@@ -1,3 +1,5 @@
 cred.txt
-__pycache__/flask.cpython-37.pyc
+__pycache__/
 PYREZ_LOG_FILE.log
+__pycache__/
+.vscode/
