@@ -1,0 +1,496 @@
+body {
+  background-color: #070720 !important;
+}
+.god-icon-style {
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  position: center;
+}
+
+.matchups {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-gap: 12px;
+}
+
+/* .god-name, .win .times-played {
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: #cddcfe;
+} */
+
+hr {
+  width: 75%;
+}
+
+.god-build {
+    display:flex;
+    flex-direction:column;
+    margin-top:0;
+    max-width:1014px;
+    width:1014px
+}
+.god-build .toughest-matchups {
+  margin-top: 24px;
+  grid-row: 2/3;
+  grid-column: 4/6;
+}
+@media (max-width: 1139px) {
+  .god-build .toughest-matchups {
+    grid-column: 1/2;
+    grid-row: 3/4;
+  }
+}
+@media (max-width: 899px) {
+  .god-build .toughest-matchups {
+    grid-column: 1/2;
+    grid-row: 3/4;
+  }
+}
+.god-build .toughest-matchups .matchups {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-gap: 12px;
+  -webkit-overflow-scrolling: touch;
+  overflow: auto;
+}
+.god-build .toughest-matchups .matchups .god-matchup {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-width: 73px;
+  padding: 7px 0 10px;
+  border-radius: 3px;
+  background-color: #11112a;
+  color: #fff;
+  text-align: center;
+}
+
+.god-label {
+color: #cddcfe;
+}
+.god-build
+  .toughest-matchups
+  .matchups
+  .god-matchup:hover {
+  background-color: #25254b;
+}
+.god-build .toughest-matchups .matchups hr {
+  margin: 8px 0;
+  width: 70%;
+  border: none;
+  border-top: 1px solid #404064;
+}
+.god-build .toughest-matchups .matchups .god-name {
+  margin-top: 6px;
+  max-width: 70px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: 700;
+}
+.god-build .toughest-matchups .matchups .god-icon {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.god-build .toughest-matchups .matchups .god-icon > img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.god-build .toughest-matchups .matchups .god-matchup .matchup-stats .win-rate {
+    font-size: 1.2rem;
+}
+.god-build .toughest-matchups .matchups .god-matchup .matchup-stats .win-rate .times-played {
+  color: #cddcfe;
+  font-size: 1rem;
+}
+.container .god-page-header .god-header-info {
+  flex: 1 1;
+  display: flex;
+  flex-direction: column;
+  margin-left: 24px;
+  height: 100%;
+  justify-content: space-between;
+  min-width: 0;
+}
+.god-page-header .god-header-info .god-abilities {
+  display: flex;
+  align-items: center;
+  margin-right: 24px;
+}
+.god-page-header .god-header-info .god-abilities .god-ability-wlabel:not(:last-child) {
+  margin-right: 6px;
+}
+.god-page-header .god-header-info .god-abilities img {
+  width: 36px;
+  height: 36px;
+  border-radius: 3px;
+}
+.ability-label{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #383864;
+    font-size: 9px;
+    font-weight: 700;
+    pointer-events: none;
+}
+
+.god-ability-wlabel {
+  position:relative
+}
+.god-ability-wlabel .ability-label {
+    position:absolute;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    background-color:#383864;
+    font-size:9px;
+    font-weight:700;
+    pointer-events:none
+}
+
+.god-ability-wlabel .ability-label.bottom-center {
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%,50%);
+  border: 2px solid #17172e;
+  box-sizing: content-box;
+  color:white;
+}
+
+.content-matchups {
+  margin-top: 25px;
+}
+
+.content-section {
+  padding: 24px;
+  border-radius: 6px;
+  background-color: #191937;
+}
+
+.content-section .content-section_header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-left: 14px;
+  width: 100%;
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+}
+.content-section .content-section_header::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 2px;
+  height: 20px;
+  border-radius: 2px;
+  background-color: #3273fa;
+}
+
+.Godpage {
+  width: 100%;
+}
+
+.god-page-header {
+  margin-bottom: 24px;
+}
+
+.god-header-wrap {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.god-image-container {
+  position: relative;
+  flex: 0 0 93px;
+  width: 93px;
+  height: 93px;
+  border-radius: 6px;
+  border: 2px solid #414165;
+  border-top-color: rgb(65, 65, 101);
+  border-right-color: rgb(65, 65, 101);
+  border-bottom-color: rgb(65, 65, 101);
+  border-left-color: rgb(65, 65, 101);
+  background-color: #17172e;
+}
+
+.tier-heading {
+  position: absolute;
+  z-index: 2;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 20px;
+  border-radius: 4px;
+  border: 1px solid #414165;
+  border-top-color: rgb(65, 65, 101);
+  border-right-color: rgb(65, 65, 101);
+  border-bottom-color: rgb(65, 65, 101);
+  border-left-color: rgb(65, 65, 101);
+  background-color: #06061f;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.god-page-image-border {
+  position: relative;
+  border: 2px solid #17172e;
+  border-radius: 5px;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.notch-border {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  z-index: 1;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 10px;
+  border-radius: 0 0 6px 6px;
+  border: 2px solid #070720;
+  background-color: #06061f;
+}
+
+.god-image {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+  transform: translate(-50%, -50%) scale(1.2);
+}
+
+.god-rank-stats {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 24px 0;
+}
+
+.god-rank-stats > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2px 0;
+  flex: 1 1;
+  height: 100%;
+  white-space: nowrap;
+}
+.god-rank-stats > div:not(:last-child) {
+  border-right: 1px solid #414165;
+}
+.god-rank-stats .value {
+  font-size: 2rem;
+  font-weight: 800;
+  color: white;
+}
+
+.god-rank-stats .label {
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #bbbedb;
+}
+
+.build {
+  display: grid;
+  grid-template-columns: repeat(6,169px);
+  grid-auto-flow: column;
+  margin-top: 24px;
+}
+
+.build .starter{
+  display: flex;
+  flex-direction: column;
+}
+
+.item-image-div img {
+  border-radius: 3px;
+  width: 36px;
+  height: 36px;
+  overflow: hidden;
+}
+
+.item-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.item-row .item-dupe {
+  margin-right: 20px;
+}
+
+.item-stats .winrate{
+  margin-top: 16px;
+  text-align: left;
+  color: white;
+  font-size: 13px;
+}
+
+.item-stats .matches{
+  margin-top: 16px;
+  text-align: left;
+  color: #cddcfe;
+  font-size: 13px;
+}
+
+.times-played {
+  font-size: 13px;
+  color: #cddcfe
+}
+
+.god-home .gods-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(100px,1fr));
+  grid-gap: 12px 12px;
+  padding: 20px;
+  border: 5px solid #2c2c40;
+  background-color: #17172e;
+}
+
+.gods-container>a{
+  color:white;
+}
+
+.god-home .image-wrap {
+  position: relative;
+  border: 1px solid #2c2c40;
+  overflow: hidden;
+}
+.god-home .gods-container .god-link .image-wrap {
+  width: 100px;
+  height: 100px;
+}
+.god-home .image-wrap::after{
+  content: "";
+  position: relative;
+  top: -110%;
+  left: -150%;
+  width: 220%;
+  height: 220%;
+  opacity: 0;
+  transform: rotate(45deg);
+  background: rgba(66, 14, 255, 0.74);
+  background: linear-gradient(90deg,hsla(0,0%,100%,.13) 0,hsla(0,0%,100%,.13) 77%,hsla(0,0%,100%,.5) 92%,hsla(0,0%,100%,0))
+
+}
+.god-link {
+  margin: 0 auto;
+}
+
+.title-header {
+  margin-top: 24px;
+  margin-bottom: 36px;
+}
+
+.title-header h1, .title-header h1.tier-list {
+  font-family: Barlow;
+  display: flex;
+  align-items: center;
+  font-size: 36px;
+  margin-top: 0;
+  margin-bottom: 0;
+  color: white;
+}
+
+.god-home {
+  max-width: 1014px;
+  width: 100vw;
+  box-sizing: content-box;
+}
+
+.god-home-page {
+  display: flex;
+  margin: 0 auto;
+  color: white;
+}
+.content-side-padding {
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.title-header h2.subtitle {
+  margin-top: 18px;
+  margin-bottom: 0;
+  font-size: 14px;
+  line-height: 1.3;
+  letter-spacing: 0;
+  white-space: nowrap;
+  color: white; 
+}
+
+#content {
+  display: flex;
+  margin: 0 auto;
+  z-index: 100;
+  width: 100%;
+}
+
+img {
+  vertical-align: middle;
+  border-style: none;
+}
+
+a, a:active, a:focus, a:hover, a:visited {
+  text-decoration: none;
+  outline: none;
+  color: white;
+}
+
+.god-home .gods-container .god-link .god-name {
+  margin-top: 8px;
+  font-size: .8rem;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  align-content: left;
+}
+.god-home .gods-container .god-link:hover .image-wrap:after {
+  opacity:1;
+  top:-35%;
+  left:-35%;
+  transition-property: left, top, opacity;
+  transition-duration:.7s,.7s,.15s;
+  transition-timing-function:ease
+ }
+
+ .god-home .gods-container .god-link:hover .god-name {
+  font-weight: 700;
+}
