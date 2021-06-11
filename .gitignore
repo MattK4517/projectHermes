@@ -3,3 +3,4 @@ __pycache__/
 PYREZ_LOG_FILE.log
 __pycache__/
 .vscode/
+token.txt
