@@ -41,12 +41,17 @@ Starter_items = [
 # worst matchups - check
 # item breakdown - check
 def get_top_builds(client, god, dataSheet, **req):
-    """[summary]
+    """ return the top builds of a given god
 
     Args:
-        client ([PyMongo client object]): [description]
+        client ([PyMongo client object]): pymongo database connection
         god ([String]): String of god getting pulled
         role ([String]): Role the god is played in
+    
+    Returns:
+        if req == discord:
+            a list containing the builds dict, and then a nested list of the gods games, wins, wr
+            the builds dict format is below, nested keys follow [role][slot][different items]
     """
     topDict = {
         "Solo": {
@@ -132,12 +137,17 @@ def get_top_builds(client, god, dataSheet, **req):
         return {**topDict, **{"games": games, "wins": wins, "wr": round(wins/games*100, 2)}}
 
 def get_worst_matchups(client, god, role, **req):
-    """[summary]
+    """ return the worst matchups of a given god in a role
 
     Args:
-        client ([type]): [description]
-        god ([type]): [description]
-        role ([type]): [description]
+        client ([PyMongo client object]): pymongo database connection
+        god ([String]): String of god getting pulled
+        role ([String]): Role the god is played in
+    
+    Returns:
+        if req == discord:
+            a list containing the matchups dict, and then a nested list of the gods games, wins, wr
+            the matcups dict format is below, nested keys follow [matchup] : {timesPlayed: int, wins: int, winRate: float, enemy: str}
     """
 
     # get all matchups in a given role per god
@@ -203,6 +213,7 @@ def get_pb_rate(client, god, **req):
         god ([type]): [description]
         role ([type]): [description]`
     """
+    print(god)
     god = god.replace("_"," ")
     totalMatches = 0
     godMatches = 0
