@@ -4,6 +4,17 @@ import { Link } from "react-router-dom";
 import "./Component.css";
 import styled from 'styled-components';
 
+
+const GetTopItems = (items) => {
+  let displayItem = [];
+  let allWins = [];
+  Object.keys(items).forEach((item, index) => {
+      allWins.push(items[item].wins);
+      displayItem.push(item)
+    });
+    const max = Math.max(...allWins)
+    return items[displayItem[allWins.indexOf(max)]]
+}
 const ImageDiv = styled.div`
   background-Position: 75% -100%;
   background:
@@ -12,17 +23,6 @@ const ImageDiv = styled.div`
     linear-gradient(to right, #070720 30%, rgba(7, 7, 32, 0.6) 100%), 
     url(${props => props.url ? props.url.replace("icons", "cards") : "https://i.ytimg.com/vi/xAPsmI_zDZs/maxresdefault.jpg"})
 `
-
-const useFetch = (url) => {
-  const [response, setResponse] = React.useState(null);
-  useEffect(async () => {
-      const res = await fetch(url);
-      const json = await res.json();
-      console.log(json);
-      setResponse(json);
-  });
-  return response;
-};
 
 class GodHeader extends React.Component {
   render() {
@@ -270,27 +270,25 @@ function Godpage(god) {
         setpickrate(((data.games / data.totalMatches) * 100).toFixed(2));
         setwinrate(data.wr);
         setrole("Solo")
+        let displayItems = [];
         Object.keys(data).forEach((key) => {
-          if (key.includes({role}.role)) {
-            console.log(data[key]);
-            data[key].map(item => {
-              console.log(item)
-              setitems((items) => [
-                ...items,
-                {
-                  games: data[key][item].games,
-                  games2: data[key][item].games2,
-                  item: data[key][item].item,
-                  item2: data[key][item].item2,
-                  url: data[key][item].url,
-                  url2: data[key][item].url2,
-                  wins: data[key][item].wins,
-                  wins2: data[key][item].wins2,
-                  slot: key,
-                },
-              ])
-           })
+          if (key === role) {
+            Object.keys(data[key]).forEach((slot) => {
+              const slotMax = GetTopItems(data[key][slot])
+              displayItems.push(slotMax);
+            })
           }
+        });
+        Object.entries(displayItems).forEach(item => {
+          console.log("getting here")
+          setitems((items) => [
+            ...items, {
+              item: item[1].itemName,
+              games: item[1].games,
+              url: item[1].url, 
+              wins: item[1].wins
+            },
+          ]);
         });
       })
     );
