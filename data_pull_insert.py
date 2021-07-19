@@ -1,15 +1,14 @@
 import pyrez
 from datetime import datetime
-import pyrez.api
 from pyrez.api import SmiteAPI
-import pyrez.enumerations
-import pyrez.models
 import pymongo
 import random
 import time
 
+from pyrez.models import Smite
+
 client = pymongo.MongoClient(
-    "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority")
+    "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
 mydb = client["Matches"]
 mycol = mydb["matches"]
 
@@ -63,6 +62,7 @@ def normalize_godId(id):
         1784: "Freya",
         2269: "Ganesha",
         1978: "Geb",
+        3997: "Gilgamesh",
         1763: "Guan Yu",
         3344: "Hachiman",
         1676: "Hades",
@@ -88,6 +88,7 @@ def normalize_godId(id):
         2051: "Medusa",
         1941: "Mercury",
         3566: "Merlin",
+        4006: "Morgan Le Fay",
         3881: "Mulan",
         1915: "Ne Zha",
         1872: "Neith",
@@ -201,11 +202,12 @@ def create_match_dict(match):
 starttime = datetime.now()
 creds = open("cred.txt", mode="r").read()
 Smite_api = SmiteAPI(devId =creds.splitlines()[0], authKey = creds.splitlines()[1])
-matchIds = Smite_api.getMatchIds(451, date=20210509, hour=-1)
+matchIds = Smite_api.getMatchIds(451, date=20210718, hour=-1)
+print(len(matchIds))
 setIds = []
 allMatches = {}
 setMatches = {}
-print(len(matchIds))
+print(len(matchIds))    
 setLength = 10
 matchIdsLen = len(matchIds)
 for x in range(matchIdsLen):
@@ -227,7 +229,7 @@ for x in range(matchIdsLen):
         setIds.clear()
 
 mycol.insert_one(setMatches)
-print(datetime.now() - starttime)        
+print("Pull Completed in " + str(datetime.now() - starttime))       
 
 
 
