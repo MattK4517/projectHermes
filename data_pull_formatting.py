@@ -4,7 +4,7 @@ from collections import defaultdict
 import timeit
 from main import client
 import pandas as pd
-
+import analyze as anlz
 
 
 class godData:
@@ -283,6 +283,7 @@ godsDict = {
     "Freya": 0,
     "Ganesha": 0,
     "Geb": 0,
+    "Gilgamesh": 0,
     "Guan Yu": 0,
     "Hachiman": 0,
     "Hades": 0,
@@ -308,6 +309,7 @@ godsDict = {
     "Medusa": 0,
     "Mercury": 0,
     "Merlin": 0,
+    "Morgan Le Fay": 0,
     "Mulan": 0,
     "Ne Zha": 0,
     "Neith": 0,
@@ -354,61 +356,72 @@ godsDict = {
     "Zhong Kui": 0
 }
 
-# Assassins = ["Arachne", "Awilix", "Bakasura", "Bastet", "Camazotz", "Da Ji", "Fenrir", "Hun Batz", "Kali", "Loki", "Mercury", "Ne Zha", "Nemesis", "Pele", "Ratatoskr", "Ravana", "Serqet", "Set", "Susano", "Thanatos", "Thor"]
-# Guardians = ["Ares", "Artio", "Athena", "Bacchus", "Cabrakan", "Cerberus",  "Fafnir", "Ganesha", "Geb", "Jormungandr", "Khepri", "Kumbhakarna", "Kuzenbo", "Sobek", "Sylvanus", "Terra", "Xing Tian", "Yemoja", "Ymir"]
-# Hunters = ["Ah Muzen Cab", "Anhur", "Apollo", "Artemis", "Cernunnos", "Chernobog", "Chiron", "Cupid", "Hachiman", "Hou Yi", " Izanami", "Jing Wei", "Medusa", "Neith", "Rama", "Skadi", "Ullr", "Xbalanque"]
-# Mages = ["Agni", "Ah Puch", "Anubis", "Ao Kuang", "Aphrodite", "Baba Yaga", "Baron Samedi", "Chang\'e", "Chronos", "Discordia", "Eset", "Freya", "Hades", "He Bo", "Hel", "Hera", "Janus", "Kukulkan", "Merlin", "Nox",
-# "Nu Wa", "Olorun", "Persephone", "Poseidon", "Ra", "Raijin", "Scylla", "Sol", "The Morrigan", "Thoth", "Tiamat", "Vulcan", "Zeus", "Zhong Kui"]
-# Warriors = ["Amaterasu", "Achilles", "Bellona", "Chaac", "Cu Chulainn", "Erlang Shen", "Guan Yu", "Herculues", "Horus", "King Arthur", "Mulan", "Nike", "Odin", "Osiris", "Sun Wukong", "Tyr", "Vamana"]
 
-mydb = client["Matches"]
-mycol = mydb["matches"]
+def calc_tier_list(client):
+    allWinrates = []
+    roles = ["Jungle", "Support", "Carry", "Mid", "Solo"]
+    for god in godsDict.keys():
+        for role in roles:
+            allWinrates.append(anlz.get_winrate(client, god, role))
+            print(god, role, allWinrates[-1])
+    print(sorted(allWinrates))
+Assassins = ["Arachne", "Awilix", "Bakasura", "Bastet", "Camazotz", "Da Ji", "Fenrir", "Hun Batz", "Kali", "Loki", "Mercury", "Ne Zha", "Nemesis", "Pele", "Ratatoskr", "Ravana", "Serqet", "Set", "Susano", "Thanatos", "Thor"]
+Guardians = ["Ares", "Artio", "Athena", "Bacchus", "Cabrakan", "Cerberus",  "Fafnir", "Ganesha", "Geb", "Jormungandr", "Khepri", "Kumbhakarna", "Kuzenbo", "Sobek", "Sylvanus", "Terra", "Xing Tian", "Yemoja", "Ymir"]
+Hunters = ["Ah Muzen Cab", "Anhur", "Apollo", "Artemis", "Cernunnos", "Chernobog", "Chiron", "Cupid", "Hachiman", "Heimdallr", "Hou Yi", " Izanami", "Jing Wei", "Medusa", "Neith", "Rama", "Skadi", "Ullr", "Xbalanque"]
+Mages = ["Agni", "Ah Puch", "Anubis", "Ao Kuang", "Aphrodite", "Baba Yaga", "Baron Samedi", "Chang\'e", "Chronos", "Discordia", "Eset", "Freya", "Hades", "He Bo", "Hel", "Hera", "Janus", "Kukulkan", "Merlin", "Morgan Le Fay",
+"Nox", "Nu Wa", "Olorun", "Persephone", "Poseidon", "Ra", "Raijin", "Scylla", "Sol", "The Morrigan", "Thoth", "Tiamat", "Vulcan", "Zeus", "Zhong Kui"]
+Warriors = ["Amaterasu", "Achilles", "Bellona", "Chaac", "Cu Chulainn", "Erlang Shen", "Gilgamesh", "Guan Yu", "Herculues", "Horus", "King Arthur", "Mulan", "Nike", "Odin", "Osiris", "Sun Wukong", "Tyr", "Vamana"]
+
+calc_tier_list(client)
+
+# mydb = client["Matches"]
+# mycol = mydb["matches"]
 
             
-starttime = datetime.now()
-godsStatDict = {}
-data = mycol.find()
-index = 59
-godsdb = client["Matchups"]
-itemsdb = client["Items"]
-godmatchesdb = client["godMatches"]
-bansdb = client["godBans"]
-sets = []
-x = 0
-matches = 0
-setsFinished = 0
-for set in data:
-    if x >= index:
-        sets.append(set)
-    x += 1
+# starttime = datetime.now()
+# godsStatDict = {}
+# data = mycol.find()
+# index = 43
+# godsdb = client["Matchups"]
+# itemsdb = client["Items"]
+# godmatchesdb = client["godMatches"]
+# bansdb = client["godBans"]
+# sets = []
+# x = 0
+# matches = 0
+# setsFinished = 0
+# for set in data:
+#     if x >= index:
+#         sets.append(set)
+#     x += 1
     
-while setsFinished < len(sets):
-    dataDict = sets[setsFinished]
-    keys = dataDict.keys()
-    matchKeys = create_matches_list(keys)
+# while setsFinished < len(sets):
+#     dataDict = sets[setsFinished]
+#     keys = dataDict.keys()
+#     matchKeys = create_matches_list(keys)
 
-    for key in godsDict.keys():
-        newEntry = godData(key)
-        godsStatDict[key] = newEntry
+#     for key in godsDict.keys():
+#         newEntry = godData(key)
+#         godsStatDict[key] = newEntry
 
-    for key in godsDict.keys():
-        newEntry = godData(key)
-        godsStatDict[key] = newEntry
-        godsdbCol = godsdb[key]
-        itemsdbCol = itemsdb[key]
-        godmatchesCol = godmatchesdb[key]
-        bansCol = bansdb[key]
-        godsStatDict[key].set_matches(dataDict)
-        godsStatDict[key].calc_wr_matches()
-        godsStatDict[key].set_item_slots()
-        godsStatDict[key].calc_wr_items()
-        godsdbCol.insert_one(godsStatDict[key].get_wr_matches())
-        itemsdbCol.insert_one(godsStatDict[key].get_wr_items())
-        bansCol.insert_one({"bans": godsStatDict[key].bans})
-        print("God done: "+key)
-    setsFinished += 1
-    print(datetime.now() - starttime)
+#     for key in godsDict.keys():
+#         newEntry = godData(key)
+#         godsStatDict[key] = newEntry
+#         godsdbCol = godsdb[key]
+#         itemsdbCol = itemsdb[key]
+#         godmatchesCol = godmatchesdb[key]
+#         bansCol = bansdb[key]
+#         godsStatDict[key].set_matches(dataDict)
+#         godsStatDict[key].calc_wr_matches()
+#         godsStatDict[key].set_item_slots()
+#         godsStatDict[key].calc_wr_items()
+#         godsdbCol.insert_one(godsStatDict[key].get_wr_matches())
+#         itemsdbCol.insert_one(godsStatDict[key].get_wr_items())
+#         bansCol.insert_one({"bans": godsStatDict[key].bans})
+#         print("God done: "+key)
+#     setsFinished += 1
+#     print(datetime.now() - starttime)
 
-print(datetime.now() - starttime)
-print(matches)
+# print(datetime.now() - starttime)
+# print("Formatting Complete!")
 

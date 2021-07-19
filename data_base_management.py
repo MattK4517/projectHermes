@@ -143,40 +143,44 @@ def get_last_day(client):
         keys.pop(0)
         print(set[keys[0]]["Entry_Datetime"])
 
-if __name__ == "__main__":
-    Assassins = ["Arachne", "Awilix", "Bakasura", "Bastet", "Camazotz", "Da Ji", "Fenrir", "Hun Batz", "Kali", "Loki", "Mercury", "Ne Zha", "Nemesis", "Pele", "Ratatoskr", "Ravana", "Serqet", "Set", "Susano", "Thanatos", "Thor"]
-    Guardians = ["Ares", "Artio", "Athena", "Bacchus", "Cabrakan", "Cerberus",  "Fafnir", "Ganesha", "Geb", "Jormungandr", "Khepri", "Kumbhakarna", "Kuzenbo", "Sobek", "Sylvanus", "Terra", "Xing Tian", "Yemoja", "Ymir"]
-    Hunters = ["Ah Muzen Cab", "Anhur", "Apollo", "Artemis", "Cernunnos", "Chernobog", "Chiron", "Cupid", "Danzaburou","Hachiman", "Heimdallr", "Hou Yi", " Izanami", "Jing Wei", "Medusa", "Neith", "Rama", "Skadi", "Ullr", "Xbalanque"]
-    Mages = ["Agni", "Ah Puch", "Anubis", "Ao Kuang", "Aphrodite", "Baba Yaga", "Baron Samedi", "Chang\'e", "Chronos", "Discordia", "Eset", "Freya", "Hades", "He Bo", "Hel", "Hera", "Janus", "Kukulkan", "Merlin", "Nox",
-    "Nu Wa", "Olorun", "Persephone", "Poseidon", "Ra", "Raijin", "Scylla", "Sol", "The Morrigan", "Thoth", "Tiamat", "Vulcan", "Zeus", "Zhong Kui"]
-    Warriors = ["Amaterasu", "Achilles", "Bellona", "Chaac", "Cu Chulainn", "Erlang Shen", "Guan Yu", "Herculues", "Horus", "King Arthur", "Mulan", "Nike", "Odin", "Osiris", "Sun Wukong", "Tyr", "Vamana"]
+Total = calc_total_matches(client)
+mydb = client["Matches"]
+mycol = mydb["Total_Matches"]
+mycol.insert_one({"Total_Matches": Total})
+# if __name__ == "__main__":
+#     Assassins = ["Arachne", "Awilix", "Bakasura", "Bastet", "Camazotz", "Da Ji", "Fenrir", "Hun Batz", "Kali", "Loki", "Mercury", "Ne Zha", "Nemesis", "Pele", "Ratatoskr", "Ravana", "Serqet", "Set", "Susano", "Thanatos", "Thor"]
+#     Guardians = ["Ares", "Artio", "Athena", "Bacchus", "Cabrakan", "Cerberus",  "Fafnir", "Ganesha", "Geb", "Jormungandr", "Khepri", "Kumbhakarna", "Kuzenbo", "Sobek", "Sylvanus", "Terra", "Xing Tian", "Yemoja", "Ymir"]
+#     Hunters = ["Ah Muzen Cab", "Anhur", "Apollo", "Artemis", "Cernunnos", "Chernobog", "Chiron", "Cupid", "Danzaburou","Hachiman", "Heimdallr", "Hou Yi", " Izanami", "Jing Wei", "Medusa", "Neith", "Rama", "Skadi", "Ullr", "Xbalanque"]
+#     Mages = ["Agni", "Ah Puch", "Anubis", "Ao Kuang", "Aphrodite", "Baba Yaga", "Baron Samedi", "Chang\'e", "Chronos", "Discordia", "Eset", "Freya", "Hades", "He Bo", "Hel", "Hera", "Janus", "Kukulkan", "Merlin", "Nox",
+#     "Nu Wa", "Olorun", "Persephone", "Poseidon", "Ra", "Raijin", "Scylla", "Sol", "The Morrigan", "Thoth", "Tiamat", "Vulcan", "Zeus", "Zhong Kui"]
+#     Warriors = ["Amaterasu", "Achilles", "Bellona", "Chaac", "Cu Chulainn", "Erlang Shen", "Guan Yu", "Herculues", "Horus", "King Arthur", "Mulan", "Nike", "Odin", "Osiris", "Sun Wukong", "Tyr", "Vamana"]
 
-    for key in godsDict:
-        if key in Assassins:
-            role = "Jungle"
-        elif key in Guardians:
-            role = "Support"
-        elif key in Hunters:
-            role = "Carry"
-        elif key in Mages:
-            role = "Mid"
-        else:
-            role = "Solo"
-        newkey = key.replace(" ", "_")
-        newkey = newkey.replace("'", "\'")
-        print("@app.route(\'/"+newkey+"\')")
-        print("def get_"+newkey+"():")
-        print("\tbuild = anlz.get_top_builds(client, \'"+newkey+"\' , \'"+role+"\', req=\'flask\')")
-        print("\tpbRate = anlz.get_pb_rate(client, \'"+newkey+"\', req=\'flask\')")
-        print("\timage = anlz.get_url(\'"+newkey+"\')")
-        print("\tdataDict = {**build, **pbRate, **image}")
-        print("\treturn dataDict")
-        print("\n")
-        print("@app.route(\'/"+newkey+"/matchups\')")
-        print("def get_"+newkey+"_matchups():")
-        print("\treturn anlz.get_worst_matchups(client, \'"+newkey+"\' , \'"+role+"\', req=\'flask\')")
-        print("\n")
-        print("@app.route(\'/"+newkey+"/abilities\')")
-        print("def get_"+newkey+"_abilities():")
-        print("\treturn anlz.get_abilities(\'"+newkey+"\')")
-        print("\n")
+#     for key in godsDict:
+#         if key in Assassins:
+#             role = "Jungle"
+#         elif key in Guardians:
+#             role = "Support"
+#         elif key in Hunters:
+#             role = "Carry"
+#         elif key in Mages:
+#             role = "Mid"
+#         else:
+#             role = "Solo"
+#         newkey = key.replace(" ", "_")
+#         newkey = newkey.replace("'", "\'")
+#         print("@app.route(\'/"+newkey+"\')")
+#         print("def get_"+newkey+"():")
+#         print("\tbuild = anlz.get_top_builds(client, \'"+newkey+"\' , \'"+role+"\', req=\'flask\')")
+#         print("\tpbRate = anlz.get_pb_rate(client, \'"+newkey+"\', req=\'flask\')")
+#         print("\timage = anlz.get_url(\'"+newkey+"\')")
+#         print("\tdataDict = {**build, **pbRate, **image}")
+#         print("\treturn dataDict")
+#         print("\n")
+#         print("@app.route(\'/"+newkey+"/matchups\')")
+#         print("def get_"+newkey+"_matchups():")
+#         print("\treturn anlz.get_worst_matchups(client, \'"+newkey+"\' , \'"+role+"\', req=\'flask\')")
+#         print("\n")
+#         print("@app.route(\'/"+newkey+"/abilities\')")
+#         print("def get_"+newkey+"_abilities():")
+#         print("\treturn anlz.get_abilities(\'"+newkey+"\')")
+#         print("\n")

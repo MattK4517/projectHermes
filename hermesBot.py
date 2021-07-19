@@ -8,12 +8,12 @@ import pandas as pd
 from main import client as dbClient
 
 
-Assassins = ["Arachne", "Awilix", "Bakasura", "Bastet", "Camazotz", "Da Ji", "Fenrir", "Hun Batz", "Kali", "Loki", "Mercury", "Ne Zha", "Nemesis", "Pele", "Ratatoskr", "Ravana", "Serqet", "Set", "Susano", "Thanatos", "Thor"]
+Assassins = ["Arachne", "Awilix", "Bakasura", "Bastet", "Camazotz", "Da Ji", "Fenrir", "Hun Batz",                                          "Kali", "Loki", "Mercury", "Ne Zha", "Nemesis", "Pele", "Ratatoskr", "Ravana", "Serqet", "Set", "Susano", "Thanatos", "Thor"]
 Guardians = ["Ares", "Artio", "Athena", "Bacchus", "Cabrakan", "Cerberus",  "Fafnir", "Ganesha", "Geb", "Jormungandr", "Khepri", "Kumbhakarna", "Kuzenbo", "Sobek", "Sylvanus", "Terra", "Xing Tian", "Yemoja", "Ymir"]
 Hunters = ["Ah Muzen Cab", "Anhur", "Apollo", "Artemis", "Cernunnos", "Chernobog", "Chiron", "Cupid", "Hachiman", "Heimdallr", "Hou Yi", " Izanami", "Jing Wei", "Medusa", "Neith", "Rama", "Skadi", "Ullr", "Xbalanque"]
-Mages = ["Agni", "Ah Puch", "Anubis", "Ao Kuang", "Aphrodite", "Baba Yaga", "Baron Samedi", "Chang\'e", "Chronos", "Discordia", "Eset", "Freya", "Hades", "He Bo", "Hel", "Hera", "Janus", "Kukulkan", "Merlin", "Nox",
-"Nu Wa", "Olorun", "Persephone", "Poseidon", "Ra", "Raijin", "Scylla", "Sol", "The Morrigan", "Thoth", "Tiamat", "Vulcan", "Zeus", "Zhong Kui"]
-Warriors = ["Amaterasu", "Achilles", "Bellona", "Chaac", "Cu Chulainn", "Erlang Shen", "Guan Yu", "Herculues", "Horus", "King Arthur", "Mulan", "Nike", "Odin", "Osiris", "Sun Wukong", "Tyr", "Vamana"]
+Mages = ["Agni", "Ah Puch", "Anubis", "Ao Kuang", "Aphrodite", "Baba Yaga", "Baron Samedi", "Chang\'e", "Chronos", "Discordia", "Eset", "Freya", "Hades", "He Bo", "Hel", "Hera", "Janus", "Kukulkan", "Merlin", "Morgan Le Fay",
+"Nox", "Nu Wa", "Olorun", "Persephone", "Poseidon", "Ra", "Raijin", "Scylla", "Sol", "The Morrigan", "Thoth", "Tiamat", "Vulcan", "Zeus", "Zhong Kui"]
+Warriors = ["Amaterasu", "Achilles", "Bellona", "Chaac", "Cu Chulainn", "Erlang Shen", "Gilgamesh", "Guan Yu", "Herculues", "Horus", "King Arthur", "Mulan", "Nike", "Odin", "Osiris", "Sun Wukong", "Tyr", "Vamana"]
 
 if __name__ == "__main__":
     token = open("token.txt", "r").read()  # I've opted to just save my token to a text file. 
@@ -44,22 +44,22 @@ if __name__ == "__main__":
                 for x in range(len(god)):
                     actgod += god[x]+" "
                 actgod = actgod.strip()
-
-                data = anlz.get_top_builds(mongo_client, actgod, role, req="discord")
+                dataSheet = pd.read_excel("God Abilities & Items.xlsx", sheet_name="all_items")
+                data = anlz.get_top_builds_discord(mongo_client, actgod, role, req="discord")
                 build = data[0]
-                print(build)
                 games = data[1][0]
                 wins = data[1][1]
                 wr = data[1][2]
                 ItemWR = []
+                print(build)
                 iconURL = anlz.get_url(actgod)
                 for slot in build:
-                    if build[slot]["games"] != 0:
-                        ItemWR.append(round(build[slot]["wins"]/build[slot]["games"] * 100, 2))
+                    if build[slot]["item1"]["games"] != 0:
+                        ItemWR.append(round(build[slot]["item1"]["wins"]/build[slot]["item1"]["games"] * 100, 2))
                     else:
                         ItemWR.append(0)
-                    if build[slot]["games2"] != 0:
-                        ItemWR.append(round(build[slot]["wins2"]/build[slot]["games2"] * 100, 2))
+                    if build[slot]["item2"]["games"] != 0:
+                        ItemWR.append(round(build[slot]["item2"]["wins"]/build[slot]["item2"]["games"] * 100, 2))
                     else:
                         ItemWR.append(0)
                     
@@ -75,12 +75,12 @@ if __name__ == "__main__":
                     color = "fc0303"
                 embed=discord.Embed(title=actgod+" "+role+" Build", description="Games: {} | Wins: {} | WR: {}".format(games, wins, wr), color = int(color, base=16))
                 embed.set_thumbnail(url=iconURL["url"])
-                embed.add_field(name="Slot 1", value=build["slot1"]["item"]+" WR: "+str( ItemWR[0] )+"%\n"+build["slot1"]["item2"]+" WR: "+str( ItemWR[1] )+"%", inline=True)
-                embed.add_field(name="Slot 2", value=build["slot2"]["item"]+" WR: "+str( ItemWR[2] )+"%\n"+build["slot2"]["item2"]+" WR: "+str( ItemWR[3] )+"%", inline=True)
-                embed.add_field(name="Slot 3", value=build["slot3"]["item"]+" WR: "+str( ItemWR[4] )+"%\n"+build["slot3"]["item2"]+" WR: "+str( ItemWR[5] )+"%", inline=True)
-                embed.add_field(name="Slot 4", value=build["slot4"]["item"]+" WR: "+str( ItemWR[6] )+"%\n"+build["slot4"]["item2"]+" WR: "+str( ItemWR[7] )+"%", inline=True)
-                embed.add_field(name="Slot 5", value=build["slot5"]["item"]+" WR: "+str( ItemWR[8] )+"%\n"+build["slot5"]["item2"]+" WR: "+str( ItemWR[9] )+"%", inline=True)
-                embed.add_field(name="Slot 6", value=build["slot6"]["item"]+" WR: "+str( ItemWR[10] )+"%\n"+build["slot6"]["item2"]+" WR: "+str( ItemWR[11] )+"%", inline=True)
+                embed.add_field(name="Slot 1", value=build["slot1"]["item1"]["item"]+" WR: "+str( ItemWR[0] )+"%\n"+build["slot1"]["item2"]["item"]+" WR: "+str( ItemWR[1] )+"%", inline=True)
+                embed.add_field(name="Slot 2", value=build["slot2"]["item1"]["item"]+" WR: "+str( ItemWR[2] )+"%\n"+build["slot2"]["item2"]["item"]+" WR: "+str( ItemWR[3] )+"%", inline=True)
+                embed.add_field(name="Slot 3", value=build["slot3"]["item1"]["item"]+" WR: "+str( ItemWR[4] )+"%\n"+build["slot3"]["item2"]["item"]+" WR: "+str( ItemWR[5] )+"%", inline=True)
+                embed.add_field(name="Slot 4", value=build["slot4"]["item1"]["item"]+" WR: "+str( ItemWR[6] )+"%\n"+build["slot4"]["item2"]["item"]+" WR: "+str( ItemWR[7] )+"%", inline=True)
+                embed.add_field(name="Slot 5", value=build["slot5"]["item1"]["item"]+" WR: "+str( ItemWR[8] )+"%\n"+build["slot5"]["item2"]["item"]+" WR: "+str( ItemWR[9] )+"%", inline=True)
+                embed.add_field(name="Slot 6", value=build["slot6"]["item1"]["item"]+" WR: "+str( ItemWR[10] )+"%\n"+build["slot6"]["item2"]["item"]+" WR: "+str( ItemWR[11] )+"%", inline=True)
                 await message.channel.send(embed=embed)
         
         if message.content.startswith("$matchups"):
@@ -113,7 +113,6 @@ if __name__ == "__main__":
                     color = "9a1af0"
                 elif actgod in Warriors:
                     color = "fc0303"
-
                 embed=discord.Embed(title=actgod+" "+role+" Matchups", description="Games: {} | Wins: {} | WR: {}".format(games, wins, wr), color = int(color, base=16))
                 embed.set_thumbnail(url=iconURL["url"])
                 for matchup in matchups:

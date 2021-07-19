@@ -2,9 +2,10 @@ from re import S, X
 from datetime import datetime
 
 import pymongo
-from data_base_management import godsDict
+# from data_base_management import godsDict
 import pandas as pd
-client = pymongo.MongoClient("mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority")
+# client = pymongo.MongoClient(
+#     "mongodb+srv://projectHermes:4zXCvGFmfh8YU6q2@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
 
 
 Tier_Three_items = [
@@ -40,7 +41,132 @@ Starter_items = [
 # relics used 
 # worst matchups - check
 # item breakdown - check
-def get_top_builds(client, god, dataSheet, **req):
+
+def get_top_builds_discord(client, god, role, **req):
+    """ return the top builds of a given god
+
+    Args:
+        client ([PyMongo client object]): pymongo database connection
+        god ([String]): String of god getting pulled
+        role ([String]): Role the god is played in
+    
+    Returns:
+        if req == discord:
+            a list containing the builds dict, and then a nested list of the gods games, wins, wr
+            the builds dict format is below, nested keys follow [role][slot][different items]
+    """ 
+    topDict = {
+        role: {
+            "slot1": {},
+            "slot2": {},
+            "slot3": {},
+            "slot4": {},
+            "slot5": {},
+            "slot6": {},
+        }
+    }
+    god = god.replace("_", " ")
+    mydb = client["Items"]
+    mycol = mydb[god]
+    games = 0
+    wins = 0
+    i = 0
+    for data in mycol.find():
+        for slot in data[role].keys():
+            for item in data[role][slot]:
+                if slot == "slot1":
+                    games += data[role][slot][item][0]
+                    wins += data[role][slot][item][1]
+                if item:
+                    if item not in topDict[role][slot].keys():
+                        topDict[role][slot][item] = {"item": item, "games": data[role][slot][item][0], "wins": data[role][slot][item][1]}
+                    elif item in topDict[role][slot].keys():
+                        topDict[role][slot][item]["games"] += data[role][slot][item][0]
+                        topDict[role][slot][item]["wins"] += data[role][slot][item][1]
+    
+    allDict = {
+        "slot1": {
+            "item1": {
+                "item": "",
+                "games": 0
+            },
+            "item2": {
+                "item": "",
+                "games": 0
+            },
+        },
+        "slot2": {
+            "item1": {
+                "item": "",
+                "games": 0
+            },
+            "item2": {
+                "item": "",
+                "games": 0
+            },
+        },
+        "slot3": {
+            "item1": {
+                "item": "",
+                "games": 0
+            },
+            "item2": {
+                "item": "",
+                "games": 0
+            },
+        },
+        "slot4": {
+            "item1": {
+                "item": "",
+                "games": 0
+            },
+            "item2": {
+                "item": "",
+                "games": 0
+            },
+        },
+        "slot5": {
+            "item1": {
+                "item": "",
+                "games": 0
+            },
+            "item2": {
+                "item": "",
+                "games": 0
+            },
+        },
+        "slot6": {
+            "item1": {
+                "item": "",
+                "games": 0
+            },
+            "item2": {
+                "item": "",
+                "games": 0
+            },
+        }
+    }
+    for slot in topDict[role]:
+        gamesplayed = []
+        for item in topDict[role][slot]:
+            gamesplayed.append(topDict[role][slot][item]["games"])
+            if len(allDict[slot]["item1"].keys()) < 1:
+                allDict[slot]["item1"] = topDict[role][slot][item]
+            elif topDict[role][slot][item]["games"] > allDict[slot]["item1"]["games"]:
+                allDict[slot]["item1"] = topDict[role][slot][item]
+            elif len(allDict[slot]["item1"].keys()) > 1 and len(allDict[slot]["item2"].keys()) < 1 and topDict[role][slot][item]["games"] < allDict[slot]["item1"]["games"]:
+                allDict[slot]["item2"] = topDict[role][slot][item]
+            elif topDict[role][slot][item]["games"] > allDict[slot]["item2"]["games"] and topDict[role][slot][item]["games"] < allDict[slot]["item1"]["games"]:
+                allDict[slot]["item2"] = topDict[role][slot][item]
+    
+    if req['req'] == "discord":
+        return [allDict, [games, wins, round(wins/games*100, 2)]]
+    else:
+        if games == 0:
+            games = 1
+        return {**allDict, **{"games": games, "wins": wins, "wr": round(wins/games*100, 2)}}
+
+def get_top_builds(client, god, dataSheet, reqrole, **req):
     """ return the top builds of a given god
 
     Args:
@@ -107,7 +233,7 @@ def get_top_builds(client, god, dataSheet, **req):
         for role in dataKeys:
             for slot in data[role].keys():
                 for item in data[role][slot].keys():
-                    if slot == "slot1":
+                    if slot == "slot1" and role == reqrole:
                         games += data[role][slot][item][0]
                         wins += data[role][slot][item][1]
                     if item in Tier_Three_items or item in Starter_items:
@@ -128,13 +254,87 @@ def get_top_builds(client, god, dataSheet, **req):
                         allURLS[item] = url
                     topDict[role][slot][item]["url"] = url
     
-
+    allDict = {
+        "slot1": {
+            "item1": {
+                "item": "",
+                "games": 0
+            },
+            "item2": {
+                "item": "",
+                "games": 0
+            },
+        },
+        "slot2": {
+            "item1": {
+                "item": "",
+                "games": 0
+            },
+            "item2": {
+                "item": "",
+                "games": 0
+            },
+        },
+        "slot3": {
+            "item1": {
+                "item": "",
+                "games": 0
+            },
+            "item2": {
+                "item": "",
+                "games": 0
+            },
+        },
+        "slot4": {
+            "item1": {
+                "item": "",
+                "games": 0
+            },
+            "item2": {
+                "item": "",
+                "games": 0
+            },
+        },
+        "slot5": {
+            "item1": {
+                "item": "",
+                "games": 0
+            },
+            "item2": {
+                "item": "",
+                "games": 0
+            },
+        },
+        "slot6": {
+            "item1": {
+                "item": "",
+                "games": 0
+            },
+            "item2": {
+                "item": "",
+                "games": 0
+            },
+        }
+    }
+    for slot in topDict[role]:
+        gamesplayed = []
+        for item in topDict[role][slot]:
+            gamesplayed.append(topDict[role][slot][item]["games"])
+            if len(allDict[slot]["item1"].keys()) < 1:
+                allDict[slot]["item1"] = topDict[role][slot][item]
+            elif topDict[role][slot][item]["games"] > allDict[slot]["item1"]["games"]:
+                allDict[slot]["item1"] = topDict[role][slot][item]
+            elif len(allDict[slot]["item1"].keys()) > 1 and len(allDict[slot]["item2"].keys()) < 1 and topDict[role][slot][item]["games"] < allDict[slot]["item1"]["games"]:
+                allDict[slot]["item2"] = topDict[role][slot][item]
+            elif topDict[role][slot][item]["games"] > allDict[slot]["item2"]["games"] and topDict[role][slot][item]["games"] < allDict[slot]["item1"]["games"]:
+                allDict[slot]["item2"] = topDict[role][slot][item]
+    
     if req['req'] == "discord":
-        return [topDict, [games, wins, round(wins/games*100, 2)]]
+        return [allDict, [games, wins, round(wins/games*100, 2)]]
     else:
         if games == 0:
             games = 1
-        return {**topDict, **{"games": games, "wins": wins, "wr": round(wins/games*100, 2)}}
+        return {**allDict, **{"games": games, "wins": wins, "wr": round(wins/games*100, 2)}}
 
 def get_worst_matchups(client, god, role, **req):
     """ return the worst matchups of a given god in a role
@@ -218,13 +418,13 @@ def get_pb_rate(client, god, **req):
     totalMatches = 0
     godMatches = 0
     godBans = 0
-    mydb = client["godMatches"]
+    mydb = client["Matches"]
     mycol = mydb["Entry_1"]
     bandb = client["godBans"]
     bancol = bandb[god]
-    totalcol = mydb["Total"]
+    totalcol = mydb["Total_Matches"]
     for set in totalcol.find():
-        totalMatches += set["Total_Matches"]
+        totalMatches = set["Total_Matches"]
     for set in mycol.find():
         godMatches += set[god]
     for set in bancol.find():
@@ -233,7 +433,7 @@ def get_pb_rate(client, god, **req):
     if req['req'] == "discord":
         return [godMatches, godBans, totalMatches]
     else:
-        return {"godMatches": godMatches, "godBans": godBans, "totalMatches": totalMatches}
+        return {"godBans": godBans, "totalMatches": totalMatches}
 
 def get_url(god):
     god = god.replace("_"," ")
@@ -244,7 +444,8 @@ def get_url(god):
         if temp["god_name"] == god:
             url = temp["icon_url"]
     if url == " ":
-        print(god)
+        None
+        # print(god)
     return {"url": url}
 
 def get_abilities(god):
@@ -260,11 +461,27 @@ def get_abilities(god):
 def get_item(item, dataSheet):
     index = dataSheet[dataSheet["Item_Name"] == item].index
     return dataSheet["Item_Image_URL"][index[0]]
+
 def get_gods():
     frontEndDict = {}
     for key in godsDict:
         frontEndDict[key] = {**get_url(key), "name": key}
     return frontEndDict
+
+def get_winrate(client, god, role):
+    god = god.replace("_", " ")
+    mydb = client["Items"]
+    mycol = mydb[god]
+    games = 0
+    wins = 0
+    i = 0
+    for data in mycol.find():
+        for slot in data[role].keys():
+            for item in data[role][slot]:
+                if slot == "slot1":
+                    games += data[role][slot][item][0]
+                    wins += data[role][slot][item][1]
+    return round(wins/games * 100, 2)
 
 # get_top_builds(client, "Achilles")
 # starttime = datetime.now()

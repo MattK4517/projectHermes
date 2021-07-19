@@ -3,18 +3,9 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Component.css";
 import styled from 'styled-components';
+import useFetch from "./useFetch";
 
 
-const GetTopItems = (items) => {
-  let displayItem = [];
-  let allWins = [];
-  Object.keys(items).forEach((item, index) => {
-      allWins.push(items[item].wins);
-      displayItem.push(item)
-    });
-    const max = Math.max(...allWins)
-    return items[displayItem[allWins.indexOf(max)]]
-}
 const ImageDiv = styled.div`
   background-Position: 75% -100%;
   background:
@@ -93,7 +84,7 @@ class FilterForm extends React.Component {
   }
 
   handleSubmit(event) {
-    console.log(event);
+    useFetch(pagegod=this.props.god, role = this.props.role)
 
     event.preventDefault();
   }
@@ -247,71 +238,25 @@ class BuildStatsElement extends React.Component {
   }
 }
 
+
 function Godpage(god) {
   const pagegod = god.god;
   var [url, seturl] = useState(0);
   const [displaygod, setgod] = useState(0);
-  const [games, setgames] = useState(0);
-  const [banrate, setbanrate] = useState(0);
-  const [pickrate, setpickrate] = useState(0);
-  const [winrate, setwinrate] = useState(0);
-  const [matchups, setmatchups] = useState([]);
   const [abilities, setabilities] = useState([]);
-  const [items, setitems] = useState([]);
-  const [role, setrole] = useState(0);
+  const [role, setrole] = useState("Solo");
   const [roles, setroles] = useState(["Solo", "Jungle", "Mid", "Support", "Carry"]);
+  const {games, banrate, pickrate, winrate, matchups, items} = useFetch(pagegod, role)
   useEffect(() => {
     fetch("/".concat(pagegod)).then((res) =>
       res.json().then((data) => {
         setgod(pagegod);
         seturl(data.url);
-        setgames(data.games);
-        setbanrate(((data.godBans / data.totalMatches) * 100).toFixed(2));
-        setpickrate(((data.games / data.totalMatches) * 100).toFixed(2));
-        setwinrate(data.wr);
-        setrole("Solo")
-        let displayItems = [];
-        Object.keys(data).forEach((key) => {
-          if (key === role) {
-            Object.keys(data[key]).forEach((slot) => {
-              const slotMax = GetTopItems(data[key][slot])
-              displayItems.push(slotMax);
-            })
-          }
-        });
-        Object.entries(displayItems).forEach(item => {
-          console.log("getting here")
-          setitems((items) => [
-            ...items, {
-              item: item[1].itemName,
-              games: item[1].games,
-              url: item[1].url, 
-              wins: item[1].wins
-            },
-          ]);
-        });
       })
     );
   }, []);
+  useFetch(pagegod)
 
-  useEffect(() => {
-    fetch("/".concat(pagegod, "/matchups")).then((res) =>
-      res.json().then((data) => {
-        Object.keys(data).forEach((key) => {
-          setmatchups((matchups) => [
-            ...matchups,
-            {
-              enemy: data[key].enemy,
-              timesPlayed: data[key].timesPlayed,
-              url: data[key].url,
-              winRate: data[key].winRate,
-              wins: data[key].wins,
-            },
-          ]);
-        });
-      })
-    );
-  }, []);
 
   useEffect(() => {
     fetch("/".concat(pagegod, "/abilities")).then((res) =>
