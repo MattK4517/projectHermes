@@ -29,11 +29,8 @@ const useFetch = (pagegod, role) => {
             setwinrate(data.wr);
             let displayItems = [];
             Object.keys(data).forEach((key) => {
-              if (key === role) {
-                Object.keys(data[key]).forEach((slot) => {
-                  const slotMax = GetTopItems(data[key][slot])
-                  displayItems.push(slotMax);
-                })
+              if (key.startsWith("slot")) {
+                displayItems.append(data[key]["item"])
               }
             });
             Object.entries(displayItems).forEach(item => {

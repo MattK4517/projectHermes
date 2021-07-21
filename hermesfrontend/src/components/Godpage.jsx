@@ -84,8 +84,8 @@ class FilterForm extends React.Component {
   }
 
   handleSubmit(event) {
-    useFetch(pagegod=this.props.god, role = this.props.role)
 
+    // console.log(useFetch(this.props.god, this.props.role))
     event.preventDefault();
   }
 
@@ -247,6 +247,7 @@ function Godpage(god) {
   const [role, setrole] = useState("Solo");
   const [roles, setroles] = useState(["Solo", "Jungle", "Mid", "Support", "Carry"]);
   const {games, banrate, pickrate, winrate, matchups, items} = useFetch(pagegod, role)
+  console.log(items)
   useEffect(() => {
     fetch("/".concat(pagegod)).then((res) =>
       res.json().then((data) => {

@@ -1,6 +1,6 @@
 from re import S, X
 from datetime import datetime
-
+import errlogger as logger
 import pymongo
 # from data_base_management import godsDict
 import pandas as pd
@@ -413,7 +413,7 @@ def get_pb_rate(client, god, **req):
         god ([type]): [description]
         role ([type]): [description]`
     """
-    print(god)
+    logger.log(god,"get_pb_rate")
     god = god.replace("_"," ")
     totalMatches = 0
     godMatches = 0

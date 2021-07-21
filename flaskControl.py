@@ -13,14 +13,11 @@ def get_all_gods():
 
 @app.route('/<god>', methods=["GET", "POST"])
 def get_god_data(god):
-        print(god)
         dataSheet = pd.read_excel("God Abilities & Items.xlsx", sheet_name="all_items")
         newgod = god.replace("_", " ")
         build = anlz.get_top_builds(client, newgod, dataSheet, "Solo", req='flask')
         pbRate = anlz.get_pb_rate(client, newgod, req='flask')
         image = anlz.get_url(newgod)
-        print(build.keys())
-        print(pbRate.keys())
         dataDict = {**build, **pbRate, **image}
         return dataDict
 
