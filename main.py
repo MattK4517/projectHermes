@@ -6,10 +6,9 @@ client = pymongo.MongoClient(
 
 if __name__ == "__main__":
     # starttime = datetime.now()
-    frontEndDict = anlz.get_top_builds_discord(client, "Geb", "Mid", req="discord")
+    # frontEndDict = anlz.get_top_builds_discord(client, "Geb", "Mid", req="discord")
     # matchupDict = anlz.get_worst_matchups(client, "Achilles", "Solo", req="discord")
-    # pbDict = anlz.get_pb_rate(client, "Gilgamesh", req="discord")
-    print(frontEndDict)
+    pbDict = anlz.get_pb_rate(client, "Gilgamesh", req="discord")
     # print("\n")
     # print(frontEndDict)
     # # print("\n")

@@ -372,56 +372,55 @@ Mages = ["Agni", "Ah Puch", "Anubis", "Ao Kuang", "Aphrodite", "Baba Yaga", "Bar
 "Nox", "Nu Wa", "Olorun", "Persephone", "Poseidon", "Ra", "Raijin", "Scylla", "Sol", "The Morrigan", "Thoth", "Tiamat", "Vulcan", "Zeus", "Zhong Kui"]
 Warriors = ["Amaterasu", "Achilles", "Bellona", "Chaac", "Cu Chulainn", "Erlang Shen", "Gilgamesh", "Guan Yu", "Herculues", "Horus", "King Arthur", "Mulan", "Nike", "Odin", "Osiris", "Sun Wukong", "Tyr", "Vamana"]
 
-calc_tier_list(client)
 
-# mydb = client["Matches"]
-# mycol = mydb["matches"]
+mydb = client["Matches"]
+mycol = mydb["matches"]
 
             
-# starttime = datetime.now()
-# godsStatDict = {}
-# data = mycol.find()
-# index = 43
-# godsdb = client["Matchups"]
-# itemsdb = client["Items"]
-# godmatchesdb = client["godMatches"]
-# bansdb = client["godBans"]
-# sets = []
-# x = 0
-# matches = 0
-# setsFinished = 0
-# for set in data:
-#     if x >= index:
-#         sets.append(set)
-#     x += 1
+starttime = datetime.now()
+godsStatDict = {}
+data = mycol.find()
+index = 63
+godsdb = client["Matchups"]
+itemsdb = client["Items"]
+godmatchesdb = client["godMatches"]
+bansdb = client["godBans"]
+sets = []
+x = 0
+matches = 0
+setsFinished = 0
+for set in data:
+    if x >= index:
+        sets.append(set)
+    x += 1
     
-# while setsFinished < len(sets):
-#     dataDict = sets[setsFinished]
-#     keys = dataDict.keys()
-#     matchKeys = create_matches_list(keys)
+while setsFinished < len(sets):
+    dataDict = sets[setsFinished]
+    keys = dataDict.keys()
+    matchKeys = create_matches_list(keys)
 
-#     for key in godsDict.keys():
-#         newEntry = godData(key)
-#         godsStatDict[key] = newEntry
+    for key in godsDict.keys():
+        newEntry = godData(key)
+        godsStatDict[key] = newEntry
 
-#     for key in godsDict.keys():
-#         newEntry = godData(key)
-#         godsStatDict[key] = newEntry
-#         godsdbCol = godsdb[key]
-#         itemsdbCol = itemsdb[key]
-#         godmatchesCol = godmatchesdb[key]
-#         bansCol = bansdb[key]
-#         godsStatDict[key].set_matches(dataDict)
-#         godsStatDict[key].calc_wr_matches()
-#         godsStatDict[key].set_item_slots()
-#         godsStatDict[key].calc_wr_items()
-#         godsdbCol.insert_one(godsStatDict[key].get_wr_matches())
-#         itemsdbCol.insert_one(godsStatDict[key].get_wr_items())
-#         bansCol.insert_one({"bans": godsStatDict[key].bans})
-#         print("God done: "+key)
-#     setsFinished += 1
-#     print(datetime.now() - starttime)
+    for key in godsDict.keys():
+        newEntry = godData(key)
+        godsStatDict[key] = newEntry
+        godsdbCol = godsdb[key]
+        itemsdbCol = itemsdb[key]
+        godmatchesCol = godmatchesdb[key]
+        bansCol = bansdb[key]
+        godsStatDict[key].set_matches(dataDict)
+        godsStatDict[key].calc_wr_matches()
+        godsStatDict[key].set_item_slots()
+        godsStatDict[key].calc_wr_items()
+        godsdbCol.insert_one(godsStatDict[key].get_wr_matches())
+        itemsdbCol.insert_one(godsStatDict[key].get_wr_items())
+        bansCol.insert_one({"bans": godsStatDict[key].bans})
+        print("God done: "+key)
+    setsFinished += 1
+    print(datetime.now() - starttime)
 
-# print(datetime.now() - starttime)
-# print("Formatting Complete!")
+print(datetime.now() - starttime)
+print("Formatting Complete!")
 
