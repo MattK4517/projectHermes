@@ -2,6 +2,7 @@ from re import S, X
 from datetime import datetime
 import errlogger as logger
 import pymongo
+
 # from data_base_management import godsDict
 import pandas as pd
 # client = pymongo.MongoClient(
@@ -42,7 +43,7 @@ Starter_items = [
 # worst matchups - check
 # item breakdown - check
 
-def get_top_builds_discord(client, god, role, **req):
+def get_top_builds_discord(client, god, role, dataSheet, **req):
     """ return the top builds of a given god
 
     Args:
@@ -158,6 +159,13 @@ def get_top_builds_discord(client, god, role, **req):
                 allDict[slot]["item2"] = topDict[role][slot][item]
             elif topDict[role][slot][item]["games"] > allDict[slot]["item2"]["games"] and topDict[role][slot][item]["games"] < allDict[slot]["item1"]["games"]:
                 allDict[slot]["item2"] = topDict[role][slot][item]
+    
+    allURLS = {}
+    for slot in allDict.keys():
+        for item in allDict[slot].keys():
+            itemName = allDict[slot][item]["item"]
+            allDict[slot][item]["url"] = get_item(itemName, dataSheet)
+
     
     if req['req'] == "discord":
         return [allDict, [games, wins, round(wins/games*100, 2)]]
@@ -354,7 +362,7 @@ def get_worst_matchups(client, god, role, **req):
     # aggregate data from each data set
     # throw out all matchups with only 1 game played or > 90% winRate
     # Create a list of matchups for the 10 lowest winRates of the remaining data
-
+    logger.log(role, "get_worst_matchups")
     god = god.replace("_", " ")
     matchupDict = {}
     mydb = client["Matchups"]
@@ -488,3 +496,5 @@ def get_winrate(client, god, role):
 # dataSheet = pd.read_excel("God Abilities & Items.xlsx", sheet_name="all_items")
 # get_top_builds(client, "Achilles", dataSheet,req="flask")
 # print(datetime.now() - starttime)
+
+# print(get_top_builds_discord(client, "Achilles", "Solo", dataSheet, req="flask"))
