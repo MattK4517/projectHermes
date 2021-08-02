@@ -75,6 +75,7 @@ class FilterForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {value: this.props.role};
+
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -84,14 +85,14 @@ class FilterForm extends React.Component {
   }
 
   handleSubmit(event) {
-    this.props.roleState(this.props.role)
+
     event.preventDefault();
   }
 
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        <button type="submit" value={this.props.role}>{this.props.role}</button>
+        <input type="submit" value={this.props.role} />
       </form>
     )
   }
@@ -174,7 +175,7 @@ class BuildStats extends React.Component {
       <>
         {this.props.stats.map((item, index) => {
           if (index >= this.props.lower && index < this.props.upper) {
-            return <BuildStatsElement itemStats={item} key={index}/>;
+            return <BuildStatsElement itemStats={item} />;
           }
         })}
       </>
@@ -238,20 +239,37 @@ class BuildStatsElement extends React.Component {
 }
 
 
-function Godpage(god){
+
+function Godpage(god, role){
   const pagegod = god.god;
-  const role = god.role
   var [url, seturl] = useState(0);
   const [displaygod, setgod] = useState(0);
   const [abilities, setabilities] = useState([]);
   const [roles, setroles] = useState(["Solo", "Jungle", "Mid", "Support", "Carry"]);
-  const [dispRole, setrole] = useState(role)
-  const {games, banrate, pickrate, winrate, matchups, items} = useFetch(pagegod, dispRole)
+  const {games, banrate, pickrate, winrate, matchups, items} = useFetch(pagegod, role)
+
   useEffect(() => {
     fetch("/".concat(pagegod)).then((res) =>
       res.json().then((data) => {
         setgod(pagegod);
         seturl(data.url);
+      })
+    );
+  }, []);
+
+
+  useEffect(() => {
+    fetch("/".concat(pagegod, "/abilities")).then((res) =>
+      res.json().then((data) => {
+        Object.keys(data).forEach((key) => {
+          setabilities((abilities) => [
+            ...abilities,
+            {
+              name: data[key].name,
+              url: data[key].url,
+            },
+          ]);
+        });
       })
     );
   }, []);
@@ -269,13 +287,13 @@ function Godpage(god){
                 god={displaygod}
                 url={url}
                 tier="S"
-                role={dispRole}
+                role="Solo"
                 rank="All Ranks"
                 abilities={abilities}
               />
               {roles.map((role) =>{
                 return (
-                  <FilterForm role={role} god={pagegod} roleState={setrole}/>
+                  <FilterForm role={role} god={pagegod}/>
                 )
               })}
               <div className="god-build">
@@ -302,8 +320,8 @@ function Godpage(god){
                       <BuildStats stats={items} lower={0} upper={1} />
                     </div>
                   </div>
-                  <div className="slot1">
-                    <div className="content-section_header">First Slot Options</div>
+                  <div className="boots">
+                    <div className="content-section_header">Boots</div>
                     <div>
                       <BuildStats stats={items} lower={1} upper={2} />
                     </div>

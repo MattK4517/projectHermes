@@ -17,7 +17,7 @@ function App() {
           <Route
             path={"/Achilles"}
             exact
-            component={() => <Godpage god={"Achilles"} />}
+            component={() => <Godpage god={"Achilles"} role={"Solo"}/>}
           />
           <Route
             path={"/Agni"}

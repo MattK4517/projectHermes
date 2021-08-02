@@ -15,7 +15,7 @@ def get_all_gods():
 def get_god_data(god):
         dataSheet = pd.read_excel("God Abilities & Items.xlsx", sheet_name="all_items")
         newgod = god.replace("_", " ")
-        build = anlz.get_top_builds_discord(client, newgod, "Solo", dataSheet, req='flask')
+        build = anlz.get_top_builds_discord(client, newgod, "Solo", req='flask')
         pbRate = anlz.get_pb_rate(client, newgod, req='flask')
         image = anlz.get_url(newgod)
         dataDict = {**build, **pbRate, **image}
@@ -23,22 +23,8 @@ def get_god_data(god):
 
 
 @app.route('/<god>/matchups', methods=["GET"])
-def get_god_matchups(god):
+def get_god_matchups_byrole(god):
         return anlz.get_worst_matchups(client, god , "Solo", req='flask')
-
-@app.route('/<god>/<role>', methods=["GET", "POST"])
-def get_god_data_role(god, role):
-        dataSheet = pd.read_excel("God Abilities & Items.xlsx", sheet_name="all_items")
-        newgod = god.replace("_", " ")
-        build = anlz.get_top_builds_discord(client, newgod, role, dataSheet, req='flask')
-        pbRate = anlz.get_pb_rate(client, newgod, req='flask')
-        image = anlz.get_url(newgod)
-        dataDict = {**build, **pbRate, **image}
-        return dataDict
-
-@app.route('/<god>/matchups/<role>')
-def get_god_matchups_byrole(god, role):
-        return anlz.get_worst_matchups(client, god , role, req='flask')
 
 
 @app.route('/<god>/abilities')
