@@ -1,0 +1,21 @@
+tier list what need.
+array of objects sorted highest rank to lowest
+
+what in object
+{
+rank: int, <--- need to weight WR, and matches
+role: str,
+godUrl: str,
+god: str,
+tier: str, <--- average WR of all roles compared to all other gods <--- might precalc and store that
+wr: float,
+pickrate: float,
+banrate: float,
+counterpicksList: { <--- might have to calc and prestore for speed
+	[ ..., {
+	matches: int,
+	godUrl: str,
+	wr: float, 
+	}]}
+matches: int
+}

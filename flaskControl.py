@@ -45,6 +45,9 @@ def get_god_matchups_byrole(god, role):
 def get_god_abilities(god):
         return anlz.get_abilities(god)
 
+@app.route("/gettierlist")
+def get_tier_list():
+        return anlz.make_tier_list(client)
 
 # make a route for every god, in the
 # temp idea for routing

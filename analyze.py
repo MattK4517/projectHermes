@@ -2,12 +2,131 @@ from re import S, X
 from datetime import datetime
 import errlogger as logger
 import pymongo
+from collections import OrderedDict
+from operator import getitem
 
 # from data_base_management import godsDict
 import pandas as pd
 # client = pymongo.MongoClient(
 #     "mongodb+srv://projectHermes:4zXCvGFmfh8YU6q2@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
 
+godsDict = {
+    "Achilles": 0,
+    "Agni": 0,
+    "Ah Muzen Cab": 0,
+    "Ah Puch": 0,
+    "Amaterasu": 0,
+    "Anhur": 0,
+    "Anubis": 0,
+    "Ao Kuang": 0,
+    "Aphrodite": 0,
+    "Apollo": 0,
+    "Arachne": 0,
+    "Ares": 0,
+    "Artemis": 0,
+    "Artio": 0,
+    "Athena": 0,
+    "Awilix": 0,
+    "Baba Yaga": 0,
+    "Bacchus": 0,
+    "Bakasura": 0,
+    "Baron Samedi": 0,
+    "Bastet": 0,
+    "Bellona": 0,
+    "Cabrakan": 0,
+    "Camazotz": 0,
+    "Cerberus": 0,
+    "Cernunnos": 0,
+    "Chaac": 0,
+    "Chang\'e": 0,
+    "Chernobog": 0,
+    "Chiron": 0,
+    "Chronos": 0,
+    "Cthulhu": 0,
+    "Cu Chulainn": 0,
+    "Cupid": 0,
+    "Da Ji": 0,
+    "Danzaburou": 0,
+    "Discordia": 0,
+    "Erlang Shen": 0,
+    "Eset": 0,
+    "Fafnir": 0,
+    "Fenrir": 0,
+    "Freya": 0,
+    "Ganesha": 0,
+    "Geb": 0,
+    "Gilgamesh": 0,
+    "Guan Yu": 0,
+    "Hachiman": 0,
+    "Hades": 0,
+    "He Bo": 0,
+    "Heimdallr": 0,
+    "Hel": 0,
+    "Hera": 0,
+    "Hercules": 0,
+    "Horus": 0,
+    "Hou Yi": 0,
+    "Hun Batz": 0,
+    "Izanami": 0,
+    "Janus": 0,
+    "Jing Wei": 0,
+    "Jormungandr": 0,
+    "Kali": 0,
+    "Khepri": 0,
+    "King Arthur": 0,
+    "Kukulkan": 0,
+    "Kumbhakarna": 0,
+    "Kuzenbo": 0,
+    "Loki": 0,
+    "Medusa": 0,
+    "Mercury": 0,
+    "Merlin": 0,
+    "Morgan Le Fay": 0,
+    "Mulan": 0,
+    "Ne Zha": 0,
+    "Neith": 0,
+    "Nemesis": 0,
+    "Nike": 0,
+    "Nox": 0,
+    "Nu Wa": 0,
+    "Odin": 0,
+    "Olorun": 0,
+    "Osiris": 0,
+    "Pele": 0,
+    "Persephone": 0,
+    "Poseidon": 0,
+    "Ra": 0,
+    "Raijin": 0,
+    "Rama": 0,
+    "Ratatoskr": 0,
+    "Ravana": 0,
+    "Scylla": 0,
+    "Serqet": 0,
+    "Set": 0,
+    "Skadi": 0,
+    "Sobek": 0,
+    "Sol": 0,
+    "Sun Wukong": 0,
+    "Susano": 0,
+    "Sylvanus": 0,
+    "Terra": 0,
+    "Thanatos": 0,
+    "The Morrigan": 0,
+    "Thor": 0,
+    "Thoth": 0,
+    "Tiamat": 0,
+    "Tsukuyomi": 0,
+    "Tyr": 0,
+    "Ullr": 0,
+    "Vamana": 0,
+    "Vulcan": 0,
+    "Xbalanque": 0,
+    "Xing Tian": 0,
+    "Yemoja": 0,
+    "Ymir": 0,
+    "Zeus": 0,
+    "Zhong Kui": 0
+}
 
 Tier_Three_items = [
 "Ninja Tabi", "Shoes of Focus", "Relic Dagger", "Shield of Regrowth", "Lotus Crown", "Heartward Amulet",
@@ -489,7 +608,46 @@ def get_winrate(client, god, role):
                 if slot == "slot1":
                     games += data[role][slot][item][0]
                     wins += data[role][slot][item][1]
+    print(games)
     return round(wins/games * 100, 2)
+
+def get_extended_winrate(client, god, role):
+    god = god.replace("_", " ")
+    mydb = client["Items"]
+    mycol = mydb[god]
+    games = 0
+    wins = 0
+    i = 0
+    for data in mycol.find():
+        for slot in data[role].keys():
+            for item in data[role][slot]:
+                if slot == "slot1":
+                    games += data[role][slot][item][0]
+                    wins += data[role][slot][item][1]
+    return [games, wins, round(wins/games * 100, 2)]
+
+def calc_ranks(client):
+    allGods = {
+        "Jungle": {},
+        "Support": {},
+        "Carry": {},
+        "Mid": {},
+        "Solo": {}
+    }
+    roles = ["Jungle", "Support", "Carry", "Mid", "Solo"]
+    for god in godsDict.keys():
+        for role in roles:
+            games, wins, winrate = get_extended_winrate(client, god, role)
+            if games > 100:
+                allGods[role][god] = {"games": games, "wins": wins, "winRate": winrate}
+    return allGods
+
+def make_tier_list(client):
+    allDict = calc_ranks(client)
+    testDict = allDict["Solo"]
+    testSort = OrderedDict(sorted(testDict.items(),
+       key = lambda x: getitem(x[1], 'games')))
+    return testSort
 
 # get_top_builds(client, "Achilles")
 # starttime = datetime.now()
