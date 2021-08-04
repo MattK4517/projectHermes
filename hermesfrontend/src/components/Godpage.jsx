@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import useFetch from "./useFetch";
 
 
-let role = "";
 const ImageDiv = styled.div`
   background-Position: 75% -100%;
   background:
@@ -289,7 +288,7 @@ function Godpage(god){
                 <div className="toughest-matchups content-section">
                   <div className="content-section_header">
                     <span>Counter Matchups</span>{" "}
-                    <span> these gods counter {displaygod} Solo</span>
+                    <span> these gods counter {displaygod} {dispRole}</span>
                   </div>
                   <div className="matchups">
                     <GodCounterStats matchups={matchups} />

@@ -7,12 +7,12 @@ function Navigation(props) {
       <nav class="navbar navbar-expand navbar-dark bg-dark">
         <div class="container">
           <Link class="navbar-brand" to="/">
-            React Multi-Page Website
+            SS.GG
           </Link>
 
           <div>
             <ul class="navbar-nav ml-auto">
-              <li
+              {/* <li
                 class={`nav-item  ${
                   props.location.pathname === "/" ? "active" : ""
                 }`}
@@ -21,7 +21,7 @@ function Navigation(props) {
                   Home
                   <span class="sr-only">(current)</span>
                 </Link>
-              </li>
+              </li> */}
               <li
                 class={`nav-item  ${
                   props.location.pathname === "/Gods" ? "active" : ""
@@ -29,6 +29,15 @@ function Navigation(props) {
               >
                 <Link class="nav-link" to="/Gods">
                   Gods
+                </Link>
+              </li>
+              <li
+                class={`nav-item  ${
+                  props.location.pathname === "/tierlist" ? "active" : ""
+                }`}
+              >
+                <Link class="nav-link" to="/TierList">
+                  Tier List
                 </Link>
               </li>
             </ul>
