@@ -45,9 +45,13 @@ def get_god_matchups_byrole(god, role):
 def get_god_abilities(god):
         return anlz.get_abilities(god)
 
-@app.route("/gettierlist")
+@app.route("/gettierlist", methods=["GET", "POST"])
 def get_tier_list():
-        return anlz.make_tier_list(client)
+        mydb = client["Tier_List"]
+        mycol = mydb["8/4/2021 - Solo"]
+        x = mycol.find()
+        print(x)
+        return x
 
 # make a route for every god, in the
 # temp idea for routing

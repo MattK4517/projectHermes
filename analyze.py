@@ -2,8 +2,6 @@ from re import S, X
 from datetime import datetime
 import errlogger as logger
 import pymongo
-from collections import OrderedDict
-from operator import getitem
 
 # from data_base_management import godsDict
 import pandas as pd
@@ -626,28 +624,6 @@ def get_extended_winrate(client, god, role):
                     wins += data[role][slot][item][1]
     return [games, wins, round(wins/games * 100, 2)]
 
-def calc_ranks(client):
-    allGods = {
-        "Jungle": {},
-        "Support": {},
-        "Carry": {},
-        "Mid": {},
-        "Solo": {}
-    }
-    roles = ["Jungle", "Support", "Carry", "Mid", "Solo"]
-    for god in godsDict.keys():
-        for role in roles:
-            games, wins, winrate = get_extended_winrate(client, god, role)
-            if games > 100:
-                allGods[role][god] = {"games": games, "wins": wins, "winRate": winrate}
-    return allGods
-
-def make_tier_list(client):
-    allDict = calc_ranks(client)
-    testDict = allDict["Solo"]
-    testSort = OrderedDict(sorted(testDict.items(),
-       key = lambda x: getitem(x[1], 'games')))
-    return testSort
 
 # get_top_builds(client, "Achilles")
 # starttime = datetime.now()
