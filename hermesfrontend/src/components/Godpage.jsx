@@ -287,7 +287,7 @@ function Godpage(god){
                 />
                 <div className="toughest-matchups content-section">
                   <div className="content-section_header">
-                    <span>Counter Matchups</span>{" "}
+                    <span>Counter Matchups </span>{" "}
                     <span> these gods counter {displaygod} {dispRole}</span>
                   </div>
                   <div className="matchups">
