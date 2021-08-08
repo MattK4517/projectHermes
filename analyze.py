@@ -5,8 +5,6 @@ import pymongo
 
 # from data_base_management import godsDict
 import pandas as pd
-client = pymongo.MongoClient(
-    "mongodb+srv://projectHermes:4zXCvGFmfh8YU6q2@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
 
 godsDict = {
     "Achilles": 0,
@@ -568,7 +566,7 @@ def get_url(god):
     url = "https://webcdn.hirezstudios.com/smite/god-icons/{}.jpg".format(god.lower())
     return {"url": url}
 
-def get_abilities(god, client):
+def get_abilities(client, god):
     god = god.replace("_"," ")
     mydb = client["URLS"]
     mycol = mydb[god]
