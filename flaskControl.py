@@ -9,7 +9,8 @@ app = Flask(__name__)
 
 @app.route("/gods")
 def get_all_gods():
-        return anlz.get_gods()
+        gdDict = anlz.get_gods()
+        return gdDict
 
 @app.route('/<god>', methods=["GET", "POST"])
 def get_god_data(god):

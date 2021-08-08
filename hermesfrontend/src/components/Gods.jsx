@@ -34,6 +34,7 @@ function Gods() {
     useEffect(() => {
         fetch("/gods").then((res) => 
         res.json().then((data) => {
+            console.log(data);
             Object.keys(data).forEach((key) => {
                 setallgods((allgods) => [
                     ...allgods,
@@ -44,7 +45,7 @@ function Gods() {
                 ])
             })
         }))
-    }, [allgods]);
+    }, []);
     return (
         <div className="content">
             <div className="god-home-page">

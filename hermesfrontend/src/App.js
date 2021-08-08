@@ -1,7 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Navigation, Godpage, Gods, TierList } from "./components";
-import { useSelector } from "react-redux";
 
 function App() {
   return (

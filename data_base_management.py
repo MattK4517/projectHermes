@@ -1,9 +1,12 @@
 import pymongo
-from main import client
 import pandas as pd
 from collections import OrderedDict
 from operator import getitem
 import analyze as anlz
+
+client = pymongo.MongoClient(
+    "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
+
 
 godsDict = {
     "Achilles": 0,
@@ -160,20 +163,22 @@ def calc_ranks(client):
         "Mid": {},
         "Solo": {}
     }
-    roles = ["Jungle", "Support", "Carry", "Mid", "Solo"]
+    roles = ["Mid"]
     for god in godsDict.keys():
         for role in roles:
             games, wins, winrate = anlz.get_extended_winrate(client, god, role)
-            if games > 100:
+            if games > 1000:
                 allGods[role][god] = {"games": games, "wins": wins, "winRate": winrate}
     return allGods
 
 def make_tier_list(client):
     allDict = calc_ranks(client)
-    testDict = allDict["Solo"]
-    testSort = OrderedDict(sorted(testDict.items(),
-       key = lambda x: getitem(x[1], 'winRate')))
-    return testSort
+    roles = ["Mid"]
+    for role in roles:
+        testDict = allDict[role]
+        testSort = OrderedDict(sorted(testDict.items(),
+            key = lambda x: getitem(x[1], 'winRate')))
+        print(testSort)
     
 def get_ids(client):
     mydb = client["Matches"]
@@ -185,8 +190,7 @@ def get_ids(client):
 # mydb = client["Tier_List"]
 # mycol = mydb["8/4/2021 - Solo"]
 # mycol.insert_one(tList)
-get_ids(client)
-
+print(make_tier_list(client))
 
 # if __name__ == "__main__":        
 #     Assassins = ["Arachne", "Awilix", "Bakasura", "Bastet", "Camazotz", "Da Ji", "Fenrir", "Hun Batz", "Kali", "Loki", "Mercury", "Ne Zha", "Nemesis", "Pele", "Ratatoskr", "Ravana", "Serqet", "Set", "Susano", "Thanatos", "Thor"]

@@ -5,8 +5,8 @@ import pymongo
 
 # from data_base_management import godsDict
 import pandas as pd
-# client = pymongo.MongoClient(
-#     "mongodb+srv://projectHermes:4zXCvGFmfh8YU6q2@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
+client = pymongo.MongoClient(
+    "mongodb+srv://projectHermes:4zXCvGFmfh8YU6q2@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
 
 godsDict = {
     "Achilles": 0,
@@ -281,7 +281,7 @@ def get_top_builds_discord(client, god, role, dataSheet, **req):
     for slot in allDict.keys():
         for item in allDict[slot].keys():
             itemName = allDict[slot][item]["item"]
-            allDict[slot][item]["url"] = get_item(itemName, dataSheet)
+            allDict[slot][item]["url"] = get_item(itemName)
 
     
     if req['req'] == "discord":
@@ -562,35 +562,35 @@ def get_pb_rate(client, god, **req):
 
 def get_url(god):
     god = god.replace("_"," ")
-    url = " "
-    dataSheet = pd.read_excel("God Abilities & Items.xlsx", sheet_name="god_icons_all")
-    for x in range(len(dataSheet)):
-        temp = dataSheet.iloc[x]
-        if temp["god_name"] == god:
-            url = temp["icon_url"]
-    if url == " ":
-        None
-        # print(god)
+    god = god.replace(" ", "-")
+    if god == "Chang\'e":
+        god = "change"
+    url = "https://webcdn.hirezstudios.com/smite/god-icons/{}.jpg".format(god.lower())
     return {"url": url}
 
-def get_abilities(god):
+def get_abilities(god, client):
     god = god.replace("_"," ")
+    mydb = client["URLS"]
+    mycol = mydb[god]
+    for x in mycol.find():
+        abDict = x
+    del abDict["_id"]
     abilities = {}
-    dataSheet = pd.read_excel("God Abilities & Items.xlsx", sheet_name="god_abilties_all")
-    for x in range(len(dataSheet)):
-        temp = dataSheet.iloc[x]
-        if temp["god_name"] == god:
-            abilities["Ability"+str(len(abilities.keys()))] = {"url": temp["ability_url"], "name": temp["ability_name"]}
+    for x in range(len(abDict["Abilities"])):
+        abilities["Ability{}".format(x+1)] = {"name": abDict["Abilities"][x], "url": abDict["Abilities_urls"][x]}
     return abilities
 
-def get_item(item, dataSheet):
-    index = dataSheet[dataSheet["Item_Name"] == item].index
-    return dataSheet["Item_Image_URL"][index[0]]
+def get_item(item):
+    item = item.replace("_"," ")
+    item = item.replace(" ", "-")
+    item = item.replace("'", "")
+    url = "https://webcdn.hirezstudios.com/smite/item-icons/{}.jpg".format(item.lower())
+    return url
 
 def get_gods():
     frontEndDict = {}
-    for key in godsDict:
-        frontEndDict[key] = {**get_url(key), "name": key}
+    for god in godsDict.keys():
+        frontEndDict[god] = {**get_url(god), "name": god}
     return frontEndDict
 
 def get_winrate(client, god, role):
@@ -632,3 +632,4 @@ def get_extended_winrate(client, god, role):
 # print(datetime.now() - starttime)
 
 # print(get_top_builds_discord(client, "Achilles", "Solo", dataSheet, req="flask"))
+# 

@@ -9,6 +9,7 @@ from pyrez.models import Smite
 
 client = pymongo.MongoClient(
     "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
+
 mydb = client["Matches"]
 mycol = mydb["matches"]
 
@@ -202,7 +203,7 @@ def create_match_dict(match):
 starttime = datetime.now()
 creds = open("cred.txt", mode="r").read()
 Smite_api = SmiteAPI(devId =creds.splitlines()[0], authKey = creds.splitlines()[1])
-matchIds = Smite_api.getMatchIds(451, date=20210724, hour=-1)
+matchIds = Smite_api.getMatchIds(451, date=20210802, hour=-1) ### 02 pulled formatted
 print(len(matchIds))
 setIds = []
 allMatches = {}

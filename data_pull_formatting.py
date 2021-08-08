@@ -2,10 +2,13 @@ from datetime import datetime
 from collections import ChainMap
 from collections import defaultdict
 import timeit
-from main import client
+import pymongo
 import pandas as pd
 import analyze as anlz
 
+
+client = pymongo.MongoClient(
+    "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
 
 class godData:
     """class object for gods to store Winrates of specific items and matchups"""
@@ -372,7 +375,7 @@ mycol = mydb["matches"]
 starttime = datetime.now()
 godsStatDict = {}
 data = mycol.find()
-index = 97
+index = 178
 godsdb = client["Matchups"]
 itemsdb = client["Items"]
 godmatchesdb = client["godMatches"]
