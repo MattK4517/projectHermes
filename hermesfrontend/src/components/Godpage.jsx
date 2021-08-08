@@ -238,7 +238,7 @@ class BuildStatsElement extends React.Component {
 
 
 function Godpage(god){
-  const pagegod = god.god;
+  const pagegod = god.god.replace("_", " ");
   const role = god.role
   var [url, seturl] = useState(0);
   const [displaygod, setgod] = useState(0);
@@ -251,6 +251,22 @@ function Godpage(god){
       res.json().then((data) => {
         setgod(pagegod);
         seturl(data.url);
+      })
+    );
+  }, []);
+
+  useEffect(() => {
+    fetch("/".concat(pagegod, "/abilities")).then((res) =>
+      res.json().then((data) => {
+        Object.keys(data).forEach((key) => {
+          setabilities((abilities) => [
+            ...abilities,
+            {
+              name: data[key].name,
+              url: data[key].url,
+            },
+          ]);
+        });
       })
     );
   }, []);
@@ -287,8 +303,7 @@ function Godpage(god){
                 />
                 <div className="toughest-matchups content-section">
                   <div className="content-section_header">
-                    <span>Counter Matchups </span>{" "}
-                    <span> these gods counter {displaygod} {dispRole}</span>
+                    <span>Counter Matchups these gods counter {displaygod} {dispRole}</span>
                   </div>
                   <div className="matchups">
                     <GodCounterStats matchups={matchups} />
@@ -302,14 +317,14 @@ function Godpage(god){
                     </div>
                   </div>
                   <div className="slot1">
-                    <div className="content-section_header">First Slot Options</div>
+                    <div className="content-section_header">Second Slot Options</div>
                     <div>
                       <BuildStats stats={items} lower={1} upper={2} />
                     </div>
                   </div>
                   <div className="slot2">
                     <div className="content-section_header">
-                      Second Slot Options
+                      Third Slot Options
                     </div>
                     <div>
                       <BuildStats stats={items} lower={2} upper={3} />
@@ -317,7 +332,7 @@ function Godpage(god){
                   </div>
                   <div className="slot3">
                     <div className="content-section_header">
-                      Third Slot Options
+                      Fourth Slot Options
                     </div>
                     <div>
                       <BuildStats stats={items} lower={3} upper={4} />

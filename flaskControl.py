@@ -44,7 +44,7 @@ def get_god_matchups_byrole(god, role):
 
 @app.route('/<god>/abilities')
 def get_god_abilities(god):
-        return anlz.get_abilities(god)
+        return anlz.get_abilities(client, god)
 
 @app.route("/gettierlist", methods=["GET", "POST"])
 def get_tier_list():
