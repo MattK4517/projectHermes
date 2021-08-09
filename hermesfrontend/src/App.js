@@ -1,6 +1,8 @@
-import React from "react";
+import React, {useState} from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { Navigation, Godpage, Gods, TierList } from "./components";
+import { Navigation, Godpage, Gods, TierList, Navbar, Home} from "./components";
+import styled from 'styled-components';
+
 
 function App() {
   return (
@@ -8,6 +10,11 @@ function App() {
       <Router>
         <Navigation />
         <Switch>
+          <Route
+            path={"/"}
+            exact
+            component={() => <Home />}
+            />
           <Route
             path={"/Gods"}
             exact
