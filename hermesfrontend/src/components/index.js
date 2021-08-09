@@ -4,3 +4,4 @@ export { default as Home} from "./Home";
 export { SinglePostPage as GetPage } from "./GetPage";
 export { default as Gods } from "./Gods";
 export { default as TierList} from "./TierList";
+export { default as Navbar } from "./Navbar";

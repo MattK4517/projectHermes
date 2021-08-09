@@ -116,6 +116,18 @@ color: #cddcfe;
   color: #cddcfe;
   font-size: 1rem;
 }
+
+.navigation {
+  z-index: 100;
+  width: 100%;
+  position: fixed;
+  top: 0;
+}
+.navbar .container {
+  margin-left: 0;
+  margin-right: 0;
+  justify-content: left;
+}
 .container .god-page-header .god-header-info {
   flex: 1 1;
   display: flex;
@@ -210,6 +222,7 @@ color: #cddcfe;
 }
 
 .Godpage {
+  padding-top: 80px;
   width: 100%;
 }
 
@@ -376,6 +389,7 @@ color: #cddcfe;
 }
 
 .god-home .gods-container {
+  align-self: center;
   display: grid;
   grid-template-columns: repeat(auto-fill,minmax(100px,1fr));
   grid-gap: 12px 12px;
@@ -430,16 +444,22 @@ color: #cddcfe;
 }
 
 .god-home {
+  padding-top: 100px;
   max-width: 1014px;
-  width: 100vw;
+  width: 200vh;
   box-sizing: content-box;
 }
 
 .god-home-page {
   display: flex;
-  margin: 0 auto;
+  margin: auto;
   color: white;
 }
+
+.god-home-page > li {
+  padding-left: 30px;
+}
+
 .content-side-padding {
   padding-left: 24px;
   padding-right: 24px;
@@ -455,7 +475,7 @@ color: #cddcfe;
   color: white; 
 }
 
-#content {
+.content {
   display: flex;
   margin: 0 auto;
   z-index: 100;
@@ -494,3 +514,50 @@ a, a:active, a:focus, a:hover, a:visited {
  .god-home .gods-container .god-link:hover .god-name {
   font-weight: 700;
 }
+
+
+.top-nav {
+  height: 60px;
+}
+
+
+.top-nav .top-nav-content{
+  width: 100%;
+  height: 60px;
+  color: white;
+  background-color: black;
+  justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+  box-sizing: content-box;
+}
+
+.god-home {
+  max-width: 1014px;
+  width: 100vw;
+  box-sizing: content-box;
+}
+
+.content-side-padding {
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.home {
+  height: 100vh;
+  width: 100vw;
+}
+.home-image {
+  height: 100%;
+  width: 100%;
+  padding-top: 80px;
+  background-image: url("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/clans/10028503/e4835c147853ffee8c2625e3cd40d4c09b899f83.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position-x: center;
+  background-position-y: 80px;
+}   
