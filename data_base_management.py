@@ -8,13 +8,16 @@ client = pymongo.MongoClient(
     "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
 
 
-
-Assassins = ["Arachne", "Awilix", "Bakasura", "Bastet", "Camazotz", "Da Ji", "Fenrir", "Hun Batz", "Kali", "Loki", "Mercury", "Ne Zha", "Nemesis", "Pele", "Ratatoskr", "Ravana", "Serqet", "Set", "Susano", "Thanatos", "Thor"]
-Guardians = ["Ares", "Artio", "Athena", "Bacchus", "Cabrakan", "Cerberus",  "Fafnir", "Ganesha", "Geb", "Jormungandr", "Khepri", "Kumbhakarna", "Kuzenbo", "Sobek", "Sylvanus", "Terra", "Xing Tian", "Yemoja", "Ymir"]
-Hunters = ["Ah Muzen Cab", "Anhur", "Apollo", "Artemis", "Cernunnos", "Chernobog", "Chiron", "Cupid", "Danzaburou","Hachiman", "Heimdallr", "Hou Yi", "Izanami", "Jing Wei", "Medusa", "Neith", "Rama", "Skadi", "Ullr", "Xbalanque"]
+Assassins = ["Arachne", "Awilix", "Bakasura", "Bastet", "Camazotz", "Da Ji", "Fenrir", "Hun Batz", "Kali", "Loki",
+    "Mercury", "Ne Zha", "Nemesis", "Pele", "Ratatoskr", "Ravana", "Serqet", "Set", "Susano", "Thanatos", "Thor"]
+Guardians = ["Ares", "Artio", "Athena", "Bacchus", "Cabrakan", "Cerberus",  "Fafnir", "Ganesha", "Geb",
+    "Jormungandr", "Khepri", "Kumbhakarna", "Kuzenbo", "Sobek", "Sylvanus", "Terra", "Xing Tian", "Yemoja", "Ymir"]
+Hunters = ["Ah Muzen Cab", "Anhur", "Apollo", "Artemis", "Cernunnos", "Chernobog", "Chiron", "Cupid", "Danzaburou",
+    "Hachiman", "Heimdallr", "Hou Yi", "Izanami", "Jing Wei", "Medusa", "Neith", "Rama", "Skadi", "Ullr", "Xbalanque"]
 Mages = ["Agni", "Ah Puch", "Anubis", "Ao Kuang", "Aphrodite", "Baba Yaga", "Baron Samedi", "Chang\'e", "Chronos", "Discordia", "Eset", "Freya", "Hades", "He Bo", "Hel", "Hera", "Janus", "Kukulkan", "Merlin", "Nox",
 "Nu Wa", "Olorun", "Persephone", "Poseidon", "Ra", "Raijin", "Scylla", "Sol", "The Morrigan", "Thoth", "Tiamat", "Vulcan", "Zeus", "Zhong Kui"]
-Warriors = ["Amaterasu", "Achilles", "Bellona", "Chaac", "Cu Chulainn", "Erlang Shen", "Guan Yu", "Herculues", "Horus", "King Arthur", "Mulan", "Nike", "Odin", "Osiris", "Sun Wukong", "Tyr", "Vamana"]
+Warriors = ["Amaterasu", "Achilles", "Bellona", "Chaac", "Cu Chulainn", "Erlang Shen", "Guan Yu",
+    "Herculues", "Horus", "King Arthur", "Mulan", "Nike", "Odin", "Osiris", "Sun Wukong", "Tyr", "Vamana"]
 
 godsDict = {
     "Achilles": 0,
@@ -131,6 +134,8 @@ godsDict = {
     "Zeus": 0,
     "Zhong Kui": 0
 }
+
+
 def clear_nonmatches(client):
     dblist = client.list_database_names()
     for db in dblist:
@@ -139,15 +144,17 @@ def clear_nonmatches(client):
         else:
             client.drop_database(db)
 
+
 def calc_total_matches(client):
     mydb = client["Matches"]
     mycol = mydb["matches"]
     games = 0
     for set in mycol.find():
-        keys= list(set.keys())
+        keys = list(set.keys())
         keys.pop(0)
         games += len(keys)
     return games
+
 
 def get_last_day(client):
     mydb = client["Matches"]
@@ -157,37 +164,34 @@ def get_last_day(client):
         keys.pop(0)
         print(set[keys[0]]["Entry_Datetime"])
 
+
 def insert_matches():
     Total = calc_total_matches(client)
     mydb = client["Matches"]
     mycol = mydb["Total_Matches"]
     mycol.insert_one({"Total_Matches": Total})
 
-def calc_ranks(client):
+
+def calc_ranks(client, role):
     allGods = {
-        "Jungle": {},
-        "Support": {},
-        "Carry": {},
-        "Mid": {},
-        "Solo": {}
+        role: {},
     }
-    roles = ["Carry"]
-    for god in Hunters:
-        print(god)
-        for role in roles:
-            games, wins, winrate = anlz.get_extended_winrate(client, god, role)
-            if games > 500:
-                allGods[role][god] = {"games": games, "wins": wins, "winRate": winrate}
+    for god in godsDict.keys():
+        games, wins, winrate = anlz.get_extended_winrate(client, god, role)
+        if games > 461:
+            matches, bans, totalMatches = anlz.get_pb_rate(
+                client, god, req="discord")
+            counterMatchups = anlz.get_worst_matchups(
+                client, god, role, req="None")
+            allGods[role][god] = {"bans": bans, "god": god, "games": games, "pickRate": round(games/totalMatches * 100, 2),
+            "banRate": round(bans/totalMatches * 100, 2), "role": role, "wins": wins, "winRate": winrate, "counterMatchups": counterMatchups}
+        print("god done: {} {}".format(god, role))
     return allGods
 
-def make_tier_list(client):
-    allDict = calc_ranks(client)
-    roles = ["Carry"]
-    for role in roles:
-        testDict = allDict[role]
-        testSort = OrderedDict(sorted(testDict.items(),
-            key = lambda x: getitem(x[1], 'winRate')))
-        print(testSort)
+def make_tier_list(client, role):
+    allDict = calc_ranks(client, role)
+    testDict = allDict[role]
+    return testDict
     
 def get_ids(client):
     mydb = client["Matches"]
@@ -195,11 +199,12 @@ def get_ids(client):
     for doc in mycol.find():
         print(doc.get("_id"))
 
-# tList = make_tier_list(client)
-# mydb = client["Tier_List"]
-# mycol = mydb["8/4/2021 - Solo"]
-# mycol.insert_one(tList)
-print(make_tier_list(client))
+roles = ["Carry", "Support", "Mid", "Jungle", "Solo"]
+for role in roles: 
+    tList = make_tier_list(client, role)
+    mydb = client["Tier_List"]
+    mycol = mydb["8/11/2021 - {}".format(role)]
+    mycol.insert_one(tList)
 
 # if __name__ == "__main__":        
 #     for key in godsDict:

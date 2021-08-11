@@ -49,10 +49,15 @@ def get_god_abilities(god):
 @app.route("/gettierlist", methods=["GET", "POST"])
 def get_tier_list():
         mydb = client["Tier_List"]
-        mycol = mydb["8/4/2021 - Solo"]
-        x = mycol.find()
-        print(x)
-        return x
+        roles = ["Carry", "Support", "Mid", "Jungle", "Solo"]
+        totalData = {}
+        for role in roles:
+                mycol = mydb["8/11/2021 - {}".format(role)]
+                for x in mycol.find():
+                        retData = x
+                del retData["_id"]
+                totalData[role] = retData
+        return totalData
 
 # make a route for every god, in the
 # temp idea for routing

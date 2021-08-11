@@ -477,7 +477,7 @@ def get_worst_matchups(client, god, role, **req):
     # aggregate data from each data set
     # throw out all matchups with only 1 game played or > 90% winRate
     # Create a list of matchups for the 10 lowest winRates of the remaining data
-    logger.log(role, "get_worst_matchups")
+    # logger.log(role, "get_worst_matchups")
     god = god.replace("_", " ")
     matchupDict = {}
     mydb = client["Matchups"]
@@ -536,7 +536,6 @@ def get_pb_rate(client, god, **req):
         god ([type]): [description]
         role ([type]): [description]`
     """
-    logger.log(god,"get_pb_rate")
     god = god.replace("_"," ")
     totalMatches = 0
     godMatches = 0
