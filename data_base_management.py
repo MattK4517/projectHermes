@@ -199,12 +199,14 @@ def get_ids(client):
     for doc in mycol.find():
         print(doc.get("_id"))
 
-roles = ["Carry", "Support", "Mid", "Jungle", "Solo"]
-for role in roles: 
-    tList = make_tier_list(client, role)
-    mydb = client["Tier_List"]
-    mycol = mydb["8/11/2021 - {}".format(role)]
-    mycol.insert_one(tList)
+# roles = ["Carry", "Support", "Mid", "Jungle", "Solo"]
+# for role in roles: 
+#     tList = make_tier_list(client, role)
+#     mydb = client["Tier_List"]
+#     mycol = mydb["8/11/2021 - {}".format(role)]
+#     mycol.insert_one(tList)
+
+get_last_day(client)
 
 # if __name__ == "__main__":        
 #     for key in godsDict:
