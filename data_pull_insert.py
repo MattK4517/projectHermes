@@ -203,7 +203,7 @@ def create_match_dict(match):
 starttime = datetime.now()
 creds = open("cred.txt", mode="r").read()
 Smite_api = SmiteAPI(devId =creds.splitlines()[0], authKey = creds.splitlines()[1])
-matchIds = Smite_api.getMatchIds(451, date=20210802, hour=-1) ### 02 pulled formatted
+matchIds = Smite_api.getMatchIds(451, date=20210804, hour=-1) ### 4 pulled
 print(len(matchIds))
 setIds = []
 allMatches = {}
