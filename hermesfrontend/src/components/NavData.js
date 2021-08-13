@@ -18,7 +18,7 @@ export const NavData = [
         cName: "nav-text",
     },
     {
-        title: "Tier List",
+        title: "Tier List WIP",
         path: "/tierlist",
         icon: <IoIcons.IoIosPaper />,
         cName: "nav-text",
