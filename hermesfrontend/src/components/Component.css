@@ -574,13 +574,10 @@ a, a:active, a:focus, a:hover, a:visited {
   width: 100%;
 }
 
-.stats-tables-container .stats-tables__content-container {
-  margin-left: auto !important;
-  margin-right: auto !important;
-}
 
  .stats-tables-container, .stats-tables__content-container, .tier-list-page-container {
-  width: 100%;
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
 
 .ReactTable.ugg-table-2.content-section {
@@ -603,6 +600,7 @@ a, a:active, a:focus, a:hover, a:visited {
 }
 
 .ReactTable.tier-list .rt-thead.-header {
+  padding-top: 15px;
   position: sticky;
   top: 60px;
   z-index: 90;
@@ -634,6 +632,7 @@ a, a:active, a:focus, a:hover, a:visited {
 
 .ReactTable * {
   box-sizing: border-box;
+  color: white;
 }
 
 .stats-tables-container {
@@ -697,6 +696,10 @@ a, a:active, a:focus, a:hover, a:visited {
   border-radius: 6px;
 }
 
+.ReactTable.ugg-table-2 {
+  width: 100%;
+}
+
 .ReactTable .rt-tr-group {
   flex: 1 0 auto;
   display: flex;
@@ -710,12 +713,29 @@ a, a:active, a:focus, a:hover, a:visited {
   width: 100%;
 }
 
+/* .stats-tables-container .stats-tables__content-container {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  padding-top: 120px;
+} */
+
 .ReactTable.ugg-table-2 .rt-tbody .rt-tr-group .rt-tr .rt-td {
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 5px;
   border: none;
+}
+
+
+.ReactTable.ugg-table-2 .rt-thead .rt-tr .rt-th {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-right: none;
+  color: #cddcfe;
 }
 
 .ReactTable.ugg-table-2 .rt-tbody {
@@ -741,4 +761,119 @@ a, a:active, a:focus, a:hover, a:visited {
   transition: .3s ease;
       transition-property: all;
   transition-property: width ,min-width , padding, opacity;
+}
+
+#page-content {
+  display: flex;
+  padding-bottom: 48px;
+}
+
+#content {
+  min-width: auto;
+  width: 100%;
+}
+
+.stats-tables-page {
+  width: 100%;
+}
+
+.stats-tables-container {
+  padding-top: 24px;
+  width: 100%;
+}
+
+.stats-tables-container {
+  display: flex;
+  flex-direction: column;
+  padding-top: 24px;
+  width: 1014px;
+  box-sizing: content-box;
+}
+
+.stats-tables-container .stats-tables__content-container .rt-td.god {
+  justify-content: flex-start !important;
+}
+
+.stats-tables-container .stats-tables__content-container .rt-td.god .god-played {
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  overflow: hidden;
+}
+
+.stats-tables-container .stats-tables__content-container .rt-td.god .god-played .god-name {
+  margin-left: 12px;
+  padding: 2px;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.inline-rank  {
+  min-width: 40px !important;
+  max-width: 60px !important;
+  flex: 1 1 100% !important;
+}
+
+.inline-role{
+  cursor: pointer !important;
+  min-width: 40px !important;
+  max-width: 60px !important;
+  flex: 1 1 100% !important;
+}
+
+.inline-god {
+    cursor: pointer !important;
+    min-width: 155px !important;
+    max-width: 180px !important;
+    flex: 1 1 100% !important;
+}
+
+.inline-tier {
+  cursor: pointer !important;
+  min-width: 50px !important;
+  max-width: 90px !important;
+  flex: 1 1 100% !important;
+}
+
+.inline-winRate {
+  cursor: pointer !important;
+  min-width: 70px !important;
+  max-width: 90px !important;
+  flex: 1 1 100% !important;
+}
+
+.inline-pickRate {
+  cursor: pointer !important;
+  min-width: 80px !important;
+  max-width: 90px !important;
+  flex: 1 1 100% !important;
+}
+
+.inline-banRate {
+  cursor: pointer !important;
+  min-width: 70px !important;
+  max-width: 90px !important;
+  flex: 1 1 100% !important;
+}
+
+.inline-counterMatchups {
+  min-width: 250px !important;
+  max-width: 270px !important;
+  flex: 1 1 100% !important;
+}
+
+.inline-games {
+  cursor: pointer !important;
+  min-width: 80px !important;
+  max-width: 90px !important;
+  flex: 1 1 100% !important;
+}
+
+.ReactTable.tier-list .rt-tbody .rt-tr-group .rt-td.against .against-container {
+
+    display: flex;
+    align-items: center;
+    margin: 0;
+
 }

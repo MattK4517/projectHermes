@@ -33,9 +33,8 @@ class GodHeader extends React.Component {
           </div>
           <div className="god-header-info">
             <h1 className="god-label">
-              <span>{this.props.god}</span>{" "}
+              <span>{this.props.god}</span>
               <span>
-                {" "}
                 Build for {this.props.role}, {this.props.rank}
               </span>
             </h1>
@@ -238,7 +237,7 @@ class BuildStatsElement extends React.Component {
 
 
 function Godpage(god){
-  const pagegod = god.god.replace("_", " ");
+  const pagegod = god.god.replaceAll("_", " ");
   const role = god.role
   var [url, seturl] = useState(0);
   const [displaygod, setgod] = useState(0);

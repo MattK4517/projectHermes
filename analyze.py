@@ -2,6 +2,8 @@ from re import S, X
 from datetime import datetime
 import errlogger as logger
 import pymongo
+from collections import OrderedDict
+from operator import getitem
 
 # from data_base_management import godsDict
 import pandas as pd
@@ -502,25 +504,46 @@ def get_worst_matchups(client, god, role, **req):
                         matchupDict[enemy]["timesPlayed"] += data[matchup][0]
                         matchupDict[enemy]["wins"] += data[matchup][1]
                         matchupDict[enemy]["winRate"] = round(matchupDict[enemy]["wins"]/matchupDict[enemy]["timesPlayed"] * 100, 2)
-    
+
+    # go thru dict and look for a min number of matchups played
     for key in matchupDict.keys():
         if matchupDict[key]["timesPlayed"] > round(games/100):
             winRates.append(matchupDict[key]["winRate"])
     winRates.sort()
-
+    ## sort the matchups played enough times then pop the greatest wrs
     while len(winRates) > 10:
         winRates.pop()
-
+    
+    ## keep track of the num of games played with wrs in the list
+    games_cache = []
     for key in matchupDict.keys():
         if matchupDict[key]["winRate"] not in winRates:
             toRemove.append(key)
+        else:
+            games_cache.append(matchupDict[key]["timesPlayed"])
+
+    ## remove matchups played the least
+    games_cache.sort()
+    games_cache = games_cache[-10:]
+
+    for key in matchupDict.keys():
+        if matchupDict[key]["timesPlayed"] not in games_cache:
+            toRemove.append(key)
     
     for i in range(len(toRemove)):
-        matchupDict.pop(toRemove[i])
+        if toRemove[i] in matchupDict.keys():
+            matchupDict.pop(toRemove[i])
+
+    toRemove = []
+    if len(matchupDict.keys()) > 10:
+        for key in matchupDict.keys():
+            if matchupDict[key]["timesPlayed"] in games_cache and matchupDict[key]["winRate"] in winRates:
+                toRemove.append(key)
     
+    print(len(toRemove))
     for key in matchupDict.keys():
         matchupDict[key]["url"] = get_url(key)
-        
+    
     if req['req'] == "discord":
         return [matchupDict, [games, wins, round(wins/games*100, 2)]]
     else:
@@ -627,6 +650,9 @@ def get_extended_winrate(client, god, role):
 # dataSheet = pd.read_excel("God Abilities & Items.xlsx", sheet_name="all_items")
 # get_top_builds(client, "Achilles", dataSheet,req="flask")
 # print(datetime.now() - starttime)
+# client = pymongo.MongoClient(
+#     "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
 
+# get_worst_matchups(client, "Ah Muzen Cab", "Support", req="fasjifkl")
 # print(get_top_builds_discord(client, "Achilles", "Solo", dataSheet, req="flask"))
 # 
