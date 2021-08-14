@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useTable, useSortBy } from 'react-table';
+import { Link } from 'react-router-dom';
 import InfiniteScroll from "react-infinite-scroll-component";
 
 class FilterForm extends React.Component {
@@ -16,14 +17,17 @@ class FilterForm extends React.Component {
 
   handleSubmit(event) {
     this.props.roleState(this.props.role)
+
     event.preventDefault();
   }
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <button type="submit" value={this.props.role}>{this.props.role}</button>
-      </form>
+      <div className="filter-item">
+        <form onSubmit={this.handleSubmit}>
+          <button type="submit" value={this.props.role}>{this.props.role}</button>
+        </form>
+      </div>
     )
   }
 }
@@ -171,20 +175,68 @@ const Table = ({ columns, data, update }) => {
   )
 }
 
+const filterData = (tierData, setTierData, totalData, role) => {
+  setTierData([])
+  totalData.map((godData, index) => {
+    if (role == "All Roles") {
+      setTierData((tierData) => [
+        ...tierData,
+        {
+          god: godData.god,
+          role: godData.role,
+          games: godData.games,
+          winRate: godData.winRate,
+          pickRate: godData.pickRate,
+          banRate: godData.banRate,
+          wins: godData.wins,
+          counterMatchups: godData.counterMatchups.map((matchup) => {
+            return(
+              [matchup[0].url,
+              matchup[1]]
+            )
+          })
+        }
+      ])
+    } else if (role != "All Roles" && godData.role == role){
+      setTierData((tierData) => [
+        ...tierData,
+        {
+          god: godData.god,
+          role: godData.role,
+          games: godData.games,
+          winRate: godData.winRate,
+          pickRate: godData.pickRate,
+          banRate: godData.banRate,
+          wins: godData.wins,
+          counterMatchups: godData.counterMatchups.map((matchup) => {
+            return(
+              [matchup[0].url,
+              matchup[1]]
+            )
+          })
+        }
+      ])
+    }
+  })
+}
+
 function TierList() {
   const [tierData, setTierData] = useState([]);
+  const [totalData, setTotalData] = useState([]);
   const [counterMatchups, setCounterMatchups] = useState([]);
   const [roles, setRoles] = useState(["Solo", "Jungle", "Mid", "Support", "Carry", "All Roles"]);
   const [role, setRole] = useState("All Roles")
   const [rank, setRank] = useState("All Ranks");
   useEffect(() => {
+    filterData(tierData, setTierData, totalData, role);
+  }, [role]);
+  useEffect(() => {
     fetch("/gettierlist").then((res) =>
       res.json().then((data) => {
         Object.keys(data).forEach((key) => {
-          if (role != "All Roles" && key == role){
             Object.keys(data[key]).forEach((godData) => {
-            setTierData((tierData) => [
-              ...tierData,
+            setTotalData((totalData) => [
+              ...totalData,
               {
                 god: data[key][godData].god,
                 role: data[key][godData].role,
@@ -203,7 +255,6 @@ function TierList() {
               },
             ]);
           });
-        }
         });
       })
     );
@@ -250,7 +301,6 @@ function TierList() {
     []
   )
 
-  console.log(tierData)
   return (
     <div id="page-content">
       <div style={{ width: "100%"}}>
@@ -264,12 +314,17 @@ function TierList() {
                       <span class="title-header_main">Smite Tier List</span>
                       <span class="title-header_secondary">for {role}, All Ranks</span>
                     </h1>
+                    <span style={{color: "white"}}>WIP, click on a role to get data to display</span>
                   </div>
-                  {roles.map((role) =>{
-                    return (
-                      <FilterForm role={role}  roleState={setRole}/>
-                    )
-                  })}
+                  <div className="role-filter-container">
+                    <div className="filter-form">
+                    {roles.map((role) =>{
+                      return (
+                        <FilterForm role={role}  roleState={setRole}/>
+                      )
+                    })}
+                    </div>
+                  </div>
                   <Table columns={columns} data={tierData}/>
                 </div>
               </div>
@@ -281,74 +336,21 @@ function TierList() {
   )
 }
 
-
-
-
-// class TierListEntry extends React.Component {
-//   render () {
-//     return(
-//       <div className="rt-tr-group">
-//         <div className="rt-tr">
-//           <div className="rt-td rank" style={{ minWidth: "40px", maxWidth: "60px", flex: "1 1 100%" }}>
-//             <span>1</span>
-//           </div>
-//           <div className="rt-td role" style={{ minWidth: "40px", maxWidth: "60px", flex: "1 1 100%" }}>
-//             <span>Solo</span>
-//           </div>
-//           <div className="rt-td god" style={{ minWidth: "155px", maxWidth: "180px", flex: "1 1 100%" }}>
-//             <a className="god-played gtm-tierlist-god" href="#">
-//               <div style={{position: "relative"}}>
-//                 <div className="god-icon">
-//                   <div style={{height: "30px", width: "30px"}}>
-//                     <div style={{ height: "48px", width: "48px", backgroundImage: "url(\"https://static.u.gg/assets/lol/riot_static/11.15.1/img/sprite/champion3.png\")", 
-//                     backgroundRepeat: "no-repeat", backgroundPosition: "-336px -96px", transform: "scale(0.625)", transformOrigin: "0px 0px 0px" }}>
-                  
-//                     </div>
-//                   </div>
-//                 </div>
-//               </div>
-//             </a>
-//           </div>
-//           <div className="rt-td tier" style={{ minWidth: "50px", maxWidth: "90px", flex: "1 1 100%" }}>
-//             <span><b>A</b></span>
-//           </div>
-//           <div className="rt-td win-rate" style={{ minWidth: "70px", maxWidth: "90px", flex: "1 1 100%" }}>
-//             <span><b>{this.props.winRate}</b></span>
-//           </div>
-//           <div className="rt-td pick-rate" style={{ minWidth: "80px", maxWidth: "90px", flex: "1 1 100%" }}>
-//             <span><b>7.50%</b></span>
-//           </div>
-//           <div className="rt-td ban-rate" style={{ minWidth: "70px", maxWidth: "90px", flex: "1 1 100%" }}>
-//             <span><b>10.50%</b></span>
-//           </div>
-//           <div className="rt-td counter-matchups" style={{ minWidth: "250px", maxWidth: "270px", flex: "1 1 100%" }}>
-//             <div className="counter-container">
-//               <CounterMatchupDisplay />
-//             </div>
-//           </div>
-//           <div className="rt-td games" style={{ minWidth: "80px", maxWidth: "90px", flex: "1 1 100%" }}>
-//             <span><b>{this.props.games}</b></span>
-//           </div>
-//         </div>
-//       </div>
-//     )
-//   }
-// }
-
 class CounterMatchupDisplay extends React.Component {
   render () {
     return(
       <div className="against-container">
         {this.props.matchups.map((matchup, index) => {
+          let routegod = matchup[1].replaceAll(" ", "_")
           return (
           <div className="against" key={index}>
-            <a href={"/".concat(matchup[1].replaceAll(" ", "_"))}>
+            <Link to={"/".concat(routegod)}>
               <div className="god-face" style={{maxWidth: "100px"}}>
                 <div>
-                  <img src={matchup[0].url} alt={matchup[1]} style={{height: "24px", width: "24px"}}></img>
+                  <img src={matchup[0]} alt={matchup[1]} style={{height: "24px", width: "24px"}}></img>
                 </div>
               </div>
-            </a>
+            </Link>
           </div>
           )
         })}
