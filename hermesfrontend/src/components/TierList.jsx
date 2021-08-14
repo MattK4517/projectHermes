@@ -1,38 +1,34 @@
-import React, { useState, useEffect, useMemo } from 'react'
-import styled from 'styled-components'
-import { useTable, useSortBy } from 'react-table'
+import React, { useState, useEffect, useMemo } from 'react';
+import { useTable, useSortBy } from 'react-table';
+import InfiniteScroll from "react-infinite-scroll-component";
 
-// const Styles = styled.div`
-//   padding: 1rem;
+class FilterForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {value: this.props.role};
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
 
-//   table {
-//     border-spacing: 0;
-//     border: 1px solid black;
-//     color: white;
+  handleChange(event) {
+    this.setState({value: event.target.value});
+  }
 
-//     tr {
-//       :last-child {
-//         td {
-//           border-bottom: 0;
-//         }
-//       }
-//     }
+  handleSubmit(event) {
+    this.props.roleState(this.props.role)
+    event.preventDefault();
+  }
 
-//     th,
-//     td {
-//       margin: 0;
-//       padding: 0.5rem;
-//       border-bottom: 1px solid black;
-//       border-right: 1px solid black;
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <button type="submit" value={this.props.role}>{this.props.role}</button>
+      </form>
+    )
+  }
+}
 
-//       :last-child {
-//         border-right: 0;
-//       }
-//     }
-//   }
-// `
-
-function Table({ columns, data }) {
+const Table = ({ columns, data, update }) => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -83,83 +79,87 @@ function Table({ columns, data }) {
                   {firstPageRows.map(
                     (row, i) => {
                       prepareRow(row);
-                      return (
-                      <div className="rt-tr-group">
-                        <div className="rt-tr" role="row" {...row.getRowProps()}>
-                          {row.cells.map((cell) => {
-                            const {key, role} = cell.getCellProps()
-                            if (key.includes("rank")) {
-                            return (
-                              <div className="rt-td rank" style={{ minWidth: "40px", maxWidth: "60px", flex: "1 1 100%" }} {...cell.getCellProps()}>
-                                <span>{i+=1}</span>
-                              </div>
-                            ) } else if (key.includes("role")) {
+                      // if (row.original.role != this.props.role && this.props.role != "All Roles"){ 
+                      //   console.log(row.original.role, this.props.role)
+                      //  }
+                        return (
+                        <div className="rt-tr-group">
+                          <div className="rt-tr" role="row" {...row.getRowProps()}>
+                            {row.cells.map((cell) => {
+                              const {key, role} = cell.getCellProps()
+                              if (key.includes("rank")) {
                               return (
-                            <div className="rt-td role" style={{ minWidth: "40px", maxWidth: "60px", flex: "1 1 100%" }} {...cell.getCellProps()}>
-                              <span>{row.original.role}</span>
-                            </div> )
-                            } else if (key.includes("god")) {
-                              let god = row.original.god.toLowerCase().replaceAll(" ", "-");
-                              let routegod = row.original.god.replaceAll(" ", "_")
-                              if (row.original.god == "Chang\'e"){
-                                routegod = "change"
-                              }
-                              return (
-                                <div className="rt-td god" style={{ minWidth: "155px", maxWidth: "180px", flex: "1 1 100%" }} {...cell.getCellProps()}>
-                                <a className="god-played gtm-tierlist-god" href={"/".concat(routegod)}>
-                                  <div style={{position: "relative"}}>
-                                    <div className="god-icon">
-                                      <div style={{height: "30px", width: "30px"}}>
-                                        <img src={`https://webcdn.hirezstudios.com/smite/god-icons/${god}.jpg`} alt={row.original.god} 
-                                        style={{ height: "48px", width: "48px", transform: "scale(0.625)", transformOrigin: "0px 0px 0px" }}/>
+                                <div className="rt-td rank" style={{ minWidth: "40px", maxWidth: "60px", flex: "1 1 100%" }} {...cell.getCellProps()}>
+                                  <span>{i+=1}</span>
+                                </div>
+                              ) } else if (key.includes("role")) {
+                                return (
+                              <div className="rt-td role" style={{ minWidth: "40px", maxWidth: "60px", flex: "1 1 100%" }} {...cell.getCellProps()}>
+                                <span>{row.original.role}</span>
+                              </div> )
+                              } else if (key.includes("god")) {
+                                let god = row.original.god.toLowerCase().replaceAll(" ", "-");
+                                let routegod = row.original.god.replaceAll(" ", "_")
+                                if (row.original.god == "Chang\'e"){
+                                  routegod = "Chang\'e"
+                                }
+                                return (
+                                  <div className="rt-td god" style={{ minWidth: "155px", maxWidth: "180px", flex: "1 1 100%" }} {...cell.getCellProps()}>
+                                  <a className="god-played gtm-tierlist-god" href={"/".concat(routegod)}>
+                                    <div style={{position: "relative"}}>
+                                      <div className="god-icon">
+                                        <div style={{height: "30px", width: "30px"}}>
+                                          <img src={`https://webcdn.hirezstudios.com/smite/god-icons/${god}.jpg`} alt={row.original.god} 
+                                          style={{ height: "48px", width: "48px", transform: "scale(0.625)", transformOrigin: "0px 0px 0px" }}/>
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
-                                  <strong className="god-name">{row.original.god}</strong>
-                                </a>
-                              </div>
-                              )
-                            } else if (key.includes("tier")) {
-                              return (
-                                <div className="rt-td tier" style={{ minWidth: "50px", maxWidth: "90px", flex: "1 1 100%" }} {...cell.getCellProps()}>
-                                  <span><b>A</b></span>
+                                    <strong className="god-name">{row.original.god}</strong>
+                                  </a>
                                 </div>
-                              )
-                            } else if (key.includes("winRate")) {
-                              return(
-                              <div className="rt-td win-rate" style={{ minWidth: "70px", maxWidth: "90px", flex: "1 1 100%" }} {...cell.getCellProps()}>
-                                <span><b>{row.original.winRate}%</b></span>
-                              </div>
-                              )
-                            } else if (key.includes("pickRate")) {
-                              return (
-                                <div className="rt-td pick-rate" style={{ minWidth: "80px", maxWidth: "90px", flex: "1 1 100%" }} {...cell.getCellProps()}>
-                                  <span><b>{row.original.pickRate}%</b></span>
-                                </div>
-                              )
-                            } else if (key.includes("banRate")) {
-                              return (
-                                <div className="rt-td ban-rate" style={{ minWidth: "70px", maxWidth: "90px", flex: "1 1 100%" }} {...cell.getCellProps()}>
-                                  <span><b>{row.original.banRate}%</b></span>
-                                </div>
-                              )
-                              } else if (key.includes("counterMatchups")) {
+                                )
+                              } else if (key.includes("tier")) {
                                 return (
-                                  <div className="rt-td against" style={{ minWidth: "250px", maxWidth: "270px", flex: "1 1 100%" }} {...cell.getCellProps()}>
-                                      <CounterMatchupDisplay matchups={row.original.counterMatchups}/>
+                                  <div className="rt-td tier" style={{ minWidth: "50px", maxWidth: "90px", flex: "1 1 100%" }} {...cell.getCellProps()}>
+                                    <span><b>A</b></span>
                                   </div>
                                 )
-                                } else if (key.includes("games")) {
+                              } else if (key.includes("winRate")) {
+                                return(
+                                <div className="rt-td win-rate" style={{ minWidth: "70px", maxWidth: "90px", flex: "1 1 100%" }} {...cell.getCellProps()}>
+                                  <span><b>{row.original.winRate}%</b></span>
+                                </div>
+                                )
+                              } else if (key.includes("pickRate")) {
+                                return (
+                                  <div className="rt-td pick-rate" style={{ minWidth: "80px", maxWidth: "90px", flex: "1 1 100%" }} {...cell.getCellProps()}>
+                                    <span><b>{row.original.pickRate}%</b></span>
+                                  </div>
+                                )
+                              } else if (key.includes("banRate")) {
+                                return (
+                                  <div className="rt-td ban-rate" style={{ minWidth: "70px", maxWidth: "90px", flex: "1 1 100%" }} {...cell.getCellProps()}>
+                                    <span><b>{row.original.banRate}%</b></span>
+                                  </div>
+                                )
+                                } else if (key.includes("counterMatchups")) {
                                   return (
-                                    <div className="rt-td games" style={{ minWidth: "80px", maxWidth: "90px", flex: "1 1 100%" }} {...cell.getCellProps()}>
-                                      <span><b>{row.original.games}</b></span>
+                                    <div className="rt-td against" style={{ minWidth: "250px", maxWidth: "270px", flex: "1 1 100%" }} {...cell.getCellProps()}>
+                                        <CounterMatchupDisplay matchups={row.original.counterMatchups}/>
                                     </div>
                                   )
-                                  }
-                          })}
+                                  } else if (key.includes("games")) {
+                                    return (
+                                      <div className="rt-td games" style={{ minWidth: "80px", maxWidth: "90px", flex: "1 1 100%" }} {...cell.getCellProps()}>
+                                        <span><b>{row.original.games}</b></span>
+                                      </div>
+                                    )
+                                    }
+                            })}
+                          </div>
                         </div>
-                      </div>
-                    )}
+                        )}
+                      // }
                   )}
                 </div>
               </div>
@@ -174,47 +174,36 @@ function Table({ columns, data }) {
 function TierList() {
   const [tierData, setTierData] = useState([]);
   const [counterMatchups, setCounterMatchups] = useState([]);
-  const [role, setRole] = useState("All Roles");
+  const [roles, setRoles] = useState(["Solo", "Jungle", "Mid", "Support", "Carry", "All Roles"]);
+  const [role, setRole] = useState("All Roles")
   const [rank, setRank] = useState("All Ranks");
   useEffect(() => {
     fetch("/gettierlist").then((res) =>
       res.json().then((data) => {
         Object.keys(data).forEach((key) => {
-          Object.keys(data[key]).forEach((godData) => {
-          setTierData((tierData) => [
-            ...tierData,
-            {
-              god: data[key][godData].god,
-              role: data[key][godData].role,
-              games: data[key][godData].games,
-              winRate: data[key][godData].winRate,
-              pickRate: data[key][godData].pickRate,
-              banRate: data[key][godData].banRate,
-              wins: data[key][godData].wins,
-              tier: "A",
-              counterMatchups: Object.keys(data[key][godData].counterMatchups).map((matchup) => {
-                return(
-                  data[key][godData]["counterMatchups"][matchup].url
-                )
-                // [...counterMatchups, {
-                //   enemy: data[key][godData]["counterMatchups"][matchup].enemy,
-                // }]
-              })
-            },
-          ]);
-          // Object.keys(data[key][godData].counterMatchups).forEach((matchup) => {
-          //   setCounterMatchups((counterMatchups) => [
-          //     ...counterMatchups,
-          //     {
-          //       enemy: data[key][godData]["counterMatchups"][matchup].enemy,
-          //       timesPlayed: data[key][godData]["counterMatchups"][matchup].timesPlayed,
-          //       url: data[key][godData]["counterMatchups"][matchup]["url"].url,
-          //       winRate: data[key][godData]["counterMatchups"][matchup].winRate,
-          //       wins: data[key][godData]["counterMatchups"][matchup].wins,
-          //     }
-          //   ])
-          // })
-        });
+          if (role != "All Roles" && key == role){
+            Object.keys(data[key]).forEach((godData) => {
+            setTierData((tierData) => [
+              ...tierData,
+              {
+                god: data[key][godData].god,
+                role: data[key][godData].role,
+                games: data[key][godData].games,
+                winRate: data[key][godData].winRate,
+                pickRate: data[key][godData].pickRate,
+                banRate: data[key][godData].banRate,
+                wins: data[key][godData].wins,
+                tier: "A",
+                counterMatchups: Object.keys(data[key][godData].counterMatchups).map((matchup) => {
+                  return(
+                    [data[key][godData]["counterMatchups"][matchup].url,
+                    data[key][godData]["counterMatchups"][matchup].enemy]
+                  )
+                })
+              },
+            ]);
+          });
+        }
         });
       })
     );
@@ -261,6 +250,7 @@ function TierList() {
     []
   )
 
+  console.log(tierData)
   return (
     <div id="page-content">
       <div style={{ width: "100%"}}>
@@ -268,14 +258,19 @@ function TierList() {
           <div id="content-wrapper">
             <div id="content">
               <div class="stats-tables-page">
-                <div id="stats-tables-container-ID" className="stats-tables-container content-side-padding">
+                <div id="stats-tables-container-ID" className="stats-tables-container content-side-padding" style={{paddingTop: "100px"}}>
                   <div className="title-header">
                     <h1 className="tier-list">
                       <span class="title-header_main">Smite Tier List</span>
-                      <span class="title-header_secondary">for All Roles, All Ranks</span>
+                      <span class="title-header_secondary">for {role}, All Ranks</span>
                     </h1>
                   </div>
-                  <Table columns={columns} data={tierData} />
+                  {roles.map((role) =>{
+                    return (
+                      <FilterForm role={role}  roleState={setRole}/>
+                    )
+                  })}
+                  <Table columns={columns} data={tierData}/>
                 </div>
               </div>
             </div>
@@ -347,10 +342,10 @@ class CounterMatchupDisplay extends React.Component {
         {this.props.matchups.map((matchup, index) => {
           return (
           <div className="against" key={index}>
-            <a href="#">
+            <a href={"/".concat(matchup[1].replaceAll(" ", "_"))}>
               <div className="god-face" style={{maxWidth: "100px"}}>
                 <div>
-                  <img src={matchup.url} alt="" style={{height: "24px", width: "24px"}}></img>
+                  <img src={matchup[0].url} alt={matchup[1]} style={{height: "24px", width: "24px"}}></img>
                 </div>
               </div>
             </a>
@@ -362,48 +357,5 @@ class CounterMatchupDisplay extends React.Component {
   }
 }
 
-// function TierList() {
-//   const [tierData, setTierData] = useState([]);
-//   const [role, setRole] = useState("All Roles");
-//   const [rank, setRank] = useState("All Ranks");
-//   useEffect(() => {
-//     fetch("/gettierlist").then((res) =>
-//       res.json().then((data) => {
-//         Object.keys(data).forEach((key) => {
-//           setTierData((tierData) => [
-//             ...tierData,
-//             {
-//               games: data[key].games,
-//               winRate: data[key].winRate,
-//               wins: data[key].wins,
-//             },
-//           ]);
-//         });
-//       })
-//     );
-//   }, []);
-
-//   return (
-//     <div id="main-content" className="collapsed">
-//       <div id="content-wrapper">
-//         <div id="content">
-//           <div className="stats-tables-page">
-//             <div id="stats-tables-container-ID" className="stats-tables-container content-side-padding">
-//               <div className="stats-tables__content-container" style={{color: "white"}}>
-//                 <div className="tier-list-page-container">
-//                   <div className="tier-list-page">
-//                     <div>
-//                       <testTable />
-//                     </div>
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
 
 export default TierList;
