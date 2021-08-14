@@ -7,6 +7,7 @@ from main import client
 
 app = Flask(__name__)
 
+
 @app.route("/gods")
 def get_all_gods():
         gdDict = anlz.get_gods()
