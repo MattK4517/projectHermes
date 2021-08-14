@@ -10,7 +10,7 @@ function Navigation(props) {
         <div class="container">
           <Navbar />
           <Link class="navbar-brand" to="/">
-            SS.GG
+            Smitestats.gg
           </Link>
     
         </div>

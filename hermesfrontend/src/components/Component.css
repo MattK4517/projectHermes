@@ -877,3 +877,19 @@ a, a:active, a:focus, a:hover, a:visited {
     margin: 0;
 
 }
+
+.filter-form {
+  display: flex;
+  align-items: auto;
+  /* padding-left: 10px; */
+  overflow: hidden;
+  justify-content: flex-end;
+}
+
+.filter-item {
+  flex: 1 1 100%;
+}
+
+.role-filter-container{
+  max-width: 450px;
+}
