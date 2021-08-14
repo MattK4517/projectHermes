@@ -6,6 +6,7 @@ import random
 import time
 
 from pyrez.models import Smite
+from pyrez.models.MatchHistory import MatchHistory
 
 client = pymongo.MongoClient(
     "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
@@ -144,6 +145,7 @@ def create_player_dict(player):
     playerDict = {}
     playerDict["Account_Level"] = player.accountLevel
     playerDict["Assists"] = player.assists
+    playerDict["Conquest_Points"] = player["Conquest_Points"]
     playerDict["Conquest_Tier"] = player.Conquest_Tier
     playerDict["Damage_Done_Magical"] = player.damageDoneMagical
     playerDict["Damage_Done_Physical"] = player.damageDonePhysical
@@ -174,11 +176,12 @@ def create_player_dict(player):
     playerDict["Kills_Single"] = player.killsSingle
     playerDict["Kills_Triple"] = player.killsTriple
     playerDict["Multi_kill_Max"] = player.multiKillMax
-    playerDict["Ranked_Stat_Conq"] = player.rankStatLeague
+    playerDict["Ranked_Stat_Conq"] = player["Ranked_Stat_Conq"]
     playerDict["Region"] = player.region
     playerDict["Role"] = player["Role"]
     playerDict["PlayerId"] = player.playerId
     playerDict["Player_Name"] = player.playerName
+    playerDict["Wards_Placed"] = player["Wards_Placed"]
     playerDict["Win_Status"] = player.winStatus
     playerDict["MatchID"] = player.matchId
     return playerDict
@@ -203,34 +206,40 @@ def create_match_dict(match):
 starttime = datetime.now()
 creds = open("cred.txt", mode="r").read()
 Smite_api = SmiteAPI(devId =creds.splitlines()[0], authKey = creds.splitlines()[1])
-matchIds = Smite_api.getMatchIds(451, date=20210804, hour=-1) ### 4 pulled
-print(len(matchIds))
-setIds = []
-allMatches = {}
-setMatches = {}
-print(len(matchIds))    
-setLength = 10
-matchIdsLen = len(matchIds)
-for x in range(matchIdsLen):
-    setIds.append(matchIds[x].matchId)
-    if (x % 500) == 0 and x > 0:
-        mycol.insert_one(setMatches)
-        setMatches.clear()
-        print("Set complete")
-        print(datetime.now() - starttime)
-    elif (x + 1) % setLength == 0 or (matchIdsLen - x < setLength and len(setMatches) > 0):
-        matchDetails = Smite_api.getMatch(setIds)
-        for i in range(len(matchDetails) // 10):
-            matchDict = create_match_dict(matchDetails[i*setLength])
-            for k in range(10):
-                player = create_player_dict(matchDetails[(i*10) + k])
-                matchDict["player"+str(k)] = player
-            setMatches["match"+str(matchDict["MatchId"])] = matchDict
+# Smite_api.getMatchHistory(712081347)
+# mydb = client["testing"]
+# mycol = mydb["playerMatchHistory"]
+# mHistory = Smite_api.getMatchHistory(712081347)
 
-        setIds.clear()
+# matchIds = Smite_api.getMatchIds(451, date=20210804, hour=-1) ### 4 pulled
+# print(len(matchIds))
+# setIds = []
+# allMatches = {}
+# setMatches = {}
+# print(len(matchIds))    
+# setLength = 10
+# matchIdsLen = len(matchIds)
+# for x in range(matchIdsLen):
+#     setIds.append(matchIds[x].matchId)
+#     if (x % 500) == 0 and x > 0:
+#         mycol.insert_one(setMatches)
+#         setMatches.clear()
+#         print("Set complete")
+#         print(datetime.now() - starttime)
+#     elif (x + 1) % setLength == 0 or (matchIdsLen - x < setLength and len(setMatches) > 0):
+#         matchDetails = Smite_api.getMatch(setIds)
+#         for i in range(len(matchDetails) // 10):
+#             matchDict = create_match_dict(matchDetails[i*setLength])
+#             for k in range(10):
+#                 player = create_player_dict(matchDetails[(i*10) + k])
+#                 matchDict["player"+str(k)] = player
+#             setMatches["match"+str(matchDict["MatchId"])] = matchDict
 
-mycol.insert_one(setMatches)
-print("Pull Completed in " + str(datetime.now() - starttime))       
+#         setIds.clear()
+
+# print(setMatches)
+# mycol.insert_one(setMatches)
+# print("Pull Completed in " + str(datetime.now() - starttime))       
 
 
 
