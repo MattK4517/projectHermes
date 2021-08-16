@@ -3,10 +3,16 @@ import analyze as anlz
 import pandas as pd
 from hermesBot import Assassins, Guardians, Hunters, Mages, Warriors
 from flask import Flask, render_template, request
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from main import client
 
 app = Flask(__name__)
-
+limiter = Limiter(
+        app,
+        key_func=get_remote_address,
+        default_limits=["250 per day", "50 per hour"]
+)
 
 @app.route("/gods")
 def get_all_gods():
