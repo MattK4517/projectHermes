@@ -176,9 +176,8 @@ def create_player_dict(player):
     playerDict["Kills_Single"] = player.killsSingle
     playerDict["Kills_Triple"] = player.killsTriple
     playerDict["Multi_kill_Max"] = player.multiKillMax
-    playerDict["Ranked_Stat_Conq"] = player["Ranked_Stat_Conq"]
+    playerDict["Ranked_Stat_Conq"] = player["Rank_Stat_Conquest"]
     playerDict["Region"] = player.region
-    playerDict["Role"] = player["Role"]
     playerDict["PlayerId"] = player.playerId
     playerDict["Player_Name"] = player.playerName
     playerDict["Wards_Placed"] = player["Wards_Placed"]
@@ -232,6 +231,7 @@ for x in range(matchIdsLen):
             matchDict = create_match_dict(matchDetails[i*setLength])
             for k in range(10):
                 player = create_player_dict(matchDetails[(i*10) + k])
+                print(player)
                 matchDict["player"+str(k)] = player
             setMatches["match"+str(matchDict["MatchId"])] = matchDict
 
