@@ -243,8 +243,10 @@ function Godpage(god){
   const [displaygod, setgod] = useState(0);
   const [abilities, setabilities] = useState([]);
   const [roles, setroles] = useState(["Solo", "Jungle", "Mid", "Support", "Carry"]);
+  const [ranks, setranks] = useState(["Bronze", "Silver", "Gold", "Platinum", "Diamond", "Masters", "Grandmaster", "All_Ranks"])
   const [dispRole, setrole] = useState(role)
-  const {games, banrate, pickrate, winrate, matchups, items} = useFetch(pagegod, dispRole)
+  const [dispRank, setrank] = useState("All_Ranks")
+  const {games, banrate, pickrate, winrate, matchups, items} = useFetch(pagegod, dispRole, dispRank)
   useEffect(() => {
     fetch("/".concat(pagegod)).then((res) =>
       res.json().then((data) => {
@@ -284,12 +286,17 @@ function Godpage(god){
                 url={url}
                 tier="S"
                 role={dispRole}
-                rank="All Ranks"
+                rank={dispRank.replaceAll("_", " ")}
                 abilities={abilities}
               />
               {roles.map((role) =>{
                 return (
                   <FilterForm role={role} god={pagegod} roleState={setrole}/>
+                )
+              })}
+              {ranks.map((rank) =>{
+                return (
+                  <FilterForm role={rank.replaceAll("_", " ")} god={pagegod} roleState={setrank}/>
                 )
               })}
               <div className="god-build">
