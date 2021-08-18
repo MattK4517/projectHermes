@@ -12,7 +12,6 @@ const GetTopItems = (items) => {
 };
 
 const useFetch = (pagegod, role, rank) => {
-  console.log(pagegod, role, rank);
   const [games, setgames] = useState(0);
   const [banrate, setbanrate] = useState(0);
   const [pickrate, setpickrate] = useState(0);
@@ -28,7 +27,6 @@ const useFetch = (pagegod, role, rank) => {
     }else {
       mainFetchStatement = "/".concat(pagegod);
     }
-    console.log(mainFetchStatement);
     fetch(mainFetchStatement).then((res) =>
       res.json().then((data) => {
         setgames(data.games);

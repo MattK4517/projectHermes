@@ -171,7 +171,8 @@ class BuildStats extends React.Component {
     return (
       <>
         {this.props.stats.map((item, index) => {
-          if (index >= this.props.lower && index < this.props.upper) {
+          console.log(item.item)
+          if (index >= this.props.lower && index < this.props.upper && item.item) {
             return <BuildStatsElement itemStats={item} key={index}/>;
           }
         })}
@@ -316,42 +317,73 @@ function Godpage(god){
                   </div>
                 </div>
                 <div className="build content-section">
-                  <div className="starter">
-                    <div className="content-section_header">Starter</div>
-                    <div>
-                      <BuildStats stats={items} lower={0} upper={1} />
-                    </div>
-                  </div>
-                  <div className="slot1">
-                    <div className="content-section_header">Second Slot Options</div>
-                    <div>
-                      <BuildStats stats={items} lower={1} upper={2} />
-                    </div>
-                  </div>
-                  <div className="slot2">
-                    <div className="content-section_header">
-                      Third Slot Options
-                    </div>
-                    <div>
-                      <BuildStats stats={items} lower={2} upper={3} />
-                    </div>
-                  </div>
-                  <div className="slot3">
-                    <div className="content-section_header">
-                      Fourth Slot Options
-                    </div>
-                    <div>
-                      <BuildStats stats={items} lower={3} upper={4} />
-                    </div>
-                  </div>
-                  <div className="slot4">
-                    <div className="content-section_header">
-                      Fifth Slot Options
-                    </div>
-                    <div>
-                      <BuildStats stats={items} lower={4} upper={5} />
-                    </div>
-                  </div>
+                    {items.map((item, index) => {
+                      console.log(index)
+                      if (index === 0) {
+                        return (
+                          <div className="starter">
+                            <div className="content-section_header">Starter</div>
+                              <div>
+                                <BuildStats stats={items} lower={0} upper={1} />
+                              </div>
+                          </div>
+                        )
+                      } else if (index === 1) {
+                        return (
+                          <div className="slot1">
+                            <div className="content-section_header">Second Slot Options</div>
+                            <div>
+                              <BuildStats stats={items} lower={1} upper={2} />
+                            </div>
+                        </div>
+                        )
+                      } else if (index === 2) {
+                        return (
+                          <div className="slot2">
+                            <div className="content-section_header">
+                              Third Slot Options
+                            </div>
+                            <div>
+                              <BuildStats stats={items} lower={2} upper={3} />
+                            </div>
+                        </div>
+                        )
+                      } else if (index === 3) {
+                        return (
+                          <div className="slot3">
+                            <div className="content-section_header">
+                              Fourth Slot Options
+                            </div>
+                            <div>
+                              <BuildStats stats={items} lower={3} upper={4} />
+                            </div>
+                          </div>
+                        )
+                      } else if (index === 4) {
+                        return (
+                          <div className="slot4">
+                            <div className="content-section_header">
+                              Fifth Slot Options
+                            </div>
+                            <div>
+                              <BuildStats stats={items} lower={4} upper={5} />
+                            </div>
+                          </div>
+                        )
+                      } else if (index === 5) {
+                        return (
+                          <div className="slot5">
+                            <div className="content-section_header">
+                              Sixth Slot Options
+                            </div>
+                            <div>
+                              <BuildStats stats={items} lower={5} upper={6} />
+                            </div>
+                          </div>
+                        )
+                      }
+                    })}
+                  {/*
                   <div className="slot5">
                     <div className="content-section_header">
                       Sixth Slot Options
@@ -359,7 +391,7 @@ function Godpage(god){
                     <div>
                       <BuildStats stats={items} lower={5} upper={6} />
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>

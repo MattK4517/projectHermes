@@ -189,12 +189,12 @@ const filterData = (tierData, setTierData, totalData, role) => {
           pickRate: godData.pickRate,
           banRate: godData.banRate,
           wins: godData.wins,
-          counterMatchups: godData.counterMatchups.map((matchup) => {
-            return(
-              [matchup[0].url,
-              matchup[1]]
-            )
-          })
+          // counterMatchups: godData.counterMatchups.map((matchup) => {
+          //   return(
+          //     [matchup[0].url,
+          //     matchup[1]]
+          //   )
+          // })
         }
       ])
     } else if (role != "All Roles" && godData.role == role){
@@ -208,12 +208,12 @@ const filterData = (tierData, setTierData, totalData, role) => {
           pickRate: godData.pickRate,
           banRate: godData.banRate,
           wins: godData.wins,
-          counterMatchups: godData.counterMatchups.map((matchup) => {
-            return(
-              [matchup[0].url,
-              matchup[1]]
-            )
-          })
+          // counterMatchups: godData.counterMatchups.map((matchup) => {
+          //   return(
+          //     [matchup[0].url,
+          //     matchup[1]]
+          //   )
+          // })
         }
       ])
     }
@@ -226,13 +226,17 @@ function TierList() {
   const [counterMatchups, setCounterMatchups] = useState([]);
   const [roles, setRoles] = useState(["Solo", "Jungle", "Mid", "Support", "Carry", "All Roles"]);
   const [role, setRole] = useState("All Roles")
-  const [rank, setRank] = useState("All Ranks");
+  const [ranks, setranks] = useState(["Bronze", "Silver", "Gold", "Platinum", "Diamond", "Masters", "Grandmaster", "All_Ranks"])
+  const [dispRole, setrole] = useState(role)
+  const [dispRank, setRank] = useState("All_Ranks")
   useEffect(() => {
     filterData(tierData, setTierData, totalData, role);
-  }, [role]);
+  }, [role, dispRank]);
   useEffect(() => {
-    fetch("/gettierlist").then((res) =>
+    fetch("/gettierlist/".concat(dispRank)).then((res) =>
       res.json().then((data) => {
+        setTotalData([])
+        console.log(data)
         Object.keys(data).forEach((key) => {
             Object.keys(data[key]).forEach((godData) => {
             setTotalData((totalData) => [
@@ -246,19 +250,19 @@ function TierList() {
                 banRate: data[key][godData].banRate,
                 wins: data[key][godData].wins,
                 tier: "A",
-                counterMatchups: Object.keys(data[key][godData].counterMatchups).map((matchup) => {
-                  return(
-                    [data[key][godData]["counterMatchups"][matchup].url,
-                    data[key][godData]["counterMatchups"][matchup].enemy]
-                  )
-                })
+                // counterMatchups: Object.keys(data[key][godData].counterMatchups).map((matchup) => {
+                //   return(
+                //     [data[key][godData]["counterMatchups"][matchup].url,
+                //     data[key][godData]["counterMatchups"][matchup].enemy]
+                //   )
+                // })
               },
             ]);
           });
         });
       })
     );
-  }, []);
+  }, [dispRank]);
   const columns = React.useMemo(
     () => [
       {
@@ -312,18 +316,27 @@ function TierList() {
                   <div className="title-header">
                     <h1 className="tier-list">
                       <span class="title-header_main">Smite Tier List</span>
-                      <span class="title-header_secondary">for {role}, All Ranks</span>
+                      <span class="title-header_secondary">for {role}, {dispRank.replaceAll("_", " ")}</span>
                     </h1>
                     <span style={{color: "white"}}>WIP, click on a role to get data to display</span>
                   </div>
                   <div className="role-filter-container">
                     <div className="filter-form">
-                    {roles.map((role) =>{
-                      return (
-                        <FilterForm role={role}  roleState={setRole}/>
-                      )
-                    })}
+                      {roles.map((role) =>{
+                        return (
+                          <FilterForm role={role}  roleState={setRole}/>
+                        )
+                      })}
                     </div>
+                  </div>
+                  <div className="rank-filter-container">
+                    <div className="filter-form" style={{maxWidth: "750px"}}>
+                        {ranks.map((rank) =>{
+                          return (
+                            <FilterForm role={rank.replaceAll("_", " ")}  roleState={setRank}/>
+                          )
+                        })}
+                      </div>
                   </div>
                   <Table columns={columns} data={tierData}/>
                 </div>
@@ -340,7 +353,7 @@ class CounterMatchupDisplay extends React.Component {
   render () {
     return(
       <div className="against-container">
-        {this.props.matchups.map((matchup, index) => {
+        {/* {this.props.matchups.map((matchup, index) => {
           let routegod = matchup[1].replaceAll(" ", "_")
           return (
           <div className="against" key={index}>
@@ -353,7 +366,7 @@ class CounterMatchupDisplay extends React.Component {
             </Link>
           </div>
           )
-        })}
+        })} */}
       </div>
     )
   }
