@@ -172,24 +172,33 @@ def insert_matches():
     mycol.insert_one({"Total_Matches": Total})
 
 
-def calc_ranks(client, role):
+def calc_ranks(client, role, rank="All Ranks"):
     allGods = {
         role: {},
     }
+    if rank:
+        minGames = 5
+    else:
+        minGames = 517
+
     for god in godsDict.keys():
-        games, wins, winrate = anlz.get_extended_winrate(client, god, role)
-        if games > 517:
+        games, wins, winrate = anlz.get_extended_winrate(client, god, role, rank)
+        if games > minGames:
             matches, bans, totalMatches = anlz.get_pb_rate(
                 client, god, req="discord")
-            counterMatchups = anlz.get_worst_matchups(
-                client, god, role, req="None")
+            if rank:
+                counterMatchups = anlz.get_worst_matchups_by_rank(
+                    client, god, role, rank, req="discord")
+            else:
+                counterMatchups = anlz.get_worst_matchups(
+                    client, god, role, req="None")
             allGods[role][god] = {"bans": bans, "god": god, "games": games, "pickRate": round(games/totalMatches * 100, 2),
             "banRate": round(bans/totalMatches * 100, 2), "role": role, "wins": wins, "winRate": winrate, "counterMatchups": counterMatchups}
         print("god done: {} {}".format(god, role))
     return allGods
 
-def make_tier_list(client, role):
-    allDict = calc_ranks(client, role)
+def make_tier_list(client, role, rank="All Ranks"):
+    allDict = calc_ranks(client, role, rank)
     testDict = allDict[role]
     return testDict
     
@@ -274,12 +283,13 @@ def get_mmrs(client):
                             #     mmrs["3251-3500"] += 1
 
 
-# roles = ["Carry", "Support", "Mid", "Jungle", "Solo"]
-# for role in roles: 
-#     tList = make_tier_list(client, role)
-#     mydb = client["Tier_List"]
-#     mycol = mydb["8/14/2021 - {}".format(role)]
-#     mycol.insert_one(tList)
+roles = ["Carry", "Support", "Mid", "Jungle", "Solo"]
+rank = "Grandmaster"
+for role in roles: 
+    tList = make_tier_list(client, role, rank)
+    mydb = client["Tier_List"]
+    mycol = mydb["8/14/2021 - {} - {}".format(role, rank)]
+    mycol.insert_one(tList)
 
 
 # if __name__ == "__main__":        

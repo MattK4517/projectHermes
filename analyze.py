@@ -467,7 +467,10 @@ def get_worst_matchups_by_rank(client, god, role, rank, **req):
         matchupDict[key]["url"] = get_url(key)
     
     if req['req'] == "discord":
-        return [matchupDict, [games, wins, round(wins/games*100, 2)]]
+        if games == 0:
+            [matchupDict, [games, wins, 0]]
+        else:
+            return [matchupDict, [games, wins, round(wins/games*100, 2)]]
     else:
         # , **{"games": games, "wins": wins, "wr": round(wins/games*100, 2)}
         return matchupDict
@@ -681,23 +684,32 @@ def get_winrate(client, god, role):
                 if slot == "slot1":
                     games += data[role][slot][item][0]
                     wins += data[role][slot][item][1]
-    print(games)
     return round(wins/games * 100, 2)
 
-def get_extended_winrate(client, god, role):
+def get_extended_winrate(client, god, role, rank="All Ranks"):
     god = god.replace("_", " ")
-    mydb = client["Items"]
+    if rank:
+        mydb = client["Items_by_Rank"]
+    else:
+        mydb = client["Items"]
     mycol = mydb[god]
     games = 0
     wins = 0
     i = 0
     for data in mycol.find():
-        for slot in data[role].keys():
-            for item in data[role][slot]:
+        if rank:
+            targetDict = data[rank]
+        else:
+            targetDict = data
+        for slot in targetDict[role].keys():
+            for item in targetDict[role][slot]:
                 if slot == "slot1":
-                    games += data[role][slot][item][0]
-                    wins += data[role][slot][item][1]
-    return [games, wins, round(wins/games * 100, 2)]
+                    games += targetDict[role][slot][item][0]
+                    wins += targetDict[role][slot][item][1]
+    if games > 0:
+        return [games, wins, round(wins/games * 100, 2)]
+    else:
+        return [games, wins, 0]
 
 
 # get_top_builds(client, "Achilles")
@@ -705,8 +717,9 @@ def get_extended_winrate(client, god, role):
 # dataSheet = pd.read_excel("God Abilities & Items.xlsx", sheet_name="all_items")
 # get_top_builds(client, "Achilles", dataSheet,req="flask")
 # print(datetime.now() - starttime)
+
+
 # client = pymongo.MongoClient(
 #     "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
 
-
-# print(get_worst_matchups_by_rank(client, "Achilles", "Solo", "Grandmaster", req="flask"))
+# print(get_worst_matchups_by_rank(client, "Vulcan", "Solo", "Grandmaster", req="flask"))
