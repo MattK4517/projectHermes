@@ -11,7 +11,8 @@ const GetTopItems = (items) => {
   return items[displayItem[allWins.indexOf(max)]];
 };
 
-const useFetch = (pagegod, role) => {
+const useFetch = (pagegod, role, rank) => {
+  console.log(pagegod, role, rank);
   const [games, setgames] = useState(0);
   const [banrate, setbanrate] = useState(0);
   const [pickrate, setpickrate] = useState(0);
@@ -20,11 +21,14 @@ const useFetch = (pagegod, role) => {
   const [items, setitems] = useState([]);
   useEffect(() => {
     let mainFetchStatement;
-    if (role) {
+    if (role && rank) {
+      mainFetchStatement = "/".concat(pagegod, "/", role, "/", rank);
+    } else if (role) {
       mainFetchStatement = "/".concat(pagegod, "/", role);
-    } else {
+    }else {
       mainFetchStatement = "/".concat(pagegod);
     }
+    console.log(mainFetchStatement);
     fetch(mainFetchStatement).then((res) =>
       res.json().then((data) => {
         setgames(data.games);
@@ -55,12 +59,16 @@ const useFetch = (pagegod, role) => {
         });
       })
     );
-  }, [role]);
+  }, [role, rank]);
 
+  // else if (role && rank){
+  //   matchupsFetchStatement = "/".concat(pagegod, "/matchups/", role, "/", rank)
   let matchupsFetchStatement;
-  if (role) {
+  if (role && rank) {
+    matchupsFetchStatement = "/".concat(pagegod, "/matchups/", role, "/", rank)
+  } else if (role) {
     matchupsFetchStatement = "/".concat(pagegod, "/matchups/", role)
-  } else {
+  }else {
     matchupsFetchStatement = "/".concat(pagegod, "/matchups")
   }
   useEffect(() => {
@@ -81,7 +89,7 @@ const useFetch = (pagegod, role) => {
         });
       })
     );
-  }, [role]);
+  }, [role, rank]);
   return { games, banrate, pickrate, winrate, matchups, items};
 };
 

@@ -8,11 +8,11 @@ from flask_limiter.util import get_remote_address
 from main import client
 
 app = Flask(__name__)
-limiter = Limiter(
-        app,
-        key_func=get_remote_address,
-        default_limits=["250 per day", "50 per hour"]
-)
+# limiter = Limiter(
+#         app,
+#         key_func=get_remote_address,
+#         default_limits=["250 per day", "50 per hour"]
+# )
 
 @app.route("/gods")
 def get_all_gods():
@@ -21,9 +21,8 @@ def get_all_gods():
 
 @app.route('/<god>', methods=["GET", "POST"])
 def get_god_data(god):
-        dataSheet = pd.read_excel("God Abilities & Items.xlsx", sheet_name="all_items")
         newgod = god.replace("_", " ")
-        build = anlz.get_top_builds_discord(client, newgod, "Solo", dataSheet, req='flask')
+        build = anlz.get_top_builds_discord(client, newgod, "Solo", req='flask')
         pbRate = anlz.get_pb_rate(client, newgod, req='flask')
         image = anlz.get_url(newgod)
         dataDict = {**build, **pbRate, **image}
@@ -34,19 +33,27 @@ def get_god_data(god):
 def get_god_matchups(god):
         return anlz.get_worst_matchups(client, god , "Solo", req='flask')
 
-@app.route('/<god>/<role>', methods=["GET", "POST"])
-def get_god_data_role(god, role):
-        dataSheet = pd.read_excel("God Abilities & Items.xlsx", sheet_name="all_items")
+@app.route('/<god>/<role>/<rank>', methods=["GET", "POST"])
+def get_god_data_role(god, role, rank):
         newgod = god.replace("_", " ")
-        build = anlz.get_top_builds_discord(client, newgod, role, dataSheet, req='flask')
+        print(rank)
+        if rank == "All Ranks":
+                print("getting here")
+                build = anlz.get_top_builds_discord(client, newgod, role, req='flask')
+        else:
+                build = anlz.get_top_builds_discord_by_rank(client, newgod, role, rank, req='flask')
         pbRate = anlz.get_pb_rate(client, newgod, req='flask')
         image = anlz.get_url(newgod)
         dataDict = {**build, **pbRate, **image}
         return dataDict
 
 @app.route('/<god>/matchups/<role>')
-def get_god_matchups_byrole(god, role):
+def get_god_matchups_by_role(god, role):
         return anlz.get_worst_matchups(client, god , role, req='flask')
+
+@app.route('/<god>/matchups/<role>/<rank>')
+def get_god_matchups_by_rank(god, role, rank):
+        return anlz.get_worst_matchups_by_rank(client, god, role, rank, req='flask')
 
 
 @app.route('/<god>/abilities')
