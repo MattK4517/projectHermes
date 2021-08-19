@@ -69,6 +69,36 @@ class GodAbilities extends React.Component {
   }
 }
 
+const getImageUrl = (rank) => {
+  let url = "https://i.imgur.com/LVbUJes.png";
+  if (rank == "Bronze") {
+    url = "https://i.imgur.com/pNAGUeR.png";
+  } else if (rank == "Silver") {
+    url = "https://i.imgur.com/Cm5uf15.png";
+  } else if (rank == "Gold") {
+    url = "https://i.imgur.com/L3BmF9F.png";
+  } else if (rank == "Platinum") {
+    url = "https://i.imgur.com/6M3Ezca.png";
+  } else if (rank == "Diamond") {
+    url = "https://i.imgur.com/dtXd0Kv.png";
+  } else if (rank == "Masters") {
+    url = "https://i.imgur.com/2SdBQ4o.png";
+  } else if (rank == "Grandmaster") {
+    url = "https://i.imgur.com/uh3i4hc.png";
+  } else if (rank == "Solo") {
+    url = "https://i.imgur.com/WLU0Cel.png"
+  } else if (rank == "Jungle") {
+    url = "https://i.imgur.com/CyXnzEO.png"
+  } else if (rank == "Mid") {
+    url = "https://i.imgur.com/0oQkAAZ.png"
+  } else if (rank == "Support") {
+    url = "https://i.imgur.com/l7CD2QM.png"
+  } else if (rank == "Carry") {
+    url = "https://i.imgur.com/RlRTbrA.png"
+  }
+  return url
+}
+
 class FilterForm extends React.Component {
   constructor(props) {
     super(props);
@@ -88,9 +118,10 @@ class FilterForm extends React.Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <button type="submit" value={this.props.role}>{this.props.role}</button>
-      </form>
+        <form onSubmit={this.handleSubmit} className="role-filter">
+          <input type="image" src={getImageUrl(this.props.role)}
+          style={{maxWidth: "36px", maxHeight: "36px"}} name="submit" value={this.props.role}></input>
+        </form>
     )
   }
 }
@@ -171,7 +202,6 @@ class BuildStats extends React.Component {
     return (
       <>
         {this.props.stats.map((item, index) => {
-          console.log(item.item)
           if (index >= this.props.lower && index < this.props.upper && item.item) {
             return <BuildStatsElement itemStats={item} key={index}/>;
           }
@@ -290,16 +320,27 @@ function Godpage(god){
                 rank={dispRank.replaceAll("_", " ")}
                 abilities={abilities}
               />
-              {roles.map((role) =>{
-                return (
-                  <FilterForm role={role} god={pagegod} roleState={setrole}/>
-                )
-              })}
-              {ranks.map((rank) =>{
-                return (
-                  <FilterForm role={rank.replaceAll("_", " ")} god={pagegod} roleState={setrank}/>
-                )
-              })}
+              <div className="filter-manager">
+                <div className="filter-width-wrapper">
+                  <div className="filter-manager_container">
+                    <div className="filter-manager_label">
+                      <span style={{color: "white"}}>Filters</span>
+                    </div>
+                    <div className="role-filter-container">
+                      {roles.map((role) =>{
+                        return (
+                          <FilterForm role={role} god={pagegod} roleState={setrole}/>
+                        )
+                      })}
+                    </div>
+                    {ranks.map((rank) =>{
+                      return (
+                        <FilterForm role={rank.replaceAll("_", " ")} god={pagegod} roleState={setrank}/>
+                      ) 
+                    })}
+                  </div>
+                </div>
+              </div>
               <div className="god-build">
                 <GodRankStats
                   winrate={winrate}
@@ -313,12 +354,12 @@ function Godpage(god){
                     <span>Counter Matchups these gods counter {displaygod} {dispRole}</span>
                   </div>
                   <div className="matchups">
+                    {console.log(matchups)}
                     <GodCounterStats matchups={matchups} />
                   </div>
                 </div>
                 <div className="build content-section">
                     {items.map((item, index) => {
-                      console.log(index)
                       if (index === 0) {
                         return (
                           <div className="starter">

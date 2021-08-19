@@ -36,10 +36,11 @@ def get_god_matchups(god):
 @app.route('/<god>/<role>/<rank>', methods=["GET", "POST"])
 def get_god_data_role(god, role, rank):
         newgod = god.replace("_", " ")
-        if rank == "All_Ranks":
+        if "All" in rank:
                 build = anlz.get_top_builds_discord(client, newgod, role, req='flask')
         else:
                 build = anlz.get_top_builds_discord_by_rank(client, newgod, role, rank, req='flask')
+
         pbRate = anlz.get_pb_rate(client, newgod, req='flask')
         image = anlz.get_url(newgod)
         dataDict = {**build, **pbRate, **image}
@@ -51,7 +52,7 @@ def get_god_matchups_by_role(god, role):
 
 @app.route('/<god>/matchups/<role>/<rank>')
 def get_god_matchups_by_rank(god, role, rank):
-        if rank != "All Ranks":
+        if "All" not in rank:
                 return anlz.get_worst_matchups_by_rank(client, god, role, rank, req='flask')
         else:
                 return anlz.get_worst_matchups(client, god, role, req='flask')
