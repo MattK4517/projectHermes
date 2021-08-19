@@ -880,12 +880,13 @@ starttime = datetime.now()
 godsStatDict = {}
 data = mycol.find()
 index = 0 # 221
-# matchupsdb = client["Matchups"]
+matchupsdb = client["Matchups"]
 # itemsdb = client["Items"]
 # godmatchesdb = client["godMatches"]
 # bansdb = client["godBans"]
+
 # ranksdb = client["Items_by_Rank"]
-rankmatchupsdb = client["Matchups_by_Rank"]
+# rankmatchupsdb = client["Matchups_by_Rank"]
 sets = []
 x = 0
 matches = 0
@@ -894,6 +895,7 @@ for set in data:
     if x >= index:
         sets.append(set)
     x += 1
+    print(x)
     # if x >= 5:
     #     break
 
@@ -910,26 +912,26 @@ while setsFinished < len(sets):
         newEntry = godData(key)
         godsStatDict[key] = newEntry
         godsStatDict[key].set_matches(dataDict)
-        # matchupsdbCol = godsdb[key]
+        matchupsdbCol = matchupsdb[key]
         # itemsdbCol = itemsdb[key]
 
         # itemsRankCol = ranksdb[key]
-        matchupsRankCol = rankmatchupsdb[key]
+        # matchupsRankCol = rankmatchupsdb[key]
 
         # godmatchesCol = godmatchesdb[key]
         # bansCol = bansdb[key]
 
-        # godsStatDict[key].calc_wr_matches()
+        godsStatDict[key].calc_wr_matches()
         # godsStatDict[key].set_item_slots()
         # godsStatDict[key].calc_wr_items()
 
-        godsStatDict[key].calc_wr_matches_by_rank()
+        # godsStatDict[key].calc_wr_matches_by_rank()
         # godsStatDict[key].set_item_slots_by_rank()
         # godsStatDict[key].calc_wr_items_by_rank()
-        # itemsRankCol.insert_one(godsStatDict[key].get_wr_items_by_rank())
-        matchupsRankCol.insert_one(godsStatDict[key].get_wr_matches_by_rank())
 
-        # matchupsdbCol.insert_one(godsStatDict[key].get_wr_matches())
+        # itemsRankCol.insert_one(godsStatDict[key].get_wr_items_by_rank())
+        # matchupsRankCol.insert_one(godsStatDict[key].get_wr_matches_by_rank())
+        matchupsdbCol.insert_one(godsStatDict[key].get_wr_matches())
         # itemsdbCol.insert_one(godsStatDict[key].get_wr_items())
         # bansCol.insert_one({"bans": godsStatDict[key].bans})
 
