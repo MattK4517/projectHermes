@@ -29,6 +29,8 @@ const getImageUrl = (rank) => {
     url = "https://i.imgur.com/l7CD2QM.png"
   } else if (rank == "Carry") {
     url = "https://i.imgur.com/RlRTbrA.png"
+  } else if (rank == "All Roles") {
+    url = "https://i.imgur.com/ajQP9zO.png"
   }
   return url
 }
@@ -205,7 +207,6 @@ const Table = ({ columns, data, update }) => {
 }
 
 const filterData = (tierData, setTierData, totalData, role) => {
-  setTierData([])
   totalData.map((godData, index) => {
     if (role == "All Roles") {
       setTierData((tierData) => [
@@ -258,14 +259,16 @@ function TierList() {
   const [ranks, setranks] = useState(["Bronze", "Silver", "Gold", "Platinum", "Diamond", "Masters", "Grandmaster", "All_Ranks"])
   const [dispRole, setrole] = useState(role)
   const [dispRank, setRank] = useState("All_Ranks")
+  
   useEffect(() => {
+    setTierData([])
     filterData(tierData, setTierData, totalData, role);
   }, [role, dispRank]);
+
   useEffect(() => {
     fetch("/gettierlist/".concat(dispRank)).then((res) =>
       res.json().then((data) => {
         setTotalData([])
-        console.log(data)
         Object.keys(data).forEach((key) => {
             Object.keys(data[key]).forEach((godData) => {
             setTotalData((totalData) => [
@@ -359,7 +362,7 @@ function TierList() {
                       {ranks.map((rank) =>{
                         return (
                           <FilterForm role={rank.replaceAll("_", " ")} roleState={setRank}/>
-                        ) 
+                        )
                       })}
                       </div>
                   </div>

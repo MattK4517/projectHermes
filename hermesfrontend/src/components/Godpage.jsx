@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import "./Component.css";
 import styled from 'styled-components';
 import useFetch from "./useFetch";
-
+import Tooltip from "@material-ui/core/Tooltip";
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 
 const ImageDiv = styled.div`
   background-Position: 75% -100%;
@@ -14,7 +15,19 @@ const ImageDiv = styled.div`
     linear-gradient(to right, #070720 30%, rgba(7, 7, 32, 0.6) 100%), 
     url(${props => props.url ? props.url.replace("icons", "cards") : "https://i.ytimg.com/vi/xAPsmI_zDZs/maxresdefault.jpg"})
 `
-
+class ItemToolTip extends React.Component {
+  render() {
+    return (
+      <div>
+        {this.props.stats.map((stat, index) => {
+          return (
+            <p key={index}> {stat} </p>
+          )
+        })}
+      </div>
+    )
+  }
+}
 class GodHeader extends React.Component {
   render() {
     return (
@@ -99,6 +112,16 @@ const getImageUrl = (rank) => {
   return url
 }
 
+class CreateFilterToolTip extends React.Component {
+  render () {
+    return (
+      <div className="filter-hover" style={{maxHeight: "10px"}}>
+        <p style={{color: "white"}}>{this.props.filterLabel}</p>
+      </div>
+    )
+  }
+}
+
 class FilterForm extends React.Component {
   constructor(props) {
     super(props);
@@ -118,10 +141,16 @@ class FilterForm extends React.Component {
 
   render() {
     return (
+      <HtmlTooltip title={
+          <React.Fragment>
+            <CreateFilterToolTip filterLabel={this.props.role}/>
+          </React.Fragment>
+        } placement="top" arrow> 
         <form onSubmit={this.handleSubmit} className="role-filter">
           <input type="image" src={getImageUrl(this.props.role)}
           style={{maxWidth: "36px", maxHeight: "36px"}} name="submit" value={this.props.role}></input>
         </form>
+      </HtmlTooltip>
     )
   }
 }
@@ -163,9 +192,6 @@ class GodCounterStats extends React.Component {
           return <GodCounterMatchup getMatchups={matchup} key={index} />;
         })}
       </>
-      // <div key={index} className="god-matchups">
-      //   <GodCounterMatchup getMatchups={this.props.matchups} />
-      // </div>
     );
   }
 }
@@ -197,17 +223,66 @@ class GodCounterMatchup extends React.Component {
   }
 }
 
+
 class BuildStats extends React.Component {
   render() {
     return (
       <>
         {this.props.stats.map((item, index) => {
           if (index >= this.props.lower && index < this.props.upper && item.item) {
-            return <BuildStatsElement itemStats={item} key={index}/>;
+            return <BuildStatsElement itemStats={item} key={index} tooltipInfo={this.props.tooltipInfo} item={item.item} item2={item.item2}/> ;
           }
         })}
       </>
     );
+  }
+}
+
+const HtmlTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: '#06061f',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 220,  
+    border: ".5px solid gray",
+    opacity: 100,
+  },
+}))(Tooltip);
+
+const EnsureItem = (data, item) => {
+  let ensured;
+  data.map((itemdata, index) => {
+    if (itemdata.itemName === item){  
+      ensured = itemdata
+      return ensured
+    }
+  })
+  return ensured
+}
+
+class CreateItemToolTip extends React.Component {
+  render() {
+  return (
+    <div style={{maxHeight: "350px", maxWidth: "550px", color: "white", alignItems: "left", fontSize: "14px"}}>
+      <h5 style={{width: "100%", fontSize: "1rem", color: "blue"}}>{EnsureItem(this.props.itemData, this.props.item).itemName}</h5>
+      <div>
+        <p>{EnsureItem(this.props.itemData, this.props.item).shortDesc}</p>
+      </div>
+      <div className="item-stats" style={{paddingLeft: "5px"}}>
+        <ul>
+          {EnsureItem(this.props.itemData, this.props.item).itemStats.map((stat) => {
+            return (
+              <li>{stat[0]}: {stat[1]}</li>
+            )
+          })}
+          {/* <li>{this.props.newitemData.desc1}: {this.props.newitemData.val1}</li> */}
+        </ul>
+        <div className="item-passive">
+        <p>{EnsureItem(this.props.itemData, this.props.item).passive}</p>
+        </div>
+      </div>
+      <p style={{color: "gold"}}><b>Price:</b> {EnsureItem(this.props.itemData, this.props.item).price} </p>
+    </div>
+  )
   }
 }
 
@@ -217,14 +292,20 @@ class BuildStatsElement extends React.Component {
       <>
         <div className="item-row">
           <div className="item-dupe">
-            <div className="item-image">
-              <div className="item-image-div">
-                <img
-                  src={this.props.itemStats.url}
-                  alt={this.props.itemStats.item}
-                />
+            <HtmlTooltip title={
+                <React.Fragment>
+                  <CreateItemToolTip itemData={this.props.tooltipInfo} item={this.props.item}/>
+                </React.Fragment>
+              } placement="top" arrow>
+              <div className="item-image">
+                <div className="item-image-div">
+                  <img
+                    src={this.props.itemStats.url}
+                    alt={this.props.itemStats.item}
+                  />
+                </div>
               </div>
-            </div>
+            </HtmlTooltip>
             <div className="item-stats">
               <div className="winrate">
                 {(
@@ -239,14 +320,20 @@ class BuildStatsElement extends React.Component {
             </div>
           </div>
           <div className="item-dupe">
-            <div className="item-image">
-              <div className="item-image-div">
-                <img
-                  src={this.props.itemStats.url2}
-                  alt={this.props.itemStats.item2}
-                />
+          <HtmlTooltip title={
+                <React.Fragment>
+                  <CreateItemToolTip itemData={this.props.tooltipInfo} item={this.props.item2}/> 
+                </React.Fragment>
+              } placement="top" arrow>
+              <div className="item-image">
+                <div className="item-image-div">
+                  <img
+                    src={this.props.itemStats.url2}
+                    alt={this.props.itemStats.item2}
+                  />
+                </div>
               </div>
-            </div>
+            </HtmlTooltip>
             <div className="item-stats">
               <div className="winrate">
                 {(
@@ -278,6 +365,7 @@ function Godpage(god){
   const [dispRole, setrole] = useState(role)
   const [dispRank, setrank] = useState("All_Ranks")
   const {games, banrate, pickrate, winrate, matchups, items} = useFetch(pagegod, dispRole, dispRank)
+  const [itemdata, setitemdata] = useState([])
   useEffect(() => {
     fetch("/".concat(pagegod)).then((res) =>
       res.json().then((data) => {
@@ -302,6 +390,42 @@ function Godpage(god){
       })
     );
   }, []);
+
+  useEffect(() => {
+    if (items.length === 6) { 
+      items.map((item, index) => {
+        for (let i = 0; i < 2; i++) {
+          let fetchItem;
+          if (i == 0){
+            fetchItem = item.item
+          } else if (i == 1){
+            fetchItem = item.item2
+          }
+          fetch("/getitemdata/".concat(fetchItem)).then((res) =>
+            res.json().then((data) => {
+              setitemdata((itemdata) => [
+                ...itemdata,
+                {
+                  itemName: data.DeviceName,
+                  shortDesc: data.ShortDesc,
+                  price: data.Price,
+                  passive: data.ItemDescription.SecondaryDescription,
+                  itemStats: data["item_stats"].map((stat) => {
+                    return (
+                      [
+                        stat.Description, stat.Value
+                      ]
+                    )
+                  })
+                },
+              ]);
+            })
+          );
+        }
+      })
+    }
+  }, [items])
+
 
   return (
     <>
@@ -354,7 +478,6 @@ function Godpage(god){
                     <span>Counter Matchups these gods counter {displaygod} {dispRole}</span>
                   </div>
                   <div className="matchups">
-                    {console.log(matchups)}
                     <GodCounterStats matchups={matchups} />
                   </div>
                 </div>
@@ -365,7 +488,7 @@ function Godpage(god){
                           <div className="starter">
                             <div className="content-section_header">Starter</div>
                               <div>
-                                <BuildStats stats={items} lower={0} upper={1} />
+                                <BuildStats stats={items} lower={0} upper={1} tooltipInfo={itemdata}/>
                               </div>
                           </div>
                         )
@@ -374,7 +497,7 @@ function Godpage(god){
                           <div className="slot1">
                             <div className="content-section_header">Second Slot Options</div>
                             <div>
-                              <BuildStats stats={items} lower={1} upper={2} />
+                              <BuildStats stats={items} lower={1} upper={2} tooltipInfo={itemdata}/>
                             </div>
                         </div>
                         )
@@ -385,7 +508,7 @@ function Godpage(god){
                               Third Slot Options
                             </div>
                             <div>
-                              <BuildStats stats={items} lower={2} upper={3} />
+                              <BuildStats stats={items} lower={2} upper={3} tooltipInfo={itemdata}/>
                             </div>
                         </div>
                         )
@@ -396,7 +519,7 @@ function Godpage(god){
                               Fourth Slot Options
                             </div>
                             <div>
-                              <BuildStats stats={items} lower={3} upper={4} />
+                              <BuildStats stats={items} lower={3} upper={4} tooltipInfo={itemdata}/>
                             </div>
                           </div>
                         )
@@ -407,7 +530,7 @@ function Godpage(god){
                               Fifth Slot Options
                             </div>
                             <div>
-                              <BuildStats stats={items} lower={4} upper={5} />
+                              <BuildStats stats={items} lower={4} upper={5} tooltipInfo={itemdata}/>
                             </div>
                           </div>
                         )
@@ -418,7 +541,7 @@ function Godpage(god){
                               Sixth Slot Options
                             </div>
                             <div>
-                              <BuildStats stats={items} lower={5} upper={6} />
+                              <BuildStats stats={items} lower={5} upper={6} tooltipInfo={itemdata}/>
                             </div>
                           </div>
                         )

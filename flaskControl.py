@@ -69,7 +69,7 @@ def get_tier_list(rank):
         roles = ["Carry", "Support", "Mid", "Jungle", "Solo"]
         totalData = {}
         for role in roles:
-                if rank == "All_Ranks":
+                if "All" in rank:
                         mycol = mydb["8/14/2021 - {}".format(role)]
                 else:
                         mycol = mydb["8/14/2021 - {} - {}".format(role, rank)]
@@ -79,6 +79,10 @@ def get_tier_list(rank):
                 totalData[role] = retData
         return totalData
 
+@app.route("/getitemdata/<item>")
+def get_item_data(item):
+        return anlz.get_item_data(client, item)
+        
 # make a route for every god, in the
 # temp idea for routing
 # for each god

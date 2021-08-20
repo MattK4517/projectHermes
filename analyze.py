@@ -284,7 +284,6 @@ def get_top_builds_discord(client, god, role, **req):
         for item in allDict[slot].keys():
             itemName = allDict[slot][item]["item"]
             allDict[slot][item]["url"] = get_item(itemName)
-
     
     if req['req'] == "discord":
         return [allDict, [games, wins, round(wins/games*100, 2)]]
@@ -711,6 +710,17 @@ def get_extended_winrate(client, god, role, rank="All Ranks"):
     else:
         return [games, wins, 0]
 
+def get_item_data(client, item):
+    mydb = client["Item_Data"]
+    mycol = mydb[item]
+    for x in mycol.find():
+            itemdata = x
+
+    del itemdata["_id"], itemdata["ActiveFlag"], itemdata["ChildItemId"]
+
+    #itemdata = {**itemdata, **{"Descriptions": itemdata["ItemDescription"]["Menuitems"][0]["Description"]}, **{"Value1": itemdata["ItemDescription"]["Menuitems"][0]["Value"]}}
+    itemdata = {**itemdata, **{"item_stats": itemdata["ItemDescription"]["Menuitems"]}}
+    return itemdata
 
 # get_top_builds(client, "Achilles")
 # starttime = datetime.now()
@@ -722,4 +732,5 @@ def get_extended_winrate(client, god, role, rank="All Ranks"):
 # client = pymongo.MongoClient(
 #     "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
 
+# get_item_data(client, "Ancile")
 # print(get_worst_matchups_by_rank(client, "Vulcan", "Solo", "Grandmaster", req="flask"))
