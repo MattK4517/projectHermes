@@ -18,6 +18,7 @@ const useFetch = (pagegod, role, rank) => {
   const [winrate, setwinrate] = useState(0);
   const [matchups, setmatchups] = useState([]);
   const [items, setitems] = useState([]);
+  const [itemdata, setitemdata] = useState([]);
   useEffect(() => {
     let mainFetchStatement;
     if (role && rank) {
@@ -58,7 +59,6 @@ const useFetch = (pagegod, role, rank) => {
       })
     );
   }, [role, rank]);
-
   // else if (role && rank){
   //   matchupsFetchStatement = "/".concat(pagegod, "/matchups/", role, "/", rank)
   let matchupsFetchStatement;
@@ -88,7 +88,9 @@ const useFetch = (pagegod, role, rank) => {
       })
     );
   }, [role, rank]);
-  return { games, banrate, pickrate, winrate, matchups, items};
+
+
+  return { games, banrate, pickrate, winrate, matchups, items };
 };
 
 export default useFetch;
