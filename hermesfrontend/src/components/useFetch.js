@@ -33,7 +33,7 @@ const useFetch = (pagegod, role, rank) => {
         setgames(data.games);
         setbanrate(((data.godBans / data.totalMatches) * 100).toFixed(2));
         setpickrate(((data.games / data.totalMatches) * 100).toFixed(2));
-        setwinrate(data.wr);
+        setwinrate(data.winRate);
         let displayItems = [];
         Object.keys(data).forEach((key) => {
           if (key.startsWith("slot")) {

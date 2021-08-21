@@ -65,7 +65,7 @@ class FilterForm extends React.Component {
 
 const Table = ({ columns, data, update }) => {
   const {
-    getTableProps,
+    getTableProps,  
     getTableBodyProps,
     headerGroups,
     rows,
@@ -219,12 +219,12 @@ const filterData = (tierData, setTierData, totalData, role) => {
           pickRate: godData.pickRate,
           banRate: godData.banRate,
           wins: godData.wins,
-          // counterMatchups: godData.counterMatchups.map((matchup) => {
-          //   return(
-          //     [matchup[0].url,
-          //     matchup[1]]
-          //   )
-          // })
+          counterMatchups: godData.counterMatchups.map((matchup) => {
+            return(
+              [matchup[0].url,
+              matchup[1]]
+            )
+          })
         }
       ])
     } else if (role != "All Roles" && godData.role == role){
@@ -238,12 +238,12 @@ const filterData = (tierData, setTierData, totalData, role) => {
           pickRate: godData.pickRate,
           banRate: godData.banRate,
           wins: godData.wins,
-          // counterMatchups: godData.counterMatchups.map((matchup) => {
-          //   return(
-          //     [matchup[0].url,
-          //     matchup[1]]
-          //   )
-          // })
+          counterMatchups: godData.counterMatchups.map((matchup) => {
+            return(
+              [matchup[0].url,
+              matchup[1]]
+            )
+          })
         }
       ])
     }
@@ -251,22 +251,20 @@ const filterData = (tierData, setTierData, totalData, role) => {
 }
 
 function TierList() {
-  const [tierData, setTierData] = useState([]);
   const [totalData, setTotalData] = useState([]);
   const [counterMatchups, setCounterMatchups] = useState([]);
   const [roles, setRoles] = useState(["Solo", "Jungle", "Mid", "Support", "Carry", "All Roles"]);
   const [role, setRole] = useState("All Roles")
   const [ranks, setranks] = useState(["Bronze", "Silver", "Gold", "Platinum", "Diamond", "Masters", "Grandmaster", "All_Ranks"])
-  const [dispRole, setrole] = useState(role)
   const [dispRank, setRank] = useState("All_Ranks")
   
-  useEffect(() => {
-    setTierData([])
-    filterData(tierData, setTierData, totalData, role);
-  }, [role, dispRank]);
+  // useEffect(() => {
+  //   setTierData([])
+  //   filterData(tierData, setTierData, totalData, role);
+  // }, [role]);
 
   useEffect(() => {
-    fetch("/gettierlist/".concat(dispRank)).then((res) =>
+    fetch("/gettierlist/".concat(dispRank, "/", role)).then((res) =>
       res.json().then((data) => {
         setTotalData([])
         Object.keys(data).forEach((key) => {
@@ -282,19 +280,20 @@ function TierList() {
                 banRate: data[key][godData].banRate,
                 wins: data[key][godData].wins,
                 tier: "A",
-                // counterMatchups: Object.keys(data[key][godData].counterMatchups).map((matchup) => {
-                //   return(
-                //     [data[key][godData]["counterMatchups"][matchup].url,
-                //     data[key][godData]["counterMatchups"][matchup].enemy]
-                //   )
-                // })
+                counterMatchups: Object.keys(data[key][godData].counterMatchups).map((matchup) => {
+                  return(
+                    [data[key][godData]["counterMatchups"][matchup].url.url,
+                    data[key][godData]["counterMatchups"][matchup].enemy]
+                  )
+                })
               },
             ]);
           });
         });
       })
     );
-  }, [dispRank]);
+  }, [dispRank, role]);
+
   const columns = React.useMemo(
     () => [
       {
@@ -366,7 +365,7 @@ function TierList() {
                       })}
                       </div>
                   </div>
-                  <Table columns={columns} data={tierData}/>
+                  <Table columns={columns} data={totalData}/>
                 </div>
               </div>
             </div>
@@ -381,7 +380,7 @@ class CounterMatchupDisplay extends React.Component {
   render () {
     return(
       <div className="against-container">
-        {/* {this.props.matchups.map((matchup, index) => {
+        {this.props.matchups.map((matchup, index) => {
           let routegod = matchup[1].replaceAll(" ", "_")
           return (
           <div className="against" key={index}>
@@ -394,7 +393,7 @@ class CounterMatchupDisplay extends React.Component {
             </Link>
           </div>
           )
-        })} */}
+        })}
       </div>
     )
   }

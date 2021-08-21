@@ -22,51 +22,58 @@ def get_all_gods():
 @app.route('/<god>', methods=["GET", "POST"])
 def get_god_data(god):
         newgod = god.replace("_", " ")
-        build = anlz.get_top_builds_discord(client, newgod, "Solo", req='flask')
-        pbRate = anlz.get_pb_rate(client, newgod, req='flask')
-        image = anlz.get_url(newgod)
+        build = anlz.get_top_builds(client, newgod, "Solo")
+        pbRate = anlz.get_pb_rate(client, newgod)
+        image = {"url": anlz.get_url(newgod)}
         dataDict = {**build, **pbRate, **image}
         return dataDict
 
 
 @app.route('/<god>/matchups', methods=["GET"])
 def get_god_matchups(god):
-        return anlz.get_worst_matchups(client, god , "Solo", req='flask')
+        return anlz.get_worst_matchups(client, god , "Solo")
 
 @app.route('/<god>/<role>/<rank>', methods=["GET", "POST"])
 def get_god_data_role(god, role, rank):
         newgod = god.replace("_", " ")
         if "All" in rank:
-                build = anlz.get_top_builds_discord(client, newgod, role, req='flask')
+                build = anlz.get_top_builds(client, newgod, role)
         else:
-                build = anlz.get_top_builds_discord_by_rank(client, newgod, role, rank, req='flask')
+                build = anlz.get_top_builds(client, newgod, role, rank)
 
-        pbRate = anlz.get_pb_rate(client, newgod, req='flask')
-        image = anlz.get_url(newgod)
+        pbRate = anlz.get_pb_rate(client, newgod)
+        image = {"url": anlz.get_url(newgod)}
         dataDict = {**build, **pbRate, **image}
         return dataDict
 
 @app.route('/<god>/matchups/<role>')
 def get_god_matchups_by_role(god, role):
-        return anlz.get_worst_matchups(client, god , role, req='flask')
+        return anlz.get_worst_matchups(client, god , role)
 
 @app.route('/<god>/matchups/<role>/<rank>')
 def get_god_matchups_by_rank(god, role, rank):
         if "All" not in rank:
-                return anlz.get_worst_matchups_by_rank(client, god, role, rank, req='flask')
-        else:
-                return anlz.get_worst_matchups(client, god, role, req='flask')
+                matchups =  anlz.get_worst_matchups(client, god, role, rank)
+                del matchups["wins"], matchups["games"], matchups["winRate"]
+                return matchups
+        else:   
+                matchups = anlz.get_worst_matchups(client, god, role)
+                del matchups["wins"], matchups["games"], matchups["winRate"]
+                return matchups
 
 
 @app.route('/<god>/abilities')
 def get_god_abilities(god):
         return anlz.get_abilities(client, god)
 
-@app.route("/gettierlist/<rank>", methods=["GET", "POST"])
-def get_tier_list(rank):
+@app.route("/gettierlist/<rank>/<role>", methods=["GET", "POST"])
+def get_tier_list(rank, role):
         retData = {}
         mydb = client["Tier_List"]
-        roles = ["Carry", "Support", "Mid", "Jungle", "Solo"]
+        if "All" in role:
+                roles = ["Carry", "Support", "Mid", "Jungle", "Solo"]
+        else:
+                roles = [role]
         totalData = {}
         for role in roles:
                 if "All" in rank:
@@ -76,7 +83,7 @@ def get_tier_list(rank):
                 for x in mycol.find():
                         retData = x
                 del retData["_id"]
-                totalData[role] = retData
+                totalData[role] = retData       
         return totalData
 
 @app.route("/getitemdata/<item>")

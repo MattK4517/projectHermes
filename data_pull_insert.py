@@ -205,47 +205,42 @@ def create_match_dict(match):
 starttime = datetime.now()
 creds = open("cred.txt", mode="r").read()
 Smite_api = SmiteAPI(devId =creds.splitlines()[0], authKey = creds.splitlines()[1], responseFormat=pyrez.Format.JSON)
-test = Smite_api.getGods()
-mydb = client["God_Data"]
-for god in test:
-    god = god.json
-    mycol = mydb[god["Name"]]
-    mycol.insert_one(god)
+# mydb = client["God_Data"]
+# for god in test:
+#     god = god.json
+#     mycol = mydb[god["Name"]]
+#     mycol.insert_one(god)
 
 # Smite_api.getMatchHistory(712081347)
-# mydb = client["testing"]
-# mycol = mydb["playerMatchHistory"]
+mydb = client["testing"]
+mycol = mydb["Omni"]
 # mHistory = Smite_api.getMatchHistory(712081347)
 
-# matchIds = Smite_api.getMatchIds(451, date=20210805, hour=-1) ### 05 pulled
-# print(len(matchIds))
-# setIds = []
-# allMatches = {}
-# setMatches = {}
-# print(len(matchIds))    
-# setLength = 10
-# matchIdsLen = len(matchIds)
-# for x in range(matchIdsLen):
-#     setIds.append(matchIds[x].matchId)
-#     if (x % 500) == 0 and x > 0:
-#         mycol.insert_one(setMatches)
-#         setMatches.clear()
-#         print("Set complete")
-#         print(datetime.now() - starttime)
-#     elif (x + 1) % setLength == 0 or (matchIdsLen - x < setLength and len(setMatches) > 0):
-#         matchDetails = Smite_api.getMatch(setIds)
-#         for i in range(len(matchDetails) // 10):
-#             matchDict = create_match_dict(matchDetails[i*setLength])
-#             for k in range(10):
-#                 player = create_player_dict(matchDetails[(i*10) + k])
-#                 print(player)
-#                 matchDict["player"+str(k)] = player
-#             setMatches["match"+str(matchDict["MatchId"])] = matchDict
+matchIds = Smite_api.getMatchIds(434, date=20210820, hour=-1) ### 05 pulled
+print(len(matchIds))
+setIds = []
+allMatches = {}
+setMatches = {}
+print(len(matchIds))    
+setLength = 10
+matchIdsLen = len(matchIds)
+for x in range(len(matchIds)):
+    setIds.append(matchIds[x].matchId)
+    if (x % 500) == 0 and x > 0:
+        mycol.insert_one(setMatches)
+        setMatches.clear()
+        print("Set complete")
+        print(datetime.now() - starttime)
+    elif (x + 1) % setLength == 0 or (matchIdsLen - x < setLength and len(setMatches) > 0):
+        matchDetails = Smite_api.getMatch(setIds)
+        for i in range(len(matchDetails) // 10):
+            matchDict = create_match_dict(matchDetails[i*setLength])
+            for k in range(10):
+                player = create_player_dict(matchDetails[(i*10) + k])
+                matchDict["player"+str(k)] = player
+            mycol.insert_one(matchDict)
 
-#         setIds.clear()
+        setIds.clear()
 
-# mycol.insert_one(setMatches)
-# print("Pull Completed in " + str(datetime.now() - starttime))       
-
-
-
+mycol.insert_one(setMatches)
+print("Pull Completed in " + str(datetime.now() - starttime))

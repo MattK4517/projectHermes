@@ -206,7 +206,7 @@ class GodCounterMatchup extends React.Component {
         <div className="god-icon">
           <img
             className="god-icon-style"
-            src={this.props.getMatchups.url.url}
+            src={this.props.getMatchups.url}
             alt={this.props.getMatchups.enemy}
           />
         </div>
@@ -427,6 +427,7 @@ function Godpage(god){
   }, [items])
 
 
+  console.log(matchups)
   return (
     <>
       <div className="Godpage">
