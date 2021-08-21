@@ -7,6 +7,8 @@ import pandas as pd
 import analyze as anlz
 import time
 
+from constants import godsDict, roles, ranks, slots
+
 
 client = pymongo.MongoClient(
     "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
@@ -15,7 +17,7 @@ client = pymongo.MongoClient(
 class godData:
     """class object for gods to store Winrates of specific items and matchups"""
 
-    def __init__(self, name):
+    def __init__(self, name, slots, ranks, roles):
         self.name = name
         self.rankCounter = {}
         self.bans = 0
@@ -23,344 +25,8 @@ class godData:
         self.matches = {}
         self.matchups = {}
         self.matchups_by_rank = {}
-        self.items = {
-            "Solo": {
-                "slot1": {},
-                "slot2": {},
-                "slot3": {},
-                "slot4": {},
-                "slot5": {},
-                "slot6": {},
-            },
-            "Jungle": {
-                "slot1": {},
-                "slot2": {},
-                "slot3": {},
-                "slot4": {},
-                "slot5": {},
-                "slot6": {},
-            },
-            "Mid": {
-                "slot1": {},
-                "slot2": {},
-                "slot3": {},
-                "slot4": {},
-                "slot5": {},
-                "slot6": {},
-            },
-            "Carry": {
-                "slot1": {},
-                "slot2": {},
-                "slot3": {},
-                "slot4": {},
-                "slot5": {},
-                "slot6": {},
-            },
-            "Support": {
-                "slot1": {},
-                "slot2": {},
-                "slot3": {},
-                "slot4": {},
-                "slot5": {},
-                "slot6": {},
-            },
-        }
-        self.items_by_rank = {
-            "Bronze": {            
-                "Solo": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-                "Jungle": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-                "Mid": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-                "Carry": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-                "Support": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-            },
-            "Silver": {            
-                "Solo": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-                "Jungle": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-                "Mid": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-                "Carry": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-                "Support": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-            },
-            "Gold": {            
-                "Solo": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-                "Jungle": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-                "Mid": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-                "Carry": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-                "Support": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-            },
-            "Platinum": {            
-                "Solo": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-                "Jungle": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-                "Mid": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-                "Carry": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-                "Support": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-            },
-            "Diamond": {            
-                "Solo": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-                "Jungle": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-                "Mid": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-                "Carry": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-                "Support": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-            },
-            "Masters": {            
-                "Solo": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-                "Jungle": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-                "Mid": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-                "Carry": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-                "Support": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-            },
-            "Grandmaster": {            
-                "Solo": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-                "Jungle": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-                "Mid": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-                "Carry": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-                "Support": {
-                    "slot1": {},
-                    "slot2": {},
-                    "slot3": {},
-                    "slot4": {},
-                    "slot5": {},
-                    "slot6": {},
-                },
-            },
-        }
+        self.items = {role: { slot: {} for slot in slots} for role in roles}
+        self.items_by_rank = {rank: {role: { slot: {} for slot in slots} for role in roles} for rank in ranks}
 
 
     def set_matches(self, data):
@@ -744,134 +410,6 @@ def normalize_rank(tier):
         rank = "Grandmaster"
     return rank
 
-
-godsDict = {
-    "Achilles": 0,
-    "Agni": 0,
-    "Ah Muzen Cab": 0,
-    "Ah Puch": 0,
-    "Amaterasu": 0,
-    "Anhur": 0,
-    "Anubis": 0,
-    "Ao Kuang": 0,
-    "Aphrodite": 0,
-    "Apollo": 0,
-    "Arachne": 0,
-    "Ares": 0,
-    "Artemis": 0,
-    "Artio": 0,
-    "Athena": 0,
-    "Awilix": 0,
-    "Baba Yaga": 0,
-    "Bacchus": 0,
-    "Bakasura": 0,
-    "Baron Samedi": 0,
-    "Bastet": 0,
-    "Bellona": 0,
-    "Cabrakan": 0,
-    "Camazotz": 0,
-    "Cerberus": 0,
-    "Cernunnos": 0,
-    "Chaac": 0,
-    "Chang\'e": 0,
-    "Chernobog": 0,
-    "Chiron": 0,
-    "Chronos": 0,
-    "Cthulhu": 0,
-    "Cu Chulainn": 0,
-    "Cupid": 0,
-    "Da Ji": 0,
-    "Danzaburou": 0,
-    "Discordia": 0,
-    "Erlang Shen": 0,
-    "Eset": 0,
-    "Fafnir": 0,
-    "Fenrir": 0,
-    "Freya": 0,
-    "Ganesha": 0,
-    "Geb": 0,
-    "Gilgamesh": 0,
-    "Guan Yu": 0,
-    "Hachiman": 0,
-    "Hades": 0,
-    "He Bo": 0,
-    "Heimdallr": 0,
-    "Hel": 0,
-    "Hera": 0,
-    "Hercules": 0,
-    "Horus": 0,
-    "Hou Yi": 0,
-    "Hun Batz": 0,
-    "Izanami": 0,
-    "Janus": 0,
-    "Jing Wei": 0,
-    "Jormungandr": 0,
-    "Kali": 0,
-    "Khepri": 0,
-    "King Arthur": 0,
-    "Kukulkan": 0,
-    "Kumbhakarna": 0,
-    "Kuzenbo": 0,
-    "Loki": 0,
-    "Medusa": 0,
-    "Mercury": 0,
-    "Merlin": 0,
-    "Morgan Le Fay": 0,
-    "Mulan": 0,
-    "Ne Zha": 0,
-    "Neith": 0,
-    "Nemesis": 0,
-    "Nike": 0,
-    "Nox": 0,
-    "Nu Wa": 0,
-    "Odin": 0,
-    "Olorun": 0,
-    "Osiris": 0,
-    "Pele": 0,
-    "Persephone": 0,
-    "Poseidon": 0,
-    "Ra": 0,
-    "Raijin": 0,
-    "Rama": 0,
-    "Ratatoskr": 0,
-    "Ravana": 0,
-    "Scylla": 0,
-    "Serqet": 0,
-    "Set": 0,
-    "Skadi": 0,
-    "Sobek": 0,
-    "Sol": 0,
-    "Sun Wukong": 0,
-    "Susano": 0,
-    "Sylvanus": 0,
-    "Terra": 0,
-    "Thanatos": 0,
-    "The Morrigan": 0,
-    "Thor": 0,
-    "Thoth": 0,
-    "Tiamat": 0,
-    "Tsukuyomi": 0,
-    "Tyr": 0,
-    "Ullr": 0,
-    "Vamana": 0,
-    "Vulcan": 0,
-    "Xbalanque": 0,
-    "Xing Tian": 0,
-    "Yemoja": 0,
-    "Ymir": 0,
-    "Zeus": 0,
-    "Zhong Kui": 0
-}
-
-
-Assassins = ["Arachne", "Awilix", "Bakasura", "Bastet", "Camazotz", "Da Ji", "Fenrir", "Hun Batz", "Kali", "Loki", "Mercury", "Ne Zha", "Nemesis", "Pele", "Ratatoskr", "Ravana", "Serqet", "Set", "Susano", "Thanatos", "Thor"]
-Guardians = ["Ares", "Artio", "Athena", "Bacchus", "Cabrakan", "Cerberus",  "Fafnir", "Ganesha", "Geb", "Jormungandr", "Khepri", "Kumbhakarna", "Kuzenbo", "Sobek", "Sylvanus", "Terra", "Xing Tian", "Yemoja", "Ymir"]
-Hunters = ["Ah Muzen Cab", "Anhur", "Apollo", "Artemis", "Cernunnos", "Chernobog", "Chiron", "Cupid", "Hachiman", "Heimdallr", "Hou Yi", " Izanami", "Jing Wei", "Medusa", "Neith", "Rama", "Skadi", "Ullr", "Xbalanque"]
-Mages = ["Agni", "Ah Puch", "Anubis", "Ao Kuang", "Aphrodite", "Baba Yaga", "Baron Samedi", "Chang\'e", "Chronos", "Discordia", "Eset", "Freya", "Hades", "He Bo", "Hel", "Hera", "Janus", "Kukulkan", "Merlin", "Morgan Le Fay",
-         "Nox", "Nu Wa", "Olorun", "Persephone", "Poseidon", "Ra", "Raijin", "Scylla", "Sol", "The Morrigan", "Thoth", "Tiamat", "Vulcan", "Zeus", "Zhong Kui"]
-Warriors = ["Amaterasu", "Achilles", "Bellona", "Chaac", "Cu Chulainn", "Erlang Shen", "Gilgamesh", "Guan Yu", "Herculues", "Horus", "King Arthur", "Mulan", "Nike", "Odin", "Osiris", "Sun Wukong", "Tyr", "Vamana"]
-
-
 mydb = client["Matches"]
 mycol = mydb["matches"]
 
@@ -881,12 +419,12 @@ godsStatDict = {}
 data = mycol.find()
 index = 0 # 221
 matchupsdb = client["Matchups"]
-# itemsdb = client["Items"]
-# godmatchesdb = client["godMatches"]
-# bansdb = client["godBans"]
+itemsdb = client["Items"]
+godmatchesdb = client["godMatches"]
+bansdb = client["godBans"]
 
-# ranksdb = client["Items_by_Rank"]
-# rankmatchupsdb = client["Matchups_by_Rank"]
+ranksdb = client["Items_by_Rank"]
+rankmatchupsdb = client["Matchups_by_Rank"]
 sets = []
 x = 0
 matches = 0
@@ -905,35 +443,31 @@ while setsFinished < len(sets):
     matchKeys = create_matches_list(keys)
 
     for key in godsDict.keys():
-        newEntry = godData(key)
-        godsStatDict[key] = newEntry
-
-    for key in godsDict.keys():
-        newEntry = godData(key)
+        newEntry = godData(key, slots, ranks, roles)
         godsStatDict[key] = newEntry
         godsStatDict[key].set_matches(dataDict)
         matchupsdbCol = matchupsdb[key]
-        # itemsdbCol = itemsdb[key]
+        itemsdbCol = itemsdb[key]
 
-        # itemsRankCol = ranksdb[key]
-        # matchupsRankCol = rankmatchupsdb[key]
+        itemsRankCol = ranksdb[key]
+        matchupsRankCol = rankmatchupsdb[key]
 
-        # godmatchesCol = godmatchesdb[key]
-        # bansCol = bansdb[key]
+        godmatchesCol = godmatchesdb[key]
+        bansCol = bansdb[key]
 
         godsStatDict[key].calc_wr_matches()
-        # godsStatDict[key].set_item_slots()
-        # godsStatDict[key].calc_wr_items()
+        godsStatDict[key].set_item_slots()
+        godsStatDict[key].calc_wr_items()
 
-        # godsStatDict[key].calc_wr_matches_by_rank()
-        # godsStatDict[key].set_item_slots_by_rank()
-        # godsStatDict[key].calc_wr_items_by_rank()
+        godsStatDict[key].calc_wr_matches_by_rank()
+        godsStatDict[key].set_item_slots_by_rank()
+        godsStatDict[key].calc_wr_items_by_rank()
 
-        # itemsRankCol.insert_one(godsStatDict[key].get_wr_items_by_rank())
-        # matchupsRankCol.insert_one(godsStatDict[key].get_wr_matches_by_rank())
+        itemsRankCol.insert_one(godsStatDict[key].get_wr_items_by_rank())
+        matchupsRankCol.insert_one(godsStatDict[key].get_wr_matches_by_rank())
         matchupsdbCol.insert_one(godsStatDict[key].get_wr_matches())
-        # itemsdbCol.insert_one(godsStatDict[key].get_wr_items())
-        # bansCol.insert_one({"bans": godsStatDict[key].bans})
+        itemsdbCol.insert_one(godsStatDict[key].get_wr_items())
+        bansCol.insert_one({"bans": godsStatDict[key].bans})
 
         print("God done: "+key)
     setsFinished += 1
