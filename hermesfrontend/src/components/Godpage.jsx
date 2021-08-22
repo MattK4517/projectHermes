@@ -280,7 +280,7 @@ class CreateItemToolTip extends React.Component {
         <p>{EnsureItem(this.props.itemData, this.props.item).passive}</p>
         </div>
       </div>
-      <p style={{color: "gold"}}><b>Price:</b> {EnsureItem(this.props.itemData, this.props.item).price} </p>
+      <p style={{color: "gold"}}><b>Price:</b> {EnsureItem(this.props.itemData, this.props.item).absolutePrice}({EnsureItem(this.props.itemData, this.props.item).relativePrice})</p>
     </div>
   )
   }
@@ -408,9 +408,10 @@ function Godpage(god){
                 {
                   itemName: data.DeviceName,
                   shortDesc: data.ShortDesc,
-                  price: data.Price,
+                  absolutePrice: data.absolutePrice,
+                  relativePrice: data.relativePrice,
                   passive: data.ItemDescription.SecondaryDescription,
-                  itemStats: data["item_stats"].map((stat) => {
+                  itemStats: data["itemStats"].map((stat) => {
                     return (
                       [
                         stat.Description, stat.Value

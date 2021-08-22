@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { Navigation, Godpage, Gods, TierList, Navbar, Home} from "./components";
+import { Navigation, Godpage, Gods, TierList, Navbar, Home, ContactForm } from "./components";
 import styled from 'styled-components';
 
 
@@ -24,6 +24,11 @@ function App() {
             path={"/tierlist"}
             exact
             component={() => <TierList />}
+          />
+          <Route 
+            path={"/contact"}
+            exact
+            component={() => <ContactForm />}
           />
           <Route
             path={"/Achilles"}

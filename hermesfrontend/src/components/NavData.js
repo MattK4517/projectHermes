@@ -3,7 +3,6 @@ import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
 import * as IoIcons from 'react-icons/io';
 
-
 export const NavData = [
     {
         title: "Home",
@@ -22,5 +21,12 @@ export const NavData = [
         path: "/tierlist",
         icon: <IoIcons.IoIosPaper />,
         cName: "nav-text",
+    },
+    {
+        title: "Contact US!",
+        path: "/contact",
+        icon: <AiIcons.AiTwotoneMail />,
+        cName: "nav-text"
+
     }
 ]

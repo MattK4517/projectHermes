@@ -14,7 +14,7 @@ client = pymongo.MongoClient(
     "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
 
 
-class godData:
+class GodData:
     """class object for gods to store Winrates of specific items and matchups"""
 
     def __init__(self, name, slots, ranks, roles):
@@ -443,7 +443,7 @@ while setsFinished < len(sets):
     matchKeys = create_matches_list(keys)
 
     for key in godsDict.keys():
-        newEntry = godData(key, slots, ranks, roles)
+        newEntry = GodData(key, slots, ranks, roles)
         godsStatDict[key] = newEntry
         godsStatDict[key].set_matches(dataDict)
         matchupsdbCol = matchupsdb[key]
