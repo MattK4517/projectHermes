@@ -186,61 +186,61 @@ def create_player_dict(player):
     return playerDict
 
 def create_match_dict(match):
-    matchDict = {}
-    matchDict["Entry_Datetime"] = match.entryDatetime
-    matchDict["MatchId"] = match.matchId
-    matchDict["Match_Duration"] = match.matchDuration
-    matchDict["Ban0"] = match["Ban1"]
-    matchDict["Ban1"] = match["Ban2"]
-    matchDict["Ban2"] = match["Ban3"]
-    matchDict["Ban3"] = match["Ban4"]
-    matchDict["Ban4"] = match["Ban5"]
-    matchDict["Ban5"] = match["Ban6"]
-    matchDict["Ban6"] = match["Ban7"]
-    matchDict["Ban7"] = match["Ban8"]
-    matchDict["Ban8"] = match["Ban9"]
-    matchDict["Ban9"]  = match["Ban10"]
-    return matchDict
+    match_dict = {}
+    match_dict["Entry_Datetime"] = match.entryDatetime
+    match_dict["MatchId"] = match.matchId
+    match_dict["Match_Duration"] = match.matchDuration
+    match_dict["Ban0"] = match["Ban1"]
+    match_dict["Ban1"] = match["Ban2"]
+    match_dict["Ban2"] = match["Ban3"]
+    match_dict["Ban3"] = match["Ban4"]
+    match_dict["Ban4"] = match["Ban5"]
+    match_dict["Ban5"] = match["Ban6"]
+    match_dict["Ban6"] = match["Ban7"]
+    match_dict["Ban7"] = match["Ban8"]
+    match_dict["Ban8"] = match["Ban9"]
+    match_dict["Ban9"]  = match["Ban10"]
+    return match_dict
 
 starttime = datetime.now()
 creds = open("cred.txt", mode="r").read()
-Smite_api = SmiteAPI(devId =creds.splitlines()[0], authKey = creds.splitlines()[1], responseFormat=pyrez.Format.JSON)
+smite_api = SmiteAPI(devId =creds.splitlines()[0], authKey = creds.splitlines()[1], responseFormat=pyrez.Format.JSON)
 # mydb = client["God_Data"]
 # for god in test:
 #     god = god.json
 #     mycol = mydb[god["Name"]]
 #     mycol.insert_one(god)
 
-# Smite_api.getMatchHistory(712081347)
+# smite_api.getMatchHistory(712081347)
 mydb = client["testing"]
 mycol = mydb["Omni"]
-# mHistory = Smite_api.getMatchHistory(712081347)
+# mHistory = smite_api.getMatchHistory(712081347)
 
-matchIds = Smite_api.getMatchIds(434, date=20210820, hour=-1) ### 05 pulled
-print(len(matchIds))
-setIds = []
-allMatches = {}
-setMatches = {}
-print(len(matchIds))    
-setLength = 10
-matchIdsLen = len(matchIds)
-for x in range(len(matchIds)):
-    setIds.append(matchIds[x].matchId)
+match_ids = smite_api.getmatch_ids(434, date=20210820, hour=-1) ### 05 pulled
+print(len(match_ids))
+set_ids = []
+all_matches = {}
+set_matches = {}
+print(len(match_ids))    
+set_length = 10
+match_ids_len = len(match_ids)
+for x in range(len(match_ids)):
+    set_ids.append(match_ids[x].matchId)
     if (x % 500) == 0 and x > 0:
-        mycol.insert_one(setMatches)
-        setMatches.clear()
+        mycol.insert_one(set_matches)
+        set_matches.clear()
         print("Set complete")
         print(datetime.now() - starttime)
-    elif (x + 1) % setLength == 0 or (matchIdsLen - x < setLength and len(setMatches) > 0):
-        matchDetails = Smite_api.getMatch(setIds)
-        for i in range(len(matchDetails) // 10):
-            matchDict = create_match_dict(matchDetails[i*setLength])
+    elif (x + 1) % set_length == 0 or (match_ids_len - x < set_length and len(set_matches) > 0):
+        match_details = smite_api.getMatch(set_ids)
+        for i in range(len(match_details) // 10):
+            match_dict = create_match_dict(match_details[i*set_length])
             for k in range(10):
-                player = create_player_dict(matchDetails[(i*10) + k])
-                matchDict["player"+str(k)] = player
-            mycol.insert_one(matchDict)
+                player = create_player_dict(match_details[(i*10) + k])
+                match_dict["player"+str(k)] = player
+            mycol.insert_one(match_dict)
 
-        setIds.clear()
+        set_ids.clear()
 
-mycol.insert_one(setMatches)
+mycol.insert_one(set_matches)
 print("Pull Completed in " + str(datetime.now() - starttime))

@@ -1,5 +1,6 @@
+
+
 import pymongo
-import pandas as pd
 from collections import OrderedDict
 from operator import getitem
 import analyze as anlz
@@ -9,8 +10,8 @@ client = pymongo.MongoClient(
     "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
 
 def clear_nonmatches(client):
-    dblist = client.list_database_names()
-    for db in dblist:
+    db_list = client.list_database_names()
+    for db in db_list:
         if db == "Matches":
             print("Matches")
         else:
@@ -45,7 +46,7 @@ def insert_matches():
 
 
 def calc_ranks(client, role, rank="All Ranks"):
-    allGods = {
+    all_gods = {
         role: {},
     }
     if rank:
@@ -56,32 +57,32 @@ def calc_ranks(client, role, rank="All Ranks"):
     for god in godsDict.keys():
         games, wins, winrate = anlz.get_extended_winrate(client, god, role, rank)
         if games > minGames:
-            matches, bans, totalMatches = anlz.get_pb_rate(
-                client, god, req="discord")
+            matches, bans, total_matches = anlz.get_pb_rate(
+                client, god)
             if "All" in rank:
-                counterMatchups = anlz.get_worst_matchups_by_rank(
-                    client, god, role, rank, req="None")
+                counter_matchups = anlz.get_worst_matchups(
+                    client, god, role, rank)
             else:
-                counterMatchups = anlz.get_worst_matchups(
-                    client, god, role, req="None")
-            allGods[role][god] = {"bans": bans, "god": god, "games": games, "pickRate": round(games/totalMatches * 100, 2),
-            "banRate": round(bans/totalMatches * 100, 2), "role": role, "wins": wins, "winRate": winrate, "counterMatchups": counterMatchups}
-        print(len(counterMatchups))
+                counter_matchups = anlz.get_worst_matchups(
+                    client, god, role)
+            all_gods[role][god] = {"bans": bans, "god": god, "games": games, "pickRate": round(games/total_matches * 100, 2),
+            "banRate": round(bans/total_matches * 100, 2), "role": role, "wins": wins, "winRate": winrate, "counter_matchups": counter_matchups}
+        print(len(counter_matchups))
         print("god done: {} {}".format(god, role))
-    return allGods
+    return all_gods
 
 def make_tier_list(client, role, rank="All Ranks", gameMode="Conq"):
     if gameMode == "Omni":
-        allDict = {}
+        all_dict = {}
     else:
-        allDict = calc_ranks(client, role, rank)
-        testDict = allDict[role]
-        return testDict
+        all_dict = calc_ranks(client, role, rank)
+        test_dict = all_dict[role]
+        return test_dict
     
 def get_ranks(client):
     mydb = client["Matches"]
     mycol = mydb["matches"]
-    playersId = []
+    players_id = []
     ranks = {}
     for doc in mycol.find():
         matches = list(doc.keys())
@@ -89,21 +90,21 @@ def get_ranks(client):
             if match != "_id": 
                 for player in doc[match].keys():
                     if "player" in player:
-                        if doc[match][player]["PlayerId"] not in playersId:
+                        if doc[match][player]["PlayerId"] not in players_id:
                             if doc[match][player]["Conquest_Tier"] in ranks.keys():
                                 ranks[doc[match][player]["Conquest_Tier"]] += 1
                             else:
                                 ranks[doc[match][player]["Conquest_Tier"]] = 1
 
                             if doc[match][player]["PlayerId"] != 0:
-                                playersId.append(doc[match][player]["PlayerId"])
+                                players_id.append(doc[match][player]["PlayerId"])
     return ranks
 
 
 def get_mmrs(client):
     mydb = client["Matches"]
     mycol = mydb["matches"]
-    playersId = []
+    players_id = []
     mmrs = {
         "0-250": 0,
         "251-500": 0,
@@ -127,7 +128,7 @@ def get_mmrs(client):
             if match != "_id": 
                 for player in doc[match].keys():
                     if "player" in player:
-                        if doc[match][player]["PlayerId"] not in playersId:
+                        if doc[match][player]["PlayerId"] not in players_id:
                             pass
                             # if doc[match][player]["Ranked_Stat_Conq"] <= 250:
                             #     mmrs["0-250"] +=1
@@ -171,6 +172,9 @@ def get_mmrs(client):
 #     mycol = mydb["8/14/2021 - {}".format(role)]
 #     mycol.insert_one(tList)
 
+def create_item_trees(client):
+    mydb = client["Item_Data"]
+    mycol = mydb
+
 if __name__ == "__main__":
-    mydb = client["testing"]
-    mycol = mydb["Omni"]
+    create_item_trees(client)

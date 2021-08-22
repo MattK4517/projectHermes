@@ -23,10 +23,10 @@ def get_all_gods():
 def get_god_data(god):
         newgod = god.replace("_", " ")
         build = anlz.get_top_builds(client, newgod, "Solo")
-        pbRate = anlz.get_pb_rate(client, newgod)
+        pb_rate = anlz.get_pb_rate(client, newgod)
         image = {"url": anlz.get_url(newgod)}
-        dataDict = {**build, **pbRate, **image}
-        return dataDict
+        data_dict = {**build, **pb_rate, **image}
+        return data_dict
 
 
 @app.route('/<god>/matchups', methods=["GET"])
@@ -41,10 +41,10 @@ def get_god_data_role(god, role, rank):
         else:
                 build = anlz.get_top_builds(client, newgod, role, rank)
 
-        pbRate = anlz.get_pb_rate(client, newgod)
+        pb_rate = anlz.get_pb_rate(client, newgod)
         image = {"url": anlz.get_url(newgod)}
-        dataDict = {**build, **pbRate, **image}
-        return dataDict
+        data_dict = {**build, **pb_rate, **image}
+        return data_dict
 
 @app.route('/<god>/matchups/<role>')
 def get_god_matchups_by_role(god, role):
