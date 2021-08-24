@@ -298,5 +298,7 @@ def get_item_data(client, item):
 # client = pymongo.MongoClient(
 #     "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
 
-# get_item_data(client, "Ancile")
+# print(get_top_builds(client, "Achilles", "Solo"))
+# # print(get_item_data(client, "Ancile"))
+# print(get_worst_matchups(client, "Achilles", "Solo"))
 # print(get_worst_matchups_by_rank(client, "Vulcan", "Solo", "Grandmaster", req="flask"))

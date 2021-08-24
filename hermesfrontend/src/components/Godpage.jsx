@@ -280,7 +280,10 @@ class CreateItemToolTip extends React.Component {
         <p>{EnsureItem(this.props.itemData, this.props.item).passive}</p>
         </div>
       </div>
-      <p style={{color: "gold"}}><b>Price:</b> {EnsureItem(this.props.itemData, this.props.item).absolutePrice}({EnsureItem(this.props.itemData, this.props.item).relativePrice})</p>
+      <p style={{color: "gold"}}>
+        <b>Price:</b> {EnsureItem(this.props.itemData, this.props.item).absolutePrice}({EnsureItem(this.props.itemData, this.props.item).relativePrice})   
+        <img style={{maxHeight: "20px", maxWidth: "20px", paddingLeft:"3px"}}src="https://i.imgur.com/XofaIQ0.png" alt="gold-img" />
+        </p>
     </div>
   )
   }
@@ -428,7 +431,6 @@ function Godpage(god){
   }, [items])
 
 
-  console.log(matchups)
   return (
     <>
       <div className="Godpage">

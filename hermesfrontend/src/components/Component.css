@@ -412,7 +412,8 @@ color: #cddcfe;
   width: 100px;
   height: 100px;
 }
-.god-home .image-wrap::after{
+
+/* .god-home .image-wrap:hover{
   content: "";
   position: relative;
   top: -110%;
@@ -424,7 +425,8 @@ color: #cddcfe;
   background: rgba(66, 14, 255, 0.74);
   background: linear-gradient(90deg,hsla(0,0%,100%,.13) 0,hsla(0,0%,100%,.13) 77%,hsla(0,0%,100%,.5) 92%,hsla(0,0%,100%,0))
 
-}
+} */
+
 .god-link {
   margin: 0 auto;
 }
@@ -498,14 +500,15 @@ a, a:active, a:focus, a:hover, a:visited {
   text-overflow: ellipsis;
   align-content: left;
 }
-.god-home .gods-container .god-link:hover .image-wrap:after {
+
+/* .god-home .gods-container .god-link:hover .image-wrap:after {
   opacity:1;
   top:-35%;
   left:-35%;
   transition-property: left, top, opacity;
   transition-duration:.7s,.7s,.15s;
   transition-timing-function:ease
- }
+ } */
 
  .god-home .gods-container .god-link:hover .god-name {
   font-weight: 700;
@@ -968,4 +971,93 @@ a, a:active, a:focus, a:hover, a:visited {
 .role-filter:hover {
   -webkit-transform: scale(1.5);
   transform: scale(1.5);
+}
+
+figure.snip0015 {
+  font-family: Georgia, serif !important;
+  color: #fff;
+  width: 100px;
+  height: 100px;
+  background: #000000;
+  text-align: center;
+  position: relative;
+  border: 1px solid #2c2c40;
+  overflow: hidden;
+}
+
+figure.snip0015 * {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+figure.snip0015 img {
+  opacity: 1;
+  width: 100%;
+  -webkit-transition: opacity 0.35s;
+  transition: opacity 0.35s;
+}
+figure.snip0015 figcaption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 1rem;
+  width: 100%;
+  height: 100%;
+}
+
+figure.snip0015 figcaption::before {
+  position: absolute;
+  top: 5px;
+  right: 30px;
+  bottom: 15px;
+  left: 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.8);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.8);
+  content: '';
+  opacity: 0;
+  background-color: #ffffff;
+  -webkit-transition: all 0.4s;
+  transition: all 0.4s;
+  -webkit-transition-delay: 0.6s;
+  transition-delay: 0.6s;
+}
+
+figure.snip0015 h2,
+figure.snip0015 p {
+  margin: 0;
+  opacity: 0;
+  -webkit-transition: opacity 0.35s, -webkit-transform 0.35s;
+  transition: opacity 0.35s,-webkit-transform 0.35s,-moz-transform 0.35s,-o-transform 0.35s,transform 0.35s;
+}
+figure.snip0015 p {
+  font-weight: 200	;
+  -webkit-transition-delay: 0s;
+  transition-delay: 0s;
+}
+figure.snip0015 a {
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  position: absolute;
+  color: #ffffff;
+}
+figure.snip0015:hover img {
+  opacity: 0.35;
+}
+
+figure.snip0015:hover figcaption p {
+  padding-top: .5rem;
+  opacity: 0.9;
+  -webkit-transition-delay: 0.6s;
+  transition-delay: 0.6s;
+}
+figure.snip0015:hover figcaption::before {
+  background: rgba(255, 255, 255, 0);
+  top: 1rem;
+  bottom: 1rem;
+  opacity: 1;
+  -webkit-transition-delay: 0s;
+  transition-delay: 0s;
 }
