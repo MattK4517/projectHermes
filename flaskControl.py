@@ -68,6 +68,7 @@ def get_god_abilities(god):
 
 @app.route("/gettierlist/<rank>/<role>", methods=["GET", "POST"])
 def get_tier_list(rank, role):
+        print(rank, role)
         retData = {}
         mydb = client["Tier_List"]
         if "All" in role:

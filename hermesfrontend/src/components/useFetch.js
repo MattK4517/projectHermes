@@ -74,6 +74,7 @@ const useFetch = (pagegod, role, rank) => {
       res.json().then((data) => {
         setmatchups([])
         Object.keys(data).forEach((key) => {
+          console.log(data[key])
           setmatchups((matchups) => [
             ...matchups,
             {

@@ -14,9 +14,12 @@ class GodsDisplay extends React.Component {
                     to={"/".concat((god.name).replaceAll(" ","_"))} 
                     className="god-link"
                     >
-                        <div className="image-wrap">
-                            <img src={god.url} alt={god.name} style={{width: "100%"}}/>
-                        </div>
+                        <figure className="snip0015">
+                            <img className="god-face" src={god.url} alt={god.name} style={{width: "100%"}}/>
+                            <figcaption>
+                                <p>stats for {god.name}</p>
+                            </figcaption>
+                        </figure>
                         <div className="god-name">
                             {god.name}
                         </div>
@@ -34,7 +37,6 @@ function Gods() {
     useEffect(() => {
         fetch("/gods").then((res) => 
         res.json().then((data) => {
-            console.log(data);
             Object.keys(data).forEach((key) => {
                 setallgods((allgods) => [
                     ...allgods,

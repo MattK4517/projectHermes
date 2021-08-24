@@ -3,7 +3,7 @@ import React from "react";
 
 function ContactForm() {
     return (
-        <div style={{width: "100vw", height: "100vh", position: "absolute", paddingTop: "100px"}}>
+        <div style={{width: "100vw", height: "100vh", position: "absolute", paddingTop: "100px", marginLeft: "25px"}}>
             <div className="contact-page" style={{color: "white", margin: "auto", alignContent: "center", verticalAlign: "center"}}>
                 <h1>Where to contact us?</h1>
                 <p>Join Our 
