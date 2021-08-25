@@ -28,6 +28,18 @@ class GodData:
     def get_matches(self):
         return len(self.matches)
 
+    def calc_matchups(self):
+        mydb = ["testing_matchups"]
+        mycol = mydb[self.name]
+        for match in self.matches:
+            for key in match:
+                if "player" in key and match[key]["godName"] == self.name:
+                    flag_player = key
+            for key in match:
+                if "player" in key and match[key]["Role"] == match[flag_player]["Role"]:
+                    mycol.insert_one({f" {self.name} - { match[key] } - {match[flag_player]}" : match[flag_player]["Win_Status"]})
+
+
 
 start_time = datetime.now()
 sum_gods = 0
