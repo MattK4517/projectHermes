@@ -262,13 +262,13 @@ class BuildStats extends React.Component {
             item.item
           ) {
             return (
+              <>
               <BuildStatsElement
                 itemStats={item}
                 key={index}
-                tooltipInfo={this.props.tooltipInfo}
-                item={item.item}
-                item2={item.item2}
+                item={item}
               />
+              </>
             );
           }
         })}
@@ -300,7 +300,13 @@ const EnsureItem = (data, item) => {
 
 class CreateItemToolTip extends React.Component {
   render() {
+    if (this.props.index == 0) {
+      this.props.item = this.props.item.item
+    } else if (this.props.index == 1) {
+      this.props.item = this.props.item.item2
+    }
     return (
+      <>
       <div
         style={{
           maxHeight: "350px",
@@ -311,14 +317,14 @@ class CreateItemToolTip extends React.Component {
         }}
       >
         <h5 style={{ width: "100%", fontSize: "1rem", color: "blue" }}>
-          {EnsureItem(this.props.itemData, this.props.item).itemName}
+          {this.props.item.item}
         </h5>
         <div>
-          <p>{EnsureItem(this.props.itemData, this.props.item).shortDesc}</p>
+          <p>{this.props.item.itemShortDesc}</p>
         </div>
         <div className="item-stats" style={{ paddingLeft: "5px" }}>
           <ul>
-            {EnsureItem(this.props.itemData, this.props.item).itemStats.map(
+            {this.props.item.itemStats.map(
               (stat) => {
                 return (
                   <li>
@@ -327,16 +333,15 @@ class CreateItemToolTip extends React.Component {
                 );
               }
             )}
-            {/* <li>{this.props.newitemData.desc1}: {this.props.newitemData.val1}</li> */}
           </ul>
           <div className="item-passive">
-            <p>{EnsureItem(this.props.itemData, this.props.item).passive}</p>
+            <p>{this.props.item.itemPassive}</p>
           </div>
         </div>
         <p style={{ color: "gold" }}>
           <b>Price:</b>{" "}
-          {EnsureItem(this.props.itemData, this.props.item).absolutePrice}(
-          {EnsureItem(this.props.itemData, this.props.item).relativePrice})
+          {this.props.item.itemAbsolutePrice}(
+          {this.props.item.itemRelativePrice})
           <img
             style={{ maxHeight: "20px", maxWidth: "20px", paddingLeft: "3px" }}
             src="https://i.imgur.com/XofaIQ0.png"
@@ -344,6 +349,7 @@ class CreateItemToolTip extends React.Component {
           />
         </p>
       </div>
+    </>
     );
   }
 }
@@ -358,8 +364,7 @@ class BuildStatsElement extends React.Component {
               title={
                 <React.Fragment>
                   <CreateItemToolTip
-                    itemData={this.props.tooltipInfo}
-                    item={this.props.item}
+                    item={this.props.item.item}
                   />
                 </React.Fragment>
               }
@@ -369,8 +374,8 @@ class BuildStatsElement extends React.Component {
               <div className="item-image">
                 <div className="item-image-div">
                   <img
-                    src={this.props.itemStats.url}
-                    alt={this.props.itemStats.item}
+                    src={this.props.item.item.url}
+                    alt={this.props.item.item.item}
                   />
                 </div>
               </div>
@@ -378,23 +383,24 @@ class BuildStatsElement extends React.Component {
             <div className="item-stats">
               <div className="winrate">
                 {(
-                  (this.props.itemStats.wins / this.props.itemStats.games) *
+                  (this.props.item.item.wins / this.props.item.item.games) *
                   100
                 ).toFixed(2)}
                 % WR
               </div>
               <div className="matches">
-                {this.props.itemStats.games} Matches
+                {this.props.item.item.games} Matches
               </div>
             </div>
           </div>
+
+
           <div className="item-dupe">
             <HtmlTooltip
               title={
                 <React.Fragment>
                   <CreateItemToolTip
-                    itemData={this.props.tooltipInfo}
-                    item={this.props.item2}
+                    item={this.props.item.item2}
                   />
                 </React.Fragment>
               }
@@ -404,8 +410,8 @@ class BuildStatsElement extends React.Component {
               <div className="item-image">
                 <div className="item-image-div">
                   <img
-                    src={this.props.itemStats.url2}
-                    alt={this.props.itemStats.item2}
+                    src={this.props.item.item2.url}
+                    alt={this.props.item.item2.item}
                   />
                 </div>
               </div>
@@ -413,13 +419,13 @@ class BuildStatsElement extends React.Component {
             <div className="item-stats">
               <div className="winrate">
                 {(
-                  (this.props.itemStats.wins2 / this.props.itemStats.games2) *
+                  (this.props.item.item2.wins / this.props.item.item2.games) *
                   100
                 ).toFixed(2)}
                 % WR
               </div>
               <div className="matches">
-                {this.props.itemStats.games2} Matches
+                {this.props.item.item2.games} Matches
               </div>
             </div>
           </div>
@@ -484,39 +490,6 @@ function Godpage(god) {
       })
     );
   }, []);
-
-  useEffect(() => {
-    if (items.length === 6) {
-      items.map((item, index) => {
-        for (let i = 0; i < 2; i++) {
-          let fetchItem;
-          if (i == 0) {
-            fetchItem = item.item;
-          } else if (i == 1) {
-            fetchItem = item.item2;
-          }
-          fetch("/getitemdata/".concat(fetchItem)).then((res) =>
-            res.json().then((data) => {
-              setitemdata((itemdata) => [
-                ...itemdata,
-                {
-                  itemName: data.DeviceName,
-                  shortDesc: data.ShortDesc,
-                  absolutePrice: data.absolutePrice,
-                  relativePrice: data.relativePrice,
-                  passive: data.ItemDescription.SecondaryDescription,
-                  itemStats: data["itemStats"].map((stat) => {
-                    return [stat.Description, stat.Value];
-                  }),
-                },
-              ]);
-            })
-          );
-        }
-      });
-    }
-  }, [items]);
-
   return (
     <>
       <div className="Godpage">
@@ -613,7 +586,6 @@ function Godpage(god) {
                               stats={items}
                               lower={0}
                               upper={1}
-                              tooltipInfo={itemdata}
                             />
                           </div>
                         </div>
@@ -629,7 +601,6 @@ function Godpage(god) {
                               stats={items}
                               lower={1}
                               upper={2}
-                              tooltipInfo={itemdata}
                             />
                           </div>
                         </div>
@@ -645,7 +616,6 @@ function Godpage(god) {
                               stats={items}
                               lower={2}
                               upper={3}
-                              tooltipInfo={itemdata}
                             />
                           </div>
                         </div>
@@ -661,7 +631,6 @@ function Godpage(god) {
                               stats={items}
                               lower={3}
                               upper={4}
-                              tooltipInfo={itemdata}
                             />
                           </div>
                         </div>
@@ -677,7 +646,6 @@ function Godpage(god) {
                               stats={items}
                               lower={4}
                               upper={5}
-                              tooltipInfo={itemdata}
                             />
                           </div>
                         </div>
@@ -693,7 +661,6 @@ function Godpage(god) {
                               stats={items}
                               lower={5}
                               upper={6}
-                              tooltipInfo={itemdata}
                             />
                           </div>
                         </div>
