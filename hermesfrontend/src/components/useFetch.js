@@ -45,19 +45,38 @@ const useFetch = (pagegod, role, rank) => {
           setitems((items) => [
             ...items,
             {
-              item: item[1].item1.item,
-              games: item[1].item1.games,
-              url: item[1].item1.url,
-              wins: item[1].item1.wins,
-              item2: item[1].item2.item,
-              games2: item[1].item2.games,
-              url2: item[1].item2.url,
-              wins2: item[1].item2.wins,
-            },
+              item: {
+                item: item[1].item1.item,
+                games: item[1].item1.games,
+                url: item[1].item1.url,
+                wins: item[1].item1.wins,
+                itemShortDesc: item[1].item1.ShortDesc,
+                itemAbsolutePrice: item[1].item1.absolutePrice,
+                itemRelativePrice: item[1].item1.relativePrice,
+                itemPassive: item[1].item1.ItemDescription.SecondaryDescription,
+                itemStats: item[1].item1["itemStats"].map((stat) => {
+                  return [stat.Description, stat.Value];
+                }),
+              },
+              item2: {
+                item: item[1].item2.item,
+                games: item[1].item2.games,
+                url: item[1].item2.url,
+                wins: item[1].item2.wins,
+                itemShortDesc: item[1].item2.ShortDesc,
+                itemAbsolutePrice: item[1].item2.absolutePrice,
+                itemRelativePrice: item[1].item2.relativePrice,
+                itemPassive: item[1].item2.ItemDescription.SecondaryDescription,
+                itemStats: item[1].item2["itemStats"].map((stat) => {
+                  return [stat.Description, stat.Value];
+                }),
+              },
+            }
           ]);
         });
       })
     );
+
   }, [role, rank]);
   // else if (role && rank){
   //   matchupsFetchStatement = "/".concat(pagegod, "/matchups/", role, "/", rank)
@@ -74,7 +93,6 @@ const useFetch = (pagegod, role, rank) => {
       res.json().then((data) => {
         setmatchups([])
         Object.keys(data).forEach((key) => {
-          console.log(data[key])
           setmatchups((matchups) => [
             ...matchups,
             {

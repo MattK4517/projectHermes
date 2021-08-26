@@ -78,6 +78,7 @@ def get_top_builds(client, god, role, rank="All Ranks"):
     
     for slot in all_dict.keys():
         for item in all_dict[slot].keys():
+            all_dict[slot][item] =  {**all_dict[slot][item], **get_item_data(client, all_dict[slot][item]["item"])}
             all_dict[slot][item]["url"] = get_item(all_dict[slot][item]["item"])
     
 
@@ -280,9 +281,12 @@ def get_item_data(client, item):
     mydb = client["Item_Data"]
     mycol = mydb[item]
     for x in mycol.find():
-            itemdata = x
+        itemdata = x
 
-    del itemdata["_id"], itemdata["ActiveFlag"], itemdata["ChildItemId"]
+    delKeys = ["_id", "ActiveFlag", "ChildItemId", "DeviceName", "IconId", "ItemId", "ItemTier", 
+        "RootItemId", "StartingItem", "Type", "itemIcon_URL", "ret_msg"]
+    for element in delKeys:
+        del itemdata[element]
 
     #itemdata = {**itemdata, **{"Descriptions": itemdata["ItemDescription"]["Menuitems"][0]["Description"]}, **{"Value1": itemdata["ItemDescription"]["Menuitems"][0]["Value"]}}
     itemdata = {**itemdata, **{"itemStats": itemdata["ItemDescription"]["Menuitems"]}}
@@ -299,6 +303,7 @@ def get_item_data(client, item):
 #     "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
 
 # print(get_top_builds(client, "Achilles", "Solo"))
-# # print(get_item_data(client, "Ancile"))
+# print(get_item_data(client, "Ancile"))
 # print(get_worst_matchups(client, "Achilles", "Solo"))
 # print(get_worst_matchups_by_rank(client, "Vulcan", "Solo", "Grandmaster", req="flask"))
+

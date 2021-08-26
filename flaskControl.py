@@ -49,7 +49,7 @@ def get_god_data_role(god, role, rank):
 @app.route('/<god>/matchups/<role>')
 def get_god_matchups_by_role(god, role):
         return anlz.get_worst_matchups(client, god , role)
-
+        
 @app.route('/<god>/matchups/<role>/<rank>')
 def get_god_matchups_by_rank(god, role, rank):
         if "All" not in rank:
@@ -68,7 +68,6 @@ def get_god_abilities(god):
 
 @app.route("/gettierlist/<rank>/<role>", methods=["GET", "POST"])
 def get_tier_list(rank, role):
-        print(rank, role)
         retData = {}
         mydb = client["Tier_List"]
         if "All" in role:
@@ -79,6 +78,7 @@ def get_tier_list(rank, role):
         for role in roles:
                 if "All" in rank:
                         mycol = mydb["8/14/2021 - {}".format(role)]
+                        print(mydb)
                 else:
                         mycol = mydb["8/14/2021 - {} - {}".format(role, rank)]
                 for x in mycol.find():
