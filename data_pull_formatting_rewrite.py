@@ -29,31 +29,84 @@ class GodData:
         return len(self.matches)
 
     def calc_matchups(self):
-        mydb = ["testing_matchups"]
+        mydb = client["single_matchups"]
         mycol = mydb[self.name]
         for match in self.matches:
             for key in match:
                 if "player" in key and match[key]["godName"] == self.name:
                     flag_player = key
             for key in match:
-                if "player" in key and match[key]["Role"] == match[flag_player]["Role"]:
-                    mycol.insert_one({f" {self.name} - { match[key] } - {match[flag_player]}" : match[flag_player]["Win_Status"]})
+                if "player" in key and match[key]["Role"] == match[flag_player]["Role"] and match[key]["godName"] != match[flag_player]["godName"]:
+                    role_played = match[key]["Role"]
+                    enemy = match[key]["godName"]
+                    rank = normalize_rank(match[key]["Conquest_Tier"])
+                    mycol.insert_one(
+                        {   self.name : match[flag_player]["Win_Status"],
+                            "rank": rank,
+                            "role_played": role_played,
+                            "enemy": enemy,
+                        }
+                    )
 
+    def calc_items(self):
+        mydb = client["single_items"]
+        mycol =  mydb[self.name]
+        for match in self.matches:
+            build = {}
+            for key in match:
+                if "player" in key and match[key]["godName"] == self.name:
+                    role_played = match[key]["Role"]
+                    rank = normalize_rank(match[key]["Conquest_Tier"])
+                    win_status = match[key]["Win_Status"]
+                    for player_key in match[key]:
+                        if "Item_Purch" in player_key:
+                            item, purch, number = player_key.split("_")
+                            build[f"slot{number}"] = match[key][player_key]
+
+                    mycol.insert_one(
+                        {self.name: build,
+                        "role_played": role_played,
+                        "rank": rank,
+                        "win_status": win_status,
+                        }
+                    )
+
+def normalize_rank(tier):
+    rank = "Error"
+    if tier <= 5:
+        rank = "Bronze"
+    elif tier <= 10:
+        rank = "Silver"
+    elif tier <= 15:
+        rank = "Gold"
+    elif tier <= 20:
+        rank = "Platinum"
+    elif tier <= 25:
+        rank = "Diamond"
+    elif tier == 26:
+        rank = "Masters"
+    elif tier == 27:
+        rank = "Grandmaster"
+    return rank
 
 
 start_time = datetime.now()
 sum_gods = 0
-mydb = client["testing"]
-mycol = mydb["invdMatch"]
+mydb = client["Matches"]
+mycol = mydb["8.8 Matches"]
 set_matches = []
-for match in mycol.find():
+for match in mycol.find({"Entry_Datetime": {"$gte": "8/29/2021" }}):
     set_matches.append(match)
 
-for god in godsDict:
-    godsDict[god] = GodData(god)
-    godsDict[god].set_matches(set_matches)
-    sum_gods += godsDict[god].get_matches()
+print(len(set_matches))
 
-    print(f"{god}: {godsDict[god].get_matches()}")
+# for god in godsDict:
+#     godsDict[god] = GodData(god)
+#     godsDict[god].set_matches(set_matches)
+#     sum_gods += godsDict[god].get_matches()
+#     godsDict[god].calc_matchups()
+#     godsDict[god].calc_items()
 
-print(f"time to complete {datetime.now() - start_time}")
+
+#     print(f"{god}: {godsDict[god].get_matches()}")
+# print(f"time to complete {datetime.now() - start_time}")

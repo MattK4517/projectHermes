@@ -6,6 +6,10 @@ import styled from "styled-components";
 import useFetch from "./useFetch";
 import Tooltip from "@material-ui/core/Tooltip";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
+import Button from '@material-ui/core/Button';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 
 const ImageDiv = styled.div`
   background-position: 75% -100%;
@@ -17,17 +21,27 @@ const ImageDiv = styled.div`
         ? props.url.replace("icons", "cards")
         : "https://i.ytimg.com/vi/xAPsmI_zDZs/maxresdefault.jpg"});
 `;
-class ItemToolTip extends React.Component {
-  render() {
-    return (
-      <div>
-        {this.props.stats.map((stat, index) => {
-          return <p key={index}> {stat} </p>;
-        })}
-      </div>
-    );
-  }
-}
+
+const StyledMenu = withStyles({
+  paper: {
+    border: '1px solid #d3d4d5',
+  },
+})((props) => (
+  <Menu
+    elevation={0}
+    getContentAnchorEl={null}
+    anchorOrigin={{
+      vertical: 'bottom',
+      horizontal: 'center',
+    }}
+    transformOrigin={{
+      vertical: 'top',
+      horizontal: 'center',
+    }}
+    {...props}
+  />
+));
+
 class GodHeader extends React.Component {
   render() {
     return (
@@ -54,6 +68,9 @@ class GodHeader extends React.Component {
             <div className="god-header-row2">
               <div className="god-abilities">
                 <GodAbilities abilities={this.props.abilities} />
+              </div>
+              <div className="stat-explanation">
+                The best win rate {this.props.god} build. The best and worst matchups for {this.props.god} and anything else you need, {this.props.rank} Smite Patch {this.props.patch}
               </div>
             </div>
           </div>
@@ -111,6 +128,39 @@ const getImageUrl = (rank) => {
   }
   return url;
 };
+
+class DropDownFilter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { value: this.props.role };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({ value: event.target.value });
+  }
+
+  handleSubmit(event) {
+    this.props.changePatch(this.props.patch);
+    event.preventDefault();
+  }
+
+  render() {
+      return (
+        <div style={{margin: "auto", paddingRight: "1rem"}}>
+          <form onSubmit={this.handleSubmit}>
+            <input
+              type="image"
+              style={{ maxWidth: "36px", maxHeight: "36px" }}
+              name="submit"
+              value={this.props.patch}
+            ></input>
+          </form>
+        </div>
+      );
+    }
+}
 
 class CreateFilterToolTip extends React.Component {
   render() {
@@ -207,14 +257,14 @@ class GodCounterStats extends React.Component {
 class CreateMatchupsHelpTooltip extends React.Component {
   render() {
     return (
-      <div style={{color: "white"}}>
+      <div style={{color: "white", fontSize: ".75rem"}}>
         <h3>What do this numbers mean?</h3>
         <div>
           <p>
             the percentage shown is {this.props.god} win rate INTO the god shown
           </p>
           <p>
-            meaning the lower the number the worst the matchup is for{" "}
+            meaning the lower the number the worse the matchup is for{" "}
             {this.props.god}
           </p>
         </div>
@@ -441,6 +491,7 @@ function Godpage(god) {
   var [url, seturl] = useState(0);
   const [displaygod, setgod] = useState(0);
   const [abilities, setabilities] = useState([]);
+  const [patch, setPatch] = useState("current")
   const [roles, setroles] = useState([
     "Solo",
     "Jungle",
@@ -459,13 +510,14 @@ function Godpage(god) {
     "All_Ranks",
   ]);
   const [dispRole, setrole] = useState(role);
-  const [dispRank, setrank] = useState("All_Ranks");
-  const { games, banrate, pickrate, winrate, matchups, items } = useFetch(
+  const [dispRank, setrank] = useState("All Ranks");
+  const { games, banrate, pickrate, winrate, badmatchups, goodmatchups, items } = useFetch(
     pagegod,
     dispRole,
-    dispRank
+    dispRank,
+    patch
   );
-  const [itemdata, setitemdata] = useState([]);
+  console.log(dispRank)
   useEffect(() => {
     fetch("/".concat(pagegod)).then((res) =>
       res.json().then((data) => {
@@ -490,6 +542,7 @@ function Godpage(god) {
       })
     );
   }, []);
+
   return (
     <>
       <div className="Godpage">
@@ -504,8 +557,9 @@ function Godpage(god) {
                 url={url}
                 tier="S"
                 role={dispRole}
-                rank={dispRank.replaceAll("_", " ")}
+                rank={dispRank}
                 abilities={abilities}
+                patch={patch}
               />
               <div className="filter-manager">
                 <div className="filter-width-wrapper">
@@ -533,6 +587,25 @@ function Godpage(god) {
                         />
                       );
                     })}
+                      <PopupState variant="popover" popupId="demo-popup-menu">
+                        {(popupState) => (
+                          <React.Fragment>
+                            <Button variant="contained" color="primary" {...bindTrigger(popupState)}>
+                              {patch}
+                            </Button>
+                            <StyledMenu {...bindMenu(popupState)}>
+                              <div>
+                                <MenuItem onClick={popupState.close}>
+                                  <DropDownFilter changePatch={setPatch} patch={"current"}/>
+                                </MenuItem>
+                                <MenuItem onClick={popupState.close}>
+                                  <DropDownFilter changePatch={setPatch} patch={"8.7"}/>
+                                </MenuItem>
+                              </div>
+                            </StyledMenu>
+                          </React.Fragment>
+                        )}
+                      </PopupState>
                   </div>
                 </div>
               </div>
@@ -572,7 +645,38 @@ function Godpage(god) {
                       </HtmlTooltip>
                   </div>
                   <div className="matchups">
-                    <GodCounterStats matchups={matchups} />
+                    <GodCounterStats matchups={badmatchups} />
+                  </div>
+                </div>
+                <div className="toughest-matchups content-section">
+                  <div className="content-section_header">
+                    <span>
+                      Good Matchups these gods get countered by {displaygod}{" "}
+                      {dispRole}
+                    </span>
+                    <HtmlTooltip
+                        title={
+                          <React.Fragment>
+                            <CreateMatchupsHelpTooltip
+                            god={displaygod}
+                            />
+                          </React.Fragment>
+                        }
+                        placement="top"
+                        arrow
+                      >
+                        <div style={{paddingLeft: "25px"}}>
+                          <div>
+                            <img
+                              src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Icon-round-Question_mark.svg/300px-Icon-round-Question_mark.svg.png"
+                              style={{maxWidth: "24px", maxHeight: "24px"}}
+                            />
+                          </div>
+                        </div>
+                      </HtmlTooltip>
+                  </div>
+                  <div className="matchups">
+                    <GodCounterStats matchups={goodmatchups} />
                   </div>
                 </div>
                 <div className="build content-section">
