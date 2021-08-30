@@ -139,48 +139,27 @@ def get_worst_matchups(client, god, role, rank="All Ranks"):
                             matchup_dict[enemy]["timesPlayed"] += data[matchup][0]
                             matchup_dict[enemy]["wins"] += data[matchup][1]
                             matchup_dict[enemy]["winRate"] = round(matchup_dict[enemy]["wins"]/matchup_dict[enemy]["timesPlayed"] * 100, 2)
-
-    # go thru dict and look for a min number of matchups played
-    for key in matchup_dict.keys():
-        if matchup_dict[key]["timesPlayed"] > round(games/100):
-            win_rates.append(matchup_dict[key]["winRate"])
-    win_rates.sort()
-    ## sort the matchups played enough times then pop the greatest wrs
-    while len(win_rates) > 10:
-        win_rates.pop()
     
-    ## keep track of the num of games played with wrs in the list
-    games_cache = []
-    for key in matchup_dict.keys():
-        if matchup_dict[key]["winRate"] not in win_rates:
-            toRemove.append(key)
-        else:
-            games_cache.append(matchup_dict[key]["timesPlayed"])
+    test_sort = OrderedDict(sorted(matchup_dict.items(),
+        key = lambda x: getitem(x[1], "winRate")))
 
-    ## remove matchups played the least
-    games_cache.sort()
-    games_cache = games_cache[-10:]
+    min_games = games * 0.01
 
-    for key in matchup_dict.keys():
-        if matchup_dict[key]["timesPlayed"] not in games_cache:
-            toRemove.append(key)
+    to_remove = []
+    for key in test_sort:
+        if test_sort[key]["timesPlayed"] < min_games:
+            to_remove.append(key)
     
-    for i in range(len(toRemove)):
-        if toRemove[i] in matchup_dict.keys():
-            matchup_dict.pop(toRemove[i])
 
-    toRemove = []
-    if len(matchup_dict.keys()) > 10:
-        for key in matchup_dict.keys():
-            if matchup_dict[key]["timesPlayed"] in games_cache and matchup_dict[key]["winRate"] in win_rates:
-                toRemove.append(key)
+    for god in to_remove:
+        test_sort.pop(god)
     
-    for key in matchup_dict.keys():
-        matchup_dict[key]["url"] = get_url(key)
+    for key in test_sort.keys():
+        test_sort[key]["url"] = get_url(key)
     
     if games == 0:
         games = 1
-    return {**matchup_dict, **{"games": games, "wins": wins, "winRate": round(wins/games*100, 2)}}
+    return {**test_sort, **{"games": games, "wins": wins, "winRate": round(wins/games*100, 2)}}
 
 
 def get_pb_rate(client, god):
@@ -292,18 +271,128 @@ def get_item_data(client, item):
     itemdata = {**itemdata, **{"itemStats": itemdata["ItemDescription"]["Menuitems"]}}
     return itemdata
 
-# get_top_builds(client, "Achilles")
-# starttime = datetime.now()
-# dataSheet = pd.read_excel("God Abilities & Items.xlsx", sheet_name="all_items")
-# get_top_builds(client, "Achilles", dataSheet,req="flask")
-# print(datetime.now() - starttime)
+from bson.son import SON
+def get_top_builds_rewrite(client, god, role, rank="All Ranks"):
+    top_dict = {slot: {} for slot in slots}
+    mydb = client["single_items"]
+    mycol = mydb[god]
+    if rank != "All Ranks":
+        myquery = { "role_played": role, "rank": rank}
+    else:
+        myquery = { "role_played": role}
+    games = 0
+    wins = 0
+    for x in mycol.find(myquery, {"_id": 0}):
+        games += 1
+        flag = False 
+        if x["win_status"] == "Winner":
+            wins +=1
+            flag = True
+        for slot in x[god].keys():
+            item = x[god][slot]
+            if item:
+                if item not in top_dict[slot].keys():
+                    if flag:
+                        top_dict[slot][item] = {"item": item, "games": 1, "wins": 1}
+                    else:
+                        top_dict[slot][item] = {"item": item, "games": 1, "wins": 0}
+                elif item in top_dict[slot].keys():
+                    top_dict[slot][item]["games"] += 1
+                    if flag:
+                        top_dict[slot][item]["wins"] += 1
 
+    return {**sort_top_dict(top_dict, client), **{"games": games, "wins": wins, "winRate": round(wins/games*100, 2)}}
 
-# client = pymongo.MongoClient(
-#     "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
+def sort_top_dict(top_dict, client):
+    items = ["item1", "item2"]
+    all_dict = {slot: {item: {"item": "", "games":0} for item in items} for slot in slots}
+    for slot in top_dict:
+        for item in top_dict[slot]:
+            if not all_dict[slot]["item1"]["item"]:
+                all_dict[slot]["item1"] = top_dict[slot][item]
+
+            elif all_dict[slot]["item1"]["games"] < top_dict[slot][item]["games"]:
+                all_dict[slot]["item2"] = all_dict[slot]["item1"]
+                all_dict[slot]["item1"] = top_dict[slot][item]
+
+            elif all_dict[slot]["item1"]["games"] == top_dict[slot][item]["games"]:
+                if all_dict[slot]["item1"]["wins"] > top_dict[slot][item]["wins"]:
+                    all_dict[slot]["item2"] == top_dict[slot][item]
+                else:
+                    all_dict[slot]["item2"] = all_dict[slot]["item1"]
+                    all_dict[slot]["item1"] = top_dict[slot][item]
+
+            elif not all_dict[slot]["item2"]["item"]:
+                all_dict[slot]["item2"] = top_dict[slot][item]
+
+            
+    
+    for slot in all_dict.keys():
+        for item in all_dict[slot].keys():
+            all_dict[slot][item] =  {**all_dict[slot][item], **get_item_data(client, all_dict[slot][item]["item"])}
+            all_dict[slot][item]["url"] = get_item(all_dict[slot][item]["item"])
+
+    return all_dict
+
+def get_worst_matchups_rewrite(client, god, role, rank="All Ranks"):
+    mydb = client["single_matchups"]
+    mycol = mydb[god]
+    matchup_dict = {}
+    if rank != "All Ranks":
+        myquery = { "role_played": role, "rank": rank}
+    else:
+        myquery = { "role_played": role}
+
+    games = 0
+    wins = 0
+    for matchup in mycol.find(myquery, {"_id": 0}):
+        games += 1
+        flag = False
+        if matchup[god] == "Winner":
+            flag = True
+            wins += 1
+        if matchup["enemy"] not in matchup_dict:
+            if flag:
+                matchup_dict[matchup["enemy"]] = {"enemy": matchup["enemy"], "timesPlayed": 1, "wins": 1}
+            else:
+                matchup_dict[matchup["enemy"]] = {"enemy": matchup["enemy"], "timesPlayed": 1, "wins": 0}
+        else:
+            if flag:
+                matchup_dict[matchup["enemy"]]["timesPlayed"] += 1
+                matchup_dict[matchup["enemy"]]["wins"] += 1
+            else: 
+                matchup_dict[matchup["enemy"]]["timesPlayed"] += 1
+            
+        
+    for matchup in matchup_dict:
+        matchup_dict[matchup]["winRate"] = round(matchup_dict[matchup]["wins"]/matchup_dict[matchup]["timesPlayed"]*100, 2)
+    
+    test_sort = OrderedDict(sorted(matchup_dict.items(),
+        key = lambda x: getitem(x[1], "winRate")))
+
+    min_games = games * 0.01
+
+    to_remove = []
+    for key in test_sort:
+        if test_sort[key]["timesPlayed"] < min_games:
+            to_remove.append(key)
+    
+
+    for god in to_remove:
+        test_sort.pop(god)
+    
+    for key in test_sort.keys():
+        test_sort[key]["url"] = get_url(key)
+    
+    if games == 0:
+        games = 1
+    return {**test_sort, **{"games": games, "wins": wins, "winRate": round(wins/games*100, 2)}}
+
+client = pymongo.MongoClient(
+    "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
+
 
 # print(get_top_builds(client, "Achilles", "Solo"))
 # print(get_item_data(client, "Ancile"))
 # print(get_worst_matchups(client, "Achilles", "Solo"))
 # print(get_worst_matchups_by_rank(client, "Vulcan", "Solo", "Grandmaster", req="flask"))
-

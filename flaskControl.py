@@ -33,33 +33,37 @@ def get_god_data(god):
 def get_god_matchups(god):
         return anlz.get_worst_matchups(client, god , "Solo")
 
-@app.route('/<god>/<role>/<rank>', methods=["GET", "POST"])
-def get_god_data_role(god, role, rank):
+@app.route('/<god>/<role>/<rank>/<patch>', methods=["GET", "POST"])
+def get_god_data_role(god, role, rank, patch):
         newgod = god.replace("_", " ")
-        if "All" in rank:
+        if "All" in rank and patch != "current":
                 build = anlz.get_top_builds(client, newgod, role)
-        else:
-                build = anlz.get_top_builds(client, newgod, role, rank)
+        elif "All" in rank and patch == "current":
+                build = anlz.get_top_builds_rewrite(client, god, role)
+        elif "All" not in rank and patch != "current":
+                build = anlz.get_top_builds(client, newgod, role, rank) 
+        else: 
+                build = anlz.get_top_builds_rewrite(client, god, role, rank)
 
         pb_rate = anlz.get_pb_rate(client, newgod)
         image = {"url": anlz.get_url(newgod)}
         data_dict = {**build, **pb_rate, **image}
         return data_dict
-
-@app.route('/<god>/matchups/<role>')
-def get_god_matchups_by_role(god, role):
-        return anlz.get_worst_matchups(client, god , role)
         
-@app.route('/<god>/matchups/<role>/<rank>')
-def get_god_matchups_by_rank(god, role, rank):
-        if "All" not in rank:
-                matchups =  anlz.get_worst_matchups(client, god, role, rank)
-                del matchups["wins"], matchups["games"], matchups["winRate"]
-                return matchups
-        else:   
-                matchups = anlz.get_worst_matchups(client, god, role)
-                del matchups["wins"], matchups["games"], matchups["winRate"]
-                return matchups
+@app.route('/<god>/matchups/<role>/<rank>/<patch>')
+def get_god_matchups_by_rank(god, role, rank, patch):
+        newgod = god.replace("_", " ")
+        if "All" in rank and patch != "current":
+                matchups = anlz.get_worst_matchups(client, newgod, role)
+        elif "All" in rank and patch == "current":
+                matchups = anlz.get_worst_matchups_rewrite(client, god, role)
+        elif "All" not in rank and patch != "current":
+                matchups = anlz.get_worst_matchups(client, newgod, role, rank) 
+        else: 
+                matchups = anlz.get_worst_matchups_rewrite(client, god, role, rank)
+
+        del matchups["wins"], matchups["games"], matchups["winRate"]
+        return matchups
 
 
 @app.route('/<god>/abilities')

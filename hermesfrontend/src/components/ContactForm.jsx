@@ -18,7 +18,7 @@ function ContactForm() {
                     </a>
                 </p> 
                 <br></br>
-                <p>Email: Contact@smitestats.gg</p>
+                <p>Email: <a href="mailto:Contact@smitestats.gg"><u>Contact@smitestats.gg</u></a></p>
             </div>
         </div>
     )

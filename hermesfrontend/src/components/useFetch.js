@@ -1,33 +1,20 @@
 import { useState, useEffect } from "react";
 
-const GetTopItems = (items) => {
-  let displayItem = [];
-  let allWins = [];
-  Object.keys(items).forEach((item, index) => {
-    allWins.push(items[item].wins);
-    displayItem.push(item);
-  });
-  const max = Math.max(...allWins);
-  return items[displayItem[allWins.indexOf(max)]];
-};
+const compare = (a, b) => {
+  return a.winRate - b.winRate
+}
 
-const useFetch = (pagegod, role, rank) => {
+const useFetch = (pagegod, role, rank, patch) => {
   const [games, setgames] = useState(0);
   const [banrate, setbanrate] = useState(0);
   const [pickrate, setpickrate] = useState(0);
   const [winrate, setwinrate] = useState(0);
-  const [matchups, setmatchups] = useState([]);
+  const [badmatchups, setbadmatchups] = useState([]);
+  const [goodmatchups, setgoodmatchups] = useState([]);
   const [items, setitems] = useState([]);
   const [itemdata, setitemdata] = useState([]);
   useEffect(() => {
-    let mainFetchStatement;
-    if (role && rank) {
-      mainFetchStatement = "/".concat(pagegod, "/", role, "/", rank);
-    } else if (role) {
-      mainFetchStatement = "/".concat(pagegod, "/", role);
-    }else {
-      mainFetchStatement = "/".concat(pagegod);
-    }
+    let mainFetchStatement = "/".concat(pagegod, "/", role, "/", rank, "/", patch);
     fetch(mainFetchStatement).then((res) =>
       res.json().then((data) => {
         setgames(data.games);
@@ -77,39 +64,48 @@ const useFetch = (pagegod, role, rank) => {
       })
     );
 
-  }, [role, rank]);
+  }, [role, rank, patch]);
   // else if (role && rank){
   //   matchupsFetchStatement = "/".concat(pagegod, "/matchups/", role, "/", rank)
-  let matchupsFetchStatement;
-  if (role && rank) {
-    matchupsFetchStatement = "/".concat(pagegod, "/matchups/", role, "/", rank)
-  } else if (role) {
-    matchupsFetchStatement = "/".concat(pagegod, "/matchups/", role)
-  }else {
-    matchupsFetchStatement = "/".concat(pagegod, "/matchups")
-  }
+  let matchupsFetchStatement = "/".concat(pagegod, "/matchups/", role, "/", rank, "/", patch)
   useEffect(() => {
     fetch(matchupsFetchStatement).then((res) =>
       res.json().then((data) => {
-        setmatchups([])
-        Object.keys(data).forEach((key) => {
-          setmatchups((matchups) => [
-            ...matchups,
-            {
-              enemy: data[key].enemy,
-              timesPlayed: data[key].timesPlayed,
-              url: data[key].url,
-              winRate: data[key].winRate,
-              wins: data[key].wins,
-            },
-          ]);
+        Object.values(data).sort(compare)
+        let newData = Object.values(data).sort(compare)
+        setbadmatchups([])
+        setgoodmatchups([])
+        Object.keys(newData).map((god, index) => {
+          if (index < 10) {
+            setbadmatchups((badmatchups) => [
+              ...badmatchups,
+              {
+                enemy: newData[god].enemy,
+                timesPlayed: newData[god].timesPlayed,
+                url: newData[god].url,
+                winRate: newData[god].winRate,
+                wins: newData[god].wins,
+              },
+            ]);
+          } else if (newData.length - index < 11) {
+            setgoodmatchups((goodmatchups) => [
+              ...goodmatchups,
+              {
+                enemy: newData[god].enemy,
+                timesPlayed: newData[god].timesPlayed,
+                url: newData[god].url,
+                winRate: newData[god].winRate,
+                wins: newData[god].wins,
+              },
+            ]);
+          }
         });
       })
     );
-  }, [role, rank]);
+  }, [role, rank, patch]);
 
 
-  return { games, banrate, pickrate, winrate, matchups, items };
+  return { games, banrate, pickrate, winrate, badmatchups, goodmatchups, items };
 };
 
 export default useFetch;

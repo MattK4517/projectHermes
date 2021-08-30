@@ -178,6 +178,7 @@ def create_player_dict(player):
     playerDict["Multi_kill_Max"] = player.multiKillMax
     playerDict["Ranked_Stat_Conq"] = player["Rank_Stat_Conquest"]
     playerDict["Region"] = player.region
+    playerDict["Role"] = player["Role"]
     playerDict["PlayerId"] = player.playerId
     playerDict["Player_Name"] = player.playerName
     playerDict["Wards_Placed"] = player["Wards_Placed"]
@@ -187,7 +188,7 @@ def create_player_dict(player):
 
 def create_match_dict(match):
     match_dict = {}
-    match_dict["Entry_Datetime"] = match.entryDatetime
+    match_dict["Entry_Datetime"] = match.entryDatetime.split()[0]
     match_dict["MatchId"] = match.matchId
     match_dict["Match_Duration"] = match.matchDuration
     match_dict["Ban0"] = match["Ban1"]
@@ -212,12 +213,11 @@ smite_api = SmiteAPI(devId =creds.splitlines()[0], authKey = creds.splitlines()[
 #     mycol.insert_one(god)
 
 # smite_api.getMatchHistory(712081347)
-mydb = client["testing"]
-mycol = mydb["Omni"]
+mydb = client["Matches"]
+mycol = mydb["8.8 Matches"]
 # mHistory = smite_api.getMatchHistory(712081347)
 
-match_ids = smite_api.getmatch_ids(434, date=20210820, hour=-1) ### 05 pulled
-print(len(match_ids))
+match_ids = smite_api.getMatchIds(451, date=20210829, hour=-1) # 26 pulled
 set_ids = []
 all_matches = {}
 set_matches = {}
@@ -226,12 +226,7 @@ set_length = 10
 match_ids_len = len(match_ids)
 for x in range(len(match_ids)):
     set_ids.append(match_ids[x].matchId)
-    if (x % 500) == 0 and x > 0:
-        mycol.insert_one(set_matches)
-        set_matches.clear()
-        print("Set complete")
-        print(datetime.now() - starttime)
-    elif (x + 1) % set_length == 0 or (match_ids_len - x < set_length and len(set_matches) > 0):
+    if (x + 1) % set_length == 0 or (match_ids_len - x < set_length and len(set_matches) > 0):
         match_details = smite_api.getMatch(set_ids)
         for i in range(len(match_details) // 10):
             match_dict = create_match_dict(match_details[i*set_length])
@@ -242,5 +237,5 @@ for x in range(len(match_ids)):
 
         set_ids.clear()
 
-mycol.insert_one(set_matches)
+# mycol.insert_one(set_matches)
 print("Pull Completed in " + str(datetime.now() - starttime))
