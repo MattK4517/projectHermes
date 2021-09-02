@@ -3,11 +3,14 @@
 import pymongo
 from collections import OrderedDict
 from operator import getitem
+
+from pymongo.encryption import Algorithm
 import analyze as anlz
 from constants import godsDict, roles, ranks
 
 client = pymongo.MongoClient(
     "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
+
 
 def clear_nonmatches(client):
     db_list = client.list_database_names()
@@ -16,17 +19,6 @@ def clear_nonmatches(client):
             print("Matches")
         else:
             client.drop_database(db)
-
-
-def calc_total_matches(client):
-    mydb = client["Matches"]
-    mycol = mydb["matches"]
-    games = 0
-    for set in mycol.find():
-        keys = list(set.keys())
-        keys.pop(0)
-        games += len(keys)
-    return games
 
 
 def get_last_day(client):
@@ -38,143 +30,100 @@ def get_last_day(client):
         print(set[keys[0]]["Entry_Datetime"])
 
 
-def insert_matches():
-    Total = calc_total_matches(client)
+def delete_match_docs(client, db, col):
+    mydb = client[db]
+    mycol = mydb[col]
+    mycol.delete_many({"Entry_Datetime": "8/30/2021"})
+
+
+def calc_total_matches(ranks, db, rank="All Ranks"):
+    if rank != "All Ranks":
+        ranks = [rank]
+    matchIds = []
+    actTotalGames = 0
+    for rank in ranks:
+        mydb = client[db]
+        total_games = 0
+        for god in godsDict:
+            mycol = mydb[god]
+            myquery = {"rank": rank}
+            games = 0
+            for x in mycol.find(myquery, {"_id": 0}):
+                if x["matchId"] not in matchIds:
+                    matchIds.append(x["matchId"])
+                    games += 1
+            total_games += games
+        actTotalGames += total_games
+        insert_games(rank, total_games)
+
+
+def insert_games(rank, games):
     mydb = client["Matches"]
-    mycol = mydb["Total_Matches"]
-    mycol.insert_one({"Total_Matches": Total})
+    mycol = mydb[f"Total_Matches - {rank}"]
+    mycol.insert_one({"Total_Matches": games})
 
 
-def calc_ranks(client, role, rank="All Ranks"):
-    all_gods = {
-        role: {},
-    }
-    if rank:
-        minGames = 5
-    else:
-        minGames = 517
+def make_tier_list(ranks, roles, db, rank="All Ranks", role="All Roles"):
+    if rank != "All Ranks":
+        ranks = [rank]
+    if role != "All Roles":
+        roles = [role]
 
-    for god in godsDict.keys():
-        games, wins, winrate = anlz.get_extended_winrate(client, god, role, rank)
-        if games > minGames:
-            matches, bans, total_matches = anlz.get_pb_rate(
-                client, god)
-            if "All" in rank:
-                counter_matchups = anlz.get_worst_matchups(
-                    client, god, role, rank)
-            else:
-                counter_matchups = anlz.get_worst_matchups(
-                    client, god, role)
-            all_gods[role][god] = {"bans": bans, "god": god, "games": games, "pickRate": round(games/total_matches * 100, 2),
-            "banRate": round(bans/total_matches * 100, 2), "role": role, "wins": wins, "winRate": winrate, "counter_matchups": counter_matchups}
-        print(len(counter_matchups))
-        print("god done: {} {}".format(god, role))
-    return all_gods
+    for rank in ["All Ranks"]:
+        for role in roles:
+            calc_tier_list(rank, role, db)
 
-def make_tier_list(client, role, rank="All Ranks", gameMode="Conq"):
-    if gameMode == "Omni":
-        all_dict = {}
-    else:
-        all_dict = calc_ranks(client, role, rank)
-        test_dict = all_dict[role]
-        return test_dict
-    
-def get_ranks(client):
+
+def calc_tier_list(rank, role, db):
+    total_games = anlz.get_total_matches(client, rank)
+    if total_games == 0 and rank == "Grandmaster":
+        total_games = anlz.get_total_matches(client, "Masters")
     mydb = client["Matches"]
-    mycol = mydb["matches"]
-    players_id = []
-    ranks = {}
-    for doc in mycol.find():
-        matches = list(doc.keys())
-        for match in matches:
-            if match != "_id": 
-                for player in doc[match].keys():
-                    if "player" in player:
-                        if doc[match][player]["PlayerId"] not in players_id:
-                            if doc[match][player]["Conquest_Tier"] in ranks.keys():
-                                ranks[doc[match][player]["Conquest_Tier"]] += 1
-                            else:
-                                ranks[doc[match][player]["Conquest_Tier"]] = 1
+    if rank != "All Ranks":
+        mycol = mydb[f"Total_Matches - {rank}"]
 
-                            if doc[match][player]["PlayerId"] != 0:
-                                players_id.append(doc[match][player]["PlayerId"])
-    return ranks
+    tierlistdb = client["Tier_List"]
+    tiercol = tierlistdb["9/1/2021 Tierlist"]
+    # for x in mycol.find():
+    #     games = x
 
+    min_games = round(total_games * .005)
+    if min_games < 1:
+        min_games = 1
+    mydb = client[db]
+    for god in godsDict:
+        wins, games, win_rate = anlz.get_winrate_rewrite(
+            client, god, role, rank)
+        if games >= min_games:
+            bans = anlz.get_ban_rate(client, god)
+            counter_matchups = anlz.get_worst_matchups_rewrite(
+               client, god, role, rank)
+            del counter_matchups["games"], counter_matchups["wins"], counter_matchups["winRate"]
+            to_remove = []
+            for key, index in enumerate(counter_matchups):
+               if key > 9:
+                   to_remove.append(index)
+            for key in to_remove:
+                counter_matchups.pop(key)
+           
+           
+            tiercol.insert_one({
+               "rank": rank,
+               "role": role,
+               "god": god,
+               "tier": "A",
+               "winRate": win_rate,
+               "pickRate": round(games/total_games * 100, 2),
+               "banRate": round(bans/total_games * 100, 2),
+               "counterMatchups": counter_matchups,
+               "games": games,
+               "wins": wins,
+           })
 
-def get_mmrs(client):
-    mydb = client["Matches"]
-    mycol = mydb["matches"]
-    players_id = []
-    mmrs = {
-        "0-250": 0,
-        "251-500": 0,
-        "501-750": 0,
-        "751-1000": 0,
-        "1001-1250": 0,
-        "1251-1500": 0,
-        "1501-1750": 0,
-        "1751-2000": 0,
-        "2001-2250": 0,
-        "2251-2500": 0,
-        "2501-2750": 0,
-        "2751-3000": 0,
-        "3001-3250": 0,
-        "3251-3500": 0,
-    }
-
-    for doc in mycol.find():
-        matches = list(doc.keys())
-        for match in matches:
-            if match != "_id": 
-                for player in doc[match].keys():
-                    if "player" in player:
-                        if doc[match][player]["PlayerId"] not in players_id:
-                            pass
-                            # if doc[match][player]["Ranked_Stat_Conq"] <= 250:
-                            #     mmrs["0-250"] +=1
-                            # elif doc[match][player]["Ranked_Stat_Conq"] > 251 and doc[match][player]["Ranked_Stat_Conq"] <= 500:
-                            #     mmrs["251-500"] += 1
-                            # elif doc[match][player]["Ranked_Stat_Conq"] > 501 and doc[match][player]["Ranked_Stat_Conq"] <= 750:
-                            #     mmrs["501-750"] += 1
-                            # elif doc[match][player]["Ranked_Stat_Conq"] > 751 and doc[match][player]["Ranked_Stat_Conq"] <= 1000:
-                            #     mmrs["751-1000"] += 1
-                            # elif doc[match][player]["Ranked_Stat_Conq"] > 1001 and doc[match][player]["Ranked_Stat_Conq"] <= 1250:
-                            #     mmrs["1001-1250"] += 1
-                            # elif doc[match][player]["Ranked_Stat_Conq"] > 1251 and doc[match][player]["Ranked_Stat_Conq"] <= 1500:
-                            #     mmrs["1251-1500"] += 1
-                            # elif doc[match][player]["Ranked_Stat_Conq"] > 1501 and doc[match][player]["Ranked_Stat_Conq"] <= 1750:
-                            #     mmrs["1501-1750"] += 1
-                            # elif doc[match][player]["Ranked_Stat_Conq"] > 1751 and doc[match][player]["Ranked_Stat_Conq"] <= 2000:
-                            #     mmrs["1751-2000"] += 1
-                            # elif doc[match][player]["Ranked_Stat_Conq"] > 2001 and doc[match][player]["Ranked_Stat_Conq"] <= 2250:
-                            #     mmrs["2001-2250"] += 1
-                            # elif doc[match][player]["Ranked_Stat_Conq"] > 2251 and doc[match][player]["Ranked_Stat_Conq"] <= 2500:
-                            #     mmrs["2251-2500"] += 1
-                            # elif doc[match][player]["Ranked_Stat_Conq"] > 2501 and doc[match][player]["Ranked_Stat_Conq"] <= 2750:
-                            #     mmrs["2501-2750"] += 1
-                            # elif doc[match][player]["Ranked_Stat_Conq"] > 2751 and doc[match][player]["Ranked_Stat_Conq"] <= 3000:
-                            #     mmrs["2751-3000"] += 1
-                            # elif doc[match][player]["Ranked_Stat_Conq"] > 3001 and doc[match][player]["Ranked_Stat_Conq"] <= 3250:
-                            #     mmrs["3000-3250"] += 1
-                            # elif doc[match][player]["Ranked_Stat_Conq"] > 3251 and doc[match][player]["Ranked_Stat_Conq"] <= 3500:
-                            #     mmrs["3251-3500"] += 1
-
-
-# # for rank in ranks:
-# #     for role in roles: 
-# #         tList = make_tier_list(client, role, rank)
-# #         mydb = client["Tier_List"]
-# #         mycol = mydb["8/14/2021 - {} - {}".format(role, rank)]
-# #         mycol.insert_one(tList)
-# for role in roles:
-#     tList = make_tier_list(client, role, rank="None")
-#     mydb = client["Tier_List"]
-#     mycol = mydb["8/14/2021 - {}".format(role)]
-#     mycol.insert_one(tList)
-
-def create_item_trees(client):
-    mydb = client["Item_Data"]
-    mycol = mydb
+        print(f"{god} Done")
+        
 
 if __name__ == "__main__":
-    create_item_trees(client)
+    db = "single_items"
+    # calc_total_matches(ranks, db)
+    make_tier_list(ranks, roles, db)

@@ -137,6 +137,7 @@ const Table = ({ columns, data, update }) => {
                                 let routegod = row.original.god.replaceAll(" ", "_")
                                 if (row.original.god == "Chang\'e"){
                                   routegod = "Chang\'e"
+                                  god = "change"
                                 }
                                 return (
                                   <div className="rt-td god" style={{ minWidth: "155px", maxWidth: "180px", flex: "1 1 100%" }} {...cell.getCellProps()}>
@@ -206,50 +207,6 @@ const Table = ({ columns, data, update }) => {
   )
 }
 
-const filterData = (tierData, setTierData, totalData, role) => {
-  totalData.map((godData, index) => {
-    if (role == "All Roles") {
-      setTierData((tierData) => [
-        ...tierData,
-        {
-          god: godData.god,
-          role: godData.role,
-          games: godData.games,
-          winRate: godData.winRate,
-          pickRate: godData.pickRate,
-          banRate: godData.banRate,
-          wins: godData.wins,
-          counterMatchups: godData.counterMatchups.map((matchup) => {
-            return(
-              [matchup[0].url,
-              matchup[1]]
-            )
-          })
-        }
-      ])
-    } else if (role != "All Roles" && godData.role == role){
-      setTierData((tierData) => [
-        ...tierData,
-        {
-          god: godData.god,
-          role: godData.role,
-          games: godData.games,
-          winRate: godData.winRate,
-          pickRate: godData.pickRate,
-          banRate: godData.banRate,
-          wins: godData.wins,
-          counterMatchups: godData.counterMatchups.map((matchup) => {
-            return(
-              [matchup[0].url,
-              matchup[1]]
-            )
-          })
-        }
-      ])
-    }
-  })
-}
-
 function TierList() {
   const [totalData, setTotalData] = useState([]);
   const [counterMatchups, setCounterMatchups] = useState([]);
@@ -282,7 +239,7 @@ function TierList() {
                 tier: "A",
                 counterMatchups: Object.keys(data[key][godData].counterMatchups).map((matchup) => {
                   return(
-                    [data[key][godData]["counterMatchups"][matchup].url.url,
+                    [data[key][godData]["counterMatchups"][matchup].url,
                     data[key][godData]["counterMatchups"][matchup].enemy]
                   )
                 })
@@ -293,7 +250,8 @@ function TierList() {
       })
     );
   }, [dispRank, role]);
-
+  
+  console.log(totalData)
   const columns = React.useMemo(
     () => [
       {
