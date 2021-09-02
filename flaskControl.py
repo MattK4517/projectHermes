@@ -1,7 +1,7 @@
 from datetime import datetime
 import analyze as anlz
 import pandas as pd
-from hermesBot import Assassins, Guardians, Hunters, Mages, Warriors
+from constants import godsDict, roles
 from flask import Flask, render_template, request
 # from flask_limiter import Limiter
 # from flask_limiter.util import get_remote_address
@@ -74,22 +74,21 @@ def get_god_abilities(god):
 def get_tier_list(rank, role):
         retData = {}
         mydb = client["Tier_List"]
+        mycol = mydb["9/1/2021 Tierlist"]
+        rank = rank.replace("_", " ")
+        print(rank, role)
         if "All" in role:
-                roles = ["Carry", "Support", "Mid", "Jungle", "Solo"]
+                myquery = {"rank": rank}
         else:
-                roles = [role]
-        totalData = {}
-        for role in roles:
-                if "All" in rank:
-                        mycol = mydb["8/14/2021 - {}".format(role)]
-                        print(mydb)
-                else:
-                        mycol = mydb["8/14/2021 - {} - {}".format(role, rank)]
-                for x in mycol.find():
-                        retData = x
-                del retData["_id"]
-                totalData[role] = retData       
-        return totalData
+                myquery = {"rank": rank, "role": role}
+        
+
+        for x in mycol.find(myquery, {"_id": 0}):
+                dict_god = x["god"]
+                dict_role = x["role"]
+                retData[dict_god] = {dict_role: x} 
+        return retData
+
 
 @app.route("/getitemdata/<item>")
 def get_item_data(item):

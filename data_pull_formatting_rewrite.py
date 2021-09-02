@@ -18,12 +18,22 @@ class GodData:
         self.matches = [] 
     
 
+    def insert_ban(self, matchId, rank):
+        mydb = client["single_god_bans"]
+        mycol = mydb[self.name]
+        mycol.insert_one({
+            "Banned in": matchId,
+            "rank": rank
+            })
+
     def set_matches(self, data):
         """append match Ids to self.matches when gods in data"""
         for match in data:
             for key in match:
                 if "player" in key and match[key]["godName"] == self.name:
                     self.matches.append(match)
+                if "Ban" in key and match[key] == self.name:
+                    self.insert_ban(match["MatchId"], normalize_rank(match["player0"]["Conquest_Tier"]))
 
     def get_matches(self):
         return len(self.matches)

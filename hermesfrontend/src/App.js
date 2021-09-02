@@ -53,7 +53,7 @@ function App() {
           <Route
             path={"/Amaterasu"}
             exact
-            component={() => <Godpage god={"Amaterasu"} role={"solo"}/>}
+            component={() => <Godpage god={"Amaterasu"} role={"Solo"}/>}
           />
           <Route
             path={"/Anhur"}
