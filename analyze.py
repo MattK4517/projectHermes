@@ -1,5 +1,7 @@
 from re import S, X
 from datetime import datetime
+
+from pymongo.message import kill_cursors
 import errlogger as logger
 import pymongo
 from collections import OrderedDict
@@ -273,6 +275,7 @@ def get_top_builds_rewrite(client, god, role, rank="All Ranks"):
                     top_dict[slot][item]["games"] += 1
                     if flag:
                         top_dict[slot][item]["wins"] += 1
+
     return {**sort_top_dict(top_dict, client), **{"games": games, "wins": wins, "winRate": round(wins/games*100, 2)}}
 
 def sort_top_dict(top_dict, client):
@@ -298,11 +301,11 @@ def sort_top_dict(top_dict, client):
                 all_dict[slot]["item2"] = top_dict[slot][item]
 
             
-    
     for slot in all_dict.keys():
         for item in all_dict[slot].keys():
             all_dict[slot][item] =  {**all_dict[slot][item], **get_item_data(client, all_dict[slot][item]["item"])}
             all_dict[slot][item]["url"] = get_item(all_dict[slot][item]["item"])
+
 
     return all_dict
 
@@ -358,6 +361,7 @@ def get_worst_matchups_rewrite(client, god, role, rank="All Ranks"):
     
     if games == 0:
         games = 1
+
     return {**test_sort, **{"games": games, "wins": wins, "winRate": round(wins/games*100, 2)}}
 
 def get_winrate_rewrite(client, god, role, rank="All Ranks"):
@@ -399,13 +403,62 @@ def get_ban_rate(client, god):
     mycol = mydb[god]
     return mycol.count_documents({})
 
+def get_combat_stats(client, god, rank, role):
+    mydb = client["single_combat_stats"]
+    mycol = mydb[god]
+    myquery = {"rank": rank, "role": role}
+    kills = 0
+    deaths = 0
+    assists = 0
+    damage = 0
+    damageTaken = 0
+    damageMitigated = 0
+    healing = 0
+    selfHealing = 0
+    games = 0
+    wins = 0
+
+    for x in mycol.find({"role": role}):
+        games += 1
+        kills += x["kills"]
+        deaths += x["deaths"]
+        assists += x["assists"]
+        damage += x["damage_player"]
+        damageTaken += x["damage_taken"]
+        damageMitigated += x["damage_mitigated"]
+        healing += x["healing"]
+        selfHealing += x["healing_self"]
+        if x["win_status"] == "Winner":
+            wins += 1
+    
+    if games == 0:
+        games = 1
+
+    combat_stats = {
+        "rank": rank,
+        "role": role,
+        "god": god,
+        "winRate": round(wins/games * 100, 2),
+        "kills": round(kills/games, 2),
+        "deaths": round(deaths/games, 2),
+        "assists": round(assists/games, 2),
+        "damage_": round(damage/games),
+        "damageTaken": round(damageTaken/games),
+        "damageMitigated": round(damageMitigated/games),
+        "healing": round(healing/games),
+        "selfHealing": round(selfHealing/games),
+        "games": games,
+
+    }
+
+    return combat_stats
 
 # client = pymongo.MongoClient(
 #     "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
 
+
 # print(get_worst_matchups_rewrite(client, "Achilles", "Solo"))
 
-# print(get_top_builds_rewrite(client, "Bellona", "Solo"))
 # print(get_top_builds(client, "Achilles", "Solo"))
 # print(get_item_data(client, "Ancile"))
 # print(get_worst_matchups(client, "Achilles", "Solo"))

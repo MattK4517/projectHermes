@@ -1,13 +1,15 @@
 import React, {useState} from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { Navigation, Godpage, Gods, TierList, Navbar, Home, ContactForm } from "./components";
+import { HashRouter } from "react-router-dom";
+import { Navigation, Godpage, Gods, TierListPage, Navbar, Home, ContactForm } from "./components";
+import { TierList } from "./components/Tierlists/TierList";
 import styled from 'styled-components';
 
 
 function App() {
   return (
     <div className="App">
-      <Router>
+      <HashRouter>
         <Navigation />
         <Switch>
           <Route
@@ -23,7 +25,7 @@ function App() {
           <Route
             path={"/tierlist"}
             exact
-            component={() => <TierList />}
+            component={() => <TierListPage />}
           />
           <Route 
             path={"/contact"}
@@ -602,7 +604,7 @@ function App() {
             component={() => <Godpage god={"Zhong_Kui"} role={"Solo"}/>}
           />
         </Switch>
-      </Router>
+      </HashRouter>
     </div>
   );
 }

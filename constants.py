@@ -126,7 +126,7 @@ Warriors = ["Amaterasu", "Achilles", "Bellona", "Chaac", "Cu Chulainn", "Erlang 
 
 
 roles = ["Carry", "Support", "Mid", "Jungle", "Solo"]
-ranks = ["Bronze", "Silver", "Gold", "Platinum", "Diamond", "Masters", "Grandmaster"]
+ranks = ["Bronze", "Silver", "Gold", "Platinum", "Diamond", "Masters", "Grandmaster", "All Ranks"]
 slots = ["slot1", "slot2", "slot3", "slot4", "slot5", "slot6"]
 
 Tier_Three_items = [
