@@ -565,7 +565,7 @@ function Godpage(god) {
                 <div className="filter-width-wrapper">
                   <div className="filter-manager_container">
                     <div className="filter-manager_label">
-                      <span style={{ color: "white" }}>Filters</span>
+                      <span style={{ color: "white" }}>Stat Filters</span>
                     </div>
                     <div className="role-filter-container">
                       {roles.map((role) => {

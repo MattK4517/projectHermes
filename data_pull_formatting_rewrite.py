@@ -50,11 +50,13 @@ class GodData:
                     role_played = match[key]["Role"]
                     enemy = match[key]["godName"]
                     rank = normalize_rank(match[key]["Conquest_Tier"])
+                    matchId = match[key]["MatchID"]
                     mycol.insert_one(
                         {   self.name : match[flag_player]["Win_Status"],
                             "rank": rank,
                             "role_played": role_played,
                             "enemy": enemy,
+                            "matchId": matchId
                         }
                     )
 
@@ -68,6 +70,7 @@ class GodData:
                     role_played = match[key]["Role"]
                     rank = normalize_rank(match[key]["Conquest_Tier"])
                     win_status = match[key]["Win_Status"]
+                    matchId = match[key]["MatchID"]
                     for player_key in match[key]:
                         if "Item_Purch" in player_key:
                             item, purch, number = player_key.split("_")
@@ -78,9 +81,43 @@ class GodData:
                         "role_played": role_played,
                         "rank": rank,
                         "win_status": win_status,
+                        "matchId": matchId
                         }
                     )
+    
+    def calc_combat_stats(self):
+        mydb = client["single_combat_stats"]
+        mycol =  mydb[self.name]
+        for match in self.matches:
+            for key in match:
+                if "player" in key and match[key]["godName"] == self.name:
+                    rank = normalize_rank(match[key]["Conquest_Tier"])
+                    matchId = match[key]["MatchID"]
+                    kills = match[key]["Kills_Player"]
+                    deaths = match[key]["Deaths"]
+                    assists = match[key]["Assists"]
+                    damage_player = match[key]["Damage_player"]
+                    damage_taken = match[key]["Damage_Taken"]
+                    damage_mitigated = match[key]["Damage_Mitigated"]
+                    healing = match[key]["Healing"]
+                    healing_self = match[key]["Healing_Player"]
+                    win_status = match[key]["Win_Status"]
 
+                    mycol.insert_one({
+                        "rank": rank,
+                        "matchId": matchId,
+                        "kills": kills,
+                        "deaths": deaths,
+                        "assists": assists,
+                        "damage_player": damage_player,
+                        "damage_taken": damage_taken,
+                        "damage_mitigated": damage_mitigated,
+                        "healing": healing,
+                        "healing_self": healing_self,
+                        "win_status": win_status,
+                    })
+                
+                
 def normalize_rank(tier):
     rank = "Error"
     if tier <= 5:
@@ -105,18 +142,20 @@ sum_gods = 0
 mydb = client["Matches"]
 mycol = mydb["8.8 Matches"]
 set_matches = []
-for match in mycol.find({"Entry_Datetime": {"$gte": "8/29/2021" }}):
+for match in mycol.find({"Entry_Datetime": {"$gte": "8/24/2021" }}):
     set_matches.append(match)
 
 print(len(set_matches))
 
-# for god in godsDict:
-#     godsDict[god] = GodData(god)
-#     godsDict[god].set_matches(set_matches)
-#     sum_gods += godsDict[god].get_matches()
-#     godsDict[god].calc_matchups()
-#     godsDict[god].calc_items()
+for god in godsDict:
+    godsDict[god] = GodData(god)
+    godsDict[god].set_matches(set_matches)
+    sum_gods += godsDict[god].get_matches()
+    godsDict[god].calc_matchups()
+    godsDict[god].calc_items()
+    godsDict[god].calc_combat_stats()
 
 
-#     print(f"{god}: {godsDict[god].get_matches()}")
-# print(f"time to complete {datetime.now() - start_time}")
+    print(f"{god}: {godsDict[god].get_matches()}")
+print(f"time to complete {datetime.now() - start_time}")
+print(sum_gods)
