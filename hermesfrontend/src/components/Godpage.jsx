@@ -10,6 +10,7 @@ import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import Items from "./Items";
 
 const ImageDiv = styled.div`
   background-position: 75% -100%;
@@ -517,7 +518,6 @@ function Godpage(god) {
     dispRank,
     patch
   );
-  console.log(dispRank)
   useEffect(() => {
     fetch("/".concat(pagegod)).then((res) =>
       res.json().then((data) => {
@@ -606,6 +606,9 @@ function Godpage(god) {
                           </React.Fragment>
                         )}
                       </PopupState>
+                      <Link to={"/".concat(god.god.replaceAll(" ", "_"), "/", "items")}>
+                        <p>Items</p>
+                      </Link>
                   </div>
                 </div>
               </div>

@@ -152,7 +152,7 @@ const Table = ({ columns, data }) => {
                               }
                               return (
                                 <div className="rt-td god" style={{ minWidth: "155px", maxWidth: "180px", flex: "1 1 100%" }} {...cell.getCellProps()}>
-                                <a className="god-played gtm-tierlist-god" href={"/".concat(routegod)}>
+                                <Link className="god-played gtm-tierlist-god" to={"/".concat(routegod)}>
                                   <div style={{position: "relative"}}>
                                     <div className="god-icon">
                                       <div style={{height: "30px", width: "30px"}}>
@@ -162,7 +162,7 @@ const Table = ({ columns, data }) => {
                                     </div>
                                   </div>
                                   <strong className="god-name">{row.original.god}</strong>
-                                </a>
+                                </Link>
                               </div>
                               )
                             } else if (key.includes("tier")) {
@@ -373,7 +373,7 @@ function TierList(tableType) {
   useEffect(() => {
     fetch("/gettierlist/".concat(dispRank, "/", role, "/", tableType.tableType)).then((res) =>
       res.json().then((data) => {
-        setTotalData([])
+        setTotalData([]);
         Object.keys(data).forEach((key) => {
             Object.keys(data[key]).forEach((godData) => {
               setTotalData((totalData) => [

@@ -27,10 +27,10 @@ function TierListPage() {
                         <span style={{color: "white"}}>WIP, click on a role to get data to display</span>
                     </div>
                     <TierListTabs>
-                    <div label="Tier List">
+                    <div label="Tier List" style={{color: "white"}}>
                       <TierList tableType={"Regular"} />
                     </div>
-                    <div label="Combat">
+                    <div label="Combat" style={{color: "white"}}>
                       <CombatTierList tableType={"Combat"} />
                     </div>
                     </TierListTabs>
