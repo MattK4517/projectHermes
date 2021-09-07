@@ -231,31 +231,31 @@ def create_sets(data):
 starttime = datetime.now()
 creds = open("cred.txt", mode="r").read()
 smite_api = SmiteAPI(devId =creds.splitlines()[0], authKey = creds.splitlines()[1], responseFormat=pyrez.Format.JSON)
-mydb = client["Matches"]
-mycol = mydb["8.8 Matches"]
+# mydb = client["Matches"]
+# mycol = mydb["8.8 Matches"]
 
-match_ids = smite_api.getMatchIds(451, date=20210824, hour=-1) # 30 pulled
-set_ids = []
-all_ids = []
-set_matches = {}
-print(len(match_ids))
-set_length = 10
-inserted_count = 0
-match_ids_len = len(match_ids)
-all_sets = create_sets(match_ids)
-print(all_sets)
-total = 0
-for set in all_sets:
-    match_details = smite_api.getMatch(set)
-    for i in range(len(match_details) // 10):
-        match_dict = create_match_dict(match_details[i*set_length])
-        for k in range(10):
-            player = create_player_dict(match_details[(i*10) + k])
-            match_dict["player"+str(k)] = player
-        mycol.insert_one(match_dict)
-        inserted_count += 1
+# match_ids = smite_api.getMatchIds(451, date=20210824, hour=-1) # 30 pulled
+# set_ids = []
+# all_ids = []
+# set_matches = {}
+# print(len(match_ids))
+# set_length = 10
+# inserted_count = 0
+# match_ids_len = len(match_ids)
+# all_sets = create_sets(match_ids)
+# print(all_sets)
+# total = 0
+# for set in all_sets:
+#     match_details = smite_api.getMatch(set)
+#     for i in range(len(match_details) // 10):
+#         match_dict = create_match_dict(match_details[i*set_length])
+#         for k in range(10):
+#             player = create_player_dict(match_details[(i*10) + k])
+#             match_dict["player"+str(k)] = player
+#         mycol.insert_one(match_dict)
+#         inserted_count += 1
 
-mycol.insert_one(set_matches)
-print("Pull Completed in " + str(datetime.now() - starttime))
-print(inserted_count)
-print("error %" + str(100 - round(inserted_count/match_ids_len * 100, 2)))
+# mycol.insert_one(set_matches)
+# print("Pull Completed in " + str(datetime.now() - starttime))
+# print(inserted_count)
+# print("error %" + str(100 - round(inserted_count/match_ids_len * 100, 2)))

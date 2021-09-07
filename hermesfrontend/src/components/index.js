@@ -8,3 +8,4 @@ export { default as CombatTierList } from "./Tierlists/CombatTierList";
 export { default as Navbar } from "./Navbar";
 export { default as ContactForm } from "./ContactForm"; 
 export { default as TierListPage } from "./TierListPage";
+export { default as Items } from "./Items";

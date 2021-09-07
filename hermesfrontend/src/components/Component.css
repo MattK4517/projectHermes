@@ -1094,3 +1094,69 @@ figure.snip0015:hover figcaption::before {
   border: solid #ccc;
   border-width: 1px 1px 0 1px;
 }
+
+/* ITEMS */
+
+.items-table-container {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  grid-template-columns: repeat(6,1fr);
+  grid-gap: 6px;
+  margin-top: 24px;
+  width: 1200px;
+  justify-content: space-between;
+}
+
+/* .grid-block.items-1 {
+  grid-row: 2/3;
+  grid-column: 1/6;
+}
+
+.grid-block.items-2 {
+  grid-row: 2/3;
+  grid-column: 2/6;
+}
+
+.grid-block.items-3 {
+  grid-row: 2/3;
+  grid-column: 3/6;
+}
+
+.grid-block.items-4 {
+  grid-row: 2/3;
+  grid-column: 4/6;
+}
+
+.grid-block.items-5 {
+  grid-row: 2/3;
+  grid-column: 5/6;
+}
+
+.grid-block.items-6 {
+  grid-row: 2/3;
+  grid-column: 6/6;
+} */
+
+.items-table-container .grid-block {
+  display: inline-block;
+}
+
+.grid-block {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.grid-block-content {
+  flex: 1 1;
+  background-color: #11112a ;
+  overflow: hidden;
+}
+
+.items-table-container .item-row {
+  display: grid;
+  grid-template-columns: 4fr 3.5fr 3.5fr;
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--border-color-grey);
+  font-size: .8rem;
+}

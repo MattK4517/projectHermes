@@ -71,10 +71,10 @@ def get_god_abilities(god):
 
 @app.route("/gettierlist/<rank>/<role>/<tableType>", methods=["GET", "POST"])
 def get_tier_list(rank, role, tableType):
-        retData = {}
+        retData = {god: {} for god in godsDict}
         if tableType == "Regular":
                 mydb = client["Tier_List"]
-                mycol = mydb["9/1/2021 Tierlist"]
+                mycol = mydb["9/7/2021 Tierlist"]
                 rank = rank.replace("_", " ")
                 if "All" in role:
                         myquery = {"rank": rank}
@@ -84,11 +84,14 @@ def get_tier_list(rank, role, tableType):
                 for x in mycol.find(myquery, {"_id": 0}):
                         dict_god = x["god"]
                         dict_role = x["role"]
-                        retData[dict_god] = {dict_role: x}
+                        if not retData[dict_god]:
+                                retData[dict_god] = {dict_role: x}
+                        else:
+                                retData[dict_god][dict_role] = x
 
         elif tableType == "Combat":
                 mydb = client["Tier_List"]
-                mycol = mydb["9/1/2021 Tierlist - Combat"]
+                mycol = mydb["9/7/2021 Tierlist - Combat"]
                 rank = rank.replace("_", " ")
                 if "All" in role:
                         myquery = {"rank": rank}
@@ -98,18 +101,24 @@ def get_tier_list(rank, role, tableType):
                 for x in mycol.find(myquery, {"_id": 0}):
                         dict_god = x["god"]
                         dict_role = x["role"]
-                        retData[dict_god] = {dict_role: x}
+                        if not retData[dict_god]:
+                                retData[dict_god] = {dict_role: x}
+                        else:
+                                retData[dict_god][dict_role] = x
+                        
         return retData
 
 
 @app.route("/getitemdata/<item>")
 def get_item_data(item):
         return anlz.get_item_data(client, item)
-
-@app.route("/test")
-def testing():
-        return render_template("/public/index.html")
         
+@app.route('/<god>/items/<role>/<rank>/<patch>')
+def get_all_items(god, role, rank, patch):
+        newgod = god.replace("_", " ")
+        items = anlz.get_top_builds_rewrite(client, god, role, rank, "All")
+
+        return items
 # make a route for every god, in the
 # temp idea for routing
 # for each god

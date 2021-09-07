@@ -96,7 +96,7 @@ class GodData:
                     kills = match[key]["Kills_Player"]
                     deaths = match[key]["Deaths"]
                     assists = match[key]["Assists"]
-                    damage_player = match[key]["Damage_player"]
+                    damage_player = match[key]["Damage_Player"]
                     damage_taken = match[key]["Damage_Taken"]
                     damage_mitigated = match[key]["Damage_Mitigated"]
                     healing = match[key]["Healing"]

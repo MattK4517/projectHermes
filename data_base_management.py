@@ -33,7 +33,7 @@ def get_last_day(client):
 def delete_match_docs(client, db, col):
     mydb = client[db]
     mycol = mydb[col]
-    mycol.delete_many({"Entry_Datetime": "9/1/2021"})
+    mycol.delete_many({"Entry_Datetime": "9/6/2021"})
 
 
 def calc_total_matches(ranks, db, rank="All Ranks"):
@@ -63,12 +63,7 @@ def insert_games(rank, games):
     mycol.insert_one({"Total_Matches": games})
 
 
-def make_tier_list(ranks, roles, list_type, rank="All Ranks", role="All Roles"):
-    if rank != "All Ranks":
-        ranks = [rank]
-    if role != "All Roles":
-        roles = [role]
-
+def make_tier_list(ranks, roles, list_type):
     for rank in ranks:
         for role in roles:
             if list_type == "Regular":
@@ -77,7 +72,7 @@ def make_tier_list(ranks, roles, list_type, rank="All Ranks", role="All Roles"):
                 calc_combat_tier_list(rank, role)
 
 
-def calc_tier_list(rank, role, db):
+def calc_tier_list(rank, role):
     total_games = anlz.get_total_matches(client, rank)
     if total_games == 0 and rank == "Grandmaster":
         total_games = anlz.get_total_matches(client, "Masters")
@@ -86,14 +81,13 @@ def calc_tier_list(rank, role, db):
         mycol = mydb[f"Total_Matches - {rank}"]
 
     tierlistdb = client["Tier_List"]
-    tiercol = tierlistdb["9/1/2021 Tierlist"]
+    tiercol = tierlistdb["9/7/2021 Tierlist"]
     # for x in mycol.find():
     #     games = x
 
     min_games = round(total_games * .005)
     if min_games < 1:
         min_games = 1
-    mydb = client[db]
     for god in godsDict:
         wins, games, win_rate = anlz.get_winrate_rewrite(
             client, god, role, rank)
@@ -134,7 +128,7 @@ def calc_combat_tier_list(rank, role):
         mycol = mydb[f"Total_Matches - {rank}"]
     
     tierlistdb = client["Tier_List"]
-    tiercol = tierlistdb["9/1/2021 Tierlist - Combat"]
+    tiercol = tierlistdb["9/7/2021 Tierlist - Combat"]
     # for x in mycol.find():
     #     games = x
 
@@ -145,12 +139,12 @@ def calc_combat_tier_list(rank, role):
         wins, games, win_rate = anlz.get_winrate_rewrite(
             client, god, role, rank)
         if games >= min_games:
-            insert_data = anlz.get_combat_stats(client, god, rank, role)
+            insert_data = anlz.get_combat_stats(client, god, role, rank)
             tiercol.insert_one(insert_data)
         print(f"{rank}-{role}-{god} Done")
 
 if __name__ == "__main__":
     db = "single_items"
     # calc_total_matches(ranks, db)
-    make_tier_list(ranks, roles, "Combat")
+    make_tier_list(ranks, roles, "Regular")
     # delete_match_docs(client, "Matches", "8.8 Matches")

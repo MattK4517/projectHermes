@@ -247,7 +247,7 @@ def get_item_data(client, item):
     itemdata = {**itemdata, **{"itemStats": itemdata["ItemDescription"]["Menuitems"]}}
     return itemdata
 
-def get_top_builds_rewrite(client, god, role, rank="All Ranks"):
+def get_top_builds_rewrite(client, god, role, rank="All Ranks", items="Top"):
     top_dict = {slot: {} for slot in slots}
     mydb = client["single_items"]
     mycol = mydb[god]
@@ -257,6 +257,7 @@ def get_top_builds_rewrite(client, god, role, rank="All Ranks"):
         myquery = { "role_played": role}
     games = 0
     wins = 0
+    starttime = datetime.now()
     for x in mycol.find(myquery, {"_id": 0}):
         games += 1
         flag = False 
@@ -265,7 +266,7 @@ def get_top_builds_rewrite(client, god, role, rank="All Ranks"):
             flag = True
         for slot in x[god].keys():
             item = x[god][slot]
-            if item:
+            if item and items == "Top":
                 if item not in top_dict[slot].keys():
                     if flag:
                         top_dict[slot][item] = {"item": item, "games": 1, "wins": 1}
@@ -275,30 +276,79 @@ def get_top_builds_rewrite(client, god, role, rank="All Ranks"):
                     top_dict[slot][item]["games"] += 1
                     if flag:
                         top_dict[slot][item]["wins"] += 1
+            elif item and items == "All":
+                if slot == "slot1":
+                    if item not in top_dict[slot].keys():
+                        if flag:
+                            top_dict[slot][item] = {"item": item, "games": 1, "wins": 1}
+                        else:
+                            top_dict[slot][item] = {"item": item, "games": 1, "wins": 0}
+                    elif item in top_dict[slot].keys():
+                        top_dict[slot][item]["games"] += 1
+                        if flag:
+                            top_dict[slot][item]["wins"] += 1
 
-    return {**sort_top_dict(top_dict, client), **{"games": games, "wins": wins, "winRate": round(wins/games*100, 2)}}
+                elif (item in Tier_Three_items or item in Starter_items) and slot != "slot1":
+                    if item not in top_dict[slot].keys():
+                        if flag:
+                            top_dict[slot][item] = {"item": item, "games": 1, "wins": 1}
+                        else:
+                            top_dict[slot][item] = {"item": item, "games": 1, "wins": 0}
+                    elif item in top_dict[slot].keys():
+                        top_dict[slot][item]["games"] += 1
+                        if flag:
+                            top_dict[slot][item]["wins"] += 1
+
+
+
+            test_sort = OrderedDict(sorted(top_dict[slot].items(),
+                key = lambda x: getitem(x[1], "games")))
+            top_dict[slot] = dict(test_sort)
+            
+    if items == "Top":
+        return {**sort_top_dict(dict(top_dict), client), **{"games": games, "wins": wins, "winRate": round(wins/games*100, 2)}}
+    elif items == "All":
+        return (dict(top_dict))
 
 def sort_top_dict(top_dict, client):
     items = ["item1", "item2"]
-    all_dict = {slot: {item: {"item": "", "games":0} for item in items} for slot in slots}
+    all_dict = {slot: {item: {"item": "", "games": 0 } for item in items} for slot in slots}
     for slot in top_dict:
         for item in top_dict[slot]:
-            if not all_dict[slot]["item1"]["item"]:
-                all_dict[slot]["item1"] = top_dict[slot][item]
+            if (item in Tier_Three_items or item in Starter_items) and slot != "slot1":
+                if not all_dict[slot]["item1"]["item"]:
+                    all_dict[slot]["item1"] = top_dict[slot][item]
 
-            elif all_dict[slot]["item1"]["games"] < top_dict[slot][item]["games"]:
-                all_dict[slot]["item2"] = all_dict[slot]["item1"]
-                all_dict[slot]["item1"] = top_dict[slot][item]
-
-            elif all_dict[slot]["item1"]["games"] == top_dict[slot][item]["games"]:
-                if all_dict[slot]["item1"]["wins"] > top_dict[slot][item]["wins"]:
-                    all_dict[slot]["item2"] == top_dict[slot][item]
-                else:
+                elif all_dict[slot]["item1"]["games"] < top_dict[slot][item]["games"]:
                     all_dict[slot]["item2"] = all_dict[slot]["item1"]
                     all_dict[slot]["item1"] = top_dict[slot][item]
 
-            elif not all_dict[slot]["item2"]["item"]:
-                all_dict[slot]["item2"] = top_dict[slot][item]
+                elif all_dict[slot]["item1"]["games"] == top_dict[slot][item]["games"]:
+                    if all_dict[slot]["item1"]["wins"] > top_dict[slot][item]["wins"]:
+                        all_dict[slot]["item2"] == top_dict[slot][item]
+                    else:
+                        all_dict[slot]["item2"] = all_dict[slot]["item1"]
+                        all_dict[slot]["item1"] = top_dict[slot][item]
+
+                elif not all_dict[slot]["item2"]["item"]:
+                    all_dict[slot]["item2"] = top_dict[slot][item]
+            elif slot == "slot1":
+                if not all_dict[slot]["item1"]["item"]:
+                    all_dict[slot]["item1"] = top_dict[slot][item]
+
+                elif all_dict[slot]["item1"]["games"] < top_dict[slot][item]["games"]:
+                    all_dict[slot]["item2"] = all_dict[slot]["item1"]
+                    all_dict[slot]["item1"] = top_dict[slot][item]
+
+                elif all_dict[slot]["item1"]["games"] == top_dict[slot][item]["games"]:
+                    if all_dict[slot]["item1"]["wins"] > top_dict[slot][item]["wins"]:
+                        all_dict[slot]["item2"] == top_dict[slot][item]
+                    else:
+                        all_dict[slot]["item2"] = all_dict[slot]["item1"]
+                        all_dict[slot]["item1"] = top_dict[slot][item]
+
+                elif not all_dict[slot]["item2"]["item"]:
+                    all_dict[slot]["item2"] = top_dict[slot][item]
 
             
     for slot in all_dict.keys():
@@ -403,10 +453,14 @@ def get_ban_rate(client, god):
     mycol = mydb[god]
     return mycol.count_documents({})
 
-def get_combat_stats(client, god, rank, role):
+def get_combat_stats(client, god, role, rank="All Ranks"):
     mydb = client["single_combat_stats"]
     mycol = mydb[god]
-    myquery = {"rank": rank, "role": role}
+    if rank != "All Ranks":
+        myquery = {"role": role, "rank": rank}
+    else:
+        myquery = {"role": role}
+
     kills = 0
     deaths = 0
     assists = 0
@@ -418,7 +472,7 @@ def get_combat_stats(client, god, rank, role):
     games = 0
     wins = 0
 
-    for x in mycol.find({"role": role}):
+    for x in mycol.find(myquery):
         games += 1
         kills += x["kills"]
         deaths += x["deaths"]
@@ -457,7 +511,7 @@ def get_combat_stats(client, god, rank, role):
 #     "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
 
 
-# print(get_worst_matchups_rewrite(client, "Achilles", "Solo"))
+# print(get_worst_matchups_rewrite(client, "Camazotz", "Solo"))
 
 # print(get_top_builds(client, "Achilles", "Solo"))
 # print(get_item_data(client, "Ancile"))
