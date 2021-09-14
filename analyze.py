@@ -1,5 +1,6 @@
 from re import S, X
 from datetime import datetime
+import re
 
 from pymongo.message import kill_cursors
 import errlogger as logger
@@ -13,155 +14,6 @@ from constants import godsDict, slots, Tier_Three_items, Starter_items
 # relics used 
 # worst matchups - check
 # item breakdown - check
-
-def get_top_builds(client, god, role, rank="All Ranks"):
-    """ return the top builds of a given god
-
-    Args:
-        client ([PyMongo client object]): pymongo database connection
-        god ([String]): String of god getting pulled
-        role ([String]): Role the god is played in
-    
-    Returns:
-        if req == discord:
-            a list containing the builds dict, and then a nested list of the gods games, wins, wr
-            the builds dict format is below, nested keys follow [role][slot][different items]
-    """ 
-    top_dict = {role: {slot: {} for slot in slots}}
-    god = god.replace("_", " ")
-    if rank != "All Ranks":
-        mydb = client["Items_by_Rank"]
-    else:
-        mydb = client["Items"]
-    mycol = mydb[god]
-    games = 0
-    wins = 0
-    for data in mycol.find():
-        data_keys = list(data.keys())
-        data_keys.remove("_id")
-        if rank != "All Ranks":
-            target_dict = data[rank]
-        else:
-            target_dict = data
-
-        for slot in target_dict[role].keys():
-            for item in target_dict[role][slot]:
-                if slot == "slot1":
-                    games += target_dict[role][slot][item][0]
-                    wins += target_dict[role][slot][item][1]
-                if item:
-                    if item not in top_dict[role][slot].keys():
-                        top_dict[role][slot][item] = {"item": item, "games": target_dict[role][slot][item][0], "wins": target_dict[role][slot][item][1]}
-                    elif item in top_dict[role][slot].keys():
-                        top_dict[role][slot][item]["games"] += target_dict[role][slot][item][0]
-                        top_dict[role][slot][item]["wins"] += target_dict[role][slot][item][1]
-    
-    items = ["item1", "item2"]
-    all_dict = {slot: {item: {"items": "", "games":0} for item in items} for slot in slots}
-
-    for slot in top_dict[role]:
-        gamesplayed = []
-        for item in top_dict[role][slot]:
-            gamesplayed.append(top_dict[role][slot][item]["games"])
-            if len(all_dict[slot]["item1"].keys()) < 1:
-                all_dict[slot]["item1"] = top_dict[role][slot][item]
-
-            elif top_dict[role][slot][item]["games"] > all_dict[slot]["item1"]["games"]:
-                all_dict[slot]["item1"] = top_dict[role][slot][item]
-
-            elif (len(all_dict[slot]["item1"].keys()) > 1 and len(all_dict[slot]["item2"].keys()) < 1
-            and top_dict[role][slot][item]["games"] < all_dict[slot]["item1"]["games"]):
-                all_dict[slot]["item2"] = top_dict[role][slot][item]
-
-            elif (top_dict[role][slot][item]["games"] > all_dict[slot]["item2"]["games"]
-            and top_dict[role][slot][item]["games"] < all_dict[slot]["item1"]["games"]):
-                all_dict[slot]["item2"] = top_dict[role][slot][item]
-    
-    for slot in all_dict.keys():
-        for item in all_dict[slot].keys():
-            all_dict[slot][item] =  {**all_dict[slot][item], **get_item_data(client, all_dict[slot][item]["item"])}
-            all_dict[slot][item]["url"] = get_item(all_dict[slot][item]["item"])
-    
-
-    if games == 0:
-        games = 1
-    return {**all_dict, **{"games": games, "wins": wins, "winRate": round(wins/games*100, 2)}}
-
-
-def get_worst_matchups(client, god, role, rank="All Ranks"):
-    """ return the worst matchups of a given god in a role
-
-    Args:
-        client ([PyMongo client object]): pymongo database connection
-        god ([String]): String of god getting pulled
-        role ([String]): Role the god is played in
-    
-    Returns:
-        if req == discord:
-            a list containing the matchups dict, and then a nested list of the gods games, wins, wr
-            the matcups dict format is below, nested keys follow [matchup] : {timesPlayed: int, wins: int, winRate: float, enemy: str}
-    """
-
-    # get all matchups in a given role per god
-    # aggregate data from each data set
-    # throw out all matchups with only 1 game played or > 90% winRate
-    # Create a list of matchups for the 10 lowest win_rates of the remaining data
-    # logger.log(role, "get_worst_matchups")
-    god = god.replace("_", " ")
-    matchup_dict = {}
-    if rank == "All Ranks":
-        mydb = client["Matchups"]
-    else:
-        mydb = client["Matchups_by_Rank"]
-    mycol = mydb[god]
-    win_rates = []
-    toRemove = []
-    games = 0
-    wins = 0
-    for data in mycol.find():
-        for matchup in data:
-            if matchup != "_id" and role in matchup:
-                index = matchup.find(role)
-                enemy = matchup[0:index].strip()
-                if rank != "All Ranks":
-                    matchup_role, matchup_rank = matchup[index:].split(" ")
-                else:
-                    matchup_rank = rank
-
-                if matchup_rank == rank:
-                    if enemy == god:
-                        games += data[matchup][0]
-                        wins += data[matchup][1]
-                    else:
-                        if enemy not in matchup_dict.keys():
-                            matchup_dict[enemy] = {"enemy": enemy, "timesPlayed": data[matchup][0], "wins": data[matchup][1],
-                            "winRate": round(data[matchup][1]/data[matchup][0] * 100, 2)}
-                        else:
-                            matchup_dict[enemy]["timesPlayed"] += data[matchup][0]
-                            matchup_dict[enemy]["wins"] += data[matchup][1]
-                            matchup_dict[enemy]["winRate"] = round(matchup_dict[enemy]["wins"]/matchup_dict[enemy]["timesPlayed"] * 100, 2)
-    
-    test_sort = OrderedDict(sorted(matchup_dict.items(),
-        key = lambda x: getitem(x[1], "winRate")))
-
-    min_games = games * 0.01
-
-    to_remove = []
-    for key in test_sort:
-        if test_sort[key]["timesPlayed"] < min_games:
-            to_remove.append(key)
-    
-
-    for god in to_remove:
-        test_sort.pop(god)
-    
-    for key in test_sort.keys():
-        test_sort[key]["url"] = get_url(key)
-    
-    if games == 0:
-        games = 1
-    return {**test_sort, **{"games": games, "wins": wins, "winRate": round(wins/games*100, 2)}}
-
 
 def get_pb_rate(client, god):
     """ # need to grab # of matches played by god, number of matches played, number of bans
@@ -507,9 +359,74 @@ def get_combat_stats(client, god, role, rank="All Ranks"):
 
     return combat_stats
 
-# client = pymongo.MongoClient(
-#     "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
+def get_build_stats(client, build):
+    item_data_db = client["Item_Data"]
+    ret_build = {slot: {} for slot in slots}
+    slot_num = 1
+    for item in build:
+        if item:
+            item_data_col = item_data_db[item]
+            for x in item_data_col.find({}, {
+                "_id": 0,
+                "ActiveFlag": 0,
+                "ChildItemId": 0,
+                "IconId": 0,
+                }):
+                data = x
+            ret_build["slot{}".format(slot_num)] = data
+            slot_num += 1
+    return ret_build
 
+def get_god_stats(client, god, level):
+    god_data_db = client["God_Data"]
+    god_data_col = god_data_db[god]
+    god_stats = {}
+    base_stats = {}
+    keys_idc = ['Ability1', 'Ability2', 'Ability3', 'Ability4', 'Ability5', 
+                'AbilityId1', 'AbilityId2', 'AbilityId3', 'AbilityId4', 'AbilityId5', 
+                'Ability_1', 'Ability_2', 'Ability_3', 'Ability_4', 'Ability_5',
+                "AutoBanned", "Cons", "Lore", "Name", "OnFreeRotation", "Pantheon", 
+                "Pros", "Roles", "Title", "Type", "basicAttack",
+                'abilityDescription1', 'abilityDescription2', 'abilityDescription3', 'abilityDescription4', 
+                'abilityDescription5', 'godAbility1_URL', 'godAbility2_URL', 'godAbility3_URL', 'godAbility4_URL', 
+                'godAbility5_URL', 'godCard_URL', 'godIcon_URL', 'id', 'latestGod', "ret_msg"
+                ]
+    per_level_stats = {}
+    for x in god_data_col.find({}, {"_id": 0}):
+        god_stats = x
+
+    for element in keys_idc:
+        del god_stats[element]
+    
+    for key in god_stats:
+        if "PerLevel" in key:
+            per_level_stats[key] = god_stats[key]
+        else:
+            base_stats[key] = god_stats[key]
+    
+    ret_stats = {
+        "AttackSpeed": round(base_stats["AttackSpeed"] + (per_level_stats["AttackSpeedPerLevel"] * level), 3),
+        "Health": round(base_stats["Health"] + (per_level_stats["HealthPerLevel"] * level), 2), 
+        "HP5": round(base_stats["HealthPerFive"] + (per_level_stats["HP5PerLevel"] * level), 2),
+        "MagicProtection": round(base_stats["MagicProtection"] + (per_level_stats["MagicProtectionPerLevel"] * level)),
+        "MagicalPower": round(base_stats["MagicalPower"] + (per_level_stats["MagicalPowerPerLevel"] * level), 2) * (1/5),
+        "Mana": round(base_stats["Mana"] + (per_level_stats["ManaPerLevel"] * level), 2),
+        "MP5": round(base_stats["ManaPerFive"] + (per_level_stats["MP5PerLevel"] * level), 2),
+        "PhysicalPower": round(base_stats["PhysicalPower"] + (per_level_stats["PhysicalPowerPerLevel"] * level), 2),
+        "PhysicalProtection": round(base_stats["PhysicalProtection"] + (per_level_stats["PhysicalProtectionPerLevel"] * level)),
+        "Speed": base_stats["Speed"]
+    }
+
+    if ret_stats["PhysicalPower"] > 0:
+        ret_stats["BasicAttackDamage"] = ret_stats["PhysicalPower"]
+    elif ret_stats["MagicalPower"]:
+        ret_stats["BasicAttackDamage"] = ret_stats["MagicalPower"] * (1/5)
+    
+    return ret_stats
+client = pymongo.MongoClient(
+    "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
+
+get_god_stats(client, "Agni", 20)
 
 # print(get_worst_matchups_rewrite(client, "Camazotz", "Solo"))
 

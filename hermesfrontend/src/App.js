@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 // import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { HashRouter as HashRouter, Switch, Route} from "react-router-dom";
-import { Navigation, Godpage, Gods, TierListPage, Navbar, Home, ContactForm, Items } from "./components";
+import { Navigation, Godpage, Gods, TierListPage, Match, Home, ContactForm, Items } from "./components";
 import { TierList } from "./components/Tierlists/TierList";
 import styled from 'styled-components';
 
@@ -122,26 +122,6 @@ const godsDict = {
   "Zeus": "Mid",
   "Zhong Kui": "Solo"
 }
-          {/*<Route
-            path={"/"}
-            exact
-            component={() => <Home />}
-            />
-          <Route
-            path={"/Gods"}
-            exact
-            component={() => <Gods />}
-          />
-          <Route
-            path={"/tierlist"}
-            exact
-            component={() => <TierListPage />}
-          />
-          <Route 
-            path={"/contact"}
-            exact
-            component={() => <ContactForm />}
-          /> */}
 let routes = [
   {
     path: "/",
@@ -158,6 +138,10 @@ let routes = [
   {
     path: "/contact",
     component: <ContactForm />
+  },
+  {
+    path: "/match",
+    component: <Match />
   }
 ]
 Object.keys(godsDict).forEach((god) => {
@@ -178,7 +162,7 @@ class App extends React.Component {
   return (
     <div className="App">
       <HashRouter>
-        <Navigation />
+        {/* <Navigation /> */}
         <Switch>
           {routeComponents}
         </Switch>

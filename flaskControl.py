@@ -36,12 +36,8 @@ def get_god_matchups(god):
 @app.route('/<god>/<role>/<rank>/<patch>', methods=["GET", "POST"])
 def get_god_data_role(god, role, rank, patch):
         newgod = god.replace("_", " ")
-        if "All" in rank and patch != "current":
-                build = anlz.get_top_builds(client, newgod, role)
-        elif "All" in rank and patch == "current":
+        if "All" in rank and patch == "current":
                 build = anlz.get_top_builds_rewrite(client, god, role)
-        elif "All" not in rank and patch != "current":
-                build = anlz.get_top_builds(client, newgod, role, rank) 
         else: 
                 build = anlz.get_top_builds_rewrite(client, god, role, rank)
 
@@ -53,12 +49,8 @@ def get_god_data_role(god, role, rank, patch):
 @app.route('/<god>/matchups/<role>/<rank>/<patch>')
 def get_god_matchups_by_rank(god, role, rank, patch):
         newgod = god.replace("_", " ")
-        if "All" in rank and patch != "current":
-                matchups = anlz.get_worst_matchups(client, newgod, role)
-        elif "All" in rank and patch == "current":
+        if "All" in rank and patch == "current":
                 matchups = anlz.get_worst_matchups_rewrite(client, god, role)
-        elif "All" not in rank and patch != "current":
-                matchups = anlz.get_worst_matchups(client, newgod, role, rank) 
         else: 
                 matchups = anlz.get_worst_matchups_rewrite(client, god, role, rank)
 
@@ -119,6 +111,32 @@ def get_all_items(god, role, rank, patch):
         items = anlz.get_top_builds_rewrite(client, god, role, rank, "All")
 
         return items
+
+@app.route("/getmatch/<matchID>")
+def get_match(matchID):
+        mydb = client["Matches"]
+        mycol = mydb["8.8 Matches"]
+        match = ""
+        matchID = int(matchID)
+        for x in mycol.find({"MatchId": matchID}, {'_id': 0}):
+                match = x
+
+
+        for key in match:
+                if "player" in key:
+                        build = [
+                        match[key]["Item_Purch_1"],
+                        match[key]["Item_Purch_2"],
+                        match[key]["Item_Purch_3"],
+                        match[key]["Item_Purch_4"],
+                        match[key]["Item_Purch_5"],
+                        match[key]["Item_Purch_6"],
+                        ]
+
+                        match[key] = {**match[key], **{"godStats": anlz.get_build_stats(client, build, match[key]["godName"])}}
+                
+        return match
+
 # make a route for every god, in the
 # temp idea for routing
 # for each god
