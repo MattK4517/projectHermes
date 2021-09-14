@@ -33,7 +33,7 @@ def get_last_day(client):
 def delete_match_docs(client, db, col):
     mydb = client[db]
     mycol = mydb[col]
-    mycol.delete_many({"Entry_Datetime": "9/6/2021"})
+    mycol.delete_many({"Entry_Datetime": "8/24/2021"})
 
 
 def calc_total_matches(ranks, db, rank="All Ranks"):

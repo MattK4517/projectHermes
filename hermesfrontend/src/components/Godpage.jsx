@@ -61,7 +61,7 @@ class GodHeader extends React.Component {
           </div>
           <div className="god-header-info">
             <h1 className="god-label">
-              <span>{this.props.god}</span>
+              <span>{this.props.god} </span>
               <span>
                 Build for {this.props.role}, {this.props.rank}
               </span>
@@ -596,10 +596,10 @@ function Godpage(god) {
                             <StyledMenu {...bindMenu(popupState)}>
                               <div>
                                 <MenuItem onClick={popupState.close}>
-                                  <DropDownFilter changePatch={setPatch} patch={"current"}/>
+                                  <DropDownFilter changePatch={setPatch} patch={"8.8 bonus"}/>
                                 </MenuItem>
                                 <MenuItem onClick={popupState.close}>
-                                  <DropDownFilter changePatch={setPatch} patch={"8.7"}/>
+                                  <DropDownFilter changePatch={setPatch} patch={"8.8"}/>
                                 </MenuItem>
                               </div>
                             </StyledMenu>

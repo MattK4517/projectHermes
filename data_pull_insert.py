@@ -3,6 +3,7 @@ from datetime import datetime
 from pyrez.api import SmiteAPI
 import pymongo
 import random
+import analyze as anlz
 import time
 
 from pyrez.models import Smite
@@ -146,17 +147,24 @@ def create_player_dict(player):
     playerDict["Camps_Cleared"] = player["Camps_Cleared"]
     playerDict["Conquest_Points"] = player["Conquest_Points"]
     playerDict["Conquest_Tier"] = player.Conquest_Tier
+    playerDict["Damage_Bot"] = player["Damage_Bot"]
     playerDict["Damage_Done_Magical"] = player.damageDoneMagical
     playerDict["Damage_Done_Physical"] = player.damageDonePhysical
     playerDict["Damage_Player"] = player["Damage_Player"]
     playerDict["Damage_Mitigated"] = player.damageMitigated
     playerDict["Damage_Taken"] = player.damageTaken
+    playerDict["Damage_Taken_Magical"] = player["Damage_Taken_Magical"]
+    playerDict["Damage_Taken_Physical"] = player["Damage_Taken_Physical"]
+    playerDict["Distance_Traveled"] = player["Distance_Traveled"]
     playerDict["Deaths"] = player.deaths
+    playerDict["Final_Match_Level"] = player["Final_Match_Level"]
     playerDict["godId"] = player["GodId"]
     playerDict["godName"] = normalize_godId(player["GodId"])
+    playerDict["godStats"] = anlz.get_god_stats(client, normalize_godId(player["GodId"]), player["Final_Match_Level"])
     playerDict["Gold_Earned"] = player.goldEarned
     playerDict["Gold_Per_Minute"] = player.goldPerMinute
     playerDict["Healing"] = player.healing
+    playerDict["Healing_Bot"] = player["Healing_Bot"]
     playerDict["Healing_Player_Self"] = player["Healing_Player_Self"]
     playerDict["Item_Purch_1"] = player.itemPurch1
     playerDict["Item_Purch_2"] = player.itemPurch2
@@ -186,6 +194,7 @@ def create_player_dict(player):
     playerDict["Role"] = player["Role"]
     playerDict["Skin"] = player["Skin"]
     playerDict["Structure_Damage"] = player["Structure_Damage"]
+    playerDict["Time_Dead"] = player["Time_Dead_Seconds"]
     playerDict["Towers_Destroyed"] = player["Towers_Destroyed"]
     playerDict["PlayerId"] = player.playerId
     playerDict["Player_Name"] = player.playerName
@@ -211,7 +220,6 @@ def create_match_dict(match):
     match_dict["Ban8"] = match["Ban9"]
     match_dict["Ban9"]  = match["Ban10"]
     match_dict["First_Ban_Side"] = match["First_Ban_Side"]
-    print(match_dict["MatchId"])
     return match_dict
 
 

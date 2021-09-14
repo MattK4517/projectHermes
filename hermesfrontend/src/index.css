@@ -1,6 +1,10 @@
 body {
   margin: 0;
-  font-family: Georgia, serif !important;
+  font-family: Helvetica Neue,Roboto,Arial,Sans-Serif !important;
+  font-weight: 550;
+  line-height: 1.35;
+  color: white;
+  text-align: left;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

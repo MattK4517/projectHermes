@@ -1160,3 +1160,115 @@ figure.snip0015:hover figcaption::before {
   border-bottom: 1px solid var(--border-color-grey);
   font-size: .8rem;
 }
+
+.bans-container {
+  display: flex;
+}
+
+.KDA {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 17px;
+}
+.match-container {
+  display: flex;
+  color: white;
+  background-color: #11112a;
+  max-width: 100%;
+}
+
+.match-summary-container-players {
+  display: flex;
+  flex-direction: column;
+}
+
+.player-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+}
+
+.player-god-played {
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    overflow: hidden;
+}
+
+.build-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    border: none;
+}
+
+.match-summary-container-players{
+  max-width: 1014px;
+}
+
+.player-stats-breakdown {
+  display: flex;
+  flex-direction: column;
+}
+
+.Winner {
+  background: linear-gradient(135deg,rgba(50,115,250,.2),rgba(50,115,250,0)),#191937;
+}
+
+.Loser {
+  background: linear-gradient(135deg,rgba(255,78,80,.16),rgba(255,78,80,0)),#191937;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  padding: 12px 0;
+  border-top: 1px solid #414165;
+  border-bottom: 1px solid #414165;
+  margin-left: 24px;
+  margin-right: 24px;
+}
+
+.items {
+  min-width: 300px;
+  justify-content: left;
+}
+
+.relics {
+  min-width: 150px;
+  justify-content: left;
+}
+
+.player-info-style {
+  color: #cddcfe;
+}
+
+.player-tabs {
+  display: flex;
+  flex-direction: row;
+}
+
+.row li {
+  color: white;
+  background-color: #383864;
+  padding: 10px;
+  border-radius: 6px;
+}
+.row .tab-list {
+  border: none;
+
+}
+.row .tab-list-active {
+  background-color: #3273fa;
+  border: none;
+}
+
+.row li:not(:last-child) {
+  margin-right: 12px;
+}
+
+.build-info {
+  display: flex;
+  flex-direction: column;
+}
