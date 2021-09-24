@@ -33,7 +33,7 @@ def get_last_day(client):
 def delete_match_docs(client, db, col):
     mydb = client[db]
     mycol = mydb[col]
-    mycol.delete_many({"Entry_Datetime": "8/24/2021"})
+    mycol.delete_many({"patch": "8.8 Bonus"})
 
 
 def calc_total_matches(ranks, db, rank="All Ranks"):
@@ -81,7 +81,7 @@ def calc_tier_list(rank, role):
         mycol = mydb[f"Total_Matches - {rank}"]
 
     tierlistdb = client["Tier_List"]
-    tiercol = tierlistdb["9/7/2021 Tierlist"]
+    tiercol = tierlistdb["Tierlist - Regular"]
     # for x in mycol.find():
     #     games = x
 
@@ -94,7 +94,7 @@ def calc_tier_list(rank, role):
         if games >= min_games:
             bans = anlz.get_ban_rate(client, god)
             counter_matchups = anlz.get_worst_matchups_rewrite(
-               client, god, role, rank)
+               client, god, role, "8.8", rank)
             del counter_matchups["games"], counter_matchups["wins"], counter_matchups["winRate"]
             to_remove = []
             for key, index in enumerate(counter_matchups):
@@ -105,6 +105,7 @@ def calc_tier_list(rank, role):
            
            
             tiercol.insert_one({
+               "Entry_Datetime": "9/15/2021",
                "rank": rank,
                "role": role,
                "god": god,
@@ -126,9 +127,9 @@ def calc_combat_tier_list(rank, role):
     mydb = client["Matches"]
     if rank != "All Ranks":
         mycol = mydb[f"Total_Matches - {rank}"]
-    
+     
     tierlistdb = client["Tier_List"]
-    tiercol = tierlistdb["9/7/2021 Tierlist - Combat"]
+    tiercol = tierlistdb["Tierlist - Combat"]
     # for x in mycol.find():
     #     games = x
 
@@ -140,11 +141,13 @@ def calc_combat_tier_list(rank, role):
             client, god, role, rank)
         if games >= min_games:
             insert_data = anlz.get_combat_stats(client, god, role, rank)
-            tiercol.insert_one(insert_data)
+            tiercol.insert_one({**{"Entry_Datetime": "9/23/2021"}, **insert_data})
         print(f"{rank}-{role}-{god} Done")
 
 if __name__ == "__main__":
     db = "single_items"
     # calc_total_matches(ranks, db)
-    make_tier_list(ranks, roles, "Regular")
-    # delete_match_docs(client, "Matches", "8.8 Matches")
+    tier_types = ["Regular"]
+    for tier_type in tier_types:
+        make_tier_list(ranks, roles, tier_type)
+    # delete_match_docs(client, "single_matchups", "Achilles")

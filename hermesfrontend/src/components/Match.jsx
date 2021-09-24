@@ -47,7 +47,7 @@ class BaseMatchSummary extends React.Component {
     return (
       <div className="match-summary-container" style={{minWidth: "300px"}}>
         <div className="match-info-header">
-          <h3>Ranked Conquest - {this.props.matchId}</h3>
+          <h3>Ranked Conquest - {this.props.matchId}<br></br>{this.props.date}</h3>
         </div>
         <div className="basic-match-info">
           <h4>Basic Match Info</h4>
@@ -167,33 +167,56 @@ const AccordionDetails = withStyles((theme) => ({
   },
 }))(MuiAccordionDetails);
 
-const calcBuildStats = (build) => {
-  var health, mana, moveSpeed, attSpeed, magProt, physProt, HP5, MP5;
-  health = mana = moveSpeed = attSpeed = magProt = physProt = HP5 = MP5 =0; 
+const calcBuildStats = (build, base) => {
+  let health = base.Health;
+  let mana = base.Mana;
+  let moveSpeed = base.Speed;
+  let attSpeed = base.AttackSpeed;
+  let magProt = base.MagicProtection;
+  let physProt = base.PhysicalProtection;
+  let magPower = base.MagicalPower;
+  let physPower = base.PhysicalPower;
+  let HP5 = base.HP5;
+  let MP5 = base.MP5;
+  let price = 0;
+  let baseAttDamage;
+  if (base.PhysicalPower > base.MagicalPower) {
+    baseAttDamage = base.PhysicalPower
+  } else if (base.MagicalPower > base.PhysicalPower) {
+    baseAttDamage = base.MagicalPower
+  }
+
   Object.entries(build).forEach((item) => {
     if (item[1]["DeviceName"] != undefined){
+      price = price + item[1].absolutePrice;
       item[1]["ItemDescription"]["Menuitems"].map((itemStat) => {
-        if (itemStat.Description == "Health") { 
+        if (itemStat.Description.toUpperCase() == "Health".toUpperCase()) { 
           health = health + parseInt(itemStat.Value);
-        } else if (itemStat.Description == "Mana") {
+        } else if (itemStat.Description.toUpperCase() == "Mana".toUpperCase()) {
           mana = mana + parseInt(itemStat.Value);
-        } else if (itemStat.Description == "Movement Speed"){
-          moveSpeed = moveSpeed + parseInt(itemStat.Value)
-        } else if (itemStat.Description == "Attack Speed"){
-          attSpeed = attSpeed + parseInt(itemStat.Value)
-        } else if (itemStat.Description == "Magical Protection") {
+        } else if (itemStat.Description.toUpperCase() == "Movement Speed".toUpperCase()){
+          moveSpeed = moveSpeed + ((parseInt(itemStat.Value)/100 * base.Speed) + (18/100 * base.Speed));
+        } else if (itemStat.Description.toUpperCase() == "Attack Speed".toUpperCase()){
+          attSpeed = attSpeed + (parseInt(itemStat.Value) /100 * base.AttackSpeed);
+        } else if (itemStat.Description.toUpperCase() == "Magical Protection".toUpperCase()) {
           magProt = magProt + parseInt(itemStat.Value)
-        } else if (itemStat.Description == "Physical Protection") {
+        } else if (itemStat.Description.toUpperCase() == "Physical Protection".toUpperCase()) {
           physProt = physProt + parseInt(itemStat.Value)
-        } else if (itemStat.Description == "HP5") {
+        } else if (itemStat.Description.toUpperCase().includes("HP5".toUpperCase())) {
           HP5 = HP5 + parseInt(itemStat.Value)
-        } else if (itemStat.Description == "MP5") {
+        } else if (itemStat.Description.toUpperCase().includes("MP5".toUpperCase())) {
           MP5 = MP5 + parseInt(itemStat.Value)
+        } else if (itemStat.Description.toUpperCase() == "Physical Power".toUpperCase()) {
+          baseAttDamage = baseAttDamage + parseInt(itemStat.Value)
+          physPower = physPower + parseInt(itemStat.Value)
+        } else if (itemStat.Description.toUpperCase() == "Magical Power".toUpperCase()) {
+          baseAttDamage = baseAttDamage + (parseInt(itemStat.Value) * (1/5))
+          magPower = magPower + parseInt(itemStat.Value)
         }
       })
     }
   })
-  return {health, mana, moveSpeed, attSpeed, magProt, physProt, HP5, MP5}
+  return {health, mana, moveSpeed, attSpeed, magProt, physProt, magPower, physPower, HP5, MP5, baseAttDamage, price}
 }
 
 function CustomizedAccordions(player) {  
@@ -206,7 +229,7 @@ function CustomizedAccordions(player) {
   } else{
     styling="linear-gradient(135deg,rgba(255,78,80,.16),rgba(255,78,80,0)),#191937"
   }
-  const {health, mana, moveSpeed, attSpeed, magProt, physProt, HP5, MP5} = calcBuildStats(player.godStats)
+  const {health, mana, moveSpeed, attSpeed, magProt, physProt, magPower, physPower, HP5, MP5, baseAttDamage, price} = calcBuildStats(player.godBuild, player.godStats)
   return (
       <Accordion>
         <AccordionSummary aria-controls="panel1d-content" id="panel1d-header" style={{background: styling}}>
@@ -268,10 +291,11 @@ function CustomizedAccordions(player) {
               </div>
               <div className="player-struct-info" style={{minWidth: "200px"}}>
                 <span className="player-info-style">Tower Damage:</span>  {player.towerDamage.toLocaleString()}<br></br>
-                <span className="player-info-style">Tower Kills:</span> : {player.towerKills}<br></br>
-                <span className="player-info-style">Phoenix Kills:</span> : {player.phoenixKills}
+                <span className="player-info-style">Tower Kills:</span> {player.towerKills}<br></br>
+                <span className="player-info-style">Phoenix Kills:</span> {player.phoenixKills}
               </div>
-              <div className="player-misc-info" style={{minWidth: "200px"}}> 
+              <div className="player-misc-info" style={{minWidth: "200px"}}>
+                <span className="player-info-style">Level:</span>  {player.level}<br></br>
                 <span className="player-info-style">Skin:</span>  {player.skin}<br></br>
                 <span className="player-info-style">Wards Placed:</span>  {player.wardsPlaced}<br></br>
               </div>
@@ -279,16 +303,18 @@ function CustomizedAccordions(player) {
             <div className="row">
               <TierListTabs>
                 <div label="Build">
-                  <div className="build-info">
-                    Health: {health}<br></br>
-                    Mana: {mana}<br></br>
-                    Movement Speed: {moveSpeed}%<br></br>
-                    Attack Speed: {attSpeed}%<br></br>
-                    Basic Attack Damage: <br></br>
-                    Magical Protection: {magProt}<br></br>
-                    Physical Protection: {physProt}<br></br>
-                    HP5: {HP5}<br></br>
-                    MP5: {MP5}<br></br>
+                  <div className="build-info" style={{minWidth: "200px"}}>
+                    <span className="player-info-style">Health:</span> {health.toFixed(0)}<br></br>
+                    <span className="player-info-style">Mana:</span> {mana.toFixed(0)}<br></br>
+                    <span className="player-info-style">Movement Speed:</span> {moveSpeed}<br></br>
+                    <span className="player-info-style">Attack Speed:</span> {attSpeed.toFixed(2)}<br></br>
+                    <span className="player-info-style">Basic Attack Damage:</span> {baseAttDamage.toFixed(0)}<br></br>
+                    <span className="player-info-style">Magical Protection:</span> {magProt.toFixed(0)}<br></br>
+                    <span className="player-info-style">Physical Protection:</span> {physProt.toFixed(0)}<br></br>
+                    <span className="player-info-style">HP5:</span> {HP5.toFixed(2)}<br></br>
+                    <span className="player-info-style">MP5:</span> {MP5.toFixed(2)}<br></br>
+                    <span className="player-info-style">Physical Power:</span> {physPower.toFixed(0)}<br></br>
+                    <span className="player-info-style">Magical Power:</span> {magPower.toFixed(0)}<br></br>
                   </div>
                 </div>
                 <div label="Scoring">
@@ -464,7 +490,8 @@ function Match() {
   const [bansLoser, setBansLoser] = useState([]);
   const [mmrWinner, setMMRWinner] = useState([0, 0, 0, 0, 0]);
   const [mmrLoser, setMMRLoser] = useState([0, 0, 0, 0, 0]);
-  const [players, setPlayers] = useState([])
+  const [players, setPlayers] = useState([]);
+  const [date, setMatchDate] = useState("");
   useEffect(() => {
     fetch("/getmatch/".concat(match)).then((res) =>
       res.json().then((data) => {
@@ -518,6 +545,8 @@ function Match() {
                   god: data[key]["godName"],
                   gpm: data[key]["Gold_Per_Minute"],
                   godStats: {...data[key]["godStats"]},
+                  godBuild: {...data[key]["godBuild"]},
+                  level: data[key]["Final_Match_Level"],
                   towerDamage: data[key]["Structure_Damage"],
                   towerKills: data[key]["Towers_Destroyed"],
                   phoenixKills: data[key]["Kills_Phoenix"],
@@ -533,6 +562,7 @@ function Match() {
         setMMR(mmrs, data["First_Ban_Side"], setMMRWinner, setMMRLoser);
         setmatchId(data["MatchId"]);
         setMatchLength(data["Minutes"]);
+        setMatchDate(data["Entry_Datetime"])
       })
     );
   }, [match]);
@@ -550,6 +580,7 @@ function Match() {
           bansLoser={bansLoser}
           mmrWinner={mmrWinner}
           mmrLoser={mmrLoser}
+          date={date}
         />
         <PlayerMatchSummary players={players}/>
       </div>
