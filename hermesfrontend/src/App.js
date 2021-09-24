@@ -34,6 +34,7 @@ const godsDict = {
   "Cernunnos": "Carry",
   "Chaac": "Solo",
   "Chang\'e": "Mid",
+  "Charybdis": "Carry",
   "Chernobog": "Carry",
   "Chiron": "Carry",
   "Chronos": "Carry",

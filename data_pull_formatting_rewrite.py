@@ -23,7 +23,8 @@ class GodData:
         mycol = mydb[self.name]
         mycol.insert_one({
             "Banned in": matchId,
-            "rank": rank
+            "rank": rank,
+            "patch": "8.8 bonus"
             })
 
     def set_matches(self, data):
@@ -56,7 +57,8 @@ class GodData:
                             "rank": rank,
                             "role_played": role_played,
                             "enemy": enemy,
-                            "matchId": matchId
+                            "matchId": matchId,
+                            "patch": "8.8 bonus"
                         }
                     )
 
@@ -81,7 +83,8 @@ class GodData:
                         "role_played": role_played,
                         "rank": rank,
                         "win_status": win_status,
-                        "matchId": matchId
+                        "matchId": matchId,
+                        "patch": "8.8 bonus"
                         }
                     )
     
@@ -115,6 +118,7 @@ class GodData:
                         "healing": healing,
                         "healing_self": healing_self,
                         "win_status": win_status,
+                        "patch": "8.8 bonus"
                     })
                 
                 

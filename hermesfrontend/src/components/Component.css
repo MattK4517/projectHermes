@@ -1268,7 +1268,6 @@ figure.snip0015:hover figcaption::before {
   margin-right: 12px;
 }
 
-.build-info {
-  display: flex;
-  flex-direction: column;
+.build-price {
+  color: gold;
 }

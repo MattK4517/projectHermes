@@ -19,11 +19,11 @@ def get_all_gods():
         gdDict = anlz.get_gods()
         return gdDict
 
-@app.route('/<god>', methods=["GET", "POST"])
-def get_god_data(god):
+@app.route('/<god>/<rank>/<patch>', methods=["GET", "POST"])
+def get_god_data(god, rank, patch):
         newgod = god.replace("_", " ")
-        build = anlz.get_top_builds(client, newgod, "Solo")
-        pb_rate = anlz.get_pb_rate(client, newgod)
+        build = anlz.get_top_builds_rewrite(client, god, "Solo", "8.9")
+        pb_rate = anlz.get_pb_rate(client, newgod, rank, patch)
         image = {"url": anlz.get_url(newgod)}
         data_dict = {**build, **pb_rate, **image}
         return data_dict
@@ -37,11 +37,11 @@ def get_god_matchups(god):
 def get_god_data_role(god, role, rank, patch):
         newgod = god.replace("_", " ")
         if "All" in rank and patch == "current":
-                build = anlz.get_top_builds_rewrite(client, god, role)
+                build = anlz.get_top_builds_rewrite(client, god, role, patch)
         else: 
-                build = anlz.get_top_builds_rewrite(client, god, role, rank)
+                build = anlz.get_top_builds_rewrite(client, god, role, patch, rank)
 
-        pb_rate = anlz.get_pb_rate(client, newgod)
+        pb_rate = anlz.get_pb_rate(client, newgod, rank, patch)
         image = {"url": anlz.get_url(newgod)}
         data_dict = {**build, **pb_rate, **image}
         return data_dict
@@ -50,9 +50,9 @@ def get_god_data_role(god, role, rank, patch):
 def get_god_matchups_by_rank(god, role, rank, patch):
         newgod = god.replace("_", " ")
         if "All" in rank and patch == "current":
-                matchups = anlz.get_worst_matchups_rewrite(client, god, role)
+                matchups = anlz.get_worst_matchups_rewrite(client, god, role, patch)
         else: 
-                matchups = anlz.get_worst_matchups_rewrite(client, god, role, rank)
+                matchups = anlz.get_worst_matchups_rewrite(client, god, role, patch, rank)
 
         del matchups["wins"], matchups["games"], matchups["winRate"]
         return matchups
@@ -66,7 +66,7 @@ def get_tier_list(rank, role, tableType):
         retData = {god: {} for god in godsDict}
         if tableType == "Regular":
                 mydb = client["Tier_List"]
-                mycol = mydb["9/7/2021 Tierlist"]
+                mycol = mydb["Tierlist - Regular"]
                 rank = rank.replace("_", " ")
                 if "All" in role:
                         myquery = {"rank": rank}
@@ -83,7 +83,7 @@ def get_tier_list(rank, role, tableType):
 
         elif tableType == "Combat":
                 mydb = client["Tier_List"]
-                mycol = mydb["9/7/2021 Tierlist - Combat"]
+                mycol = mydb["Tierlist - Combat"]
                 rank = rank.replace("_", " ")
                 if "All" in role:
                         myquery = {"rank": rank}
@@ -108,7 +108,7 @@ def get_item_data(item):
 @app.route('/<god>/items/<role>/<rank>/<patch>')
 def get_all_items(god, role, rank, patch):
         newgod = god.replace("_", " ")
-        items = anlz.get_top_builds_rewrite(client, god, role, rank, "All")
+        items = anlz.get_top_builds_rewrite(client, god, role, patch, rank, "All")
 
         return items
 
@@ -133,7 +133,7 @@ def get_match(matchID):
                         match[key]["Item_Purch_6"],
                         ]
 
-                        match[key] = {**match[key], **{"godStats": anlz.get_build_stats(client, build, match[key]["godName"])}}
+                        match[key] = {**match[key], **{"godBuild": anlz.get_build_stats(client, build)}}
                 
         return match
 

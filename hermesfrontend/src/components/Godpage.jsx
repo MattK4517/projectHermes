@@ -492,7 +492,7 @@ function Godpage(god) {
   var [url, seturl] = useState(0);
   const [displaygod, setgod] = useState(0);
   const [abilities, setabilities] = useState([]);
-  const [patch, setPatch] = useState("current")
+  const [patch, setPatch] = useState("8.9")
   const [roles, setroles] = useState([
     "Solo",
     "Jungle",
@@ -519,7 +519,7 @@ function Godpage(god) {
     patch
   );
   useEffect(() => {
-    fetch("/".concat(pagegod)).then((res) =>
+    fetch("/".concat(pagegod, "/", dispRank, "/", patch)).then((res) =>
       res.json().then((data) => {
         setgod(pagegod);
         seturl(data.url);
@@ -596,7 +596,7 @@ function Godpage(god) {
                             <StyledMenu {...bindMenu(popupState)}>
                               <div>
                                 <MenuItem onClick={popupState.close}>
-                                  <DropDownFilter changePatch={setPatch} patch={"8.8 bonus"}/>
+                                  <DropDownFilter changePatch={setPatch} patch={"8.9"}/>
                                 </MenuItem>
                                 <MenuItem onClick={popupState.close}>
                                   <DropDownFilter changePatch={setPatch} patch={"8.8"}/>

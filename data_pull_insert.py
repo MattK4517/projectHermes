@@ -205,6 +205,7 @@ def create_player_dict(player):
 
 def create_match_dict(match):
     match_dict = {}
+    match_dict["Patch"] = "8.8 Bonus"
     match_dict["Entry_Datetime"] = match.entryDatetime.split()[0]
     match_dict["MatchId"] = match.matchId
     match_dict["Match_Duration"] = match.matchDuration
@@ -239,10 +240,13 @@ def create_sets(data):
 starttime = datetime.now()
 creds = open("cred.txt", mode="r").read()
 smite_api = SmiteAPI(devId =creds.splitlines()[0], authKey = creds.splitlines()[1], responseFormat=pyrez.Format.JSON)
+print(smite_api.getDataUsed())
+print(smite_api.getMotd())
 # mydb = client["Matches"]
-# mycol = mydb["8.8 Matches"]
-
-# match_ids = smite_api.getMatchIds(451, date=20210824, hour=-1) # 30 pulled
+# mycol = mydb["8.8 - bonus Matches"]
+# # mHistory = smite_api.getMatchHistory(712081347)
+# date = 20210910
+# match_ids = smite_api.getMatchIds(451, date=date, hour=-1) # 30 pulled
 # set_ids = []
 # all_ids = []
 # set_matches = {}
@@ -251,7 +255,6 @@ smite_api = SmiteAPI(devId =creds.splitlines()[0], authKey = creds.splitlines()[
 # inserted_count = 0
 # match_ids_len = len(match_ids)
 # all_sets = create_sets(match_ids)
-# print(all_sets)
 # total = 0
 # for set in all_sets:
 #     match_details = smite_api.getMatch(set)
@@ -263,7 +266,7 @@ smite_api = SmiteAPI(devId =creds.splitlines()[0], authKey = creds.splitlines()[
 #         mycol.insert_one(match_dict)
 #         inserted_count += 1
 
-# mycol.insert_one(set_matches)
-# print("Pull Completed in " + str(datetime.now() - starttime))
+
+# print(f"{date} Pull Completed in " + str(datetime.now() - starttime))
 # print(inserted_count)
 # print("error %" + str(100 - round(inserted_count/match_ids_len * 100, 2)))
