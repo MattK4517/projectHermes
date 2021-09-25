@@ -61,17 +61,17 @@ def get_god_matchups_by_rank(god, role, rank, patch):
 def get_god_abilities(god):
         return anlz.get_abilities(client, god)
 
-@app.route("/gettierlist/<rank>/<role>/<tableType>", methods=["GET", "POST"])
-def get_tier_list(rank, role, tableType):
+@app.route("/gettierlist/<rank>/<role>/<tableType>/<patch>", methods=["GET", "POST"])
+def get_tier_list(rank, role, tableType, patch):
         retData = {god: {} for god in godsDict}
         if tableType == "Regular":
                 mydb = client["Tier_List"]
-                mycol = mydb["Tierlist - Regular"]
+                mycol = mydb["Tierlist - Regular test"]
                 rank = rank.replace("_", " ")
                 if "All" in role:
-                        myquery = {"rank": rank}
+                        myquery = {"rank": rank, "patch": patch}
                 else:
-                        myquery = {"rank": rank, "role": role}
+                        myquery = {"rank": rank, "role": role, "patch": patch}
                 
                 for x in mycol.find(myquery, {"_id": 0}):
                         dict_god = x["god"]
@@ -83,12 +83,12 @@ def get_tier_list(rank, role, tableType):
 
         elif tableType == "Combat":
                 mydb = client["Tier_List"]
-                mycol = mydb["Tierlist - Combat"]
+                mycol = mydb["Tierlist - Combat test"]
                 rank = rank.replace("_", " ")
                 if "All" in role:
-                        myquery = {"rank": rank}
+                        myquery = {"rank": rank, "patch": patch}
                 else:
-                        myquery = {"rank": rank, "role": role}
+                        myquery = {"rank": rank, "role": role, "patch": patch}
                 
                 for x in mycol.find(myquery, {"_id": 0}):
                         dict_god = x["god"]
@@ -97,7 +97,8 @@ def get_tier_list(rank, role, tableType):
                                 retData[dict_god] = {dict_role: x}
                         else:
                                 retData[dict_god][dict_role] = x
-                        
+        
+        print(myquery)
         return retData
 
 
