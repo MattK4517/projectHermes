@@ -27,6 +27,7 @@ godsDict = {
     "Cernunnos": 0,
     "Chaac": 0,
     "Chang\'e": 0,
+    "Charybdis": 0,
     "Chernobog": 0,
     "Chiron": 0,
     "Chronos": 0,

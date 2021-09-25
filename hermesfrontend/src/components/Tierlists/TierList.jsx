@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useTable, useSortBy, usePagination } from 'react-table';
 import { Link } from 'react-router-dom';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Button from '@material-ui/core/Button';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import { withStyles, makeStyles } from "@material-ui/core/styles";
 
 
 const getImageUrl = (rank) => {
@@ -61,6 +66,59 @@ render() {
   )
 }
 }
+
+class DropDownFilter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { value: this.props.role };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({ value: event.target.value });
+  }
+
+  handleSubmit(event) {
+    this.props.changePatch(this.props.patch);
+    event.preventDefault();
+  }
+
+  render() {
+      return (
+        <div style={{margin: "auto", paddingRight: "1rem"}}>
+          <form onSubmit={this.handleSubmit}>
+            <input
+              type="image"
+              style={{ maxWidth: "36px", maxHeight: "36px" }}
+              name="submit"
+              value={this.props.patch}
+            ></input>
+          </form>
+        </div>
+      );
+    }
+}
+
+const StyledMenu = withStyles({
+  paper: {
+    border: '1px solid #d3d4d5',
+  },
+})((props) => (
+  <Menu
+    elevation={0}
+    getContentAnchorEl={null}
+    anchorOrigin={{
+      vertical: 'bottom',
+      horizontal: 'center',
+    }}
+    transformOrigin={{
+      vertical: 'top',
+      horizontal: 'center',
+    }}
+    {...props}
+  />
+));
 
 const Table = ({ columns, data }) => {
   const {
@@ -363,6 +421,7 @@ const GetColumnType = (tableType) => {
 }
 
 function TierList(tableType) {
+  const [patch, setPatch] = useState("8.9");
   const [totalData, setTotalData] = useState([]);
   const [counterMatchups, setCounterMatchups] = useState([]);
   const [roles, setRoles] = useState(["Solo", "Jungle", "Mid", "Support", "Carry", "All Roles"]);
@@ -371,7 +430,7 @@ function TierList(tableType) {
   const [dispRank, setRank] = useState("All_Ranks")
 
   useEffect(() => {
-    fetch("/gettierlist/".concat(dispRank, "/", role, "/", tableType.tableType)).then((res) =>
+    fetch("/gettierlist/".concat(dispRank, "/", role, "/", tableType.tableType, "/", patch)).then((res) =>
       res.json().then((data) => {
         setTotalData([]);
         Object.keys(data).forEach((key) => {
@@ -399,7 +458,7 @@ function TierList(tableType) {
         });
       })
     );
-  }, [dispRank, role]);
+  }, [dispRank, role, patch]);
   
   const columns = React.useMemo(
     () => [
@@ -457,6 +516,29 @@ function TierList(tableType) {
             <FilterForm role={rank.replaceAll("_", " ")} roleState={setRank}/>
             )
         })}
+                  <PopupState variant="popover" popupId="demo-popup-menu">
+            {(popupState) => (
+              <React.Fragment>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  {...bindTrigger(popupState)}
+                >
+                  {patch}
+                </Button>
+                <StyledMenu {...bindMenu(popupState)}>
+                  <div>
+                    <MenuItem onClick={popupState.close}>
+                      <DropDownFilter changePatch={setPatch} patch={"8.9"} />
+                    </MenuItem>
+                    <MenuItem onClick={popupState.close}>
+                      <DropDownFilter changePatch={setPatch} patch={"8.8"} />
+                    </MenuItem>
+                  </div>
+                </StyledMenu>
+              </React.Fragment>
+            )}
+          </PopupState>
         </div>
       </div>
     <Table columns={columns} data={totalData}/>

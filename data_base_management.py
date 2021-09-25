@@ -63,25 +63,25 @@ def insert_games(rank, games):
     mycol.insert_one({"Total_Matches": games})
 
 
-def make_tier_list(ranks, roles, list_type):
+def make_tier_list(ranks, roles, list_type, patch):
     for rank in ranks:
         for role in roles:
             if list_type == "Regular":
-                calc_tier_list(rank, role)
+                calc_tier_list(rank, role, patch)
             elif list_type == "Combat":
-                calc_combat_tier_list(rank, role)
+                calc_combat_tier_list(rank, role, patch)
 
 
-def calc_tier_list(rank, role):
-    total_games = anlz.get_total_matches(client, rank)
+def calc_tier_list(rank, role, patch):
+    total_games = anlz.get_total_matches(client, rank, patch)
     if total_games == 0 and rank == "Grandmaster":
-        total_games = anlz.get_total_matches(client, "Masters")
+        total_games = anlz.get_total_matches(client, "Masters", patch)
     mydb = client["Matches"]
     if rank != "All Ranks":
         mycol = mydb[f"Total_Matches - {rank}"]
 
     tierlistdb = client["Tier_List"]
-    tiercol = tierlistdb["Tierlist - Regular"]
+    tiercol = tierlistdb["Tierlist - Regular test"]
     # for x in mycol.find():
     #     games = x
 
@@ -90,9 +90,9 @@ def calc_tier_list(rank, role):
         min_games = 1
     for god in godsDict:
         wins, games, win_rate = anlz.get_winrate_rewrite(
-            client, god, role, rank)
+            client, god, role, patch, rank)
         if games >= min_games:
-            bans = anlz.get_ban_rate(client, god)
+            bans = anlz.get_pb_rate(client, god, rank, patch)
             counter_matchups = anlz.get_worst_matchups_rewrite(
                client, god, role, "8.8", rank)
             del counter_matchups["games"], counter_matchups["wins"], counter_matchups["winRate"]
@@ -105,14 +105,15 @@ def calc_tier_list(rank, role):
            
            
             tiercol.insert_one({
-               "Entry_Datetime": "9/15/2021",
+               "Entry_Datetime": "9/25/2021",
+               "patch": patch,
                "rank": rank,
                "role": role,
                "god": god,
                "tier": "A",
                "winRate": win_rate,
                "pickRate": round(games/total_games * 100, 2),
-               "banRate": round(bans/total_games * 100, 2),
+               "banRate": bans["banRate"],
                "counterMatchups": counter_matchups,
                "games": games,
                "wins": wins,
@@ -120,16 +121,16 @@ def calc_tier_list(rank, role):
 
         print(f"{rank}-{role}-{god} Done")
         
-def calc_combat_tier_list(rank, role):
-    total_games = anlz.get_total_matches(client, rank)
+def calc_combat_tier_list(rank, role, patch):
+    total_games = anlz.get_total_matches(client, rank, patch)
     if total_games == 0 and rank == "Grandmaster":
-        total_games = anlz.get_total_matches(client, "Masters")
+        total_games = anlz.get_total_matches(client, "Masters", patch)
     mydb = client["Matches"]
     if rank != "All Ranks":
         mycol = mydb[f"Total_Matches - {rank}"]
      
     tierlistdb = client["Tier_List"]
-    tiercol = tierlistdb["Tierlist - Combat"]
+    tiercol = tierlistdb["Tierlist - Combat test"]
     # for x in mycol.find():
     #     games = x
 
@@ -138,16 +139,18 @@ def calc_combat_tier_list(rank, role):
         min_games = 1
     for god in godsDict:
         wins, games, win_rate = anlz.get_winrate_rewrite(
-            client, god, role, rank)
+            client, god, role, patch, rank)
         if games >= min_games:
-            insert_data = anlz.get_combat_stats(client, god, role, rank)
-            tiercol.insert_one({**{"Entry_Datetime": "9/23/2021"}, **insert_data})
+            insert_data = anlz.get_combat_stats(client, god, role, patch, rank)
+            tiercol.insert_one({**{"Entry_Datetime": "9/25/2021", "patch": patch}, **insert_data})
         print(f"{rank}-{role}-{god} Done")
 
 if __name__ == "__main__":
     db = "single_items"
     # calc_total_matches(ranks, db)
-    tier_types = ["Regular"]
+    tier_types = ["Regular", "Combat"]
+    patches = ["8.9", "8.8"]
     for tier_type in tier_types:
-        make_tier_list(ranks, roles, tier_type)
+        for patch in patches:
+            make_tier_list(ranks, roles, tier_type, patch)
     # delete_match_docs(client, "single_matchups", "Achilles")

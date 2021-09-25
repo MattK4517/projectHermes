@@ -37,7 +37,9 @@ def get_pb_rate(client, god, rank, patch):
     for set in bancol.find(myquery):
         godBans += 1
 
-    return {"godBans": godBans, "totalMatches": totalMatches}
+    if totalMatches == 0:
+        totalMatches = 1
+    return {"godBans": godBans, "totalMatches": totalMatches, "banRate": round(godBans/totalMatches * 100, 2)}
 
 def get_url(god):
     god = god.replace("_"," ")
@@ -281,7 +283,7 @@ def get_worst_matchups_rewrite(client, god, role, patch, rank="All Ranks"):
 
     return {**test_sort, **{"games": games, "wins": wins, "winRate": round(wins/games*100, 2)}}
 
-def get_winrate_rewrite(client, god, role, rank="All Ranks"):
+def get_winrate_rewrite(client, god, role, patch, rank="All Ranks"):
     mydb = client["single_items"]
     mycol = mydb[god]
     if rank != "All Ranks":
@@ -315,18 +317,19 @@ def get_total_matches(client, rank, patch):
         total_games = mycol.count_documents({})
     return total_games
 
-def get_ban_rate(client, god):
-    mydb = client["single_god_bans"]
-    mycol = mydb[god]
-    return mycol.count_documents({})
-
-def get_combat_stats(client, god, role, rank="All Ranks"):
+def get_combat_stats(client, god, role, patch, rank="All Ranks"):
     mydb = client["single_combat_stats"]
     mycol = mydb[god]
     if rank != "All Ranks":
-        myquery = {"role": role, "rank": rank}
+        myquery = { "role_played": role, "rank": rank, "patch": patch}
     else:
-        myquery = {"role": role}
+        myquery = { "role_played": role, "patch": patch}
+    
+    if patch != "8.9":
+        if rank != "All Ranks":
+            myquery = { "role_played": role, "rank": rank}
+        else:
+            myquery = { "role_played": role}
 
     kills = 0
     deaths = 0

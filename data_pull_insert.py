@@ -47,6 +47,7 @@ def normalize_godId(id):
         2268: "Cernunnos",
         1966: "Chaac",
         1921: "Chang\'e",
+        4010: "Charybdis",
         3509: "Chernobog",
         2075: "Chiron",
         1920: "Chronos",
