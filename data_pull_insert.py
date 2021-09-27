@@ -3,9 +3,8 @@ from datetime import datetime
 from pyrez.api import SmiteAPI
 import pymongo
 import random
-import analyze as anlz
 import time
-
+import analyze as anlz
 from pyrez.models import Smite
 from pyrez.models.MatchHistory import MatchHistory
 
@@ -202,11 +201,20 @@ def create_player_dict(player):
     playerDict["Wards_Placed"] = player["Wards_Placed"]
     playerDict["Win_Status"] = player.winStatus
     playerDict["MatchID"] = player.matchId
+    build = [
+        playerDict["Item_Purch_1"],
+        playerDict["Item_Purch_2"],
+        playerDict["Item_Purch_3"],
+        playerDict["Item_Purch_4"],
+        playerDict["Item_Purch_5"],
+        playerDict["Item_Purch_6"],
+    ]
+    playerDict["godBuild"] = anlz.get_build_stats(client, build)
     return playerDict
 
 def create_match_dict(match):
     match_dict = {}
-    match_dict["Patch"] = "8.8 Bonus"
+    match_dict["Patch"] = "8.9"
     match_dict["Entry_Datetime"] = match.entryDatetime.split()[0]
     match_dict["MatchId"] = match.matchId
     match_dict["Match_Duration"] = match.matchDuration
@@ -237,37 +245,109 @@ def create_sets(data):
         sets.append(set)
     return sets
 
+def get_new_id(client, smite_api):
+    mydb = client["God_Data"]
+    gods = smite_api.getGods()
+    for god in range(len(gods)):
+        if gods[god]["latestGod"] == "y":
+            mycol = mydb["Charybdis"]
+            data = create_god_data_dict(gods[god])
+            mycol.insert_one(data)
+
+def create_god_data_dict(data):
+    ret_data = {}
+    ret_data["Ability1"] = data["Ability1"]
+    ret_data["Ability2"] = data["Ability2"]
+    ret_data["Ability3"] = data["Ability3"]
+    ret_data["Ability4"] = data["Ability4"]
+    ret_data["Ability5"] = data["Ability5"]
+    ret_data["AbilityId1"] = data["AbilityId1"]
+    ret_data["AbilityId2"] = data["AbilityId2"]
+    ret_data["AbilityId3"] = data["AbilityId3"]
+    ret_data["AbilityId4"] = data["AbilityId4"]
+    ret_data["AbilityId5"] = data["AbilityId5"]
+    ret_data["Ability_1"] = data["Ability_1"]
+    ret_data["Ability_2"] = data["Ability_2"]
+    ret_data["Ability_3"] = data["Ability_3"]
+    ret_data["Ability_4"] = data["Ability_4"]
+    ret_data["Ability_5"] = data["Ability_5"]
+    ret_data["AttackSpeed"] = data["AttackSpeed"]
+    ret_data["AttackSpeedPerLevel"] = data["AttackSpeedPerLevel"]
+    ret_data["AutoBanned"] = data["AutoBanned"]
+    ret_data["Cons"] = data["Cons"]
+    ret_data["HP5PerLevel"] = data["HP5PerLevel"]
+    ret_data["Health"] = data["Health"]
+    ret_data["HealthPerFive"] = data["HealthPerFive"]
+    ret_data["HealthPerLevel"] = data["HealthPerLevel"]
+    ret_data["Lore"] = data["Lore"]
+    ret_data["MagicProtection"] = data["MagicProtection"]
+    ret_data["MagicProtectionPerLevel"] = data["MagicProtectionPerLevel"]
+    ret_data["MagicalPower"] = data["MagicalPower"]
+    ret_data["MagicalPowerPerLevel"] = data["MagicalPowerPerLevel"]
+    ret_data["MP5PerLevel"] = data["MP5PerLevel"]
+    ret_data["Mana"] = data["Mana"]
+    ret_data["ManaPerFive"] = data["ManaPerFive"]
+    ret_data["ManaPerLevel"] = data["ManaPerLevel"]
+    ret_data["Name"] = data["Name"]
+    ret_data["OnFreeRotation"] = data["OnFreeRotation"]
+    ret_data["Pantheon"] = data["Pantheon"]
+    ret_data["PhysicalPower"] = data["PhysicalPower"]
+    ret_data["PhysicalPowerPerLevel"] = data["PhysicalPowerPerLevel"]
+    ret_data["PhysicalProtection"] = data["PhysicalProtection"]
+    ret_data["PhysicalProtectionPerLevel"] = data["PhysicalProtectionPerLevel"]
+    ret_data["Pros"] = data["Pros"]
+    ret_data["Roles"] = data["Roles"]
+    ret_data["Speed"] = data["Speed"]
+    ret_data["Title"] = data["Title"]
+    ret_data["Type"] = data["Type"]
+    ret_data["abilityDescription1"] = data["abilityDescription1"]
+    ret_data["abilityDescription2"] = data["abilityDescription2"]
+    ret_data["abilityDescription3"] = data["abilityDescription3"]
+    ret_data["abilityDescription4"] = data["abilityDescription4"]
+    ret_data["abilityDescription5"] = data["abilityDescription5"]
+    ret_data["basicAttack"] = data["basicAttack"]
+    ret_data["godAbility1_URL"] = data["godAbility1_URL"]
+    ret_data["godAbility2_URL"] = data["godAbility2_URL"]
+    ret_data["godAbility3_URL"] = data["godAbility3_URL"]
+    ret_data["godAbility4_URL"] = data["godAbility4_URL"]
+    ret_data["godAbility5_URL"] = data["godAbility5_URL"]
+    ret_data["godCard_URL"] = data["godCard_URL"]
+    ret_data["godIcon_URL"] = data["godIcon_URL"]
+    ret_data["id"] = data["id"]
+    ret_data["latestGod"] = data["latestGod"]
+    ret_data["ret_msg"] = data["ret_msg"]
+    return ret_data
 
 starttime = datetime.now()
 creds = open("cred.txt", mode="r").read()
+
+
 smite_api = SmiteAPI(devId =creds.splitlines()[0], authKey = creds.splitlines()[1], responseFormat=pyrez.Format.JSON)
-print(smite_api.getDataUsed())
-print(smite_api.getMotd())
-# mydb = client["Matches"]
-# mycol = mydb["8.8 - bonus Matches"]
-# # mHistory = smite_api.getMatchHistory(712081347)
-# date = 20210910
-# match_ids = smite_api.getMatchIds(451, date=date, hour=-1) # 30 pulled
-# set_ids = []
-# all_ids = []
-# set_matches = {}
-# print(len(match_ids))
-# set_length = 10
-# inserted_count = 0
-# match_ids_len = len(match_ids)
-# all_sets = create_sets(match_ids)
-# total = 0
-# for set in all_sets:
-#     match_details = smite_api.getMatch(set)
-#     for i in range(len(match_details) // 10):
-#         match_dict = create_match_dict(match_details[i*set_length])
-#         for k in range(10):
-#             player = create_player_dict(match_details[(i*10) + k])
-#             match_dict["player"+str(k)] = player
-#         mycol.insert_one(match_dict)
-#         inserted_count += 1
+
+mydb = client["Matches"]
+mycol = mydb["8.9 Matches"]
+date = 20210924
+match_ids = smite_api.getMatchIds(451, date=date, hour=-1)
+set_ids = []
+all_ids = []
+set_matches = {}
+print(len(match_ids))
+set_length = 10
+inserted_count = 0
+match_ids_len = len(match_ids)
+all_sets = create_sets(match_ids)
+total = 0
+for set in all_sets:
+    match_details = smite_api.getMatch(set)
+    for i in range(len(match_details) // 10):
+        match_dict = create_match_dict(match_details[i*set_length])
+        for k in range(10):
+            player = create_player_dict(match_details[(i*10) + k])
+            match_dict["player"+str(k)] = player
+        mycol.insert_one(match_dict)
+        inserted_count += 1
 
 
-# print(f"{date} Pull Completed in " + str(datetime.now() - starttime))
-# print(inserted_count)
-# print("error %" + str(100 - round(inserted_count/match_ids_len * 100, 2)))
+print(f"{date} Pull Completed in " + str(datetime.now() - starttime))
+print(inserted_count)
+print("error %" + str(round(100 - inserted_count/match_ids_len * 100, 2)))

@@ -108,27 +108,34 @@ def get_all_items(god, role, rank, patch):
 
 @app.route("/getmatch/<matchID>")
 def get_match(matchID):
+        starttime = datetime.now()
         mydb = client["Matches"]
         mycol = mydb["8.8 Matches"]
         match = ""
         matchID = int(matchID)
+        if mycol.count_documents({"MatchId": matchID}) == 0:
+                mycol = mydb["8.9 Matches"]
+        print(f"finished in {datetime.now() - starttime}")
         for x in mycol.find({"MatchId": matchID}, {'_id': 0}):
                 match = x
+        print(f"finished in {datetime.now() - starttime}")
 
 
-        for key in match:
-                if "player" in key:
-                        build = [
-                        match[key]["Item_Purch_1"],
-                        match[key]["Item_Purch_2"],
-                        match[key]["Item_Purch_3"],
-                        match[key]["Item_Purch_4"],
-                        match[key]["Item_Purch_5"],
-                        match[key]["Item_Purch_6"],
-                        ]
+        if match["Entry_Datetime"] < "9/25/2021":
+                for key in match:
+                        if "player" in key:
+                                build = [
+                                match[key]["Item_Purch_1"],
+                                match[key]["Item_Purch_2"],
+                                match[key]["Item_Purch_3"],
+                                match[key]["Item_Purch_4"],
+                                match[key]["Item_Purch_5"],
+                                match[key]["Item_Purch_6"],
+                                ]
 
-                        match[key] = {**match[key], **{"godBuild": anlz.get_build_stats(client, build)}}
-                
+                                match[key] = {**match[key], **{"godBuild": anlz.get_build_stats(client, build)}}
+        
+        print(f"finished in {datetime.now() - starttime}")
         return match
 
 # make a route for every god, in the

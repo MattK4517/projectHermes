@@ -160,3 +160,5 @@ Starter_items = [
 "Sentinel\'s Gift", "Sigil of the Old Guard", "Spartan Flag", "Sundering Axe", "Tainted Amulet", "Tainted Breastplate", "Tainted Steel",
 "The Alternate Timeline", "Vampiric Shroud", "War Banner", "War Flag", "Warding Sigil", "Warrior\'s Axe"
 ]
+
+print("9/25/2021" < "9/26/2021")
