@@ -54,7 +54,7 @@ def gen_regular_tier_entry(client, god, role, rank, patch):
         "games": games
     }
 
-    insert_data(client, "test", "test tier list", tier_entry)
+    insert_data(client, "Tier_list", "Regular List", tier_entry)
 
 def calc_tier():
     """
@@ -97,7 +97,7 @@ def gen_combat_tier_entry(client, god, role, rank, patch):
     }
 
     tier_entry = {**tier_entry, ** anlz.get_combat_stats(client, god, role, patch, rank)}
-    insert_data(client, "test", "test combat list", tier_entry)
+    insert_data(client, "Tier_list", "Combat List", tier_entry)
 
 def insert_data(client, db, col, data):
     mydb = client[db]
@@ -109,7 +109,7 @@ def get_date():
     return f"{time.month}/{time.day}/{time.year}"
 
 if __name__ == '__main__':
-    gen_tier_list(client, roles, "8.9", ["Combat"], ["All Ranks"])
+    gen_tier_list(client, roles, "8.9", ["Combat", "Regular"], ranks)
 
 
 
