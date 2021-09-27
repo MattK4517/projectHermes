@@ -519,7 +519,7 @@ function Godpage(god) {
     patch
   );
   useEffect(() => {
-    fetch("/".concat(pagegod, "/", dispRank, "/", patch)).then((res) =>
+    fetch("/".concat(god.god)).then((res) =>
       res.json().then((data) => {
         setgod(pagegod);
         seturl(data.url);

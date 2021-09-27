@@ -15,7 +15,7 @@ from constants import godsDict, slots, Tier_Three_items, Starter_items
 # worst matchups - check
 # item breakdown - check
 
-def get_pb_rate(client, god, rank, patch):
+def get_pb_rate(client, god, rank, role, patch):
     """ # need to grab # of matches played by god, number of matches played, number of bans
 
     Args:
@@ -30,16 +30,32 @@ def get_pb_rate(client, god, rank, patch):
     bancol = bandb[god]
     totalMatches = get_total_matches(client, rank, patch)
     if patch == "8.9":
-        myquery = {"patch": patch}
+        if rank == "All Ranks":
+            myquery = {"patch": patch}
+        else:
+            myquery = {"patch": patch, "rank": rank}
     else:
-        myquery = {}
+        myquery = {"rank": rank}
 
-    for set in bancol.find(myquery):
-        godBans += 1
-
+    godBans = bancol.count_documents(myquery)
+    games = get_games_played(client, god, rank, role, patch)
     if totalMatches == 0:
         totalMatches = 1
-    return {"godBans": godBans, "totalMatches": totalMatches, "banRate": round(godBans/totalMatches * 100, 2)}
+    return {"godBans": godBans, "totalMatches": totalMatches, "banRate": round(godBans/totalMatches * 100, 2), "pickRate": round(games/totalMatches * 100, 2)}
+
+def get_games_played(client, god, rank, role, patch):
+    mydb = client["single_items"]
+    mycol = mydb[god]
+    if patch == "8.9":
+        if rank == "All Ranks":
+            myquery = {"patch": patch, "role_played": role}
+        else:
+            myquery = {"patch": patch, "rank": rank, "role_played": role}
+    else:
+        myquery = {"rank": rank}
+    
+    games = mycol.count_documents(myquery)
+    return games
 
 def get_url(god):
     god = god.replace("_"," ")
@@ -74,20 +90,6 @@ def get_gods():
         frontEndDict[god] = {"url": get_url(god), "name": god}
     return frontEndDict
 
-def get_winrate(client, god, role):
-    god = god.replace("_", " ")
-    mydb = client["Items"]
-    mycol = mydb[god]
-    games = 0
-    wins = 0
-    for data in mycol.find():
-        for slot in data[role].keys():
-            for item in data[role][slot]:
-                if slot == "slot1":
-                    games += data[role][slot][item][0]
-                    wins += data[role][slot][item][1]
-    return round(wins/games * 100, 2)
-
 def get_item_data(client, item):
     mydb = client["Item_Data"]
     mycol = mydb[item]
@@ -103,7 +105,7 @@ def get_item_data(client, item):
     itemdata = {**itemdata, **{"itemStats": itemdata["ItemDescription"]["Menuitems"]}}
     return itemdata
 
-def get_top_builds_rewrite(client, god, role, patch, rank="All Ranks", items="Top"):
+def get_top_builds(client, god, role, patch, rank="All Ranks"):
     top_dict = {slot: {} for slot in slots}
     mydb = client["single_items"]
     mycol = mydb[god]
@@ -119,7 +121,6 @@ def get_top_builds_rewrite(client, god, role, patch, rank="All Ranks", items="To
             myquery = { "role_played": role}
     games = 0
     wins = 0
-    starttime = datetime.now()
     for x in mycol.find(myquery, {"_id": 0}):
         games += 1
         flag = False 
@@ -128,7 +129,7 @@ def get_top_builds_rewrite(client, god, role, patch, rank="All Ranks", items="To
             flag = True
         for slot in x[god].keys():
             item = x[god][slot]
-            if item and items == "Top":
+            if item:
                 if item not in top_dict[slot].keys():
                     if flag:
                         top_dict[slot][item] = {"item": item, "games": 1, "wins": 1}
@@ -138,28 +139,6 @@ def get_top_builds_rewrite(client, god, role, patch, rank="All Ranks", items="To
                     top_dict[slot][item]["games"] += 1
                     if flag:
                         top_dict[slot][item]["wins"] += 1
-            elif item and items == "All":
-                if slot == "slot1":
-                    if item not in top_dict[slot].keys():
-                        if flag:
-                            top_dict[slot][item] = {"item": item, "games": 1, "wins": 1}
-                        else:
-                            top_dict[slot][item] = {"item": item, "games": 1, "wins": 0}
-                    elif item in top_dict[slot].keys():
-                        top_dict[slot][item]["games"] += 1
-                        if flag:
-                            top_dict[slot][item]["wins"] += 1
-
-                elif (item in Tier_Three_items or item in Starter_items) and slot != "slot1":
-                    if item not in top_dict[slot].keys():
-                        if flag:
-                            top_dict[slot][item] = {"item": item, "games": 1, "wins": 1}
-                        else:
-                            top_dict[slot][item] = {"item": item, "games": 1, "wins": 0}
-                    elif item in top_dict[slot].keys():
-                        top_dict[slot][item]["games"] += 1
-                        if flag:
-                            top_dict[slot][item]["wins"] += 1
 
 
 
@@ -167,10 +146,7 @@ def get_top_builds_rewrite(client, god, role, patch, rank="All Ranks", items="To
                 key = lambda x: getitem(x[1], "games")))
             top_dict[slot] = dict(test_sort)
             
-    if items == "Top":
-        return {**sort_top_dict(dict(top_dict), client), **{"games": games, "wins": wins, "winRate": round(wins/games*100, 2)}}
-    elif items == "All":
-        return (dict(top_dict))
+    return {**sort_top_dict(dict(top_dict), client), **{"games": games, "wins": wins, "winRate": round(wins/games*100, 2)}}
 
 def sort_top_dict(top_dict, client):
     items = ["item1", "item2"]
@@ -221,7 +197,50 @@ def sort_top_dict(top_dict, client):
 
     return all_dict
 
-def get_worst_matchups_rewrite(client, god, role, patch, rank="All Ranks"):
+def get_all_builds(client, god, role, patch, rank="All Ranks"):
+    top_dict = {slot: {} for slot in slots}
+    mydb = client["single_items"]
+    mycol = mydb[god]
+    if rank != "All Ranks":
+        myquery = { "role_played": role, "rank": rank, "patch": patch}
+    else:
+        myquery = { "role_played": role, "patch": patch}
+    
+    if patch != "8.9":
+        if rank != "All Ranks":
+            myquery = { "role_played": role, "rank": rank}
+        else:
+            myquery = { "role_played": role}
+    games = 0
+    wins = 0
+    for x in mycol.find(myquery, {"_id": 0}):
+        games += 1
+        flag = False 
+        if x["win_status"] == "Winner":
+            wins +=1
+            flag = True
+        for slot in x[god].keys():
+            item = x[god][slot]
+            if item:
+                if item not in top_dict[slot].keys():
+                    if flag:
+                        top_dict[slot][item] = {"item": item, "games": 1, "wins": 1}
+                    else:
+                        top_dict[slot][item] = {"item": item, "games": 1, "wins": 0}
+                elif item in top_dict[slot].keys():
+                    top_dict[slot][item]["games"] += 1
+                    if flag:
+                        top_dict[slot][item]["wins"] += 1
+
+
+
+            test_sort = OrderedDict(sorted(top_dict[slot].items(),
+                key = lambda x: getitem(x[1], "games")))
+            top_dict[slot] = dict(test_sort)
+            
+    return {**dict(top_dict), **{"games": games, "wins": wins, "winRate": round(wins/games*100, 2)}}
+
+def get_worst_matchups(client, god, role, patch, rank="All Ranks"):
     mydb = client["single_matchups"]
     mycol = mydb[god]
     matchup_dict = {}
@@ -283,13 +302,20 @@ def get_worst_matchups_rewrite(client, god, role, patch, rank="All Ranks"):
 
     return {**test_sort, **{"games": games, "wins": wins, "winRate": round(wins/games*100, 2)}}
 
-def get_winrate_rewrite(client, god, role, patch, rank="All Ranks"):
+def get_winrate(client, god, role, patch, rank="All Ranks"):
     mydb = client["single_items"]
     mycol = mydb[god]
     if rank != "All Ranks":
-        myquery = {"role_played": role, "rank": rank}
+        myquery = { "role_played": role, "rank": rank, "patch": patch}
     else:
-        myquery = {"role_played": role}
+        myquery = { "role_played": role, "patch": patch}
+    
+    if patch != "8.9":
+        if rank != "All Ranks":
+            myquery = { "role_played": role, "rank": rank}
+        else:
+            myquery = { "role_played": role}
+
 
     games = 0
     wins = 0
@@ -302,7 +328,8 @@ def get_winrate_rewrite(client, god, role, patch, rank="All Ranks"):
     else:
         win_rate = 0
 
-    return [wins, games, win_rate]
+    return {"wins": wins, "games": games, "win_rate": win_rate}
+
 
 def get_total_matches(client, rank, patch):
     mydb = client["Matches"]
@@ -321,15 +348,15 @@ def get_combat_stats(client, god, role, patch, rank="All Ranks"):
     mydb = client["single_combat_stats"]
     mycol = mydb[god]
     if rank != "All Ranks":
-        myquery = { "role_played": role, "rank": rank, "patch": patch}
+        myquery = { "role": role, "rank": rank, "patch": patch}
     else:
-        myquery = { "role_played": role, "patch": patch}
+        myquery = { "role": role, "patch": patch}
     
     if patch != "8.9":
         if rank != "All Ranks":
-            myquery = { "role_played": role, "rank": rank}
+            myquery = { "role": role, "rank": rank}
         else:
-            myquery = { "role_played": role}
+            myquery = { "role": role}
 
     kills = 0
     deaths = 0
@@ -446,7 +473,6 @@ def get_god_stats(client, god, level):
 # client = pymongo.MongoClient(
 #     "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
 
-# get_god_stats(client, "Agni", 20)
 
 # print(get_worst_matchups_rewrite(client, "Camazotz", "Solo"))
 

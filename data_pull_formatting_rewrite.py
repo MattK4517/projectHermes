@@ -1,22 +1,16 @@
 import pymongo
 from datetime import datetime
-from constants import godsDict, roles, ranks, slots
+from constants import godsDict, roles, ranks, slots, patch
 
 client = pymongo.MongoClient(
     "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
 
-# roles = ["Carry", "Support", "Mid", "Jungle", "Solo"]
-# ranks = ["Bronze", "Silver", "Gold", "Platinum", "Diamond", "Masters", "Grandmaster"]
-# slots = ["slot1", "slot2", "slot3", "slot4", "slot5", "slot6"]
-# items = ["item1", "item2"]
-# testDict = {slot: {item: {"items": "", "games":0} for item in items} for slot in slots}
-# print(testDict)
 
 class GodData:
     def __init__(self, god):
         self.name = god
-        self.matches = [] 
-    
+        self.matches = []
+
 
     def insert_ban(self, matchId, rank):
         mydb = client["single_god_bans"]
@@ -24,7 +18,8 @@ class GodData:
         mycol.insert_one({
             "Banned in": matchId,
             "rank": rank,
-            "patch": "8.8 bonus"
+            "patch": patch,
+            "Entry_Datetime": match["Entry_Datetime"],
             })
 
     def set_matches(self, data):
@@ -58,7 +53,8 @@ class GodData:
                             "role_played": role_played,
                             "enemy": enemy,
                             "matchId": matchId,
-                            "patch": "8.8 bonus"
+                            "patch": patch,
+                            "Entry_Datetime": match["Entry_Datetime"],
                         }
                     )
 
@@ -84,10 +80,11 @@ class GodData:
                         "rank": rank,
                         "win_status": win_status,
                         "matchId": matchId,
-                        "patch": "8.8 bonus"
+                        "patch": patch,
+                        "Entry_Datetime": match["Entry_Datetime"],
                         }
                     )
-    
+
     def calc_combat_stats(self):
         mydb = client["single_combat_stats"]
         mycol =  mydb[self.name]
@@ -95,6 +92,7 @@ class GodData:
             for key in match:
                 if "player" in key and match[key]["godName"] == self.name:
                     rank = normalize_rank(match[key]["Conquest_Tier"])
+                    role = match[key]["Role"]
                     matchId = match[key]["MatchID"]
                     kills = match[key]["Kills_Player"]
                     deaths = match[key]["Deaths"]
@@ -103,11 +101,12 @@ class GodData:
                     damage_taken = match[key]["Damage_Taken"]
                     damage_mitigated = match[key]["Damage_Mitigated"]
                     healing = match[key]["Healing"]
-                    healing_self = match[key]["Healing_Player"]
+                    healing_self = match[key]["Healing_Player_Self"]
                     win_status = match[key]["Win_Status"]
 
                     mycol.insert_one({
                         "rank": rank,
+                        "role": role,
                         "matchId": matchId,
                         "kills": kills,
                         "deaths": deaths,
@@ -118,10 +117,11 @@ class GodData:
                         "healing": healing,
                         "healing_self": healing_self,
                         "win_status": win_status,
-                        "patch": "8.8 bonus"
+                        "patch": patch,
+                        "Entry_Datetime": match["Entry_Datetime"],
                     })
-                
-                
+
+
 def normalize_rank(tier):
     rank = "Error"
     if tier <= 5:
@@ -141,12 +141,20 @@ def normalize_rank(tier):
     return rank
 
 
+
+def get_date():
+    time = datetime.now()
+    return f"{time.month}/{time.day}/{time.year}"
+
+
+
+# {"Entry_Datetime": {"$lte": "8/30/2021", "$gte": "8/27/2021" }}
 start_time = datetime.now()
 sum_gods = 0
 mydb = client["Matches"]
-mycol = mydb["8.8 Matches"]
+mycol = mydb["8.9 Matches"]
 set_matches = []
-for match in mycol.find({"Entry_Datetime": {"$gte": "8/24/2021" }}):
+for match in mycol.find({"Entry_Datetime": {"$gte": "9/21/2021"}}):
     set_matches.append(match)
 
 print(len(set_matches))

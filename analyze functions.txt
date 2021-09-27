@@ -1,0 +1,41 @@
+get_pb_rate(client, god, rank, patch)
+returns {godBans: int, totalMatches: int, banRate: float}
+
+get_url(god)
+returns god icon url (str)
+
+get_abilities(client, god)
+returns {ability1: {name: str, url (of icon): str}}
+
+get_item(item)
+returns god icon url (str)
+
+get_gods():
+returns {god_name: {url (of god icon): str, name: str}}
+
+get_item_data(client, item)
+returns a dict containing stat info about an item
+
+get_top_builds(client, god, role, patch, rank="All Ranks")
+returns a dict of the top 2 most bought items in each slot
+
+get_all_builds(client, god, role, patch, rank="All Ranks")
+returns a dict of all items 
+
+get_worst_matchups(client, god, role, patch, rank="All Ranks")
+returns a dict of the gods matchups
+
+get_winrate(client, god, role, patch, rank="All Ranks")
+returns {wins: int, games: int, win_rate: float}
+
+get_total_matches(client, rank, patch)
+returns the number of games played at a rank for a patch
+
+get_combat_stats(client, god, role, patch, rank="All Ranks")
+returns average combat stats for a god
+
+get_build_stats(client, build)
+returns stats of a build
+
+get_god_stats(client, god, level)
+returns the base stats of a god 
