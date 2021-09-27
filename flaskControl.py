@@ -19,15 +19,10 @@ def get_all_gods():
         gdDict = anlz.get_gods()
         return gdDict
 
-@app.route('/<god>/<rank>/<patch>', methods=["GET", "POST"])
-def get_god_data(god, rank, patch):
+@app.route('/<god>', methods=["GET", "POST"])
+def get_god_data(god):
         newgod = god.replace("_", " ")
-        build = anlz.get_top_builds_rewrite(client, god, "Solo", "8.9")
-        pb_rate = anlz.get_pb_rate(client, newgod, rank, patch)
-        image = {"url": anlz.get_url(newgod)}
-        data_dict = {**build, **pb_rate, **image}
-        return data_dict
-
+        return {"url": anlz.get_url(newgod)}
 
 @app.route('/<god>/matchups', methods=["GET"])
 def get_god_matchups(god):
@@ -37,11 +32,11 @@ def get_god_matchups(god):
 def get_god_data_role(god, role, rank, patch):
         newgod = god.replace("_", " ")
         if "All" in rank and patch == "current":
-                build = anlz.get_top_builds_rewrite(client, god, role, patch)
+                build = anlz.get_top_builds(client, god, role, patch)
         else: 
-                build = anlz.get_top_builds_rewrite(client, god, role, patch, rank)
+                build = anlz.get_top_builds(client, god, role, patch, rank)
 
-        pb_rate = anlz.get_pb_rate(client, newgod, rank, patch)
+        pb_rate = anlz.get_pb_rate(client, newgod, rank, role, patch)
         image = {"url": anlz.get_url(newgod)}
         data_dict = {**build, **pb_rate, **image}
         return data_dict
@@ -50,9 +45,9 @@ def get_god_data_role(god, role, rank, patch):
 def get_god_matchups_by_rank(god, role, rank, patch):
         newgod = god.replace("_", " ")
         if "All" in rank and patch == "current":
-                matchups = anlz.get_worst_matchups_rewrite(client, god, role, patch)
+                matchups = anlz.get_worst_matchups(client, god, role, patch)
         else: 
-                matchups = anlz.get_worst_matchups_rewrite(client, god, role, patch, rank)
+                matchups = anlz.get_worst_matchups(client, god, role, patch, rank)
 
         del matchups["wins"], matchups["games"], matchups["winRate"]
         return matchups
@@ -65,13 +60,13 @@ def get_god_abilities(god):
 def get_tier_list(rank, role, tableType, patch):
         retData = {god: {} for god in godsDict}
         if tableType == "Regular":
-                mydb = client["Tier_List"]
-                mycol = mydb["Tierlist - Regular test"]
+                mydb = client["test"]
+                mycol = mydb["test tier list"]
                 rank = rank.replace("_", " ")
                 if "All" in role:
-                        myquery = {"rank": rank, "patch": patch}
+                        myquery = {"rank": rank, "patch": patch, "pickRate": {"$gte": 1}}
                 else:
-                        myquery = {"rank": rank, "role": role, "patch": patch}
+                        myquery = {"rank": rank, "role": role, "patch": patch, "pickRate": {"$gte": 1}}
                 
                 for x in mycol.find(myquery, {"_id": 0}):
                         dict_god = x["god"]
@@ -82,13 +77,13 @@ def get_tier_list(rank, role, tableType, patch):
                                 retData[dict_god][dict_role] = x
 
         elif tableType == "Combat":
-                mydb = client["Tier_List"]
-                mycol = mydb["Tierlist - Combat test"]
+                mydb = client["test"]
+                mycol = mydb["test combat list"]
                 rank = rank.replace("_", " ")
                 if "All" in role:
-                        myquery = {"rank": rank, "patch": patch}
+                        myquery = {"rank": rank, "patch": patch, "pickRate": {"$gte": 1}}
                 else:
-                        myquery = {"rank": rank, "role": role, "patch": patch}
+                        myquery = {"rank": rank, "role": role, "patch": patch, "pickRate": {"$gte": 1}}
                 
                 for x in mycol.find(myquery, {"_id": 0}):
                         dict_god = x["god"]
@@ -97,8 +92,6 @@ def get_tier_list(rank, role, tableType, patch):
                                 retData[dict_god] = {dict_role: x}
                         else:
                                 retData[dict_god][dict_role] = x
-        
-        print(myquery)
         return retData
 
 
@@ -109,7 +102,7 @@ def get_item_data(item):
 @app.route('/<god>/items/<role>/<rank>/<patch>')
 def get_all_items(god, role, rank, patch):
         newgod = god.replace("_", " ")
-        items = anlz.get_top_builds_rewrite(client, god, role, patch, rank, "All")
+        items = anlz.get_all_builds(client, god, role, patch, rank)
 
         return items
 

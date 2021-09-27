@@ -421,7 +421,7 @@ const GetColumnType = (tableType) => {
 }
 
 function TierList(tableType) {
-  const [patch, setPatch] = useState("8.9");
+  // const [patch, setPatch] = useState("8.9");
   const [totalData, setTotalData] = useState([]);
   const [counterMatchups, setCounterMatchups] = useState([]);
   const [roles, setRoles] = useState(["Solo", "Jungle", "Mid", "Support", "Carry", "All Roles"]);
@@ -430,7 +430,8 @@ function TierList(tableType) {
   const [dispRank, setRank] = useState("All_Ranks")
 
   useEffect(() => {
-    fetch("/gettierlist/".concat(dispRank, "/", role, "/", tableType.tableType, "/", patch)).then((res) =>
+    //"/gettierlist/".concat(dispRank, "/", role, "/", tableType.tableType, "/", patch
+    fetch("/gettierlist/".concat(dispRank, "/", role, "/", tableType.tableType)).then((res) =>
       res.json().then((data) => {
         setTotalData([]);
         Object.keys(data).forEach((key) => {
@@ -458,7 +459,7 @@ function TierList(tableType) {
         });
       })
     );
-  }, [dispRank, role, patch]);
+  }, [dispRank, role]);
   
   const columns = React.useMemo(
     () => [
@@ -516,7 +517,7 @@ function TierList(tableType) {
             <FilterForm role={rank.replaceAll("_", " ")} roleState={setRank}/>
             )
         })}
-                  <PopupState variant="popover" popupId="demo-popup-menu">
+        {/* <PopupState variant="popover" popupId="demo-popup-menu">
             {(popupState) => (
               <React.Fragment>
                 <Button
@@ -538,7 +539,7 @@ function TierList(tableType) {
                 </StyledMenu>
               </React.Fragment>
             )}
-          </PopupState>
+          </PopupState> */}
         </div>
       </div>
     <Table columns={columns} data={totalData}/>

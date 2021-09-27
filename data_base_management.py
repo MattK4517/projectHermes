@@ -1,5 +1,6 @@
 
 
+from re import A
 import pymongo
 from collections import OrderedDict
 from operator import getitem
@@ -33,7 +34,7 @@ def get_last_day(client):
 def delete_match_docs(client, db, col):
     mydb = client[db]
     mycol = mydb[col]
-    mycol.delete_many({"patch": "8.8 Bonus"})
+    mycol.delete_many({"patch": 8.8})
 
 
 def calc_total_matches(ranks, db, rank="All Ranks"):
@@ -62,95 +63,48 @@ def insert_games(rank, games):
     mycol = mydb[f"Total_Matches - {rank}"]
     mycol.insert_one({"Total_Matches": games})
 
+def add_new_urls(client, god):
+    god_info_db = client["God_Data"]
+    god_info_col = god_info_db[god]
+    for x in god_info_col.find():
+        data = x
+    ability_names = [
+        data["Ability1"],
+        data["Ability2"],
+        data["Ability3"],
+        data["Ability4"],
+        data["Ability5"],
+    ]
+    ability_urls = [
+        data["godAbility1_URL"],
+        data["godAbility2_URL"],
+        data["godAbility3_URL"],
+        data["godAbility4_URL"],
+        data["godAbility5_URL"],
+    ]
+    mydb = client["URLS"]
+    mycol = mydb[god]
+    mycol.insert_one({
+        "Abilities": ability_names,
+        "Abilities_urls": ability_urls,
+    })
 
-def make_tier_list(ranks, roles, list_type, patch):
-    for rank in ranks:
-        for role in roles:
-            if list_type == "Regular":
-                calc_tier_list(rank, role, patch)
-            elif list_type == "Combat":
-                calc_combat_tier_list(rank, role, patch)
-
-
-def calc_tier_list(rank, role, patch):
-    total_games = anlz.get_total_matches(client, rank, patch)
-    if total_games == 0 and rank == "Grandmaster":
-        total_games = anlz.get_total_matches(client, "Masters", patch)
-    mydb = client["Matches"]
-    if rank != "All Ranks":
-        mycol = mydb[f"Total_Matches - {rank}"]
-
-    tierlistdb = client["Tier_List"]
-    tiercol = tierlistdb["Tierlist - Regular test"]
-    # for x in mycol.find():
-    #     games = x
-
-    min_games = round(total_games * .005)
-    if min_games < 1:
-        min_games = 1
-    for god in godsDict:
-        wins, games, win_rate = anlz.get_winrate_rewrite(
-            client, god, role, patch, rank)
-        if games >= min_games:
-            bans = anlz.get_pb_rate(client, god, rank, patch)
-            counter_matchups = anlz.get_worst_matchups_rewrite(
-               client, god, role, "8.8", rank)
-            del counter_matchups["games"], counter_matchups["wins"], counter_matchups["winRate"]
-            to_remove = []
-            for key, index in enumerate(counter_matchups):
-               if key > 9:
-                   to_remove.append(index)
-            for key in to_remove:
-                counter_matchups.pop(key)
-           
-           
-            tiercol.insert_one({
-               "Entry_Datetime": "9/25/2021",
-               "patch": patch,
-               "rank": rank,
-               "role": role,
-               "god": god,
-               "tier": "A",
-               "winRate": win_rate,
-               "pickRate": round(games/total_games * 100, 2),
-               "banRate": bans["banRate"],
-               "counterMatchups": counter_matchups,
-               "games": games,
-               "wins": wins,
-           })
-
-        print(f"{rank}-{role}-{god} Done")
-        
-def calc_combat_tier_list(rank, role, patch):
-    total_games = anlz.get_total_matches(client, rank, patch)
-    if total_games == 0 and rank == "Grandmaster":
-        total_games = anlz.get_total_matches(client, "Masters", patch)
-    mydb = client["Matches"]
-    if rank != "All Ranks":
-        mycol = mydb[f"Total_Matches - {rank}"]
-     
-    tierlistdb = client["Tier_List"]
-    tiercol = tierlistdb["Tierlist - Combat test"]
-    # for x in mycol.find():
-    #     games = x
-
-    min_games = round(total_games * .005)
-    if min_games < 1:
-        min_games = 1
-    for god in godsDict:
-        wins, games, win_rate = anlz.get_winrate_rewrite(
-            client, god, role, patch, rank)
-        if games >= min_games:
-            insert_data = anlz.get_combat_stats(client, god, role, patch, rank)
-            tiercol.insert_one({**{"Entry_Datetime": "9/25/2021", "patch": patch}, **insert_data})
-        print(f"{rank}-{role}-{god} Done")
+def add_patch_field(client, db, col):
+    mydb = client[db]
+    mycol = mydb[col]
+    mycol.update_many(
+        {"matchId": {"$lte": 1186797152}},
+        {"$set": {"patch": "8.8"}},
+    )
 
 if __name__ == "__main__":
-    db = "single_items"
-    # calc_total_matches(ranks, db)
-    tier_types = ["Regular", "Combat"]
-    patches = ["8.9", "8.8"]
-    for tier_type in tier_types:
-        for patch in patches:
-            make_tier_list(ranks, roles, tier_type, patch)
-    # delete_match_docs(client, "single_matchups", "Achilles")
+    # db = "single_items"
+    # # calc_total_matches(ranks, db)
+    # tier_types = ["Regular", "Combat"]
+    # patches = ["8.9", "8.8"]
+    # for tier_type in tier_types:
+    #     for patch in patches:
+    #         make_tier_list(ranks, roles, tier_type, patch)
+    # add_new_urls(client, "Charybdis")
+    # for god in godsDict:
+    delete_match_docs(client, "single_combat_stats", "Achilles")
