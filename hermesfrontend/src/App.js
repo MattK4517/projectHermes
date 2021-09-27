@@ -163,7 +163,7 @@ class App extends React.Component {
   return (
     <div className="App">
       <HashRouter>
-        {/* <Navigation /> */}
+        <Navigation />
         <Switch>
           {routeComponents}
         </Switch>
