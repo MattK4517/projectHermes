@@ -568,7 +568,7 @@ function Match() {
   }, [match]);
 
   return (
-    <div className="container">
+    <div className="container content-container">
       <NameForm setMatch={setMatch} />
       <div
         className="match-container"

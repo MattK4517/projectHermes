@@ -122,7 +122,7 @@ color: #cddcfe;
   width: 100%;
   position: fixed;
   top: 0;
-  padding-bottom: 80px;
+  /* padding-bottom: 80px; */
 }
 .navbar .container {
   margin-left: 0;
@@ -1270,4 +1270,8 @@ figure.snip0015:hover figcaption::before {
 
 .build-price {
   color: gold;
+}
+
+.content-container {
+  padding-top: 80px;
 }
