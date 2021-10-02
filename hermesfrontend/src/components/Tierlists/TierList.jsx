@@ -141,7 +141,15 @@ const Table = ({ columns, data }) => {
     {
       columns,
       data,
-      initialState: {pageIndex: 0},
+      initialState: {
+        pageIndex: 0,
+        sortBy: [
+            {
+                id: 'winRate',
+                desc: true
+            }
+        ]
+    }
     },
     useSortBy,
     usePagination,
@@ -434,28 +442,30 @@ function TierList(tableType) {
     fetch("/gettierlist/".concat(dispRank, "/", role, "/", tableType.tableType)).then((res) =>
       res.json().then((data) => {
         setTotalData([]);
-        Object.keys(data).forEach((key) => {
-            Object.keys(data[key]).forEach((godData) => {
-              setTotalData((totalData) => [
-                ...totalData,
-                {
-                  god: data[key][godData].god,
-                  role: data[key][godData].role,
-                  games: data[key][godData].games,
-                  winRate: data[key][godData].winRate,
-                  pickRate: data[key][godData].pickRate,
-                  banRate: data[key][godData].banRate,
-                  wins: data[key][godData].wins,
-                  tier: "A",
-                  counterMatchups: Object.keys(data[key][godData].counterMatchups).map((matchup) => {
-                    return(
-                      [data[key][godData]["counterMatchups"][matchup].url,
-                      data[key][godData]["counterMatchups"][matchup].enemy]
-                    )
-                  })
-                },
-              ]);
-          });
+        Object.keys(data).forEach((key, index) => {
+          if (index < 15){
+              Object.keys(data[key]).forEach((godData) => {
+                setTotalData((totalData) => [
+                  ...totalData,
+                  {
+                    god: data[key][godData].god,
+                    role: data[key][godData].role,
+                    games: data[key][godData].games,
+                    winRate: data[key][godData].winRate,
+                    pickRate: data[key][godData].pickRate,
+                    banRate: data[key][godData].banRate,
+                    wins: data[key][godData].wins,
+                    tier: "A",
+                    counterMatchups: Object.keys(data[key][godData].counterMatchups).map((matchup) => {
+                      return(
+                        [data[key][godData]["counterMatchups"][matchup].url,
+                        data[key][godData]["counterMatchups"][matchup].enemy]
+                      )
+                    })
+                  },
+                ]);
+            });
+          }
         });
       })
     );
