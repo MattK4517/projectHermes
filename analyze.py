@@ -7,7 +7,7 @@ import errlogger as logger
 import pymongo
 from collections import OrderedDict
 from operator import getitem
-from constants import godsDict, slots, Tier_Three_items, Starter_items
+from constants import godsDict, slots, Tier_Three_items, Starter_items, roles
 
 # info pull
 # [godWR, godPR, godBR] - check, matchesPlayed - check
@@ -119,6 +119,7 @@ def get_top_builds(client, god, role, patch, rank="All Ranks"):
             myquery = { "role_played": role, "rank": rank}
         else:
             myquery = { "role_played": role}
+    
     games = 0
     wins = 0
     for x in mycol.find(myquery, {"_id": 0}):
@@ -469,6 +470,82 @@ def get_god_stats(client, god, level):
     
     return ret_stats
 
+# def calc_hardcarry_score():
+    # Gold Share your % of the teams gold
+    # Damage Share your % of the teams damage
+    # Lane Level Diff 
+
+def get_gold_score(match):
+    team = {
+        "Winner": {
+            "totalGold": 0,
+        },
+        "Loser": {
+            "totalGold": 0,
+        }
+    }
+    for key in match:
+        if "player" in key:
+            team[match[key]["Win_Status"]]["totalGold"] += match[key]["Gold_Earned"]
+    
+    for key in match:
+        if "player" in key:
+            team[match[key]["Win_Status"]][match[key]["Role"]] = {"gold": match[key]["Gold_Earned"], 
+                        "goldShare": round(match[key]["Gold_Earned"] / team[match[key]["Win_Status"]]["totalGold"]* 100, 2)}
+
+    return team
+
+def get_average_gold_share(average_gold_share):
+    # average_gold_share = {role: {"goldShare": 0} for role in roles}
+    # for team in data["carryScore"]:
+    #     for role in data["carryScore"][team]:
+    #         if role in roles:
+    #             average_gold_share[role]["goldShare"] += data["carryScore"][team][role]["goldShare"]
+    
+    for role in average_gold_share:
+        average_gold_share[role]["goldShare"] = round(average_gold_share[role]["goldShare"] / 2, 2)
+    return average_gold_share
+
+def get_damage_score(match):
+    team = {
+        "Winner": {
+            "totalDamage": 1,
+        },
+        "Loser": {
+            "totalDamage": 1,
+        }
+    }
+    for key in match:
+        if "player" in key:
+            team[match[key]["Win_Status"]]["totalDamage"] += match[key]["Damage_Player"]
+    
+    for key in match:
+        if "player" in key:
+            team[match[key]["Win_Status"]][match[key]["Role"]] = {"damage": match[key]["Damage_Player"], 
+                        "damageShare": round(match[key]["Damage_Player"] / team[match[key]["Win_Status"]]["totalDamage"]* 100, 2)}
+
+    return team
+
+def get_level_diff(match):
+    team = {
+        "Winner": {
+        },
+        "Loser": {
+        }
+    }
+    for key in match:
+        if "player" in key:
+            team[match[key]["Win_Status"]][match[key]["Role"]] = {"level": match[key]["Final_Match_Level"]}
+        
+    for side in team:
+        for role in team[side]:
+            if side == "Winner":
+                opp_side = "Loser"
+            elif side == "Loser":
+                opp_side = "Winner"
+            team[side][role]["level_diff"] = team[side][role]["level"] - team[opp_side][role]["level"]
+
+    return team
 
 # client = pymongo.MongoClient(
 #     "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")

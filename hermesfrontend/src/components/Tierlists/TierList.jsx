@@ -552,18 +552,20 @@ class CounterMatchupDisplay extends React.Component {
     return(
       <div className="against-container">
         {this.props.matchups.map((matchup, index) => {
-          let routegod = matchup[1].replaceAll(" ", "_")
-          return (
-          <div className="against" key={index}>
-            <Link to={"/".concat(routegod)}>
-              <div className="god-face" style={{maxWidth: "100px"}}>
-                <div>
-                  <img src={matchup[0]} alt={matchup[1]} style={{height: "24px", width: "24px"}}></img>
+          if (index < 10) {
+            let routegod = matchup[1].replaceAll(" ", "_")
+            return (
+            <div className="against" key={index}>
+              <Link to={"/".concat(routegod)}>
+                <div className="god-face" style={{maxWidth: "100px"}}>
+                  <div>
+                    <img src={matchup[0]} alt={matchup[1]} style={{height: "24px", width: "24px"}}></img>
+                  </div>
                 </div>
-              </div>
-            </Link>
-          </div>
-          )
+              </Link>
+            </div>
+            )
+          }
         })}
       </div>
     )
