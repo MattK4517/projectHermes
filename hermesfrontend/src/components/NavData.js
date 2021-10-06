@@ -17,8 +17,14 @@ export const NavData = [
         cName: "nav-text",
     },
     {
-        title: "Tier List WIP",
+        title: "Tier List",
         path: "/tierlist",
+        icon: <IoIcons.IoIosPaper />,
+        cName: "nav-text",
+    },
+    {
+        title: "Find a Match! WIP",
+        path: "/match",
         icon: <IoIcons.IoIosPaper />,
         cName: "nav-text",
     },

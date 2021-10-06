@@ -1,6 +1,6 @@
 
 
-from re import A
+from re import A, match
 import pymongo
 from collections import OrderedDict
 from operator import getitem
@@ -89,22 +89,104 @@ def add_new_urls(client, god):
         "Abilities_urls": ability_urls,
     })
 
-def add_patch_field(client, db, col):
+def add_patch_field(client, db, col, matchId, carry_score):
     mydb = client[db]
     mycol = mydb[col]
-    mycol.update_many(
-        {"matchId": {"$lte": 1186797152}},
-        {"$set": {"patch": "8.8"}},
+    print(matchId)
+    mycol.update_one(
+        {"MatchId": matchId},
+        {"$set": {"levelDiff": carry_score}},
     )
 
+def add_gold_score(client, db, col):
+    myquery = {"Patch": "8.9"}
+    mydb = client[db]
+    mycol = mydb[col]
+    carry_score = {}
+    for x in mycol.find(myquery, {"_id": 0}):
+        matchId = x["MatchId"]
+        carry_score = anlz.get_gold_score(x)
+        add_patch_field(client, db, col, matchId, carry_score)
+
+def get_one_match(client, db, col):
+    mydb = client[db]
+    mycol = mydb[col]
+    for x in mycol.find({"MatchId": 1191575208}, {"_id": 0}):
+        return x
+
+def add_damage_score(client, db, col):
+    myquery = {"Patch": "8.9"}
+    mydb = client[db]
+    mycol = mydb[col]
+    damage_score = {}
+    for x in mycol.find(myquery, {"_id": 0}):
+        matchId = x["MatchId"]
+        damage_score = anlz.get_damage_score(x)
+        add_patch_field(client, db, col, matchId, damage_score)
+
+def add_level_diff(client, db, col):
+    myquery = {"Patch": "8.9"}
+    mydb = client[db]
+    mycol = mydb[col]
+    level_diff = {}
+    for x in mycol.find(myquery, {"_id": 0}):
+        matchId = x["MatchId"]
+        level_diff = anlz.get_level_diff(x)
+        add_patch_field(client, db, col, matchId, level_diff)
+
 if __name__ == "__main__":
-    # db = "single_items"
-    # # calc_total_matches(ranks, db)
-    # tier_types = ["Regular", "Combat"]
-    # patches = ["8.9", "8.8"]
-    # for tier_type in tier_types:
-    #     for patch in patches:
-    #         make_tier_list(ranks, roles, tier_type, patch)
-    # add_new_urls(client, "Charybdis")
-    # for god in godsDict:
-    delete_match_docs(client, "single_combat_stats", "Achilles")
+
+    ### CODE FOR AVERAGE LEVEL DIFF ###
+    # average_level_diff = {role: {"levelDiff": 0} for role in roles}
+    # mydb = client["test"]
+    # mycol = mydb["8.9 Matches"]
+    # count = 0
+    # for x in mycol.find({}, {"levelDiff": 1, "_id": 0}):
+    #     if "levelDiff" in x.keys():
+    #         for role in x["levelDiff"]["Winner"]:
+    #             if role in average_level_diff.keys():
+    #                 average_level_diff[role]["levelDiff"] += x["levelDiff"]["Winner"][role]["level_diff"]
+    #         count += 1
+    # for role in average_level_diff:
+    #     average_level_diff[role]["levelDiff"] = round(average_level_diff[role]["levelDiff"] / count)
+    
+    # print(average_level_diff)
+
+    ### CODE FOR AVERAGE DAMAGE SHARE ###
+    # average_damage_share = {role: {"damageShare": 0} for role in roles}
+    # mydb = client["test"]
+    # mycol = mydb["8.9 Matches"]
+    # count = 0
+    # for x in mycol.find({}, {"damageScore": 1, "_id": 0}):
+    #     if "damageScore" in x.keys():
+    #         for team in x["damageScore"]:
+    #             del x["damageScore"][team]["totalDamage"]
+    #             for role in x["damageScore"][team]:
+    #                 if role in average_damage_share.keys():
+    #                     average_damage_share[role]["damageShare"] += x["damageScore"][team][role]["damageShare"] / 2
+    #         count += 1
+    #     print(count)
+
+    # for role in average_damage_share:
+    #     average_damage_share[role]["damageShare"] = round(average_damage_share[role]["damageShare"] / count, 2)
+    # print(average_damage_share)
+
+
+    ### CALCS AVERAGE GOLD SHARE FOR THE ROLES
+    # average_gold_share = {role: {"goldShare": 0} for role in roles}
+    # mydb = client["Matches"]
+    # mycol = mydb["8.9 Matches"]
+    # count = 0
+    # for x in mycol.find({}, {"carryScore": 1, "_id": 0}):
+    #     if "carryScore" in x.keys():
+    #         for team in x["carryScore"]:
+    #             del x["carryScore"][team]["totalGold"]
+    #             for role in x["carryScore"][team]:
+    #                 if role in average_gold_share.keys():
+    #                     average_gold_share[role]["goldShare"] += x["carryScore"][team][role]["goldShare"] / 2
+    #         count += 1
+    #         print(count)
+
+    # for role in average_gold_share:
+    #     average_gold_share[role]["goldShare"] = round(average_gold_share[role]["goldShare"] / count, 2)
+    # print(average_gold_share)

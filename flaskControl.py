@@ -56,17 +56,17 @@ def get_god_matchups_by_rank(god, role, rank, patch):
 def get_god_abilities(god):
         return anlz.get_abilities(client, god)
 
-@app.route("/gettierlist/<rank>/<role>/<tableType>/<patch>", methods=["GET", "POST"])
-def get_tier_list(rank, role, tableType, patch):
+@app.route("/gettierlist/<rank>/<role>/<tableType>", methods=["GET", "POST"])
+def get_tier_list(rank, role, tableType):
         retData = {god: {} for god in godsDict}
+        mydb = client["Tier_list"]
         if tableType == "Regular":
-                mydb = client["test"]
-                mycol = mydb["test tier list"]
+                mycol = mydb["Regular List"]
                 rank = rank.replace("_", " ")
                 if "All" in role:
-                        myquery = {"rank": rank, "patch": patch, "pickRate": {"$gte": 1}}
+                        myquery = {"rank": rank, "pickRate": {"$gte": 1}}
                 else:
-                        myquery = {"rank": rank, "role": role, "patch": patch, "pickRate": {"$gte": 1}}
+                        myquery = {"rank": rank, "role": role, "pickRate": {"$gte": 1}}
                 
                 for x in mycol.find(myquery, {"_id": 0}):
                         dict_god = x["god"]
@@ -77,13 +77,12 @@ def get_tier_list(rank, role, tableType, patch):
                                 retData[dict_god][dict_role] = x
 
         elif tableType == "Combat":
-                mydb = client["test"]
-                mycol = mydb["test combat list"]
+                mycol = mydb["Combat List"]
                 rank = rank.replace("_", " ")
                 if "All" in role:
-                        myquery = {"rank": rank, "patch": patch, "pickRate": {"$gte": 1}}
+                        myquery = {"rank": rank, "pickRate": {"$gte": 1}}
                 else:
-                        myquery = {"rank": rank, "role": role, "patch": patch, "pickRate": {"$gte": 1}}
+                        myquery = {"rank": rank, "role": role, "pickRate": {"$gte": 1}}
                 
                 for x in mycol.find(myquery, {"_id": 0}):
                         dict_god = x["god"]
@@ -108,17 +107,14 @@ def get_all_items(god, role, rank, patch):
 
 @app.route("/getmatch/<matchID>")
 def get_match(matchID):
-        starttime = datetime.now()
         mydb = client["Matches"]
         mycol = mydb["8.8 Matches"]
         match = ""
         matchID = int(matchID)
         if mycol.count_documents({"MatchId": matchID}) == 0:
                 mycol = mydb["8.9 Matches"]
-        print(f"finished in {datetime.now() - starttime}")
         for x in mycol.find({"MatchId": matchID}, {'_id': 0}):
                 match = x
-        print(f"finished in {datetime.now() - starttime}")
 
 
         if match["Entry_Datetime"] < "9/25/2021":
@@ -135,7 +131,6 @@ def get_match(matchID):
 
                                 match[key] = {**match[key], **{"godBuild": anlz.get_build_stats(client, build)}}
         
-        print(f"finished in {datetime.now() - starttime}")
         return match
 
 # make a route for every god, in the

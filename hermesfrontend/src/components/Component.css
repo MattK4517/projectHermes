@@ -559,10 +559,10 @@ a, a:active, a:focus, a:hover, a:visited {
   width: 100vw;
 }
 .home-image {
-  height: 100%;
-  width: 100%;
+  height: 100vh;
+  width: 100vw;
   padding-top: 80px;
-  background-image: url("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/clans/10028503/e4835c147853ffee8c2625e3cd40d4c09b899f83.jpg");
+  background-image: url("https://i.imgur.com/MBYqznN.jpg");
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position-x: center;
@@ -1274,4 +1274,24 @@ figure.snip0015:hover figcaption::before {
 
 .content-container {
   padding-top: 80px;
+}
+
+.home{
+  display: flex;
+  justify-content: space-around;
+}
+
+.home-image{
+  display: flex;
+}
+
+.new-god {
+  max-width: fit-content;
+  max-height: fit-content;
+  margin-left: 300px;
+  margin-bottom: auto;
+}
+
+.new-god a:hover {
+  background-color: #1a83ff;
 }

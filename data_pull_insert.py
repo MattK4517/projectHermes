@@ -344,6 +344,8 @@ for set in all_sets:
         for k in range(10):
             player = create_player_dict(match_details[(i*10) + k])
             match_dict["player"+str(k)] = player
+        match_dict["carryScore"] = anlz.get_gold_score(match_dict)
+        match_dict["damageScore"] = anlz.get_damage_score(match_dict)
         mycol.insert_one(match_dict)
         inserted_count += 1
 

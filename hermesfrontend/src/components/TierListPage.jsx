@@ -24,7 +24,11 @@ function TierListPage() {
                         <span class="title-header_main">{tableType} Tier List</span>
                         {/* <span class="title-header_secondary">for {role}, {dispRank.replaceAll("_", " ")}</span> */}
                         </h1>
-                        <span style={{color: "white"}}>WIP, click on a role to get data to display</span>
+                        <span style={{color: "white"}}>
+                          WIP give the page some time to load <br></br>
+                          if it doesnt load I'm probably reworking the data<br></br> 
+                          too much spaghetti code running this
+                        </span>
                     </div>
                     <TierListTabs>
                     <div label="Tier List" style={{color: "white"}}>

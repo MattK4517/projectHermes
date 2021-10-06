@@ -570,6 +570,15 @@ function Match() {
   return (
     <div className="container content-container">
       <NameForm setMatch={setMatch} />
+      <div className="filler">
+        <h4>
+          Don't have a match? try 1191054312
+        </h4>
+        {/* <br></br> */}
+        <h5>
+          Remember all matches must by Ranked PC Conquest from 8/24/2021 or later (will expand the match types we support soon!)
+        </h5>
+      </div>
       <div
         className="match-container"
       >
