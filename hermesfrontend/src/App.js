@@ -163,10 +163,12 @@ class App extends React.Component {
   return (
     <div className="App">
       <HashRouter>
+        <div className="page-content">
         <Navigation />
         <Switch>
           {routeComponents}
         </Switch>
+        </div>
       </HashRouter>
     </div>
   );

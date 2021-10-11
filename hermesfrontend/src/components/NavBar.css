@@ -5,6 +5,11 @@
     display: flex;
     justify-content: left;
     align-items: center;
+    position: relative;
+    min-height: 50px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    min-width: 100px;
   }
   
   .menu-bars {
@@ -28,7 +33,9 @@
   
   .nav-menu.active {
     left: 0;
+    min-width: 240px;
     transition: 350ms;
+    z-index: 6;
   }
   
   .nav-text {
@@ -58,6 +65,7 @@
   
   .nav-menu-items {
     width: 100%;
+    min-width: 60px;
   }
   
   .navbar-toggle {
