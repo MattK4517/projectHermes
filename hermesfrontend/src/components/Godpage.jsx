@@ -361,24 +361,24 @@ class CreateItemToolTip extends React.Component {
       <div
         style={{
           maxHeight: "350px",
-          maxWidth: "550px",
-          color: "white",
+          maxWidth: "750px",
+          color: "#E6E6FA",
           alignItems: "left",
           fontSize: "14px",
         }}
       >
-        <h5 style={{ width: "100%", fontSize: "1rem", color: "blue" }}>
+        <h5 style={{ width: "100%", fontSize: "1rem", color: "#1E90FF" }}>
           {this.props.item.item}
         </h5>
         <div>
           <p>{this.props.item.itemShortDesc}</p>
         </div>
-        <div className="item-stats" style={{ paddingLeft: "5px" }}>
+        <div className="item-stats">
           <ul>
             {this.props.item.itemStats.map(
               (stat) => {
                 return (
-                  <li>
+                  <li style={{left: "0"}}>
                     {stat[0]}: {stat[1]}
                   </li>
                 );
@@ -389,7 +389,7 @@ class CreateItemToolTip extends React.Component {
             <p>{this.props.item.itemPassive}</p>
           </div>
         </div>
-        <p style={{ color: "gold" }}>
+        <p style={{ color: "#D4AF37" }}>
           <b>Price:</b>{" "}
           {this.props.item.itemAbsolutePrice}(
           {this.props.item.itemRelativePrice})

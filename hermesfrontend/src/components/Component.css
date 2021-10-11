@@ -559,8 +559,10 @@ a, a:active, a:focus, a:hover, a:visited {
   width: 100vw;
 }
 .home-image {
+  z-index: 5;
+  left: 0;
   height: 100vh;
-  width: 100vw;
+  width: 101vw;
   padding-top: 80px;
   background-image: url("https://i.imgur.com/MBYqznN.jpg");
   background-repeat: no-repeat;
@@ -1290,6 +1292,7 @@ figure.snip0015:hover figcaption::before {
   max-height: fit-content;
   margin-left: 300px;
   margin-bottom: auto;
+  background-color: #060b26;
 }
 
 .new-god a:hover {
