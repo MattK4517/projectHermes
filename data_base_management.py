@@ -4,7 +4,7 @@ from re import A, match
 import pymongo
 from collections import OrderedDict
 from operator import getitem
-
+import pandas as pd
 from pymongo.encryption import Algorithm
 import analyze as anlz
 from constants import godsDict, roles, ranks
@@ -89,24 +89,14 @@ def add_new_urls(client, god):
         "Abilities_urls": ability_urls,
     })
 
-def add_patch_field(client, db, col, matchId, carry_score):
+def add_patch_field(client, db, col, matchId, carry_score, field_key):
     mydb = client[db]
     mycol = mydb[col]
-    print(matchId)
+    # print(matchId)
     mycol.update_one(
         {"MatchId": matchId},
-        {"$set": {"levelDiff": carry_score}},
+        {"$set": {field_key: carry_score}},
     )
-
-def add_gold_score(client, db, col):
-    myquery = {"Patch": "8.9"}
-    mydb = client[db]
-    mycol = mydb[col]
-    carry_score = {}
-    for x in mycol.find(myquery, {"_id": 0}):
-        matchId = x["MatchId"]
-        carry_score = anlz.get_gold_score(x)
-        add_patch_field(client, db, col, matchId, carry_score)
 
 def get_one_match(client, db, col):
     mydb = client[db]
@@ -114,7 +104,17 @@ def get_one_match(client, db, col):
     for x in mycol.find({"MatchId": 1191575208}, {"_id": 0}):
         return x
 
-def add_damage_score(client, db, col):
+def add_carry_score(client, db, col, field_key):
+    myquery = {"Patch": "8.9"}
+    mydb = client[db]
+    mycol = mydb[col]
+    carry_score = {}
+    for x in mycol.find(myquery, {"_id": 0}):
+        matchId = x["MatchId"]
+        carry_score = anlz.get_gold_score(x)
+        add_patch_field(client, db, col, matchId, carry_score, field_key)
+
+def add_damage_score(client, db, col, field_key):
     myquery = {"Patch": "8.9"}
     mydb = client[db]
     mycol = mydb[col]
@@ -122,9 +122,9 @@ def add_damage_score(client, db, col):
     for x in mycol.find(myquery, {"_id": 0}):
         matchId = x["MatchId"]
         damage_score = anlz.get_damage_score(x)
-        add_patch_field(client, db, col, matchId, damage_score)
+        add_patch_field(client, db, col, matchId, damage_score, field_key)
 
-def add_level_diff(client, db, col):
+def add_level_diff(client, db, col, field_key):
     myquery = {"Patch": "8.9"}
     mydb = client[db]
     mycol = mydb[col]
@@ -132,61 +132,49 @@ def add_level_diff(client, db, col):
     for x in mycol.find(myquery, {"_id": 0}):
         matchId = x["MatchId"]
         level_diff = anlz.get_level_diff(x)
-        add_patch_field(client, db, col, matchId, level_diff)
+        add_patch_field(client, db, col, matchId, level_diff, field_key)
+
+def add_kill_part(client, db, col, field_key):
+    myquery = {"Patch": "8.9"}
+    mydb = client[db]
+    mycol = mydb[col]
+    kill_part = {}
+    for x in mycol.find(myquery, {"_id": 0}):
+        matchId = x["MatchId"]
+        kill_part = anlz.get_kill_part(x)
+        add_patch_field(client, db, col, matchId, kill_part, field_key)
+
+def add_gold_eff(client, db, col, field_key):
+    myquery = {"Patch": "8.9"}
+    mydb = client[db]
+    mycol = mydb[col]
+    gold_eff = {}
+    for x in mycol.find(myquery, {"carryScore": 1, "killPart": 1,"_id": 0, "MatchId": 1}):
+        matchId = x["MatchId"]
+        gold_eff = anlz.get_gold_eff(x["killPart"], x["carryScore"])
+        add_patch_field(client, db, col, matchId, gold_eff, field_key)
 
 if __name__ == "__main__":
-
-    ### CODE FOR AVERAGE LEVEL DIFF ###
-    # average_level_diff = {role: {"levelDiff": 0} for role in roles}
-    # mydb = client["test"]
-    # mycol = mydb["8.9 Matches"]
-    # count = 0
-    # for x in mycol.find({}, {"levelDiff": 1, "_id": 0}):
-    #     if "levelDiff" in x.keys():
-    #         for role in x["levelDiff"]["Winner"]:
-    #             if role in average_level_diff.keys():
-    #                 average_level_diff[role]["levelDiff"] += x["levelDiff"]["Winner"][role]["level_diff"]
-    #         count += 1
-    # for role in average_level_diff:
-    #     average_level_diff[role]["levelDiff"] = round(average_level_diff[role]["levelDiff"] / count)
-    
-    # print(average_level_diff)
-
-    ### CODE FOR AVERAGE DAMAGE SHARE ###
-    # average_damage_share = {role: {"damageShare": 0} for role in roles}
-    # mydb = client["test"]
-    # mycol = mydb["8.9 Matches"]
-    # count = 0
-    # for x in mycol.find({}, {"damageScore": 1, "_id": 0}):
-    #     if "damageScore" in x.keys():
-    #         for team in x["damageScore"]:
-    #             del x["damageScore"][team]["totalDamage"]
-    #             for role in x["damageScore"][team]:
-    #                 if role in average_damage_share.keys():
-    #                     average_damage_share[role]["damageShare"] += x["damageScore"][team][role]["damageShare"] / 2
-    #         count += 1
-    #     print(count)
-
-    # for role in average_damage_share:
-    #     average_damage_share[role]["damageShare"] = round(average_damage_share[role]["damageShare"] / count, 2)
-    # print(average_damage_share)
-
-
-    ### CALCS AVERAGE GOLD SHARE FOR THE ROLES
-    # average_gold_share = {role: {"goldShare": 0} for role in roles}
-    # mydb = client["Matches"]
-    # mycol = mydb["8.9 Matches"]
-    # count = 0
-    # for x in mycol.find({}, {"carryScore": 1, "_id": 0}):
-    #     if "carryScore" in x.keys():
-    #         for team in x["carryScore"]:
-    #             del x["carryScore"][team]["totalGold"]
-    #             for role in x["carryScore"][team]:
-    #                 if role in average_gold_share.keys():
-    #                     average_gold_share[role]["goldShare"] += x["carryScore"][team][role]["goldShare"] / 2
-    #         count += 1
-    #         print(count)
-
-    # for role in average_gold_share:
-    #     average_gold_share[role]["goldShare"] = round(average_gold_share[role]["goldShare"] / count, 2)
-    # print(average_gold_share)
+    fields = ["carryScore","damageScore", "levelDiff", "killPart", "efficiency"]
+    mydb = client["Matches"] 
+    mycol = mydb["8.9 Matches"]
+    count = 0
+    compCount = 0
+    for x in mycol.find({"Entry_Datetime": "10/3/2021"}, {"_id": 0}):
+        if "carryScore" not in x.keys():
+            for field in fields:
+                if field == "carryScore":
+                    carry_score = anlz.get_gold_score(x)
+                elif field == "damageScore":
+                    carry_score = anlz.get_damage_score(x)
+                elif field == "levelDiff":
+                    carry_score = anlz.get_level_diff(x)
+                elif field == "killPart":
+                    carry_score = anlz.get_kill_part(x)
+                elif field == "efficiency":
+                    carry_score = anlz.get_gold_eff(anlz.get_kill_part(x), anlz.get_gold_score(x))
+                add_patch_field(client, "Matches", "8.9 Matches", x["MatchId"], carry_score, field)
+                count += 1
+            print("Match Done: {}".format(x["MatchId"]))
+print("number remaining 9858")
+### 1192921877

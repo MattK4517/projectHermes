@@ -484,14 +484,17 @@ def get_gold_score(match):
             "totalGold": 0,
         }
     }
+    match_roles = []
     for key in match:
         if "player" in key:
             team[match[key]["Win_Status"]]["totalGold"] += match[key]["Gold_Earned"]
+            match_roles.append(match[key]["Role"])
     
-    for key in match:
-        if "player" in key:
-            team[match[key]["Win_Status"]][match[key]["Role"]] = {"gold": match[key]["Gold_Earned"], 
-                        "goldShare": round(match[key]["Gold_Earned"] / team[match[key]["Win_Status"]]["totalGold"]* 100, 2)}
+    if check_roles(match_roles):
+        for key in match:
+            if "player" in key:
+                team[match[key]["Win_Status"]][match[key]["Role"]] = {"gold": match[key]["Gold_Earned"], 
+                            "goldShare": round(match[key]["Gold_Earned"] / team[match[key]["Win_Status"]]["totalGold"]* 100, 2)}
 
     return team
 
@@ -515,14 +518,17 @@ def get_damage_score(match):
             "totalDamage": 1,
         }
     }
+    match_roles = []
     for key in match:
         if "player" in key:
             team[match[key]["Win_Status"]]["totalDamage"] += match[key]["Damage_Player"]
+            match_roles.append(match[key]["Role"])
     
-    for key in match:
-        if "player" in key:
-            team[match[key]["Win_Status"]][match[key]["Role"]] = {"damage": match[key]["Damage_Player"], 
-                        "damageShare": round(match[key]["Damage_Player"] / team[match[key]["Win_Status"]]["totalDamage"]* 100, 2)}
+    if check_roles(match_roles):
+        for key in match:
+            if "player" in key:
+                team[match[key]["Win_Status"]][match[key]["Role"]] = {"damage": match[key]["Damage_Player"], 
+                            "damageShare": round(match[key]["Damage_Player"] / team[match[key]["Win_Status"]]["totalDamage"]* 100, 2)}
 
     return team
 
@@ -533,20 +539,74 @@ def get_level_diff(match):
         "Loser": {
         }
     }
+    match_roles = []
     for key in match:
         if "player" in key:
             team[match[key]["Win_Status"]][match[key]["Role"]] = {"level": match[key]["Final_Match_Level"]}
-        
-    for side in team:
-        for role in team[side]:
-            if side == "Winner":
-                opp_side = "Loser"
-            elif side == "Loser":
-                opp_side = "Winner"
-            team[side][role]["level_diff"] = team[side][role]["level"] - team[opp_side][role]["level"]
+            match_roles.append(match[key]["Role"])
+
+    if check_roles(match_roles):    
+        for side in team:
+            for role in team[side]:
+                if side == "Winner":
+                    opp_side = "Loser"
+                elif side == "Loser":
+                    opp_side = "Winner"
+                team[side][role]["level_diff"] = team[side][role]["level"] - team[opp_side][role]["level"]
 
     return team
 
+def get_kill_part(match):
+    team = {
+        "Winner": {
+            "totalKills": 0,
+        },
+        "Loser": {
+            "totalKills": 0,
+        }
+    }
+    match_roles = []
+    for key in match:
+        if "player" in key:
+            team[match[key]["Win_Status"]]["totalKills"] += match[key]["Kills_Player"]
+            match_roles.append(match[key]["Role"])
+    
+    if check_roles(match_roles):
+        for key in match:
+            if "player" in key and team[match[key]["Win_Status"]]["totalKills"] <= 0:
+                team[match[key]["Win_Status"]][match[key]["Role"]] = {"kills": match[key]["Kills_Player"], "assists": match[key]["Assists"], "killShare": 0}
+            elif "player" in key:
+                team[match[key]["Win_Status"]][match[key]["Role"]] = {"kills": match[key]["Kills_Player"], "assists": match[key]["Assists"], 
+                "killShare": round((match[key]["Kills_Player"] + match[key]["Assists"]) / team[match[key]["Win_Status"]]["totalKills"]* 100, 2)}
+        
+    return team
+
+def get_gold_eff(kill_part, gold_eff):
+    ret_data = {
+        "Winner": {
+        },
+        "Loser": {
+        }
+    }
+    match_roles = []
+    for team in kill_part:
+        for role in kill_part[team]:
+            match_roles.append(role)
+
+    if check_roles(match_roles):
+        for team in kill_part:
+            for role in kill_part[team]:
+                if role in roles:
+                    ret_data[team][role] = {"efficiency": round(kill_part[team][role]["killShare"]/gold_eff[team][role]["goldShare"], 2)}
+    return ret_data
+
+
+def check_roles(match_roles):
+    # print(match_roles)
+    match_roles.sort()
+    if match_roles != ['Carry', 'Carry', 'Jungle', 'Jungle', 'Mid', 'Mid', 'Solo', 'Solo', 'Support', 'Support']:
+        return False
+    return True
 # client = pymongo.MongoClient(
 #     "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
 
