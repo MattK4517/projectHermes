@@ -474,29 +474,70 @@ def get_god_stats(client, god, level):
     # Gold Share your % of the teams gold
     # Damage Share your % of the teams damage
     # Lane Level Diff 
-
-def get_gold_score(match):
-    team = {
+def get_carry_score(match):
+    ret_data = {
+        "goldScore":
+            {
+            "Winner": {
+                "totalGold": 0,
+            },
+            "Loser": {
+                "totalGold": 0,
+            }
+        },
+        "damageScore":  {
+            "Winner": {
+                "totalDamage": 1,
+            },
+            "Loser": {
+                "totalDamage": 1,
+            }
+        },
+        "levelDiff": {
+            "Winner": {
+            },
+            "Loser": {
+            }
+        },
+        "killPart": {
         "Winner": {
-            "totalGold": 0,
+            "totalKills": 0,
         },
         "Loser": {
-            "totalGold": 0,
+            "totalKills": 0,
         }
+    }
     }
     match_roles = []
     for key in match:
         if "player" in key:
-            team[match[key]["Win_Status"]]["totalGold"] += match[key]["Gold_Earned"]
+            ret_data["goldScore"][match[key]["Win_Status"]]["totalGold"] += match[key]["Gold_Earned"]
+            ret_data["damageScore"][match[key]["Win_Status"]]["totalDamage"] += match[key]["Damage_Player"]
+            ret_data["levelDiff"][match[key]["Win_Status"]][match[key]["Role"]] = {"level": match[key]["Final_Match_Level"]}
+            ret_data["killPart"][match[key]["Win_Status"]]["totalKills"] += match[key]["Kills_Player"]
             match_roles.append(match[key]["Role"])
     
     if check_roles(match_roles):
+        for side in ret_data["levelDiff"]:
+            for role in ret_data["levelDiff"][side]:
+                if side == "Winner":
+                    opp_side = "Loser"
+                elif side == "Loser":
+                    opp_side = "Winner"
+                ret_data["levelDiff"][side][role]["level_diff"] = ret_data["levelDiff"][side][role]["level"] - ret_data["levelDiff"][opp_side][role]["level"]
         for key in match:
-            if "player" in key:
-                team[match[key]["Win_Status"]][match[key]["Role"]] = {"gold": match[key]["Gold_Earned"], 
-                            "goldShare": round(match[key]["Gold_Earned"] / team[match[key]["Win_Status"]]["totalGold"]* 100, 2)}
+            if "player" in key and ret_data["killPart"][match[key]["Win_Status"]]["totalKills"] <= 0:
+                ret_data["killPart"][match[key]["Win_Status"]][match[key]["Role"]] = {"kills": match[key]["Kills_Player"], "assists": match[key]["Assists"], "killShare": 0}
+            elif "player" in key:
+                ret_data["killPart"][match[key]["Win_Status"]][match[key]["Role"]] = {"kills": match[key]["Kills_Player"], "assists": match[key]["Assists"], 
+                "killShare": round((match[key]["Kills_Player"] + match[key]["Assists"]) / ret_data["killPart"][match[key]["Win_Status"]]["totalKills"]* 100, 2)}
 
-    return team
+            if "player" in key:
+                ret_data["goldScore"][match[key]["Win_Status"]][match[key]["Role"]] = {"gold": match[key]["Gold_Earned"], 
+                            "goldShare": round(match[key]["Gold_Earned"] / ret_data["goldScore"][match[key]["Win_Status"]]["totalGold"]* 100, 2)}
+                ret_data["damageScore"][match[key]["Win_Status"]][match[key]["Role"]] = {"damage": match[key]["Damage_Player"], 
+                            "damageShare": round(match[key]["Damage_Player"] / ret_data["damageScore"][match[key]["Win_Status"]]["totalDamage"]* 100, 2)}
+    return ret_data
 
 def get_average_gold_share(average_gold_share):
     # average_gold_share = {role: {"goldShare": 0} for role in roles}
@@ -509,78 +550,6 @@ def get_average_gold_share(average_gold_share):
         average_gold_share[role]["goldShare"] = round(average_gold_share[role]["goldShare"] / 2, 2)
     return average_gold_share
 
-def get_damage_score(match):
-    team = {
-        "Winner": {
-            "totalDamage": 1,
-        },
-        "Loser": {
-            "totalDamage": 1,
-        }
-    }
-    match_roles = []
-    for key in match:
-        if "player" in key:
-            team[match[key]["Win_Status"]]["totalDamage"] += match[key]["Damage_Player"]
-            match_roles.append(match[key]["Role"])
-    
-    if check_roles(match_roles):
-        for key in match:
-            if "player" in key:
-                team[match[key]["Win_Status"]][match[key]["Role"]] = {"damage": match[key]["Damage_Player"], 
-                            "damageShare": round(match[key]["Damage_Player"] / team[match[key]["Win_Status"]]["totalDamage"]* 100, 2)}
-
-    return team
-
-def get_level_diff(match):
-    team = {
-        "Winner": {
-        },
-        "Loser": {
-        }
-    }
-    match_roles = []
-    for key in match:
-        if "player" in key:
-            team[match[key]["Win_Status"]][match[key]["Role"]] = {"level": match[key]["Final_Match_Level"]}
-            match_roles.append(match[key]["Role"])
-
-    if check_roles(match_roles):    
-        for side in team:
-            for role in team[side]:
-                if side == "Winner":
-                    opp_side = "Loser"
-                elif side == "Loser":
-                    opp_side = "Winner"
-                team[side][role]["level_diff"] = team[side][role]["level"] - team[opp_side][role]["level"]
-
-    return team
-
-def get_kill_part(match):
-    team = {
-        "Winner": {
-            "totalKills": 0,
-        },
-        "Loser": {
-            "totalKills": 0,
-        }
-    }
-    match_roles = []
-    for key in match:
-        if "player" in key:
-            team[match[key]["Win_Status"]]["totalKills"] += match[key]["Kills_Player"]
-            match_roles.append(match[key]["Role"])
-    
-    if check_roles(match_roles):
-        for key in match:
-            if "player" in key and team[match[key]["Win_Status"]]["totalKills"] <= 0:
-                team[match[key]["Win_Status"]][match[key]["Role"]] = {"kills": match[key]["Kills_Player"], "assists": match[key]["Assists"], "killShare": 0}
-            elif "player" in key:
-                team[match[key]["Win_Status"]][match[key]["Role"]] = {"kills": match[key]["Kills_Player"], "assists": match[key]["Assists"], 
-                "killShare": round((match[key]["Kills_Player"] + match[key]["Assists"]) / team[match[key]["Win_Status"]]["totalKills"]* 100, 2)}
-        
-    return team
-
 def get_gold_eff(kill_part, gold_eff):
     ret_data = {
         "Winner": {
@@ -591,7 +560,8 @@ def get_gold_eff(kill_part, gold_eff):
     match_roles = []
     for team in kill_part:
         for role in kill_part[team]:
-            match_roles.append(role)
+            if role in roles:
+                match_roles.append(role)
 
     if check_roles(match_roles):
         for team in kill_part:

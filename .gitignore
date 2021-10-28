@@ -4,3 +4,7 @@ PYREZ_LOG_FILE.log
 __pycache__/
 .vscode/
 token.txt
+__pycache__/analyze.cpython-37.pyc
+__pycache__/data_pull_insert.cpython-37.pyc
+__pycache__/flaskControl.cpython-37.pyc
+__pycache__/main.cpython-37.pyc

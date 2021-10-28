@@ -8,6 +8,7 @@ import pandas as pd
 from pymongo.encryption import Algorithm
 import analyze as anlz
 from constants import godsDict, roles, ranks
+from pandas.io.json import json_normalize
 
 client = pymongo.MongoClient(
     "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
@@ -155,26 +156,43 @@ def add_gold_eff(client, db, col, field_key):
         add_patch_field(client, db, col, matchId, gold_eff, field_key)
 
 if __name__ == "__main__":
-    fields = ["carryScore","damageScore", "levelDiff", "killPart", "efficiency"]
+    # fields = ["carryScore","damageScore", "levelDiff", "killPart", "efficiency"]
     mydb = client["Matches"] 
     mycol = mydb["8.9 Matches"]
-    count = 0
-    compCount = 0
-    for x in mycol.find({"Entry_Datetime": "10/3/2021"}, {"_id": 0}):
-        if "carryScore" not in x.keys():
-            for field in fields:
-                if field == "carryScore":
-                    carry_score = anlz.get_gold_score(x)
-                elif field == "damageScore":
-                    carry_score = anlz.get_damage_score(x)
-                elif field == "levelDiff":
-                    carry_score = anlz.get_level_diff(x)
-                elif field == "killPart":
-                    carry_score = anlz.get_kill_part(x)
-                elif field == "efficiency":
-                    carry_score = anlz.get_gold_eff(anlz.get_kill_part(x), anlz.get_gold_score(x))
-                add_patch_field(client, "Matches", "8.9 Matches", x["MatchId"], carry_score, field)
-                count += 1
-            print("Match Done: {}".format(x["MatchId"]))
-print("number remaining 9858")
+    for x in mycol.find({"MatchId": 1190137864}, {"_id": 0}):
+        carryScore = anlz.get_gold_eff(anlz.get_kill_part(x), anlz.get_gold_score(x))
+    # myquery = {"player"+str(i)+".Player_Name": 1 for i in range(10)}
+    # myquery["_id"] = 0
+    # df = pd.DataFrame(json_normalize(mycol.find({}, myquery)))
+    # df.to_excel("names.xlsx")
+
+
+
+
+
+
+
+
+
+
+
+#     count = 0
+#     compCount = 0
+#     for x in mycol.find({"Entry_Datetime": "10/3/2021"}, {"_id": 0}):
+#         if "carryScore" not in x.keys():
+#             for field in fields:
+#                 if field == "carryScore":
+#                     carry_score = anlz.get_gold_score(x)
+#                 elif field == "damageScore":
+#                     carry_score = anlz.get_damage_score(x)
+#                 elif field == "levelDiff":
+#                     carry_score = anlz.get_level_diff(x)
+#                 elif field == "killPart":
+#                     carry_score = anlz.get_kill_part(x)
+#                 elif field == "efficiency":
+#                     carry_score = anlz.get_gold_eff(anlz.get_kill_part(x), anlz.get_gold_score(x))
+#                 add_patch_field(client, "Matches", "8.9 Matches", x["MatchId"], carry_score, field)
+#                 count += 1
+#             print("Match Done: {}".format(x["MatchId"]))
+# print("number remaining 9858")
 ### 1192921877
