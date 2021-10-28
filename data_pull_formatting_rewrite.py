@@ -149,25 +149,22 @@ def get_date():
 
 
 # {"Entry_Datetime": {"$lte": "8/30/2021", "$gte": "8/27/2021" }}
-start_time = datetime.now()
-sum_gods = 0
-mydb = client["Matches"]
-mycol = mydb["8.9 Matches"]
-set_matches = []
-for match in mycol.find({"Entry_Datetime": {"$gte": "9/21/2021"}}):
-    set_matches.append(match)
-
-print(len(set_matches))
-
-for god in godsDict:
-    godsDict[god] = GodData(god)
-    godsDict[god].set_matches(set_matches)
-    sum_gods += godsDict[god].get_matches()
-    godsDict[god].calc_matchups()
-    godsDict[god].calc_items()
-    godsDict[god].calc_combat_stats()
+def run_format(patch, date):
+    sum_gods = 0
+    mydb = client["test"]
+    mycol = mydb[f"{patch} Matches"]
+    set_matches = []
+    for match in mycol.find({"Entry_Datetime": {"$gte": date}}):
+        set_matches.append(match)
 
 
-    print(f"{god}: {godsDict[god].get_matches()}")
-print(f"time to complete {datetime.now() - start_time}")
-print(sum_gods)
+    for god in godsDict:
+        godsDict[god] = GodData(god)
+        godsDict[god].set_matches(set_matches)
+        sum_gods += godsDict[god].get_matches()
+        godsDict[god].calc_matchups()
+        godsDict[god].calc_items()
+        godsDict[god].calc_combat_stats()
+
+
+        print(f"{god}: {godsDict[god].get_matches()}")

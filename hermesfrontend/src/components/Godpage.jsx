@@ -492,7 +492,7 @@ function Godpage(god) {
   var [url, seturl] = useState(0);
   const [displaygod, setgod] = useState(0);
   const [abilities, setabilities] = useState([]);
-  const [patch, setPatch] = useState("8.9")
+  const [patch, setPatch] = useState("8.10")
   const [roles, setroles] = useState([
     "Solo",
     "Jungle",
@@ -595,6 +595,9 @@ function Godpage(god) {
                             </Button>
                             <StyledMenu {...bindMenu(popupState)}>
                               <div>
+                                <MenuItem onClick={popupState.close}>
+                                  <DropDownFilter changePatch={setPatch} patch={"8.10"}/>
+                                </MenuItem>
                                 <MenuItem onClick={popupState.close}>
                                   <DropDownFilter changePatch={setPatch} patch={"8.9"}/>
                                 </MenuItem>
