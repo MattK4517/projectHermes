@@ -29,13 +29,10 @@ def get_pb_rate(client, god, rank, role, patch):
     bandb = client["single_god_bans"]
     bancol = bandb[god]
     totalMatches = get_total_matches(client, rank, patch)
-    if patch == "8.9":
-        if rank == "All Ranks":
-            myquery = {"patch": patch}
-        else:
-            myquery = {"patch": patch, "rank": rank}
+    if rank == "All Ranks":
+        myquery = {"patch": patch}
     else:
-        myquery = {"rank": rank}
+        myquery = {"patch": patch, "rank": rank}
 
     godBans = bancol.count_documents(myquery)
     games = get_games_played(client, god, rank, role, patch)
@@ -46,14 +43,10 @@ def get_pb_rate(client, god, rank, role, patch):
 def get_games_played(client, god, rank, role, patch):
     mydb = client["single_items"]
     mycol = mydb[god]
-    if patch == "8.9":
-        if rank == "All Ranks":
-            myquery = {"patch": patch, "role_played": role}
-        else:
-            myquery = {"patch": patch, "rank": rank, "role_played": role}
+    if rank == "All Ranks":
+        myquery = {"patch": patch, "role_played": role}
     else:
-        myquery = {"rank": rank}
-    
+        myquery = {"patch": patch, "rank": rank, "role_played": role}
     games = mycol.count_documents(myquery)
     return games
 
@@ -113,12 +106,6 @@ def get_top_builds(client, god, role, patch, rank="All Ranks"):
         myquery = { "role_played": role, "rank": rank, "patch": patch}
     else:
         myquery = { "role_played": role, "patch": patch}
-    
-    if patch != "8.9":
-        if rank != "All Ranks":
-            myquery = { "role_played": role, "rank": rank}
-        else:
-            myquery = { "role_played": role}
     
     games = 0
     wins = 0
@@ -207,11 +194,6 @@ def get_all_builds(client, god, role, patch, rank="All Ranks"):
     else:
         myquery = { "role_played": role, "patch": patch}
     
-    if patch != "8.9":
-        if rank != "All Ranks":
-            myquery = { "role_played": role, "rank": rank}
-        else:
-            myquery = { "role_played": role}
     games = 0
     wins = 0
     for x in mycol.find(myquery, {"_id": 0}):
@@ -249,12 +231,6 @@ def get_worst_matchups(client, god, role, patch, rank="All Ranks"):
         myquery = { "role_played": role, "rank": rank, "patch": patch}
     else:
         myquery = { "role_played": role, "patch": patch}
-    
-    if patch != "8.9":
-        if rank != "All Ranks":
-            myquery = { "role_played": role, "rank": rank}
-        else:
-            myquery = { "role_played": role}
 
 
     games = 0
@@ -310,13 +286,6 @@ def get_winrate(client, god, role, patch, rank="All Ranks"):
         myquery = { "role_played": role, "rank": rank, "patch": patch}
     else:
         myquery = { "role_played": role, "patch": patch}
-    
-    if patch != "8.9":
-        if rank != "All Ranks":
-            myquery = { "role_played": role, "rank": rank}
-        else:
-            myquery = { "role_played": role}
-
 
     games = 0
     wins = 0
@@ -353,12 +322,6 @@ def get_combat_stats(client, god, role, patch, rank="All Ranks"):
     else:
         myquery = { "role": role, "patch": patch}
     
-    if patch != "8.9":
-        if rank != "All Ranks":
-            myquery = { "role": role, "rank": rank}
-        else:
-            myquery = { "role": role}
-
     kills = 0
     deaths = 0
     assists = 0
