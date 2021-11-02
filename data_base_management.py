@@ -156,11 +156,16 @@ def add_gold_eff(client, db, col, field_key):
         add_patch_field(client, db, col, matchId, gold_eff, field_key)
 
 if __name__ == "__main__":
+    mydb = client["Matches"]
+    mycol = mydb["8.10 Matches"]
+    print(mycol.count_documents({"Entry_Datetime": "10/28/2021"}))
+
+
     # fields = ["carryScore","damageScore", "levelDiff", "killPart", "efficiency"]
-    mydb = client["Matches"] 
-    mycol = mydb["8.9 Matches"]
-    for x in mycol.find({"MatchId": 1190137864}, {"_id": 0}):
-        carryScore = anlz.get_gold_eff(anlz.get_kill_part(x), anlz.get_gold_score(x))
+    # mydb = client["Matches"] 
+    # mycol = mydb["8.9 Matches"]
+    # for x in mycol.find({"MatchId": 1190137864}, {"_id": 0}):
+    #     carryScore = anlz.get_gold_eff(anlz.get_kill_part(x), anlz.get_gold_score(x))
     # myquery = {"player"+str(i)+".Player_Name": 1 for i in range(10)}
     # myquery["_id"] = 0
     # df = pd.DataFrame(json_normalize(mycol.find({}, myquery)))
