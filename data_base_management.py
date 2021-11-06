@@ -183,11 +183,19 @@ def purge_date(client, dbs, date):
             delete_match_docs(client, db, god, "Entry_Datetime", date)
         
 if __name__ == "__main__":
+<<<<<<< HEAD
     dbs = ["single_god_bans", "single_items", "single_matchups", "single_combat_stats", "single_objective_stats"]
     purge_date(client, dbs, "11/4/2021")
     delete_match_docs(client, "Matches", "8.10 Matches", "Entry_Datetime", "11/4/2021")
 
     # remove_duplicates(client, ["single_items", "single_matchups"])
+=======
+    mydb = client["Matches"]
+    mycol = mydb["8.10 Matches"]
+    print(mycol.count_documents({"Entry_Datetime": "10/28/2021"}))
+
+
+>>>>>>> 801a3e2a637497bbd931cf960515645fc2868fc9
     # fields = ["carryScore","damageScore", "levelDiff", "killPart", "efficiency"]
     # mydb = client["Matches"] 
     # mycol = mydb["8.9 Matches"]
