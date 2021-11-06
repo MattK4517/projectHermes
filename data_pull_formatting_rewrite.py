@@ -12,14 +12,14 @@ class GodData:
         self.matches = []
 
 
-    def insert_ban(self, matchId, rank):
+    def insert_ban(self, matchId, rank, entry_datetime):
         mydb = client["single_god_bans"]
         mycol = mydb[self.name]
         mycol.insert_one({
             "Banned in": matchId,
             "rank": rank,
             "patch": patch,
-            "Entry_Datetime": match["Entry_Datetime"],
+            "Entry_Datetime": entry_datetime,
             })
 
     def set_matches(self, data):
@@ -29,7 +29,7 @@ class GodData:
                 if "player" in key and match[key]["godName"] == self.name:
                     self.matches.append(match)
                 if "Ban" in key and match[key] == self.name:
-                    self.insert_ban(match["MatchId"], normalize_rank(match["player0"]["Conquest_Tier"]))
+                    self.insert_ban(match["MatchId"], normalize_rank(match["player0"]["Conquest_Tier"]), match["Entry_Datetime"])
 
     def get_matches(self):
         return len(self.matches)
@@ -120,6 +120,42 @@ class GodData:
                         "patch": patch,
                         "Entry_Datetime": match["Entry_Datetime"],
                     })
+    
+    def calc_objective_stats(self):
+        mydb = client["single_objective_stats"]
+        mycol =  mydb[self.name]
+        for match in self.matches:
+            for key in match:
+                if "player" in key and match[key]["godName"] == self.name:
+                    rank = normalize_rank(match[key]["Conquest_Tier"])
+                    role = match[key]["Role"]
+                    matchId = match[key]["MatchID"]
+                    gold = match[key]["Gold"]
+                    damage_bot = match[key]["Damage_Bot"]
+                    camps_cleared = match[key]["Camps_Cleared"]
+                    tower_kills = match[key]["Towers_Destroyed"]
+                    phoenix_kills = match[key]["Kills_Phoenix"]
+                    tower_damage = match[key]["Structure_damage"]
+                    wards_placed = match[key]["Wards_Placed"]
+                    win_status = match[key]["Win_Status"]
+                
+                mycol.insert_one({
+                        "rank": rank,
+                        "role": role,
+                        "matchId": matchId,
+                        "gold": gold,
+                        "damage_bot": damage_bot,
+                        "camps_cleared": camps_cleared,
+                        "tower_kills": tower_kills,
+                        "phoenix_kills": phoenix_kills,
+                        "tower_damage": tower_damage,
+                        "wards_placed": wards_placed,
+                        "win_status": win_status,
+                        "patch": patch,
+                        "Entry_Datetime": match["Entry_Datetime"],
+                    })
+
+
 
 
 def normalize_rank(tier):

@@ -1,99 +1,71 @@
-import matplotlib.pyplot as plt
-import numpy as np
-from numpy.core.fromnumeric import size
 import pandas as pd
-import rfpimp
-from sklearn import datasets, linear_model
-from sklearn.metrics import mean_squared_error, r2_score
 import pymongo
-from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn import metrics
+import matplotlib.pyplot as plt
+import seaborn as sns
+from constants import godsDict
+import os
+from constants import Hunters
+from bson import BSON
+from bson import json_util
 
 client = pymongo.MongoClient(
     "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
 
+# col_names = ["gold", "damage_bot", "kills_bot", "tower_kills", "phoenix_kills", "tower_damage", "objective_assists", "wards_placed"]
+# mydb = client["single_objective_stats"]
 
-# Load the diabetes dataset
-mydb = client["test"]
-mycol = mydb["8.9 Matches"]
-myquery = {}
-diabetes_X = []
-diabetes_y = []
+# col_names = ["kills", "deaths", "assists", "damage_player", "damage_taken", "damage_mitigated","healing", "healing_self"]
+# mydb = client["single_combat_stats"]
 
-db = mydb
-collection = mycol
-df = pd.DataFrame(list(collection.find()))
+data = pd.DataFrame()
+mydb = client["Matches"]
+mycol = mydb["8.10 Matches"]
+print(mycol.count_documents({"Entry_Datetime": "11/4/2021"}))
+# carrydb = client["carryScore"]
+# carrycol = carrydb["8.10 Matches"]
+# fil = {f"player{i}.Role": 1 for i in range(10)}
+# fil = {**fil, **{f"player{i}.godName": 1 for i in range(10)}} cv6566666666
+# fil = {**fil, **{f"player{i}.Win_Status": 1 for i in range(10)}}
+# print(fil)
+# for x in mycol.find({}, {**fil, **{"carryScore": 1, "MatchId": 1, "Entry_Datetime": 1,"_id": 0}}):
+#     print(x)
+#     # carrycol.insert_many(scores)
 
-features = ['Time_Dead', 'Ranked_Stat_Conq', 'Minutes', 'Deaths', 'Damage_Taken']
+# print(data)
+# X = data[col_names]
+# y = data["win_status"]
+# X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.25,random_state=0)
+# logreg = LogisticRegression()
+# logreg.fit(X_train,y_train)
+# y_pred=logreg.predict(X_test)
 
-######################################## Train/test split #########################################
-
-df_train, df_test = train_test_split(df, test_size=0.20)
-df_train = df_train[features]
-df_test = df_test[features]
-
-X_train, y_train = df_train.drop('Prod',axis=1), df_train['Prod']
-X_test, y_test = df_test.drop('Prod',axis=1), df_test['Prod']
-
-################################################ Train #############################################
-
-rf = RandomForestRegressor(n_estimators=100, n_jobs=-1)
-rf.fit(X_train, y_train)
-
-############################### Permutation feature importance #####################################
-
-imp = rfpimp.importances(rf, X_test, y_test)
-
-############################################## Plot ################################################
-
-fig, ax = plt.subplots(figsize=(6, 3))
-
-ax.barh(imp.index, imp['Importance'], height=0.8, facecolor='grey', alpha=0.8, edgecolor='k')
-ax.set_xlabel('Importance score')
-ax.set_title('Permutation feature importance')
-ax.text(0.8, 0.15, 'aegis4048.github.io', fontsize=12, ha='center', va='center',
-        transform=ax.transAxes, color='grey', alpha=0.5)
-plt.gca().invert_yaxis()
-
-fig.tight_layout()
-
-# # Use only one feature
-# data_breakpoint = round(len(diabetes_X) * .5)
-# # Split the data into training/testing sets
-# diabetes_X_train = diabetes_X[:-data_breakpoint]
-# diabetes_X_test = diabetes_X[-data_breakpoint:]
-
-# # Split the targets into training/testing sets
-# diabetes_y_train = diabetes_y[:-data_breakpoint]
-# diabetes_y_test = diabetes_y[-data_breakpoint:]
-
-# # Create linear regression object
-# regr = linear_model.LinearRegression()
-
-# # Train the model using the training sets
-# regr.fit(diabetes_X_train, diabetes_y_train)
-# # Make predictions using the testing set
-# diabetes_y_pred = regr.predict(diabetes_X_test)
-# print(size(diabetes_X_test))
-# print(len(diabetes_X_test))
-# print(size(diabetes_y_pred))
-# print(size(diabetes_y_test))
+# score = logreg.score(X_test, y_test)
 
 
-# # The coefficients
-# print('Coefficients: \n', regr.coef_)
-# # The mean squared error
-# print('Mean squared error: %.2f'
-#       % mean_squared_error(diabetes_y_test, diabetes_y_pred))
-# # The coefficient of determination: 1 is perfect prediction
-# print('Coefficient of determination: %.2f'
-#       % r2_score(diabetes_y_test, diabetes_y_pred))
+# cm = metrics.confusion_matrix(y_test, y_pred)
+# plt.figure(figsize=(9,9))
+# sns.heatmap(cm, annot=True, fmt=".3f", linewidths=.5, square = True, cmap = 'Blues_r');
+# plt.ylabel('Actual label');
+# plt.xlabel('Predicted label');
+# plt.title(f"Warriors")
+# all_sample_title = 'Accuracy Score: {0}'.format(score)
+# plt.title(all_sample_title, size = 15)
 
-# # Plot outputs
-# plt.scatter(diabetes_X_test, diabetes_y_test,  color='black')
-# plt.plot(diabetes_X_test, diabetes_y_pred, color='blue', linewidth=3)
+# # if not os.path.exists(f"C:\\Users\\MayheM\\Desktop\\python\\projectHermes\\charts\\_Machine Learning\\{god}"):
+# #     os.mkdir(f"C:\\Users\\MayheM\\Desktop\\python\\projectHermes\\charts\\_Machine Learning\\{god}")
 
-# plt.xticks(())
-# plt.yticks(())
-
-# plt.show()
+# plt.savefig(f"C:\\Users\\MayheM\\Desktop\\python\\projectHermes\\charts\\_Machine Learning\\{god}", 
+# dpi=None, 
+# facecolor='w', 
+# edgecolor='w',
+# orientation='portrait', 
+# papertype=None, 
+# format=None,
+# transparent=False, 
+# bbox_inches=None, 
+# pad_inches=0.1,
+# metadata=None)
+# plt.close()
