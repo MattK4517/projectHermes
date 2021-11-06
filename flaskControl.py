@@ -59,14 +59,15 @@ def get_god_abilities(god):
 @app.route("/gettierlist/<rank>/<role>/<tableType>", methods=["GET", "POST"])
 def get_tier_list(rank, role, tableType):
         retData = {god: {} for god in godsDict}
+        patch = "8.10"
         mydb = client["Tier_list"]
         if tableType == "Regular":
                 mycol = mydb["Regular List"]
                 rank = rank.replace("_", " ")
                 if "All" in role:
-                        myquery = {"rank": rank, "pickRate": {"$gte": 1}}
+                        myquery = {"rank": rank, "pickRate": {"$gte": 1}, "patch": patch}
                 else:
-                        myquery = {"rank": rank, "role": role, "pickRate": {"$gte": 1}}
+                        myquery = {"rank": rank, "role": role, "pickRate": {"$gte": 1}, "patch": patch}
                 
                 for x in mycol.find(myquery, {"_id": 0}):
                         dict_god = x["god"]
@@ -80,9 +81,9 @@ def get_tier_list(rank, role, tableType):
                 mycol = mydb["Combat List"]
                 rank = rank.replace("_", " ")
                 if "All" in role:
-                        myquery = {"rank": rank, "pickRate": {"$gte": 1}}
+                        myquery = {"rank": rank, "pickRate": {"$gte": 1}, "patch": patch}
                 else:
-                        myquery = {"rank": rank, "role": role, "pickRate": {"$gte": 1}}
+                        myquery = {"rank": rank, "role": role, "pickRate": {"$gte": 1}, "patch": patch}
                 
                 for x in mycol.find(myquery, {"_id": 0}):
                         dict_god = x["god"]
@@ -113,25 +114,47 @@ def get_match(matchID):
         matchID = int(matchID)
         if mycol.count_documents({"MatchId": matchID}) == 0:
                 mycol = mydb["8.9 Matches"]
+        if mycol.count_documents({"MatchId": matchID}) == 0:
+            mycol= mydb["8.10 Matches"]
         for x in mycol.find({"MatchId": matchID}, {'_id': 0}):
                 match = x
 
+        # print(match)
+        # if match["Entry_Datetime"] < "9/25/2021":
+        #         for key in match:
+        #                 if "player" in key:
+        #                         build = [
+        #                         match[key]["Item_Purch_1"],
+        #                         match[key]["Item_Purch_2"],
+        #                         match[key]["Item_Purch_3"],
+        #                         match[key]["Item_Purch_4"],
+        #                         match[key]["Item_Purch_5"],
+        #                         match[key]["Item_Purch_6"],
+        #                         ]
 
-        if match["Entry_Datetime"] < "9/25/2021":
-                for key in match:
-                        if "player" in key:
-                                build = [
-                                match[key]["Item_Purch_1"],
-                                match[key]["Item_Purch_2"],
-                                match[key]["Item_Purch_3"],
-                                match[key]["Item_Purch_4"],
-                                match[key]["Item_Purch_5"],
-                                match[key]["Item_Purch_6"],
-                                ]
-
-                                match[key] = {**match[key], **{"godBuild": anlz.get_build_stats(client, build)}}
+        #                         match[key] = {**match[key], **{"godBuild": anlz.get_build_stats(client, build)}}
         
+        print(match)
         return match
+
+# @app.route("/graph")
+# def get_graph():
+#         field = "kills"
+#         mydb = client["single_items"]
+#         mycol = mydb["Achilles"]
+#         dmg_dict = {}
+#         index = 0
+#         for x in mycol.aggregate([
+#                 { "$match": {"role": "Solo" } }, 
+#                 { "$group": {"name": "$Achilles.slot1"}
+#         ]):
+#                 print(x)
+#         # for x in mycol.find({}, {"Achilles.slot1": 1}):
+#         #         print(x)
+#         #         print(x["Achilles"].keys())
+#                 # dmg_dict[index] = {**x, **{"index": index}}
+#                 # index += 1
+#         return dmg_dict
 
 # make a route for every god, in the
 # temp idea for routing

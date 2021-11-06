@@ -9,6 +9,7 @@ from pymongo.encryption import Algorithm
 import analyze as anlz
 from constants import godsDict, roles, ranks
 from pandas.io.json import json_normalize
+import time
 
 client = pymongo.MongoClient(
     "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
@@ -32,10 +33,10 @@ def get_last_day(client):
         print(set[keys[0]]["Entry_Datetime"])
 
 
-def delete_match_docs(client, db, col):
+def delete_match_docs(client, db, col, field, value):
     mydb = client[db]
     mycol = mydb[col]
-    mycol.delete_many({"patch": 8.8})
+    mycol.delete_many({field: value})
 
 
 def calc_total_matches(ranks, db, rank="All Ranks"):
@@ -155,12 +156,43 @@ def add_gold_eff(client, db, col, field_key):
         gold_eff = anlz.get_gold_eff(x["killPart"], x["carryScore"])
         add_patch_field(client, db, col, matchId, gold_eff, field_key)
 
+def remove_duplicates(client, dbs):
+    for db in dbs:
+        mydb = client[db]
+        for god in godsDict.keys():
+            mycol = mydb[god]
+            starting_number = mycol.count_documents({})
+            doc_ids = []
+            for x in mycol.aggregate([
+                {"$group": {"_id": "$matchId", "count": {"$sum": 1} }}
+            ]):
+                if x["count"] > 1:
+                    for x in mycol.find({"matchId": x["_id"]}, {"_id": 1}):
+                        doc_ids.append(x["_id"])
+                        if len(doc_ids) > 1:
+                            mycol.delete_one({"_id": doc_ids[-1]})
+                                # time.sleep(100)
+            ending_number = mycol.count_documents({})
+            with open("requirements.txt", "a") as f:
+                f.writelines(f"{db} for {god} starting at {starting_number} end at {ending_number}. loss={round(100 -ending_number/starting_number * 100, 2)}\n")
+            print(f"{god} done")
+
+def purge_date(client, dbs, date):
+    for db in dbs:
+        for god in godsDict.keys():
+            delete_match_docs(client, db, god, "Entry_Datetime", date)
+        
 if __name__ == "__main__":
+    dbs = ["single_god_bans", "single_items", "single_matchups", "single_combat_stats", "single_objective_stats"]
+    purge_date(client, dbs, "11/4/2021")
+    delete_match_docs(client, "Matches", "8.10 Matches", "Entry_Datetime", "11/4/2021")
+
+    # remove_duplicates(client, ["single_items", "single_matchups"])
     # fields = ["carryScore","damageScore", "levelDiff", "killPart", "efficiency"]
-    mydb = client["Matches"] 
-    mycol = mydb["8.9 Matches"]
-    for x in mycol.find({"MatchId": 1190137864}, {"_id": 0}):
-        carryScore = anlz.get_gold_eff(anlz.get_kill_part(x), anlz.get_gold_score(x))
+    # mydb = client["Matches"] 
+    # mycol = mydb["8.9 Matches"]
+    # for x in mycol.find({"MatchId": 1190137864}, {"_id": 0}):
+    #     carryScore = anlz.get_gold_eff(anlz.get_kill_part(x), anlz.get_gold_score(x))
     # myquery = {"player"+str(i)+".Player_Name": 1 for i in range(10)}
     # myquery["_id"] = 0
     # df = pd.DataFrame(json_normalize(mycol.find({}, myquery)))

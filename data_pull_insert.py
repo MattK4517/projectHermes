@@ -50,6 +50,7 @@ def normalize_godId(id):
         3509: "Chernobog",
         2075: "Chiron",
         1920: "Chronos",
+        4010: "Cliodhna",
         3945: "Cthulhu",
         2319: "Cu Chulainn",
         1778: "Cupid",
@@ -176,6 +177,7 @@ def create_player_dict(player):
     playerDict["Item_Active_2"] = player.itemActive2
     playerDict["Item_Active_3"] = player.itemActive3
     playerDict["Item_Active_4"] = player.itemActive4
+    playerDict["Kills_Bot"] = player["Kills_Bot"]
     playerDict["Killing_Spree"] = player.killingSpree
     playerDict["Kills_Double"] = player.killsDouble
     playerDict["Kills_Fire_Giant"] = player["Kills_Fire_Giant"]
@@ -212,9 +214,9 @@ def create_player_dict(player):
     playerDict["godBuild"] = anlz.get_build_stats(client, build)
     return playerDict
 
-def create_match_dict(match):
+def create_match_dict(match, patch):
     match_dict = {}
-    match_dict["Patch"] = "8.9"
+    match_dict["Patch"] = patch
     match_dict["Entry_Datetime"] = match.entryDatetime.split()[0]
     match_dict["MatchId"] = match.matchId
     match_dict["Match_Duration"] = match.matchDuration
@@ -231,7 +233,6 @@ def create_match_dict(match):
     match_dict["Ban9"]  = match["Ban10"]
     match_dict["First_Ban_Side"] = match["First_Ban_Side"]
     return match_dict
-
 
 def create_sets(data):
     sets = []
@@ -250,7 +251,7 @@ def get_new_id(client, smite_api):
     gods = smite_api.getGods()
     for god in range(len(gods)):
         if gods[god]["latestGod"] == "y":
-            mycol = mydb["Charybdis"]
+            mycol = mydb["Cliodhna"]
             data = create_god_data_dict(gods[god])
             mycol.insert_one(data)
 
