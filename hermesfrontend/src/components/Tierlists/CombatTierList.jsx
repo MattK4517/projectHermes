@@ -6,123 +6,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { withStyles, makeStyles } from "@material-ui/core/styles";
-
-const getImageUrl = (rank) => {
-  let url = "https://i.imgur.com/LVbUJes.png";
-  if (rank == "Bronze") {
-    url = "https://i.imgur.com/pNAGUeR.png";
-  } else if (rank == "Silver") {
-    url = "https://i.imgur.com/Cm5uf15.png";
-  } else if (rank == "Gold") {
-    url = "https://i.imgur.com/L3BmF9F.png";
-  } else if (rank == "Platinum") {
-    url = "https://i.imgur.com/6M3Ezca.png";
-  } else if (rank == "Diamond") {
-    url = "https://i.imgur.com/dtXd0Kv.png";
-  } else if (rank == "Masters") {
-    url = "https://i.imgur.com/2SdBQ4o.png";
-  } else if (rank == "Grandmaster") {
-    url = "https://i.imgur.com/uh3i4hc.png";
-  } else if (rank == "Solo") {
-    url = "https://i.imgur.com/WLU0Cel.png";
-  } else if (rank == "Jungle") {
-    url = "https://i.imgur.com/CyXnzEO.png";
-  } else if (rank == "Mid") {
-    url = "https://i.imgur.com/0oQkAAZ.png";
-  } else if (rank == "Support") {
-    url = "https://i.imgur.com/l7CD2QM.png";
-  } else if (rank == "Carry") {
-    url = "https://i.imgur.com/RlRTbrA.png";
-  } else if (rank == "All Roles") {
-    url = "https://i.imgur.com/ajQP9zO.png";
-  }
-  return url;
-};
-
-class FilterForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { value: this.props.role };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleChange(event) {
-    this.setState({ value: event.target.value });
-  }
-
-  handleSubmit(event) {
-    this.props.roleState(this.props.role);
-    event.preventDefault();
-  }
-
-  render() {
-    return (
-      <form onSubmit={this.handleSubmit} className="role-filter">
-        <input
-          type="image"
-          src={getImageUrl(this.props.role)}
-          style={{ maxWidth: "36px", maxHeight: "36px" }}
-          name="submit"
-          value={this.props.role}
-        ></input>
-      </form>
-    );
-  }
-}
-
-class DropDownFilter extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { value: this.props.role };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleChange(event) {
-    this.setState({ value: event.target.value });
-  }
-
-  handleSubmit(event) {
-    this.props.changePatch(this.props.patch);
-    event.preventDefault();
-  }
-
-  render() {
-      return (
-        <div style={{margin: "auto", paddingRight: "1rem"}}>
-          <form onSubmit={this.handleSubmit}>
-            <input
-              type="image"
-              style={{ maxWidth: "36px", maxHeight: "36px" }}
-              name="submit"
-              value={this.props.patch}
-            ></input>
-          </form>
-        </div>
-      );
-    }
-}
-
-const StyledMenu = withStyles({
-  paper: {
-    border: '1px solid #d3d4d5',
-  },
-})((props) => (
-  <Menu
-    elevation={0}
-    getContentAnchorEl={null}
-    anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'center',
-    }}
-    transformOrigin={{
-      vertical: 'top',
-      horizontal: 'center',
-    }}
-    {...props}
-  />
-));
+import { FilterForm } from "../Filters/FilterForm";
+import winRateColor from "../mainGodPage/WinRateColor";
 
 const Table = ({ columns, data }) => {
   const {
@@ -145,7 +30,15 @@ const Table = ({ columns, data }) => {
     {
       columns,
       data,
-      initialState: { pageIndex: 0 },
+      initialState: {
+        pageIndex: 0,
+        sortBy: [
+            {
+                id: 'winRate',
+                desc: true
+            }
+        ]
+    }
     },
     useSortBy,
     usePagination
@@ -255,11 +148,7 @@ const Table = ({ columns, data }) => {
                                 return (
                                   <div
                                     className="rt-td god"
-                                    style={{
-                                      minWidth: "135px",
-                                      maxWidth: "180px",
-                                      flex: "1 1 100%",
-                                    }}
+                                    style={{ minWidth: "180px", maxWidth: "220px", flex: "1 1 100%" }}
                                     {...cell.getCellProps()}
                                   >
                                     <Link
@@ -305,7 +194,7 @@ const Table = ({ columns, data }) => {
                                     {...cell.getCellProps()}
                                   >
                                     <span>
-                                      <b>{row.original.winRate}%</b>
+                                      <b style={{color: winRateColor(row.original.winRate)}}>{row.original.winRate}%</b>
                                     </span>
                                   </div>
                                 );
@@ -524,7 +413,6 @@ const Table = ({ columns, data }) => {
 };
 
 function CombatTierList(tableType) {
-  // const [patch, setPatch] = useState("8.9");
   const [totalData, setTotalData] = useState([]);
   const [counterMatchups, setCounterMatchups] = useState([]);
   const [roles, setRoles] = useState([
@@ -639,7 +527,6 @@ function CombatTierList(tableType) {
   );
   return (
     <>
-      <div className="role-filter-container">
         <div className="filter-form">
           {roles.map((role) => {
             return <FilterForm role={role} roleState={setRole} />;
@@ -676,7 +563,6 @@ function CombatTierList(tableType) {
             )}
           </PopupState> */}
         </div>
-      </div>
       <Table columns={columns} data={totalData} />
     </>
   );

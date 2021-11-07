@@ -3,7 +3,8 @@ import analyze as anlz
 import pymongo
 from datetime import datetime
 from constants import roles, patch
-from data_pull_insert import run_pull
+# from data_pull_insert import run_pull
+
 client = pymongo.MongoClient(
     "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
 

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { PropTypes } from "prop-types";
 import Tab from "./Tab";
 
-class Tabs extends Component {
+export default class TierListTabs extends Component {
     static propTypes = {
       children: PropTypes.instanceOf(Array).isRequired,
     }
@@ -54,6 +54,4 @@ class Tabs extends Component {
           </div>
         );
       }
-    }
-    
-    export default Tabs;
+    };

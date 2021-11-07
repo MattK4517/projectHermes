@@ -11,6 +11,8 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { useTable, useSortBy, usePagination } from 'react-table';
+import DropDownFilter from "./Filters/DropDownFilter";
+import FilterForm from "./Filters/FilterForm";
 
 const ImageDiv = styled.div`
   background-position: 75% -100%;
@@ -127,156 +129,61 @@ const getImageUrl = (rank) => {
   return url;
 };
 
-class DropDownFilter extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { value: this.props.role };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleChange(event) {
-    this.setState({ value: event.target.value });
-  }
-
-  handleSubmit(event) {
-    this.props.changePatch(this.props.patch);
-    event.preventDefault();
-  }
-
-  render() {
-      return (
-        <div style={{margin: "auto", paddingRight: "1rem"}}>
-          <form onSubmit={this.handleSubmit}>
-            <input
-              type="image"
-              style={{ maxWidth: "36px", maxHeight: "36px" }}
-              name="submit"
-              value={this.props.patch}
-            ></input>
-          </form>
-        </div>
-      );
-    }
-}
-
-class CreateFilterToolTip extends React.Component {
-  render() {
-    return (
-      <div className="filter-hover" style={{ maxHeight: "10px" }}>
-        <p style={{ color: "white" }}>{this.props.filterLabel}</p>
-      </div>
-    );
-  }
-}
-
-class FilterForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { value: this.props.role };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleChange(event) {
-    this.setState({ value: event.target.value });
-  }
-
-  handleSubmit(event) {
-    this.props.roleState(this.props.role);
-    event.preventDefault();
-  }
-
-  render() {
-    return (
-      <HtmlTooltip
-        title={
-          <React.Fragment>
-            <CreateFilterToolTip filterLabel={this.props.role} />
-          </React.Fragment>
-        }
-        placement="top"
-        arrow
-      >
-        <form onSubmit={this.handleSubmit} className="role-filter">
-          <input
-            type="image"
-            src={getImageUrl(this.props.role)}
-            style={{ maxWidth: "36px", maxHeight: "36px" }}
-            name="submit"
-            value={this.props.role}
-          ></input>
-        </form>
-      </HtmlTooltip>
-    );
-  }
-}
-
-const HtmlTooltip = withStyles((theme) => ({
-  tooltip: {
-    backgroundColor: "#06061f",
-    color: "rgba(0, 0, 0, 0.87)",
-    maxWidth: 220,
-    border: ".5px solid gray",
-    opacity: 100,
-  },
-}))(Tooltip);
-
-class CreateItemToolTip extends React.Component {
-  render() {
-    if (this.props.index == 0) {
-      this.props.item = this.props.item.item
-    } else if (this.props.index == 1) {
-      this.props.item = this.props.item.item2
-    }
-    return (
-      <>
-      <div
-        style={{
-          maxHeight: "350px",
-          maxWidth: "550px",
-          color: "white",
-          alignItems: "left",
-          fontSize: "14px",
-        }}
-      >
-        <h5 style={{ width: "100%", fontSize: "1rem", color: "blue" }}>
-          {this.props.item.item}
-        </h5>
-        <div>
-          <p>{this.props.item.itemShortDesc}</p>
-        </div>
-        <div className="item-stats" style={{ paddingLeft: "5px" }}>
-          <ul>
-            {this.props.item.itemStats.map(
-              (stat) => {
-                return (
-                  <li>
-                    {stat[0]}: {stat[1]}
-                  </li>
-                );
-              }
-            )}
-          </ul>
-          <div className="item-passive">
-            <p>{this.props.item.itemPassive}</p>
-          </div>
-        </div>
-        <p style={{ color: "gold" }}>
-          <b>Price:</b>{" "}
-          {this.props.item.itemAbsolutePrice}(
-          {this.props.item.itemRelativePrice})
-          <img
-            style={{ maxHeight: "20px", maxWidth: "20px", paddingLeft: "3px" }}
-            src="https://i.imgur.com/XofaIQ0.png"
-            alt="gold-img"
-          />
-        </p>
-      </div>
-    </>
-    );
-  }
-}
+// class CreateItemToolTip extends React.Component {
+//   render() {
+//     if (this.props.index == 0) {
+//       this.props.item = this.props.item.item
+//     } else if (this.props.index == 1) {
+//       this.props.item = this.props.item.item2
+//     }
+//     return (
+//       <>
+//       <div
+//         style={{
+//           maxHeight: "350px",
+//           maxWidth: "550px",
+//           color: "white",
+//           alignItems: "left",
+//           fontSize: "14px",
+//         }}
+//       >
+//         <h5 style={{ width: "100%", fontSize: "1rem", color: "blue" }}>
+//           {this.props.item.item}
+//         </h5>
+//         <div>
+//           <p>{this.props.item.itemShortDesc}</p>
+//         </div>
+//         <div className="item-stats" style={{ paddingLeft: "5px" }}>
+//           <ul>
+//             {this.props.item.itemStats.map(
+//               (stat) => {
+//                 return (
+//                   <li>
+//                     {stat[0]}: {stat[1]}
+//                   </li>
+//                 );
+//               }
+//             )}
+//           </ul>
+//           <div className="item-passive">
+//             <p>{this.props.item.itemPassive}</p>
+//           </div>
+//         </div>
+//         <p style={{ color: "gold" }}>
+//           <b>Price:</b>{" "}
+//           {this.props.item.itemAbsolutePrice}(
+//           {this.props.item.itemRelativePrice})
+//           <img
+//             style={{ maxHeight: "20px", maxWidth: "20px", paddingLeft: "3px" }}
+//             src="https://i.imgur.com/XofaIQ0.png"
+//             alt="gold-img"
+//           />
+//         </p>
+//       </div>
+//     </>
+//     );
+//   }
+// }
 
 function Table({ columns, data }) {
     const {
@@ -289,6 +196,15 @@ function Table({ columns, data }) {
       {
         columns,
         data,
+        initialState: {
+          sortBy: [
+              {
+                  id: 'games',
+                  desc: true
+              }
+          ]
+        }
+
       },
       useSortBy
     )
@@ -377,7 +293,7 @@ function Items(god) {
   var [url, seturl] = useState(0);
   const [displaygod, setgod] = useState(0);
   const [abilities, setabilities] = useState([]);
-  const [patch, setPatch] = useState("8.9")
+  const [patch, setPatch] = useState("8.10")
   const [slotOneItems, setSlotOneItems] = useState([]);
   const [slotTwoItems, setSlotTwoItems] = useState([]);
   const [slotThreeItems, setSlotThreeItems] = useState([]);
@@ -566,25 +482,7 @@ function Items(god) {
                         />
                       );
                     })}
-                      <PopupState variant="popover" popupId="demo-popup-menu">
-                        {(popupState) => (
-                          <React.Fragment>
-                            <Button variant="contained" color="primary" {...bindTrigger(popupState)}>
-                              {patch}
-                            </Button>
-                            <StyledMenu {...bindMenu(popupState)}>
-                              <div>
-                                <MenuItem onClick={popupState.close}>
-                                  <DropDownFilter changePatch={setPatch} patch={"8.9"}/>
-                                </MenuItem>
-                                <MenuItem onClick={popupState.close}>
-                                  <DropDownFilter changePatch={setPatch} patch={"8.8"}/>
-                                </MenuItem>
-                              </div>
-                            </StyledMenu>
-                          </React.Fragment>
-                        )}
-                      </PopupState>
+                    <DropDownFilter changePatch={setPatch} patch={"8.10"} style={{color: "white"}}/>
                       <Link to={"/".concat(displaygod, "/", "items")}>
                         <p>Items</p>
                       </Link>
