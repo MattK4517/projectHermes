@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import winRateColor from "./mainGodPage/WinRateColor";
 
 const compare = (a, b) => {
   return a.winRate - b.winRate
@@ -12,6 +13,7 @@ const useFetch = (pagegod, role, rank, patch) => {
   const [badmatchups, setbadmatchups] = useState([]);
   const [goodmatchups, setgoodmatchups] = useState([]);
   const [items, setitems] = useState([]);
+  const [colorStyle, setColorStyle] = useState("white");
   const [itemdata, setitemdata] = useState([]);
   useEffect(() => {
     let mainFetchStatement = "/".concat(pagegod, "/", role, "/", rank, "/", patch);
@@ -21,6 +23,7 @@ const useFetch = (pagegod, role, rank, patch) => {
         setbanrate(((data.godBans / data.totalMatches) * 100).toFixed(2));
         setpickrate(((data.games / data.totalMatches) * 100).toFixed(2));
         setwinrate(data.winRate);
+        setColorStyle(winRateColor(data.winRate))
         let displayItems = [];
         Object.keys(data).forEach((key) => {
           if (key.startsWith("slot")) {
@@ -105,7 +108,7 @@ const useFetch = (pagegod, role, rank, patch) => {
   }, [role, rank, patch]);
 
 
-  return { games, banrate, pickrate, winrate, badmatchups, goodmatchups, items };
+  return { games, banrate, pickrate, winrate, badmatchups, goodmatchups, items, colorStyle };
 };
 
 export default useFetch;

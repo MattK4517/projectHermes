@@ -561,9 +561,9 @@ a, a:active, a:focus, a:hover, a:visited {
 .home-image {
   z-index: 5;
   left: 0;
-  height: 100vh;
-  width: 101vw;
-  padding-top: 80px;
+  height: 100%;
+  width: 100%;
+
   background-image: url("https://i.imgur.com/MBYqznN.jpg");
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -977,10 +977,12 @@ a, a:active, a:focus, a:hover, a:visited {
   transition-duration: 0.3s;
   -webkit-transition-property: transform;
   transition-property: transform;
+  z-index: 200;
 }
 .role-filter:hover {
   -webkit-transform: scale(1.5);
   transform: scale(1.5);
+  z-index: 5;
 }
 
 figure.snip0015 {
@@ -1251,22 +1253,22 @@ figure.snip0015:hover figcaption::before {
   flex-direction: row;
 }
 
-.row li {
+.tabs li {
   color: white;
   background-color: #383864;
   padding: 10px;
   border-radius: 6px;
 }
-.row .tab-list {
+.tab-list {
   border: none;
 
 }
-.row .tab-list-active {
+.tabs .tab-list-active {
   background-color: #3273fa;
   border: none;
 }
 
-.row li:not(:last-child) {
+.tabs li:not(:last-child) {
   margin-right: 12px;
 }
 
@@ -1293,8 +1295,21 @@ figure.snip0015:hover figcaption::before {
   margin-left: 300px;
   margin-bottom: auto;
   background-color: #060b26;
+  color: white
 }
 
 .new-god a:hover {
   background-color: #1a83ff;
+}
+
+.bottom-push {
+  position: fixed;
+  bottom: 0;
+  margin-top: auto;
+  text-align: "center";
+  padding-bottom: 10;
+}
+
+.filler {
+  color: white;
 }

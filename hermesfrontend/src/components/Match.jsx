@@ -6,7 +6,7 @@ import MuiAccordion from '@material-ui/core/Accordion';
 import MuiAccordionSummary from '@material-ui/core/AccordionSummary';
 import MuiAccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
-import TierListTabs from "./TierListTabs";
+import TierListTabs from "./Tabs/TierListTabs";
 
 class NameForm extends React.Component {
   constructor(props) {

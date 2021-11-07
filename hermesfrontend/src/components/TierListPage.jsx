@@ -1,4 +1,4 @@
-import TierListTabs from "./TierListTabs";
+import TierListTabs from "./Tabs/TierListTabs";
 import TierList from "./Tierlists/TierList";
 import CombatTierList from "./Tierlists/CombatTierList";
 import React, { useState, useEffect, useMemo } from 'react';

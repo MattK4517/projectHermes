@@ -1,16 +1,20 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "./Component.css";
+import "../Component.css";
 import styled from "styled-components";
-import useFetch from "./useFetch";
+import useFetch from "../useFetch";
 import Tooltip from "@material-ui/core/Tooltip";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import Items from "./Items";
+import Items from "../Items";
+import { FilterForm } from "../Filters/FilterForm";
+import { DropDownFilter } from "../Filters/DropDownFilter";
+import winRateColor from "./WinRateColor";
+import { GodHeader } from "../mainGodPage/GodHeader";
 
 const ImageDiv = styled.div`
   background-position: 75% -100%;
@@ -43,184 +47,12 @@ const StyledMenu = withStyles({
   />
 ));
 
-class GodHeader extends React.Component {
-  render() {
-    return (
-      <div className="god-page-header">
-        <div className="god-header-wrap">
-          <div className="god-image-container">
-            <div className="tier-heading">{this.props.tier}</div>
-            <div className="god-page-image-border">
-              <div className="notch-border"></div>
-              <img
-                className="god-image"
-                src={this.props.url}
-                alt={this.props.god}
-              />
-            </div>
-          </div>
-          <div className="god-header-info">
-            <h1 className="god-label">
-              <span>{this.props.god} </span>
-              <span>
-                Build for {this.props.role}, {this.props.rank}
-              </span>
-            </h1>
-            <div className="god-header-row2">
-              <div className="god-abilities">
-                <GodAbilities abilities={this.props.abilities} />
-              </div>
-              <div className="stat-explanation">
-                The best win rate {this.props.god} build. The best and worst matchups for {this.props.god} and anything else you need, {this.props.rank} Smite Patch {this.props.patch}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-}
-
-class GodAbilities extends React.Component {
-  render() {
-    return (
-      <>
-        {this.props.abilities.map((ability, index) => {
-          return (
-            <>
-              <div className="god-ability-wlabel" key={index}>
-                <img src={ability.url} alt={ability.name} />
-                <div className="ability-label bottom-center">{index}</div>
-              </div>
-            </>
-          );
-        })}
-      </>
-    );
-  }
-}
-
-const getImageUrl = (rank) => {
-  let url = "https://i.imgur.com/LVbUJes.png";
-  if (rank == "Bronze") {
-    url = "https://i.imgur.com/pNAGUeR.png";
-  } else if (rank == "Silver") {
-    url = "https://i.imgur.com/Cm5uf15.png";
-  } else if (rank == "Gold") {
-    url = "https://i.imgur.com/L3BmF9F.png";
-  } else if (rank == "Platinum") {
-    url = "https://i.imgur.com/6M3Ezca.png";
-  } else if (rank == "Diamond") {
-    url = "https://i.imgur.com/dtXd0Kv.png";
-  } else if (rank == "Masters") {
-    url = "https://i.imgur.com/2SdBQ4o.png";
-  } else if (rank == "Grandmaster") {
-    url = "https://i.imgur.com/uh3i4hc.png";
-  } else if (rank == "Solo") {
-    url = "https://i.imgur.com/WLU0Cel.png";
-  } else if (rank == "Jungle") {
-    url = "https://i.imgur.com/CyXnzEO.png";
-  } else if (rank == "Mid") {
-    url = "https://i.imgur.com/0oQkAAZ.png";
-  } else if (rank == "Support") {
-    url = "https://i.imgur.com/l7CD2QM.png";
-  } else if (rank == "Carry") {
-    url = "https://i.imgur.com/RlRTbrA.png";
-  }
-  return url;
-};
-
-class DropDownFilter extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { value: this.props.role };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleChange(event) {
-    this.setState({ value: event.target.value });
-  }
-
-  handleSubmit(event) {
-    this.props.changePatch(this.props.patch);
-    event.preventDefault();
-  }
-
-  render() {
-      return (
-        <div style={{margin: "auto", paddingRight: "1rem"}}>
-          <form onSubmit={this.handleSubmit}>
-            <input
-              type="image"
-              style={{ maxWidth: "36px", maxHeight: "36px" }}
-              name="submit"
-              value={this.props.patch}
-            ></input>
-          </form>
-        </div>
-      );
-    }
-}
-
-class CreateFilterToolTip extends React.Component {
-  render() {
-    return (
-      <div className="filter-hover" style={{ maxHeight: "10px" }}>
-        <p style={{ color: "white" }}>{this.props.filterLabel}</p>
-      </div>
-    );
-  }
-}
-
-class FilterForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { value: this.props.role };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleChange(event) {
-    this.setState({ value: event.target.value });
-  }
-
-  handleSubmit(event) {
-    this.props.roleState(this.props.role);
-    event.preventDefault();
-  }
-
-  render() {
-    return (
-      <HtmlTooltip
-        title={
-          <React.Fragment>
-            <CreateFilterToolTip filterLabel={this.props.role} />
-          </React.Fragment>
-        }
-        placement="top"
-        arrow
-      >
-        <form onSubmit={this.handleSubmit} className="role-filter">
-          <input
-            type="image"
-            src={getImageUrl(this.props.role)}
-            style={{ maxWidth: "36px", maxHeight: "36px" }}
-            name="submit"
-            value={this.props.role}
-          ></input>
-        </form>
-      </HtmlTooltip>
-    );
-  }
-}
-
 class GodRankStats extends React.Component {
   render() {
     return (
       <div className="content-section god-rank-stats">
         <div className="win-rate">
-          <div className="value">{this.props.winrate}%</div>
+          <div className="value" style={{color: this.props.colorStyle}}>{this.props.winrate}%</div>
           <div className="label">Win Rate</div>
         </div>
 
@@ -290,7 +122,7 @@ class GodCounterMatchup extends React.Component {
         <div className="god-name">{this.props.getMatchups.enemy}</div>
         <hr></hr>
         <div className="matchup-stats">
-          <div className="win-rate">
+          <div className="win-rate" style={{color: winRateColor(this.props.getMatchups.winRate)}}>
             <strong>{this.props.getMatchups.winRate}%</strong>
           </div>
           <div className="times-played">
@@ -486,6 +318,7 @@ class BuildStatsElement extends React.Component {
   }
 }
 
+
 function Godpage(god) {
   const pagegod = god.god.replaceAll("_", " ");
   const role = god.role;
@@ -512,7 +345,7 @@ function Godpage(god) {
   ]);
   const [dispRole, setrole] = useState(role);
   const [dispRank, setrank] = useState("All Ranks");
-  const { games, banrate, pickrate, winrate, badmatchups, goodmatchups, items } = useFetch(
+  const { games, banrate, pickrate, winrate, badmatchups, goodmatchups, items, colorStyle } = useFetch(
     pagegod,
     dispRole,
     dispRank,
@@ -542,7 +375,6 @@ function Godpage(god) {
       })
     );
   }, []);
-
   return (
     <>
       <div className="Godpage">
@@ -587,28 +419,7 @@ function Godpage(god) {
                         />
                       );
                     })}
-                      <PopupState variant="popover" popupId="demo-popup-menu">
-                        {(popupState) => (
-                          <React.Fragment>
-                            <Button variant="contained" color="primary" {...bindTrigger(popupState)}>
-                              {patch}
-                            </Button>
-                            <StyledMenu {...bindMenu(popupState)}>
-                              <div>
-                                <MenuItem onClick={popupState.close}>
-                                  <DropDownFilter changePatch={setPatch} patch={"8.10"}/>
-                                </MenuItem>
-                                <MenuItem onClick={popupState.close}>
-                                  <DropDownFilter changePatch={setPatch} patch={"8.9"}/>
-                                </MenuItem>
-                                <MenuItem onClick={popupState.close}>
-                                  <DropDownFilter changePatch={setPatch} patch={"8.8"}/>
-                                </MenuItem>
-                              </div>
-                            </StyledMenu>
-                          </React.Fragment>
-                        )}
-                      </PopupState>
+                    <DropDownFilter changePatch={setPatch} patch={"8.10"} style={{color: "white"}}/>
                       <Link to={"/".concat(god.god.replaceAll(" ", "_"), "/", "items")}>
                         <p>Items</p>
                       </Link>
@@ -622,13 +433,14 @@ function Godpage(god) {
                   banrate={banrate}
                   pickrate={pickrate}
                   url={url}
+                  colorStyle={colorStyle}
                 />
                 <div className="toughest-matchups content-section">
                   <div className="content-section_header">
-                    <span>
-                      Counter Matchups these gods counter {displaygod}{" "}
+                      Counter Matchups&nbsp;
+                      <span style={{color: "#5f5f7b", fontSize: "14px", fontWeight: "400"}}>these gods counter {displaygod}{" "}
                       {dispRole}
-                    </span>
+                      </span>
                     <HtmlTooltip
                         title={
                           <React.Fragment>
@@ -656,10 +468,10 @@ function Godpage(god) {
                 </div>
                 <div className="toughest-matchups content-section">
                   <div className="content-section_header">
-                    <span>
-                      Good Matchups these gods get countered by {displaygod}{" "}
-                      {dispRole}
-                    </span>
+                      Good Matchups&nbsp;
+                      <span style={{color: "#5f5f7b", fontSize: "14px", fontWeight: "400"}}>these gods get countered by {displaygod}{" "}
+                        {dispRole}
+                      </span>
                     <HtmlTooltip
                         title={
                           <React.Fragment>
