@@ -1,18 +1,8 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import "./Component.css";
+import "../Component.css";
 import styled from "styled-components";
-import useFetch from "./useFetch";
-import Tooltip from "@material-ui/core/Tooltip";
-import { withStyles, makeStyles } from "@material-ui/core/styles";
-import Button from '@material-ui/core/Button';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { useTable, useSortBy, usePagination } from 'react-table';
-import DropDownFilter from "./Filters/DropDownFilter";
-import FilterForm from "./Filters/FilterForm";
 
 const ImageDiv = styled.div`
   background-position: 75% -100%;
@@ -25,79 +15,8 @@ const ImageDiv = styled.div`
         : "https://i.ytimg.com/vi/xAPsmI_zDZs/maxresdefault.jpg"});
 `;
 
-const StyledMenu = withStyles({
-  paper: {
-    border: '1px solid #d3d4d5',
-  },
-})((props) => (
-  <Menu
-    elevation={0}
-    getContentAnchorEl={null}
-    anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'center',
-    }}
-    transformOrigin={{
-      vertical: 'top',
-      horizontal: 'center',
-    }}
-    {...props}
-  />
-));
 
-class GodHeader extends React.Component {
-  render() {
-    return (
-      <div className="god-page-header">
-        <div className="god-header-wrap">
-          <div className="god-image-container">
-            <div className="tier-heading">{this.props.tier}</div>
-            <div className="god-page-image-border">
-              <div className="notch-border"></div>
-              <img
-                className="god-image"
-                src={this.props.url}
-                alt={this.props.god}
-              />
-            </div>
-          </div>
-          <div className="god-header-info">
-            <h1 className="god-label">
-              <span>{this.props.god} </span>
-              <span>
-                Items for {this.props.role}
-              </span>
-            </h1>
-            <div className="god-header-row2">
-              <div className="god-abilities">
-                <GodAbilities abilities={this.props.abilities} />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-}
 
-class GodAbilities extends React.Component {
-  render() {
-    return (
-      <>
-        {this.props.abilities.map((ability, index) => {
-          return (
-            <>
-              <div className="god-ability-wlabel" key={index}>
-                <img src={ability.url} alt={ability.name} />
-                <div className="ability-label bottom-center">{index}</div>
-              </div>
-            </>
-          );
-        })}
-      </>
-    );
-  }
-}
 
 const getImageUrl = (rank) => {
   let url = "https://i.imgur.com/LVbUJes.png";
@@ -287,9 +206,8 @@ function Table({ columns, data }) {
     )
   }
 
-function Items(god) {
-  const pagegod = god.god.replaceAll("_", " ");
-  const role = god.role;
+function Items(pagegod) {
+  console.log(pagegod)
   var [url, seturl] = useState(0);
   const [displaygod, setgod] = useState(0);
   const [abilities, setabilities] = useState([]);
@@ -317,11 +235,11 @@ function Items(god) {
     "Grandmaster",
     "All_Ranks",
   ]);
-  const [dispRole, setrole] = useState(role);
+  const [dispRole, setrole] = useState(pagegod.role);
   const [dispRank, setrank] = useState("All Ranks");
 
   useEffect(()=> {
-      fetch("/".concat(pagegod, "/items/", dispRole, "/", dispRank, "/", patch)).then((res) =>
+      fetch("/".concat(pagegod.pagegod, "/items/", dispRole, "/", dispRank, "/", patch)).then((res) =>
       res.json().then((data) => {
         setSlotOneItems([])
         setSlotTwoItems([])
@@ -394,31 +312,6 @@ function Items(god) {
       }))
   }, [dispRole, dispRank, patch])
 
-  useEffect(() => {
-    fetch("/".concat(pagegod)).then((res) =>
-      res.json().then((data) => {
-        setgod(pagegod);
-        seturl(data.url);
-      })
-    );
-  }, []);
-
-  useEffect(() => {
-    fetch("/".concat(pagegod, "/abilities")).then((res) =>
-      res.json().then((data) => {
-        Object.keys(data).forEach((key) => {
-          setabilities((abilities) => [
-            ...abilities,
-            {
-              name: data[key].name,
-              url: data[key].url,
-            },
-          ]);
-        });
-      })
-    );
-  }, []);
-
   const columns = React.useMemo(
     () => [
       {
@@ -440,67 +333,14 @@ function Items(god) {
 
   return (
     <>
-      <div className="Godpage">
-        <div className="container">
-          <ImageDiv className="god-container build_page" url={url}>
-            <div className="row align-items-center my-5">
-              {/* <div class="col-lg-5"></div> */}
-              <h1 className="font-weight-light"></h1>
-
-              <GodHeader
-                god={displaygod}
-                url={url}
-                tier="S"
-                role={dispRole}
-                rank={dispRank}
-                abilities={abilities}
-                patch={patch}
-              />
-              <div className="filter-manager">
-                <div className="filter-width-wrapper">
-                  <div className="filter-manager_container">
-                    <div className="filter-manager_label">
-                      <span style={{ color: "white" }}>Stat Filters</span>
-                    </div>
-                    <div className="role-filter-container">
-                      {roles.map((role) => {
-                        return (
-                          <FilterForm
-                            role={role}
-                            god={pagegod}
-                            roleState={setrole}
-                          />
-                        );
-                      })}
-                    </div>
-                    {ranks.map((rank) => {
-                      return (
-                        <FilterForm
-                          role={rank.replaceAll("_", " ")}
-                          god={pagegod}
-                          roleState={setrank}
-                        />
-                      );
-                    })}
-                    <DropDownFilter changePatch={setPatch} patch={"8.10"} style={{color: "white"}}/>
-                      <Link to={"/".concat(displaygod, "/", "items")}>
-                        <p>Items</p>
-                      </Link>
-                  </div>
-                </div>
-              </div>
-              <div class="items-table-container">
-                <Table columns={columns} data={slotOneItems} />
-                <Table columns={columns} data={slotTwoItems} />
-                <Table columns={columns} data={slotThreeItems} />
-                <Table columns={columns} data={slotFourItems} />
-                <Table columns={columns} data={slotFiveItems} />
-                <Table columns={columns} data={slotSixItems} />
-              </div>
-            </div>
-          </ImageDiv>
-        </div>
-      </div>
+    <div class="items-table-container">
+      <Table columns={columns} data={slotOneItems} />
+      <Table columns={columns} data={slotTwoItems} />
+      <Table columns={columns} data={slotThreeItems} />
+      <Table columns={columns} data={slotFourItems} />
+      <Table columns={columns} data={slotFiveItems} />
+      <Table columns={columns} data={slotSixItems} />
+    </div>
     </>
   );
 }

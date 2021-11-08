@@ -41,6 +41,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
+
 export default class DropDownFilter extends React.Component {
     constructor(props) {
       super(props);
@@ -63,13 +64,17 @@ export default class DropDownFilter extends React.Component {
       return (
         <Box sx={{ minWidth: 120 }}>
           <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Patch</InputLabel>
+            <InputLabel sx={{color: "white"}}>Patch</InputLabel>
             <Select
               labelId="demo-simple-select-label"
-              id="demo-simple-select"
+              id="patch-filter"
               value={this.props.role}
               label="Patch"
               onChange={this.handleChange}
+              sx= {{
+                color: "white",
+                bgcolor: "#191937"
+              }}
             >
               <MenuItem value={"8.10"}>8.10</MenuItem>
               <MenuItem value={"8.9"}>8.9</MenuItem>

@@ -16,7 +16,7 @@ export default function winRateColor(winRate) {
       color = "#3273fa";
     }
     else if (winRate >= 56){
-      color = "#ff9b00";
+      color = "#70ea0f";
     }
     return color;
   }

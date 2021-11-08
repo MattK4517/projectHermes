@@ -48,7 +48,7 @@ def calc_total_matches(ranks, db, rank="All Ranks"):
         total_games = 0
         for god in godsDict:
             mycol = mydb[god]
-            myquery = {"rank": rank}
+            myquery = {"rank": rank, "patch": "8.10"}
             games = 0
             for x in mycol.find(myquery, {"_id": 0}):
                 if x["matchId"] not in matchIds:
@@ -61,8 +61,8 @@ def calc_total_matches(ranks, db, rank="All Ranks"):
 
 def insert_games(rank, games):
     mydb = client["Matches"]
-    mycol = mydb[f"Total_Matches - {rank}"]
-    mycol.insert_one({"Total_Matches": games})
+    mycol = mydb[f"Total_Matches"]
+    mycol.insert_one({"Total_Matches": games, "rank": rank, "patch": "8.10"})
 
 def add_new_urls(client, god):
     god_info_db = client["God_Data"]
@@ -156,9 +156,7 @@ def add_gold_eff(client, db, col, field_key):
         add_patch_field(client, db, col, matchId, gold_eff, field_key)
 
 if __name__ == "__main__":
-    mydb = client["Matches"]
-    mycol = mydb["8.10 Matches"]
-    print(mycol.count_documents({"Entry_Datetime": "10/28/2021"}))
+    calc_total_matches(ranks, "single_items")
 
 
     # fields = ["carryScore","damageScore", "levelDiff", "killPart", "efficiency"]

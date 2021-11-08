@@ -1102,6 +1102,7 @@ figure.snip0015:hover figcaption::before {
 /* ITEMS */
 
 .items-table-container {
+  position: absolute;
   display: grid;
   grid-template-rows: auto 1fr;
   grid-template-columns: repeat(6,1fr);
@@ -1109,6 +1110,7 @@ figure.snip0015:hover figcaption::before {
   margin-top: 24px;
   width: 1200px;
   justify-content: space-between;
+  left: 22%;
 }
 
 /* .grid-block.items-1 {
@@ -1312,4 +1314,16 @@ figure.snip0015:hover figcaption::before {
 
 .filler {
   color: white;
+}
+
+.header-items{
+  padding-right: 10px;
+}
+
+.header-games{
+  padding-right: 10px;
+}
+
+.header-winrate{
+  padding-right: 10px;
 }
