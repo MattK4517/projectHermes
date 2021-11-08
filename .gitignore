@@ -1,6 +1,19 @@
 cred.txt
+<<<<<<< HEAD
 /__pycache__/
 PYREZ_LOG_FILE.log
 .vscode/
 token.txt
 venv
+=======
+PYREZ_LOG_FILE.log
+__pycache__
+.vscode/
+token.txt
+__pycache__/analyze.cpython-37.pyc
+__pycache__/data_pull_insert.cpython-37.pyc
+__pycache__/flaskControl.cpython-37.pyc
+__pycache__/main.cpython-37.pyc
+venv
+charts
+>>>>>>> 9cff3faaa0ee484d7c838c84dcfbcb29f299d16b

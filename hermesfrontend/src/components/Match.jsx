@@ -318,6 +318,30 @@ function CustomizedAccordions(player) {
                   </div>
                 </div>
                 <div label="Scoring">
+                  <div className="scoring-container">
+                    <div className="stats-container">
+                      <div className="header-section">
+                      <div style={{height: "32px", width: "32px"}}>
+                        <img src={`https://webcdn.hirezstudios.com/smite/god-icons/${player.god.replaceAll(" ", "-").toLowerCase()}.jpg`} alt={player.god} 
+                        style={{ height: "32px", width: "32px", transformOrigin: "0px 0px 0px" }}/>
+                      </div>
+                      <div>Carry Score for: {player.playerName}</div>
+                      </div>
+                      <div className="substats-container">
+                        <div className="hardcarry-section">
+                          <div className="substats-header">
+                            <div style={{marginLeft: "10px"}}>Hard Carry</div>
+                            <div className="avg-box">
+                              <div>Avg: 75</div>
+                            </div>
+                            <div className="hardcarry-score">{((player.carryScore + player.damageScore + player.levelDiff) / 3).toFixed()}</div>
+                          </div>
+                        </div>
+                        <div className="teamplay-section"></div>
+                      </div>
+                      <div>{player.carryScore}, {player.damageScore}, {player.levelDiff}, {player.killPart}</div>
+                    </div>
+                  </div>
                 </div>
               </TierListTabs>
             </div>
@@ -492,6 +516,7 @@ function Match() {
   const [mmrLoser, setMMRLoser] = useState([0, 0, 0, 0, 0]);
   const [players, setPlayers] = useState([]);
   const [date, setMatchDate] = useState("");
+
   useEffect(() => {
     fetch("/getmatch/".concat(match)).then((res) =>
       res.json().then((data) => {
@@ -500,7 +525,6 @@ function Match() {
         setMMRWinner([0, 0, 0, 0, 0]);
         setMMRLoser([0, 0, 0, 0, 0]);
         setPlayers([])
-        console.log(data);
         let bans = [];
         let mmrs = []
         Object.keys(data).forEach((key) => {
@@ -554,6 +578,10 @@ function Match() {
                   selfHealing: data[key]["Healing_Player_Self"],
                   skin: data[key]["Skin"],
                   wardsPlaced: data[key]["Wards_Placed"],
+                  carryScore: data["carryScore"][data[key]["Win_Status"]][data[key]["Role"]]["goldShare"],
+                  damageScore: data["damageScore"][data[key]["Win_Status"]][data[key]["Role"]]["damageShare"],
+                  killPart: data["killPart"][data[key]["Win_Status"]][data[key]["Role"]]["killShare"],
+                  levelDiff: data["levelDiff"][data[key]["Win_Status"]][data[key]["Role"]]["level_diff"],
                 }
               ])
           }

@@ -1,5 +1,5 @@
 import pyrez
-from datetime import datetime
+from datetime import datetime, timedelta
 from pyrez.api import SmiteAPI
 import pymongo
 import random
@@ -7,9 +7,12 @@ import time
 import analyze as anlz
 from pyrez.models import Smite
 from pyrez.models.MatchHistory import MatchHistory
+from pytz import timezone
 
 client = pymongo.MongoClient(
     "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
+
+eastern = timezone('US/Eastern')
 
 
 
@@ -50,6 +53,7 @@ def normalize_godId(id):
         3509: "Chernobog",
         2075: "Chiron",
         1920: "Chronos",
+        4010: "Cliodhna",
         3945: "Cthulhu",
         2319: "Cu Chulainn",
         1778: "Cupid",
@@ -176,6 +180,7 @@ def create_player_dict(player):
     playerDict["Item_Active_2"] = player.itemActive2
     playerDict["Item_Active_3"] = player.itemActive3
     playerDict["Item_Active_4"] = player.itemActive4
+    playerDict["Kills_Bot"] = player["Kills_Bot"]
     playerDict["Killing_Spree"] = player.killingSpree
     playerDict["Kills_Double"] = player.killsDouble
     playerDict["Kills_Fire_Giant"] = player["Kills_Fire_Giant"]
@@ -212,9 +217,9 @@ def create_player_dict(player):
     playerDict["godBuild"] = anlz.get_build_stats(client, build)
     return playerDict
 
-def create_match_dict(match):
+def create_match_dict(match, patch):
     match_dict = {}
-    match_dict["Patch"] = "8.9"
+    match_dict["Patch"] = patch
     match_dict["Entry_Datetime"] = match.entryDatetime.split()[0]
     match_dict["MatchId"] = match.matchId
     match_dict["Match_Duration"] = match.matchDuration
@@ -231,7 +236,6 @@ def create_match_dict(match):
     match_dict["Ban9"]  = match["Ban10"]
     match_dict["First_Ban_Side"] = match["First_Ban_Side"]
     return match_dict
-
 
 def create_sets(data):
     sets = []
@@ -250,7 +254,7 @@ def get_new_id(client, smite_api):
     gods = smite_api.getGods()
     for god in range(len(gods)):
         if gods[god]["latestGod"] == "y":
-            mycol = mydb["Charybdis"]
+            mycol = mydb["Cliodhna"]
             data = create_god_data_dict(gods[god])
             mycol.insert_one(data)
 
@@ -319,8 +323,9 @@ def create_god_data_dict(data):
     return ret_data
 
 def get_date():
-    time = datetime.now()
-    return f"{time.year}{time.month}{time.day}"
+    time = datetime.now(eastern)
+    yesterday = time - timedelta(days = 1)
+    return f"{yesterday.year}{yesterday.month}{yesterday.day}"
 
 def run_pull(patch, date=get_date()):
     starttime = datetime.now()
@@ -337,26 +342,29 @@ def run_pull(patch, date=get_date()):
     # set_matches = {}
     set_length = 10
     inserted_count = 0
-    # match_ids_len = len(match_ids)
-    all_sets = create_sets(match_ids)
-    # total = 0
-    for set in all_sets:
-        match_details = smite_api.getMatch(set)
-        for i in range(len(match_details) // 10):
-            match_dict = create_match_dict(match_details[i*set_length])
-            for k in range(10):
-                player = create_player_dict(match_details[(i*10) + k])
-                match_dict["player"+str(k)] = player
-            carry_score = anlz.get_carry_score(match_dict)
-            match_dict["carryScore"] = carry_score["goldScore"]
-            match_dict["damageScore"] = carry_score["damageScore"]
-            match_dict["levelDiff"] = carry_score["levelDiff"]
-            match_dict["killPart"] = carry_score["killPart"]
-            match_dict["efficiency"] = anlz.get_gold_eff(match_dict["killPart"], match_dict["carryScore"])
-            mycol.insert_one(match_dict)
-            inserted_count += 1
+    match_ids_len = len(match_ids)
+    print(match_ids_len)
+#     all_sets = create_sets(match_ids)
+#     # total = 0
+#     for set in all_sets:
+#         match_details = smite_api.getMatch(set)
+#         for i in range(len(match_details) // 10):
+#             match_dict = create_match_dict(match_details[i*set_length])
+#             for k in range(10):
+#                 player = create_player_dict(match_details[(i*10) + k])
+#                 match_dict["player"+str(k)] = player
+#             carry_score = anlz.get_carry_score(match_dict)
+#             match_dict["carryScore"] = carry_score["goldScore"]
+#             match_dict["damageScore"] = carry_score["damageScore"]
+#             match_dict["levelDiff"] = carry_score["levelDiff"]
+#             match_dict["killPart"] = carry_score["killPart"]
+#             match_dict["efficiency"] = anlz.get_gold_eff(match_dict["killPart"], match_dict["carryScore"])
+#             mycol.insert_one(match_dict)
+#             inserted_count += 1
 
 
-    print(f"{date} Pull Completed in " + str(datetime.now() - starttime))
-# print(inserted_count)
+#     print(f"{date} Pull Completed in " + str(datetime.now() - starttime))
+# # print(inserted_count)
 # print("error %" + str(round(100 - inserted_count/match_ids_len * 100, 2)))
+
+run_pull("8.10", get_date())
