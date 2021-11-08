@@ -7,8 +7,8 @@ import analyze as anlz
 import pymongo
 from datetime import datetime
 from constants import roles, patch
-from data_pull_insert import run_pull, get_new_id
-from data_pull_formatting_rewrite import run_format
+# from data_pull_insert import run_pull, get_new_id
+# from data_pull_formatting_rewrite import run_format
 import pandas as pd
 client = pymongo.MongoClient(
     "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
