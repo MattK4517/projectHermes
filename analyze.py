@@ -540,7 +540,6 @@ def check_roles(match_roles):
 
 def get_tier(win_rate, pick_rate, ban_rate):
     tier = (win_rate) + (pick_rate) + (.5 * ban_rate)
-    print(tier)
     if tier < 55:
         tier_letter = "D"
 
@@ -553,7 +552,6 @@ def get_tier(win_rate, pick_rate, ban_rate):
     else:
         tier_letter = "S+"
 
-    print(tier_letter)
     return tier_letter
 
 # if __name__ == "__main__":
