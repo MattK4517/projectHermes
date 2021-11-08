@@ -368,6 +368,14 @@ def get_combat_stats(client, god, role, patch, rank="All Ranks"):
 
     return combat_stats
 
+def get_objective_stats(client, god, role, patch, rank="All Ranks"):
+    mydb = client["single_combat_stats"]
+    mycol = mydb[god]
+    if rank != "All Ranks":
+        myquery = { "role": role, "rank": rank, "patch": patch}
+    else:
+        myquery = { "role": role, "patch": patch}
+
 def get_build_stats(client, build):
     item_data_db = client["Item_Data"]
     ret_build = {slot: {} for slot in slots}

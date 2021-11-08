@@ -377,7 +377,7 @@ function Items(god) {
   var [url, seturl] = useState(0);
   const [displaygod, setgod] = useState(0);
   const [abilities, setabilities] = useState([]);
-  const [patch, setPatch] = useState("8.9")
+  const [patch, setPatch] = useState("8.10")
   const [slotOneItems, setSlotOneItems] = useState([]);
   const [slotTwoItems, setSlotTwoItems] = useState([]);
   const [slotThreeItems, setSlotThreeItems] = useState([]);
@@ -575,10 +575,10 @@ function Items(god) {
                             <StyledMenu {...bindMenu(popupState)}>
                               <div>
                                 <MenuItem onClick={popupState.close}>
-                                  <DropDownFilter changePatch={setPatch} patch={"8.9"}/>
+                                  <DropDownFilter changePatch={setPatch} patch={"8.10"}/>
                                 </MenuItem>
                                 <MenuItem onClick={popupState.close}>
-                                  <DropDownFilter changePatch={setPatch} patch={"8.8"}/>
+                                  <DropDownFilter changePatch={setPatch} patch={"8.9"}/>
                                 </MenuItem>
                               </div>
                             </StyledMenu>

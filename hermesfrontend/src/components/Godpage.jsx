@@ -601,9 +601,6 @@ function Godpage(god) {
                                 <MenuItem onClick={popupState.close}>
                                   <DropDownFilter changePatch={setPatch} patch={"8.9"}/>
                                 </MenuItem>
-                                <MenuItem onClick={popupState.close}>
-                                  <DropDownFilter changePatch={setPatch} patch={"8.8"}/>
-                                </MenuItem>
                               </div>
                             </StyledMenu>
                           </React.Fragment>
