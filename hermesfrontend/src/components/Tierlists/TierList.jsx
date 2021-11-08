@@ -443,7 +443,6 @@ function TierList(tableType) {
       res.json().then((data) => {
         setTotalData([]);
         Object.keys(data).forEach((key, index) => {
-          if (index < 15){
               Object.keys(data[key]).forEach((godData) => {
                 setTotalData((totalData) => [
                   ...totalData,
@@ -465,7 +464,6 @@ function TierList(tableType) {
                   },
                 ]);
             });
-          }
         });
       })
     );
