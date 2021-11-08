@@ -28,6 +28,7 @@ def get_pb_rate(client, god, rank, role, patch):
     godBans = 0
     bandb = client["single_god_bans"]
     bancol = bandb[god]
+    startime = datetime.now()
     totalMatches = get_total_matches(client, rank, patch)
     if rank == "All Ranks":
         myquery = {"patch": patch}
@@ -303,15 +304,11 @@ def get_winrate(client, god, role, patch, rank="All Ranks"):
 
 def get_total_matches(client, rank, patch):
     mydb = client["Matches"]
+    mycol = mydb["Total_Matches"]
     total_games = 0
-    if rank != "All Ranks":
-        mycol = mydb[f"Total_Matches - {rank}"]
-        for x in mycol.find():
-            games = x
-        total_games = games["Total_Matches"]
-    else:
-        mycol = mydb["{} Matches".format(patch)]
-        total_games = mycol.count_documents({})
+    myquery = {"rank": rank, "patch": patch}
+    for x in mycol.find(myquery, {"Total_Matches": 1, "_id": 0}):
+        total_games = x["Total_Matches"]
     return total_games
 
 def get_combat_stats(client, god, role, patch, rank="All Ranks"):
@@ -540,9 +537,30 @@ def check_roles(match_roles):
     if match_roles != ['Carry', 'Carry', 'Jungle', 'Jungle', 'Mid', 'Mid', 'Solo', 'Solo', 'Support', 'Support']:
         return False
     return True
-# client = pymongo.MongoClient(
-#     "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
 
+def get_tier(win_rate, pick_rate, ban_rate):
+    tier = (win_rate) + (pick_rate) + (.5 * ban_rate)
+    print(tier)
+    if tier < 55:
+        tier_letter = "D"
+
+    elif tier < 57:
+        tier_letter = "A"
+
+    elif tier < 59:
+        tier_letter = "S"
+
+    else:
+        tier_letter = "S+"
+
+    print(tier_letter)
+    return tier_letter
+
+# if __name__ == "__main__":
+#     client = pymongo.MongoClient(
+#         "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
+#     print(get_winrate(client, "Achilles", "Solo", "8.10"))
+#     print(get_pb_rate(client, "Achilles", "All Ranks", "Solo", "8.10"))
 
 # print(get_worst_matchups_rewrite(client, "Camazotz", "Solo"))
 

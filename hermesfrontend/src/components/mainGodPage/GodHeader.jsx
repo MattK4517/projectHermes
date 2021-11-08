@@ -39,7 +39,7 @@ export default class GodHeader extends React.Component {
               <h1 className="god-label">
                 <span><b style={{color: "white"}}>{this.props.god}</b></span>
                 <span>
-                &nbsp;Build for {this.props.role}, {this.props.rank}
+                &nbsp;{this.props.tab} for {this.props.role}, {this.props.rank}
                 </span>
               </h1>
               <div className="god-header-row2">
