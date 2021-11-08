@@ -62,7 +62,6 @@ function Godpage(god) {
   useEffect(() => {
     fetch("/main/".concat(pagegod, "/", dispRole, "/", dispRank, "/", patch)).then((res) =>
       res.json().then((data) => {
-        console.log(data)
         setgod(pagegod);
         seturl(data.url);
         setbanrate(((data.godBans / data.totalMatches) * 100).toFixed(2));

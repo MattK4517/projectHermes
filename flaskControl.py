@@ -148,6 +148,7 @@ def get_build_path(god, role, rank, patch):
     mydb = client["single_items"]
     mycol = mydb[god]
     index = 0
+    games = 0
     builds = {}
     if "All" not in rank:
         myquery = {"role_played": role, "patch": patch, "rank": rank}
@@ -174,6 +175,7 @@ def get_build_path(god, role, rank, patch):
             {"$sort": {"count": 1}},
         ]
     ):
+        games += x["count"]
         if "{},{},{}".format(x["_id"]["slot1"], x["_id"]["slot2"], x["_id"]["slot3"]) not in builds.keys():
             builds["{},{},{}".format(x["_id"]["slot1"], x["_id"]["slot2"], x["_id"]["slot3"])] = { 
                 "slot1": x["_id"]["slot1"],
@@ -187,16 +189,11 @@ def get_build_path(god, role, rank, patch):
         elif x["_id"]["win_status"] == "Loser":
             builds["{},{},{}".format(x["_id"]["slot1"], x["_id"]["slot2"], x["_id"]["slot3"])]["losses"] += x["count"]
         index += 1
+    top_five = {}
+    for x in list(builds)[-10:]:
+            top_five[x] = builds[x]
 
-    to_remove = []
-    for build in builds:
-        if (builds[build]["wins"] + builds[build]["losses"]) < (index * 1.5/100):
-            to_remove.append(build)
-    
-    for element in to_remove:
-        del builds[element]
-
-    test_sort = OrderedDict(sorted(builds.items(),
+    test_sort = OrderedDict(sorted(top_five.items(),
             key = lambda x: getitem(x[1], "wins")))
     builds = dict(test_sort)
 
