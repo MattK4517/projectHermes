@@ -142,7 +142,7 @@ const godsDict = {
   }
   let routes = [
     {
-      path: "/Home",
+      path: "/",
       component: <Home />,
     },
     {
@@ -191,7 +191,7 @@ const routeComponents = routes.map(({path, component}, key) => <Route exact path
       >
         <Toolbar>
           <Typography variant="h6" noWrap component="div">
-          <Link to={"/Home"}>SmiteStats.gg</Link>
+          <Link to={"/"}>SmiteStats.gg</Link>
           </Typography>
         </Toolbar>
       </AppBar>
@@ -218,14 +218,23 @@ const routeComponents = routes.map(({path, component}, key) => <Route exact path
             color: "#bbbedb",
             bgcolor: "#17172e",
         }}>
-          {['Home', 'Gods', 'Tierlist', 'Match'].map((text, index) => (
-              <>
-            <Link key = {index} to={"/".concat((text).replaceAll(" ","_"))} 
-            className="god-link"
-            >{text}</Link>
-            <br></br>
-            </>
-          ))}
+          {['Home', 'Gods', 'Tierlist', "Contact",'Match'].map((text, index) => {
+            let route ="";
+            if (text === "Home"){
+              route = "";
+            }
+            else {
+              route = text;
+            }
+            return (
+                <>
+              <Link key = {index} to={"/".concat((route).replaceAll(" ","_"))} 
+              className="god-link"
+              >{text}</Link>
+              <br></br>
+              </>
+            )
+    })}
         </List>
         <Divider />
       </Drawer>
