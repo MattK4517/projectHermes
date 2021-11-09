@@ -8,6 +8,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { green } from '@mui/material/colors';
+import { Paper } from "@mui/material";
 
 const theme = createTheme({
   breakpoints: {
