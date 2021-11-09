@@ -116,7 +116,7 @@ if __name__ == "__main__":
                     color = "9a1af0"
                 elif actgod in Warriors:
                     color = "fc0303"
-                embed=discord.Embed(title=actgod+" "+role+" Worst Matchups", description="[See more info here](https://www.smitestats.gg/#/{})".format(actgod.replace(" ", "_")), color = int(color, base=16))
+                embed=discord.Embed(title=actgod+" "+role+" Build Paths", description="[See more info here](https://www.smitestats.gg/#/{})".format(actgod.replace(" ", "_")), color = int(color, base=16))
                 embed.set_thumbnail(url=iconURL)
                 for i, path in enumerate(data):
                     if i < 2:
