@@ -8,11 +8,8 @@ import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-<<<<<<< HEAD
 import MenuIcon from '@mui/icons-material/Menu';
 
-=======
->>>>>>> 0f528e3159f08bb1122ecd667120ddd4af6603db
 import { Link } from "react-router-dom";
 import { HashRouter as HashRouter, Switch, Route} from "react-router-dom";
 import { Godpage, Gods, TierListPage, Match, Home, ContactForm, Items } from "./"
@@ -179,14 +176,13 @@ const Root = styled(AppBar)(({ theme }) => ({
   padding: theme.spacing(1),
   [theme.breakpoints.down('sm')]: {
     backgroundColor: "#0b0b23",
-    width: "100%"
   },
   [theme.breakpoints.up('sm')]: {
     backgroundColor: "#0b0b23",
   },
   [theme.breakpoints.up('lg')]: {
     backgroundColor: "#0b0b23",
-  },
+  }
 }));
 
 const CustDrawer = styled(Drawer)(({ theme }) => ({
@@ -196,11 +192,18 @@ const CustDrawer = styled(Drawer)(({ theme }) => ({
     display:  "none",
   },
   [theme.breakpoints.up('sm')]: {
-    backgroundColor: "#00FFFF",
+    backgroundColor: "#FFF",
+    width: "225px"
   },
   [theme.breakpoints.up('lg')]: {
     backgroundColor: "#0000FF",
   },
+  '& .MuiDrawer-paper': {
+    [theme.breakpoints.down("md")]: {
+      bgColor: "#ff0000"
+      // width: "225px",
+    }
+  }
 }));
 
 const Hamburger = styled("div")(({ theme }) => ({
@@ -279,12 +282,10 @@ const routeComponents = routes.map(({path, component}, key) => <Route exact path
       </Root>
       <CustDrawer
         sx={{
-          width: "drawer.width",
+          width: "drawer.paper.width",
           flexShrink: 0,
           '& .MuiDrawer-paper': {
-            width: 225,
-            boxSizing: 'border-box',
-            bgcolor: "#17172e",
+            bgColor: "drawer.paper.bgColor"
           },
         }}
         variant="permanent"
