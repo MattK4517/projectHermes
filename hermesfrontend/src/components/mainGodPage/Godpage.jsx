@@ -26,6 +26,7 @@ const ImageDiv = styled.div`
         : "https://i.ytimg.com/vi/xAPsmI_zDZs/maxresdefault.jpg"});
 `;
 
+
 function Godpage(god) {
   const pagegod = god.god.replaceAll("_", " ");
   const role = god.role;

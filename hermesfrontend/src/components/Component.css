@@ -563,12 +563,9 @@ a, a:active, a:focus, a:hover, a:visited {
   left: 0;
   height: 100%;
   width: 100%;
-
   background-image: url("https://i.imgur.com/MBYqznN.jpg");
   background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-position-x: center;
-  background-position-y: 80px;
+  background-size: 100%;
 }  
 
 .stats-tables-page {

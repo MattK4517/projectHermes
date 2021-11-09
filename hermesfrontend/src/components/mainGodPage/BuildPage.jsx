@@ -4,6 +4,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 import winRateColor from "./WinRateColor";
+import { styled } from "@mui/system";
 
 const HtmlTooltip = withStyles((theme) => ({
   tooltip: {
@@ -86,10 +87,29 @@ render() {
 }
 }
 
+const CustHeader = styled("div")(({ theme }) => ({
+  padding: theme.spacing(1),
+  [theme.breakpoints.down('sm')]: {
+    backgroundColor: "#191937",
+    display:  "none",
+  },
+  [theme.breakpoints.up('sm')]: {
+    backgroundColor: "#191937",
+  },
+  [theme.breakpoints.up('lg')]: {
+    backgroundColor: "#191937",
+  },
+  [theme.breakpoints.down('xl')]: {
+    width: "90%"
+    // backgroundColor: "#FFF"
+  },
+}));
+
+
 class GodRankStats extends React.Component {
     render() {
       return (
-        <div className="content-section god-rank-stats">
+        <CustHeader className="content-section god-rank-stats">
           <div className="win-rate">
             <div className="value" style={{color: this.props.colorStyle}}>{this.props.winrate}%</div>
             <div className="label">Win Rate</div>
@@ -109,7 +129,7 @@ class GodRankStats extends React.Component {
             <div className="value">{this.props.games}</div>
             <div className="label">Matches</div>
           </div>
-        </div>
+        </CustHeader>
       );
     }
   }

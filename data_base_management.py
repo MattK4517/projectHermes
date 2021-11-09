@@ -156,7 +156,10 @@ def add_gold_eff(client, db, col, field_key):
         add_patch_field(client, db, col, matchId, gold_eff, field_key)
 
 if __name__ == "__main__":
-    calc_total_matches(ranks, "single_items")
+    mydb = client["Matches"]
+    mycol = mydb["8.10 Matches"]
+    print(mycol.count_documents({"Entry_Datetime": "11/5/2021"}))
+    # calc_total_matches(ranks, "single_items")
 
 
     # fields = ["carryScore","damageScore", "levelDiff", "killPart", "efficiency"]

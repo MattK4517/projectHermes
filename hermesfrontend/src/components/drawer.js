@@ -8,17 +8,15 @@ import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import MenuIcon from '@mui/icons-material/Menu';
 
 import { Link } from "react-router-dom";
 import { HashRouter as HashRouter, Switch, Route} from "react-router-dom";
 import { Godpage, Gods, TierListPage, Match, Home, ContactForm, Items } from "./"
 import { color } from '@mui/system';
-
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 
 
@@ -174,33 +172,114 @@ const godsDict = {
   ]
   })
 
-const drawerWidth = 200;
+const Root = styled(AppBar)(({ theme }) => ({
+  padding: theme.spacing(1),
+  [theme.breakpoints.down('sm')]: {
+    backgroundColor: "#0b0b23",
+    width: "100%"
+  },
+  [theme.breakpoints.up('sm')]: {
+    backgroundColor: "#0b0b23",
+  },
+  [theme.breakpoints.up('lg')]: {
+    backgroundColor: "#0b0b23",
+  },
+}));
 
+const CustDrawer = styled(Drawer)(({ theme }) => ({
+  padding: theme.spacing(1),
+  [theme.breakpoints.down('sm')]: {
+    backgroundColor: "#FF0000",
+    display:  "none",
+  },
+  [theme.breakpoints.up('sm')]: {
+    backgroundColor: "#00FFFF",
+  },
+  [theme.breakpoints.up('lg')]: {
+    backgroundColor: "#0000FF",
+  },
+}));
+
+const Hamburger = styled("div")(({ theme }) => ({
+  [theme.breakpoints.down('sm')]: {
+    backgroundColor: "#FFF",
+    color: "000",
+    display: "block",
+    marginRight: "25px"
+  },
+  [theme.breakpoints.up('sm')]: {
+    backgroundColor: "#00FFFF",
+    display:  "none",
+  },
+  [theme.breakpoints.up('lg')]: {
+    backgroundColor: "#0000FF",
+    display:  "none",
+  },
+}));
+
+
+const drawerWidth = 200;
 export default function PermanentDrawerLeft() {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 const routeComponents = routes.map(({path, component}, key) => <Route exact path={path} component={() => component} key={key} />);
   return (
     <Box sx={{ display: 'flex'}}>
-      <CssBaseline />
-      <AppBar
+      {/* <CssBaseline /> */}
+      <Root
         position="fixed"
         sx={{ 
-            width: `calc(100% - ${drawerWidth}px)`,
+            width: `calc(100% - ${drawerWidth+20}px)`,
             ml: `${drawerWidth}px`,
-            bgcolor: "#0b0b23",
+            bgcolor: "drawer.backgroundColor",
          }}
       >
         <Toolbar>
-          <Typography variant="h6" noWrap component="div">
+          <Typography variant="h6" noWrap component="div" 
+          sx={{
+            display: "flex"
+          }}
+          >
+          <Hamburger>
+          <Button
+            id="basic-button"
+            aria-controls="basic-menu"
+            aria-haspopup="true"
+            aria-expanded={open ? 'true' : undefined}
+            onClick={handleClick}
+          >
+            <MenuIcon />
+          </Button>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+          >
+            <MenuItem onClick={handleClose}><Link to={"/"}>Gods</Link></MenuItem>
+            <MenuItem onClick={handleClose}><Link to={"/Gods"}>Gods</Link></MenuItem>
+            <MenuItem onClick={handleClose}><Link to={"/tierlist"}>tierlist</Link></MenuItem>
+          </Menu>
+        </Hamburger>
           <Link to={"/"}>SmiteStats.gg</Link>
           </Typography>
         </Toolbar>
-      </AppBar>
-      <Drawer
+      </Root>
+      <CustDrawer
         sx={{
-          width: drawerWidth,
+          width: "drawer.width",
           flexShrink: 0,
           '& .MuiDrawer-paper': {
-            width: drawerWidth,
+            width: 225,
             boxSizing: 'border-box',
             bgcolor: "#17172e",
           },
@@ -237,17 +316,17 @@ const routeComponents = routes.map(({path, component}, key) => <Route exact path
     })}
         </List>
         <Divider />
-      </Drawer>
+      </CustDrawer>
       <Box
         component="main"
         sx={{ flexGrow: 1, width: "100%"}}
       >
         <Toolbar />
-        <Typography>
-            <Switch>
-                {routeComponents}
-            </Switch>
-        </Typography>
+            <Typography>
+                <Switch>
+                    {routeComponents}
+                </Switch>
+            </Typography>
       </Box>
     </Box>
   );
