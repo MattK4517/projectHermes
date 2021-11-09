@@ -8,8 +8,11 @@ import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
+<<<<<<< HEAD
 import MenuIcon from '@mui/icons-material/Menu';
 
+=======
+>>>>>>> 0f528e3159f08bb1122ecd667120ddd4af6603db
 import { Link } from "react-router-dom";
 import { HashRouter as HashRouter, Switch, Route} from "react-router-dom";
 import { Godpage, Gods, TierListPage, Match, Home, ContactForm, Items } from "./"
