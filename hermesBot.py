@@ -27,7 +27,7 @@ if __name__ == "__main__":
         # check out more by print(dir(message)) for example.
         print(f"{message.guild}: {message.channel}: {message.author}: {message.author.name}: {message.content}")
 
-        if message.content.startswith("$build"):
+        if message.content.lower().startswith("$build"):
             m = message.content.split(" ")
             if len(m) < 3:
                 await message.channel.send("Must use $god role format")
@@ -63,7 +63,7 @@ if __name__ == "__main__":
                     
                 await message.channel.send(embed=embed)
         
-        if message.content.startswith("$matchups"):
+        if message.content.lower().startswith("$matchups"):
             m = message.content.split(" ")
             if len(m) < 3:
                 await message.channel.send("Must use $god role format")
@@ -93,7 +93,7 @@ if __name__ == "__main__":
                         embed.add_field(name=matchup, value="Games Played: "+str(data[matchup]["timesPlayed"])+"\nWR: "+str(data[matchup]["winRate"])+"%", inline=True)
                 await message.channel.send(embed=embed)
         
-        if message.content.startswith("$paths"):
+        if message.content.lower().startswith("$paths"):
             m = message.content.split(" ")
             if len(m) < 3:
                 await message.channel.send("Must use $god role format")
