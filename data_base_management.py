@@ -10,10 +10,7 @@ import analyze as anlz
 from constants import godsDict, roles, ranks
 from pandas.io.json import json_normalize
 import time
-
-client = pymongo.MongoClient(
-    "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
-
+from main import client
 
 def clear_nonmatches(client):
     db_list = client.list_database_names()
