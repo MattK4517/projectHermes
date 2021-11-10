@@ -138,7 +138,7 @@ function Godpage(god) {
                   </div>
                 </div>
               </div>
-              <BasicTabs 
+              {/* <BasicTabs 
                 pagegod={pagegod} 
                 role={dispRole} 
                 rank={dispRank} 
@@ -147,7 +147,7 @@ function Godpage(god) {
                 winRate={winrate}
                 pickRate={pickrate}
                 banRate={banrate}
-                />
+                /> */}
             </div>
           </ImageDiv>
         </div>

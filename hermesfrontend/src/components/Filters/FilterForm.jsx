@@ -1,7 +1,10 @@
 import React from "react";
 import { withStyles } from "@material-ui/styles";
 import { Tooltip } from "@material-ui/core";
-
+import { styled } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
 const HtmlTooltip = withStyles((theme) => ({
     tooltip: {
       backgroundColor: "#06061f",
@@ -12,16 +15,33 @@ const HtmlTooltip = withStyles((theme) => ({
     },
   }))(Tooltip);
   
-  const EnsureItem = (data, item) => {
-    let ensured;
-    data.map((itemdata, index) => {
-      if (itemdata.itemName === item) {
-        ensured = itemdata;
-        return ensured;
-      }
-    });
-    return ensured;
-  };
+  // const EnsureItem = (data, item) => {
+  //   let ensured;
+  //   data.map((itemdata, index) => {
+  //     if (itemdata.itemName === item) {
+  //       ensured = itemdata;
+  //       return ensured;
+  //     }
+  //   });
+  //   return ensured;
+  // };
+
+const Hamburger = styled("div")(({ theme }) => ({
+  [theme.breakpoints.down('sm')]: {
+    backgroundColor: "#0b0b23",
+    color: "000",
+    display: "block",
+    marginRight: "25px"
+  },
+  [theme.breakpoints.up('sm')]: {
+    backgroundColor: "#00FFFF",
+    display:  "none",
+  },
+  [theme.breakpoints.up('lg')]: {
+    backgroundColor: "#0000FF",
+    display:  "none",
+  },
+}));
 
 class CreateFilterToolTip extends React.Component {
     render() {
@@ -82,25 +102,28 @@ export default class FilterForm extends React.Component {
   
     render() {
       return (
-        <HtmlTooltip
-          title={
-            <React.Fragment>
-              <CreateFilterToolTip filterLabel={this.props.role} />
-            </React.Fragment>
-          }
-          placement="top"
-          arrow
-        >
-          <form onSubmit={this.handleSubmit} className="role-filter">
-            <input
-              type="image"
-              src={getImageUrl(this.props.role)}
-              style={{ maxWidth: "36px", maxHeight: "36px" }}
-              name="submit"
-              value={this.props.role}
-            ></input>
-          </form>
-        </HtmlTooltip>
+          <HtmlTooltip
+            title={
+              <React.Fragment>
+                <CreateFilterToolTip filterLabel={this.props.role} />
+              </React.Fragment>
+            }
+            placement="top"
+            arrow
+          >
+            <ButtonGroup variant="outlined" aria-label="outlined button group">
+              <Button onClick={this.handleSubmit} className="role-filter">
+                <img
+                  type="image"
+                  src={getImageUrl(this.props.role)}
+                  style={{ maxWidth: "36px", maxHeight: "36px" }}
+                  name="submit"
+                  value={this.props.role}
+                ></img>
+                {this.props.role}
+              </Button>
+            </ButtonGroup>
+          </HtmlTooltip>
       );
     }
   }

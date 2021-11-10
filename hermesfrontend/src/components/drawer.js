@@ -176,31 +176,43 @@ const Root = styled(AppBar)(({ theme }) => ({
   padding: theme.spacing(1),
   [theme.breakpoints.down('sm')]: {
     backgroundColor: "#0b0b23",
+    width: "100%",
   },
   [theme.breakpoints.up('sm')]: {
     backgroundColor: "#0b0b23",
   },
   [theme.breakpoints.up('lg')]: {
     backgroundColor: "#0b0b23",
-  }
+  },
+  [theme.breakpoints.down('md')]: {
+    backgroundColor: "#0b0b23",
+    width: "100%",
+    paddingLeft: "125px"
+  },
 }));
 
 const CustDrawer = styled(Drawer)(({ theme }) => ({
   padding: theme.spacing(1),
+  bgColor: "#17172e",
   [theme.breakpoints.down('sm')]: {
-    backgroundColor: "#FF0000",
     display:  "none",
   },
   [theme.breakpoints.up('sm')]: {
-    backgroundColor: "#FFF",
-    width: "225px"
   },
   [theme.breakpoints.up('lg')]: {
-    backgroundColor: "#0000FF",
+  },
+  [theme.breakpoints.down("md")]: {
+    width: "120px"
+
   },
   '& .MuiDrawer-paper': {
+    backgroundColor: "#17172e",
     [theme.breakpoints.down("md")]: {
-      bgColor: "#ff0000"
+      width: "120px"
+      // width: "225px",
+    },
+    [theme.breakpoints.up("md")]: {
+      width: "225px"
       // width: "225px",
     }
   }
@@ -208,7 +220,7 @@ const CustDrawer = styled(Drawer)(({ theme }) => ({
 
 const Hamburger = styled("div")(({ theme }) => ({
   [theme.breakpoints.down('sm')]: {
-    backgroundColor: "#FFF",
+    backgroundColor: "#0b0b23",
     color: "000",
     display: "block",
     marginRight: "25px"
@@ -243,7 +255,7 @@ const routeComponents = routes.map(({path, component}, key) => <Route exact path
         sx={{ 
             width: `calc(100% - ${drawerWidth+20}px)`,
             ml: `${drawerWidth}px`,
-            bgcolor: "drawer.backgroundColor",
+            bgcolor: "#17172e",
          }}
       >
         <Toolbar>
@@ -253,7 +265,10 @@ const routeComponents = routes.map(({path, component}, key) => <Route exact path
           }}
           >
           <Hamburger>
-          <Button
+          <Link to={"/"} style={{marginLeft: "10px",paddingRight: "10px"}}>Home</Link>
+          <Link to={"/gods"} style={{paddingRight: "10px"}}>Gods</Link>
+          <Link to={"/tierlist"}>Tierlist</Link>
+          {/* <Button
             id="basic-button"
             aria-controls="basic-menu"
             aria-haspopup="true"
@@ -270,11 +285,11 @@ const routeComponents = routes.map(({path, component}, key) => <Route exact path
             MenuListProps={{
               'aria-labelledby': 'basic-button',
             }}
-          >
+          > */}
+            {/* <MenuItem onClick={handleClose}><Link to={"/"}>Gods</Link></MenuItem>
             <MenuItem onClick={handleClose}><Link to={"/"}>Gods</Link></MenuItem>
-            <MenuItem onClick={handleClose}><Link to={"/Gods"}>Gods</Link></MenuItem>
-            <MenuItem onClick={handleClose}><Link to={"/tierlist"}>tierlist</Link></MenuItem>
-          </Menu>
+            <MenuItem onClick={handleClose}><Link to={"/tierlist"}>tierlist</Link></MenuItem> */}
+          {/* </Menu> */}
         </Hamburger>
           <Link to={"/"}>SmiteStats.gg</Link>
           </Typography>
@@ -282,10 +297,11 @@ const routeComponents = routes.map(({path, component}, key) => <Route exact path
       </Root>
       <CustDrawer
         sx={{
-          width: "drawer.paper.width",
+          width: "225px",
           flexShrink: 0,
+          bgColor:"#17172e",
           '& .MuiDrawer-paper': {
-            bgColor: "drawer.paper.bgColor"
+            bgColor: "#17172e"
           },
         }}
         variant="permanent"
@@ -293,7 +309,8 @@ const routeComponents = routes.map(({path, component}, key) => <Route exact path
       >
         <Toolbar />
         <Divider sx={{
-            color: "#bbbedb"
+            color: "#bbbedb",
+            bgColor: "#17172e"
         }}/>
         <List
         sx={{
