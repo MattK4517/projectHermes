@@ -93,7 +93,6 @@ const Table = ({ columns, data }) => {
                   {page.map(
                     (row, i) => {
                       prepareRow(row);
-                      console.log(row)
                       // if (row.original.role != this.props.role && this.props.role != "All Roles"){
                       //   console.log(row.original.role, this.props.role)
                       //  }
@@ -393,7 +392,6 @@ function ObjectiveTierList(tableType) {
       "/gettierlist/".concat(dispRank, "/", role, "/", tableType.tableType)
     ).then((res) =>
       res.json().then((data) => {
-        console.log(data)
         setTotalData([]);
         Object.keys(data).forEach((key) => {
           Object.keys(data[key]).forEach((godData) => {

@@ -22,7 +22,7 @@ function TierListPage() {
                   <div id="stats-tables-container-ID" className="stats-tables-container content-side-padding" style={{paddingTop: "100px"}}>
                     <div className="title-header">
                         <h1 className="tier-list">
-                        <span class="title-header_main">{tableType} Tier List</span>
+                        <span class="title-header_main">{tableType} Stats Tier List</span>
                         {/* <span class="title-header_secondary">for {role}, {dispRank.replaceAll("_", " ")}</span> */}
                         </h1>
                         <span style={{color: "white"}}>
@@ -31,7 +31,7 @@ function TierListPage() {
                           too much spaghetti code running this
                         </span>
                     </div>
-                    <TierListTabs>
+                    <TierListTabs style={{paddingTop: "10px"}} changeTableType={setTableType}>
                     <div label="Tier List" style={{color: "white"}}>
                       <TierList tableType={"Regular"} />
                     </div>

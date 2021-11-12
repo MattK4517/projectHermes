@@ -49,7 +49,7 @@ function Godpage(god) {
     "Diamond",
     "Masters",
     "Grandmaster",
-    "All_Ranks",
+    "All Ranks",
   ]);
 
   const [tab, setTab] = useState("Build");

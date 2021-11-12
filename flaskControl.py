@@ -207,10 +207,14 @@ def get_build_path(god, role, rank, patch):
         index += 1
     top_five = {}
     for x in list(builds)[-10:]:
+            for key in builds[x].keys():
+                    if "slot" in key:
+                            builds[x][key] = anlz.get_item_data(client, builds[x][key])
             top_five[x] = builds[x]
 
     test_sort = OrderedDict(sorted(top_five.items(),
             key = lambda x: getitem(x[1], "wins")))
+            
     builds = dict(test_sort)
 
     return builds

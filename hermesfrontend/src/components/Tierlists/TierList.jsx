@@ -344,7 +344,7 @@ function TierList(tableType) {
                     banRate: data[key][godData].banRate,
                     wins: data[key][godData].wins,
                     tier: "A",
-                    counterMatchups: Object.keys(data[key][godData].counterMatchups).map((matchup) => {
+                    counterMatchups: Object.keys(data[key][godData].counterMatchups).map((matchup, index) => {
                       return(
                         [data[key][godData]["counterMatchups"][matchup].url,
                         data[key][godData]["counterMatchups"][matchup].enemy]
@@ -417,7 +417,7 @@ class CounterMatchupDisplay extends React.Component {
     return(
       <div className="against-container">
         {this.props.matchups.map((matchup, index) => {
-          if (index < 10) {
+          if (index < 9) {
             let routegod = matchup[1].replaceAll(" ", "_")
             return (
             <div className="against" key={index}>
