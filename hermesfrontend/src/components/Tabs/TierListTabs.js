@@ -16,6 +16,7 @@ export default class TierListTabs extends Component {
     }
   
     onClickTabItem = (tab) => {
+      this.props.changeTableType(tab)
       this.setState({ activeTab: tab });
     }
     render() {

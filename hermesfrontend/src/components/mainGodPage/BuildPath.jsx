@@ -2,6 +2,73 @@ import { Tab } from "@material-ui/core";
 import React from "react";
 import { useState, useEffect } from "react";
 import { useTable, useSortBy, usePagination } from "react-table";
+import Tooltip from "@material-ui/core/Tooltip";
+import { withStyles, makeStyles } from "@material-ui/core/styles";
+
+const HtmlTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: "#06061f",
+    color: "rgba(0, 0, 0, 0.87)",
+    maxWidth: 220,
+    border: ".5px solid gray",
+    opacity: 100,
+  },
+}))(Tooltip);
+
+class CreateItemToolTip extends React.Component {
+  render() {
+    console.log(this.props.item)
+    if (this.props.index == 0) {
+      this.props.item = this.props.item.item
+    } else if (this.props.index == 1) {
+      this.props.item = this.props.item.item2
+    }
+    return (
+      <>
+      <div
+        style={{
+          maxHeight: "350px",
+          maxWidth: "750px",
+          color: "#E6E6FA",
+          alignItems: "left",
+          fontSize: "14px",
+        }}
+      >
+        <h5 style={{ width: "100%", fontSize: "1rem", color: "#1E90FF" }}>
+          {this.props.item.DeviceName}
+        </h5>
+        <div>
+          <p>{this.props.item.itemShortDesc}</p>
+        </div>
+        <div className="item-stats">
+            {this.props.item.ItemDescription.Menuitems.map(
+              (stat) => {
+                return (
+                  <p style={{left: "0"}}>
+                    {stat.Description}: {stat.Value}
+                  </p>
+                );
+              }
+            )}
+          <div className="item-passive">
+            <p>{this.props.item.ItemDescription.SecondaryDescription}</p>
+          </div>
+        </div>
+        <p style={{ color: "#D4AF37" }}>
+          <b>Price:</b>{" "}
+          {this.props.item.absolutePrice}(
+          {this.props.item.relativePrice})
+          <img
+            style={{ maxHeight: "20px", maxWidth: "20px", paddingLeft: "3px" }}
+            src="https://i.imgur.com/XofaIQ0.png"
+            alt="gold-img"
+          />
+        </p>
+      </div>
+    </>
+    );
+  }
+}
 
 function Table({ columns, data }) {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
@@ -66,40 +133,79 @@ function Table({ columns, data }) {
               //   console.log(row.original.role, this.props.role)
               //  }
               return (
-                <div className="item-row" role="row" {...row.getRowProps()}>
+                <>
+                <div className="item-row" role="row" {...row.getRowProps()}
+                style={{paddingTop: "10px"}}
+                >
                   {row.cells.map((cell) => {
                     const { key, role } = cell.getCellProps();
                     let url = "";
                     //   let url = `https://webcdn.hirezstudios.com/smite/item-icons/.jpg`
                     if (key.includes("islot")) {
-                    let item = row.original.islot1.replaceAll("_"," ")
+                    let item = row.original.islot1.DeviceName.replaceAll("_"," ")
                     item = item.replaceAll("'", "")
                     item = item.replaceAll(" ", "-")
-                    let item2 = row.original.slot2.replaceAll("_"," ")
+                    let item2 = row.original.slot2.DeviceName.replaceAll("_"," ")
                     item2 = item2.replaceAll("'", "")
                     item2 = item2.replaceAll(" ", "-")
-                    let item3 = row.original.slot3.replaceAll("_"," ")
+                    let item3 = row.original.slot3.DeviceName.replaceAll("_"," ")
                     item3 = item3.replaceAll("'", "")
                     item3 = item3.replaceAll(" ", "-")
                       return (
                         <>
-                          <div className="item-image" style={{marginLeft: "30px", minWidth: "50px", maxWidth: "90px"}}>
-                            <div className="item-image-div">
-                              <img src={`https://webcdn.hirezstudios.com/smite/item-icons/${item.toLowerCase()}.jpg`} alt={row.original.islot1} />
+                          <HtmlTooltip
+                            title={
+                              <React.Fragment>
+                                <CreateItemToolTip
+                                  item={row.original.islot1}
+                                />
+                              </React.Fragment>
+                            }
+                            placement="top"
+                            arrow
+                          >
+                            <div className="item-image" style={{marginLeft: "30px", minWidth: "50px", maxWidth: "90px"}}>
+                              <div className="item-image-div">
+                                <img src={`https://webcdn.hirezstudios.com/smite/item-icons/${item.toLowerCase()}.jpg`} alt={row.original.islot1} />
+                              </div>
                             </div>
-                          </div>
+                          </HtmlTooltip>
                           {/* <div style={{width: "50px", height: "50px"}}/> */}
-                          <div className="item-image" style={{minWidth: "50px", maxWidth: "90px"}}>
-                            <div className="item-image-div">
-                              <img src={`https://webcdn.hirezstudios.com/smite/item-icons/${item2.toLowerCase()}.jpg`} alt={row.original.slot2} />
+                          <HtmlTooltip
+                            title={
+                              <React.Fragment>
+                                <CreateItemToolTip
+                                  item={row.original.slot2}
+                                />
+                              </React.Fragment>
+                            }
+                            placement="top"
+                            arrow
+                          >
+                            <div className="item-image" style={{minWidth: "50px", maxWidth: "90px"}}>
+                              <div className="item-image-div">
+                                <img src={`https://webcdn.hirezstudios.com/smite/item-icons/${item2.toLowerCase()}.jpg`} alt={row.original.slot2} />
+                              </div>
                             </div>
-                          </div>
+                          </HtmlTooltip>
                           {/* <div style={{width: "50px", height: "50px"}}/> */}
-                          <div className="item-image" style={{paddingRight: "30px", minWidth: "80px", maxWidth: "90px"}}>
-                            <div className="item-image-div">
-                              <img src={`https://webcdn.hirezstudios.com/smite/item-icons/${item3.toLowerCase()}.jpg`} alt={row.original.slot3} />
+                          <HtmlTooltip
+                            title={
+                              <React.Fragment>
+                                <CreateItemToolTip
+                                  item={row.original.slot3}
+                                />
+                              </React.Fragment>
+                            }
+                            placement="top"
+                            arrow
+                          >
+                            <div className="item-image" style={{paddingRight: "30px", minWidth: "80px", maxWidth: "90px"}}>
+                              <div className="item-image-div">
+                                <img src={`https://webcdn.hirezstudios.com/smite/item-icons/${item3.toLowerCase()}.jpg`} alt={row.original.slot3} />
+                              </div>
                             </div>
-                          </div>
+                          </HtmlTooltip>
                         </>
                       );
                     } else if (key.includes("games")) {
@@ -136,6 +242,8 @@ function Table({ columns, data }) {
                     }
                   })}
                 </div>
+                <br></br>
+                </>
               );
             }
             // }
