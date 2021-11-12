@@ -1,4 +1,11 @@
 import React from "react";
+import { styled } from '@mui/material/styles';
+
+const CustHeader = styled("div")(({ theme }) => ({
+  [theme.breakpoints.down('md')]: {
+    display:  "none",
+  },
+}));
 
 class GodAbilities extends React.Component {
     render() {
@@ -46,9 +53,9 @@ export default class GodHeader extends React.Component {
                 <div className="god-abilities">
                   <GodAbilities abilities={this.props.abilities} />
                 </div>
-                <div className="stat-explanation">
+                <CustHeader className="stat-explanation">
                   The best win rate {this.props.god} build. The best and worst matchups for {this.props.god} and anything else you need, {this.props.rank} Smite Patch {this.props.patch}
-                </div>
+                </CustHeader>
               </div>
             </div>
           </div>

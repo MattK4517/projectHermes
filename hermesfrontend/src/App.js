@@ -29,11 +29,9 @@ class App extends React.Component {
   return (
     <div className="App">
       <HashRouter>
-        <div className="page-content">
         <ThemeProvider theme={theme}>
           <MiniDrawer />
         </ThemeProvider>
-        </div>
       </HashRouter>
     </div>
   );

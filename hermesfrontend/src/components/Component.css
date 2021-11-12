@@ -31,7 +31,9 @@ hr {
     flex-direction:column;
     margin-top:0;
     max-width:1014px;
-    width:1014px
+    width:1014px;
+    min-width: auto;
+    width: 100%;
 }
 .god-build .toughest-matchups {
   margin-top: 24px;
@@ -315,12 +317,12 @@ color: #cddcfe;
 }
 
 .god-rank-stats {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  flex-wrap: wrap;
-  padding: 24px 0;
-}
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  flex-wrap:wrap;
+  padding:24px 0
+ }
 
 .god-rank-stats > div {
   display: flex;
@@ -332,9 +334,28 @@ color: #cddcfe;
   height: 100%;
   white-space: nowrap;
 }
+
 .god-rank-stats > div:not(:last-child) {
   border-right: 1px solid #414165;
 }
+
+@media(max-width:599px) {
+  .god-ranking-stats {
+   padding:18px;
+  }
+  .god-ranking-stats>div {
+   border-right:none!important
+  }
+  .god-ranking-stats .value {
+   font-size:1.4rem
+  }
+  .god-ranking-stats:not(.matchup-view) .matches {
+   margin-top:12px;
+   padding:12px 0 0;
+   flex:0 0 100%;
+   border-top:1px solid #414165
+  }
+ }
 .god-rank-stats .value {
   font-size: 2rem;
   font-weight: 800;
@@ -1324,3 +1345,26 @@ figure.snip0015:hover figcaption::before {
 .header-winrate{
   padding-right: 10px;
 }
+
+@media(max-width:1359px) {
+  .build .recommended-build_items {
+   grid-template-columns:repeat(4,1fr);
+  }
+ }
+ @media(max-width:899px) {
+  .build .recommended-build_items {
+   grid-template-columns:repeat(6,1fr)
+  }
+ }
+ @media(max-width:599px) {
+  .build .recommended-build_items {
+   grid-template-columns:none;
+   grid-template-rows:repeat(5,-webkit-min-content);
+   grid-template-rows:repeat(5,min-content);
+   grid-auto-flow:row
+  }
+  .build .recommended-build_items>:not(:last-child) {
+   border-right:none;
+   border-bottom:1px solid #414165
+  }
+ }

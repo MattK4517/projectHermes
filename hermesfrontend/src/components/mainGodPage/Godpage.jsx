@@ -91,6 +91,7 @@ function Godpage(god) {
   }, []);
   return (
     <>
+    <div className="page-content">
       <div className="Godpage">
         <div className="container">
           <ImageDiv className="god-container build_page" url={url}>
@@ -114,31 +115,25 @@ function Godpage(god) {
                     <div className="filter-manager_label">
                       <span style={{ color: "white" }}>Stat Filters</span>
                     </div>
-                    <div className="role-filter-container">
-                      {roles.map((role) => {
-                        return (
-                          <FilterForm
-                            role={role}
-                            god={pagegod}
-                            roleState={setrole}
-                          />
-                        );
-                      })}
-                    </div>
-                    {ranks.map((rank) => {
-                      return (
+                    {/* <div className="role-filter-container"> */}
+                    <FilterForm
+                      filter={role}
+                      god={pagegod}
+                      filters={roles}
+                      setFilter={setrole}
+                    />
+                    {/* </div> */}
                         <FilterForm
-                          role={rank.replaceAll("_", " ")}
+                          filter={dispRank}
                           god={pagegod}
-                          roleState={setrank}
+                          filters={ranks}
+                          setFilter={setrank}
                         />
-                      );
-                    })}
                     <DropDownFilter changePatch={setPatch} patch={"8.10"} style={{color: "white"}}/>
                   </div>
                 </div>
               </div>
-              {/* <BasicTabs 
+              <BasicTabs 
                 pagegod={pagegod} 
                 role={dispRole} 
                 rank={dispRank} 
@@ -147,10 +142,11 @@ function Godpage(god) {
                 winRate={winrate}
                 pickRate={pickrate}
                 banRate={banrate}
-                /> */}
+                />
             </div>
           </ImageDiv>
         </div>
+      </div>
       </div>
     </>
   );
