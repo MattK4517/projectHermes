@@ -326,25 +326,28 @@ def get_date():
     yesterday = time - timedelta(days = 1)
     return f"{yesterday.year}{yesterday.month}{yesterday.day}"
 
+
+#my player id 704292327
 def run_pull(patch, date=get_date()):
     starttime = datetime.now()
     with open("cred.txt", "r") as creds:
         lines = creds.readlines()
         smite_api = SmiteAPI(devId=lines[0].strip(), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
 
-    mydb = client["test"]
-    mycol = mydb[f"{patch} Matches"]
-    date = date
-    match_ids = smite_api.getMatchIds(451, date=20211106, hour=-1)
-    # set_ids = []
-    # all_ids = []
-    # set_matches = {}
-    set_length = 10
-    inserted_count = 0
-    match_ids_len = len(match_ids)
-    print(match_ids_len)
-    print(match_ids[0].matchId)
-    print(smite_api.getMatch(1200451078))
+    # mydb = client["test"]
+    # mycol = mydb[f"{patch} Matches"]
+    # date = date
+    # match_ids = smite_api.getMatchIds(451, date=20211106, hour=-1)
+    # # set_ids = []
+    # # all_ids = []
+    # # set_matches = {}
+    # set_length = 10
+    # inserted_count = 0
+    # match_ids_len = len(match_ids)
+    # print(match_ids_len)
+    # print(match_ids[0].matchId)s
+    # print(smite_api.getPlayerId("Mayhem4517"))
+# print(smite_api.getQueueStats(704292327, 451))
 #     all_sets = create_sets(match_ids)
 #     # total = 0
 #     for set in all_sets:
@@ -354,7 +357,7 @@ def run_pull(patch, date=get_date()):
 #             for k in range(10):
 #                 player = create_player_dict(match_details[(i*10) + k])
 #                 match_dict["player"+str(k)] = player
-#             carry_score = anlz.get_carry_score(match_dict)
+            # carry_score = anlz.get_carry_score(match_dict)
 #             match_dict["carryScore"] = carry_score["goldScore"]
 #             match_dict["damageScore"] = carry_score["damageScore"]
 #             match_dict["levelDiff"] = carry_score["levelDiff"]

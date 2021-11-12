@@ -88,28 +88,48 @@ render() {
 }
 
 const CustHeader = styled("div")(({ theme }) => ({
-  padding: theme.spacing(1),
-  [theme.breakpoints.down('sm')]: {
-    backgroundColor: "#191937",
-    display:  "none",
+  [theme.breakpoints.down('md')]: {
+    width: "100%",
+    padding: "10px",
+    border: "none"
   },
-  [theme.breakpoints.up('sm')]: {
-    backgroundColor: "#191937",
-  },
-  [theme.breakpoints.up('lg')]: {
-    backgroundColor: "#191937",
-  },
-  [theme.breakpoints.down('xl')]: {
-    width: "90%"
-    // backgroundColor: "#FFF"
-  },
+  // [theme.breakpoints.up('sm')]: {
+  //   backgroundColor: "#191937",
+  // },
+  // [theme.breakpoints.up('lg')]: {
+  //   backgroundColor: "#191937",
+  // },
+  // [theme.breakpoints.down('lg')]: {
+  //   width: "75%",
+  //   fontsize: "8px"
+  //   // backgroundColor: "#FFF"
+  // },
 }));
+
+
+const ResponsiveBuild = styled("div")(({ theme }) => ({
+  [theme.breakpoints.down('md')]: {
+    display: "block",
+  },
+  // [theme.breakpoints.up('sm')]: {
+  //   backgroundColor: "#191937",
+  // },
+  // [theme.breakpoints.up('lg')]: {
+  //   backgroundColor: "#191937",
+  // },
+  // [theme.breakpoints.down('lg')]: {
+  //   width: "75%",
+  //   fontsize: "8px"
+  //   // backgroundColor: "#FFF"
+  // },
+}));
+
 
 
 class GodRankStats extends React.Component {
     render() {
       return (
-        <CustHeader className="content-section god-rank-stats">
+        <div className="content-section god-rank-stats">
           <div className="win-rate">
             <div className="value" style={{color: this.props.colorStyle}}>{this.props.winrate}%</div>
             <div className="label">Win Rate</div>
@@ -129,7 +149,7 @@ class GodRankStats extends React.Component {
             <div className="value">{this.props.games}</div>
             <div className="label">Matches</div>
           </div>
-        </CustHeader>
+        </div>
       );
     }
   }
@@ -378,7 +398,7 @@ export default function BuildPage(pagegod) {
                 <GodCounterStats matchups={goodmatchups} />
               </div>
             </div>
-            <div className="build content-section">
+            <ResponsiveBuild className="build content-section">
               {items.map((item, index) => {
                 if (index === 0) {
                   return (
@@ -479,7 +499,7 @@ export default function BuildPage(pagegod) {
                   <BuildStats stats={items} lower={5} upper={6} />
                 </div>
               </div> */}
-            </div>
+            </ResponsiveBuild>
           </div>
         )
     }
