@@ -1,6 +1,7 @@
 import TierListTabs from "./Tabs/TierListTabs";
 import TierList from "./Tierlists/TierList";
 import CombatTierList from "./Tierlists/CombatTierList";
+import ObjectiveTierList from "./Tierlists/ObjectiveTierList";
 import React, { useState, useEffect, useMemo } from 'react';
 import { useTable, useSortBy, usePagination } from 'react-table';
 import { Link } from 'react-router-dom';
@@ -36,6 +37,9 @@ function TierListPage() {
                     </div>
                     <div label="Combat" style={{color: "white"}}>
                       <CombatTierList tableType={"Combat"} />
+                    </div>
+                    <div label="Objective" style={{color: "white"}}>
+                      <ObjectiveTierList tableType={"Objective"} />
                     </div>
                     </TierListTabs>
                   </div>

@@ -404,39 +404,8 @@ function TierList(tableType) {
   return (
     <>
         <div className="filter-form">
-        {roles.map((role) =>{
-            return (
-                <FilterForm role={role}  roleState={setRole}/>
-            )
-            })}
-        {ranks.map((rank) =>{
-            return (
-            <FilterForm role={rank.replaceAll("_", " ")} roleState={setRank}/>
-            )
-        })}
-        {/* <PopupState variant="popover" popupId="demo-popup-menu">
-            {(popupState) => (
-              <React.Fragment>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  {...bindTrigger(popupState)}
-                >
-                  {patch}
-                </Button>
-                <StyledMenu {...bindMenu(popupState)}>
-                  <div>
-                    <MenuItem onClick={popupState.close}>
-                      <DropDownFilter changePatch={setPatch} patch={"8.9"} />
-                    </MenuItem>
-                    <MenuItem onClick={popupState.close}>
-                      <DropDownFilter changePatch={setPatch} patch={"8.8"} />
-                    </MenuItem>
-                  </div>
-                </StyledMenu>
-              </React.Fragment>
-            )}
-          </PopupState> */}
+          <FilterForm filter={role} filters={roles} role={role}  setFilter={setRole}/>
+          <FilterForm filter={dispRank.replaceAll("_", " ")} filters={ranks} role={dispRank.replaceAll("_", " ")} setFilter={setRank}/>
         </div>
     <Table columns={columns} data={totalData}/>
   </>

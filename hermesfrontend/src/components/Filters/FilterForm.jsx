@@ -51,12 +51,10 @@ export default class FilterForm extends React.Component {
     };
   
     handleChange(event) {
-      console.log(event)
       this.props.setFilter(event.target.value);
     };
   
     handleSubmit(event) {
-      console.log(event)
       this.props.setFilter(this.props.patch);
       event.preventDefault();
     }

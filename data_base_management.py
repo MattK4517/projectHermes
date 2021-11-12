@@ -11,7 +11,7 @@ from constants import godsDict, roles, ranks
 from pandas.io.json import json_normalize
 
 client = pymongo.MongoClient(
-    "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
+    "mongodb+srv://sysAdmin:9gR7C1aDKclng4jA@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
 
 
 def clear_nonmatches(client):
@@ -32,10 +32,10 @@ def get_last_day(client):
         print(set[keys[0]]["Entry_Datetime"])
 
 
-def delete_match_docs(client, db, col):
+def delete_match_docs(client, db, col, field, value):
     mydb = client[db]
     mycol = mydb[col]
-    mycol.delete_many({"patch": 8.8})
+    mycol.delete_many({field: value})
 
 
 def calc_total_matches(ranks, db, rank="All Ranks"):
@@ -156,9 +156,9 @@ def add_gold_eff(client, db, col, field_key):
         add_patch_field(client, db, col, matchId, gold_eff, field_key)
 
 if __name__ == "__main__":
-    mydb = client["Matches"]
-    mycol = mydb["8.10 Matches"]
-    print(mycol.count_documents({"Entry_Datetime": "11/5/2021"}))
+    cols = ["Combat List", "Objective List", "Regular List"]
+    for col in cols:
+        delete_match_docs(client, "Tier_list", col, "god", "Cliodhna")
     # calc_total_matches(ranks, "single_items")
 
 
