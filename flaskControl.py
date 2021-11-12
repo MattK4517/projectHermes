@@ -101,6 +101,22 @@ def get_tier_list(rank, role, tableType):
                                 retData[dict_god] = {dict_role: x}
                         else:
                                 retData[dict_god][dict_role] = x
+
+        elif tableType == "Objective":
+                mycol = mydb["Objective List"]
+                rank = rank.replace("_", " ")
+                if "All" in role:
+                        myquery = {"rank": rank, "games": {"$gte": 500}}
+                else:
+                        myquery = {"rank": rank, "role": role, "games": {"$gte": 500}}
+                
+                for x in mycol.find(myquery, {"_id": 0}):
+                        dict_god = x["god"]
+                        dict_role = x["role"]
+                        if not retData[dict_god]:
+                                retData[dict_god] = {dict_role: x}
+                        else:
+                                retData[dict_god][dict_role] = x
         return retData
 
 

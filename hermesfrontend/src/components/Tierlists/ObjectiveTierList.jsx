@@ -93,6 +93,7 @@ const Table = ({ columns, data }) => {
                   {page.map(
                     (row, i) => {
                       prepareRow(row);
+                      console.log(row)
                       // if (row.original.role != this.props.role && this.props.role != "All Roles"){
                       //   console.log(row.original.role, this.props.role)
                       //  }
@@ -105,8 +106,20 @@ const Table = ({ columns, data }) => {
                           >
                             {row.cells.map((cell) => {
                               const { key, role } = cell.getCellProps();
+                              let god = row.original.god
+                              .toLowerCase()
+                              .replaceAll(" ", "-");
+                              let routegod = row.original.god.replaceAll(
+                                " ",
+                                "_"
+                              );
+                              if (row.original.god == "Chang'e") {
+                                routegod = "Chang'e";
+                                god = "change";
+                              }
                               if (key.includes("rank")) {
                                 return (
+                                  <>
                                   <div
                                     className="rt-td rank"
                                     style={{
@@ -118,10 +131,8 @@ const Table = ({ columns, data }) => {
                                   >
                                     <span>{(i += 1)}</span>
                                   </div>
-                                );
-                              } else if (key.includes("role")) {
-                                return (
-                                  <div
+
+                                    <div
                                     className="rt-td role"
                                     style={{
                                       minWidth: "40px",
@@ -132,20 +143,7 @@ const Table = ({ columns, data }) => {
                                   >
                                     <span>{row.original.role}</span>
                                   </div>
-                                );
-                              } else if (key.includes("god")) {
-                                let god = row.original.god
-                                  .toLowerCase()
-                                  .replaceAll(" ", "-");
-                                let routegod = row.original.god.replaceAll(
-                                  " ",
-                                  "_"
-                                );
-                                if (row.original.god == "Chang'e") {
-                                  routegod = "Chang'e";
-                                  god = "change";
-                                }
-                                return (
+
                                   <div
                                     className="rt-td god"
                                     style={{ minWidth: "180px", maxWidth: "220px", flex: "1 1 100%" }}
@@ -181,9 +179,7 @@ const Table = ({ columns, data }) => {
                                       </strong>
                                     </Link>
                                   </div>
-                                );
-                              } else if (key.includes("winRate")) {
-                                return (
+
                                   <div
                                     className="rt-td win-rate"
                                     style={{
@@ -197,137 +193,91 @@ const Table = ({ columns, data }) => {
                                       <b style={{color: winRateColor(row.original.winRate)}}>{row.original.winRate}%</b>
                                     </span>
                                   </div>
-                                );
-                              } else if (key.includes("kills")) {
-                                return (
+
                                   <div
-                                    className="rt-td"
+                                    className="rt-td gold"
                                     style={{
-                                      minWidth: "65px",
-                                      maxWidth: "70px",
-                                      flex: "1 1 100%",
-                                    }}
-                                    {...cell.getCellProps()}
-                                  >
-                                    <span>
-                                      <b>{row.original.kills}</b>
-                                    </span>
-                                  </div>
-                                );
-                              } else if (key.includes("deaths")) {
-                                return (
-                                  <div
-                                    className="rt-td"
-                                    style={{
-                                      minWidth: "65px",
-                                      maxWidth: "70px",
-                                      flex: "1 1 100%",
-                                    }}
-                                    {...cell.getCellProps()}
-                                  >
-                                    <span>
-                                      <b>{row.original.deaths}</b>
-                                    </span>
-                                  </div>
-                                );
-                              } else if (key.includes("assists")) {
-                                return (
-                                  <div
-                                    className="rt-td"
-                                    style={{
-                                      minWidth: "65px",
-                                      maxWidth: "70px",
-                                      flex: "1 1 100%",
-                                    }}
-                                    {...cell.getCellProps()}
-                                  >
-                                    <span>
-                                      <b>{row.original.assists}</b>
-                                    </span>
-                                  </div>
-                                );
-                              } else if (key.includes("damageD")) {
-                                return (
-                                  <div
-                                    className="rt-td"
-                                    style={{
-                                      minWidth: "60px",
+                                      minWidth: "70px",
                                       maxWidth: "90px",
                                       flex: "1 1 100%",
                                     }}
                                     {...cell.getCellProps()}
                                   >
                                     <span>
-                                      <b>{row.original.damageD}</b>
+                                      {row.original.gold.toFixed()}
                                     </span>
                                   </div>
-                                );
-                              } else if (key.includes("damageTaken")) {
-                                return (
+
                                   <div
-                                    className="rt-td"
+                                    className="rt-td killsBot"
                                     style={{
-                                      minWidth: "60px",
+                                      minWidth: "70px",
                                       maxWidth: "90px",
                                       flex: "1 1 100%",
                                     }}
                                     {...cell.getCellProps()}
                                   >
                                     <span>
-                                      <b>{row.original.damageTaken}</b>
+                                      {row.original.killsBot.toFixed(1)}
                                     </span>
                                   </div>
-                                );
-                              } else if (key.includes("damageMitigated")) {
-                                return (
+
                                   <div
-                                    className="rt-td"
+                                    className="rt-td damageBot"
                                     style={{
-                                      minWidth: "60px",
+                                      minWidth: "70px",
                                       maxWidth: "90px",
                                       flex: "1 1 100%",
                                     }}
                                     {...cell.getCellProps()}
                                   >
                                     <span>
-                                      <b>{row.original.damageMitigated}</b>
+                                      {row.original.damageBot.toFixed()}
                                     </span>
                                   </div>
-                                );
-                              } else if (key.includes("healing")) {
-                                return (
+
                                   <div
-                                    className="rt-td"
+                                    className="rt-td towerKills"
                                     style={{
-                                      minWidth: "60px",
+                                      minWidth: "70px",
                                       maxWidth: "90px",
                                       flex: "1 1 100%",
                                     }}
                                     {...cell.getCellProps()}
                                   >
                                     <span>
-                                      <b>{row.original.healing}</b>
+                                      {row.original.towerKills.toFixed()}
                                     </span>
                                   </div>
-                                );
-                              } else if (key.includes("selfHealing")) {
-                                return (
+
                                   <div
-                                    className="rt-td"
+                                    className="rt-td phoenixKills"
                                     style={{
-                                      minWidth: "60px",
+                                      minWidth: "70px",
                                       maxWidth: "90px",
                                       flex: "1 1 100%",
                                     }}
                                     {...cell.getCellProps()}
                                   >
                                     <span>
-                                      <b>{row.original.selfHealing}</b>
+                                      {row.original.phoenixKills.toFixed()}
                                     </span>
                                   </div>
-                                );
-                              } else if (key.includes("games")) {
-                                return (
+
+                                  <div
+                                    className="rt-td wardsPlaced"
+                                    style={{
+                                      minWidth: "70px",
+                                      maxWidth: "90px",
+                                      flex: "1 1 100%",
+                                    }}
+                                    {...cell.getCellProps()}
+                                  >
+                                    <span>
+                                      {row.original.wardsPlaced.toFixed()}
+                                    </span>
+                                  </div>
+
                                   <div
                                     className="rt-td games"
                                     style={{
@@ -341,8 +291,9 @@ const Table = ({ columns, data }) => {
                                       <b>{row.original.games}</b>
                                     </span>
                                   </div>
+                                  </>
                                 );
-                              }
+                              } 
                             })}
                           </div>
                         </div>
@@ -412,7 +363,7 @@ const Table = ({ columns, data }) => {
   );
 };
 
-function CombatTierList(tableType) {
+function ObjectiveTierList(tableType) {
   const [totalData, setTotalData] = useState([]);
   const [counterMatchups, setCounterMatchups] = useState([]);
   const [roles, setRoles] = useState([
@@ -442,6 +393,7 @@ function CombatTierList(tableType) {
       "/gettierlist/".concat(dispRank, "/", role, "/", tableType.tableType)
     ).then((res) =>
       res.json().then((data) => {
+        console.log(data)
         setTotalData([]);
         Object.keys(data).forEach((key) => {
           Object.keys(data[key]).forEach((godData) => {
@@ -451,14 +403,12 @@ function CombatTierList(tableType) {
                 god: data[key][godData].god,
                 role: data[key][godData].role,
                 winRate: data[key][godData].winRate,
-                kills: data[key][godData].kills,
-                deaths: data[key][godData].deaths,
-                assists: data[key][godData].assists,
-                damageD: data[key][godData].damage_,
-                damageTaken: data[key][godData].damageTaken,
-                damageMitigated: data[key][godData].damageMitigated,
-                healing: data[key][godData].healing,
-                selfHealing: data[key][godData].selfHealing,
+                gold: data[key][godData].gold,
+                killsBot: data[key][godData].kills_bot,
+                damageBot: data[key][godData].damage_bot,
+                towerKills: data[key][godData].tower_kills,
+                phoenixKills: data[key][godData].phoenix_kills,
+                wardsPlaced: data[key][godData].wards_placed,
                 games: data[key][godData].games,
               },
             ]);
@@ -487,36 +437,28 @@ function CombatTierList(tableType) {
         accessor: "winRate",
       },
       {
-        Header: "Kills",
-        accessor: "kills",
+        Header: "Gold",
+        accessor: "gold",
       },
       {
-        Header: "Deaths",
-        accessor: "deaths",
+        Header: "Minion Kills",
+        accessor: "killsBot",
       },
       {
-        Header: "Assists",
-        accessor: "assists",
+        Header: "Minion Damage",
+        accessor: "damageBot",
       },
       {
-        Header: "Damage",
-        accessor: "damageD",
+        Header: "Tower Kills",
+        accessor: "towerKills",
       },
       {
-        Header: "Taken",
-        accessor: "damageTaken",
+        Header: "Phoenix Kills",
+        accessor: "phoenixKills",
       },
       {
-        Header: "Mitigated",
-        accessor: "damageMitigated",
-      },
-      {
-        Header: "Healing",
-        accessor: "healing",
-      },
-      {
-        Header: "Self Healing",
-        accessor: "selfHealing",
+        Header: "Wards Placed",
+        accessor: "wardsPlaced",
       },
       {
         Header: "Games",
@@ -536,4 +478,4 @@ function CombatTierList(tableType) {
   );
 }
 
-export default CombatTierList;
+export default ObjectiveTierList;
