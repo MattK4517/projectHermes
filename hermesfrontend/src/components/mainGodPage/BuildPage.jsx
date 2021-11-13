@@ -31,7 +31,7 @@ class CreateMatchupsHelpTooltip extends React.Component {
     render() {
       return (
         <div style={{color: "white", fontSize: ".75rem"}}>
-          <h3>What do this numbers mean?</h3>
+          <h3>What do these numbers mean?</h3>
           <div>
             <p>
               the percentage shown is {this.props.god} win rate INTO the god shown
