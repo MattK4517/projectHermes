@@ -1,11 +1,9 @@
 cred.txt
-<<<<<<< HEAD
 /__pycache__/
 PYREZ_LOG_FILE.log
 .vscode/
 token.txt
 venv
-=======
 PYREZ_LOG_FILE.log
 __pycache__
 .vscode/
@@ -17,7 +15,11 @@ __pycache__/main.cpython-37.pyc
 venv
 <<<<<<< Updated upstream
 charts
+<<<<<<< HEAD
 >>>>>>> 9cff3faaa0ee484d7c838c84dcfbcb29f299d16b
 =======
 charts
 >>>>>>> Stashed changes
+=======
+main
+>>>>>>> e9520f997ae3b44f61b4f7f3394cc7a7817c672c

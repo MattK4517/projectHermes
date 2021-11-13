@@ -1,6 +1,5 @@
 ## Discord Bot testing
 # bot.py
-#ID 845256099711680542
 import discord
 import sys
 import analyze as anlz

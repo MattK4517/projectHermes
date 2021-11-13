@@ -603,11 +603,7 @@ def get_build_path(client, god, role, patch, rank="All Ranks"):
     builds = dict(test_sort)
 
     return builds
-
-# client = pymongo.MongoClient(
-#     "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
-
-
+    
 # print(get_worst_matchups_rewrite(client, "Camazotz", "Solo"))
 
 # print(get_top_builds(client, "Achilles", "Solo"))
