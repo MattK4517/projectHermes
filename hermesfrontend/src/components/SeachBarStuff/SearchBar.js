@@ -106,7 +106,6 @@ export default function SearchBar(data) {
           </React.Fragment>
         )}
         renderInput={(params) => (
-          console.log({ ...params }),
           (
             <TextField
               {...params}

@@ -8,6 +8,7 @@ from flask import Flask, render_template, request
 from main import client
 from collections import OrderedDict
 from operator import getitem
+from duo_tier_list import get_lanes
 
 app = Flask(__name__, static_folder="../hermesfrontend", static_url_path="/")
 # limiter = Limiter(
@@ -117,6 +118,9 @@ def get_tier_list(rank, role, tableType):
                                 retData[dict_god] = {dict_role: x}
                         else:
                                 retData[dict_god][dict_role] = x
+        
+        elif tableType == "Duos":
+                retData = get_lanes()
         return retData
 
 

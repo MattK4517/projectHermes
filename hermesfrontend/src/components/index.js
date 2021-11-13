@@ -6,6 +6,7 @@ export { default as Gods } from "./Gods";
 export { default as TierList } from "./Tierlists/TierList";
 export { default as CombatTierList } from "./Tierlists/CombatTierList";
 export { default as ObjectiveTierList } from "./Tierlists/ObjectiveTierList";
+export { default as DuoLaneTierList } from "./Tierlists/DuoLaneTierList";
 // export { default as NavigationBar } from "./Navbar";
 export { default as ContactForm } from "./ContactForm"; 
 export { default as TierListPage } from "./TierListPage";
