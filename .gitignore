@@ -15,5 +15,9 @@ __pycache__/data_pull_insert.cpython-37.pyc
 __pycache__/flaskControl.cpython-37.pyc
 __pycache__/main.cpython-37.pyc
 venv
+<<<<<<< Updated upstream
 charts
 >>>>>>> 9cff3faaa0ee484d7c838c84dcfbcb29f299d16b
+=======
+charts
+>>>>>>> Stashed changes
