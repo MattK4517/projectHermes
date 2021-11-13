@@ -17,6 +17,7 @@ import { color } from '@mui/system';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import SearchBar from "./SeachBarStuff/SearchBar";
 
 
 
@@ -142,33 +143,40 @@ const godsDict = {
     {
       path: "/",
       component: <Home />,
+      god: "",
     },
     {
       path: "/Gods",
       component: <Gods />,
+      god: "",
     },
     {
       path: "/tierlist",
       component: <TierListPage />,
+      god: "",
     },
     {
       path: "/contact",
-      component: <ContactForm />
+      component: <ContactForm />,
+      god: "",
     },
     {
       path: "/match",
-      component: <Match />
+      component: <Match />,
+      god: "",
     }
   ]
   Object.keys(godsDict).forEach((god) => {
     routes = [...routes, {
       path: "/".concat(god).replaceAll(" ", "_"),
-      component: <Godpage god={god} role={godsDict[god]}/>
+      component: <Godpage god={god} role={godsDict[god]}/>,
+      "god": god,
     },
-    {
-      path: "/".concat(god.replaceAll(" ", "_"), "/items"),
-      component: <Items god={god} role={godsDict[god]}/>
-    }
+    // {
+    //   path: "/".concat(god.replaceAll(" ", "_"), "/items"),
+    //   component: <Items god={god} role={godsDict[god]}/>,
+    //   "god": god,
+    // }
   ]
   })
 
@@ -261,7 +269,8 @@ const routeComponents = routes.map(({path, component}, key) => <Route exact path
         <Toolbar>
           <Typography variant="h6" noWrap component="div" 
           sx={{
-            display: "flex"
+            display: "flex",
+            // position: "fixed",
           }}
           >
           <Hamburger>
@@ -291,7 +300,9 @@ const routeComponents = routes.map(({path, component}, key) => <Route exact path
             <MenuItem onClick={handleClose}><Link to={"/tierlist"}>tierlist</Link></MenuItem> */}
           {/* </Menu> */}
         </Hamburger>
-          <Link to={"/"}>SmiteStats.gg</Link>
+        
+            <Link to={"/"}>SmiteStats.gg</Link>
+            <SearchBar data={routes} />
           </Typography>
         </Toolbar>
       </Root>
