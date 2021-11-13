@@ -3,106 +3,73 @@ import { useState, useEffect } from "react";
 import "../Component.css";
 import styled from "styled-components";
 import { useTable, useSortBy, usePagination } from 'react-table';
+import Tooltip from "@material-ui/core/Tooltip";
+import { withStyles, makeStyles } from "@material-ui/core/styles";
 
-const ImageDiv = styled.div`
-  background-position: 75% -100%;
-  background: repeat no-repeat,
-    radial-gradient(400px 200px at 75% 20%, rgba(7, 7, 32, 0) 0%, #070720 100%),
-    linear-gradient(to right, #070720 30%, rgba(7, 7, 32, 0.6) 100%),
-    url(${(props) =>
-      props.url
-        ? props.url.replace("icons", "cards")
-        : "https://i.ytimg.com/vi/xAPsmI_zDZs/maxresdefault.jpg"});
-`;
+const HtmlTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: "#06061f",
+    color: "rgba(0, 0, 0, 0.87)",
+    maxWidth: 220,
+    border: ".5px solid gray",
+    opacity: 100,
+  },
+}))(Tooltip);
 
-
-
-
-const getImageUrl = (rank) => {
-  let url = "https://i.imgur.com/LVbUJes.png";
-  if (rank == "Bronze") {
-    url = "https://i.imgur.com/pNAGUeR.png";
-  } else if (rank == "Silver") {
-    url = "https://i.imgur.com/Cm5uf15.png";
-  } else if (rank == "Gold") {
-    url = "https://i.imgur.com/L3BmF9F.png";
-  } else if (rank == "Platinum") {
-    url = "https://i.imgur.com/6M3Ezca.png";
-  } else if (rank == "Diamond") {
-    url = "https://i.imgur.com/dtXd0Kv.png";
-  } else if (rank == "Masters") {
-    url = "https://i.imgur.com/2SdBQ4o.png";
-  } else if (rank == "Grandmaster") {
-    url = "https://i.imgur.com/uh3i4hc.png";
-  } else if (rank == "Solo") {
-    url = "https://i.imgur.com/WLU0Cel.png";
-  } else if (rank == "Jungle") {
-    url = "https://i.imgur.com/CyXnzEO.png";
-  } else if (rank == "Mid") {
-    url = "https://i.imgur.com/0oQkAAZ.png";
-  } else if (rank == "Support") {
-    url = "https://i.imgur.com/l7CD2QM.png";
-  } else if (rank == "Carry") {
-    url = "https://i.imgur.com/RlRTbrA.png";
+class CreateItemToolTip extends React.Component {
+  render() {
+    console.log(this.props.item)
+    if (this.props.index == 0) {
+      this.props.item = this.props.item.item
+    } else if (this.props.index == 1) {
+      this.props.item = this.props.item.item2
+    }
+    return (
+      <>
+      <div
+        style={{
+          maxHeight: "350px",
+          maxWidth: "750px",
+          color: "#E6E6FA",
+          alignItems: "left",
+          fontSize: "14px",
+        }}
+      >
+        <h5 style={{ width: "100%", fontSize: "1rem", color: "#1E90FF" }}>
+          {this.props.item.DeviceName}
+        </h5>
+        <div>
+          <p>{this.props.item.itemShortDesc}</p>
+        </div>
+        <div className="item-stats">
+            {this.props.item.ItemDescription.Menuitems.map(
+              (stat) => {
+                return (
+                  <p style={{left: "0"}}>
+                    {stat.Description}: {stat.Value}
+                  </p>
+                );
+              }
+            )}
+          <div className="item-passive">
+            <p>{this.props.item.ItemDescription.SecondaryDescription}</p>
+          </div>
+        </div>
+        <p style={{ color: "#D4AF37" }}>
+          <b>Price:</b>{" "}
+          {this.props.item.absolutePrice}(
+          {this.props.item.relativePrice})
+          <img
+            style={{ maxHeight: "20px", maxWidth: "20px", paddingLeft: "3px" }}
+            src="https://i.imgur.com/XofaIQ0.png"
+            alt="gold-img"
+          />
+        </p>
+      </div>
+    </>
+    );
   }
-  return url;
-};
-
-// class CreateItemToolTip extends React.Component {
-//   render() {
-//     if (this.props.index == 0) {
-//       this.props.item = this.props.item.item
-//     } else if (this.props.index == 1) {
-//       this.props.item = this.props.item.item2
-//     }
-//     return (
-//       <>
-//       <div
-//         style={{
-//           maxHeight: "350px",
-//           maxWidth: "550px",
-//           color: "white",
-//           alignItems: "left",
-//           fontSize: "14px",
-//         }}
-//       >
-//         <h5 style={{ width: "100%", fontSize: "1rem", color: "blue" }}>
-//           {this.props.item.item}
-//         </h5>
-//         <div>
-//           <p>{this.props.item.itemShortDesc}</p>
-//         </div>
-//         <div className="item-stats" style={{ paddingLeft: "5px" }}>
-//           <ul>
-//             {this.props.item.itemStats.map(
-//               (stat) => {
-//                 return (
-//                   <li>
-//                     {stat[0]}: {stat[1]}
-//                   </li>
-//                 );
-//               }
-//             )}
-//           </ul>
-//           <div className="item-passive">
-//             <p>{this.props.item.itemPassive}</p>
-//           </div>
-//         </div>
-//         <p style={{ color: "gold" }}>
-//           <b>Price:</b>{" "}
-//           {this.props.item.itemAbsolutePrice}(
-//           {this.props.item.itemRelativePrice})
-//           <img
-//             style={{ maxHeight: "20px", maxWidth: "20px", paddingLeft: "3px" }}
-//             src="https://i.imgur.com/XofaIQ0.png"
-//             alt="gold-img"
-//           />
-//         </p>
-//       </div>
-//     </>
-//     );
-//   }
-// }
+}
 
 function Table({ columns, data }) {
     const {

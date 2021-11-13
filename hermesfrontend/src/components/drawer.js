@@ -302,7 +302,7 @@ const routeComponents = routes.map(({path, component}, key) => <Route exact path
         </Hamburger>
         
             <Link to={"/"}>SmiteStats.gg</Link>
-            <SearchBar data={routes} />
+            <SearchBar data={routes.slice(5)} />
           </Typography>
         </Toolbar>
       </Root>

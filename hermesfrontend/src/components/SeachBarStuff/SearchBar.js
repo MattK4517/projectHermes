@@ -62,46 +62,59 @@ import { Link } from "react-router-dom";
 // }
 // // export default SearchBar;
 
-import * as React from 'react';
-import TextField from '@mui/material/TextField';
-import Stack from '@mui/material/Stack';
-import Autocomplete from '@mui/material/Autocomplete';
+import * as React from "react";
+import TextField from "@mui/material/TextField";
+import Stack from "@mui/material/Stack";
+import Autocomplete from "@mui/material/Autocomplete";
 
 export default function SearchBar(data) {
   return (
-    <Stack spacing={2} sx={{ width: 300 }}>
-      {/* <Autocomplete
-        id="free-solo-demo"
-        freeSolo
-        options={data.data.map((option) => option.god)}
-        renderInput={(params) => 
-            // <TextField {...params} label="freeSolo" />
-        }
-      /> */}
+    <Stack spacing={2} 
+      sx={{ 
+        width: 300,
+        backgroundColor: "white",
+        color: "black",
+        marginLeft: "15px",
+       }}
+      >
       <Autocomplete
         freeSolo
         id="god-seach-bar"
         // disableClearable
         options={data.data.map((option) => option.god)}
+        defaultValue={"Search a God"}
+        clearOnEscape={"true"}
         renderOption={(option) => (
-            <React.Fragment>
-              <Link
-                style={{ cursor: "pointer", color:"black" }}
-                to={"/".concat(option.key)}
-              >
-                  {option.key}
-              </Link>
-              <br></br>
-            </React.Fragment>
-          )}
+          <React.Fragment>
+            <Link
+              style={{ cursor: "pointer", color: "black", display: "flex"}}
+              to={"/".concat(option.key)}
+            >
+              <img
+                src={`https://webcdn.hirezstudios.com/smite/god-icons/${option.key.toLowerCase().replaceAll(" ", "-").replaceAll("'","")}.jpg`}
+                alt={option.key}
+                style={{
+                  height: "48px",
+                  width: "48px",
+                  transform: "scale(0.625)",
+                  transformOrigin: "0px 0px 0px",
+                  marginLeft: "10px"
+                }}
+              />
+              <p>{option.key}</p>
+            </Link>
+          </React.Fragment>
+        )}
         renderInput={(params) => (
-            console.log({...params}),
-          <TextField
-            {...params}
-            InputProps={{
-              ...params.InputProps,
-            }}
-          />
+          console.log({ ...params }),
+          (
+            <TextField
+              {...params}
+              InputProps={{
+                ...params.InputProps,
+              }}
+            />
+          )
         )}
       />
     </Stack>
