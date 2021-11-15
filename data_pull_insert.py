@@ -334,6 +334,7 @@ def run_pull(patch, date=get_date()):
         lines = creds.readlines()
         smite_api = SmiteAPI(devId=lines[0].strip(), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
 
+    print(smite_api.getMatch())
     # mydb = client["test"]
     # mycol = mydb[f"{patch} Matches"]
     # date = date

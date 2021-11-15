@@ -113,7 +113,7 @@ def get_top_builds(client, god, role, patch, rank="All Ranks", data=None):
     
     games = 0
     wins = 0
-    if data:
+    if type(data) is list:
         for x in data:
             games += 1
             flag = False 
@@ -574,6 +574,30 @@ def get_tier(win_rate, pick_rate, ban_rate):
 
     return tier_letter
 
+def get_specific_build(client, god, role, patch, matchup, rank="All Ranks"):
+    mydb = client["single_matchups"]
+    mycol = mydb[god]
+    match_ids = []
+    if "All" in rank:
+        myquery = {"enemy": matchup, "patch": patch, "role_played": role}
+    else:
+        myquery = {"enemy": matchup, "patch": patch, "role_played": role, "rank": rank}
+    for x in mycol.find(myquery, {"_id": 0}):
+        match_ids.append(x["matchId"])
+
+    builds = []
+    itemsdb = client["single_items"]
+    itemscol = itemsdb[god]
+    games = 0
+    for x in itemscol.aggregate([
+        {
+                "$match": {"matchId": {"$in": match_ids}},
+        },
+        ]
+    ):
+        builds.append({**{god: x[god]}, **{"win_status": x["win_status"]}})
+
+    return get_top_builds(client, god, role, patch, rank=rank, data=builds)
 # if __name__ == "__main__":
 #     client = pymongo.MongoClient(
 #         "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")

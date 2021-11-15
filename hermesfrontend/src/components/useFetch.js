@@ -5,7 +5,7 @@ const compare = (a, b) => {
   return a.winRate - b.winRate
 }
 
-const useFetch = (pagegod, role, rank, patch) => {
+const useFetch = (pagegod, role, rank, patch, matchup) => {
   const [games, setgames] = useState(0);
   // const [banrate, setbanrate] = useState(0);
   // const [pickrate, setpickrate] = useState(0);
@@ -17,8 +17,12 @@ const useFetch = (pagegod, role, rank, patch) => {
   const [itemdata, setitemdata] = useState([]);
   useEffect(() => {
     let mainFetchStatement = "/".concat(pagegod, "/", role, "/", rank, "/", patch);
+    if (matchup !== "None"){
+      mainFetchStatement = mainFetchStatement.concat("/", matchup)
+    }
     fetch(mainFetchStatement).then((res) =>
       res.json().then((data) => {
+        console.log(data)
         setgames(data.games);
         // setbanrate(((data.godBans / data.totalMatches) * 100).toFixed(2));
         // setpickrate(((data.games / data.totalMatches) * 100).toFixed(2));
@@ -67,7 +71,7 @@ const useFetch = (pagegod, role, rank, patch) => {
       })
     );
 
-  }, [role, rank, patch]);
+  }, [role, rank, patch, matchup]);
   // else if (role && rank){
   //   matchupsFetchStatement = "/".concat(pagegod, "/matchups/", role, "/", rank)
   let matchupsFetchStatement = "/".concat(pagegod, "/matchups/", role, "/", rank, "/", patch)

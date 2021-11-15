@@ -323,9 +323,9 @@ export default function BuildPage(pagegod) {
         pagegod.pagegod,
         pagegod.role,
         pagegod.rank,
-        pagegod.patch
+        pagegod.patch,
+        pagegod.matchup
         );
-        // console.log(pagegod)
         return (
             <div className="god-build">
             <GodRankStats
