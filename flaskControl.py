@@ -39,12 +39,15 @@ def get_god_data(god, role, rank, patch):
 def get_god_matchups(god):
         return anlz.get_worst_matchups(client, god , "Solo")
 
+@app.route('/<god>/<role>/<rank>/<patch>/<matchup>')
 @app.route('/<god>/<role>/<rank>/<patch>', methods=["GET", "POST"])
-def get_god_data_role(god, role, rank, patch):
+def get_god_data_role(god, role, rank, patch, matchup="None"):
         newgod = god.replace("_", " ")
-        if "All" in rank and patch == "current":
+        if matchup != "None":
+                return anlz.get_specific_build(client, god, role, patch, matchup, rank)
+        elif "All" in rank and matchup == "None":
                 build = anlz.get_top_builds(client, god, role, patch)
-        else: 
+        elif matchup =="None": 
                 build = anlz.get_top_builds(client, god, role, patch, rank)
 
         # pb_rate = anlz.get_pb_rate(client, newgod, rank, role, patch)
@@ -222,7 +225,6 @@ def get_build_path(god, role, rank, patch):
     builds = dict(test_sort)
 
     return builds
-
 
 # make a route for every god, in the
 # temp idea for routing

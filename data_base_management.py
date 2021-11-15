@@ -156,11 +156,19 @@ def add_gold_eff(client, db, col, field_key):
         add_patch_field(client, db, col, matchId, gold_eff, field_key)
 
 if __name__ == "__main__":
-    cols = ["Combat List", "Objective List", "Regular List"]
-    for col in cols:
-        delete_match_docs(client, "Tier_list", col, "god", "Cliodhna")
-    # calc_total_matches(ranks, "single_items")
+    
+    # delete_match_docs(client, "Matches", "8.10 Matches", "Patch", "8.9")
+    # mydb = client["Matches"]
+    # mycol = mydb["8.10 Matches"]
+    # print(mycol.count_documents({"Entry_Datetime": "11/13/2021"}))
 
+    dbs = ["single_combat_stats", "single_god_bans", "single_items", "single_matchups", "single_objective_stats"]
+    for db in dbs:
+        mydb = client[db]
+        for god in godsDict.keys():
+            if god != "Cliodhna":
+                mycol = mydb[god]
+                mycol.delete_many({"patch": {"$exists": False}})
 
     # fields = ["carryScore","damageScore", "levelDiff", "killPart", "efficiency"]
     # mydb = client["Matches"] 

@@ -29,21 +29,10 @@ if __name__ == "__main__":
         {
                 "$match": {"matchId": {"$in": match_ids}},
         },
-            # {
-            #     "$group": {
-            #         "_id": {
-            #             "slot1": f"${god}.slot1",
-            #             "slot2": f"${god}.slot2",
-            #             "slot3": f"${god}.slot3",
-            #             "win_status": "$win_status",
-            #         },
-            #         "count": {"$sum": 1},
-            #     }
-            # },
-            # {"$sort": {"count": 1}},
         ]
     ):
-        builds.append(x)
+        print(x)
+        builds.append({**{"Achilles": x["Achilles"]}, **{"win_status": x["win_status"]}})
         # games += x["count"]
         # if "{},{},{}".format(x["_id"]["slot1"], x["_id"]["slot2"], x["_id"]["slot3"]) not in builds.keys():
         #     builds["{},{},{}".format(x["_id"]["slot1"], x["_id"]["slot2"], x["_id"]["slot3"])] = { 

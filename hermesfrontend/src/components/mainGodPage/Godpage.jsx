@@ -6,13 +6,150 @@ import styled from "styled-components";
 import useFetch from "../useFetch";
 import Tooltip from "@material-ui/core/Tooltip";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
-import Menu from '@material-ui/core/Menu';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import Items from "./Items";
 import { FilterForm } from "../Filters/FilterForm";
 import { DropDownFilter } from "../Filters/DropDownFilter";
 import winRateColor from "./WinRateColor";
 import { GodHeader } from "../mainGodPage/GodHeader";
 import { BasicTabs } from "../mainGodPage/PageTabs";
+import SearchBarGodPage from "../SearchBarStuff/SearchBarGodPage";
+
+const godsDict = {
+  "All Gods": "None",
+  "Achilles": "Solo",
+  "Agni": "Mid",
+  "Ah Muzen Cab": "Carry",
+  "Ah Puch": "Mid",
+  "Amaterasu": "Solo",
+  "Anhur": "Carry",
+  "Anubis": "Mid",
+  "Ao Kuang": "Jungle",
+  "Aphrodite": "Mid",
+  "Apollo": "Carry",
+  "Arachne": "Jungle",
+  "Ares": "Support",
+  "Artemis": "Carry",
+  "Artio": "Support",
+  "Athena": "Support",
+  "Awilix": "Jungle",
+  "Baba Yaga": "Mid",
+  "Bacchus": "Supprt",
+  "Bakasura": "Jungle",
+  "Baron Samedi": "Mid",
+  "Bastet": "Jungle",
+  "Bellona": "Solo",
+  "Cabrakan": "Support",
+  "Camazotz": "Jungle",
+  "Cerberus": "Support",
+  "Cernunnos": "Carry",
+  "Chaac": "Solo",
+  "Chang\'e": "Mid",
+  "Charybdis": "Carry",
+  "Chernobog": "Carry",
+  "Chiron": "Carry",
+  "Chronos": "Carry",
+  "Cthulhu": "Support",
+  "Cu Chulainn": "Solo",
+  "Cupid": "Carry",
+  "Da Ji": "Jungle",
+  "Danzaburou": "Carry",
+  "Discordia": "Mid",
+  "Erlang Shen": "Jungle",
+  "Eset": "Mid",
+  "Fafnir": "Support",
+  "Fenrir": "Jungle",
+  "Freya": "Carry",
+  "Ganesha": "Support",
+  "Geb": "Support",
+  "Gilgamesh": "Solo",
+  "Guan Yu": "Solo",
+  "Hachiman": "Carry",
+  "Hades": "Mid",
+  "He Bo": "Mid",
+  "Heimdallr": "Carry",
+  "Hel": "Mid",
+  "Hera": "Mid",
+  "Hercules": "Solo",
+  "Horus": "Support",
+  "Hou Yi": "Carry",
+  "Hun Batz": "Jungle",
+  "Izanami": "Carry",
+  "Janus": "Mid",
+  "Jing Wei": "Carry",
+  "Jormungandr": "Solo",
+  "Kali": "Jungle",
+  "Khepri": "Support",
+  "King Arthur": "Solo",
+  "Kukulkan": "Mid",
+  "Kumbhakarna": "Support",
+  "Kuzenbo": "Support",
+  "Loki": "Jungle",
+  "Medusa": "Carry",
+  "Mercury": "Jungle",
+  "Merlin": "Mid",
+  "Morgan Le Fay": "Mid",
+  "Mulan": "Solo",
+  "Ne Zha": "Jungle",
+  "Neith": "Carry",
+  "Nemesis": "Jungle",
+  "Nike": "Solo",
+  "Nox": "Mid",
+  "Nu Wa": "Mid",
+  "Odin": "Solo",
+  "Olorun": "Carry",
+  "Osiris": "Solo",
+  "Pele": "Jungle",
+  "Persephone": "Mid",
+  "Poseidon": "Mid",
+  "Ra": "Mid",
+  "Raijin": "Mid",
+  "Rama": "Carry",
+  "Ratatoskr": "Jungle",
+  "Ravana": "Jungle",
+  "Scylla": "Mid",
+  "Serqet": "Jungle",
+  "Set": "Jungle",
+  "Skadi": "Carry",
+  "Sobek": "Support",
+  "Sol": "Carry",
+  "Sun Wukong": "Solo",
+  "Susano": "Jungle",
+  "Sylvanus": "Support",
+  "Terra": "Support",
+  "Thanatos": "Jungle",
+  "The Morrigan": "Mid",
+  "Thor": "Jungle",
+  "Thoth": "Mid",
+  "Tiamat": "Mid",
+  "Tsukuyomi": "Jungle",
+  "Tyr": "Solo",
+  "Ullr": "Carry",
+  "Vamana": "Solo",
+  "Vulcan": "Mid",
+  "Xbalanque": "Carry",
+  "Xing Tian": "Support",
+  "Yemoja": "Support",
+  "Ymir": "Support",
+  "Zeus": "Mid",
+  "Zhong Kui": "Solo"
+}
+let routes = [
+]
+Object.keys(godsDict).forEach((god) => {
+  routes = [...routes, {
+    path: "/".concat(god).replaceAll(" ", "_"),
+    component: <Godpage god={god} role={godsDict[god]}/>,
+    "god": god,
+  },
+  // {
+  //   path: "/".concat(god.replaceAll(" ", "_"), "/items"),
+  //   component: <Items god={god} role={godsDict[god]}/>,
+  //   "god": god,
+  // }
+]
+})
 
 
 const ImageDiv = styled.div`
@@ -27,13 +164,14 @@ const ImageDiv = styled.div`
 `;
 
 
-function Godpage(god) {
-  const pagegod = god.god.replaceAll("_", " ");
-  const role = god.role;
+function Godpage(props) {
+  const pagegod = props.god.replaceAll("_", " ");
+  const role = props.role;
   var [url, seturl] = useState(0);
   const [displaygod, setgod] = useState(0);
   const [abilities, setabilities] = useState([]);
   const [patch, setPatch] = useState("8.10")
+  const [matchup, setMatchup] = useState("None")
   const [roles, setroles] = useState([
     "Solo",
     "Jungle",
@@ -130,6 +268,7 @@ function Godpage(god) {
                           setFilter={setrank}
                         />
                     <DropDownFilter changePatch={setPatch} patch={"8.10"} style={{color: "white"}}/>
+                    <SearchBarGodPage data={routes} changeMatchup={setMatchup}/>
                   </div>
                 </div>
               </div>
@@ -142,6 +281,7 @@ function Godpage(god) {
                 winRate={winrate}
                 pickRate={pickrate}
                 banRate={banrate}
+                matchup={matchup}
                 />
             </div>
           </ImageDiv>

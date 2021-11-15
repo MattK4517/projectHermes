@@ -168,3 +168,5 @@ def run_format(patch, date):
 
 
         print(f"{god}: {godsDict[god].get_matches()}")
+
+# run_format("8.10", "11/10/2021")
