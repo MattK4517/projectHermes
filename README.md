@@ -1,4 +1,4 @@
-#Project Hermes
+# Project Hermes
 
 [SmiteStats.gg](https://www.smitestats.gg/#/)
 ## Table of contents
@@ -11,10 +11,10 @@ A project using the smite api to pull and store data to create a smite version o
 	
 ## Technologies
 Project is created with:
-Python 3.9
-Flask
-React JS
-MUI 5
+- Python 3.9
+- Flask
+- React JS
+- MUI 5
 	
 ## Features
 - Can fully sort Smite data by rank, role, patch, and specifc matchup against another character
