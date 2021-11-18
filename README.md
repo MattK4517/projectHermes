@@ -5,6 +5,7 @@
 * [General info](#general-info)
 * [Technologies](#technologies)
 * [Setup](#setup)
+* [Usage](#usage)
 
 ## General info
 A project using the smite api to pull and store data to create a smite version of u.gg. This is an attempt to learn and master skills previously learned in other projects.
