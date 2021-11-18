@@ -1,4 +1,4 @@
-##Project Hermes
+#Project Hermes
 
 [SmiteStats.gg](https://www.smitestats.gg/#/)
 ## Table of contents
