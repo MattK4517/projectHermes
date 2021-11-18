@@ -21,4 +21,3 @@ MUI 5
 - Fully functioning Discord bot along with the website
 - Fast load times thanks to MongoDB Aggregation pipelines and Search Indexes
 - Gain Access to over 500,000 matches of Smite Data
-- 
