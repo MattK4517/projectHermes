@@ -170,7 +170,7 @@ function Godpage(props) {
   var [url, seturl] = useState(0);
   const [displaygod, setgod] = useState(0);
   const [abilities, setabilities] = useState([]);
-  const [patch, setPatch] = useState("8.10")
+  const [patch, setPatch] = useState("8.11")
   const [matchup, setMatchup] = useState("None")
   const [roles, setroles] = useState([
     "Solo",
@@ -267,7 +267,7 @@ function Godpage(props) {
                           filters={ranks}
                           setFilter={setrank}
                         />
-                    <DropDownFilter changePatch={setPatch} patch={"8.10"} style={{color: "white"}}/>
+                    <DropDownFilter changePatch={setPatch} patch={patch} style={{color: "white"}}/>
                     <SearchBarGodPage data={routes} changeMatchup={setMatchup}/>
                   </div>
                 </div>

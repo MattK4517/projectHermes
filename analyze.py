@@ -1,4 +1,4 @@
-from re import S, X
+from re import A, S, X
 from datetime import datetime
 import re
 
@@ -598,9 +598,59 @@ def get_specific_build(client, god, role, patch, matchup, rank="All Ranks"):
         builds.append({**{god: x[god]}, **{"win_status": x["win_status"]}})
 
     return get_top_builds(client, god, role, patch, rank=rank, data=builds)
+
+def get_matchups_stats(client, god: str, role: str, patch, rank="All Ranks"):
+    print(type(god), type(role), type(patch), type(rank))
+    mydb = client["single_combat_stats"]
+    mycol = mydb[str(god)]
+    if "All" in rank:
+        myquery = {"role": role, "patch": patch}
+    else:
+        myquery = {"role": role, "patch": patch, "rank": rank}
+
+    avg_dmg_dict = {}
+    total_games = mycol.count_documents(myquery)
+    for x in mycol.aggregate([
+        {
+            "$match": myquery
+        },
+        {
+            "$group": {
+                "_id": "$enemy",
+                "avg_dmg_diff": { "$avg": "$damage_player"},
+                "avg_kill_diff": { "$avg": "$kills"},
+                "timesPlayed": {"$sum": 1},
+            }
+        }
+    ]):
+
+        if x["timesPlayed"] >= .01 * total_games:
+            avg_dmg_dict[x["_id"]] = {"dmg": x["avg_dmg_diff"], "kills": x["avg_kill_diff"]}
+    
+    myquery = {**myquery, **{"enemy": god}}
+    for god in avg_dmg_dict:
+        mycol = mydb[god]
+        for x in mycol.aggregate([
+            {
+                "$match": myquery
+            },
+            {
+                "$group": {
+                    "_id": "$enemy",
+                    "avg_dmg_diff": { "$avg": "$damage_player"},
+                    "avg_kill_diff": { "$avg": "$kills"}
+                }
+            },
+        ]):
+            avg_dmg_dict[god]["dmg"] -= x["avg_dmg_diff"]
+            avg_dmg_dict[god]["kills"] -= x["avg_kill_diff"]
+        
+    return avg_dmg_dict
+    
 # if __name__ == "__main__":
 #     client = pymongo.MongoClient(
-#         "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
+#         "mongodb+srv://sysAdmin:9gR7C1aDKclng4jA@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
+#     get_all_matchups(client, "Achilles", "Solo", "8.11")
 #     print(get_winrate(client, "Achilles", "Solo", "8.10"))
 #     print(get_pb_rate(client, "Achilles", "All Ranks", "Solo", "8.10"))
 

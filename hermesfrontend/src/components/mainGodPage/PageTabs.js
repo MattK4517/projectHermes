@@ -7,6 +7,8 @@ import Box from '@mui/material/Box';
 import BuildPage from './BuildPage';
 import Items from './Items';
 import BuildPath from './BuildPath';
+import Matchups from './Matchups';
+
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -59,6 +61,7 @@ export default function BasicTabs(pagegod) {
           <Tab sx={{ color: "white" }} label="Build" {...a11yProps(0)} />
           <Tab sx={{ color: "white" }} label="Items" {...a11yProps(1)} />
           <Tab sx={{ color: "white" }} label="Build Paths" {...a11yProps(2)} />
+          <Tab sx={{ color: "white" }} label="Matchups" {...a11yProps(3)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -79,6 +82,9 @@ export default function BasicTabs(pagegod) {
       </TabPanel>
       <TabPanel value={value} index={2}>
         <BuildPath pagegod={pagegod.pagegod} role={pagegod.role} rank={pagegod.rank} patch={pagegod.patch}/>
+      </TabPanel>
+      <TabPanel value={value} index={3}>
+        <Matchups pagegod={pagegod.pagegod} role={pagegod.role} rank={pagegod.rank} patch={pagegod.patch}/>
       </TabPanel>
     </Box>
   );
