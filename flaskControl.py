@@ -133,10 +133,58 @@ def get_item_data(item):
         
 @app.route('/<god>/items/<role>/<rank>/<patch>')
 def get_all_items(god, role, rank, patch):
-        newgod = god.replace("_", " ")
         items = anlz.get_all_builds(client, god, role, patch, rank)
-
         return items
+
+@app.route('/<god>/m/<role>/<rank>/<patch>')
+def get_all_matchups(god, role, rank, patch):
+    mydb = client["single_combat_stats"]
+    mycol = mydb[god]
+    if "All" in rank:
+        myquery = {"role": role, "patch": patch}
+    else:
+        myquery = {"role": role, "patch": patch, "rank": rank}
+
+    avg_dmg_dict = {}
+    total_games = mycol.count_documents(myquery)
+    for x in mycol.aggregate([
+        {
+            "$match": myquery
+        },
+        {
+            "$group": {
+                "_id": "$enemy",
+                "avg_dmg_diff": { "$avg": "$damage_player"},
+                "avg_kill_diff": { "$avg": "$kills"},
+                "timesPlayed": {"$sum": 1},
+            }
+        }
+    ]):
+
+        if x["timesPlayed"] >= .01 * total_games:
+            avg_dmg_dict[x["_id"]] = {"dmg": x["avg_dmg_diff"], "kills": x["avg_kill_diff"]}
+    
+    myquery = {**myquery, **{"enemy": god}}
+    for god in avg_dmg_dict:
+        mycol = mydb[god]
+        for x in mycol.aggregate([
+            {
+                "$match": myquery
+            },
+            {
+                "$group": {
+                    "_id": "$enemy",
+                    "avg_dmg_diff": { "$avg": "$damage_player"},
+                    "avg_kill_diff": { "$avg": "$kills"}
+                }
+            },
+        ]):
+            avg_dmg_dict[god]["god"] = god
+            avg_dmg_dict[god]["dmg"] -= x["avg_dmg_diff"]
+            avg_dmg_dict[god]["kills"] -= x["avg_kill_diff"]
+        
+    return avg_dmg_dict
+
 
 @app.route("/getmatch/<matchID>")
 def get_match(matchID):

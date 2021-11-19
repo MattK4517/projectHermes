@@ -21,5 +21,6 @@ export { default as MiniDrawer } from "./drawer";
 export { default as WinRateColor } from "./mainGodPage/WinRateColor";
 export { default as BasicTabs } from "./mainGodPage/PageTabs";
 export { default as BuildPath } from "./mainGodPage/BuildPath";
+export { default as Matchups } from "./mainGodPage/Matchups";
 export { default as SearchBar } from "./SearchBarStuff/SearchBar";
 export { default as SearchBarGodPage } from "./SearchBarStuff/SearchBarGodPage";

@@ -76,8 +76,8 @@ export default class DropDownFilter extends React.Component {
                 bgcolor: "#191937"
               }}
             >
+              <MenuItem value={"8.11"}>8.11</MenuItem>
               <MenuItem value={"8.10"}>8.10</MenuItem>
-              <MenuItem value={"8.9"}>8.9</MenuItem>
             </Select>
           </FormControl>
         </Box>
