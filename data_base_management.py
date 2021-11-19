@@ -181,7 +181,7 @@ def purge_date(client, dbs, date):
         
 if __name__ == "__main__":
     mydb = client["single_matchups"]
-    insertdb = client["single_combat_stats"]
+    insertdb = client["single_match_stats"]
     for god in godsDict:
         mycol = mydb[god]
         insertcol = insertdb[god]
