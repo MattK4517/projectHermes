@@ -138,7 +138,7 @@ def get_all_items(god, role, rank, patch):
 
 @app.route('/<god>/m/<role>/<rank>/<patch>')
 def get_all_matchups(god, role, rank, patch):
-    mydb = client["single_combat_stats"]
+    mydb = client["single_match_stats"]
     mycol = mydb[god]
     if "All" in rank:
         myquery = {"role": role, "patch": patch}
@@ -160,7 +160,7 @@ def get_all_matchups(god, role, rank, patch):
             }
         }
     ]):
-
+        print(x)
         if x["timesPlayed"] >= .01 * total_games:
             avg_dmg_dict[x["_id"]] = {"dmg": x["avg_dmg_diff"], "kills": x["avg_kill_diff"]}
     
