@@ -180,14 +180,34 @@ def purge_date(client, dbs, date):
             delete_match_docs(client, db, god, "Entry_Datetime", date)
         
 if __name__ == "__main__":
-    mydb = client["single_matchups"]
-    insertdb = client["single_match_stats"]
-    for god in godsDict:
-        mycol = mydb[god]
-        insertcol = insertdb[god]
-        myquery = {"patch": "8.11"}
-        for x in mycol.find(myquery, {"enemy": 1, "matchId": 1}):
-            insertcol.update_one({"matchId": x["matchId"]}, {"$set": {"enemy": x["enemy"]}})
+    mydb = client["Matches"]
+    cols = ["8.9 Matches", "8.10 Matches", "8.11 Matches"]
+    myquery = {**{f"player{i}.Ranked_Stat_Conq": 1 for i in range(10)}, **{f"player{i}.Player_Name": 1 for i in range(10)}, **{"_id": 0}}
+    low_elo = {}
+    count = 0
+    for col in cols:
+        mycol = mydb[col]
+        for x in mycol.find({}, myquery):
+            for player in x:
+                if x[player]["Ranked_Stat_Conq"] < 0:
+                    count += 1
+                    playerName = x[player]["Player_Name"]
+                    low_elo[playerName] = x[player]
+    
+    test_sort = OrderedDict(sorted(low_elo.items(),
+    key = lambda x: getitem(x[1], "Ranked_Stat_Conq")))
+    low_elo = dict(test_sort)
+    print(low_elo)
+    print(len(low_elo))
+    print(count)
+    # mydb = client["single_matchups"]
+    # insertdb = client["single_match_stats"]
+    # for god in godsDict:
+    #     mycol = mydb[god]
+    #     insertcol = insertdb[god]
+    #     myquery = {"patch": "8.11"}
+    #     for x in mycol.find(myquery, {"enemy": 1, "matchId": 1}):
+    #         insertcol.update_one({"matchId": x["matchId"]}, {"$set": {"enemy": x["enemy"]}})
 
 
     # dbs = ["single_god_bans", "single_items", "single_matchups", "single_combat_stats", "single_objective_stats"]

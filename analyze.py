@@ -129,6 +129,27 @@ def get_top_builds(client, god, role, patch, rank="All Ranks"):
                         top_dict[slot][item]["wins"] += 1
 
 
+    else:
+        if mycol.count_documents(myquery) == 0:
+            return {**{}, **{"games": 0, "wins": 0, "winRate": 0}}
+        for x in mycol.find(myquery, {"_id": 0}):
+            games += 1
+            flag = False 
+            if x["win_status"] == "Winner":
+                wins +=1
+                flag = True
+            for slot in x[god].keys():
+                item = x[god][slot]
+                if item:
+                    if item not in top_dict[slot].keys():
+                        if flag:
+                            top_dict[slot][item] = {"item": item, "games": 1, "wins": 1}
+                        else:
+                            top_dict[slot][item] = {"item": item, "games": 1, "wins": 0}
+                    elif item in top_dict[slot].keys():
+                        top_dict[slot][item]["games"] += 1
+                        if flag:
+                            top_dict[slot][item]["wins"] += 1
 
             test_sort = OrderedDict(sorted(top_dict[slot].items(),
                 key = lambda x: getitem(x[1], "games")))
