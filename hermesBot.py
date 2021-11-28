@@ -7,6 +7,156 @@ import analyze as anlz
 from main import client as dbClient
 from constants import Assassins, Guardians, Hunters, Mages, Warriors, patch
 
+def godAbbreviations(godName):
+    godName = godName.lower()
+    if godName == "amc" or godName == "ah muzen cab":
+        godName = "Ah-Muzen-Cab"
+    elif godName == "ap" or godName == "ah puch":
+        godName = "Ah-Puch"
+    elif godName == "ama":
+        godName = "Amaterasu"
+    elif godName == "goobis":
+        godName = "Anubis"
+    elif godName == "ao" or godName == "ak" or godName == "ao kuang":
+        godName = "Ao-Kuang"
+    elif godName == "aphro":
+        godName = "Aphrodite"
+    elif godName == "ara":
+        godName = "Arachne"
+    elif godName == "art":
+        godName = "Artemis"
+    elif godName == "baba" or godName == "baba yaga":
+        godName = "Baba-Yaga"
+    elif godName == "bacc":
+        godName = "Bacchus"
+    elif godName == "baka":
+        godName = "Bakasura"
+    elif godName == "baron" or godName == "baron samedi":
+        godName = "Baron-Samedi"
+    elif godName == "bast":
+        godName = "Bastet"
+    elif godName == "bell":
+        godName = "Bellona"
+    elif godName == "cab" or godName == "cabra":
+        godName = "Cabrakan"
+    elif godName == "cama":
+        godName = "Camazotz"
+    elif godName == "cerb":
+        godName = "Cerberus"
+    elif godName == "cern":
+        godName = "Cernunnos"
+    elif godName == "change" or godName == "chang'e":
+        godName = "Chang-e"
+    elif godName == "chary" or godName == "char":
+        godName = "Charybdis"
+    elif godName == "chern" or godName == "cherno":
+        godName = "Chernobog"
+    elif godName == "lulu":
+        godName = "Cthulu"
+    elif godName == "cu" or godName == "cu chu" or godName == "cu chulainn" or godName == "chu chu":
+        godName = "Cu-Chulainn"
+    elif godName == "daji" or godName == "da ji":
+        godName = "Da-Ji"
+    elif godName == "danza":
+        godName = "Danzaburou"
+    elif godName == "disco":
+        godName = "Discordia"
+    elif godName == "erlang" or godName == "erlang shen":
+        godName = "Erlang-Shen"
+    elif godName == "isis":
+        godName = "Eset"
+    elif godName == "faf":
+        godName = "Fafnir"
+    elif godName == "fen":
+        godName = "Fenrir"
+    elif godName == "ganesh":
+        godName = "Ganesha"
+    elif godName == "gil" or godName == "gilga":
+        godName = "Gilgamesh"
+    elif godName == "guan" or godName == "guan yu":
+        godName = "Guan-Yu"
+    elif godName == "hachi":
+        godName = "Hachiman"
+    elif godName == "hebo" or godName == "he bo":
+        godName = "He-Bo"
+    elif godName == "heim":
+        godName = "Heimdallr"
+    elif godName == "herc":
+        godName = "Hercules"
+    elif godName == "hou" or godName == "hou yi":
+        godName = "Hou-Yi"
+    elif godName == "hun" or godName == "batz" or godName == "hun batz":
+        godName = "Hun-Batz"
+    elif godName == "iza":
+        godName = "Izanami"
+    elif godName == "jing" or godName == "jing wei":
+        godName = "Jing-Wei"
+    elif godName == "jorm":
+        godName = "Jormungandr"
+    elif godName == "khep":
+        godName = "Khepri"
+    elif godName == "king" or godName == "arthur" or godName == "king arthur" or godName == "ka":
+        godName = "King-Arthur"
+    elif godName == "kuku":
+        godName = "Kukulkan"
+    elif godName == "kumbha" or godName == "kumba":
+        godName = "Kumbhakarna"
+    elif godName == "kuzen":
+        godName = "Kuzenbo"
+    elif godName == "dusa":
+        godName = "Medusa"
+    elif godName == "merc":
+        godName = "Mercury"
+    elif godName == "morgan le fay" or godName == "morgan" or godName == "morgan fay" or godName == "morg":
+        godName = "Morgan-Le-Fay"
+    elif godName == "nezha" or godName == "ne zha":
+        godName = "Ne-Zha"
+    elif godName == "nem":
+        godName = "Nemesis"
+    elif godName == "nuwa" or godName == "nu wa":
+        godName = "Nu-Wa"
+    elif godName == "olo":
+        godName = "Olorun"
+    elif godName == "osi":
+        godName = "Osiris"
+    elif godName == "pers" or godName == "perse":
+        godName = "Persephone"
+    elif godName == "pos" or godName == "pose":
+        godName = "Poseidon"
+    elif godName == "ram":
+        godName = "Rama"
+    elif godName == "rat":
+        godName = "Ratatoskr"
+    elif godName == "rav" or godName == "ravan":
+        godName = "Ravana"
+    elif godName == "serq":
+        godName = "Serqet"
+    elif godName == "swk" or godName == "wukong" or godName == "sun wukong":
+        godName = "Sun-Wukong"
+    elif godName == "susan" or godName == "sus":
+        godName = "Susano"
+    elif godName == "sylv"or godName == "tree":
+        godName = "Sylvanus"
+    elif godName == "thana" or godName == "than":
+        godName = "Thanatos"
+    elif godName == "morrigan" or godName == "morri" or godName == "the morrigan":
+        godName = "The-Morrigan"
+    elif godName == "tia":
+        godName = "Tiamat"
+    elif godName == "tsuku" or godName == "tsuki" or godName == "tsu":
+        godName = "Tsukuyomi"
+    elif godName == "vam" or godName == "vaman":
+        godName = "Vamana"
+    elif godName == "xbal":
+        godName = "Xbalanque"
+    elif godName == "xing" or godName == "xing tian" or godName == "XT":
+        godName = "Xing-tian"
+    elif godName == "yem":
+        godName = "Yemoja"
+    elif godName == "zhong" or godName == "zhong kui":
+        godName = "Zhong-Kui"
+    return godName
+
 
 if __name__ == "__main__":
     token = open("token.txt", "r").read()  # I've opted to just save my token to a text file. 
@@ -36,8 +186,9 @@ if __name__ == "__main__":
                 role = m[-1]
                 for x in range(len(god)):
                     actgod += god[x]+" "
-                actgod = actgod.strip()
+                actgod = godAbbreviations(actgod.strip()).replace("-"," ")
                 data = anlz.get_top_builds(dbClient, actgod, role, patch)
+                print(actgod)
                 ItemWR = []
                 iconURL = anlz.get_url(actgod)
                 if actgod in Assassins:
@@ -72,7 +223,7 @@ if __name__ == "__main__":
                 role = m[-1]
                 for x in range(len(god)):
                     actgod += god[x]+" "
-                actgod = actgod.strip()
+                actgod = godAbbreviations(actgod.strip()).replace("-"," ")
                 data = anlz.get_worst_matchups(mongo_client, actgod, role, patch)
                 iconURL = anlz.get_url(actgod)
                 if actgod in Assassins:
@@ -102,7 +253,7 @@ if __name__ == "__main__":
                 role = m[-1]
                 for x in range(len(god)):
                     actgod += god[x]+" "
-                actgod = actgod.strip()
+                actgod = godAbbreviations(actgod.strip()).replace("-"," ")
                 data = anlz.get_build_path(dbClient, actgod, role, patch)
                 iconURL = anlz.get_url(actgod)
                 if actgod in Assassins:
