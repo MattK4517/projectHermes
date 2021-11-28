@@ -189,7 +189,7 @@ if __name__ == "__main__":
         mycol = mydb[col]
         for x in mycol.find({}, myquery):
             for player in x:
-                if x[player]["Ranked_Stat_Conq"] < 0:
+                if x[player]["Ranked_Stat_Conq"] > 3300:
                     count += 1
                     playerName = x[player]["Player_Name"]
                     low_elo[playerName] = x[player]
