@@ -110,9 +110,9 @@ def get_tier_list(rank, role, tableType):
                 mycol = mydb["Objective List"]
                 rank = rank.replace("_", " ")
                 if "All" in role:
-                        myquery = {"rank": rank, "games": {"$gte": 500}}
+                        myquery = {"rank": rank, "pickRate": {"$gte": 1}}
                 else:
-                        myquery = {"rank": rank, "role": role, "games": {"$gte": 500}}
+                        myquery = {"rank": rank, "role": role, "pickRate": {"$gte": 1}}
                 
                 for x in mycol.find(myquery, {"_id": 0}):
                         dict_god = x["god"]

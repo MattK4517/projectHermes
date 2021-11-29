@@ -13,6 +13,8 @@ def gen_tier_list(client, roles, patch, types, ranks):
                         gen_regular_tier_entry(client, god, role, rank, patch)
                     elif tier_type == "Combat":
                         gen_combat_tier_entry(client, god, role, rank, patch)
+                    elif tier_type == "Objective":
+                        gen_objective_tier_entry(client, god, role, rank, patch)
                     print(f"god done {god} - {rank} - {role} - {tier_type}")
 
 
@@ -89,6 +91,7 @@ def gen_combat_tier_entry(client, god, role, rank, patch):
     tier_entry = {
         "patch": patch,
         "Entry_Datetime": get_date(),
+        "god": god,
         "role": role,
         "rank": rank,
         "winRate": winRate,
@@ -97,7 +100,42 @@ def gen_combat_tier_entry(client, god, role, rank, patch):
     }
 
     tier_entry = {**tier_entry, ** anlz.get_combat_stats(client, god, role, patch, rank)}
+    if "_id" in tier_entry:
+        del tier_entry["_id"]   
     insert_data(client, "Tier_list", "Combat List", tier_entry)
+
+def gen_objective_tier_entry(client, god, role, rank, patch):
+    """ gather information to generate combat tier entry
+        dict fields shown below
+    """
+    # insert a dict
+    # { 
+    #     patch, get from args
+    #     role, get from args
+    #     god, get from args
+    #     winRate, get from calc_win_rate
+    #     kills, deaths, assists, damage, damage taken, damage mitigated, healing, self healing from anlz.get_combat_stats
+    #     games, get from calc_win_rate
+    # }
+    wr_data = calc_win_rate(client, god, role, patch, rank)
+    winRate = wr_data["win_rate"]
+    games = wr_data["games"]
+    pb_data =  calc_pick_ban_rate(client, god, rank, role, patch)
+    pick_rate = pb_data["pickRate"]
+    tier_entry = {
+        "patch": patch,
+        "Entry_Datetime": get_date(),
+        "god": god,
+        "role": role,
+        "rank": rank,
+        "winRate": winRate,
+        "pickRate": pick_rate,
+    }
+
+    tier_entry = {**tier_entry, ** anlz.get_objective_stats(client, god, role, patch, rank)}
+    if "_id" in tier_entry:
+        del tier_entry["_id"]   
+    insert_data(client, "Tier_list", "Objective List", tier_entry)
 
 def insert_data(client, db, col, data):
     mydb = client[db]
@@ -109,7 +147,7 @@ def get_date():
     return f"{time.month}/{time.day}/{time.year}"
 
 if __name__ == '__main__':
-    gen_tier_list(client, roles, "8.9", ["Combat", "Regular"], ranks)
+    gen_tier_list(client, roles, "8.11", ["Combat", "Regular", "Objective"], ranks)
 
 
 

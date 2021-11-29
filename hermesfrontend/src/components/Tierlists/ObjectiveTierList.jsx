@@ -245,7 +245,7 @@ const Table = ({ columns, data }) => {
                                     {...cell.getCellProps()}
                                   >
                                     <span>
-                                      {row.original.towerKills.toFixed()}
+                                      {row.original.towerKills}
                                     </span>
                                   </div>
 
@@ -259,7 +259,7 @@ const Table = ({ columns, data }) => {
                                     {...cell.getCellProps()}
                                   >
                                     <span>
-                                      {row.original.phoenixKills.toFixed()}
+                                      {row.original.phoenixKills}
                                     </span>
                                   </div>
 
@@ -402,11 +402,11 @@ function ObjectiveTierList(tableType) {
                 role: data[key][godData].role,
                 winRate: data[key][godData].winRate,
                 gold: data[key][godData].gold,
-                killsBot: data[key][godData].kills_bot,
-                damageBot: data[key][godData].damage_bot,
-                towerKills: data[key][godData].tower_kills,
-                phoenixKills: data[key][godData].phoenix_kills,
-                wardsPlaced: data[key][godData].wards_placed,
+                killsBot: data[key][godData].killsBot,
+                damageBot: data[key][godData].damageBot,
+                towerKills: data[key][godData].towerKills,
+                phoenixKills: data[key][godData].phoenixKills,
+                wardsPlaced: data[key][godData].wardsPlaced,
                 games: data[key][godData].games,
               },
             ]);

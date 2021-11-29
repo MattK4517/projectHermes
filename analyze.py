@@ -7,7 +7,7 @@ import errlogger as logger
 import pymongo
 from collections import OrderedDict
 from operator import getitem
-from constants import godsDict, slots, Tier_Three_items, Starter_items, roles
+from constants import godsDict, slots, Tier_Three_items, Starter_items, roles, single_combat_stats, single_objective_stats
 
 # info pull
 # [godWR, godPR, godBR] - check, matchesPlayed - check
@@ -332,58 +332,74 @@ def get_total_matches(client, rank, patch):
     return total_games
 
 def get_combat_stats(client, god, role, patch, rank="All Ranks"):
-    mydb = client["single_combat_stats"]
+    mydb = client["single_match_stats"]
     mycol = mydb[god]
+    combat_stats = {}
     if rank != "All Ranks":
         myquery = { "role": role, "rank": rank, "patch": patch}
     else:
         myquery = { "role": role, "patch": patch}
     
-    kills = 0
-    deaths = 0
-    assists = 0
-    damage = 0
-    damageTaken = 0
-    damageMitigated = 0
-    healing = 0
-    selfHealing = 0
-    games = 0
-    wins = 0
-
-    for x in mycol.find(myquery):
-        games += 1
-        kills += x["kills"]
-        deaths += x["deaths"]
-        assists += x["assists"]
-        damage += x["damage_player"]
-        damageTaken += x["damage_taken"]
-        damageMitigated += x["damage_mitigated"]
-        healing += x["healing"]
-        selfHealing += x["healing_self"]
-        if x["win_status"] == "Winner":
-            wins += 1
-    
-    if games == 0:
-        games = 1
-
-    combat_stats = {
-        "rank": rank,
-        "role": role,
-        "god": god,
-        "winRate": round(wins/games * 100, 2),
-        "kills": round(kills/games, 2),
-        "deaths": round(deaths/games, 2),
-        "assists": round(assists/games, 2),
-        "damage_": round(damage/games),
-        "damageTaken": round(damageTaken/games),
-        "damageMitigated": round(damageMitigated/games),
-        "healing": round(healing/games),
-        "selfHealing": round(selfHealing/games),
-        "games": games,
-
-    }
+    for x in mycol.aggregate([
+        {
+            "$match": myquery
+        },
+        {
+            "$group": {
+                "_id": "$god",
+                "kills": { "$avg": "$kills"},
+                "deaths": { "$avg": "$deaths"},
+                "damage_": { "$avg": "$damage_player"},
+                "damageTaken": { "$avg": "$damage_taken"},
+                "damageMitigated": { "$avg": "$damage_mitigated"},
+                "healing": { "$avg": "$healing"},
+                "selfHealing": { "$avg": "$healing_self"},
+                "games": {"$sum": 1},
+            }
+        }
+    ]):
+        combat_stats = x
+        for key, val in enumerate(combat_stats):
+            if type(combat_stats[val]) is float or type(combat_stats[val]) is int:
+                combat_stats[val] = round(combat_stats[val], 2)
 
     return combat_stats
+
+def get_objective_stats(client, god, role, patch, rank="All Ranks"):
+    mydb = client["single_match_stats"]
+    mycol = mydb[god]
+    if rank != "All Ranks":
+        myquery = { "role": role, "rank": rank, "patch": patch}
+    else:
+        myquery = { "role": role, "patch": patch}
+    combat_stats = {}
+    for x in mycol.aggregate([
+        {
+            "$match": myquery
+        },
+        {
+            "$group": {
+                "_id": "$god",
+                "gold": { "$avg": "$gold"},
+                "damageBot": { "$avg": "$damage_bot"},
+                "killsBot": { "$avg": "$kills_bot"},
+                "towerKills": { "$avg": "$tower_kills"},
+                "phoenixKills": { "$avg": "$phoenix_kills"},
+                "towerDamage": { "$avg": "$tower_damage"},
+                "wardsPlaced": { "$avg": "$wards_placed"},
+                "games": {"$sum": 1},
+            }
+        }
+    ]):
+        # print(x)
+        combat_stats = x
+        for key, val in enumerate(combat_stats):
+            if type(combat_stats[val]) is float or type(combat_stats[val]) is int:
+                combat_stats[val] = round(combat_stats[val], 2)
+
+    # del combat_stats["_id"]
+    return combat_stats
+
 
 def get_build_stats(client, build):
     item_data_db = client["Item_Data"]
@@ -650,7 +666,8 @@ def get_matchups_stats(client, god: str, role: str, patch, rank="All Ranks"):
 # if __name__ == "__main__":
 #     client = pymongo.MongoClient(
 #         "mongodb+srv://sysAdmin:9gR7C1aDKclng4jA@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
-#     get_all_matchups(client, "Achilles", "Solo", "8.11")
+#     print(get_combat_stats(client, "Achilles", "Solo", "8.11"))
+#     print(get_objective_stats(client, "Achilles", "Solo", "8.11"))
 #     print(get_winrate(client, "Achilles", "Solo", "8.10"))
 #     print(get_pb_rate(client, "Achilles", "All Ranks", "Solo", "8.10"))
 

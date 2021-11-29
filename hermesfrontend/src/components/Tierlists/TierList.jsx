@@ -123,7 +123,7 @@ const Table = ({ columns, data }) => {
                             } else if (key.includes("tier")) {
                               return (
                                 <div className="rt-td tier" style={{ minWidth: "50px", maxWidth: "90px", flex: "1 1 100%" }} {...cell.getCellProps()}>
-                                  <span><b>A</b></span>
+                                  <span><b>{row.original.tier}</b></span>
                                 </div>
                               )
                             } else if (key.includes("winRate")) {
@@ -317,6 +317,10 @@ const GetColumnType = (tableType) => {
   return columns
 }
 
+const compare = (a, b) => {
+  return a.winRate - b.winRate
+}
+
 function TierList(tableType) {
   // const [patch, setPatch] = useState("8.9");
   const [totalData, setTotalData] = useState([]);
@@ -333,6 +337,7 @@ function TierList(tableType) {
         setTotalData([]);
         Object.keys(data).forEach((key, index) => {
               Object.keys(data[key]).forEach((godData) => {
+                let matchups = Object.values(data[key][godData].counterMatchups).sort(compare)
                 setTotalData((totalData) => [
                   ...totalData,
                   {
@@ -343,11 +348,10 @@ function TierList(tableType) {
                     pickRate: data[key][godData].pickRate,
                     banRate: data[key][godData].banRate,
                     wins: data[key][godData].wins,
-                    tier: "A",
-                    counterMatchups: Object.keys(data[key][godData].counterMatchups).map((matchup, index) => {
+                    tier: data[key][godData].tier,
+                    counterMatchups: matchups.map((matchup, index) => {
                       return(
-                        [data[key][godData]["counterMatchups"][matchup].url,
-                        data[key][godData]["counterMatchups"][matchup].enemy]
+                        [matchup.url, matchup.enemy]
                       )
                     })
                   },
