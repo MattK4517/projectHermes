@@ -33,6 +33,7 @@ godsDict = {
     "Chernobog": 0,
     "Chiron": 0,
     "Chronos": 0,
+    "Cliodhna": 0,
     "Cthulhu": 0,
     "Cu Chulainn": 0,
     "Cupid": 0,
