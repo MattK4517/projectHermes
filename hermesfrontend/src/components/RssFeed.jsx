@@ -7,7 +7,7 @@ function RSSFeeder(props) {
       
         script.src = "//rss.bloople.net/?url=https%3A%2F%2Fstore.steampowered.com%2Ffeeds%2Fnews%2Fapp%2F386360%2F%3Fcc%3DUS%26l%3Denglish%26snr%3D1_2108_9__2107&showtitle=false&type=js";
         script.async = true;
-        var element = document.getElementById("insertHere");
+        let element = document.getElementById("insertHere");
         element.appendChild(script);
       
       }, []);
