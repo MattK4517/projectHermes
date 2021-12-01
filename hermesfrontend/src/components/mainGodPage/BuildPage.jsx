@@ -182,6 +182,7 @@ class GodRankStats extends React.Component {
 
   class BuildStatsElement extends React.Component {
     render() {
+      console.log(this.props)
       return (
         <>
           <div className="item-row">
