@@ -14,6 +14,8 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Godpage from "../mainGodPage/Godpage";
 import SearchBarGodPage from "../SearchBarStuff/SearchBarGodPage";
+import RSSFeeder from "../RssFeed";
+import { Helmet } from "react-helmet";
 
 const godsDict = {
   "All Gods": "None",
@@ -496,10 +498,15 @@ export default function BuildPage(pagegod) {
         matchup
         );
         return (
+          <div style={{
+            display: "flex", 
+            flexDirection: "row"
+          }}>
             <div className="god-build"
             style={{ 
               backgroundImage: "url(https://i.imgur.com/Y0y5iPZ.jpg)",
-              backgroundRepeat: "no-repeat"
+              backgroundRepeat: "no-repeat",
+              paddingRight: "24px"
           }}
             >
             <div className="toughest-matchups content-section" style={{opacity: "75%"}}>
@@ -566,14 +573,12 @@ export default function BuildPage(pagegod) {
                     <div className="filter-manager">
                       <div className="filter-width-wrapper">
                         <div className="filter-manager_container">
-                          {/* <div className="role-filter-container"> */}
                           <FilterForm
                             filter={role}
                             god={"Achilles"}
                             filters={roles}
                             setFilter={setRole}
                           />
-                          {/* </div> */}
                               <FilterForm
                                 filter={rank}
                                 god={"Achilles"}
@@ -581,7 +586,6 @@ export default function BuildPage(pagegod) {
                                 setFilter={setRank}
                               />
                           <DropDownFilter changePatch={null} patch={"8.11"} style={{color: "white"}}/>
-                          {/* <SearchBarGodPage data={routes} changeMatchup={setMatchup}/> */}
                         </div>
                       </div>
                     </div>
@@ -604,6 +608,8 @@ export default function BuildPage(pagegod) {
                 </p>
               </div>
             </div>
+          </div>
+          <RSSFeeder />
           </div>
         )
     }
