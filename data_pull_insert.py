@@ -193,7 +193,7 @@ def create_player_dict(player):
     playerDict["Multi_kill_Max"] = player.multiKillMax
     playerDict["Objective_Assists"] = player["Objective_Assists"]
     playerDict["Ranked_Stat_Conq"] = player["Rank_Stat_Conquest"]
-    playerDict["Region"] = player.region
+    playerDict["Region"] = player["Region"]
     playerDict["Role"] = player["Role"]
     playerDict["Skin"] = player["Skin"]
     playerDict["Structure_Damage"] = player["Structure_Damage"]

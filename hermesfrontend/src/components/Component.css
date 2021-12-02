@@ -1368,3 +1368,9 @@ figure.snip0015:hover figcaption::before {
    border-bottom:1px solid #414165
   }
  }
+
+ .update-feed img {
+   display: none;
+   max-width: 150px;
+   max-height: 150px;
+ }
