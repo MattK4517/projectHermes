@@ -189,6 +189,20 @@ const Table = ({ columns, data }) => {
                                       <b>{row.original.dmg}</b>
                                     </span>
                                   </div>
+
+                                  <div
+                                    className="rt-td"
+                                    style={{
+                                      minWidth: "65px",
+                                      maxWidth: "70px",
+                                      flex: "1 1 100%",
+                                    }}
+                                    {...cell.getCellProps()}
+                                  >
+                                    <span>
+                                      <b>{row.original.gold}</b>
+                                    </span>
+                                  </div>
                                     </>
                                     )
                                 }
@@ -279,6 +293,7 @@ export default function Matchups(props) {
                       dmg: data[key]["dmg"].toFixed(2),
                       kills: data[key]["kills"].toFixed(2),
                       god: data[key]["god"],
+                      gold: data[key]["gold"].toFixed(),
                       }
                   ])
               })
@@ -302,6 +317,10 @@ export default function Matchups(props) {
           {
             Header: "Damage Diff",
             accessor: "dmg",
+          },
+          {
+            Header: "Gold Diff",
+            accessor: "gold",
           },
         ],
         []
