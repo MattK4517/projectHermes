@@ -20,6 +20,11 @@ const theme = createTheme({
       xl: 1536,
     },
   },
+  ".MuiContainer-root":
+  {
+    paddingLeft: "0px",
+    paddingRight: "0px",
+  }
 });
 
 

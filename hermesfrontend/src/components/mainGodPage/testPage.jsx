@@ -15,7 +15,7 @@ import Box from '@mui/material/Box';
 import Godpage from "../mainGodPage/Godpage";
 import SearchBarGodPage from "../SearchBarStuff/SearchBarGodPage";
 import RSSFeeder from "../RssFeed";
-import { Helmet } from "react-helmet";
+import InfiniteScroll from "react-infinite-scroll-component"
 
 const godsDict = {
   "All Gods": "None",
@@ -498,35 +498,50 @@ export default function BuildPage(pagegod) {
         matchup
         );
         return (
-          <div style={{
+          <div className="home-image"
+          style={{
             display: "flex", 
-            flexDirection: "row"
+            flexDirection: "row",
           }}>
             <div className="god-build"
             style={{ 
-              backgroundImage: "url(https://i.imgur.com/Y0y5iPZ.jpg)",
-              backgroundRepeat: "no-repeat",
-              paddingRight: "24px"
+              // backgroundImage: "url(https://i.imgur.com/Y0y5iPZ.jpg)",
+              // backgroundRepeat: "no-repeat",
+              paddingRight: "24px",
+              maxWidth: "750px",
+              // opacity: "85%"
           }}
+          // height={window.innerHeight}
+          // dataLength={1}
             >
-            <div className="toughest-matchups content-section" style={{opacity: "75%"}}>
+            <div className="toughest-matchups content-section"
+            style={{
+              backgroundColor: "#191937D9"
+            }}>
               <div className="content-section_header">
                   Introduction&nbsp;
                   <span style={{color: "#5f5f7b", fontSize: "14px", fontWeight: "400"}}>Welcome to SmiteStats!</span>
               </div>
               <div className="matchups" style={{display: "flex", flexDirection: "column", fontSize: "1rem"}}>
-                <p style={{opacity: "100% !important"}}>
+                <p>
                   SmiteStats.gg is a statistics website for SMITE. This page will go through all the features provided as well
                   as explain what all the numbers mean. SmiteStats prides itself on allowing users to get the most granular data
                   available, if someones played it you can get data from it.
                 </p>
               </div>
             </div>
-            <div className="toughest-matchups content-section">
+            <InfiniteScroll
+              className="toughest-matchups content-section test_page"
+              dataLength={1}
+              height={450}
+              style={{
+                backgroundColor: "#191937D9"
+              }}
+            >
               <div className="content-section_header">
                   God Pages&nbsp;
                   <span style={{color: "#5f5f7b", fontSize: "14px", fontWeight: "400"}}>
-                    This is where most of the god stats are
+                    This is where most of the god stats are (Scroll For More Info)
                   </span>
               </div>
               <div className="matchups" style={{display: "flex", flexDirection: "column"}}>
@@ -607,7 +622,7 @@ export default function BuildPage(pagegod) {
                   </ul>
                 </p>
               </div>
-            </div>
+            </InfiniteScroll>
           </div>
           <RSSFeeder />
           </div>

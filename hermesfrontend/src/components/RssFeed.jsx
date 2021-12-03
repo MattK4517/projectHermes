@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from "react"
+import InfiniteScroll from "react-infinite-scroll-component"
 //https://store.steampowered.com/feeds/news/app/386360/?cc=US&l=english&snr=1_2108_9__2107
 // function RSSFeeder(props) {
 //     useEffect(() => {
@@ -59,23 +60,39 @@ export default function RSSFeeder() {
     }, []);
 
   return (
-    // style={{opacity: "75%", flexDirection: "row", display: "flex"}} 
-    <div className="toughest-matchups content-section">
+    // style={{opacity: "75%", flexDirection: "row", display: "flex"}}
+    <> 
+    <InfiniteScroll  
+      className="toughest-matchups content-section " 
+      style={{ 
+        maxWidth: "512px",
+        marginTop: "24px",
+        backgroundColor: "#191937D9"
+    }}
+      dataLength={items.length}
+      height={400}
+    >
     <div className="content-section_header">
-      Patch Info
+      SMITE Update Info
     </div>
       {items.map((item, index) => {
-        if (index < 2) {
+        // if (index < 2) {
         return (
-          <div style={{flexDirection: "column", display: "flex"}}>
+          <div>
             <h1>{item.title}</h1>
             <p>{item.author}</p>
-            <div dangerouslySetInnerHTML={{ __html: item.description.replaceAll("&lt;", "<").replaceAll("&gt;", ">") }} className="update-feed"/>
+            <div dangerouslySetInnerHTML={{ __html: item.description.replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("https://steamcommunity.com/linkfilter/?url=", "")
+           }} className="feed-element"             
+           style={{
+            marginTop: "10px",
+            marginBottom: "10px",
+            borderBottom: "2px solid #414165"
+          }}/> 
           </div>
         );
-        }
+        // }
       })}
-    </div>
-    </div>
+    </InfiniteScroll>
+    </>
   );
 }
