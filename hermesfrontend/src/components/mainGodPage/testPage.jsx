@@ -533,7 +533,7 @@ export default function BuildPage(pagegod) {
             <InfiniteScroll
               className="toughest-matchups content-section test_page"
               dataLength={1}
-              height={450}
+              height={window.innerHeight - 300}
               style={{
                 backgroundColor: "#191937D9"
               }}
