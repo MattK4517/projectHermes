@@ -468,6 +468,13 @@ class HomeRankStats extends React.Component {
     }
   }
 
+  const CustDiv = styled("div")(({ theme }) => ({
+    [theme.breakpoints.down('lg')]: {
+      backgroundColor: "#0000FF",
+      display:  "none",
+    },
+  }));
+
 
 export default function BuildPage(pagegod) {
     const [role, setRole] = useState("Solo");
@@ -502,9 +509,14 @@ export default function BuildPage(pagegod) {
           style={{
             display: "flex", 
             flexDirection: "row",
-            marginLeft: "auto",
-            marginRight: "auto"
+            width: "100%",
           }}>
+            <div className="center"
+            style={{
+              display: "flex",
+              width: "100%",
+              margin: "auto"
+            }}>
             <div className="god-build"
             style={{ 
               // backgroundImage: "url(https://i.imgur.com/Y0y5iPZ.jpg)",
@@ -626,7 +638,11 @@ export default function BuildPage(pagegod) {
               </div>
             </InfiniteScroll>
           </div>
+          <CustDiv>
           <RSSFeeder />
+          </CustDiv>
+          </div>
+          
           </div>
         )
     }

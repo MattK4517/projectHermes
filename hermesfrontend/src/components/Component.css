@@ -1350,6 +1350,10 @@ figure.snip0015:hover figcaption::before {
   .build .recommended-build_items {
    grid-template-columns:repeat(4,1fr);
   }
+
+  .home-image {
+    background-image: none;
+  }
  }
  @media(max-width:899px) {
   .build .recommended-build_items {
