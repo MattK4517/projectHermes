@@ -264,6 +264,8 @@ const routeComponents = routes.map(({path, component}, key) => <Route exact path
             width: `calc(100% - ${drawerWidth+20}px)`,
             ml: `${drawerWidth}px`,
             bgcolor: "#17172e",
+            paddingLeft: "0px",
+            paddingRight: "0px"
          }}
       >
         <Toolbar>

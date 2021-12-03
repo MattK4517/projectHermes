@@ -157,11 +157,10 @@ def add_gold_eff(client, db, col, field_key):
         add_patch_field(client, db, col, matchId, gold_eff, field_key)
 
 if __name__ == "__main__":
-    pass
-    # delete_match_docs(client, "Matches", "8.10 Matches", "Patch", "8.9")
-    # mydb = client["Matches"]
-    # mycol = mydb["8.10 Matches"]
-    # print(mycol.count_documents({"Entry_Datetime": "11/13/2021"}))
+    # delete_match_docs(client, "Matches", "8.11 Matches", "Entry_Datetime", "11/24/2021")
+    mydb = client["Matches"]
+    mycol = mydb["8.11 Matches"]
+    print(mycol.count_documents({"Entry_Datetime": "11/26/2021"}))
 
     # dbs = ["single_combat_stats", "single_god_bans", "single_items", "single_matchups", "single_objective_stats"]
     # for db in dbs:
