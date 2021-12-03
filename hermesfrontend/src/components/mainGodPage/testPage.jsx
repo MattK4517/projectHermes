@@ -502,6 +502,8 @@ export default function BuildPage(pagegod) {
           style={{
             display: "flex", 
             flexDirection: "row",
+            marginLeft: "auto",
+            marginRight: "auto"
           }}>
             <div className="god-build"
             style={{ 
