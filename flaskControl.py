@@ -156,13 +156,13 @@ def get_all_matchups(god, role, rank, patch):
                 "_id": "$enemy",
                 "avg_dmg_diff": { "$avg": "$damage_player"},
                 "avg_kill_diff": { "$avg": "$kills"},
+                "avg_gold_diff": { "$avg": "$gold"},
                 "timesPlayed": {"$sum": 1},
             }
         }
     ]):
-        print(x)
         if x["timesPlayed"] >= .01 * total_games:
-            avg_dmg_dict[x["_id"]] = {"dmg": x["avg_dmg_diff"], "kills": x["avg_kill_diff"]}
+            avg_dmg_dict[x["_id"]] = {"dmg": x["avg_dmg_diff"], "kills": x["avg_kill_diff"], "gold": x["avg_gold_diff"]}
     
     myquery = {**myquery, **{"enemy": god}}
     for god in avg_dmg_dict:
@@ -175,13 +175,15 @@ def get_all_matchups(god, role, rank, patch):
                 "$group": {
                     "_id": "$enemy",
                     "avg_dmg_diff": { "$avg": "$damage_player"},
-                    "avg_kill_diff": { "$avg": "$kills"}
+                    "avg_kill_diff": { "$avg": "$kills"},
+                    "avg_gold_diff": { "$avg": "$gold"},
                 }
             },
         ]):
             avg_dmg_dict[god]["god"] = god
             avg_dmg_dict[god]["dmg"] -= x["avg_dmg_diff"]
             avg_dmg_dict[god]["kills"] -= x["avg_kill_diff"]
+            avg_dmg_dict[god]["gold"] -= x["avg_gold_diff"]
         
     return avg_dmg_dict
 
