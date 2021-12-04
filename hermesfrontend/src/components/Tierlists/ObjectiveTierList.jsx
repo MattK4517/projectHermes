@@ -433,30 +433,37 @@ function ObjectiveTierList(tableType) {
       {
         Header: "Win Rate",
         accessor: "winRate",
+        sortType: compareNumericString
       },
       {
         Header: "Gold",
         accessor: "gold",
+        sortType: compareNumericString
       },
       {
         Header: "Minion Kills",
         accessor: "killsBot",
+        sortType: compareNumericString
       },
       {
         Header: "Minion Damage",
         accessor: "damageBot",
+        sortType: compareNumericString
       },
       {
         Header: "Tower Kills",
         accessor: "towerKills",
+        sortType: compareNumericString
       },
       {
         Header: "Phoenix Kills",
         accessor: "phoenixKills",
+        sortType: compareNumericString
       },
       {
         Header: "Wards Placed",
         accessor: "wardsPlaced",
+        sortType: compareNumericString
       },
       {
         Header: "Games",
@@ -476,4 +483,18 @@ function ObjectiveTierList(tableType) {
   );
 }
 
+
+function compareNumericString(rowA, rowB, id, desc) {
+  let a = Number.parseFloat(rowA.values[id]);
+  let b = Number.parseFloat(rowB.values[id]);
+  if (Number.isNaN(a)) {  // Blanks and non-numeric strings to bottom
+      a = desc ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
+  }
+  if (Number.isNaN(b)) {
+      b = desc ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
+  }
+  if (a > b) return 1; 
+  if (a < b) return -1;
+  return 0;
+}
 export default ObjectiveTierList;

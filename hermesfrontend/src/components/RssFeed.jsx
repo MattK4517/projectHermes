@@ -70,7 +70,7 @@ export default function RSSFeeder() {
         backgroundColor: "#191937D9"
     }}
       dataLength={items.length}
-      height={400}
+      height={750}
     >
     <div className="content-section_header">
       SMITE Update Info
