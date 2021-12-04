@@ -485,42 +485,52 @@ function CombatTierList(tableType) {
       {
         Header: "Win Rate",
         accessor: "winRate",
+        sortType: compareNumericString
       },
       {
         Header: "Kills",
         accessor: "kills",
+        sortType: compareNumericString
       },
       {
         Header: "Deaths",
         accessor: "deaths",
+        sortType: compareNumericString
       },
       {
         Header: "Assists",
         accessor: "assists",
+        sortType: compareNumericString
       },
       {
         Header: "Damage",
         accessor: "damageD",
+        sortType: compareNumericString
       },
       {
         Header: "Taken",
         accessor: "damageTaken",
+        sortType: compareNumericString
       },
       {
         Header: "Mitigated",
         accessor: "damageMitigated",
+        sortType: compareNumericString
       },
       {
         Header: "Healing",
         accessor: "healing",
+        sortType: compareNumericString
       },
       {
         Header: "Self Healing",
         accessor: "selfHealing",
+        sortType: compareNumericString
       },
       {
         Header: "Games",
         accessor: "games",
+        sortType: compareNumericString
       },
     ],
     []
@@ -534,6 +544,20 @@ function CombatTierList(tableType) {
       <Table columns={columns} data={totalData} />
     </>
   );
+}
+
+function compareNumericString(rowA, rowB, id, desc) {
+  let a = Number.parseFloat(rowA.values[id]);
+  let b = Number.parseFloat(rowB.values[id]);
+  if (Number.isNaN(a)) {  // Blanks and non-numeric strings to bottom
+      a = desc ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
+  }
+  if (Number.isNaN(b)) {
+      b = desc ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
+  }
+  if (a > b) return 1; 
+  if (a < b) return -1;
+  return 0;
 }
 
 export default CombatTierList;

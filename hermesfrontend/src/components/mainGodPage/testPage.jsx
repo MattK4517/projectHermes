@@ -496,6 +496,7 @@ export default function BuildPage(pagegod) {
       "Support",
       "Carry",
     ]);
+    
     const [matchup, setMatchup] = useState("None")
     const { games, badmatchups, goodmatchups, items, colorStyle } = useFetch(
         "Achilles",
@@ -505,7 +506,7 @@ export default function BuildPage(pagegod) {
         matchup
         );
         return (
-          <div className="home-image"
+          <div
           style={{
             display: "flex", 
             flexDirection: "row",
@@ -525,7 +526,7 @@ export default function BuildPage(pagegod) {
               maxWidth: "750px",
               // opacity: "85%"
           }}
-          // height={window.innerHeight}
+          height={144}
           // dataLength={1}
             >
             <div className="toughest-matchups content-section"
@@ -547,7 +548,7 @@ export default function BuildPage(pagegod) {
             <InfiniteScroll
               className="toughest-matchups content-section test_page"
               dataLength={1}
-              height={window.innerHeight - 300}
+              height={"calc(window.innerHeight-300)"}
               style={{
                 backgroundColor: "#191937D9"
               }}

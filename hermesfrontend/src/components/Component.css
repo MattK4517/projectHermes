@@ -1392,3 +1392,7 @@ figure.snip0015:hover figcaption::before {
 .test_page {
   scrollbar-width: none;
 }
+
+.rt-td {
+  align-self: center;
+}

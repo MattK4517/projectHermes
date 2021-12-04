@@ -384,14 +384,20 @@ function TierList(tableType) {
       {
         Header: 'Win Rate',
         accessor: 'winRate',
+        sortType: compareNumericString
+        
       },
       {
         Header: 'Pick Rate',
         accessor: 'pickRate',
+        sortType: compareNumericString
+        
       },
       {
         Header: 'Ban Rate',
         accessor: 'banRate',
+        sortType: compareNumericString
+        
       },
       {
         Header: "Counter Matchups",
@@ -441,5 +447,18 @@ class CounterMatchupDisplay extends React.Component {
   }
 }
 
+function compareNumericString(rowA, rowB, id, desc) {
+  let a = Number.parseFloat(rowA.values[id]);
+  let b = Number.parseFloat(rowB.values[id]);
+  if (Number.isNaN(a)) {  // Blanks and non-numeric strings to bottom
+      a = desc ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
+  }
+  if (Number.isNaN(b)) {
+      b = desc ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
+  }
+  if (a > b) return 1; 
+  if (a < b) return -1;
+  return 0;
+}
 
 export default TierList;

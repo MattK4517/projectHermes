@@ -123,17 +123,26 @@ const Table = ({ columns, data }) => {
                                     }}
                                     {...cell.getCellProps()}
                                   >
-                                    <span>{(i += 1)}</span>
+                                    
+                                    <span className="center-aligned">{(i += 1)} {cell.render('Cell')}</span>
                                   </div>
                                     
                                   <div
                                     className="rt-td god"
-                                    style={{ minWidth: "180px", maxWidth: "220px", flex: "1 1 100%" }}
+                                    style={{ 
+                                      minWidth: "180px", 
+                                      maxWidth: "220px", 
+                                      flex: "1 1 100%",
+                                      display: 'flex', 
+                                      flexDirection: 'row', 
+                                      justifyContent: "center"
+                                     }}
                                     {...cell.getCellProps()}
                                   >
                                     <Link
                                       className="god-played gtm-tierlist-god"
                                       to={"/".concat(routegod)}
+
                                     >
                                       <div style={{ position: "relative" }}>
                                         <div className="god-icon">
@@ -141,6 +150,7 @@ const Table = ({ columns, data }) => {
                                             style={{
                                               height: "30px",
                                               width: "30px",
+
                                             }}
                                           >
                                             <img
@@ -165,13 +175,16 @@ const Table = ({ columns, data }) => {
                                   <div
                                     className="rt-td"
                                     style={{
-                                      minWidth: "65px",
+                                      // minWidth: "65px",
                                       maxWidth: "70px",
                                       flex: "1 1 100%",
+                                      display: 'flex', 
+                                      flexDirection: 'column', 
+                                      justifyContent: 'center'
                                     }}
                                     {...cell.getCellProps()}
                                   >
-                                    <span>
+                                    <span className="center-aligned">
                                       <b>{row.original.kills}</b>
                                     </span>
                                   </div>
@@ -179,13 +192,16 @@ const Table = ({ columns, data }) => {
                                   <div
                                     className="rt-td"
                                     style={{
-                                      minWidth: "65px",
+                                      // minWidth: "65px",
                                       maxWidth: "70px",
-                                      flex: "1 1 100%",
+                                      // flex: "1 1 100%",
+                                      display: 'flex', 
+                                      flexDirection: 'column', 
+                                      justifyContent: 'center'
                                     }}
                                     {...cell.getCellProps()}
                                   >
-                                    <span>
+                                    <span className="center-aligned">
                                       <b>{row.original.dmg}</b>
                                     </span>
                                   </div>
@@ -193,13 +209,16 @@ const Table = ({ columns, data }) => {
                                   <div
                                     className="rt-td"
                                     style={{
-                                      minWidth: "65px",
+                                      // minWidth: "65px",
                                       maxWidth: "70px",
                                       flex: "1 1 100%",
+                                      display: 'flex', 
+                                      flexDirection: 'column', 
+                                      justifyContent: 'center'
                                     }}
                                     {...cell.getCellProps()}
                                   >
-                                    <span>
+                                    <span className="center-aligned">
                                       <b>{row.original.gold}</b>
                                     </span>
                                   </div>
@@ -305,28 +324,56 @@ export default function Matchups(props) {
           {
             Header: "Rank",
             accessor: "rank",
+            
           },
           {
             Header: "God",
             accessor: "god",
           },
           {
-            Header: "Kill Diff",
+            Header: "Avg. Kill Difference",
             accessor: "kills",
+            sortType: compareNumericString 
           },
           {
-            Header: "Damage Diff",
+            Header: "Avg. Damage Difference",
             accessor: "dmg",
+            sortType: compareNumericString
           },
           {
-            Header: "Gold Diff",
+            Header: "Avg. Gold Difference",
             accessor: "gold",
+            sortType: compareNumericString 
           },
+          
         ],
         []
       );
     return(
-        <Table columns={columns} data={totalData} />
+      <div id="content">
+        <div class="stats-tables-page">
+          <div id="stats-tables-container-ID" 
+            className="stats-tables-container content-side-padding" 
+            style={{paddingTop: "100px"}}
+            >
+          <Table columns={columns} data={totalData} />
+          </div>
+        </div>
+      </div>
     )
 
+}
+
+function compareNumericString(rowA, rowB, id, desc) {
+  let a = Number.parseFloat(rowA.values[id]);
+  let b = Number.parseFloat(rowB.values[id]);
+  if (Number.isNaN(a)) {  // Blanks and non-numeric strings to bottom
+      a = desc ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
+  }
+  if (Number.isNaN(b)) {
+      b = desc ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
+  }
+  if (a > b) return 1; 
+  if (a < b) return -1;
+  return 0;
 }
