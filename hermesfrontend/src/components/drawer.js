@@ -54,6 +54,7 @@ const godsDict = {
     "Chernobog": "Carry",
     "Chiron": "Carry",
     "Chronos": "Carry",
+    "Cliodhna": "Jungle",
     "Cthulhu": "Support",
     "Cu Chulainn": "Solo",
     "Cupid": "Carry",
@@ -215,11 +216,11 @@ const CustDrawer = styled(Drawer)(({ theme }) => ({
   },
   '& .MuiDrawer-paper': {
     backgroundColor: "#17172e",
-    [theme.breakpoints.down("md")]: {
+    [theme.breakpoints.down("lg")]: {
       width: "120px"
       // width: "225px",
     },
-    [theme.breakpoints.up("md")]: {
+    [theme.breakpoints.up("lg")]: {
       width: "225px"
       // width: "225px",
     }

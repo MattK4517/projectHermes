@@ -8,6 +8,17 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import { FilterForm } from "../Filters/FilterForm";
 import winRateColor from '../mainGodPage/WinRateColor';
+import Tooltip from "@material-ui/core/Tooltip";
+
+const HtmlTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: "#06061f",
+    color: "rgba(0, 0, 0, 0.87)",
+    maxWidth: 220,
+    border: ".5px solid gray",
+    opacity: 100,
+  },
+}))(Tooltip);
 
 const Table = ({ columns, data }) => {
   const {
@@ -147,7 +158,7 @@ const Table = ({ columns, data }) => {
                               } else if (key.includes("counterMatchups")) {
                                 return (
                                   <div className="rt-td against" style={{ minWidth: "250px", maxWidth: "270px", flex: "1 1 100%" }} {...cell.getCellProps()}>
-                                      <CounterMatchupDisplay matchups={row.original.counterMatchups}/>
+                                      <CounterMatchupDisplay god={row.original.god} matchups={row.original.counterMatchups}/>
                                   </div>
                                 )
                                 } else if (key.includes("games")) {
@@ -351,7 +362,7 @@ function TierList(tableType) {
                     tier: data[key][godData].tier,
                     counterMatchups: matchups.map((matchup, index) => {
                       return(
-                        [matchup.url, matchup.enemy]
+                        [matchup.url, matchup.enemy, matchup.winRate, matchup.timesPlayed]
                       )
                     })
                   },
@@ -427,18 +438,41 @@ class CounterMatchupDisplay extends React.Component {
     return(
       <div className="against-container">
         {this.props.matchups.map((matchup, index) => {
+          // console.log(matchup);
           if (index < 9) {
             let routegod = matchup[1].replaceAll(" ", "_")
+            let styling;
+            if (matchup[2] < 50){
+              styling = {height: "24px", width: "24px"}
+            } else {
+              styling = {height: "24px", width: "24px", opacity: ".4", filter: "grayscale(100%)"}
+            }
             return (
+              <HtmlTooltip
+              title={
+                <React.Fragment>
+                  <CreateMatchupToolTip
+                    god={this.props.god}
+                    winrate={matchup[2]}
+                    enemy={matchup[1]}
+                    enemyURL={matchup[0]}
+                    games={matchup[3]}
+                  />
+                </React.Fragment>
+              }
+              placement="top"
+              arrow
+            >
             <div className="against" key={index}>
               <Link to={"/".concat(routegod)}>
                 <div className="god-face" style={{maxWidth: "100px"}}>
                   <div>
-                    <img src={matchup[0]} alt={matchup[1]} style={{height: "24px", width: "24px"}}></img>
+                    <img src={matchup[0]} alt={matchup[1]} style={styling}></img>
                   </div>
                 </div>
               </Link>
             </div>
+            </HtmlTooltip>
             )
           }
         })}
@@ -459,6 +493,32 @@ function compareNumericString(rowA, rowB, id, desc) {
   if (a > b) return 1; 
   if (a < b) return -1;
   return 0;
+}
+
+
+class CreateMatchupToolTip extends React.Component {
+  render() {
+    return (
+      <div className="matchup-tooltip-container">
+        <div className="matchup-tooltip">
+          <div className="god-icon">
+            <div style={{height: "30px", width: "30px"}}>
+              <img src={`https://webcdn.hirezstudios.com/smite/god-icons/${this.props.god.replaceAll(" ", "-").replaceAll("'","").toLowerCase()}.jpg`} alt={this.props.god} 
+                style={{ height: "48px", width: "48px", transform: "scale(0.625)", transformOrigin: "0px 0px 0px" }}/>
+            </div>
+          </div>
+            <span style={{color: "white",  paddingTop: ".3rem"}}>wins&nbsp;<b style={{color: winRateColor(this.props.winrate)}}>{this.props.winrate}%</b>&nbsp;vs&nbsp;</span>
+          <div className="god-icon">
+            <div style={{height: "30px", width: "30px"}}>
+              <img src={this.props.enemyURL} alt={this.props.enemy} 
+                style={{ height: "48px", width: "48px", transform: "scale(0.625)", transformOrigin: "0px 0px 0px" }}/>
+            </div>
+          </div>
+        </div>
+          <p>{this.props.games} games</p>
+        </div>
+    );
+  }
 }
 
 export default TierList;

@@ -17,7 +17,6 @@ const HtmlTooltip = withStyles((theme) => ({
 
 class CreateItemToolTip extends React.Component {
   render() {
-    console.log(this.props.item)
     if (this.props.index == 0) {
       this.props.item = this.props.item.item
     } else if (this.props.index == 1) {

@@ -140,10 +140,13 @@ def get_all_items(god, role, rank, patch):
 def get_all_matchups(god, role, rank, patch):
     mydb = client["single_match_stats"]
     mycol = mydb[god]
+    matchupsdb = client["single_matchups"]
+    matchupscol = matchupsdb[god]
     if "All" in rank:
         myquery = {"role": role, "patch": patch}
     else:
         myquery = {"role": role, "patch": patch, "rank": rank}
+
 
     avg_dmg_dict = {}
     total_games = mycol.count_documents(myquery)
@@ -161,8 +164,13 @@ def get_all_matchups(god, role, rank, patch):
             }
         }
     ]):
+        # wins = matchupscol.count_documents({**myquery, **{"enemy": x["_id"], "win_status": "Winner"}})
+        if "All" in rank:
+                wins = matchupscol.count_documents({"enemy": x["_id"], f"{god}": "Winner", "patch": patch, "role_played": role})
+        else:
+                wins = matchupscol.count_documents({"enemy": x["_id"], f"{god}": "Winner", "patch": patch, "rank": rank, "role_played": role})
         if x["timesPlayed"] >= .01 * total_games:
-            avg_dmg_dict[x["_id"]] = {"dmg": x["avg_dmg_diff"], "kills": x["avg_kill_diff"], "gold": x["avg_gold_diff"]}
+            avg_dmg_dict[x["_id"]] = {"dmg": x["avg_dmg_diff"], "kills": x["avg_kill_diff"], "gold": x["avg_gold_diff"], "wr": round(wins/x["timesPlayed"]*100, 2)}
     
     myquery = {**myquery, **{"enemy": god}}
     for god in avg_dmg_dict:
