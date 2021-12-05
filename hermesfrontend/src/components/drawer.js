@@ -18,6 +18,7 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import SearchBar from "./SearchBarStuff/SearchBar";
+import Player from "./PlayerPage/Player";
 
 
 
@@ -164,6 +165,11 @@ const godsDict = {
     {
       path: "/match",
       component: <Match />,
+      god: "",
+    },
+    {
+      path: "/player",
+      component: <Player />,
       god: "",
     }
   ]
