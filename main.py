@@ -14,16 +14,15 @@ client = pymongo.MongoClient(
     "mongodb+srv://sysAdmin:9gR7C1aDKclng4jA@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
 
 if __name__ == "__main__":
-    dFilter = {**{f"player{i}.Region": 1 for i in range(10)}, **{f"player{i}.godName": 1 for i in range(10)}}
-    mydb = client["Matches"]
-    mycol = mydb["8.9 Matches"]
-    match_ids = []
-    for x in mycol.find({}, dFilter):
-        for player in x:
-            if "player" in player:
-                if x[player]["Region"] == "EU":
-                    godsDict[x[player]["godName"]] += 1
-    
+    with open("cred.txt", "r") as creds:
+            lines = creds.readlines()
+            smite_api = SmiteAPI(devId=lines[0].strip(), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
+    playerId = smite_api.getPlayerId("jurse")
+    matches = smite_api.getQueueStats(playerId[0].player_id, 451)
+    with open("tierList.txt", "a") as f:
+        for match_data in matches:
+            f.write(anlz.create_player_return_dict(match_data))
+
     
 
 

@@ -8,7 +8,7 @@ import pymongo
 from collections import OrderedDict
 from operator import getitem
 from constants import godsDict, slots, Tier_Three_items, Starter_items, roles, single_combat_stats, single_objective_stats
-
+from data_pull_formatting_rewrite import normalize_rank
 # info pull
 # [godWR, godPR, godBR] - check, matchesPlayed - check
 # relics used 
@@ -662,10 +662,10 @@ def get_matchups_stats(client, god: str, role: str, patch, rank="All Ranks"):
             avg_dmg_dict[god]["kills"] -= x["avg_kill_diff"]
         
     return avg_dmg_dict
-    
 # if __name__ == "__main__":
 #     client = pymongo.MongoClient(
 #         "mongodb+srv://sysAdmin:9gR7C1aDKclng4jA@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
+#     print(find_match_history(client, "jurse"))
 #     print(get_combat_stats(client, "Achilles", "Solo", "8.11"))
 #     print(get_objective_stats(client, "Achilles", "Solo", "8.11"))
 #     print(get_winrate(client, "Achilles", "Solo", "8.10"))
