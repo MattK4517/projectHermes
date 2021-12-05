@@ -1396,3 +1396,19 @@ figure.snip0015:hover figcaption::before {
 .rt-td {
   align-self: center;
 }
+
+.matchup-tooltip-container{
+  color: white;
+  text-align: center;
+  font-size: 14px
+}
+
+.matchup-tooltip {
+  display: flex;
+  flex-direction: row;
+  padding: 0.5em;
+}
+
+.matchup-tooltip img {
+  padding: 0.5em
+}
