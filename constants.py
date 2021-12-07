@@ -1,5 +1,5 @@
 
-patch = "8.10"
+patch = "8.11"
 godsDict = {
     "Achilles": 0,
     "Agni": 0,
