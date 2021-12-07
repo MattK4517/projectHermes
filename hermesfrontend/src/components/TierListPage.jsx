@@ -6,6 +6,7 @@ import DuoLaneTierList from "./Tierlists/DuoLaneTierList";
 import React, { useState, useEffect, useMemo } from 'react';
 import { useTable, useSortBy, usePagination } from 'react-table';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet'
 
 
 function TierListPage() {
@@ -14,6 +15,11 @@ function TierListPage() {
     const [counterMatchups, setCounterMatchups] = useState([]);
     
     return (
+      <>
+        <Helmet>
+        <meta charSet="utf-8" />
+        <title>{`SMITE ${tableType} Tier List`}</title>
+        </Helmet>
         <div id="page-content">
         <div style={{ width: "100%"}}>
           <div id="main-content" className="collapsed">
@@ -53,6 +59,7 @@ function TierListPage() {
           </div>
         </div>
       </div>
+    </>
     )
 }
 
