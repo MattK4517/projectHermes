@@ -15,7 +15,8 @@ import Box from '@mui/material/Box';
 import Godpage from "../mainGodPage/Godpage";
 import SearchBarGodPage from "../SearchBarStuff/SearchBarGodPage";
 import RSSFeeder from "../RssFeed";
-import InfiniteScroll from "react-infinite-scroll-component"
+import InfiniteScroll from "react-infinite-scroll-component";
+import ChangeLog from "../Changelog";
 
 const godsDict = {
   "All Gods": "None",
@@ -640,7 +641,8 @@ export default function BuildPage(pagegod) {
             </InfiniteScroll>
           </div>
           <CustDiv>
-          <RSSFeeder />
+            <ChangeLog />
+            <RSSFeeder />
           </CustDiv>
           </div>
           

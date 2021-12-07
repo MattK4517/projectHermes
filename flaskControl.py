@@ -9,6 +9,8 @@ from main import client
 from collections import OrderedDict
 from operator import getitem
 from duo_tier_list import get_lanes
+import pyrez
+from pyrez.api import SmiteAPI
 
 app = Flask(__name__, static_folder="../hermesfrontend", static_url_path="/")
 # limiter = Limiter(
@@ -140,10 +142,13 @@ def get_all_items(god, role, rank, patch):
 def get_all_matchups(god, role, rank, patch):
     mydb = client["single_match_stats"]
     mycol = mydb[god]
+    matchupsdb = client["single_matchups"]
+    matchupscol = matchupsdb[god]
     if "All" in rank:
         myquery = {"role": role, "patch": patch}
     else:
         myquery = {"role": role, "patch": patch, "rank": rank}
+
 
     avg_dmg_dict = {}
     total_games = mycol.count_documents(myquery)
@@ -161,8 +166,13 @@ def get_all_matchups(god, role, rank, patch):
             }
         }
     ]):
+        # wins = matchupscol.count_documents({**myquery, **{"enemy": x["_id"], "win_status": "Winner"}})
+        if "All" in rank:
+                wins = matchupscol.count_documents({"enemy": x["_id"], f"{god}": "Winner", "patch": patch, "role_played": role})
+        else:
+                wins = matchupscol.count_documents({"enemy": x["_id"], f"{god}": "Winner", "patch": patch, "rank": rank, "role_played": role})
         if x["timesPlayed"] >= .01 * total_games:
-            avg_dmg_dict[x["_id"]] = {"dmg": x["avg_dmg_diff"], "kills": x["avg_kill_diff"], "gold": x["avg_gold_diff"]}
+            avg_dmg_dict[x["_id"]] = {"dmg": x["avg_dmg_diff"], "kills": x["avg_kill_diff"], "gold": x["avg_gold_diff"], "wr": round(wins/x["timesPlayed"]*100, 2)}
     
     myquery = {**myquery, **{"enemy": god}}
     for god in avg_dmg_dict:
@@ -276,6 +286,175 @@ def get_build_path(god, role, rank, patch):
 
     return builds
 
+
+@app.route("/getplayer/<playername>")
+def get_player_info(playername):
+        return anlz.find_match_history(client, playername)
+        
+@app.route("/getplayergeneral/<playername>")
+def get_player_general(playername):
+        # with open("cred.txt", "r") as creds:
+        #         lines = creds.readlines()
+        #         smite_api = SmiteAPI(devId=lines[0].strip(), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
+        return anlz.create_player_return_dict({
+  "ActivePlayerId": 6935006,
+  "Avatar_URL": "http://webcdn.hirezstudios.com/smite-app/wp-content/uploads/2015/06/Icon_Player_Ra_Alienware.png",
+  "Created_Datetime": "6/4/2015 2:41:37 PM",
+  "HoursPlayed": 2232,
+  "Id": 6935006,
+  "Last_Login_Datetime": "11/25/2021 11:57:29 AM",
+  "Leaves": 90,
+  "Level": 151,
+  "Losses": 3134,
+  "MasteryLevel": 114,
+  "MergedPlayers": None,
+  "MinutesPlayed": 133958,
+  "Name": "Jurse",
+  "Personal_Status_Message": "mm is sh!t,community is worse",
+  "Platform": "Steam",
+  "Rank_Stat_Conquest": 1963.83472,
+  "Rank_Stat_Conquest_Controller": 1500,
+  "Rank_Stat_Duel": 2831.5144,
+  "Rank_Stat_Duel_Controller": 1500,
+  "Rank_Stat_Joust": 1903.49353,
+  "Rank_Stat_Joust_Controller": 1500,
+  "RankedConquest": {
+    "Leaves": 0,
+    "Losses": 14,
+    "Name": "League",
+    "Points": 0,
+    "PrevRank": 0,
+    "Rank": 0,
+    "Rank_Stat": 1963.83472,
+    "Rank_Stat_Conquest": None,
+    "Rank_Stat_Joust": None,
+    "Rank_Variance": 24,
+    "Round": 0,
+    "Season": 8,
+    "Tier": 22,
+    "Trend": 0,
+    "Wins": 8,
+    "player_id": None,
+    "ret_msg": None
+  },
+  "RankedConquestController": {
+    "Leaves": 0,
+    "Losses": 0,
+    "Name": "League Controller",
+    "Points": 0,
+    "PrevRank": 0,
+    "Rank": 0,
+    "Rank_Stat": 1500,
+    "Rank_Stat_Conquest": None,
+    "Rank_Stat_Joust": None,
+    "Rank_Variance": 21,
+    "Round": 0,
+    "Season": 0,
+    "Tier": 0,
+    "Trend": 0,
+    "Wins": 0,
+    "player_id": None,
+    "ret_msg": None
+  },
+  "RankedDuel": {
+    "Leaves": 0,
+    "Losses": 6,
+    "Name": "Duel",
+    "Points": 113,
+    "PrevRank": 66,
+    "Rank": 66,
+    "Rank_Stat": 2831.5144,
+    "Rank_Stat_Conquest": None,
+    "Rank_Stat_Joust": None,
+    "Rank_Variance": 24,
+    "Round": 0,
+    "Season": 8,
+    "Tier": 26,
+    "Trend": 0,
+    "Wins": 18,
+    "player_id": None,
+    "ret_msg": None
+  },
+  "RankedDuelController": {
+    "Leaves": 0,
+    "Losses": 0,
+    "Name": "Duel Controller",
+    "Points": 0,
+    "PrevRank": 0,
+    "Rank": 0,
+    "Rank_Stat": 1500,
+    "Rank_Stat_Conquest": None,
+    "Rank_Stat_Joust": None,
+    "Rank_Variance": 21,
+    "Round": 0,
+    "Season": 0,
+    "Tier": 0,
+    "Trend": 0,
+    "Wins": 0,
+    "player_id": None,
+    "ret_msg": None
+  },
+  "RankedJoust": {
+    "Leaves": 0,
+    "Losses": 0,
+    "Name": "Joust",
+    "Points": 95,
+    "PrevRank": 12,
+    "Rank": 12,
+    "Rank_Stat": 1903.49353,
+    "Rank_Stat_Conquest": None,
+    "Rank_Stat_Joust": None,
+    "Rank_Variance": 24,
+    "Round": 0,
+    "Season": 8,
+    "Tier": 19,
+    "Trend": 0,
+    "Wins": 1,
+    "player_id": None,
+    "ret_msg": None
+  },
+  "RankedJoustController": {
+    "Leaves": 0,
+    "Losses": 0,
+    "Name": "Joust Controller",
+    "Points": 0,
+    "PrevRank": 0,
+    "Rank": 0,
+    "Rank_Stat": 1500,
+    "Rank_Stat_Conquest": None,
+    "Rank_Stat_Joust": None,
+    "Rank_Variance": 21,
+    "Round": 0,
+    "Season": 0,
+    "Tier": 0,
+    "Trend": 0,
+    "Wins": 0,
+    "player_id": None,
+    "ret_msg": None
+  },
+  "Region": "Europe",
+  "TeamId": 0,
+  "Team_Name": "",
+  "Tier_Conquest": 22,
+  "Tier_Duel": 26,
+  "Tier_Joust": 19,
+  "Total_Achievements": 167,
+  "Total_Worshippers": 78765,
+  "Wins": 3935,
+  "hz_gamer_tag": None,
+  "hz_player_name": "jurse",
+  "ret_msg": None
+})
+ 
+@app.route("/getplayergods/<playername>")
+def get_player_god_info(playername):
+        # with open("cred.txt", "r") as creds:
+        #         lines = creds.readlines()
+        #         smite_api = SmiteAPI(devId=lines[0].strip(), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
+        # playerId = smite_api.getPlayerId(playername)
+
+        # print(smite_api.getQueueStats(playerId, 451))
+        return {}
 # make a route for every god, in the
 # temp idea for routing
 # for each god
