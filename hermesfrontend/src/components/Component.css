@@ -1580,3 +1580,116 @@ figure.snip0015:hover figcaption::before {
   flex-direction: column;
   padding: 16px 24px 24px;
 }
+
+.total-games {
+  color: #cddcfe;
+  text-align: right;
+}
+
+.win-rate {
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.god-stats_col {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 32px;
+}
+
+.god-stats {
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.kda-split {
+  color: #cddcfe;
+  white-space: nowrap;
+}
+
+.kda-ratio {
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.god-name {
+  flex: 1 1;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+/* .god-face {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  overflow: hidden;
+} */
+
+.god-performance {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+  padding: 12px;
+  border-radius: 6px;
+  background-color: #11112a;
+}
+
+.god-stats {
+  display: grid;
+  grid-template-columns: .8fr 1fr 1fr;
+  flex: 1 1;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.god-stats_col-3 {
+  align-items: flex-end;
+}
+
+.god-stats_col-2 {
+  align-items: center;
+}
+
+.god-stats_col-1 {
+  overflow: hidden;
+}
+
+.slash {
+  color: #5f5f7b;
+}
+
+.kda-split {
+  color: #cddcfe;
+  white-space: nowrap;
+}
+
+.played-gods_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.played-gods {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 24px 24px;
+}
+
+/* .god-face > div {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%) scale(1.1);
+} */
