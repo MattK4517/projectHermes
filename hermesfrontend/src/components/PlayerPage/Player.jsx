@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PlayerHeader from './PlayerHeader';
 import RankDisplay from './RankDisplay';
 import GodDisplay from './GodDisplay';
+import { MatchDisplay } from '..';
 
 
 class NameForm extends React.Component {
@@ -46,27 +47,36 @@ export default function Player(props) {
     const [tier, setTier] = useState("")
     const [winRate, setWinRate] = useState("")
     const [games, setGames] = useState(0)
-    // useEffect(() => {
-    //     fetch("/getplayer/".concat(player)).then((res) =>
-    //       res.json().then((data) => {
-    //           console.log(data)
-    //       })
-    //     );
-    //   }, [player]);
-
+    const [matchList, setMatchList] = useState([])
     useEffect(() => {
-      fetch("/getplayergeneral/".concat(player)).then((res) =>
-        res.json().then((data) => {
-            console.log(data)
-            setPlayerLevel(data.level)
-            setIcon(data.avatar)
-            setRank(data.rank)
-            setTier(data.tier)
-            setWinRate(data.winRate)
-            setGames(data.games)
-        })
-      );
-  }, [player]);
+        fetch("/getplayermatch/".concat(player)).then((res) =>
+          res.json().then((data) => {
+              console.log(data)
+              Object.keys(data).map((match) => {
+              setMatchList((matchList) => [
+                ...matchList,
+                {
+                  ...data[match]
+                },
+              ]);
+            })
+          })
+        );
+      }, [player]);
+      console.log(matchList)
+  //   useEffect(() => {
+  //     fetch("/getplayergeneral/".concat(player)).then((res) =>
+  //       res.json().then((data) => {
+  //           console.log(data)
+  //           setPlayerLevel(data.level)
+  //           setIcon(data.avatar)
+  //           setRank(data.rank)
+  //           setTier(data.tier)
+  //           setWinRate(data.winRate)
+  //           setGames(data.games)
+  //       })
+  //     );
+  // }, [player]);
       // <NameForm setPlayer={setPlayer} />
     return(
       <div className="player-profile-page" style={{paddingTop: "100px"}}>
@@ -77,6 +87,7 @@ export default function Player(props) {
           <PlayerHeader player={player} level={playerLevel} icon={icon}/>
           <RankDisplay rank={rank} tier={tier} winrate={winRate} games={games}/>
           <GodDisplay />
+          <MatchDisplay matchList={matchList} player={player}/>
           <NameForm setPlayer={setPlayer} />
         </div>
       </div>
