@@ -186,7 +186,7 @@ if __name__ == "__main__":
                 role = m[-1]
                 for x in range(len(god)):
                     actgod += god[x]+" "
-                actgod = godAbbreviations(actgod.strip()).replace("-"," ")
+                actgod = godAbbreviations(actgod.strip()).replace("-"," ").capitalize()
                 data = anlz.get_top_builds(dbClient, actgod, role, patch)
                 print(actgod)
                 ItemWR = []
@@ -223,7 +223,7 @@ if __name__ == "__main__":
                 role = m[-1]
                 for x in range(len(god)):
                     actgod += god[x]+" "
-                actgod = godAbbreviations(actgod.strip()).replace("-"," ")
+                actgod = godAbbreviations(actgod.strip()).replace("-"," ").capitalize()
                 data = anlz.get_worst_matchups(mongo_client, actgod, role, patch)
                 iconURL = anlz.get_url(actgod)
                 if actgod in Assassins:
@@ -253,7 +253,7 @@ if __name__ == "__main__":
                 role = m[-1]
                 for x in range(len(god)):
                     actgod += god[x]+" "
-                actgod = godAbbreviations(actgod.strip()).replace("-"," ")
+                actgod = godAbbreviations(actgod.strip()).replace("-"," ").capitalize()
                 data = anlz.get_build_path(dbClient, actgod, role, patch)
                 iconURL = anlz.get_url(actgod)
                 if actgod in Assassins:
