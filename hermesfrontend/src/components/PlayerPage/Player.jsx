@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PlayerHeader from './PlayerHeader';
 import RankDisplay from './RankDisplay';
 import GodDisplay from './GodDisplay';
+import { MatchDisplay } from '..';
 
 
 class NameForm extends React.Component {
@@ -71,19 +72,36 @@ export default function Player(props) {
         })
       );
   }, [player]);
+    const [matchList, setMatchList] = useState([])
     useEffect(() => {
-      fetch("/getplayergeneral/".concat(player)).then((res) =>
-        res.json().then((data) => {
-            console.log(data)
-            setPlayerLevel(data.level)
-            setIcon(data.avatar)
-            setRank(data.rank)
-            setTier(data.tier)
-            setWinRate(data.winRate)
-            setGames(data.games)
-        })
-      );
-  }, [player]);
+        fetch("/getplayermatch/".concat(player)).then((res) =>
+          res.json().then((data) => {
+              console.log(data)
+              Object.keys(data).map((match) => {
+              setMatchList((matchList) => [
+                ...matchList,
+                {
+                  ...data[match]
+                },
+              ]);
+            })
+          })
+        );
+      }, [player]);
+      console.log(matchList)
+  //   useEffect(() => {
+  //     fetch("/getplayergeneral/".concat(player)).then((res) =>
+  //       res.json().then((data) => {
+  //           console.log(data)
+  //           setPlayerLevel(data.level)
+  //           setIcon(data.avatar)
+  //           setRank(data.rank)
+  //           setTier(data.tier)
+  //           setWinRate(data.winRate)
+  //           setGames(data.games)
+  //       })
+  //     );
+  // }, [player]);
       // <NameForm setPlayer={setPlayer} />
     return(
       <div className="player-profile-page" style={{paddingTop: "100px"}}>
@@ -93,7 +111,12 @@ export default function Player(props) {
           </div>
           <PlayerHeader player={player} level={playerLevel} icon={icon}/>
           <RankDisplay rank={rank} tier={tier} winrate={winRate} games={games}/>
+<<<<<<< HEAD
           <GodDisplay godList={godList}/>
+=======
+          <GodDisplay />
+          <MatchDisplay matchList={matchList} player={player}/>
+>>>>>>> c03b427c592424aaa5a30a0be252a6aca175fafe
           <NameForm setPlayer={setPlayer} />
         </div>
       </div>

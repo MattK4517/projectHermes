@@ -15,6 +15,7 @@ import winRateColor from "./WinRateColor";
 import { GodHeader } from "../mainGodPage/GodHeader";
 import { BasicTabs } from "../mainGodPage/PageTabs";
 import SearchBarGodPage from "../SearchBarStuff/SearchBarGodPage";
+import { Helmet } from "react-helmet"
 
 const godsDict = {
   "All Gods": "None",
@@ -230,6 +231,12 @@ function Godpage(props) {
   }, []);
   return (
     <>
+    <Helmet>
+      <meta charSet="utf-8" />
+      <meta property={"og:image"} content={url}/>
+      <meta name="description" content={`${pagegod} Build & Matchups Best Stats for SMITE patch: ${patch}`} />
+      <title>{`${pagegod} Build & Matchups`}</title>
+    </Helmet>
     <div className="page-content">
       <div className="Godpage">
         <div className="container">
@@ -239,7 +246,7 @@ function Godpage(props) {
               <h1 className="font-weight-light"></h1>
 
               <GodHeader
-                god={displaygod}
+                god={pagegod}
                 url={url}
                 tier={tier}
                 role={dispRole}
