@@ -51,6 +51,7 @@ const godsDict = {
   "Chernobog": "Carry",
   "Chiron": "Carry",
   "Chronos": "Carry",
+  "Cliodhna": "Jungle",
   "Cthulhu": "Support",
   "Cu Chulainn": "Solo",
   "Cupid": "Carry",

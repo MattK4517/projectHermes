@@ -25,3 +25,8 @@ export { default as Matchups } from "./mainGodPage/Matchups";
 export { default as SearchBar } from "./SearchBarStuff/SearchBar";
 export { default as SearchBarGodPage } from "./SearchBarStuff/SearchBarGodPage";
 export { default as RSSFeeder } from "./RssFeed";
+export { default as ChangeLog } from "./Changelog";
+export { default as Player } from "./PlayerPage/Player";
+export { default as PlayerHeader } from "./PlayerPage/PlayerHeader";
+export { default as RankDisplay } from "./PlayerPage/RankDisplay";
+export { default as GodDisplay } from "./PlayerPage/GodDisplay";

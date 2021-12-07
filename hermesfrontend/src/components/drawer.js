@@ -18,6 +18,7 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import SearchBar from "./SearchBarStuff/SearchBar";
+import Player from "./PlayerPage/Player";
 
 
 
@@ -54,6 +55,7 @@ const godsDict = {
     "Chernobog": "Carry",
     "Chiron": "Carry",
     "Chronos": "Carry",
+    "Cliodhna": "Jungle",
     "Cthulhu": "Support",
     "Cu Chulainn": "Solo",
     "Cupid": "Carry",
@@ -164,6 +166,11 @@ const godsDict = {
       path: "/match",
       component: <Match />,
       god: "",
+    },
+    {
+      path: "/player",
+      component: <Player />,
+      god: "",
     }
   ]
   Object.keys(godsDict).forEach((god) => {
@@ -215,11 +222,11 @@ const CustDrawer = styled(Drawer)(({ theme }) => ({
   },
   '& .MuiDrawer-paper': {
     backgroundColor: "#17172e",
-    [theme.breakpoints.down("md")]: {
+    [theme.breakpoints.down("lg")]: {
       width: "120px"
       // width: "225px",
     },
-    [theme.breakpoints.up("md")]: {
+    [theme.breakpoints.up("lg")]: {
       width: "225px"
       // width: "225px",
     }

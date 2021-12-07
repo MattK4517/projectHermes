@@ -28,8 +28,8 @@ const Table = ({ columns, data }) => {
           pageIndex: 0,
           sortBy: [
               {
-                  id: 'kills',
-                  desc: true,
+                  id: 'wr',
+                  desc: false,
                   sortType: 'basic',
               }
           ],
@@ -124,18 +124,18 @@ const Table = ({ columns, data }) => {
                                     {...cell.getCellProps()}
                                   >
                                     
-                                    <span className="center-aligned">{(i += 1)} {cell.render('Cell')}</span>
+                                    <span className="center-aligned">{(i += 1)}</span>
                                   </div>
                                     
                                   <div
                                     className="rt-td god"
                                     style={{ 
                                       minWidth: "180px", 
-                                      maxWidth: "220px", 
+                                      maxWidth: "180px", 
                                       flex: "1 1 100%",
-                                      display: 'flex', 
-                                      flexDirection: 'row', 
-                                      justifyContent: "center"
+                                      display: 'flex',
+                                      alignSelf: "center",
+                                      marginLeft: "10px",
                                      }}
                                     {...cell.getCellProps()}
                                   >
@@ -175,8 +175,25 @@ const Table = ({ columns, data }) => {
                                   <div
                                     className="rt-td"
                                     style={{
-                                      // minWidth: "65px",
-                                      maxWidth: "70px",
+                                      minWidth: "100px",
+                                      maxWidth: "175px",
+                                      flex: "1 1 100%",
+                                      display: 'flex', 
+                                      flexDirection: 'column', 
+                                      justifyContent: 'center'
+                                    }}
+                                    {...cell.getCellProps()}
+                                  >
+                                    <span>
+                                      <b>{row.original.wr}</b>
+                                    </span>
+                                  </div>
+
+                                  <div
+                                    className="rt-td"
+                                    style={{
+                                      minWidth: "100px",
+                                      maxWidth: "175px",
                                       flex: "1 1 100%",
                                       display: 'flex', 
                                       flexDirection: 'column', 
@@ -192,9 +209,9 @@ const Table = ({ columns, data }) => {
                                   <div
                                     className="rt-td"
                                     style={{
-                                      // minWidth: "65px",
-                                      maxWidth: "70px",
-                                      // flex: "1 1 100%",
+                                      minWidth: "100px",
+                                      maxWidth: "150px",
+                                      flex: "1 1 100%",
                                       display: 'flex', 
                                       flexDirection: 'column', 
                                       justifyContent: 'center'
@@ -209,8 +226,8 @@ const Table = ({ columns, data }) => {
                                   <div
                                     className="rt-td"
                                     style={{
-                                      // minWidth: "65px",
-                                      maxWidth: "70px",
+                                      minWidth: "100px",
+                                      maxWidth: "150px",
                                       flex: "1 1 100%",
                                       display: 'flex', 
                                       flexDirection: 'column', 
@@ -313,6 +330,7 @@ export default function Matchups(props) {
                       kills: data[key]["kills"].toFixed(2),
                       god: data[key]["god"],
                       gold: data[key]["gold"].toFixed(),
+                      wr: data[key]["wr"]
                       }
                   ])
               })
@@ -331,19 +349,27 @@ export default function Matchups(props) {
             accessor: "god",
           },
           {
-            Header: "Avg. Kill Difference",
+            Header: "Win Rate",
+            accessor: "wr",
+            sortType: compareNumericString,
+
+          },
+          {
+            Header: "Avg. Kill Diff",
             accessor: "kills",
-            sortType: compareNumericString 
+            sortType: compareNumericString,
+
           },
           {
-            Header: "Avg. Damage Difference",
+            Header: "Avg. Damage Diff",
             accessor: "dmg",
-            sortType: compareNumericString
+            sortType: compareNumericString,
+
           },
           {
-            Header: "Avg. Gold Difference",
+            Header: "Avg. Gold Diff",
             accessor: "gold",
-            sortType: compareNumericString 
+            sortType: compareNumericString,
           },
           
         ],

@@ -88,7 +88,7 @@ export default function SearchBar(data) {
           <React.Fragment>
             <Link
               style={{ cursor: "pointer", color: "black", display: "flex"}}
-              to={"/".concat(option.key)}
+              to={"/".concat(option.key.replaceAll(" ", "_"))}
             >
               <img
                 src={`https://webcdn.hirezstudios.com/smite/god-icons/${option.key.toLowerCase().replaceAll(" ", "-").replaceAll("'","")}.jpg`}
