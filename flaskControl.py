@@ -9,6 +9,7 @@ from flask import Flask, render_template, request
 from main import client
 from collections import OrderedDict
 from operator import getitem
+import analyze_players as anlzpy
 from duo_tier_list import get_lanes
 import pyrez
 from pyrez.api import SmiteAPI
@@ -328,6 +329,10 @@ def get_player_god_info(playername):
 
         # print(smite_api.getQueueStats(playerId, 451))
         return {}
+
+@app.route("/getplayermatch/<playername>")
+def get_player_match_info(playername):
+        return anlzpy.find_match_history(client, playername)
 # make a route for every god, in the
 # temp idea for routing
 # for each god

@@ -310,7 +310,15 @@ const routeComponents = routes.map(({path, component}, key) => <Route exact path
           {/* </Menu> */}
         </Hamburger>
         
-            <Link to={"/"}>SmiteStats.gg</Link>
+            <Link to={"/"}>
+              <img 
+                src="https://i.imgur.com/1OGq7Nk.png" 
+                alt="SmiteStats Icon"
+                style={{
+                  maxWidth: "220px"
+                }}
+              />
+            </Link>
             <SearchBar data={routes.slice(5)} />
           </Typography>
         </Toolbar>

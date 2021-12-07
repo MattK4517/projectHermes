@@ -30,3 +30,4 @@ export { default as Player } from "./PlayerPage/Player";
 export { default as PlayerHeader } from "./PlayerPage/PlayerHeader";
 export { default as RankDisplay } from "./PlayerPage/RankDisplay";
 export { default as GodDisplay } from "./PlayerPage/GodDisplay";
+export { default as MatchDisplay } from "./PlayerPage/MatchDisplay";
