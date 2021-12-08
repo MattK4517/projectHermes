@@ -36,7 +36,6 @@ def create_player_return_dict(player):
 # def get_player_god_stats(player):
 #     ret_data = {}
 #     for god in player:
-<<<<<<< HEAD
 
 def get_player_basic(player):
     return {
@@ -101,27 +100,6 @@ def create_player_god_dict(data, playername):
             "winRate": round(god["Wins"]/god["Matches"]*100, 2)
         }
     return ret_data
-=======
-# 
-def normalize_rank(tier):
-    rank = "Error"
-    if tier <= 5:
-        rank = "Bronze"
-    elif tier <= 10:
-        rank = "Silver"
-    elif tier <= 15:
-        rank = "Gold"
-    elif tier <= 20:
-        rank = "Platinum"
-    elif tier <= 25:
-        rank = "Diamond"
-    elif tier == 26:
-        rank = "Masters"
-    elif tier == 27:
-        rank = "Grandmaster"
-    return rank
-      
->>>>>>> c03b427c592424aaa5a30a0be252a6aca175fafe
 
 def normalize_tier(tier):
     rank_text = "None"
