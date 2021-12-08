@@ -12,7 +12,7 @@ def find_match_history(client, playername):
         # **{f"player{i}": 0 for i in range(10)}
     }
     ret_data = {}
-    for x in mycol.find(myquery, filter):
+    for x in mycol.find(myquery, filter).limit(5):
         ret_data[x["MatchId"]] = x
     return ret_data
 
