@@ -76,7 +76,6 @@ export default function Player(props) {
     useEffect(() => {
         fetch("/getplayermatch/".concat(player)).then((res) =>
           res.json().then((data) => {
-              console.log(data)
               Object.keys(data).map((match) => {
               setMatchList((matchList) => [
                 ...matchList,
@@ -88,7 +87,6 @@ export default function Player(props) {
           })
         );
       }, [player]);
-      console.log(matchList)
   //   useEffect(() => {
   //     fetch("/getplayergeneral/".concat(player)).then((res) =>
   //       res.json().then((data) => {
@@ -111,12 +109,8 @@ export default function Player(props) {
           </div>
           <PlayerHeader player={player} level={playerLevel} icon={icon}/>
           <RankDisplay rank={rank} tier={tier} winrate={winRate} games={games}/>
-<<<<<<< HEAD
           <GodDisplay godList={godList}/>
-=======
-          <GodDisplay />
           <MatchDisplay matchList={matchList} player={player}/>
->>>>>>> c03b427c592424aaa5a30a0be252a6aca175fafe
           <NameForm setPlayer={setPlayer} />
         </div>
       </div>

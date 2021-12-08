@@ -374,6 +374,7 @@ class PlayerIcon extends React.Component {
     )
   }
 }
+
 class CreateItemToolTip extends React.Component {
   render() {
     return (
