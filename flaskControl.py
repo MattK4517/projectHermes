@@ -1,5 +1,6 @@
 from datetime import datetime
 import analyze as anlz
+import analyze_players as anlzpy
 import pandas as pd
 from constants import godsDict, roles
 from flask import Flask, render_template, request
@@ -291,16 +292,36 @@ def get_build_path(god, role, rank, patch):
 @app.route("/getplayer/<playername>")
 def get_player_info(playername):
         return anlz.find_match_history(client, playername)
-        
+
 @app.route("/getplayergeneral/<playername>")
 def get_player_general(playername):
-        # with open("cred.txt", "r") as creds:
-        #         lines = creds.readlines()
-        #         smite_api = SmiteAPI(devId=lines[0].strip(), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
-        return anlzpy.create_player_return_dict(playername)
+        mydb = client["Players"]
+        mycol = mydb["Player Basic"]
+        if mycol.count_documents({"NameTag": { "$regex" : f"{playername}", "$options": "i" }}) == 0:
+                with open("cred.txt", "r") as creds:
+                        lines = creds.readlines()
+                        smite_api = SmiteAPI(devId=lines[0].strip(), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
+                        data = anlzpy.get_player_basic(smite_api.getPlayer(playername))
+                        mycol.insert_one(data)
+        else:
+                for x in mycol.find({"NameTag": { "$regex" : f"{playername}", "$options": "i" }}, {"_id": 0}):
+                        data = x
+        return anlzpy.create_player_return_dict(data)
  
 @app.route("/getplayergods/<playername>")
 def get_player_god_info(playername):
+        mydb = client["Players"]
+        mycol = mydb["Player Gods"]
+        if mycol.count_documents({"NameTag": { "$regex" : f"{playername}", "$options": "i" }}) == 0:
+                with open("cred.txt", "r") as creds:
+                        lines = creds.readlines()
+                        smite_api = SmiteAPI(devId=lines[0].strip(), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
+                        data = anlzpy.create_player_god_dict(smite_api.getQueueStats(playername, 451), playername)
+                        mycol.insert_one(data)
+        else:
+                for x in mycol.find({"NameTag": { "$regex" : f"{playername}", "$options": "i" }}, {"_id": 0}):
+                        data = x
+        return data
         # with open("cred.txt", "r") as creds:
         #         lines = creds.readlines()
         #         smite_api = SmiteAPI(devId=lines[0].strip(), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)

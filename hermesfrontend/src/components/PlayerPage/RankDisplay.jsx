@@ -38,7 +38,7 @@ export default function RankDisplay(props) {
             <div className="rank-list">
                 <div className="rank-title">
                     <div className="rank-image-container">
-                        <img className="rank-img" src={getImageUrl(props.rank)} alt="" />
+                        <img className="rank-img" src={getImageUrl(props.tier.split(" ")[0])} alt="" />
                     </div>
                     <div>
                         <div className="queue-type">Queue: Ranked Conquest</div>

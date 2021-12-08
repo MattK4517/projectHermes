@@ -39,6 +39,10 @@ class NameForm extends React.Component {
     }
   }
 
+const compare = (a, b) => {
+  return b.matches - a.matches
+}
+
 export default function Player(props) {
     const [player, setPlayer] = useState("")
     const [playerLevel, setPlayerLevel] = useState(-1)
@@ -47,11 +51,31 @@ export default function Player(props) {
     const [tier, setTier] = useState("")
     const [winRate, setWinRate] = useState("")
     const [games, setGames] = useState(0)
+    const [godList, setGodList] = useState([])
+    useEffect(() => {
+      fetch("/getplayergods/".concat(player)).then((res) =>
+        res.json().then((data) => {
+          let newData = Object.values(data).sort(compare)
+          setGodList([])
+          Object.keys(newData).map((god, index) => {
+            if (index < 10) {
+              if (Object.keys(newData[god]).indexOf("god") !== -1){
+              setGodList((godList) => [
+                ...godList,
+                {
+                  ...newData[god]
+                }
+              ])
+            }
+            }
+          })
+        })
+      );
+  }, [player]);
     const [matchList, setMatchList] = useState([])
     useEffect(() => {
         fetch("/getplayermatch/".concat(player)).then((res) =>
           res.json().then((data) => {
-              console.log(data)
               Object.keys(data).map((match) => {
               setMatchList((matchList) => [
                 ...matchList,
@@ -63,7 +87,6 @@ export default function Player(props) {
           })
         );
       }, [player]);
-      console.log(matchList)
   //   useEffect(() => {
   //     fetch("/getplayergeneral/".concat(player)).then((res) =>
   //       res.json().then((data) => {
@@ -86,7 +109,7 @@ export default function Player(props) {
           </div>
           <PlayerHeader player={player} level={playerLevel} icon={icon}/>
           <RankDisplay rank={rank} tier={tier} winrate={winRate} games={games}/>
-          <GodDisplay />
+          <GodDisplay godList={godList}/>
           <MatchDisplay matchList={matchList} player={player}/>
           <NameForm setPlayer={setPlayer} />
         </div>
