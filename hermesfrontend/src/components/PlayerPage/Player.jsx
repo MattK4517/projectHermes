@@ -111,12 +111,8 @@ export default function Player(props) {
           </div>
           <PlayerHeader player={player} level={playerLevel} icon={icon}/>
           <RankDisplay rank={rank} tier={tier} winrate={winRate} games={games}/>
-<<<<<<< HEAD
           <GodDisplay godList={godList}/>
-=======
-          <GodDisplay />
           <MatchDisplay matchList={matchList} player={player}/>
->>>>>>> c03b427c592424aaa5a30a0be252a6aca175fafe
           <NameForm setPlayer={setPlayer} />
         </div>
       </div>

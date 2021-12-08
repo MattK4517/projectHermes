@@ -8,8 +8,7 @@ import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import MenuIcon from '@mui/icons-material/Menu';
-
+import * as AiIcons from 'react-icons/ai';
 import { Link } from "react-router-dom";
 import { HashRouter as HashRouter, Switch, Route} from "react-router-dom";
 import { Godpage, Gods, TierListPage, Match, Home, ContactForm, Items } from "./"
@@ -283,7 +282,9 @@ const routeComponents = routes.map(({path, component}, key) => <Route exact path
           }}
           >
           <Hamburger>
-          <Link to={"/"} style={{marginLeft: "10px",paddingRight: "10px"}}>Home</Link>
+          <AiIcons.AiFillHome>
+            <Link to={"/"} style={{marginLeft: "10px",paddingRight: "10px"}}> Home</Link>
+          </AiIcons.AiFillHome>
           <Link to={"/gods"} style={{paddingRight: "10px"}}>Gods</Link>
           <Link to={"/tierlist"}>Tierlist</Link>
           {/* <Button
