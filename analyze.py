@@ -8,7 +8,6 @@ import pymongo
 from collections import OrderedDict
 from operator import getitem
 from constants import godsDict, slots, Tier_Three_items, Starter_items, roles, single_combat_stats, single_objective_stats
-from data_pull_formatting_rewrite import normalize_rank
 # info pull
 # [godWR, godPR, godBR] - check, matchesPlayed - check
 # relics used 

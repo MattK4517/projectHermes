@@ -4,6 +4,7 @@ from re import match
 import pyrez
 from pyrez.api import SmiteAPI
 import analyze as anlz
+import analyze_players as anlzpy
 import pymongo
 from datetime import datetime
 from constants import roles, patch, godsDict
@@ -14,14 +15,16 @@ client = pymongo.MongoClient(
     "mongodb+srv://sysAdmin:9gR7C1aDKclng4jA@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
 
 if __name__ == "__main__":
-    with open("cred.txt", "r") as creds:
-            lines = creds.readlines()
-            smite_api = SmiteAPI(devId=lines[0].strip(), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
-    playerId = smite_api.getPlayerId("jurse")
-    matches = smite_api.getQueueStats(playerId[0].player_id, 451)
-    with open("tierList.txt", "a") as f:
-        for match_data in matches:
-            f.write(anlz.create_player_return_dict(match_data))
+    anlzpy.find_match_history(client, "Inbowned")        
+        # mydb = client["Players"]
+        # mycol = mydb["Player Basic"]
+        # playername= "jurse"
+        # print(mycol.count_documents({"Name": { "$regex" : f"{playername}", "$options": "i" }}))
+    # playerId = smite_api.getPlayerId("jurse")
+    # matches = smite_api.getQueueStats(playerId[0].player_id, 451)
+    # with open("tierList.txt", "a") as f:
+    #     for match_data in matches:
+    #         f.write(anlz.create_player_return_dict(match_data))
 
     
 
