@@ -89,21 +89,21 @@ export default function MatchDisplay(props) {
                                             if (item) {
                                             return(
                                                 <div className="item-wrap">
-                                                <div className="item-image">
-                                                <div className="item-image-div">
-                                                    <img
-                                                    src={`https://webcdn.hirezstudios.com/smite/item-icons/${
-                                                        item
-                                                        .replaceAll(" ","-")
-                                                        .replaceAll("'", "")
-                                                        .toLowerCase()
-                                                        }.jpg`
-                                                    }
-                                                    alt={item}
-                                                    style= {{border: "2px solid black", borderRadius: "5px"}}
-                                                    />
-                                                </div>
-                                                </div>
+                                                    <div className="item-image">
+                                                        <div className="item-image-div">
+                                                            <img
+                                                            src={`https://webcdn.hirezstudios.com/smite/item-icons/${
+                                                                item
+                                                                .replaceAll(" ","-")
+                                                                .replaceAll("'", "")
+                                                                .toLowerCase()
+                                                                }.jpg`
+                                                            }
+                                                            alt={item}
+                                                            style= {{border: "2px solid black", borderRadius: "5px"}}
+                                                            />
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             )
                                         }
