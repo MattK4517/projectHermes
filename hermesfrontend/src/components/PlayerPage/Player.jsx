@@ -76,7 +76,6 @@ export default function Player(props) {
     useEffect(() => {
         fetch("/getplayermatch/".concat(player)).then((res) =>
           res.json().then((data) => {
-              console.log(data)
               Object.keys(data).map((match) => {
               setMatchList((matchList) => [
                 ...matchList,
@@ -88,7 +87,6 @@ export default function Player(props) {
           })
         );
       }, [player]);
-      console.log(matchList)
   //   useEffect(() => {
   //     fetch("/getplayergeneral/".concat(player)).then((res) =>
   //       res.json().then((data) => {
