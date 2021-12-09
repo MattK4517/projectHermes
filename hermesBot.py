@@ -186,20 +186,20 @@ if __name__ == "__main__":
                 role = m[-1]
                 for x in range(len(god)):
                     actgod += god[x]+" "
-                actgod = godAbbreviations(actgod.strip()).replace("-"," ").capitalize()
-                data = anlz.get_top_builds(dbClient, actgod, role, patch)
+                actgod = godAbbreviations(actgod.strip()).replace("-"," ")
+                data = anlz.get_top_builds(dbClient, actgod, role.capitalize(), patch)
                 print(actgod)
                 ItemWR = []
                 iconURL = anlz.get_url(actgod)
-                if actgod in Assassins:
-                     color = "fce703"
-                elif actgod in Guardians:
+                if actgod.lower() in (assassin.lower() for assassin in Assassins):
+                    color = "fce703"
+                elif actgod.lower() in (guardian.lower() for guardian in Guardians):
                     color = "067527"
-                elif actgod in Hunters:
+                elif actgod.lower() in (hunter.lower() for hunter in Hunters):
                     color = "754306"
-                elif actgod in Mages:
+                elif actgod.lower() in (mage.lower() for mage in Mages):
                     color = "9a1af0"
-                elif actgod in Warriors:
+                elif actgod.lower() in (warrior.lower() for warrior in Warriors):
                     color = "fc0303"
                 embed=discord.Embed(title=f"{actgod} {role} Build", description="Games: {} | Wins: {} | WR: {} \n [See more info here](https://www.smitestats.gg/#/{})".format(data["games"], data["wins"], data["winRate"], actgod.replace(" ", "_")), color = int(color, base=16))
                 embed.set_thumbnail(url=iconURL)
@@ -223,18 +223,18 @@ if __name__ == "__main__":
                 role = m[-1]
                 for x in range(len(god)):
                     actgod += god[x]+" "
-                actgod = godAbbreviations(actgod.strip()).replace("-"," ").capitalize()
-                data = anlz.get_worst_matchups(mongo_client, actgod, role, patch)
+                actgod = godAbbreviations(actgod.strip()).replace("-"," ")
+                data = anlz.get_worst_matchups(mongo_client, actgod, role.capitalize(), patch)
                 iconURL = anlz.get_url(actgod)
-                if actgod in Assassins:
+                if actgod.lower() in (assassin.lower() for assassin in Assassins):
                     color = "fce703"
-                elif actgod in Guardians:
+                elif actgod.lower() in (guardian.lower() for guardian in Guardians):
                     color = "067527"
-                elif actgod in Hunters:
+                elif actgod.lower() in (hunter.lower() for hunter in Hunters):
                     color = "754306"
-                elif actgod in Mages:
+                elif actgod.lower() in (mage.lower() for mage in Mages):
                     color = "9a1af0"
-                elif actgod in Warriors:
+                elif actgod.lower() in (warrior.lower() for warrior in Warriors):
                     color = "fc0303"
                 embed=discord.Embed(title=actgod+" "+role+" Worst Matchups", description="Games: {} | Wins: {} | WR: {} \n [See more info here](https://www.smitestats.gg/#/{})".format(data["games"], data["wins"], data["winRate"], actgod.replace(" ", "_")), color = int(color, base=16))
                 embed.set_thumbnail(url=iconURL)
@@ -242,6 +242,37 @@ if __name__ == "__main__":
                     if matchup not in ["games", "wins", "winRate"] and i < 4:
                         embed.add_field(name=matchup, value="Games Played: "+str(data[matchup]["timesPlayed"])+"\nWR: "+str(data[matchup]["winRate"])+"%", inline=True)
                 await message.channel.send(embed=embed)
+
+        if message.content.lower().startswith("$goodmatchups"):
+            m = message.content.split(" ")
+            if len(m) < 3:
+                await message.channel.send("Must use $god role format")
+            else:
+                actgod = ""
+                god = m[1:len(m)-1]
+                role = m[-1]
+                for x in range(len(god)):
+                    actgod += god[x]+" "
+                actgod = godAbbreviations(actgod.strip()).replace("-"," ")
+                data = anlz.get_worst_matchups(mongo_client, actgod, role.capitalize(), patch)
+                iconURL = anlz.get_url(actgod)
+                if actgod.lower() in (assassin.lower() for assassin in Assassins):
+                    color = "fce703"
+                elif actgod.lower() in (guardian.lower() for guardian in Guardians):
+                    color = "067527"
+                elif actgod.lower() in (hunter.lower() for hunter in Hunters):
+                    color = "754306"
+                elif actgod.lower() in (mage.lower() for mage in Mages):
+                    color = "9a1af0"
+                elif actgod.lower() in (warrior.lower() for warrior in Warriors):
+                    color = "fc0303"
+                embed=discord.Embed(title=actgod+" "+role+" Best Matchups", description="Games: {} | Wins: {} | WR: {} \n [See more info here](https://www.smitestats.gg/#/{})".format(data["games"], data["wins"], data["winRate"], actgod.replace(" ", "_")), color = int(color, base=16))
+                embed.set_thumbnail(url=iconURL)
+                for i, matchup in enumerate(data):
+                    print(i, matchup)
+                    if matchup not in ["games", "wins", "winRate"] and i > (len(data)-9):
+                        embed.add_field(name=matchup, value="Games Played: "+str(data[matchup]["timesPlayed"])+"\nWR: "+str(data[matchup]["winRate"])+"%", inline=True)
+                await message.channel.send(embed=embed)                
         
         if message.content.lower().startswith("$paths"):
             m = message.content.split(" ")
@@ -253,18 +284,18 @@ if __name__ == "__main__":
                 role = m[-1]
                 for x in range(len(god)):
                     actgod += god[x]+" "
-                actgod = godAbbreviations(actgod.strip()).replace("-"," ").capitalize()
-                data = anlz.get_build_path(dbClient, actgod, role, patch)
+                actgod = godAbbreviations(actgod.strip()).replace("-"," ")
+                data = anlz.get_build_path(dbClient, actgod, role.capitalize(), patch)
                 iconURL = anlz.get_url(actgod)
-                if actgod in Assassins:
+                if actgod.lower() in (assassin.lower() for assassin in Assassins):
                     color = "fce703"
-                elif actgod in Guardians:
+                elif actgod.lower() in (guardian.lower() for guardian in Guardians):
                     color = "067527"
-                elif actgod in Hunters:
+                elif actgod.lower() in (hunter.lower() for hunter in Hunters):
                     color = "754306"
-                elif actgod in Mages:
+                elif actgod.lower() in (mage.lower() for mage in Mages):
                     color = "9a1af0"
-                elif actgod in Warriors:
+                elif actgod.lower() in (warrior.lower() for warrior in Warriors):
                     color = "fc0303"
                 embed=discord.Embed(title=actgod+" "+role+" Build Paths", description="[See more info here](https://www.smitestats.gg/#/{})".format(actgod.replace(" ", "_")), color = int(color, base=16))
                 embed.set_thumbnail(url=iconURL)
