@@ -268,7 +268,11 @@ function CustomizedAccordions(player) {
               <div className="player-account-info" style={{minWidth: "225px"}}>
                 <span className="player-info-style">Account Level:</span> {player.accountLevel} <br></br>
                 <span className="player-info-style">Ranked MMR:</span> {player.mmr.toFixed(2).toLocaleString()} <br></br>
-                <span className="player-info-style">Player:</span> {player.playerName}
+                <Link
+                  to={{
+                    pathname: `/Player/${player.playerName}`
+                  }}
+                ><span className="player-info-style">Player:</span> {player.playerName}</Link>
               </div>
               <div className="player-kills-info" style={{minWidth: "200px"}}>
                 <div className="KDA">
@@ -564,7 +568,9 @@ const getImageUrl = (rank) => {
 };
 
 function Match() {
-  const [match, setMatch] = useState("");
+  const startMatchId = window.location.href.split("/")[5];
+  console.log(startMatchId)
+  const [match, setMatch] = useState(startMatchId);
   const [matchId, setmatchId] = useState("");
   const [matchLength, setMatchLength] = useState("");
   const [bansWinner, setBansWinner] = useState([]);

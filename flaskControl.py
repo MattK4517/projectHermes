@@ -203,29 +203,28 @@ def get_all_matchups(god, role, rank, patch):
 @app.route("/getmatch/<matchID>")
 def get_match(matchID):
         mydb = client["Matches"]
-        mycol = mydb["8.8 Matches"]
+        mycol = mydb["8.10 Matches"]
         match = ""
         matchID = int(matchID)
         if mycol.count_documents({"MatchId": matchID}) == 0:
-                mycol = mydb["8.9 Matches"]
+                mycol = mydb["8.11 Matches"]
         for x in mycol.find({"MatchId": matchID}, {'_id': 0}):
                 match = x
 
 
-        if match["Entry_Datetime"] < "9/25/2021":
-                for key in match:
-                        if "player" in key:
-                                build = [
-                                match[key]["Item_Purch_1"],
-                                match[key]["Item_Purch_2"],
-                                match[key]["Item_Purch_3"],
-                                match[key]["Item_Purch_4"],
-                                match[key]["Item_Purch_5"],
-                                match[key]["Item_Purch_6"],
-                                ]
+        for key in match:
+                if "player" in key:
+                        build = [
+                        match[key]["Item_Purch_1"],
+                        match[key]["Item_Purch_2"],
+                        match[key]["Item_Purch_3"],
+                        match[key]["Item_Purch_4"],
+                        match[key]["Item_Purch_5"],
+                        match[key]["Item_Purch_6"],
+                        ]
 
-                                match[key] = {**match[key], **{"godBuild": anlz.get_build_stats(client, build)}}
-        
+                        match[key] = {**match[key], **{"godBuild": anlz.get_build_stats(client, build)}}
+        print(match)
         return match
 
 @app.route('/<god>/buildpath/<role>/<rank>/<patch>')
