@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
+import { Link } from "react-router-dom";
 
 class CreateItemToolTip extends React.Component {
   render() {
@@ -274,7 +275,11 @@ export default function MatchDisplay(props) {
                               />
                             </div>
                             <div className="player-name">
-                                <a>{teamPlayerName}</a>
+                                <Link
+                                to={{
+                                  pathname: `Match/${match["MatchId"]}`,
+                                  target: "_blank"
+                                }}>{teamPlayerName}</Link>
                             </div>
                           </div>
                         );

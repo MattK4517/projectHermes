@@ -44,7 +44,8 @@ const compare = (a, b) => {
 }
 
 export default function Player(props) {
-    const [player, setPlayer] = useState("")
+    const startPlayer = window.location.href.split("/")[5]
+    const [player, setPlayer] = useState(startPlayer)
     const [playerLevel, setPlayerLevel] = useState(-1)
     const [icon, setIcon] = useState("")
     const [rank, setRank] = useState("")
