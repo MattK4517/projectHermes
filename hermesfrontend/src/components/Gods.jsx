@@ -17,7 +17,7 @@ class GodsDisplay extends React.Component {
                         <figure className="snip0015">
                             <img className="god-face" src={god.url} alt={god.name} style={{width: "100%"}}/>
                             <figcaption>
-                                <p>stats for {god.name}</p>
+                                <p>Stats for {god.name}</p>
                             </figcaption>
                         </figure>
                         <div className="god-name">

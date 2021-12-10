@@ -27,18 +27,23 @@ class NameForm extends React.Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        {" "}
-        <label style={{color: "white"}}>
-          Match ID:
-          <input
-            type="text"
-            value={this.state.value}
-            onChange={this.handleChange}
-          />{" "}
-        </label>
-        <input type="submit" value="Submit" />
-      </form>
+      <div className="content-section" style={{maxWidth: "240px"}}>
+        <div className="content-section_header">
+          Match Search
+        </div>
+        <form onSubmit={this.handleSubmit}>
+          {" "}
+          <label style={{color: "white"}}>
+            Match ID:
+            <input
+              type="text"
+              value={this.state.value}
+              onChange={this.handleChange}
+            />{" "}
+          </label>
+          <input type="submit" value="Submit" />
+        </form>
+      </div>
     );
   }
 }
@@ -569,7 +574,6 @@ const getImageUrl = (rank) => {
 
 function Match() {
   const startMatchId = window.location.href.split("/")[5];
-  console.log(startMatchId)
   const [match, setMatch] = useState(startMatchId);
   const [matchId, setmatchId] = useState("");
   const [matchLength, setMatchLength] = useState("");
@@ -663,15 +667,19 @@ function Match() {
 
   return (
     <div className="container content-container">
-      <NameForm setMatch={setMatch} />
-      <div className="filler">
-        <h4>
-          Don't have a match? try 1191054312
-        </h4>
-        {/* <br></br> */}
-        <h5>
-          Remember all matches must by Ranked PC Conquest from 8/24/2021 or later (will expand the match types we support soon!)
-        </h5>
+      <div className="header-container">
+        <NameForm setMatch={setMatch} />
+        <div className="content-section">
+          <div className="filler">
+            <h4>
+              Don't have a match? try 1191054312
+            </h4>
+            {/* <br></br> */}
+            <h5>
+              Remember all matches must by Ranked PC Conquest from 8/24/2021 or later (will expand the match types we support soon!)
+            </h5>
+          </div>
+        </div>
       </div>
       <div
         className="match-container"

@@ -108,13 +108,15 @@ class PlayerBuildDisplay extends React.Component {
 }
 
 export default function MatchDisplay(props) {
+  console.log(props)
+  let player;
   return (
     <div className="content-section content-section_no-padding match-block">
       <div className="content-section_header">
         <span>Recent Matches</span>
       </div>
       {props.matchList.map((match) => {
-        let player;
+        player= {}
         let build;
         let teamOne = [];
         let teamTwo = [];
@@ -145,7 +147,7 @@ export default function MatchDisplay(props) {
             }
           }
         });
-        if (player){
+        if (player.Player_Name.toLowerCase().includes(props.player.toLowerCase())){
         return (
           <div className="match-history">
             <div className={`match-history-large ${player.Win_Status}`}>
