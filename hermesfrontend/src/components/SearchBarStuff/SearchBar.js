@@ -3,6 +3,8 @@
 // import SearchIcon from "@material-ui/icons/Search";
 // import CloseIcon from "@material-ui/icons/Close";
 import { Link } from "react-router-dom";
+import Match from "../Match";
+import Player from "../PlayerPage/Player";
 
 // export default function SearchBar({ placeholder, data }) {
 //   const [filteredData, setFilteredData] = useState([]);
