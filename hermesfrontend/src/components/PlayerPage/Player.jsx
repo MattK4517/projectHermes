@@ -88,19 +88,19 @@ export default function Player(props) {
           })
         );
       }, [player]);
-  //   useEffect(() => {
-  //     fetch("/getplayergeneral/".concat(player)).then((res) =>
-  //       res.json().then((data) => {
-  //           console.log(data)
-  //           setPlayerLevel(data.level)
-  //           setIcon(data.avatar)
-  //           setRank(data.rank)
-  //           setTier(data.tier)
-  //           setWinRate(data.winRate)
-  //           setGames(data.games)
-  //       })
-  //     );
-  // }, [player]);
+    useEffect(() => {
+      fetch("/getplayergeneral/".concat(player)).then((res) =>
+        res.json().then((data) => {
+            console.log(data)
+            setPlayerLevel(data.level)
+            setIcon(data.avatar)
+            setRank(data.rank)
+            setTier(data.tier)
+            setWinRate(data.winRate)
+            setGames(data.games)
+        })
+      );
+  }, [player]);
       // <NameForm setPlayer={setPlayer} />
     return(
       <div className="player-profile-page" style={{paddingTop: "100px"}}>

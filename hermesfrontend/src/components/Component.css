@@ -1948,3 +1948,11 @@ figure.snip0015:hover figcaption::before {
   width: 4px;
   border-radius: 2px;
 }
+
+.header-container {
+  display: flex;
+}
+
+.header-container > div {
+  margin-left: 10
+}
