@@ -162,12 +162,12 @@ const godsDict = {
       god: "",
     },
     {
-      path: "/match/:handle",
+      path: ["/match/:handle", "/match"],
       component: <Match />,
       god: "",
     },
     {
-      path: "/player/:handle",
+      path: ["/player/:handle", "/player"],
       component: <Player />,
       god: "",
     }
