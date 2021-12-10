@@ -44,6 +44,7 @@ const compare = (a, b) => {
 }
 
 export default function Player(props) {
+  console.log(props)
     const startPlayer = window.location.href.split("/")[5]
     const [player, setPlayer] = useState(startPlayer)
     const [playerLevel, setPlayerLevel] = useState(-1)

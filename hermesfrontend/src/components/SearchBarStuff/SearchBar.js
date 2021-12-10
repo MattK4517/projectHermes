@@ -79,7 +79,10 @@ export default function SearchBar(data) {
       if (parseInt(event.target.value)) {
         history.push(`/Match/${event.target.value}`);
       } else{
-        history.push(`/Player/${event.target.value}`);
+        history.push({
+          pathname: `/Player/${event.target.value}`,
+          state: {player: event.target.value}
+        });
       }
   }
   }
