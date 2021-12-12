@@ -591,7 +591,6 @@ const getImageUrl = (rank) => {
 
 function Match() {
   const startMatchId = window.location.href.split("/")[5];
-  console.log(startMatchId)
   const [match, setMatch] = useState(startMatchId);
   const [matchId, setmatchId] = useState("");
   const [matchLength, setMatchLength] = useState("");
