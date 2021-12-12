@@ -2,7 +2,7 @@
 // import "./SearchBar.css";
 // import SearchIcon from "@material-ui/icons/Search";
 // import CloseIcon from "@material-ui/icons/Close";
-import { Link } from "react-router-dom";
+import { Link, withRouter, useHistory } from "react-router-dom";
 import Match from "../Match";
 import Player from "../PlayerPage/Player";
 
@@ -64,12 +64,28 @@ import Player from "../PlayerPage/Player";
 // }
 // // export default SearchBar;
 
+
 import * as React from "react";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import Autocomplete from "@mui/material/Autocomplete";
 
 export default function SearchBar(data) {
+
+  let history = useHistory();
+  
+  function handleKeyPress(event){
+    if(event.charCode==13){
+      if (parseInt(event.target.value)) {
+        history.push(`/Match/${event.target.value}`);
+      } else{
+        history.push({
+          pathname: `/Player/${event.target.value}`,
+          state: {player: event.target.value}
+        });
+      }
+  }
+  }
   return (
     <Stack spacing={2} 
       sx={{ 
@@ -114,7 +130,9 @@ export default function SearchBar(data) {
               InputProps={{
                 ...params.InputProps,
               }}
+              onKeyPress={e => handleKeyPress(e)}
             />
+            
           )
         )}
       />
