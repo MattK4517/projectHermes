@@ -45,14 +45,17 @@ def calc_total_matches(ranks, db, rank="All Ranks"):
     matchIds = []
     actTotalGames = 0
     for rank in ranks:
+        if rank == "All Ranks":
+             mycol.update_one({"rank": rank, "patch": "8.11"}, {"$set": {"Total_Matches": len(matchIds)}})
+             break
         mydb = client[db]
         total_games = 0
         for god in godsDict:
             mycol = mydb[god]
-            myquery = {"rank": rank, "patch": "8.10"}
+            myquery = {"rank": rank, "patch": "8.11"}
             games = 0
             for x in mycol.find(myquery, {"_id": 0}):
-                if x["matchId"] not in matchIds:
+                # if x["matchId"] not in matchIds:
                     matchIds.append(x["matchId"])
                     games += 1
             total_games += games
@@ -63,7 +66,7 @@ def calc_total_matches(ranks, db, rank="All Ranks"):
 def insert_games(rank, games):
     mydb = client["Matches"]
     mycol = mydb[f"Total_Matches"]
-    mycol.insert_one({"Total_Matches": games, "rank": rank, "patch": "8.10"})
+    mycol.update_one({"rank": rank, "patch": "8.11"}, {"$set": {"Total_Matches": games}})
 
 def add_new_urls(client, god):
     god_info_db = client["God_Data"]
@@ -158,6 +161,7 @@ def add_gold_eff(client, db, col, field_key):
 
 
 if __name__ == "__main__":
+    calc_total_matches(ranks, "single_items")
     # delete_match_docs(client, "Matches", "8.11 Matches", "Entry_Datetime", "12/10/2021")
     # mydb = client["Matches"]
     # mycol = mydb["8.11 Matches"]

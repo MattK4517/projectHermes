@@ -115,7 +115,7 @@ export default function MatchDisplay(props) {
         <span>Recent Matches</span>
       </div>
       {props.matchList.map((match) => {
-        player= {}
+        let player= {}
         let build;
         let teamOne = [];
         let teamTwo = [];
