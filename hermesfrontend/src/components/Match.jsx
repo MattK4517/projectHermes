@@ -27,18 +27,34 @@ class NameForm extends React.Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        {" "}
-        <label style={{color: "white"}}>
-          Match ID:
-          <input
-            type="text"
-            value={this.state.value}
-            onChange={this.handleChange}
-          />{" "}
-        </label>
-        <input type="submit" value="Submit" />
-      </form>
+      <div className="content-section">
+        <div className="content-section_header">
+          Search for a Player
+
+          
+        </div>
+        <form onSubmit={this.handleSubmit}>
+          {" "}
+          <label style={{color: "white"}}>
+            Match ID:
+            <input
+              type="text"
+              value={this.state.value}
+              onChange={this.handleChange}
+            />{" "}
+          </label>
+          <input type="submit" value="Submit" />
+        </form>
+        <div className="filler">
+          <h4>
+            Don't have a match? try 1191054312
+          </h4>
+          {/* <br></br> */}
+          <h5>
+            Remember all matches must by Ranked PC Conquest from 8/24/2021 or later (will expand the match types we support soon!)
+          </h5>
+      </div>
+      </div>
     );
   }
 }
@@ -57,7 +73,7 @@ const HtmlTooltip = withStyles((theme) => ({
 class BaseMatchSummary extends React.Component {
   render() {
     return (
-      <div className="match-summary-container" style={{minWidth: "300px"}}>
+      <div className="match-summary-container" style={{minWidth: "200px"}}>
         <div className="match-info-header">
           <h3>Ranked Conquest - {this.props.matchId}<br></br>{this.props.date}</h3>
         </div>
@@ -270,9 +286,15 @@ function CustomizedAccordions(player) {
                 <span className="player-info-style">Ranked MMR:</span> {player.mmr.toFixed(2).toLocaleString()} <br></br>
                 <Link
                   to={{
-                    pathname: `/Player/${player.playerName}`
+                    pathname: `/Player/${player.playerName}`,
+                    target: "_blank"
                   }}
-                ><span className="player-info-style">Player:</span> {player.playerName}</Link>
+                >
+                  <span className="player-info-style">Player:</span> {player.playerName}&nbsp;
+                  <span style={{color: "#5f5f7b", fontSize: "14px", fontWeight: "400"}}> 
+                    Click Me!
+                  </span>
+                </Link>
               </div>
               <div className="player-kills-info" style={{minWidth: "200px"}}>
                 <div className="KDA">
@@ -662,30 +684,32 @@ function Match() {
   }, [match]);
 
   return (
-    <div className="container content-container">
-      <NameForm setMatch={setMatch} />
-      <div className="filler">
-        <h4>
-          Don't have a match? try 1191054312
-        </h4>
-        {/* <br></br> */}
-        <h5>
-          Remember all matches must by Ranked PC Conquest from 8/24/2021 or later (will expand the match types we support soon!)
-        </h5>
-      </div>
-      <div
-        className="match-container"
-      >
-        <BaseMatchSummary
-          matchId={matchId}
-          length={matchLength}
-          bansWinner={bansWinner}
-          bansLoser={bansLoser}
-          mmrWinner={mmrWinner}
-          mmrLoser={mmrLoser}
-          date={date}
-        />
-        <PlayerMatchSummary players={players}/>
+    <div 
+      className="container content-container"
+      style={{maxWidth: "fit-content"}}
+    >
+      <NameForm setMatch={setMatch}/>
+      <div className="content-section" style={{marginTop: "36px"}}>
+        <div className="content-section_header">
+          Match Summary&nbsp;
+          <span style={{color: "#5f5f7b", fontSize: "14px", fontWeight: "400"}}> 
+            Click on players to see thier performance
+          </span>
+        </div>
+        <div
+          className="match-container"
+        >
+          <BaseMatchSummary
+            matchId={matchId}
+            length={matchLength}
+            bansWinner={bansWinner}
+            bansLoser={bansLoser}
+            mmrWinner={mmrWinner}
+            mmrLoser={mmrLoser}
+            date={date}
+          />
+          <PlayerMatchSummary players={players}/>
+        </div>
       </div>
     </div>
   );

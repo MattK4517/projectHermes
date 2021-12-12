@@ -108,6 +108,7 @@ class PlayerBuildDisplay extends React.Component {
 }
 
 export default function MatchDisplay(props) {
+  console.log(props.matchList)
   return (
     <div className="content-section content-section_no-padding match-block">
       <div className="content-section_header">
@@ -119,6 +120,7 @@ export default function MatchDisplay(props) {
         let teamOne = [];
         let teamTwo = [];
         let deaths;
+        console.log(Object.keys(match).length)
         Object.keys(match).forEach((key) => {
           if (key.includes("player")) {
             if (match[key]["Win_Status"] === "Winner") {
@@ -126,7 +128,7 @@ export default function MatchDisplay(props) {
             } else {
               teamTwo = [...teamTwo, match[key]];
             }
-            if (match[key]["Player_Name"] === props.player) {
+            if (match[key]["Player_Name"].toLowerCase().includes(props.player.toLowerCase())) {
                 deaths = match[key].Deaths
                 if (deaths <= 0) {
                     deaths = 1;
@@ -215,6 +217,14 @@ export default function MatchDisplay(props) {
                         deaths
                       ).toFixed(2)}{" "}
                       <span>KDA</span>
+                    </div>
+                    <div>
+                      <Link to={{
+                        pathname: `Match/${match["MatchId"]}`,
+                        target: "_blank"
+                      }}
+                      className="date"
+                      >Go to Match</Link>
                     </div>
                   </div>
                   <div className="stat-group-four">

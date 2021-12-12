@@ -156,19 +156,19 @@ def add_gold_eff(client, db, col, field_key):
         gold_eff = anlz.get_gold_eff(x["killPart"], x["carryScore"])
         add_patch_field(client, db, col, matchId, gold_eff, field_key)
 
-if __name__ == "__main__":
-    # delete_match_docs(client, "Matches", "8.11 Matches", "Entry_Datetime", "11/24/2021")
-    mydb = client["Matches"]
-    mycol = mydb["8.11 Matches"]
-    print(mycol.count_documents({"Entry_Datetime": "11/26/2021"}))
 
-    # dbs = ["single_combat_stats", "single_god_bans", "single_items", "single_matchups", "single_objective_stats"]
+if __name__ == "__main__":
+    # delete_match_docs(client, "Matches", "8.11 Matches", "Entry_Datetime", "12/10/2021")
+    # mydb = client["Matches"]
+    # mycol = mydb["8.11 Matches"]
+    # print(mycol.count_documents({"Entry_Datetime": "12/10/2021"}))
+
+    # dbs = ["single_combat_stats", "single_god_bans", "single_items", "single_matchups", "single_objective_stats", "single_match_stats"]
     # for db in dbs:
     #     mydb = client[db]
     #     for god in godsDict.keys():
-    #         if god != "Cliodhna":
     #             mycol = mydb[god]
-    #             mycol.delete_many({"patch": {"$exists": False}})
+    #             mycol.delete_many({"Entry_Datetime": "12/10/2021"})
 
     # fields = ["carryScore","damageScore", "levelDiff", "killPart", "efficiency"]
     # mydb = client["Matches"] 

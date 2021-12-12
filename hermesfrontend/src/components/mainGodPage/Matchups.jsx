@@ -239,6 +239,23 @@ const Table = ({ columns, data }) => {
                                       <b>{row.original.gold}</b>
                                     </span>
                                   </div>
+
+                                  <div
+                                    className="rt-td"
+                                    style={{
+                                      minWidth: "100px",
+                                      maxWidth: "150px",
+                                      flex: "1 1 100%",
+                                      display: 'flex', 
+                                      flexDirection: 'column', 
+                                      justifyContent: 'center'
+                                    }}
+                                    {...cell.getCellProps()}
+                                  >
+                                    <span className="center-aligned">
+                                      <b>{row.original.games}</b>
+                                    </span>
+                                  </div>
                                     </>
                                     )
                                 }
@@ -330,7 +347,8 @@ export default function Matchups(props) {
                       kills: data[key]["kills"].toFixed(2),
                       god: data[key]["god"],
                       gold: data[key]["gold"].toFixed(),
-                      wr: data[key]["wr"]
+                      wr: data[key]["wr"],
+                      games: data[key]["games"],
                       }
                   ])
               })
@@ -371,7 +389,11 @@ export default function Matchups(props) {
             accessor: "gold",
             sortType: compareNumericString,
           },
-          
+          {
+            Header: "Games",
+            accessor: "games",
+            sortType: compareNumericString,
+          },          
         ],
         []
       );

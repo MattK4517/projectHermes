@@ -1199,6 +1199,7 @@ figure.snip0015:hover figcaption::before {
   color: white;
   background-color: #11112a;
   max-width: 100%;
+  padding: 10px;
 }
 
 .match-summary-container-players {
@@ -1715,6 +1716,11 @@ figure.snip0015:hover figcaption::before {
   font-weight: 700;
 }
 
+.date {
+  font-size: 14px;
+  font-weight: 500;
+  color: #cddcfe;
+}
 .r1 .date {
   font-size: 10px;
   font-weight: 500;
@@ -1947,4 +1953,44 @@ figure.snip0015:hover figcaption::before {
   height: 76px;
   width: 4px;
   border-radius: 2px;
+}
+
+.player-side {
+  display: grid;
+  grid-template-rows: repeat(auto-fit,minmax(0,-webkit-min-content));
+  grid-template-rows: repeat(auto-fit,minmax(0,min-content));
+  grid-gap: 24px;
+}
+
+.player-content-main {
+  display: grid;
+  grid-template-columns: 312px 1fr;
+  grid-gap: 24px;
+  width: 1016px;
+}
+
+.player-content-container {
+  display: flex;
+  margin-top: 36px;
+}
+
+.god-stats_col-1 .god-name {
+  flex: 1 1;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.god-performance .god-face {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 7px;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  overflow: hidden;
 }
