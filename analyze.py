@@ -107,6 +107,8 @@ def get_top_builds(client, god, role, patch, rank="All Ranks", data=None):
     mycol = mydb[god]
     if rank != "All Ranks":
         myquery = { "role_played": role, "rank": rank, "patch": patch}
+    elif rank == "Platinum+":
+        myquery = { "role_played": role, "rank": {"$in" ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch}
     else:
         myquery = { "role_played": role, "patch": patch}
     
