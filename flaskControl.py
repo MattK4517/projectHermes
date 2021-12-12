@@ -174,7 +174,13 @@ def get_all_matchups(god, role, rank, patch):
         else:
                 wins = matchupscol.count_documents({"enemy": x["_id"], f"{god}": "Winner", "patch": patch, "rank": rank, "role_played": role})
         if x["timesPlayed"] >= .01 * total_games:
-            avg_dmg_dict[x["_id"]] = {"dmg": x["avg_dmg_diff"], "kills": x["avg_kill_diff"], "gold": x["avg_gold_diff"], "wr": round(wins/x["timesPlayed"]*100, 2)}
+            avg_dmg_dict[x["_id"]] = {
+                    "dmg": x["avg_dmg_diff"], 
+                    "kills": x["avg_kill_diff"], 
+                    "gold": x["avg_gold_diff"], 
+                    "wr": round(wins/x["timesPlayed"]*100, 2),
+                    "games": x["timesPlayed"],
+                    }
     
     myquery = {**myquery, **{"enemy": god}}
     for god in avg_dmg_dict:
@@ -224,7 +230,6 @@ def get_match(matchID):
                         ]
 
                         match[key] = {**match[key], **{"godBuild": anlz.get_build_stats(client, build)}}
-        print(match)
         return match
 
 @app.route('/<god>/buildpath/<role>/<rank>/<patch>')
@@ -287,13 +292,10 @@ def get_build_path(god, role, rank, patch):
 
     return builds
 
-
-@app.route("/getplayer/<playername>")
-def get_player_info(playername):
-        return anlz.find_match_history(client, playername)
-
 @app.route("/getplayergeneral/<playername>")
 def get_player_general(playername):
+        if playername == "undefined":
+                return {}
         mydb = client["Players"]
         mycol = mydb["Player Basic"]
         if mycol.count_documents({"NameTag": { "$regex" : f"{playername}", "$options": "i" }}) == 0:
@@ -309,6 +311,8 @@ def get_player_general(playername):
  
 @app.route("/getplayergods/<playername>")
 def get_player_god_info(playername):
+        if playername == "undefined":
+                return {}
         mydb = client["Players"]
         mycol = mydb["Player Gods"]
         if mycol.count_documents({"NameTag": { "$regex" : f"{playername}", "$options": "i" }}) == 0:
@@ -331,6 +335,8 @@ def get_player_god_info(playername):
 
 @app.route("/getplayermatch/<playername>")
 def get_player_match_info(playername):
+        if playername == "undefined":
+                return {}
         return anlzpy.find_match_history(client, playername)
 # make a route for every god, in the
 # temp idea for routing

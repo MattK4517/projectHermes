@@ -23,18 +23,23 @@ class NameForm extends React.Component {
   
     render() {
       return (
-        <form onSubmit={this.handleSubmit}>
-          {" "}
-          <label style={{color: "white"}}>
-            Player Name:
-            <input
-              type="text"
-              value={this.state.value}
-              onChange={this.handleChange}
-            />{" "}
-          </label>
-          <input type="submit" value="Submit" />
-        </form>
+        <div className="content-section">
+          <div className="content-section_header">
+            Search for a Player
+          </div>
+          <form onSubmit={this.handleSubmit}>
+            {" "}
+            <label style={{color: "white"}}>
+              Player Name:
+              <input
+                type="text"
+                value={this.state.value}
+                onChange={this.handleChange}
+              />{" "}
+            </label>
+            <input type="submit" value="Submit" />
+          </form>
+        </div>
       );
     }
   }
@@ -72,7 +77,7 @@ export default function Player(props) {
           })
         })
       );
-  }, [player]);
+  }, [player ?? ""]);
     const [matchList, setMatchList] = useState([])
     useEffect(() => {
         fetch("/getplayermatch/".concat(player)).then((res) =>
@@ -87,20 +92,20 @@ export default function Player(props) {
             })
           })
         );
-      }, [player]);
-  //   useEffect(() => {
-  //     fetch("/getplayergeneral/".concat(player)).then((res) =>
-  //       res.json().then((data) => {
-  //           console.log(data)
-  //           setPlayerLevel(data.level)
-  //           setIcon(data.avatar)
-  //           setRank(data.rank)
-  //           setTier(data.tier)
-  //           setWinRate(data.winRate)
-  //           setGames(data.games)
-  //       })
-  //     );
-  // }, [player]);
+      }, [player ?? ""]);
+    useEffect(() => {
+      fetch("/getplayergeneral/".concat(player)).then((res) =>
+        res.json().then((data) => {
+            console.log(data)
+            setPlayerLevel(data.level)
+            setIcon(data.avatar)
+            setRank(data.rank)
+            setTier(data.tier ?? "")
+            setWinRate(data.winRate)
+            setGames(data.games)
+        })
+      );
+  }, [player ?? ""]);
       // <NameForm setPlayer={setPlayer} />
     return(
       <div className="player-profile-page" style={{paddingTop: "100px"}}>
@@ -109,10 +114,18 @@ export default function Player(props) {
 
           </div>
           <PlayerHeader player={player} level={playerLevel} icon={icon}/>
-          <RankDisplay rank={rank} tier={tier} winrate={winRate} games={games}/>
-          <GodDisplay godList={godList}/>
-          <MatchDisplay matchList={matchList} player={player}/>
           <NameForm setPlayer={setPlayer} />
+          <div className="player-content-container">
+            <div className="player-content-main">
+              <div className="player-side">
+                <RankDisplay rank={rank} tier={tier} winrate={winRate} games={games}/>
+                <GodDisplay godList={godList}/>
+              </div>
+              <div className="player-main">
+                <MatchDisplay matchList={matchList} player={player}/>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     )

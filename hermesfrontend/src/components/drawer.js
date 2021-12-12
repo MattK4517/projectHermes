@@ -347,7 +347,7 @@ const routeComponents = routes.map(({path, component}, key) => <Route exact path
             color: "#bbbedb",
             bgcolor: "#17172e",
         }}>
-          {['Home', 'Gods', 'Tierlist', "Contact",'Match'].map((text, index) => {
+          {['Home', 'Gods', 'Tierlist', "Contact",'Match', 'Player'].map((text, index) => {
             let route ="";
             if (text === "Home"){
               route = "";
