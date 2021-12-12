@@ -28,12 +28,15 @@ def get_pb_rate(client, god, rank, role, patch):
     bandb = client["single_god_bans"]
     bancol = bandb[god]
     startime = datetime.now()
-    totalMatches = get_total_matches(client, rank, patch)
-    if rank == "All Ranks":
-        myquery = {"patch": patch}
+    if rank == "Platinum+":
+        myquery = { "role_played": role, "rank": {"$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch}
+    elif rank == "Diamond+":
+        myquery = { "role_played": role, "rank": {"$in":  ["Diamond", "Masters", "Grandmaster"]}, "patch": patch}    
+    elif rank != "All Ranks":
+        myquery = { "role_played": role, "rank": rank, "patch": patch}
     else:
-        myquery = {"patch": patch, "rank": rank}
-
+        myquery = { "role_played": role, "patch": patch}
+    totalMatches = get_total_matches(client, rank, patch)
     godBans = bancol.count_documents(myquery)
     games = get_games_played(client, god, rank, role, patch)
     if totalMatches == 0:
@@ -43,10 +46,14 @@ def get_pb_rate(client, god, rank, role, patch):
 def get_games_played(client, god, rank, role, patch):
     mydb = client["single_items"]
     mycol = mydb[god]
-    if rank == "All Ranks":
-        myquery = {"patch": patch, "role_played": role}
+    if rank == "Platinum+":
+        myquery = { "role_played": role, "rank": {"$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch}
+    elif rank == "Diamond+":
+        myquery = { "role_played": role, "rank": {"$in":  ["Diamond", "Masters", "Grandmaster"]}, "patch": patch}    
+    elif rank != "All Ranks":
+        myquery = { "role_played": role, "rank": rank, "patch": patch}
     else:
-        myquery = {"patch": patch, "rank": rank, "role_played": role}
+        myquery = { "role_played": role, "patch": patch}
     games = mycol.count_documents(myquery)
     return games
 
@@ -105,13 +112,15 @@ def get_top_builds(client, god, role, patch, rank="All Ranks", data=None):
     top_dict = {slot: {} for slot in slots}
     mydb = client["single_items"]
     mycol = mydb[god]
-    if rank != "All Ranks":
+    if rank == "Platinum+":
+        myquery = { "role_played": role, "rank": {"$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch}
+    elif rank == "Diamond+":
+        myquery = { "role_played": role, "rank": {"$in":  ["Diamond", "Masters", "Grandmaster"]}, "patch": patch}    
+    elif rank != "All Ranks":
         myquery = { "role_played": role, "rank": rank, "patch": patch}
-    elif rank == "Platinum+":
-        myquery = { "role_played": role, "rank": {"$in" ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch}
     else:
         myquery = { "role_played": role, "patch": patch}
-    
+
     games = 0
     wins = 0
     if type(data) is list:
@@ -211,7 +220,11 @@ def get_all_builds(client, god, role, patch, rank="All Ranks"):
     top_dict = {slot: {} for slot in slots}
     mydb = client["single_items"]
     mycol = mydb[god]
-    if rank != "All Ranks":
+    if rank == "Platinum+":
+        myquery = { "role_played": role, "rank": {"$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch}
+    elif rank == "Diamond+":
+        myquery = { "role_played": role, "rank": {"$in":  ["Diamond", "Masters", "Grandmaster"]}, "patch": patch}    
+    elif rank != "All Ranks":
         myquery = { "role_played": role, "rank": rank, "patch": patch}
     else:
         myquery = { "role_played": role, "patch": patch}
@@ -249,7 +262,11 @@ def get_worst_matchups(client, god, role, patch, rank="All Ranks"):
     mydb = client["single_matchups"]
     mycol = mydb[god]
     matchup_dict = {}
-    if rank != "All Ranks":
+    if rank == "Platinum+":
+        myquery = { "role_played": role, "rank": {"$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch}
+    elif rank == "Diamond+":
+        myquery = { "role_played": role, "rank": {"$in":  ["Diamond", "Masters", "Grandmaster"]}, "patch": patch}    
+    elif rank != "All Ranks":
         myquery = { "role_played": role, "rank": rank, "patch": patch}
     else:
         myquery = { "role_played": role, "patch": patch}
@@ -304,7 +321,11 @@ def get_worst_matchups(client, god, role, patch, rank="All Ranks"):
 def get_winrate(client, god, role, patch, rank="All Ranks"):
     mydb = client["single_items"]
     mycol = mydb[god]
-    if rank != "All Ranks":
+    if rank == "Platinum+":
+        myquery = { "role_played": role, "rank": {"$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch}
+    elif rank == "Diamond+":
+        myquery = { "role_played": role, "rank": {"$in":  ["Diamond", "Masters", "Grandmaster"]}, "patch": patch}    
+    elif rank != "All Ranks":
         myquery = { "role_played": role, "rank": rank, "patch": patch}
     else:
         myquery = { "role_played": role, "patch": patch}
@@ -336,10 +357,14 @@ def get_combat_stats(client, god, role, patch, rank="All Ranks"):
     mydb = client["single_match_stats"]
     mycol = mydb[god]
     combat_stats = {}
-    if rank != "All Ranks":
-        myquery = { "role": role, "rank": rank, "patch": patch}
+    if rank == "Platinum+":
+        myquery = { "role_played": role, "rank": {"$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch}
+    elif rank == "Diamond+":
+        myquery = { "role_played": role, "rank": {"$in":  ["Diamond", "Masters", "Grandmaster"]}, "patch": patch}    
+    elif rank != "All Ranks":
+        myquery = { "role_played": role, "rank": rank, "patch": patch}
     else:
-        myquery = { "role": role, "patch": patch}
+        myquery = { "role_played": role, "patch": patch}
     
     for x in mycol.aggregate([
         {
@@ -369,10 +394,14 @@ def get_combat_stats(client, god, role, patch, rank="All Ranks"):
 def get_objective_stats(client, god, role, patch, rank="All Ranks"):
     mydb = client["single_match_stats"]
     mycol = mydb[god]
-    if rank != "All Ranks":
-        myquery = { "role": role, "rank": rank, "patch": patch}
+    if rank == "Platinum+":
+        myquery = { "role_played": role, "rank": {"$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch}
+    elif rank == "Diamond+":
+        myquery = { "role_played": role, "rank": {"$in":  ["Diamond", "Masters", "Grandmaster"]}, "patch": patch}    
+    elif rank != "All Ranks":
+        myquery = { "role_played": role, "rank": rank, "patch": patch}
     else:
-        myquery = { "role": role, "patch": patch}
+        myquery = { "role_played": role, "patch": patch}
     combat_stats = {}
     for x in mycol.aggregate([
         {
