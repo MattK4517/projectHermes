@@ -178,6 +178,22 @@ const Table = ({ columns, data }) => {
                                     </Link>
                                   </div>
 
+                                  
+                                  <div
+                                    className="rt-td win-rate"
+                                    style={{
+                                      minWidth: "70px",
+                                      maxWidth: "90px",
+                                      flex: "1 1 100%",
+                                    }}
+                                    {...cell.getCellProps()}
+                                  >
+                                    <span>
+                                      <b style={{color: winRateColor(row.original.carryWinRate)}}>{row.original.carryWinRate}%</b>
+                                    </span>
+                                  </div>
+
+
                                   <div
                                     className="rt-td god"
                                     style={{ minWidth: "180px", maxWidth: "220px", flex: "1 1 100%" }}
@@ -212,6 +228,34 @@ const Table = ({ columns, data }) => {
                                         {row.original.support}
                                       </strong>
                                     </Link>
+                                  </div>
+
+                                  <div
+                                    className="rt-td win-rate"
+                                    style={{
+                                      minWidth: "70px",
+                                      maxWidth: "90px",
+                                      flex: "1 1 100%",
+                                    }}
+                                    {...cell.getCellProps()}
+                                  >
+                                    <span>
+                                      <b style={{color: winRateColor(row.original.supportWinRate)}}>{row.original.supportWinRate}%</b>
+                                    </span>
+                                  </div>
+
+                                  <div
+                                    className="rt-td win-rate"
+                                    style={{
+                                      minWidth: "70px",
+                                      maxWidth: "90px",
+                                      flex: "1 1 100%",
+                                    }}
+                                    {...cell.getCellProps()}
+                                  >
+                                    <span>
+                                      <b style={{color: winRateColor(row.original.syneryFactor)}}>{row.original.syneryFactor.toFixed(2)}%</b>
+                                    </span>
                                   </div>
 
                                   <div
@@ -353,6 +397,9 @@ function DuoLaneTierList(tableType) {
                 support: data[key]["_id"]["support"],
                 winRate: data[key]["winRate"],
                 games: data[key]["count"]+data[key]["losses"],
+                carryWinRate: data[key]["carryWinRate"],
+                supportWinRate: data[key]["supportWinRate"],
+                syneryFactor: data[key]["syneryFactor"]
               },
             ]);
           }
@@ -371,6 +418,10 @@ function DuoLaneTierList(tableType) {
         Header: "Carry",
         accessor: "carry",
       },
+      {
+        Header: "Carry Win Rate",
+        accessor: "carryWinRate",
+      },
       // {
       //   Header: "Carry Win Rate",
       //   accessor: "carryWinRate",
@@ -378,6 +429,14 @@ function DuoLaneTierList(tableType) {
       {
         Header: "Support",
         accessor: "support",
+      },
+      {
+        Header: "Support Win Rate",
+        accessor: "supportWinRate",
+      },
+      {
+        Header: "Synery Factor",
+        accessor: "syneryFactor",
       },
       {
         Header: "Win Rate",
