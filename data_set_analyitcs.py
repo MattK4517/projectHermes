@@ -1,12 +1,75 @@
 import pymongo
 from datetime import datetime
-from constants import godsDict, roles, ranks, slots, Assassins, Guardians, Hunters, Mages, Warriors
+from constants import godsDict, roles, ranks, slots, Assassins, Guardians, Hunters, Mages, Warriors, Starter_items
 from main import client
 import numpy as np
 # import matplotlib.pyplot as plt
 import os 
 import analyze as anlz
+import pandas as pd
 
+def mergeDict(dict1, dict2):
+   ''' Merge dictionaries and keep values of common keys in list'''
+   dict3 = {**dict1, **dict2}
+   for key, value in dict3.items():
+       if key in dict1 and key in dict2:
+               dict3[key] = [value , dict1[key]]
+   return dict3
+
+def get_items_by_class(client, class_name, role):
+    build = ["Mystical Mail", "Blackthorn Hammer", "Bulwark of Hope", "Pridwen"]
+    items = {f"slot{i+1}": {} for i in range(6)}
+    for char in class_name:
+        print(char)
+        char_items = anlz.get_all_builds(client, char, role, "8.11")
+        for slot in char_items:
+            if "slot" in slot:
+                for item in char_items[slot]:
+                    if item in items[slot]:
+                        items[slot][item]["games"] += char_items[slot][item]["games"]
+                        items[slot][item]["wins"] += char_items[slot][item]["wins"]
+                    else:
+                        items[slot][item] = char_items[slot][item]
+
+    with open("items.txt", "w") as f:
+        for slot in items:
+            for item in items[slot]:
+                if item in build or item in Starter_items and items[slot][item]["games"] > 25:
+                    games = items[slot][item]["games"]
+                    wins = items[slot][item]["wins"]
+                    wr = round(wins/games * 100, 2)
+                    f.writelines(f"{slot},{item},{wins},{games},{wr}\n")
+
+get_items_by_class(client, Warriors, "Solo")
+
+def get_combat_stats_by_class(client, class_name):
+    mydb= client["single_combat_stats"]
+    myquery = {"role": "Mid", "patch": "8.10"}
+    for god in class_name:
+        mycol = mydb[god]
+        for x in mycol.aggregate([
+            {
+                "$match": myquery
+            },
+            {
+                "$group": {
+                    "_id": f"{god}",
+                    "kills": { "$avg": "$kills"},
+                    "deaths": { "$avg": "$deaths"},
+                    "damage_": { "$avg": "$damage_player"},
+                    "damageTaken": { "$avg": "$damage_taken"},
+                    "damageMitigated": { "$avg": "$damage_mitigated"},
+                    "healing": { "$avg": "$healing"},
+                    "selfHealing": { "$avg": "$healing_self"},
+                    "games": {"$sum": 1},
+                }
+            }
+        ]):
+            df = pd.DataFrame(x, index=[0])
+            df.to_csv("test.csv", mode='a', index = False, header=None)
+
+
+# get_combat_stats_by_class(client, Warriors)
 
 # for char_class in [Assassins, Guardians, Hunters, Mages, Warriors]:
 #     games = 0
