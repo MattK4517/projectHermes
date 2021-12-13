@@ -1,9 +1,9 @@
 import pymongo
 from datetime import datetime
-from constants import godsDict, roles, ranks, slots, patch
+from constants import godsDict, roles, ranks, slots
 
 client = pymongo.MongoClient(
-    "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
+    "mongodb+srv://sysAdmin:9gR7C1aDKclng4jA@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
 
 
 class GodData:
@@ -12,11 +12,11 @@ class GodData:
         self.matches = []
 
 
-    def insert_ban(self, matchId, rank, entry_datetime):
-        mydb = client["single_god_bans"]
+    def insert_ban(self, matchId, rank, entry_datetime, patch):
+        mydb = client["single_god_bans_test"]
         mycol = mydb[self.name]
         mycol.insert_one({
-            "Banned in": matchId,
+            "matchId": matchId,
             "rank": rank,
             "patch": patch,
             "Entry_Datetime": entry_datetime,
@@ -25,17 +25,19 @@ class GodData:
     def set_matches(self, data):
         """append match Ids to self.matches when gods in data"""
         for match in data:
+            match_bans = 0
             for key in match:
                 if "player" in key and match[key]["godName"] == self.name:
                     self.matches.append(match)
-                if "Ban" in key and match[key] == self.name:
-                    self.insert_ban(match["MatchId"], normalize_rank(match["player0"]["Conquest_Tier"]), match["Entry_Datetime"])
+                if "Ban" in key and match[key] == self.name and match_bans == 0:
+                    match_bans += 1
+                    self.insert_ban(match["MatchId"], normalize_rank(match["player0"]["Conquest_Tier"]), match["Entry_Datetime"], match["Patch"])
 
     def get_matches(self):
         return len(self.matches)
 
     def calc_matchups(self):
-        mydb = client["single_matchups"]
+        mydb = client["single_matchups_test"]
         mycol = mydb[self.name]
         for match in self.matches:
             for key in match:
@@ -53,13 +55,13 @@ class GodData:
                             "role_played": role_played,
                             "enemy": enemy,
                             "matchId": matchId,
-                            "patch": patch,
+                            "patch": match["Patch"],
                             "Entry_Datetime": match["Entry_Datetime"],
                         }
                     )
 
     def calc_items(self):
-        mydb = client["single_items"]
+        mydb = client["single_items_test"]
         mycol =  mydb[self.name]
         for match in self.matches:
             build = {}
@@ -80,13 +82,13 @@ class GodData:
                         "rank": rank,
                         "win_status": win_status,
                         "matchId": matchId,
-                        "patch": patch,
+                        "patch": match["Patch"],
                         "Entry_Datetime": match["Entry_Datetime"],
                         }
                     )
 
-    def calc_combat_stats(self):
-        mydb = client["single_combat_stats"]
+    def calc_match_stats(self):
+        mydb = client["single_match_stats_test"]
         mycol =  mydb[self.name]
         for match in self.matches:
             for key in match:
@@ -103,8 +105,24 @@ class GodData:
                     healing = match[key]["Healing"]
                     healing_self = match[key]["Healing_Player_Self"]
                     win_status = match[key]["Win_Status"]
+                    gold = match[key]["Gold_Earned"]
+                    damage_bot = match[key]["Damage_Bot"]
+                    kills_bot = match[key]["Kills_Bot"]
+                    camps_cleared = match[key]["Camps_Cleared"]
+                    tower_kills = match[key]["Towers_Destroyed"]
+                    phoenix_kills = match[key]["Kills_Phoenix"]
+                    tower_damage = match[key]["Structure_Damage"]
+                    wards_placed = match[key]["Wards_Placed"]
+                    objective_assists = match[key]["Objective_Assists"]
+                    player = match[key]["Player_Name"]
+                    enemy = ""
+
+                    for key in match:
+                        if "player" in key and match[key]["godName"] != self.name and match[key]["Role"] == role:
+                            enemy = match[key]["godName"]
 
                     mycol.insert_one({
+                        "player": player,
                         "rank": rank,
                         "role": role,
                         "matchId": matchId,
@@ -116,47 +134,21 @@ class GodData:
                         "damage_mitigated": damage_mitigated,
                         "healing": healing,
                         "healing_self": healing_self,
-                        "win_status": win_status,
-                        "patch": patch,
-                        "Entry_Datetime": match["Entry_Datetime"],
-                    })
-    
-    def calc_objective_stats(self):
-        mydb = client["single_objective_stats"]
-        mycol =  mydb[self.name]
-        for match in self.matches:
-            for key in match:
-                if "player" in key and match[key]["godName"] == self.name:
-                    rank = normalize_rank(match[key]["Conquest_Tier"])
-                    role = match[key]["Role"]
-                    matchId = match[key]["MatchID"]
-                    gold = match[key]["Gold"]
-                    damage_bot = match[key]["Damage_Bot"]
-                    camps_cleared = match[key]["Camps_Cleared"]
-                    tower_kills = match[key]["Towers_Destroyed"]
-                    phoenix_kills = match[key]["Kills_Phoenix"]
-                    tower_damage = match[key]["Structure_damage"]
-                    wards_placed = match[key]["Wards_Placed"]
-                    win_status = match[key]["Win_Status"]
-                
-                mycol.insert_one({
-                        "rank": rank,
-                        "role": role,
-                        "matchId": matchId,
                         "gold": gold,
                         "damage_bot": damage_bot,
+                        "kills_bot": kills_bot,
                         "camps_cleared": camps_cleared,
                         "tower_kills": tower_kills,
                         "phoenix_kills": phoenix_kills,
                         "tower_damage": tower_damage,
+                        "objective_assists": objective_assists,
                         "wards_placed": wards_placed,
                         "win_status": win_status,
-                        "patch": patch,
+                        "patch": match["Patch"],
+                        "enemy": enemy,
                         "Entry_Datetime": match["Entry_Datetime"],
+                        "time": match["Match_Duration"],
                     })
-
-
-
 
 def normalize_rank(tier):
     rank = "Error"
@@ -190,7 +182,8 @@ def run_format(patch, date):
     mydb = client["test"]
     mycol = mydb[f"{patch} Matches"]
     set_matches = []
-    for match in mycol.find({"Entry_Datetime": {"$gte": date}}):
+    count = 0
+    for match in mycol.find({"Entry_Datetime": date}):
         set_matches.append(match)
 
 
@@ -200,7 +193,15 @@ def run_format(patch, date):
         sum_gods += godsDict[god].get_matches()
         godsDict[god].calc_matchups()
         godsDict[god].calc_items()
-        godsDict[god].calc_combat_stats()
-
-
+        godsDict[god].calc_match_stats()
+        # godsDict[god].calc_objective_stats()
         print(f"{god}: {godsDict[god].get_matches()}")
+
+def format_no_query(match):
+    set_matches = [match]
+    for god in godsDict:
+        godsDict[god] = GodData(god)
+        godsDict[god].set_matches(set_matches)
+        godsDict[god].calc_matchups()
+        godsDict[god].calc_items()
+        godsDict[god].calc_match_stats()
