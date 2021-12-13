@@ -3,32 +3,32 @@ from datetime import datetime
 from constants import godsDict, roles, ranks, slots, Assassins, Guardians, Hunters, Mages, Warriors
 from main import client
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import os 
 import analyze as anlz
 
 
-for char_class in [Assassins, Guardians, Hunters, Mages, Warriors]:
-    games = 0
-    wins = 0
-    for god in char_class:
-        if god in Assassins:
-            role = "Jungle"
-        elif god in Guardians:
-            role = "Support"
-        elif god in Hunters:
-            role = "Carry"
-        elif god in Mages:
-            role = "Mid"
-        else: 
-            role = "Solo"
-        for god in char_class:
-            win_rate = anlz.get_winrate(client, god, role, "8.10")
-            wins += win_rate["wins"]
-            games += win_rate["games"]
+# for char_class in [Assassins, Guardians, Hunters, Mages, Warriors]:
+#     games = 0
+#     wins = 0
+#     for god in char_class:
+#         if god in Assassins:
+#             role = "Jungle"
+#         elif god in Guardians:
+#             role = "Support"
+#         elif god in Hunters:
+#             role = "Carry"
+#         elif god in Mages:
+#             role = "Mid"
+#         else: 
+#             role = "Solo"
+#         for god in char_class:
+#             win_rate = anlz.get_winrate(client, god, role, "8.10")
+#             wins += win_rate["wins"]
+#             games += win_rate["games"]
         
     
-    print(f"{wins}, {games}, winrate={round(wins/games*100,5)}")
+#     print(f"{wins}, {games}, winrate={round(wins/games*100,5)}")
 
 
 # client = pymongo.MongoClient(
@@ -55,23 +55,26 @@ for char_class in [Assassins, Guardians, Hunters, Mages, Warriors]:
 #     return style
 
 
-# starttime = datetime.now()
-# fields = ["gold", "damage_bot", "kills_bot", "tower_kills","phoenix_kills", "tower_damage", "objective_assists", "wards_placed"]
-# dmg_dict = {field: {role: {"god": "", "amount": 0} for role in roles} for field in fields}
-# for field in fields:
-#     top = 0
-#     for god in godsDict:
-#         mycol = mydb[god]
-#         all_games = []
-#         #pymongo.ASCENDING
-#         #pymongo.DESCENDING
-#         #{"damage_mitigated": {"$gt": 0}
-#         #.sort("damage_mitigated", pymongo.DESCENDING)
-#         for x in mycol.find({"role": {"$exists": True}}, {"_id": 0, field: 1, "role": 1}).sort(field, pymongo.DESCENDING).limit(1):
-#             if x[field] > dmg_dict[field][x["role"]]["amount"]:
-#                 dmg_dict[field][x["role"]] = {"god": god, "amount": x[field]}
 
-# print(dmg_dict)
+mydb = client["single_match_stats"]
+# starttime = datetime.now()
+fields = ["gold", "damage_bot", "kills_bot", "tower_kills","phoenix_kills", "tower_damage", "objective_assists", "wards_placed"]
+fields = ["kills", "deaths", "assists", "damage_player", "damage_mitigated", "damage_taken", "healing", "healing_self",]
+dmg_dict = {field: {role: {"god": "", "amount": 0} for role in roles} for field in fields}
+for field in fields:
+    top = 0
+    for god in godsDict:
+        mycol = mydb[god]
+        all_games = []
+        #pymongo.ASCENDING
+        #pymongo.DESCENDING
+        #{"damage_mitigated": {"$gt": 0}
+        #.sort("damage_mitigated", pymongo.DESCENDING)
+        for x in mycol.find({"role": {"$exists": True}}, {"_id": 0, field: 1, "role": 1, "matchId": 1}).sort(field, pymongo.DESCENDING).limit(1):
+            if x[field] > dmg_dict[field][x["role"]]["amount"]:
+                dmg_dict[field][x["role"]] = {"god": god, "amount": x[field], "matchid": x["matchId"]}
+
+print(dmg_dict)
 #         # mean = sum(all_games) / len(all_games)
 #         # variance = sum([((x - mean) ** 2) for x in all_games]) / len(all_games)
 #         # res = variance ** 0.5
