@@ -144,7 +144,7 @@ const Table = ({ columns, data }) => {
 
                                   <div
                                     className="rt-td god"
-                                    style={{ minWidth: "180px", maxWidth: "220px", flex: "1 1 100%" }}
+                                    style={{ minWidth: "140px", maxWidth: "180px", flex: "1 1 100%" }}
                                     {...cell.getCellProps()}
                                   >
                                     <Link
@@ -189,14 +189,14 @@ const Table = ({ columns, data }) => {
                                     {...cell.getCellProps()}
                                   >
                                     <span>
-                                      <b style={{color: winRateColor(row.original.carryWinRate)}}>{row.original.carryWinRate}%</b>
+                                      <b style={{color: winRateColor(row.original.carryWinRate)}}>{row.original.carryWinRate.toFixed(2)}%</b>
                                     </span>
                                   </div>
 
 
                                   <div
                                     className="rt-td god"
-                                    style={{ minWidth: "180px", maxWidth: "220px", flex: "1 1 100%" }}
+                                    style={{ minWidth: "160px", maxWidth: "180px", flex: "1 1 100%" }}
                                     {...cell.getCellProps()}
                                   >
                                     <Link
@@ -240,7 +240,7 @@ const Table = ({ columns, data }) => {
                                     {...cell.getCellProps()}
                                   >
                                     <span>
-                                      <b style={{color: winRateColor(row.original.supportWinRate)}}>{row.original.supportWinRate}%</b>
+                                      <b style={{color: winRateColor(row.original.supportWinRate)}}>{row.original.supportWinRate.toFixed(2)}%</b>
                                     </span>
                                   </div>
 
@@ -254,7 +254,7 @@ const Table = ({ columns, data }) => {
                                     {...cell.getCellProps()}
                                   >
                                     <span>
-                                      <b style={{color: winRateColor(row.original.syneryFactor)}}>{row.original.syneryFactor.toFixed(2)}%</b>
+                                      <b style={{color: winRateColor(row.original.syneryFactor*10)}}>{row.original.syneryFactor.toFixed(2)}%</b>
                                     </span>
                                   </div>
 
@@ -421,11 +421,8 @@ function DuoLaneTierList(tableType) {
       {
         Header: "Carry Win Rate",
         accessor: "carryWinRate",
+        sortType: compareNumericString
       },
-      // {
-      //   Header: "Carry Win Rate",
-      //   accessor: "carryWinRate",
-      // },
       {
         Header: "Support",
         accessor: "support",
@@ -433,18 +430,22 @@ function DuoLaneTierList(tableType) {
       {
         Header: "Support Win Rate",
         accessor: "supportWinRate",
+        sortType: compareNumericString
       },
       {
         Header: "Synery Factor",
         accessor: "syneryFactor",
+        sortType: compareNumericString
       },
       {
         Header: "Win Rate",
         accessor: "winRate",
+        sortType: compareNumericString
       },
       {
         Header: "Games",
         accessor: "games",
+        sortType: compareNumericString
       },
     ],
     []
@@ -458,6 +459,20 @@ function DuoLaneTierList(tableType) {
       <Table columns={columns} data={totalData} />
     </>
   );
+}
+
+function compareNumericString(rowA, rowB, id, desc) {
+  let a = Number.parseFloat(rowA.values[id]);
+  let b = Number.parseFloat(rowB.values[id]);
+  if (Number.isNaN(a)) {  // Blanks and non-numeric strings to bottom
+      a = desc ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
+  }
+  if (Number.isNaN(b)) {
+      b = desc ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
+  }
+  if (a > b) return 1; 
+  if (a < b) return -1;
+  return 0;
 }
 
 export default DuoLaneTierList;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useTable, useSortBy, usePagination } from "react-table";
 import { Link } from "react-router-dom";
+import winRateColor from "./WinRateColor";
 
 
 const Table = ({ columns, data }) => {
@@ -185,7 +186,7 @@ const Table = ({ columns, data }) => {
                                     {...cell.getCellProps()}
                                   >
                                     <span>
-                                      <b>{row.original.wr}</b>
+                                      <b style={{color: winRateColor(row.original.wr)}}>{row.original.wr}%</b>
                                     </span>
                                   </div>
 

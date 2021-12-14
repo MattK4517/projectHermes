@@ -19,6 +19,15 @@ export default function ChangeLog(props) {
           </div>
             <ul>
                 <li>
+                    12/13/2021: SMITESTATS BOT ADDED IN R/SMITE DISCORD!!!!!
+                </li>
+                <li>
+                    12/13/2021: Added Win Rate Colors in Matchups Tierlist in God Pages
+                </li>
+                <li>
+                    12/13/2021: Fixed Duo Lane Tierlist
+                </li>
+                <li>
                     12/4/2021: Added Hover Effect on Regular Tier List in Counter Matchups to Show Win Rates
                 </li>
                 <li>
