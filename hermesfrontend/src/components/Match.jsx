@@ -47,11 +47,11 @@ class NameForm extends React.Component {
         </form>
         <div className="filler">
           <h4>
-            Don't have a match? try 1191054312
+            Don't have a match? try 1202691204
           </h4>
           {/* <br></br> */}
           <h5>
-            Remember all matches must by Ranked PC Conquest from 8/24/2021 or later (will expand the match types we support soon!)
+            Remember all matches must by Ranked PC Conquest from 10/24/2021 or later (will expand the match types we support soon!)
           </h5>
       </div>
       </div>
@@ -284,7 +284,8 @@ function CustomizedAccordions(player) {
               <div className="player-account-info" style={{minWidth: "225px"}}>
                 <span className="player-info-style">Account Level:</span> {player.accountLevel} <br></br>
                 <span className="player-info-style">Ranked MMR:</span> {player.mmr.toFixed(2).toLocaleString()} <br></br>
-                <Link
+                <span className="player-info-style">Player:</span> {player.playerName}&nbsp;
+                {/* <Link
                   to={{
                     pathname: `/Player/${player.playerName}`,
                     target: "_blank"
@@ -294,7 +295,7 @@ function CustomizedAccordions(player) {
                   <span style={{color: "#5f5f7b", fontSize: "14px", fontWeight: "400"}}> 
                     Click Me!
                   </span>
-                </Link>
+                </Link> */}
               </div>
               <div className="player-kills-info" style={{minWidth: "200px"}}>
                 <div className="KDA">
