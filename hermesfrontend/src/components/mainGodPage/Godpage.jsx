@@ -172,7 +172,7 @@ function Godpage(props) {
   var [url, seturl] = useState(0);
   const [displaygod, setgod] = useState(0);
   const [abilities, setabilities] = useState([]);
-  const [patch, setPatch] = useState("8.11")
+  const [patch, setPatch] = useState("8.12")
   const [matchup, setMatchup] = useState("None")
   const [roles, setroles] = useState([
     "Solo",
@@ -203,7 +203,7 @@ function Godpage(props) {
   const [winrate, setwinrate] = useState(0);
 
   useEffect(() => {
-    fetch("/main/".concat(pagegod, "/", dispRole, "/", dispRank, "/", patch)).then((res) =>
+    fetch("/api/main/".concat(pagegod, "/", dispRole, "/", dispRank, "/", patch)).then((res) =>
       res.json().then((data) => {
         setgod(pagegod);
         seturl(data.url);
@@ -217,7 +217,7 @@ function Godpage(props) {
   }, [dispRole, dispRank, patch]);
 
   useEffect(() => {
-    fetch("/".concat(pagegod, "/abilities")).then((res) =>
+    fetch("/api/".concat(pagegod, "/abilities")).then((res) =>
       res.json().then((data) => {
         Object.keys(data).forEach((key) => {
           setabilities((abilities) => [

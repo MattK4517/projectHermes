@@ -616,7 +616,7 @@ export default function BuildPage(pagegod) {
                                 filters={ranks}
                                 setFilter={setRank}
                               />
-                          <DropDownFilter changePatch={null} patch={"8.11"} style={{color: "white"}}/>
+                          <DropDownFilter changePatch={null} patch={"8.12"} style={{color: "white"}}/>
                         </div>
                       </div>
                     </div>
