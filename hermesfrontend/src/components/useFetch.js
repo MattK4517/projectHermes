@@ -16,7 +16,7 @@ const useFetch = (pagegod, role, rank, patch, matchup) => {
   const [colorStyle, setColorStyle] = useState("white");
   const [itemdata, setitemdata] = useState([]);
   useEffect(() => {
-    let mainFetchStatement = "/".concat(pagegod, "/", role, "/", rank, "/", patch);
+    let mainFetchStatement = "/api/".concat(pagegod, "/", role, "/", rank, "/", patch);
     if (matchup !== "None"){
       mainFetchStatement = mainFetchStatement.concat("/", matchup)
     }
@@ -74,7 +74,7 @@ const useFetch = (pagegod, role, rank, patch, matchup) => {
   }, [role, rank, patch, matchup]);
   // else if (role && rank){
   //   matchupsFetchStatement = "/".concat(pagegod, "/matchups/", role, "/", rank)
-  let matchupsFetchStatement = "/".concat(pagegod, "/matchups/", role, "/", rank, "/", patch)
+  let matchupsFetchStatement = "/api/".concat(pagegod, "/matchups/", role, "/", rank, "/", patch)
   useEffect(() => {
     fetch(matchupsFetchStatement).then((res) =>
       res.json().then((data) => {

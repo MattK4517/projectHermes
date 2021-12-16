@@ -21,12 +21,12 @@ app = Flask(__name__, static_folder="../hermesfrontend", static_url_path="/")
 #         default_limits=["250 per day", "50 per hour"]
 # )
 
-@app.route("/gods")
+@app.route("/api/gods")
 def get_all_gods():
         gdDict = anlz.get_gods()
         return gdDict
 
-@app.route('/main/<god>/<role>/<rank>/<patch>', methods=["GET", "POST"])
+@app.route('/api/main/<god>/<role>/<rank>/<patch>', methods=["GET", "POST"])
 def get_god_data(god, role, rank, patch):
         newgod = god.replace("_", " ")
         winrate = anlz.get_winrate(client, god, role, patch, rank)
@@ -39,12 +39,12 @@ def get_god_data(god, role, rank, patch):
                 **winrate
                  }
 
-@app.route('/<god>/matchups', methods=["GET"])
+@app.route('/api/<god>/matchups', methods=["GET"])
 def get_god_matchups(god):
         return anlz.get_worst_matchups(client, god , "Solo")
 
-@app.route('/<god>/<role>/<rank>/<patch>/<matchup>')
-@app.route('/<god>/<role>/<rank>/<patch>', methods=["GET", "POST"])
+@app.route('/api/<god>/<role>/<rank>/<patch>/<matchup>')
+@app.route('/api/<god>/<role>/<rank>/<patch>', methods=["GET", "POST"])
 def get_god_data_role(god, role, rank, patch, matchup="None"):
         newgod = god.replace("_", " ")
         if matchup != "None":
@@ -59,7 +59,7 @@ def get_god_data_role(god, role, rank, patch, matchup="None"):
         data_dict = {**build, **image}
         return data_dict
         
-@app.route('/<god>/matchups/<role>/<rank>/<patch>')
+@app.route('/api/<god>/matchups/<role>/<rank>/<patch>')
 def get_god_matchups_by_rank(god, role, rank, patch):
         newgod = god.replace("_", " ")
         if "All" in rank and patch == "current":
@@ -70,11 +70,11 @@ def get_god_matchups_by_rank(god, role, rank, patch):
         del matchups["wins"], matchups["games"], matchups["winRate"]
         return matchups
 
-@app.route('/<god>/abilities')
+@app.route('/api/<god>/abilities')
 def get_god_abilities(god):
         return anlz.get_abilities(client, god)
 
-@app.route("/gettierlist/<rank>/<role>/<tableType>", methods=["GET", "POST"])
+@app.route("/api/gettierlist/<rank>/<role>/<tableType>", methods=["GET", "POST"])
 def get_tier_list(rank, role, tableType):
         retData = {god: {} for god in godsDict}
         mydb = client["Tier_list"]
@@ -131,16 +131,16 @@ def get_tier_list(rank, role, tableType):
         return retData
 
 
-@app.route("/getitemdata/<item>")
+@app.route("/api/getitemdata/<item>")
 def get_item_data(item):
         return anlz.get_item_data(client, item)
         
-@app.route('/<god>/items/<role>/<rank>/<patch>')
+@app.route('/api/<god>/items/<role>/<rank>/<patch>')
 def get_all_items(god, role, rank, patch):
         items = anlz.get_all_builds(client, god, role, patch, rank)
         return items
 
-@app.route('/<god>/m/<role>/<rank>/<patch>')
+@app.route('/api/<god>/m/<role>/<rank>/<patch>')
 def get_all_matchups(god, role, rank, patch):
     mydb = client["single_match_stats"]
     mycol = mydb[god]
@@ -206,7 +206,7 @@ def get_all_matchups(god, role, rank, patch):
     return avg_dmg_dict
 
 
-@app.route("/getmatch/<matchID>")
+@app.route("/api/getmatch/<matchID>")
 def get_match(matchID):
         mydb = client["Matches"]
         mycol = mydb["8.10 Matches"]
@@ -232,7 +232,7 @@ def get_match(matchID):
                         match[key] = {**match[key], **{"godBuild": anlz.get_build_stats(client, build)}}
         return match
 
-@app.route('/<god>/buildpath/<role>/<rank>/<patch>')
+@app.route('/api/<god>/buildpath/<role>/<rank>/<patch>')
 def get_build_path(god, role, rank, patch):
     mydb = client["single_items"]
     mycol = mydb[god]
@@ -292,7 +292,7 @@ def get_build_path(god, role, rank, patch):
 
     return builds
 
-@app.route("/getplayergeneral/<playername>")
+@app.route("/api/getplayergeneral/<playername>")
 def get_player_general(playername):
         if playername == "undefined":
                 return {}
@@ -309,7 +309,7 @@ def get_player_general(playername):
                         data = x
         return anlzpy.create_player_return_dict(data)
  
-@app.route("/getplayergods/<playername>")
+@app.route("/api/getplayergods/<playername>")
 def get_player_god_info(playername):
         if playername == "undefined":
                 return {}
@@ -333,7 +333,7 @@ def get_player_god_info(playername):
         # print(smite_api.getQueueStats(playerId, 451))
         return {}
 
-@app.route("/getplayermatch/<playername>")
+@app.route("/api/getplayermatch/<playername>")
 def get_player_match_info(playername):
         if playername == "undefined":
                 return {}
@@ -341,7 +341,7 @@ def get_player_match_info(playername):
 # make a route for every god, in the
 # temp idea for routing
 # for each god
-# @app.route("/godname"):
+# @app.route("/api/godname"):
 # def godName():
 #     collect god info
 #     render_template("godbuild.html", other params)

@@ -337,7 +337,7 @@ export default function Matchups(props) {
     const god = props.pagegod;
     const [totalData, setTotalData] = useState([]);
     useEffect(() => {
-        fetch("/".concat(god, "/m/", dispRole, "/", dispRank, "/", dispPatch)).then((res) =>
+        fetch("/api/".concat(god, "/m/", dispRole, "/", dispRank, "/", dispPatch)).then((res) =>
           res.json().then((data) => {
               setTotalData([]);
               Object.keys(data).forEach(key => {

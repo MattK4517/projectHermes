@@ -343,7 +343,7 @@ function TierList(tableType) {
 
   useEffect(() => {
     //"/gettierlist/".concat(dispRank, "/", role, "/", tableType.tableType, "/", patch
-    fetch("/gettierlist/".concat(dispRank, "/", role, "/", tableType.tableType)).then((res) =>
+    fetch("/api/gettierlist/".concat(dispRank, "/", role, "/", tableType.tableType)).then((res) =>
       res.json().then((data) => {
         setTotalData([]);
         Object.keys(data).forEach((key, index) => {

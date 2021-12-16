@@ -178,7 +178,7 @@ function Items(pagegod) {
   var [url, seturl] = useState(0);
   const [displaygod, setgod] = useState(0);
   const [abilities, setabilities] = useState([]);
-  const [patch, setPatch] = useState("8.11")
+  const [patch, setPatch] = useState("8.12")
   const [slotOneItems, setSlotOneItems] = useState([]);
   const [slotTwoItems, setSlotTwoItems] = useState([]);
   const [slotThreeItems, setSlotThreeItems] = useState([]);
@@ -206,7 +206,7 @@ function Items(pagegod) {
   const [dispRank, setrank] = useState("All Ranks");
 
   useEffect(()=> {
-      fetch("/".concat(pagegod.pagegod, "/items/", dispRole, "/", dispRank, "/", patch)).then((res) =>
+      fetch("/api/".concat(pagegod.pagegod, "/items/", dispRole, "/", dispRank, "/", patch)).then((res) =>
       res.json().then((data) => {
         setSlotOneItems([])
         setSlotTwoItems([])
