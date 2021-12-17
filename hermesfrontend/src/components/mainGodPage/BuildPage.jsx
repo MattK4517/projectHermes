@@ -77,6 +77,7 @@ class CreateMatchupsHelpTooltip extends React.Component {
 
 class GodCounterStats extends React.Component {
 render() {
+  if (this.props.matchups.length > 0) {
     return (
     <>
         {this.props.matchups.map((matchup, index) => {
@@ -84,6 +85,13 @@ render() {
         })}
     </>
     );
+  } else{
+    return (
+    <div className="empty-set">
+      NO DATA TO DISPLAY
+    </div>
+    )
+  }
 }
 }
 
@@ -128,6 +136,12 @@ const ResponsiveBuild = styled("div")(({ theme }) => ({
 
 class GodRankStats extends React.Component {
     render() {
+      let banrateMessage;
+      if (this.props.mode === "Ranked"){
+        banrateMessage = this.props.banrate + "%"
+      } else if (this.props.mode === "Casual"){
+        banrateMessage = "N/A"
+      }
       return (
         <div className="content-section god-rank-stats">
           <div className="win-rate">
@@ -139,9 +153,9 @@ class GodRankStats extends React.Component {
             <div className="value">{this.props.pickrate}%</div>
             <div className="label">Pick Rate</div>
           </div>
-  
+
           <div className="ban-rate">
-            <div className="value">{this.props.banrate}%</div>
+            <div className="value">{banrateMessage}</div>
             <div className="label">Ban Rate</div>
           </div>
   
@@ -182,7 +196,6 @@ class GodRankStats extends React.Component {
 
   class BuildStatsElement extends React.Component {
     render() {
-      console.log(this.props)
       return (
         <>
           <div className="item-row">
@@ -320,13 +333,25 @@ class GodRankStats extends React.Component {
 
 
 export default function BuildPage(pagegod) {
-    const { games, badmatchups, goodmatchups, items, colorStyle } = useFetch(
+  
+    let { games, badmatchups, goodmatchups, items, colorStyle } = useFetch(
         pagegod.pagegod,
         pagegod.role,
         pagegod.rank,
         pagegod.patch,
         pagegod.matchup
         );
+    if (items.length === 0 ){
+      items = ["None"]
+    }
+    let styling = {}
+    let goodStyling = {}
+    if (badmatchups.length < 1) {
+      styling = {display: "flex", flexDirection: "column", color: "#bbbedb"}
+    } 
+    if (goodmatchups.length < 1) {
+      goodStyling = {display: "flex", flexDirection: "column", color: "#bbbedb"}
+    }
         return (
             <div className="god-build">
             <GodRankStats
@@ -336,6 +361,7 @@ export default function BuildPage(pagegod) {
               pickrate={pagegod.pickrate}
             //   url={url}
               colorStyle={colorStyle}
+              mode={pagegod.mode}
             />
             <div className="toughest-matchups content-section">
               <div className="content-section_header">
@@ -364,7 +390,7 @@ export default function BuildPage(pagegod) {
                     </div>
                   </HtmlTooltip>
               </div>
-              <div className="matchups">
+              <div className="matchups" style={styling}>
                 <GodCounterStats matchups={badmatchups} />
               </div>
             </div>
@@ -395,12 +421,23 @@ export default function BuildPage(pagegod) {
                     </div>
                   </HtmlTooltip>
               </div>
-              <div className="matchups">
+              <div className="matchups" style={goodStyling}>
                 <GodCounterStats matchups={goodmatchups} />
               </div>
             </div>
-            <ResponsiveBuild className="build content-section">
+            
+            <ResponsiveBuild className="build content-section" style={styling}>
               {items.map((item, index) => {
+                if (item === "None"){
+                  return (
+                    <>
+                    <div className="content-section_header">Build</div>
+                    <div className="empty-set">
+                      NO DATA TO DISPLAY
+                    </div>
+                    </>
+                  )
+                }
                 if (index === 0) {
                   return (
                     <div className="starter">

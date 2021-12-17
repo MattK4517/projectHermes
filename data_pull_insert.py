@@ -373,4 +373,4 @@ def run_pull(patch, date=get_date()):
 # # print(inserted_count)
 # print("error %" + str(round(100 - inserted_count/match_ids_len * 100, 2)))
 
-run_pull("8.12", get_date())
+# run_pull("8.12", get_date())

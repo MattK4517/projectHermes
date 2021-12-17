@@ -72,7 +72,7 @@ export default function SearchBarGodPage(data) {
   return (
     <Stack spacing={2} 
       sx={{ 
-        width: 300,
+        width: 200,
         backgroundColor: "white",
         color: "black",
         marginLeft: "15px",

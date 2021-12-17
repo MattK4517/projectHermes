@@ -202,10 +202,13 @@ function Godpage(props) {
   const [banrate, setbanrate] = useState(0);
   const [pickrate, setpickrate] = useState(0);
   const [winrate, setwinrate] = useState(0);
+  const [mode, setMode] = useState("Ranked")
+  const modes = ["Casual", "Ranked"]
 
   useEffect(() => {
     fetch("/api/main/".concat(pagegod, "/", dispRole, "/", dispRank, "/", patch)).then((res) =>
       res.json().then((data) => {
+        console.log(data)
         setgod(pagegod);
         seturl(data.url);
         setbanrate(((data.godBans / data.totalMatches) * 100).toFixed(2));
@@ -279,6 +282,12 @@ function Godpage(props) {
                           setFilter={setrank}
                         />
                     <DropDownFilter changePatch={setPatch} patch={patch} style={{color: "white"}}/>
+                    <FilterForm
+                      filter={mode}
+                      god={pagegod}
+                      filters={modes}
+                      setFilter={setMode}
+                    />
                     <SearchBarGodPage data={routes} changeMatchup={setMatchup}/>
                   </div>
                 </div>
@@ -293,6 +302,7 @@ function Godpage(props) {
                 pickRate={pickrate}
                 banRate={banrate}
                 matchup={matchup}
+                mode={mode}
                 />
             </div>
           </ImageDiv>

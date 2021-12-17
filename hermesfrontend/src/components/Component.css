@@ -9,9 +9,15 @@ body {
 }
 
 .matchups {
-  display: grid;
+  display: flex;
   grid-template-columns: repeat(10, 1fr);
   grid-gap: 12px;
+  justify-content: center;
+}
+
+.empty-set{
+  margin: 0 auto;
+  display: flex;
 }
 
 /* .god-name, .win .times-played {
@@ -907,6 +913,15 @@ a, a:active, a:focus, a:hover, a:visited {
     align-items: center;
     margin: 0;
 
+}
+
+.filter-manager_container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 44px;
 }
 
 .filter-form {

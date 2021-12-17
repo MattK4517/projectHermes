@@ -165,15 +165,22 @@ if __name__ == "__main__":
     # mydb = client["Matches"]
     # mycol = mydb["8.11 Matches"]
     # print(mycol.count_documents({"Entry_Datetime": "12/10/2021"}))
-
-    dbs = ["single_combat_stats", "single_god_bans", "single_items", "single_matchups", "single_objective_stats", "single_match_stats"]
-    for db in dbs:
-        mydb = client[db]
-        for god in godsDict.keys():
-            if god != "Atlas":
-                mycol = mydb[god]
-                mycol.update_many({}, {"$set": {"mode": "RankedConq"}})
-    #             mycol.delete_many({"Entry_Datetime": "12/10/2021"})
+    mydb = client["single_items_test"]
+    mycol = mydb["Atlas"]
+    for x in mycol.aggregate([
+        {"$group": {"_id": "$matchId", "count": {"$sum": 1} }}
+    ]):
+        if x["count"] > 1:
+            print(x["count"], x["_id"])
+    # dbs = ["single_combat_stats", "single_god_bans", "single_items", "single_matchups", "single_objective_stats", "single_match_stats"]
+    # for db in dbs:
+    #     mydb = client[db]
+    #     for god in godsDict.keys():
+    #         if god != "Atlas":
+    #             mycol = mydb[god]
+    # mydb = client["Matches"]
+    # mycol = mydb["8.12 Matches"]
+    # mycol.update_many({}, {"$set": {"mode": "RankedConq"}})
 
     # fields = ["carryScore","damageScore", "levelDiff", "killPart", "efficiency"]
     # mydb = client["Matches"] 
