@@ -66,5 +66,5 @@ def threaded_process_format(nthreads):
 
 starttime = datetime.now()
 # init_api("8.12", "20211215")
-threaded_process_format(7)
+threaded_process_format(5)
 print(f"ENDED IN {datetime.now() - starttime}")
