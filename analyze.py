@@ -44,7 +44,7 @@ def get_pb_rate(client, god, rank, role, patch):
     return {"godBans": godBans, "totalMatches": totalMatches, "banRate": round(godBans/totalMatches * 100, 2), "pickRate": round(games/totalMatches * 100, 2)}
 
 def get_games_played(client, god, rank, role, patch):
-    mydb = client["single_items"]
+    mydb = client["single_items_test"]
     mycol = mydb[god]
     if rank == "Platinum+":
         myquery = { "role_played": role, "rank": {"$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch}
@@ -110,13 +110,13 @@ def get_item_data(client, item):
 
 def get_top_builds(client, god, role, patch, rank="All Ranks", data=None):
     top_dict = {slot: {} for slot in slots}
-    mydb = client["single_items"]
+    mydb = client["single_items_test"]
     mycol = mydb[god]
     if rank == "Platinum+":
         myquery = { "role_played": role, "rank": {"$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch}
     elif rank == "Diamond+":
         myquery = { "role_played": role, "rank": {"$in":  ["Diamond", "Masters", "Grandmaster"]}, "patch": patch}    
-    elif rank != "All Ranks":
+    if rank != "All Ranks":
         myquery = { "role_played": role, "rank": rank, "patch": patch}
     else:
         myquery = { "role_played": role, "patch": patch}
@@ -218,7 +218,7 @@ def sort_top_dict(top_dict, client):
 
 def get_all_builds(client, god, role, patch, rank="All Ranks"):
     top_dict = {slot: {} for slot in slots}
-    mydb = client["single_items"]
+    mydb = client["single_items_test"]
     mycol = mydb[god]
     if rank == "Platinum+":
         myquery = { "role_played": role, "rank": {"$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch}
@@ -259,7 +259,7 @@ def get_all_builds(client, god, role, patch, rank="All Ranks"):
     return {**dict(top_dict), **{"games": games, "wins": wins, "winRate": round(wins/games*100, 2)}}
 
 def get_worst_matchups(client, god, role, patch, rank="All Ranks"):
-    mydb = client["single_matchups"]
+    mydb = client["single_matchups_test"]
     mycol = mydb[god]
     matchup_dict = {}
     if rank == "Platinum+":
@@ -319,7 +319,7 @@ def get_worst_matchups(client, god, role, patch, rank="All Ranks"):
     return {**test_sort, **{"games": games, "wins": wins, "winRate": round(wins/games*100, 2)}}
 
 def get_winrate(client, god, role, patch, rank="All Ranks"):
-    mydb = client["single_items"]
+    mydb = client["single_items_test"]
     mycol = mydb[god]
     if rank == "Platinum+":
         myquery = { "role_played": role, "rank": {"$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch}
@@ -621,7 +621,7 @@ def get_tier(win_rate, pick_rate, ban_rate):
     return tier_letter
 
 def get_specific_build(client, god, role, patch, matchup, rank="All Ranks"):
-    mydb = client["single_matchups"]
+    mydb = client["single_matchups_test"]
     mycol = mydb[god]
     match_ids = []
     if "All" in rank:
@@ -632,7 +632,7 @@ def get_specific_build(client, god, role, patch, matchup, rank="All Ranks"):
         match_ids.append(x["matchId"])
 
     builds = []
-    itemsdb = client["single_items"]
+    itemsdb = client["single_items_test"]
     itemscol = itemsdb[god]
     games = 0
     for x in itemscol.aggregate([

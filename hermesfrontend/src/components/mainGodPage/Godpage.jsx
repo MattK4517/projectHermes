@@ -34,6 +34,7 @@ const godsDict = {
   "Artemis": "Carry",
   "Artio": "Support",
   "Athena": "Support",
+  "Atlas": "Support",
   "Awilix": "Jungle",
   "Baba Yaga": "Mid",
   "Bacchus": "Supprt",
@@ -172,7 +173,7 @@ function Godpage(props) {
   var [url, seturl] = useState(0);
   const [displaygod, setgod] = useState(0);
   const [abilities, setabilities] = useState([]);
-  const [patch, setPatch] = useState("8.11")
+  const [patch, setPatch] = useState("8.12")
   const [matchup, setMatchup] = useState("None")
   const [roles, setroles] = useState([
     "Solo",
