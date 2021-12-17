@@ -26,9 +26,11 @@ class GodData:
         """append match Ids to self.matches when gods in data"""
         for match in data:
             match_bans = 0
+            match_picks = 0
             for key in match:
-                if "player" in key and match[key]["godName"] == self.name:
+                if "player" in key and match[key]["godName"] == self.name and match_picks == 0:
                     self.matches.append(match)
+                    match_picks += 1
                 if "Ban" in key and match[key] == self.name and match_bans == 0:
                     match_bans += 1
                     self.insert_ban(match["MatchId"], normalize_rank(match["player0"]["Conquest_Tier"]), match["Entry_Datetime"], match["Patch"])
@@ -36,57 +38,59 @@ class GodData:
     def get_matches(self):
         return len(self.matches)
 
-    def calc_matchups(self):
-        mydb = client["single_matchups_test"]
-        mycol = mydb[self.name]
-        set = []
-        for match in self.matches:
-            for key in match:
-                if "player" in key and match[key]["godName"] == self.name:
-                    flag_player = key
-            for key in match:
-                if "player" in key and match[key]["Role"] == match[flag_player]["Role"] and match[key]["godName"] != match[flag_player]["godName"]:
-                    role_played = match[key]["Role"]
-                    enemy = match[key]["godName"]
-                    rank = normalize_rank(match[key]["Conquest_Tier"])
-                    matchId = match[key]["MatchID"]
-                    set.append(
-                        {   self.name : match[flag_player]["Win_Status"],
-                            "rank": rank,
-                            "role_played": role_played,
-                            "enemy": enemy,
-                            "matchId": matchId,
-                            "patch": match["Patch"],
-                            "Entry_Datetime": match["Entry_Datetime"],
-                        }
-                    )
-        mycol.insert_many(set)
+    # def calc_matchups(self):
+    #     mydb = client["single_matchups_test"]
+    #     mycol = mydb[self.name]
+    #     set = []
+    #     for match in self.matches:
+    #         for key in match:
+    #             if "player" in key and match[key]["godName"] == self.name:
+    #                 flag_player = key
+    #         for key in match:
+    #             if "player" in key and match[key]["Role"] == match[flag_player]["Role"] and match[key]["godName"] != match[flag_player]["godName"]:
+    #                 role_played = match[key]["Role"]
+    #                 enemy = match[key]["godName"]
+    #                 rank = normalize_rank(match[key]["Conquest_Tier"])
+    #                 matchId = match[key]["MatchID"]
+    #                 set.append(
+    #                     {   self.name : match[flag_player]["Win_Status"],
+    #                         "rank": rank,
+    #                         "role_played": role_played,
+    #                         "enemy": enemy,
+    #                         "matchId": matchId,
+    #                         "patch": match["Patch"],
+    #                         "Entry_Datetime": match["Entry_Datetime"],
+    #                     }
+    #                 )
+    #     mycol.insert_many(set)
 
     def calc_items(self):
         mydb = client["single_items_test"]
         mycol =  mydb[self.name]
         set = []
         for match in self.matches:
-            build = {}
+            player_ids = []
             for key in match:
                 if "player" in key and match[key]["godName"] == self.name:
                     role_played = match[key]["Role"]
                     rank = normalize_rank(match[key]["Conquest_Tier"])
                     win_status = match[key]["Win_Status"]
                     matchId = match[key]["MatchID"]
+                    build = {}
                     for player_key in match[key]:
                         if "Item_Purch" in player_key:
                             item, purch, number = player_key.split("_")
                             build[f"slot{number}"] = match[key][player_key]
 
                     set.append(
-                        {self.name: build,
-                        "role_played": role_played,
-                        "rank": rank,
-                        "win_status": win_status,
-                        "matchId": matchId,
-                        "patch": match["Patch"],
-                        "Entry_Datetime": match["Entry_Datetime"],
+                        {
+                            self.name: build,
+                            "role_played": role_played,
+                            "rank": rank,
+                            "win_status": win_status,
+                            "matchId": matchId,
+                            "patch": match["Patch"],
+                            "Entry_Datetime": match["Entry_Datetime"],
                         }
                     )
         mycol.insert_many(set)
@@ -96,6 +100,7 @@ class GodData:
         mycol =  mydb[self.name]
         set = []
         for match in self.matches:
+            player_ids = []
             for key in match:
                 if "player" in key and match[key]["godName"] == self.name:
                     rank = normalize_rank(match[key]["Conquest_Tier"])
@@ -121,6 +126,7 @@ class GodData:
                     objective_assists = match[key]["Objective_Assists"]
                     player = match[key]["Player_Name"]
                     enemy = ""
+                    win_status = match[key]["Win_Status"]
 
                     for key in match:
                         if "player" in key and match[key]["godName"] != self.name and match[key]["Role"] == role:
@@ -215,9 +221,9 @@ def format_no_query(match):
 
 def threadedd_format_no_query(match):
     print("starting format")
+    print(len(match))
     for god in godsDict:
         godsDict[god] = GodData(god)
         godsDict[god].set_matches(match)
-        godsDict[god].calc_matchups()
         godsDict[god].calc_items()
         godsDict[god].calc_match_stats()

@@ -180,6 +180,21 @@ def purge_date(client, dbs, date):
             delete_match_docs(client, db, god, "Entry_Datetime", date)
         
 if __name__ == "__main__":
+    count = 0
+    mydb = client["single_match_stats_test"]
+    for god in godsDict:
+        mycol = mydb[god]
+        count += mycol.count_documents({})
+    print(count)
+    # mycol = mydb["Atlas"]
+    # for x in mycol.aggregate([
+    #     {"$group": {"_id": "$matchId", "count": {"$sum": 1} }}
+    # ]):
+    #     if x["count"] > 1:
+    #         print(x["count"], x["_id"])
+    #         count += x["count"]
+    # print(count)
+
     # mydb = client["Matches"]
     # cols = ["8.9 Matches", "8.10 Matches", "8.11 Matches"]
     # myquery = {**{f"player{i}.Ranked_Stat_Conq": 1 for i in range(10)}, **{f"player{i}.Player_Name": 1 for i in range(10)}, **{"_id": 0}}
@@ -212,9 +227,6 @@ if __name__ == "__main__":
 
     # dbs = ["single_god_bans", "single_items", "single_matchups", "single_combat_stats", "single_objective_stats"]
     # purge_date(client, dbs, "11/4/2021")
-    mydb = client["Matches"]
-    mycol = mydb["8.11 Matches"]
-    print(mycol.count_documents({"Entry_Datetime": "11/24/2021"}))
     # delete_match_docs(client, "Matches", "8.11 Matches", "Entry_Datetime", "11/24/2021")
 
     # # remove_duplicates(client, ["single_items", "single_matchups"])
