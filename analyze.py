@@ -265,38 +265,40 @@ def get_all_builds(client, god, role, patch, rank="All Ranks"):
     return {**dict(top_dict), **{"games": games, "wins": wins, "winRate": round(wins/games*100, 2)}}
 
 def get_worst_matchups(client, god, role, patch, rank="All Ranks"):
-    mydb = client["single_matchups_test"]
+    mydb = client["single_match_stats_test"]
     mycol = mydb[god]
     matchup_dict = {}
     if rank == "Platinum+":
-        myquery = { "role_played": role, "rank": {"$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch}
+        myquery = { "role": role, "rank": {"$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch}
     elif rank == "Diamond+":
-        myquery = { "role_played": role, "rank": {"$in":  ["Diamond", "Masters", "Grandmaster"]}, "patch": patch}    
+        myquery = { "role": role, "rank": {"$in":  ["Diamond", "Masters", "Grandmaster"]}, "patch": patch}    
     elif rank != "All Ranks":
-        myquery = { "role_played": role, "rank": rank, "patch": patch}
+        myquery = { "role": role, "rank": rank, "patch": patch}
     else:
-        myquery = { "role_played": role, "patch": patch}
+        myquery = { "role": role, "patch": patch}
 
 
     games = 0
     wins = 0
     for matchup in mycol.find(myquery, {"_id": 0}):
+        # print(matchup)
         games += 1
         flag = False
-        if matchup[god] == "Winner":
-            flag = True
-            wins += 1
-        if matchup["enemy"] not in matchup_dict:
-            if flag:
-                matchup_dict[matchup["enemy"]] = {"enemy": matchup["enemy"], "timesPlayed": 1, "wins": 1}
+        if matchup["enemy"]:
+            if matchup["win_status"] == "Winner":
+                flag = True
+                wins += 1
+            if matchup["enemy"] not in matchup_dict:
+                if flag:
+                    matchup_dict[matchup["enemy"]] = {"enemy": matchup["enemy"], "timesPlayed": 1, "wins": 1}
+                else:
+                    matchup_dict[matchup["enemy"]] = {"enemy": matchup["enemy"], "timesPlayed": 1, "wins": 0}
             else:
-                matchup_dict[matchup["enemy"]] = {"enemy": matchup["enemy"], "timesPlayed": 1, "wins": 0}
-        else:
-            if flag:
-                matchup_dict[matchup["enemy"]]["timesPlayed"] += 1
-                matchup_dict[matchup["enemy"]]["wins"] += 1
-            else: 
-                matchup_dict[matchup["enemy"]]["timesPlayed"] += 1
+                if flag:
+                    matchup_dict[matchup["enemy"]]["timesPlayed"] += 1
+                    matchup_dict[matchup["enemy"]]["wins"] += 1
+                else: 
+                    matchup_dict[matchup["enemy"]]["timesPlayed"] += 1
             
         
     for matchup in matchup_dict:
@@ -698,14 +700,11 @@ def get_matchups_stats(client, god: str, role: str, patch, rank="All Ranks"):
             avg_dmg_dict[god]["kills"] -= x["avg_kill_diff"]
         
     return avg_dmg_dict
-# if __name__ == "__main__":
-#     client = pymongo.MongoClient(
-#         "mongodb+srv://sysAdmin:9gR7C1aDKclng4jA@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
-#     print(find_match_history(client, "jurse"))
-#     print(get_combat_stats(client, "Achilles", "Solo", "8.11"))
-#     print(get_objective_stats(client, "Achilles", "Solo", "8.11"))
-#     print(get_winrate(client, "Achilles", "Solo", "8.10"))
-#     print(get_pb_rate(client, "Achilles", "All Ranks", "Solo", "8.10"))
+if __name__ == "__main__":
+    client = pymongo.MongoClient(
+        "mongodb+srv://sysAdmin:9gR7C1aDKclng4jA@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
+    
+    print(get_worst_matchups(client, "Achilles", "Solo", "8.12"))
 
 # print(get_worst_matchups_rewrite(client, "Camazotz", "Solo"))
 
