@@ -376,7 +376,7 @@ def threaded_pull(patch, all_sets, smite_api):
     #     data = f.readlines()
     #     smite_api = SmiteAPI(devId=data[0].strip(), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
 
-    mydb = client["thread_test"]
+    mydb = client["CasualMatches"]
     mycol = mydb[f"{patch} Matches"]
     # date = date
     # match_ids = smite_api.getMatchIds(426, date=date, hour=-1)
@@ -404,7 +404,7 @@ def threaded_pull(patch, all_sets, smite_api):
             # format_no_query(match_dict)
         mycol.insert_many(set_data)
         inserted_count += 1
-        if inserted_count > len(all_sets)/2:
+        if inserted_count == round(len(all_sets)/2):
             print("halfway")
 
 
