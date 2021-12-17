@@ -37,6 +37,7 @@ const godsDict = {
     "Artemis": "Carry",
     "Artio": "Support",
     "Athena": "Support",
+    "Atlas": "Support",
     "Awilix": "Jungle",
     "Baba Yaga": "Mid",
     "Bacchus": "Supprt",

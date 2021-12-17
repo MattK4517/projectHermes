@@ -503,7 +503,7 @@ export default function BuildPage(pagegod) {
         "Achilles",
         role,
         rank,
-        "8.11",
+        "8.12",
         matchup
         );
         return (
