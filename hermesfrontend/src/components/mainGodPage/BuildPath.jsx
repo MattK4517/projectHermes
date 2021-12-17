@@ -257,7 +257,7 @@ export default function BuildPath(pagegod) {
   const [paths, setPaths] = useState([]);
   useEffect(() => {
     fetch(
-      "/".concat(
+      "/api/".concat(
         pagegod.pagegod,
         "/buildpath/",
         pagegod.role,

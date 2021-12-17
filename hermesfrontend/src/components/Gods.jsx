@@ -35,7 +35,7 @@ function Gods() {
     const [allgods, setallgods] = useState([]);
 
     useEffect(() => {
-        fetch("/gods").then((res) => 
+        fetch("/api/gods").then((res) => 
         res.json().then((data) => {
             Object.keys(data).forEach((key) => {
                 setallgods((allgods) => [

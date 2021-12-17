@@ -439,7 +439,7 @@ function CombatTierList(tableType) {
   useEffect(() => {
     //"/gettierlist/".concat(dispRank, "/", role, "/", tableType.tableType, "/", patch
     fetch(
-      "/gettierlist/".concat(dispRank, "/", role, "/", tableType.tableType)
+      "/api/gettierlist/".concat(dispRank, "/", role, "/", tableType.tableType)
     ).then((res) =>
       res.json().then((data) => {
         setTotalData([]);

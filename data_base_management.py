@@ -46,13 +46,13 @@ def calc_total_matches(ranks, db, rank="All Ranks"):
     actTotalGames = 0
     for rank in ranks:
         if rank == "All Ranks":
-             mycol.update_one({"rank": rank, "patch": "8.11"}, {"$set": {"Total_Matches": len(matchIds)}})
+             mycol.update_one({"rank": rank, "patch": "8.1"}, {"$set": {"Total_Matches": len(matchIds)}})
              break
         mydb = client[db]
         total_games = 0
         for god in godsDict:
             mycol = mydb[god]
-            myquery = {"rank": rank, "patch": "8.11"}
+            myquery = {"rank": rank, "patch": "8.12"}
             games = 0
             for x in mycol.find(myquery, {"_id": 0}):
                 # if x["matchId"] not in matchIds:
@@ -66,7 +66,7 @@ def calc_total_matches(ranks, db, rank="All Ranks"):
 def insert_games(rank, games):
     mydb = client["Matches"]
     mycol = mydb[f"Total_Matches"]
-    mycol.update_one({"rank": rank, "patch": "8.11"}, {"$set": {"Total_Matches": games}})
+    mycol.update_one({"rank": rank, "patch": "8.12"}, {"$set": {"Total_Matches": games}})
 
 def add_new_urls(client, god):
     god_info_db = client["God_Data"]
