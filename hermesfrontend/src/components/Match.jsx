@@ -602,7 +602,7 @@ function Match() {
   const [players, setPlayers] = useState([]);
   const [date, setMatchDate] = useState("");
   useEffect(() => {
-    fetch("/getmatch/".concat(match)).then((res) =>
+    fetch("/api/getmatch/".concat(match)).then((res) =>
       res.json().then((data) => {
         setBansWinner([]);
         setBansLoser([]);

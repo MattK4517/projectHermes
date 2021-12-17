@@ -334,11 +334,12 @@ def run_pull(patch, date=get_date()):
         lines = creds.readlines()
         smite_api = SmiteAPI(devId=lines[0].strip(), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
 
-    print(smite_api.getMatch())
+    # print(smite_api.getMatch())
     # mydb = client["test"]
     # mycol = mydb[f"{patch} Matches"]
     # date = date
-    # match_ids = smite_api.getMatchIds(451, date=20211106, hour=-1)
+    match_ids = smite_api.getMatchIds(434, date=20211215, hour=-1)
+    print(len(match_ids))
     # # set_ids = []
     # # all_ids = []
     # # set_matches = {}
@@ -372,4 +373,4 @@ def run_pull(patch, date=get_date()):
 # # print(inserted_count)
 # print("error %" + str(round(100 - inserted_count/match_ids_len * 100, 2)))
 
-# run_pull("8.10", get_date())
+run_pull("8.12", get_date())

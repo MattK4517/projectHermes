@@ -147,7 +147,7 @@ def get_date():
     return f"{time.month}/{time.day}/{time.year}"
 
 if __name__ == '__main__':
-    gen_tier_list(client, roles, "8.11", ["Combat", "Regular", "Objective"], ranks)
+    gen_tier_list(client, roles, "8.12", ["Combat", "Regular", "Objective"], ranks)
 
 
 

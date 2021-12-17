@@ -60,7 +60,7 @@ export default function Player(props) {
     const [games, setGames] = useState(0)
     const [godList, setGodList] = useState([])
     useEffect(() => {
-      fetch("/getplayergods/".concat(player)).then((res) =>
+      fetch("/api/getplayergods/".concat(player)).then((res) =>
         res.json().then((data) => {
           let newData = Object.values(data).sort(compare)
           setGodList([])
@@ -81,7 +81,7 @@ export default function Player(props) {
   }, [player ?? ""]);
     const [matchList, setMatchList] = useState([])
     useEffect(() => {
-        fetch("/getplayermatch/".concat(player)).then((res) =>
+        fetch("/api/getplayermatch/".concat(player)).then((res) =>
           res.json().then((data) => {
               Object.keys(data).map((match) => {
               setMatchList((matchList) => [
@@ -95,7 +95,7 @@ export default function Player(props) {
         );
       }, [player ?? ""]);
     useEffect(() => {
-      fetch("/getplayergeneral/".concat(player)).then((res) =>
+      fetch("/api/getplayergeneral/".concat(player)).then((res) =>
         res.json().then((data) => {
             console.log(data)
             setPlayerLevel(data.level)
