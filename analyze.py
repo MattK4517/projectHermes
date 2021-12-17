@@ -29,13 +29,14 @@ def get_pb_rate(client, god, rank, role, patch):
     bancol = bandb[god]
     startime = datetime.now()
     if rank == "Platinum+":
-        myquery = { "role_played": role, "rank": {"$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch}
+        myquery = { "rank": {"$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch}
     elif rank == "Diamond+":
-        myquery = { "role_played": role, "rank": {"$in":  ["Diamond", "Masters", "Grandmaster"]}, "patch": patch}    
+        myquery = { "rank": {"$in":  ["Diamond", "Masters", "Grandmaster"]}, "patch": patch}    
     elif rank != "All Ranks":
-        myquery = { "role_played": role, "rank": rank, "patch": patch}
+        myquery = { "rank": rank, "patch": patch}
     else:
-        myquery = { "role_played": role, "patch": patch}
+        myquery = { "patch": patch}
+
     totalMatches = get_total_matches(client, rank, patch)
     godBans = bancol.count_documents(myquery)
     games = get_games_played(client, god, rank, role, patch)
@@ -126,7 +127,7 @@ def get_top_builds(client, god, role, patch, rank="All Ranks", data=None):
     if type(data) is list:
         for x in data:
             games += 1
-            flag = False 
+            flag = False
             if x["win_status"] == "Winner":
                 wins +=1
                 flag = True
@@ -147,7 +148,7 @@ def get_top_builds(client, god, role, patch, rank="All Ranks", data=None):
     else:
         for x in mycol.find(myquery, {"_id": 0}):
             games += 1
-            flag = False 
+            flag = False
             if x["win_status"] == "Winner":
                 wins +=1
                 flag = True
@@ -164,7 +165,9 @@ def get_top_builds(client, god, role, patch, rank="All Ranks", data=None):
                         if flag:
                             top_dict[slot][item]["wins"] += 1
 
-            
+
+    if games == 0:
+        return {**{}, **{"games": games, "wins": wins, "winRate": 0}} 
     return {**sort_top_dict(dict(top_dict), client), **{"games": games, "wins": wins, "winRate": round(wins/games*100, 2)}}
 
 def sort_top_dict(top_dict, client):
@@ -189,6 +192,9 @@ def sort_top_dict(top_dict, client):
 
                 elif not all_dict[slot]["item2"]["item"]:
                     all_dict[slot]["item2"] = top_dict[slot][item]
+
+                elif top_dict[slot][item]["games"] > all_dict[slot]["item2"]["games"]:
+                    all_dict[slot]["item2"] = top_dict[slot][item]
             elif slot == "slot1":
                 if not all_dict[slot]["item1"]["item"]:
                     all_dict[slot]["item1"] = top_dict[slot][item]
@@ -207,7 +213,7 @@ def sort_top_dict(top_dict, client):
                 elif not all_dict[slot]["item2"]["item"]:
                     all_dict[slot]["item2"] = top_dict[slot][item]
 
-            
+
     for slot in all_dict.keys():
         for item in all_dict[slot].keys():
             all_dict[slot][item] =  {**all_dict[slot][item], **get_item_data(client, all_dict[slot][item]["item"])}

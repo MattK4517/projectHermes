@@ -14,7 +14,6 @@ const useFetch = (pagegod, role, rank, patch, matchup) => {
   const [goodmatchups, setgoodmatchups] = useState([]);
   const [items, setitems] = useState([]);
   const [colorStyle, setColorStyle] = useState("white");
-  const [itemdata, setitemdata] = useState([]);
   useEffect(() => {
     let mainFetchStatement = "/api/".concat(pagegod, "/", role, "/", rank, "/", patch);
     if (matchup !== "None"){

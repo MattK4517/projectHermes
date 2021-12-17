@@ -75,6 +75,7 @@ export default function BasicTabs(pagegod) {
           pickrate={pagegod.pickRate}
           banrate={pagegod.banRate}
           matchup={pagegod.matchup}
+          mode={pagegod.mode}
         />
       </TabPanel>
       <TabPanel value={value} index={1}>
