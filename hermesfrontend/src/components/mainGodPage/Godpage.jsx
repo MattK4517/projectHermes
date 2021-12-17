@@ -206,7 +206,7 @@ function Godpage(props) {
   const modes = ["Casual", "Ranked"]
 
   useEffect(() => {
-    fetch("/api/main/".concat(pagegod, "/", dispRole, "/", dispRank, "/", patch)).then((res) =>
+    fetch("/api/main/".concat(pagegod, "/", dispRole, "/", dispRank, "/", patch, "/", mode)).then((res) =>
       res.json().then((data) => {
         console.log(data)
         setgod(pagegod);
@@ -218,7 +218,7 @@ function Godpage(props) {
         // setTier(data.tier)
       })
     );
-  }, [dispRole, dispRank, patch]);
+  }, [dispRole, dispRank, patch, mode]);
 
   useEffect(() => {
     fetch("/api/".concat(pagegod, "/abilities")).then((res) =>
@@ -275,18 +275,21 @@ function Godpage(props) {
                       setFilter={setrole}
                     />
                     {/* </div> */}
+                    <div className={mode}>
                         <FilterForm
                           filter={dispRank}
                           god={pagegod}
                           filters={ranks}
                           setFilter={setrank}
                         />
+                    </div>
                     <DropDownFilter changePatch={setPatch} patch={patch} style={{color: "white"}}/>
                     <FilterForm
                       filter={mode}
                       god={pagegod}
                       filters={modes}
                       setFilter={setMode}
+                      rankSet={setrank}
                     />
                     <SearchBarGodPage data={routes} changeMatchup={setMatchup}/>
                   </div>

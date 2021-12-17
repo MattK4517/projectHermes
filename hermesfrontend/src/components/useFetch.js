@@ -5,7 +5,8 @@ const compare = (a, b) => {
   return a.winRate - b.winRate
 }
 
-const useFetch = (pagegod, role, rank, patch, matchup) => {
+const useFetch = (pagegod, role, rank, patch, matchup, mode) => {
+  console.log(pagegod)
   const [games, setgames] = useState(0);
   // const [banrate, setbanrate] = useState(0);
   // const [pickrate, setpickrate] = useState(0);
@@ -15,13 +16,12 @@ const useFetch = (pagegod, role, rank, patch, matchup) => {
   const [items, setitems] = useState([]);
   const [colorStyle, setColorStyle] = useState("white");
   useEffect(() => {
-    let mainFetchStatement = "/api/".concat(pagegod, "/", role, "/", rank, "/", patch);
+    let mainFetchStatement = "/api/".concat(pagegod, "/", role, "/", rank, "/", patch, "/", mode);
     if (matchup !== "None"){
       mainFetchStatement = mainFetchStatement.concat("/", matchup)
     }
     fetch(mainFetchStatement).then((res) =>
       res.json().then((data) => {
-        console.log(data)
         setgames(data.games);
         // setbanrate(((data.godBans / data.totalMatches) * 100).toFixed(2));
         // setpickrate(((data.games / data.totalMatches) * 100).toFixed(2));
@@ -70,10 +70,10 @@ const useFetch = (pagegod, role, rank, patch, matchup) => {
       })
     );
 
-  }, [role, rank, patch, matchup]);
+  }, [role, rank, patch, matchup, mode]);
   // else if (role && rank){
   //   matchupsFetchStatement = "/".concat(pagegod, "/matchups/", role, "/", rank)
-  let matchupsFetchStatement = "/api/".concat(pagegod, "/matchups/", role, "/", rank, "/", patch)
+  let matchupsFetchStatement = "/api/".concat(pagegod, "/matchups/", role, "/", rank, "/", patch, "/", mode)
   useEffect(() => {
     fetch(matchupsFetchStatement).then((res) =>
       res.json().then((data) => {
@@ -108,7 +108,7 @@ const useFetch = (pagegod, role, rank, patch, matchup) => {
         });
       })
     );
-  }, [role, rank, patch]);
+  }, [role, rank, patch, mode]);
 
   return { games, badmatchups, goodmatchups, items, colorStyle };
   // return { games, banrate, pickrate, winrate, badmatchups, goodmatchups, items, colorStyle };

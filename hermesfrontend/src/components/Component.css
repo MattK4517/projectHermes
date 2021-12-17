@@ -2009,3 +2009,7 @@ figure.snip0015:hover figcaption::before {
   border-radius: 6px;
   overflow: hidden;
 }
+
+.Casual {
+  display: none;
+}

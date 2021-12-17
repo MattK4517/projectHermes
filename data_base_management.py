@@ -162,16 +162,17 @@ def add_gold_eff(client, db, col, field_key):
 
 if __name__ == "__main__":
     # delete_match_docs(client, "Matches", "8.11 Matches", "Entry_Datetime", "12/10/2021")
-    # mydb = client["Matches"]
-    # mycol = mydb["8.11 Matches"]
+    mydb = client["Matches"]
+    mycol = mydb["Total_Matches"]
+    mycol.update_many({"patch": "8.12"}, {"$set": {"mode": "RankedConq"}})
     # print(mycol.count_documents({"Entry_Datetime": "12/10/2021"}))
-    mydb = client["single_items_test"]
-    mycol = mydb["Atlas"]
-    for x in mycol.aggregate([
-        {"$group": {"_id": "$matchId", "count": {"$sum": 1} }}
-    ]):
-        if x["count"] > 1:
-            print(x["count"], x["_id"])
+    # mydb = client["single_items_test"]
+    # mycol = mydb["Atlas"]
+    # for x in mycol.aggregate([
+    #     {"$group": {"_id": "$matchId", "count": {"$sum": 1} }}
+    # ]):
+    #     if x["count"] > 1:
+    #         print(x["count"], x["_id"])
     # dbs = ["single_combat_stats", "single_god_bans", "single_items", "single_matchups", "single_objective_stats", "single_match_stats"]
     # for db in dbs:
     #     mydb = client[db]
@@ -191,34 +192,3 @@ if __name__ == "__main__":
     # myquery["_id"] = 0
     # df = pd.DataFrame(json_normalize(mycol.find({}, myquery)))
     # df.to_excel("names.xlsx")
-
-
-
-
-
-
-
-
-
-
-
-#     count = 0
-#     compCount = 0
-#     for x in mycol.find({"Entry_Datetime": "10/3/2021"}, {"_id": 0}):
-#         if "carryScore" not in x.keys():
-#             for field in fields:
-#                 if field == "carryScore":
-#                     carry_score = anlz.get_gold_score(x)
-#                 elif field == "damageScore":
-#                     carry_score = anlz.get_damage_score(x)
-#                 elif field == "levelDiff":
-#                     carry_score = anlz.get_level_diff(x)
-#                 elif field == "killPart":
-#                     carry_score = anlz.get_kill_part(x)
-#                 elif field == "efficiency":
-#                     carry_score = anlz.get_gold_eff(anlz.get_kill_part(x), anlz.get_gold_score(x))
-#                 add_patch_field(client, "Matches", "8.9 Matches", x["MatchId"], carry_score, field)
-#                 count += 1
-#             print("Match Done: {}".format(x["MatchId"]))
-# print("number remaining 9858")
-### 1192921877

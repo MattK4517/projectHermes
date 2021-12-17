@@ -332,14 +332,15 @@ class GodRankStats extends React.Component {
   }
 
 
-export default function BuildPage(pagegod) {
-  
-    let { games, badmatchups, goodmatchups, items, colorStyle } = useFetch(
-        pagegod.pagegod,
-        pagegod.role,
-        pagegod.rank,
-        pagegod.patch,
-        pagegod.matchup
+export default function BuildPage(props) {
+  // console.log(props)
+    let { games, badmatchups, goodmatchups, items, colorStyle} = useFetch(
+        props.pagegod,
+        props.role,
+        props.rank,
+        props.patch,
+        props.matchup,
+        props.mode
         );
     if (items.length === 0 ){
       items = ["None"]
@@ -359,25 +360,25 @@ export default function BuildPage(pagegod) {
         return (
             <div className="god-build">
             <GodRankStats
-              winrate={pagegod.winrate}
+              winrate={props.winrate}
               games={games}
-              banrate={pagegod.banrate}
-              pickrate={pagegod.pickrate}
-            //   url={url}
+              banrate={props.banrate}
+              pickrate={props.pickrate}
+              // url={url}
               colorStyle={colorStyle}
-              mode={pagegod.mode}
+              mode={props.mode}
             />
             <div className="toughest-matchups content-section">
               <div className="content-section_header">
                   Counter Matchups&nbsp;
-                  <span style={{color: "#5f5f7b", fontSize: "14px", fontWeight: "400"}}>these gods counter {pagegod.pagegod}{" "}
-                  {pagegod.role}
+                  <span style={{color: "#5f5f7b", fontSize: "14px", fontWeight: "400"}}>these gods counter {props.props}{" "}
+                  {props.role}
                   </span>
                 <HtmlTooltip
                     title={
                       <React.Fragment>
                         <CreateMatchupsHelpTooltip
-                        god={pagegod.pagegod}
+                        god={props.props}
                         />
                       </React.Fragment>
                     }
@@ -401,14 +402,14 @@ export default function BuildPage(pagegod) {
             <div className="toughest-matchups content-section">
               <div className="content-section_header">
                   Good Matchups&nbsp;
-                  <span style={{color: "#5f5f7b", fontSize: "14px", fontWeight: "400"}}>these gods get countered by {pagegod.pagegod}{" "}
-                    {pagegod.role}
+                  <span style={{color: "#5f5f7b", fontSize: "14px", fontWeight: "400"}}>these gods get countered by {props.props}{" "}
+                    {props.role}
                   </span>
                 <HtmlTooltip
                     title={
                       <React.Fragment>
                         <CreateMatchupsHelpTooltip
-                        god={pagegod.pagegod}
+                        god={props.props}
                         />
                       </React.Fragment>
                     }
@@ -532,15 +533,6 @@ export default function BuildPage(pagegod) {
                   );
                 }
               })}
-              {/*
-              <div className="slot5">
-                <div className="content-section_header">
-                  Sixth Slot Options
-                </div>
-                <div>
-                  <BuildStats stats={items} lower={5} upper={6} />
-                </div>
-              </div> */}
             </ResponsiveBuild>
           </div>
         )
