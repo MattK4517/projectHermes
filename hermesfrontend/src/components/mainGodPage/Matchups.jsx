@@ -331,13 +331,10 @@ const Table = ({ columns, data }) => {
 
     
 export default function Matchups(props) {
-    const [dispRank, setRank] = useState(props.rank);
-    const [dispRole, setRole] = useState(props.role);
-    const [dispPatch, setPatch] = useState(props.patch);
-    const god = props.pagegod;
+  console.log(props)
     const [totalData, setTotalData] = useState([]);
     useEffect(() => {
-        fetch("/api/".concat(god, "/m/", dispRole, "/", dispRank, "/", dispPatch)).then((res) =>
+        fetch("/api/".concat(props.pagegod, "/m/", props.role, "/", props.rank, "/", props.patch, "/", props.mode)).then((res) =>
           res.json().then((data) => {
               setTotalData([]);
               Object.keys(data).forEach(key => {
@@ -355,7 +352,7 @@ export default function Matchups(props) {
               })
           })
         );
-      }, [dispRole, dispRank, dispPatch]);
+      }, [props.role, props.rank, props.patch, props.mode]);
     const columns = React.useMemo(
         () => [
           {

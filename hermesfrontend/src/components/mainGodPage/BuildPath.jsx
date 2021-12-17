@@ -211,8 +211,8 @@ function Table({ columns, data }) {
                       return (
                         <div
                           style={{
-                            minWidth: "30px",
-                            maxWidth: "40px",
+                            minWidth: "65px",
+                            maxWidth: "90px",
                             flex: "1 1 100%",
                           }}
                           {...cell.getCellProps()}
@@ -253,18 +253,21 @@ function Table({ columns, data }) {
   );
 }
 
-export default function BuildPath(pagegod) {
+export default function BuildPath(props) {
   const [paths, setPaths] = useState([]);
+  console.log(props)
   useEffect(() => {
     fetch(
       "/api/".concat(
-        pagegod.pagegod,
+        props.pagegod,
         "/buildpath/",
-        pagegod.role,
+        props.role,
         "/",
-        pagegod.rank,
+        props.rank,
         "/",
-        pagegod.patch
+        props.patch,
+        "/",
+        props.mode
       )
     ).then((res) =>
       res.json().then((data) => {
@@ -289,7 +292,7 @@ export default function BuildPath(pagegod) {
         });
       })
     );
-  }, [pagegod.role, pagegod.rank, pagegod.patch]);
+  }, [props.role, props.rank, props.patch, props.mode]);
 
   const columns = React.useMemo(
     () => [

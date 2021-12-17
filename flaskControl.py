@@ -26,46 +26,47 @@ def get_all_gods():
         gdDict = anlz.get_gods()
         return gdDict
 
-@app.route('/api/main/<god>/<role>/<rank>/<patch>', methods=["GET", "POST"])
-def get_god_data(god, role, rank, patch):
+@app.route('/api/main/<god>/<role>/<rank>/<patch>/<mode>', methods=["GET", "POST"])
+def get_god_data(god, role, rank, patch, mode):
         newgod = god.replace("_", " ")
-        winrate = anlz.get_winrate(client, god, role, patch, rank)
-        pbrate = anlz.get_pb_rate(client, god, rank, role, patch)
-        return {**{
+        winrate = anlz.get_winrate(client, god, role, patch, mode, rank)
+        pbrate = anlz.get_pb_rate(client, god, rank, role, patch, mode)
+        return {
+                **{
                 "url": anlz.get_url(newgod), 
                 "tier": anlz.get_tier(winrate["win_rate"], pbrate["pickRate"], pbrate["banRate"]),
                 },
                 **pbrate,
                 **winrate
-                 }
+               }
 
 @app.route('/api/<god>/matchups', methods=["GET"])
 def get_god_matchups(god):
         return anlz.get_worst_matchups(client, god , "Solo")
 
-@app.route('/api/<god>/<role>/<rank>/<patch>/<matchup>')
-@app.route('/api/<god>/<role>/<rank>/<patch>', methods=["GET", "POST"])
-def get_god_data_role(god, role, rank, patch, matchup="None"):
+@app.route('/api/<god>/<role>/<rank>/<patch>/<mode>/<matchup>')
+@app.route('/api/<god>/<role>/<rank>/<patch>/<mode>', methods=["GET", "POST"])
+def get_god_data_role(god, role, rank, patch, mode, matchup="None"):
+        print(god, role, rank, patch, mode)
         newgod = god.replace("_", " ")
         if matchup != "None":
                 return anlz.get_specific_build(client, god, role, patch, matchup, rank)
         elif "All" in rank and matchup == "None":
-                build = anlz.get_top_builds(client, god, role, patch)
+                build = anlz.get_top_builds(client, god, role, patch, mode)
         elif matchup =="None": 
-                build = anlz.get_top_builds(client, god, role, patch, rank)
+                build = anlz.get_top_builds(client, god, role, patch, mode, rank)
 
         # pb_rate = anlz.get_pb_rate(client, newgod, rank, role, patch)
         image = {"url": anlz.get_url(newgod)}
         data_dict = {**build, **image}
         return data_dict
         
-@app.route('/api/<god>/matchups/<role>/<rank>/<patch>')
-def get_god_matchups_by_rank(god, role, rank, patch):
-        newgod = god.replace("_", " ")
+@app.route('/api/<god>/matchups/<role>/<rank>/<patch>/<mode>')
+def get_god_matchups_by_rank(god, role, rank, patch, mode):
         if "All" in rank and patch == "current":
-                matchups = anlz.get_worst_matchups(client, god, role, patch)
+                matchups = anlz.get_worst_matchups(client, god, role, patch, mode)
         else: 
-                matchups = anlz.get_worst_matchups(client, god, role, patch, rank)
+                matchups = anlz.get_worst_matchups(client, god, role, patch, mode, rank)
 
         del matchups["wins"], matchups["games"], matchups["winRate"]
         return matchups
@@ -135,21 +136,21 @@ def get_tier_list(rank, role, tableType):
 def get_item_data(item):
         return anlz.get_item_data(client, item)
         
-@app.route('/api/<god>/items/<role>/<rank>/<patch>')
-def get_all_items(god, role, rank, patch):
-        items = anlz.get_all_builds(client, god, role, patch, rank)
+@app.route('/api/<god>/items/<role>/<rank>/<patch>/<mode>')
+def get_all_items(god, role, rank, patch, mode):
+        items = anlz.get_all_builds(client, god, role, patch, mode, rank)
         return items
 
-@app.route('/api/<god>/m/<role>/<rank>/<patch>')
-def get_all_matchups(god, role, rank, patch):
+@app.route('/api/<god>/m/<role>/<rank>/<patch>/<mode>')
+def get_all_matchups(god, role, rank, patch, mode):
     mydb = client["single_match_stats"]
     mycol = mydb[god]
     matchupsdb = client["single_matchups"]
     matchupscol = matchupsdb[god]
     if "All" in rank:
-        myquery = {"role": role, "patch": patch}
+        myquery = {"role": role, "patch": patch, "mode": f"{mode}Conq"}
     else:
-        myquery = {"role": role, "patch": patch, "rank": rank}
+        myquery = {"role": role, "patch": patch, "rank": rank, "mode": f"{mode}Conq"}
 
 
     avg_dmg_dict = {}
@@ -232,19 +233,19 @@ def get_match(matchID):
                         match[key] = {**match[key], **{"godBuild": anlz.get_build_stats(client, build)}}
         return match
 
-@app.route('/api/<god>/buildpath/<role>/<rank>/<patch>')
-def get_build_path(god, role, rank, patch):
+@app.route('/api/<god>/buildpath/<role>/<rank>/<patch>/<mode>')
+def get_build_path(god, role, rank, patch, mode):
     mydb = client["single_items"]
     mycol = mydb[god]
     index = 0
     games = 0
     builds = {}
     if "All" not in rank:
-        myquery = {"role_played": role, "patch": patch, "rank": rank}
+        myquery = {"role_played": role, "patch": patch, "rank": rank, "mode": f"{mode}Conq"}
     else:
-        myquery = {"role_played": role, "patch": patch}
+        myquery = {"role_played": role, "patch": patch, "mode": f"{mode}Conq"}
     
-    
+    print(myquery)
     for x in mycol.aggregate(
         [
             {

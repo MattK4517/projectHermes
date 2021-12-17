@@ -504,7 +504,8 @@ export default function BuildPage(pagegod) {
         role,
         rank,
         "8.12",
-        matchup
+        matchup,
+        "Ranked"
         );
         return (
           <div

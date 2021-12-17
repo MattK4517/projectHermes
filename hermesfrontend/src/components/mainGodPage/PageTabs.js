@@ -43,12 +43,12 @@ function a11yProps(index) {
   };
 }
 
-export default function BasicTabs(pagegod) {
+export default function BasicTabs(props) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    pagegod.changeTab(event.target.textContent)
+    props.changeTab(event.target.textContent)
   };
   return (
     <Box sx={{ 
@@ -66,26 +66,26 @@ export default function BasicTabs(pagegod) {
       </Box>
       <TabPanel value={value} index={0}>
         <BuildPage                 
-          pagegod={pagegod.pagegod} 
-          role={pagegod.role} 
-          rank={pagegod.rank} 
-          patch={pagegod.patch} 
-          changeTab={pagegod.setTab}
-          winrate={pagegod.winRate}
-          pickrate={pagegod.pickRate}
-          banrate={pagegod.banRate}
-          matchup={pagegod.matchup}
-          mode={pagegod.mode}
+          pagegod={props.pagegod} 
+          role={props.role} 
+          rank={props.rank} 
+          patch={props.patch} 
+          changeTab={props.setTab}
+          winrate={props.winRate}
+          pickrate={props.pickRate}
+          banrate={props.banRate}
+          matchup={props.matchup}
+          mode={props.mode}
         />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <Items pagegod={pagegod.pagegod} role={pagegod.role} rank={pagegod.rank} patch={pagegod.patch}/>
+        <Items pagegod={props.pagegod} role={props.role} rank={props.rank} patch={props.patch} mode={props.mode}/>
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <BuildPath pagegod={pagegod.pagegod} role={pagegod.role} rank={pagegod.rank} patch={pagegod.patch}/>
+        <BuildPath pagegod={props.pagegod} role={props.role} rank={props.rank} patch={props.patch} mode={props.mode}/>
       </TabPanel>
       <TabPanel value={value} index={3}>
-        <Matchups pagegod={pagegod.pagegod} role={pagegod.role} rank={pagegod.rank} patch={pagegod.patch}/>
+        <Matchups pagegod={props.pagegod} role={props.role} rank={props.rank} patch={props.patch} mode={props.mode}/>
       </TabPanel>
     </Box>
   );
