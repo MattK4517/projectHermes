@@ -19,13 +19,13 @@ client = pymongo.MongoClient(
 
 
 def init_api(patch, date):
-    starttime = datetime.now()
     with open("cred.txt", "r") as f:
         data = f.readlines()
         smite_api = SmiteAPI(devId=data[0].strip(), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
 
     date = date
     match_ids = smite_api.getMatchIds(426, date=date, hour=-1)
+    print(len(match_ids))
     threaded_process_range(4, create_sets(match_ids), patch, smite_api)
     # print(len(create_sets(match_ids)))
 
@@ -47,7 +47,7 @@ def threaded_process_range(nthreads, id_range, patch, smite_api):
 def threaded_process_format(nthreads):
     threads = []
     # create the threads
-    mydb = client["thread_test"]
+    mydb = client["CasualMatches"]
     mycol = mydb["8.12 Matches"]
     matches = []
     for x in mycol.find({}, {"_id": 0}):
@@ -65,6 +65,6 @@ def threaded_process_format(nthreads):
     [ t.join() for t in threads ]
 
 starttime = datetime.now()
-# init_api("8.12", "20211215")
-threaded_process_format(5)
+init_api("8.12", "20211214")
+# threaded_process_format(5)
 print(f"ENDED IN {datetime.now() - starttime}")
