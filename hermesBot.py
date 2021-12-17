@@ -202,9 +202,14 @@ if __name__ == "__main__":
                     actgod = ""
                     god = m[1:len(m)-1]
                     role = m[-1]
-                    for x in range(len(god)):
-                        actgod += god[x]+" "
-                        actgod = godAbbreviations(actgod.strip()).replace("-"," ") 
+                    if role.lower() not in ["solo", "jungle", "mid", "support", "carry"]:
+                        god.append(role)
+                        god = " ".join(god)
+                        actgod = godAbbreviations(god.title()).replace("-", " ")
+                        role = get_role(god)
+                    else:
+                        god = " ".join(god)
+                        actgod = godAbbreviations(god.title()).replace("-", " ")
 
                 data = anlz.get_top_builds(dbClient, actgod, role.capitalize(), patch)
                 ItemWR = []
@@ -244,9 +249,14 @@ if __name__ == "__main__":
                     actgod = ""
                     god = m[1:len(m)-1]
                     role = m[-1]
-                    for x in range(len(god)):
-                        actgod += god[x]+" "
-                        actgod = godAbbreviations(actgod.strip()).replace("-"," ") 
+                    if role.lower() not in ["solo", "jungle", "mid", "support", "carry"]:
+                        god.append(role)
+                        god = " ".join(god)
+                        actgod = godAbbreviations(god.title()).replace("-", " ")
+                        role = get_role(god)
+                    else:
+                        god = " ".join(god)
+                        actgod = godAbbreviations(god.title()).replace("-", " ")
 
                 data = anlz.get_worst_matchups(mongo_client, actgod, role.capitalize(), patch)
                 iconURL = anlz.get_url(actgod)
@@ -280,10 +290,15 @@ if __name__ == "__main__":
                     actgod = ""
                     god = m[1:len(m)-1]
                     role = m[-1]
-                    for x in range(len(god)):
-                        actgod += god[x]+" "
-                        actgod = godAbbreviations(actgod.strip()).replace("-"," ") 
-
+                    if role.lower() not in ["solo", "jungle", "mid", "support", "carry"]:
+                        god.append(role)
+                        god = " ".join(god)
+                        actgod = godAbbreviations(god.title()).replace("-", " ")
+                        role = get_role(god)
+                    else:
+                        god = " ".join(god)
+                        actgod = godAbbreviations(god.title()).replace("-", " ")
+                
                 data = anlz.get_worst_matchups(mongo_client, actgod, role.capitalize(), patch)
                 iconURL = anlz.get_url(actgod)
                 if actgod.lower() in (assassin.lower() for assassin in Assassins):
@@ -316,9 +331,14 @@ if __name__ == "__main__":
                     actgod = ""
                     god = m[1:len(m)-1]
                     role = m[-1]
-                    for x in range(len(god)):
-                        actgod += god[x]+" "
-                        actgod = godAbbreviations(actgod.strip()).replace("-"," ") 
+                    if role.lower() not in ["solo", "jungle", "mid", "support", "carry"]:
+                        god.append(role)
+                        god = " ".join(god)
+                        actgod = godAbbreviations(god.title()).replace("-", " ")
+                        role = get_role(god)
+                    else:
+                        god = " ".join(god)
+                        actgod = godAbbreviations(god.title()).replace("-", " ")
 
                 data = anlz.get_build_path(dbClient, actgod, role.capitalize(), patch)
                 iconURL = anlz.get_url(actgod)
@@ -335,6 +355,7 @@ if __name__ == "__main__":
                 embed=discord.Embed(title=f"{actgod} {role} Build Paths".title(), description="[See more info here](https://www.smitestats.gg/#/{})".format(actgod.replace(" ", "_")), color = int(color, base=16))
                 embed.set_thumbnail(url=iconURL)
                 for i, path in enumerate(data):
+                    # print(data)
                     if i < 2:
                         games = data[path]["wins"]+data[path]["losses"]
                         embed.add_field(name=f"Path {i+1}", value="{}\nGames: {} Win Rate: {}".format(path.replace(",", ", "), games, round(data[path]["wins"]/games * 100,2)), inline=True)
