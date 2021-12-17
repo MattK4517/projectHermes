@@ -348,9 +348,13 @@ export default function BuildPage(pagegod) {
     let goodStyling = {}
     if (badmatchups.length < 1) {
       styling = {display: "flex", flexDirection: "column", color: "#bbbedb"}
-    } 
+    } else{
+      styling = {}
+    }
     if (goodmatchups.length < 1) {
       goodStyling = {display: "flex", flexDirection: "column", color: "#bbbedb"}
+    } else {
+      styling = {}
     }
         return (
             <div className="god-build">
