@@ -35,6 +35,7 @@ def normalize_godId(id):
         1748: "Artemis",
         3336: "Artio",
         1919: "Athena",
+        4034: "Atlas",
         2037: "Awilix",
         3925: "Baba Yaga",
         1809: "Bacchus",
@@ -163,7 +164,7 @@ def create_player_dict(player):
     playerDict["Final_Match_Level"] = player["Final_Match_Level"]
     playerDict["godId"] = player["GodId"]
     playerDict["godName"] = normalize_godId(player["GodId"])
-    playerDict["godStats"] = anlz.get_god_stats(client, normalize_godId(player["GodId"]), player["Final_Match_Level"])
+    # playerDict["godStats"] = anlz.get_god_stats(client, normalize_godId(player["GodId"]), player["Final_Match_Level"])
     playerDict["Gold_Earned"] = player.goldEarned
     playerDict["Gold_Per_Minute"] = player.goldPerMinute
     playerDict["Healing"] = player.healing
@@ -213,7 +214,7 @@ def create_player_dict(player):
         playerDict["Item_Purch_5"],
         playerDict["Item_Purch_6"],
     ]
-    playerDict["godBuild"] = anlz.get_build_stats(client, build)
+    # playerDict["godBuild"] = anlz.get_build_stats(client, build)
     return playerDict
 
 def create_match_dict(match, patch):
@@ -328,21 +329,23 @@ def get_date():
 
 def run_pull(patch, date=get_date()):
     starttime = datetime.now()
-    with open("cred.txt", "r") as f:
-        data = f.readlines()
-        smite_api = SmiteAPI(devId=data[0].strip(), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
+
+    # with open("cred.txt", "r") as f:
+    #     data = f.readlines()
+    #     smite_api = SmiteAPI(devId=data[0].strip(), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
 
     mydb = client["test"]
     mycol = mydb[f"{patch} Matches"]
-    date = date
-    match_ids = smite_api.getMatchIds(426, date=date, hour=-1)
-    # set_ids = []
-    # all_ids = []
-    # set_matches = {}
+    # date = date
+    # match_ids = smite_api.getMatchIds(426, date=date, hour=-1)
+    #  match_ids_len = len(match_ids)
+    # print(match_ids_len)
+    set_ids = []
+    all_ids = []
+    set_matches = {}
     set_length = 10
     inserted_count = 0
-    match_ids_len = len(match_ids)
-    print(match_ids_len)
+
     all_sets = create_sets(match_ids)
     # total = 0
     for set in all_sets:
@@ -365,6 +368,46 @@ def run_pull(patch, date=get_date()):
 
     print(f"{date} Pull Completed in " + str(datetime.now() - starttime))
 
-run_pull("8.11")
+
+def threaded_pull(patch, all_sets, smite_api):
+    starttime = datetime.now()
+
+    # with open("cred.txt", "r") as f:
+    #     data = f.readlines()
+    #     smite_api = SmiteAPI(devId=data[0].strip(), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
+
+    mydb = client["thread_test"]
+    mycol = mydb[f"{patch} Matches"]
+    # date = date
+    # match_ids = smite_api.getMatchIds(426, date=date, hour=-1)
+    #  match_ids_len = len(match_ids)
+    # print(match_ids_len)
+    set_length = 10
+    inserted_count = 0
+    # total = 0
+    print("Starting pull")
+    for set in all_sets:
+        set_data = []
+        match_details = smite_api.getMatch(set)
+        for i in range(len(match_details) // 10):
+            match_dict = create_match_dict(match_details[i*set_length], patch)
+            for k in range(10):
+                player = create_player_dict(match_details[(i*10) + k])
+                match_dict["player"+str(k)] = player
+            # carry_score = anlz.get_carry_score(match_dict)
+            # match_dict["carryScore"] = carry_score["goldScore"]
+            # match_dict["damageScore"] = carry_score["damageScore"]
+            # match_dict["levelDiff"] = carry_score["levelDiff"]
+            # match_dict["killPart"] = carry_score["killPart"]
+            # match_dict["efficiency"] = anlz.get_gold_eff(match_dict["killPart"], match_dict["carryScore"])
+            set_data.append(match_dict)
+            # format_no_query(match_dict)
+        mycol.insert_many(set_data)
+        inserted_count += 1
+        if inserted_count > len(all_sets)/2:
+            print("halfway")
+
+
+    print(f"Pull Completed in " + str(datetime.now() - starttime))
 # print(inserted_count)
 # print("error %" + str(round(100 - inserted_count/match_ids_len * 100, 2)))

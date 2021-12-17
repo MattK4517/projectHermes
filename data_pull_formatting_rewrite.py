@@ -39,6 +39,7 @@ class GodData:
     def calc_matchups(self):
         mydb = client["single_matchups_test"]
         mycol = mydb[self.name]
+        set = []
         for match in self.matches:
             for key in match:
                 if "player" in key and match[key]["godName"] == self.name:
@@ -49,7 +50,7 @@ class GodData:
                     enemy = match[key]["godName"]
                     rank = normalize_rank(match[key]["Conquest_Tier"])
                     matchId = match[key]["MatchID"]
-                    mycol.insert_one(
+                    set.append(
                         {   self.name : match[flag_player]["Win_Status"],
                             "rank": rank,
                             "role_played": role_played,
@@ -59,10 +60,12 @@ class GodData:
                             "Entry_Datetime": match["Entry_Datetime"],
                         }
                     )
+        mycol.insert_many(set)
 
     def calc_items(self):
         mydb = client["single_items_test"]
         mycol =  mydb[self.name]
+        set = []
         for match in self.matches:
             build = {}
             for key in match:
@@ -76,7 +79,7 @@ class GodData:
                             item, purch, number = player_key.split("_")
                             build[f"slot{number}"] = match[key][player_key]
 
-                    mycol.insert_one(
+                    set.append(
                         {self.name: build,
                         "role_played": role_played,
                         "rank": rank,
@@ -86,10 +89,12 @@ class GodData:
                         "Entry_Datetime": match["Entry_Datetime"],
                         }
                     )
+        mycol.insert_many(set)
 
     def calc_match_stats(self):
         mydb = client["single_match_stats_test"]
         mycol =  mydb[self.name]
+        set = []
         for match in self.matches:
             for key in match:
                 if "player" in key and match[key]["godName"] == self.name:
@@ -121,7 +126,7 @@ class GodData:
                         if "player" in key and match[key]["godName"] != self.name and match[key]["Role"] == role:
                             enemy = match[key]["godName"]
 
-                    mycol.insert_one({
+                    set.append({
                         "player": player,
                         "rank": rank,
                         "role": role,
@@ -149,6 +154,7 @@ class GodData:
                         "Entry_Datetime": match["Entry_Datetime"],
                         "time": match["Match_Duration"],
                     })
+        mycol.insert_many(set)
 
 def normalize_rank(tier):
     rank = "Error"
@@ -202,6 +208,16 @@ def format_no_query(match):
     for god in godsDict:
         godsDict[god] = GodData(god)
         godsDict[god].set_matches(set_matches)
+        godsDict[god].calc_matchups()
+        godsDict[god].calc_items()
+        godsDict[god].calc_match_stats()
+
+
+def threadedd_format_no_query(match):
+    print("starting format")
+    for god in godsDict:
+        godsDict[god] = GodData(god)
+        godsDict[god].set_matches(match)
         godsDict[god].calc_matchups()
         godsDict[god].calc_items()
         godsDict[god].calc_match_stats()
