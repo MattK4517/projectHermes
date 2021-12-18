@@ -1,14 +1,21 @@
 import React from "react";
+import FilterForm from "../Filters/FilterForm";
 
 const calcKDA = (kills, deaths, assists) => {
   return ((kills + assists / 2) / deaths).toFixed(2);
 };
 
 export default function GodDisplay(props) {
+  const modes = ["Casual", "Ranked"];
   return (
     <div className="content-section content-section_no-padding played-gods">
       <div className="content-section_header played-gods_header">
         <span>Best Gods</span>
+        <FilterForm
+          filter={"Queue Type"}
+          filters={modes}
+          setFilter={props.setMode}
+        />
       </div>
       <div className="god-list">
         {props.godList.map((god) => {
@@ -39,10 +46,10 @@ export default function GodDisplay(props) {
                     {calcKDA(god.kills, god.deaths, god.assists)}
                   </div>
                   <div className="kda-split">
-                    <span>{god.kills}</span>
-                    <span className="slash">/</span>
-                    <span>{god.deaths}</span>
-                    <span className="slash">/</span>
+                    <span>{god.kills}</span>&nbsp;
+                    <span className="slash">/</span>&nbsp;
+                    <span>{god.deaths}</span>&nbsp;
+                    <span className="slash">/</span>&nbsp;
                     <span>{god.assists}</span>
                   </div>
                 </div>

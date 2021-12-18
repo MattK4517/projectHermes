@@ -13,6 +13,7 @@ import analyze_players as anlzpy
 from duo_tier_list import get_lanes
 import pyrez
 from pyrez.api import SmiteAPI
+import flaskHelper as fh
 
 app = Flask(__name__, static_folder="../hermesfrontend", static_url_path="/")
 # limiter = Limiter(
@@ -293,39 +294,42 @@ def get_build_path(god, role, rank, patch, mode):
 
     return builds
 
-@app.route("/api/getplayergeneral/<playername>")
-def get_player_general(playername):
-        if playername == "undefined":
-                return {}
+@app.route("/api/getplayergeneral/<playername>/<mode>")
+def get_player_general(playername, mode):
         mydb = client["Players"]
         mycol = mydb["Player Basic"]
-        if mycol.count_documents({"NameTag": { "$regex" : f"{playername}", "$options": "i" }}) == 0:
+        if playername == "undefined":
+                return {}
+        
+        if fh.validate_player(client, playername, mode):
+                for x in mycol.find({"NameTag": { "$regex" : f"{playername}", "$options": "i" }}, {"_id": 0}):
+                        data = x
+        else:
                 with open("cred.txt", "r") as creds:
                         lines = creds.readlines()
                         smite_api = SmiteAPI(devId=lines[0].strip(), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
                         data = anlzpy.get_player_basic(smite_api.getPlayer(playername))
                         mycol.insert_one(data)
-        else:
-                for x in mycol.find({"NameTag": { "$regex" : f"{playername}", "$options": "i" }}, {"_id": 0}):
-                        data = x
         return anlzpy.create_player_return_dict(data)
- 
-@app.route("/api/getplayergods/<playername>")
-def get_player_god_info(playername):
-        if playername == "undefined":
-                return {}
+
+@app.route("/api/getplayergods/<playername>/<mode>")
+def get_player_god_info(playername, mode):
         mydb = client["Players"]
         mycol = mydb["Player Gods"]
-        if mycol.count_documents({"NameTag": { "$regex" : f"{playername}", "$options": "i" }}) == 0:
+        if playername == "undefined":
+                return {}
+
+        if fh.validate_player(client, playername, mode):
+                for x in mycol.find({"mode": mode, "NameTag": { "$regex" : f"{playername}", "$options": "i" }}, {"_id": 0}):
+                        data = x
+        else:
                 with open("cred.txt", "r") as creds:
                         lines = creds.readlines()
                         smite_api = SmiteAPI(devId=lines[0].strip(), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
-                        data = anlzpy.create_player_god_dict(smite_api.getQueueStats(playername, 451), playername)
+                        data = anlzpy.create_player_god_dict(smite_api.getQueueStats(playername, fh.convert_mode(mode)), playername, mode)
                         mycol.insert_one(data)
-        else:
-                for x in mycol.find({"NameTag": { "$regex" : f"{playername}", "$options": "i" }}, {"_id": 0}):
-                        data = x
-        return data
+        del data["_id"]
+        return {**data, **anlzpy.get_player_winrate(data)}
         # with open("cred.txt", "r") as creds:
         #         lines = creds.readlines()
         #         smite_api = SmiteAPI(devId=lines[0].strip(), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
@@ -334,15 +338,8 @@ def get_player_god_info(playername):
         # print(smite_api.getQueueStats(playerId, 451))
         return {}
 
-@app.route("/api/getplayermatch/<playername>")
-def get_player_match_info(playername):
+@app.route("/api/getplayermatch/<playername>/<mode>")
+def get_player_match_info(playername, mode):
         if playername == "undefined":
                 return {}
-        return anlzpy.find_match_history(client, playername)
-# make a route for every god, in the
-# temp idea for routing
-# for each god
-# @app.route("/api/godname"):
-# def godName():
-#     collect god info
-#     render_template("godbuild.html", other params)
+        return anlzpy.find_match_history(client, playername, mode)
