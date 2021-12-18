@@ -156,7 +156,7 @@ export default function MatchDisplay(props) {
                 <div className="content-container" style={{paddingTop: "0px"}}>
                   <div className="stat-group-one">
                     <div className="r1">
-                      <div className="queue-type">Ranked Conquest</div>
+                      <div className="queue-type">{props.mode} Conquest</div>
                       <div className="date">{match.Entry_Datetime}</div>
                     </div>
                     <div className="r2 r2_spacing"></div>

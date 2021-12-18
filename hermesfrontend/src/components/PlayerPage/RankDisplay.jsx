@@ -1,5 +1,4 @@
 
-
   const getImageUrl = (rank) => {
     let url = "https://i.imgur.com/LVbUJes.png";
     if (rank == "Bronze") {
@@ -41,7 +40,7 @@ export default function RankDisplay(props) {
                         <img className="rank-img" src={getImageUrl(props.tier.split(" ")[0])} alt="" />
                     </div>
                     <div>
-                        <div className="queue-type">Queue: Ranked Conquest</div>
+                        <div className="queue-type">Queue: {props.mode} Conquest</div>
                         <div className="rank-text"><strong>{props.tier}</strong></div>
                         <div className="rank-wins">
                           <strong>{props.winrate}%</strong>

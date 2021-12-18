@@ -9,6 +9,7 @@ import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import * as AiIcons from 'react-icons/ai';
+import * as GiIcons from 'react-icons/gi'
 import { Link } from "react-router-dom";
 import { HashRouter as HashRouter, Switch, Route} from "react-router-dom";
 import { Godpage, Gods, TierListPage, Match, Home, ContactForm, Items } from "./"
@@ -167,11 +168,11 @@ const godsDict = {
       component: <Match />,
       god: "",
     },
-    // {
-    //   path: ["/player/:handle", "/player"],
-    //   component: <Player />,
-    //   god: "",
-    // }
+    {
+      path: ["/player/:handle", "/player"],
+      component: <Player />,
+      god: "",
+    }
   ]
   Object.keys(godsDict).forEach((god) => {
     routes = [...routes, {
@@ -283,9 +284,7 @@ const routeComponents = routes.map(({path, component}, key) => <Route exact path
           }}
           >
           <Hamburger>
-          <AiIcons.AiFillHome>
-            <Link to={"/"} style={{marginLeft: "10px",paddingRight: "10px"}}> Home</Link>
-          </AiIcons.AiFillHome>
+          <Link to={"/"} style={{marginLeft: "10px",paddingRight: "10px"}}><AiIcons.AiFillHome/>Home</Link>
           <Link to={"/gods"} style={{paddingRight: "10px"}}>Gods</Link>
           <Link to={"/tierlist"}>Tierlist</Link>
           {/* <Button
@@ -347,21 +346,43 @@ const routeComponents = routes.map(({path, component}, key) => <Route exact path
             paddingLeft: "10px",
             color: "#bbbedb",
             bgcolor: "#17172e",
+            display: "flex",
+            flexDirection: "column",
         }}>
-          {['Home', 'Gods', 'Tierlist', "Contact",'Match'].map((text, index) => {
-            let route ="";
+          {["Home", "Gods", "Tierlist", "Contact", "Match", "Player"].map((text, index) => {
+            let route = text;
+            let icon;
             if (text === "Home"){
               route = "";
+              icon = <AiIcons.AiFillHome/>
+            }
+            else if (text === "Gods"){
+              icon = <GiIcons.GiPikeman/>
+            } else if (text === "Tierlist") {
+              icon = <AiIcons.AiOutlineBars/>
+            }
+            else if (text === "Contact"){
+              icon = <AiIcons.AiFillMail/>
+            }
+            else if (text === "Match"){
+              icon = <GiIcons.GiSwordClash/>
+            }
+            else if (text === "Player"){
+              icon = <GiIcons.GiSwordman/>
             }
             else {
               route = text;
             }
             return (
                 <>
-              <Link key = {index} to={"/".concat((route).replaceAll(" ","_"))} 
-              className="god-link"
-              >{text}</Link>
-              <br></br>
+              <Link
+                key ={index} to={"/".concat((route).replaceAll(" ","_"))} 
+                className="god-link"
+                style={{marginBottom: "20px", marginLeft: "5px"}}
+                >
+                  {icon}{text}
+              </Link>
+              {/* <br></br> */}
               </>
             )
     })}

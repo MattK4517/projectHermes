@@ -59,11 +59,14 @@ export default function Player(props) {
     const [winRate, setWinRate] = useState("")
     const [games, setGames] = useState(0)
     const [godList, setGodList] = useState([])
+    const [mode, setMode] = useState("Ranked")
     useEffect(() => {
-      fetch("/api/getplayergods/".concat(player)).then((res) =>
+      fetch("/api/getplayergods/".concat(player, "/", mode)).then((res) =>
         res.json().then((data) => {
           let newData = Object.values(data).sort(compare)
           setGodList([])
+          setWinRate(data.winRate)
+          setGames(data.games)
           Object.keys(newData).map((god, index) => {
             if (index < 10) {
               if (Object.keys(newData[god]).indexOf("god") !== -1){
@@ -78,11 +81,12 @@ export default function Player(props) {
           })
         })
       );
-  }, [player ?? ""]);
+  }, [player, mode]);
     const [matchList, setMatchList] = useState([])
     useEffect(() => {
-        fetch("/api/getplayermatch/".concat(player)).then((res) =>
+        fetch("/api/getplayermatch/".concat(player, "/", mode)).then((res) =>
           res.json().then((data) => {
+            setMatchList([])
               Object.keys(data).map((match) => {
               setMatchList((matchList) => [
                 ...matchList,
@@ -93,24 +97,25 @@ export default function Player(props) {
             })
           })
         );
-      }, [player ?? ""]);
+      }, [player, mode]);
     useEffect(() => {
       fetch("/api/getplayergeneral/".concat(player)).then((res) =>
         res.json().then((data) => {
             console.log(data)
+            setWinRate(data.winRate)
+            setGames(data.games)
             setPlayerLevel(data.level)
             setIcon(data.avatar)
             setRank(data.rank)
             setTier(data.tier ?? "")
-            setWinRate(data.winRate)
             setGames(data.games)
         })
       );
-  }, [player ?? ""]);
+  }, [player]);
       // <NameForm setPlayer={setPlayer} />
     return(
       <div className="player-profile-page" style={{paddingTop: "100px"}}>
-        <div className="player-profile-container content-side-padding">
+        <div className="player-profile-container content-side-padding" style={{marginLeft: "auto", marginRight: "auto"}}>
           <div className="content-side-padding background-image-container">
 
           </div>
@@ -119,14 +124,22 @@ export default function Player(props) {
           <div className="player-content-container">
             <div className="player-content-main">
               <div className="player-side">
-                <RankDisplay rank={rank} tier={tier} winrate={winRate} games={games}/>
-                <GodDisplay godList={godList}/>
+                <RankDisplay rank={rank} tier={tier} winrate={winRate} games={games} mode={mode}/>
+                <GodDisplay godList={godList} setMode={setMode}/>
               </div>
               <div className="player-main">
-                <MatchDisplay matchList={matchList} player={player}/>
+                <MatchDisplay matchList={matchList} player={player} mode={mode}/>
               </div>
             </div>
           </div>
+          {/* <div className="player-content-container">
+            <div className="player-content-main">
+              <div className="content-section">
+                <div className="content-section_header">Stay Tuned For New Content!</div>
+                Player Profiles and Statistics Coming Soon!
+              </div>
+            </div>
+          </div> */}
         </div>
       </div>
     )

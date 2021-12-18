@@ -162,9 +162,11 @@ def add_gold_eff(client, db, col, field_key):
 
 if __name__ == "__main__":
     # delete_match_docs(client, "Matches", "8.11 Matches", "Entry_Datetime", "12/10/2021")
-    mydb = client["Matches"]
-    mycol = mydb["Total_Matches"]
-    mycol.update_many({"patch": "8.12"}, {"$set": {"mode": "RankedConq"}})
+    mydb = client["Players"]
+    cols = ["Player Gods"]
+    for col in cols:
+        mycol = mydb[col]
+        mycol.update_many({}, {"$set": {"mode": "RankedConq"}})
     # print(mycol.count_documents({"Entry_Datetime": "12/10/2021"}))
     # mydb = client["single_items_test"]
     # mycol = mydb["Atlas"]

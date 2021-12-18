@@ -1,9 +1,13 @@
 from data_pull_formatting_rewrite import normalize_rank
 
-def find_match_history(client, playername):
+def find_match_history(client, playername, mode):
     myquery = {}
-    mydb = client["Matches"]
-    mycol = mydb["8.11 Matches"]
+    if mode == "Ranked":
+        database = "Matches"
+    elif mode == "Casual":
+        database = "thread_test"
+    mydb = client[database]
+    mycol = mydb["8.12 Matches"]
     myquery = { "$or": [ {f"player{i}.Player_Name": { "$regex" : f"{playername}", "$options": "i" }} for i in range(10) ] }
     filter = {
         **{"_id": 0}, 
@@ -11,6 +15,7 @@ def find_match_history(client, playername):
         **{f"Ban{i}": 0 for i in range(10)},
         # **{f"player{i}": 0 for i in range(10)}
     }
+    print(mycol.count_documents(myquery))
     ret_data = {}
     for x in mycol.find(myquery, filter).limit(5):
         ret_data[x["MatchId"]] = x
@@ -80,8 +85,8 @@ def get_player_basic(player):
         "Wins": player["Wins"],
     }
 
-def create_player_god_dict(data, playername):
-    ret_data = {"NameTag": playername}
+def create_player_god_dict(data, playername, mode):
+    ret_data = {"NameTag": playername, "mode": f"{mode}Conq"}
     for god in data:
         losses = god["Losses"]
         if losses == 0:
@@ -100,6 +105,15 @@ def create_player_god_dict(data, playername):
             "winRate": round(god["Wins"]/god["Matches"]*100, 2)
         }
     return ret_data
+
+def get_player_winrate(data):
+    wins = 0
+    games = 0
+    del data["NameTag"], data["mode"]
+    for god in data:
+        wins += data[god]["wins"]
+        games += data[god]["matches"]
+    return {"winRate": round(wins/games*100, 2), "games": games}
 
 def normalize_tier(tier):
     rank_text = "None"

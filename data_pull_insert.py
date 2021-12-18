@@ -333,13 +333,13 @@ def run_pull(patch, date=get_date()):
     with open("cred.txt", "r") as creds:
         lines = creds.readlines()
         smite_api = SmiteAPI(devId=lines[0].strip(), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
-
+        print(smite_api.getDataUsed())
     # print(smite_api.getMatch())
     # mydb = client["test"]
     # mycol = mydb[f"{patch} Matches"]
     # date = date
-    match_ids = smite_api.getMatchIds(434, date=20211215, hour=-1)
-    print(len(match_ids))
+    # match_ids = smite_api.getMatchIds(434, date=20211215, hour=-1)
+    # print(len(match_ids))
     # # set_ids = []
     # # all_ids = []
     # # set_matches = {}
