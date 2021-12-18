@@ -22,7 +22,7 @@ export default function GodDisplay(props) {
           return (
             <a href="#" className="god-performance">
               <div className="god-face">
-                <div style={{ height: "30px", width: "30px" }}>
+                <div style={{ height: "30px", width: "30px", borderRadius: "3px" }}>
                   <img
                     src={`https://webcdn.hirezstudios.com/smite/god-icons/${god.god
                       .replaceAll(" ", "-")

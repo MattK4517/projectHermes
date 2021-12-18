@@ -2,10 +2,18 @@ import pymongo
 import analyze as anlz
 
 
-def validate_player(client, playername, mode):
+def validate_player(client, playername):
     mydb = client["Players"]
     mycol = mydb["Player Basic"]
-    if mycol.count_documents({"mode": mode, "NameTag": { "$regex" : f"{playername}", "$options": "i" }}) > 0:
+    if mycol.count_documents({"NameTag": { "$regex" : f"{playername}", "$options": "i" }}) > 0:
+        return True
+    return False
+
+def validate_gods(client, playername):
+    mydb = client["Players"]
+    mycol = mydb["Player Gods"]
+    print(mycol.count_documents({"NameTag": { "$regex" : f"{playername}", "$options": "i" }}))
+    if mycol.count_documents({"NameTag": { "$regex" : f"{playername}", "$options": "i" }}) > 0:
         return True
     return False
 

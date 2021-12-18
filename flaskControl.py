@@ -319,8 +319,8 @@ def get_player_god_info(playername, mode):
         if playername == "undefined":
                 return {}
 
-        if fh.validate_player(client, playername, mode):
-                for x in mycol.find({"mode": mode, "NameTag": { "$regex" : f"{playername}", "$options": "i" }}, {"_id": 0}):
+        if fh.validate_gods(client, playername):
+                for x in mycol.find({"mode": f"{mode}Conq", "NameTag": { "$regex" : f"{playername}", "$options": "i" }}, {"_id": 0}):
                         data = x
         else:
                 with open("cred.txt", "r") as creds:
@@ -328,7 +328,7 @@ def get_player_god_info(playername, mode):
                         smite_api = SmiteAPI(devId=lines[0].strip(), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
                         data = anlzpy.create_player_god_dict(smite_api.getQueueStats(playername, fh.convert_mode(mode)), playername, mode)
                         mycol.insert_one(data)
-        del data["_id"]
+        # del data["_id"]
         return {**data, **anlzpy.get_player_winrate(data)}
         # with open("cred.txt", "r") as creds:
         #         lines = creds.readlines()
