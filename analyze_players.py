@@ -15,6 +15,9 @@ def find_match_history(client, playername, mode):
         **{f"Ban{i}": 0 for i in range(10)},
         # **{f"player{i}": 0 for i in range(10)}
     }
+    if mycol.count_documents(myquery) == 0 and mode == "Casual":
+        mydb = client["CasualMatches"]
+        mycol = mydb["8.12 Matches"]
     print(mycol.count_documents(myquery))
     ret_data = {}
     for x in mycol.find(myquery, filter).limit(5):
