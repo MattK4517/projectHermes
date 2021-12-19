@@ -359,9 +359,15 @@ def get_total_matches(client, rank, patch, mode):
     mydb = client["Matches"]
     mycol = mydb["Total_Matches"]
     total_games = 0
-    myquery = {"rank": rank, "patch": patch, "mode": f"{mode}Conq"}
+    if rank == "Platinum+":
+        myquery = {"rank": {"$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch, "mode": f"{mode}Conq"}
+    elif rank == "Diamond+":
+        myquery = { "rank": {"$in":  ["Diamond", "Masters", "Grandmaster"]}, "patch": patch, "mode": f"{mode}Conq"}  
+    else:
+        myquery = {"rank": rank, "patch": patch, "mode": f"{mode}Conq"}
+
     for x in mycol.find(myquery, {"Total_Matches": 1, "_id": 0}):
-        total_games = x["Total_Matches"]
+        total_games += x["Total_Matches"]
     return total_games
 
 def get_combat_stats(client, god, role, patch, rank="All Ranks"):
