@@ -1,4 +1,5 @@
 from data_pull_formatting_rewrite import normalize_rank
+from constants import godsDict
 
 def find_match_history(client, playername, mode):
     myquery = {}
@@ -46,6 +47,7 @@ def create_player_return_dict(player):
 #     for god in player:
 
 def get_player_basic(player):
+    print(player["Avatar_URL"])
     return {
         "Avatar_URL": player["Avatar_URL"],
         "Created_Datetime": player["Created_Datetime"],
@@ -112,10 +114,10 @@ def create_player_god_dict(data, playername, mode):
 def get_player_winrate(data):
     wins = 0
     games = 0
-    del data["NameTag"], data["mode"]
     for god in data:
-        wins += data[god]["wins"]
-        games += data[god]["matches"]
+        if god in godsDict:
+            wins += data[god]["wins"]
+            games += data[god]["matches"]
     return {"winRate": round(wins/games*100, 2), "games": games}
 
 def normalize_tier(tier):
