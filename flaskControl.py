@@ -301,7 +301,7 @@ def get_player_general(playername, mode):
         if playername == "undefined":
                 return {}
         
-        if fh.validate_player(client, playername, mode):
+        if fh.validate_player(client, playername):
                 for x in mycol.find({"NameTag": { "$regex" : f"{playername}", "$options": "i" }}, {"_id": 0}):
                         data = x
         else:
@@ -319,7 +319,7 @@ def get_player_god_info(playername, mode):
         if playername == "undefined":
                 return {}
 
-        if fh.validate_gods(client, playername):
+        if fh.validate_gods(client, playername, mode):
                 for x in mycol.find({"mode": f"{mode}Conq", "NameTag": { "$regex" : f"{playername}", "$options": "i" }}, {"_id": 0}):
                         data = x
         else:
