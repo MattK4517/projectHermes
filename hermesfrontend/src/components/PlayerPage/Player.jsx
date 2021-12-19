@@ -119,8 +119,10 @@ export default function Player(props) {
           <div className="content-side-padding background-image-container">
 
           </div>
-          <PlayerHeader player={player} level={playerLevel} icon={icon}/>
           <NameForm setPlayer={setPlayer} />
+          <div className={player ?? "undefined"}>
+            <PlayerHeader player={player} level={playerLevel} icon={icon}/>
+          </div>
           <div className="player-content-container">
             <div className="player-content-main">
               <div className="player-side">

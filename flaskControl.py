@@ -294,8 +294,8 @@ def get_build_path(god, role, rank, patch, mode):
 
     return builds
 
-@app.route("/api/getplayergeneral/<playername>/<mode>")
-def get_player_general(playername, mode):
+@app.route("/api/getplayergeneral/<playername>")
+def get_player_general(playername):
         mydb = client["Players"]
         mycol = mydb["Player Basic"]
         if playername == "undefined":
