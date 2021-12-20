@@ -2,6 +2,16 @@ from data_pull_formatting_rewrite import normalize_rank
 from constants import godsDict
 
 def find_match_history(client, playername, mode):
+    """returns a dict of the match history for a given playername in a give mode 
+
+    Args:
+        client ([MongoClient]): [database connection]
+        playername ([String]): [username of player]
+        mode ([String]): [gamemode to get history for]
+
+    Returns:
+        [Dict]: [a dict of match data (see sample match for more information)]
+    """
     myquery = {}
     if mode == "Ranked":
         database = "Matches"
@@ -16,16 +26,24 @@ def find_match_history(client, playername, mode):
         **{f"Ban{i}": 0 for i in range(10)},
         # **{f"player{i}": 0 for i in range(10)}
     }
-    if mycol.count_documents(myquery) == 0 and mode == "Casual":
+    if mycol.count_documents(myquery) == 0 and mode == "Casual": # casual match data is stored in 2 different database
         mydb = client["CasualMatches"]
         mycol = mydb["8.12 Matches"]
-    print(mycol.count_documents(myquery))
+    # print(mycol.count_documents(myquery))
     ret_data = {}
     for x in mycol.find(myquery, filter).limit(5):
         ret_data[x["MatchId"]] = x
     return ret_data
 
 def create_player_return_dict(player):
+    """[summary]
+
+    Args:
+        player ([type]): [description]
+
+    Returns:
+        [type]: [description]
+    """
     # print(player)
     if player["RankedConquest"]["Losses"] == 0:
         losses = 1
