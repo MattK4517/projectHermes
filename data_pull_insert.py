@@ -327,6 +327,51 @@ def get_date():
     time = datetime.now()
     return f"{time.year}{time.month}{time.day}"
 
+def get_player_basic(player):
+    print(player)
+    return {
+        "Avatar_URL": player["Avatar_URL"],
+        "Created_Datetime": player["Created_Datetime"],
+        "HoursPlayed": player["HoursPlayed"],
+        "Leaves": player["Leaves"],
+        "Level": player["Level"],
+        "Losses": player["Losses"],
+        "MinutesPlayed": player["MinutesPlayed"],
+        "Name": player["Name"],
+        "NameTag": player["hz_player_name"],
+        "Rank_Stat_Conquest": player["Rank_Stat_Conquest"],
+        "Rank_Stat_Conquest_Controller": player["Rank_Stat_Conquest_Controller"],
+        "RankedConquest": {
+            "Leaves": player["RankedConquest"]["Leaves"],
+            "Losses": player["RankedConquest"]["Losses"],
+            "Points": player["RankedConquest"]["Points"],
+            "Rank": player["RankedConquest"]["Rank"],
+            "Rank_Stat": player["RankedConquest"]["Rank_Stat"],
+            "Rank_Stat_Conquest": player["RankedConquest"]["Rank_Stat_Conquest"],
+            "Rank_Variance": player["RankedConquest"]["Rank_Variance"],
+            "Season": player["RankedConquest"]["Season"],
+            "Tier": player["RankedConquest"]["Tier"],
+            "Wins": player["RankedConquest"]["Wins"],
+        },
+        "RankedConquestController": {
+            "Leaves": player["RankedConquestController"]["Leaves"],
+            "Losses": player["RankedConquestController"]["Losses"],
+            "Points": player["RankedConquestController"]["Points"],
+            "Rank": player["RankedConquestController"]["Rank"],
+            "Rank_Stat": player["RankedConquestController"]["Rank_Stat"],
+            "Rank_Stat_Conquest": player["RankedConquestController"]["Rank_Stat_Conquest"],
+            "Rank_Variance": player["RankedConquestController"]["Rank_Variance"],
+            "Season": player["RankedConquestController"]["Season"],
+            "Tier": player["RankedConquestController"]["Tier"],
+            "Wins": player["RankedConquestController"]["Wins"],
+        },
+        "Tier_Conquest": player["Tier_Conquest"],
+        "Total_Achievements": player["Total_Achievements"],
+        "Total_Worshippers": player["Total_Worshippers"],
+        "Wins": player["Wins"],
+    }
+
+#my player id 704292327
 def run_pull(patch, date=get_date()):
     starttime = datetime.now()
 

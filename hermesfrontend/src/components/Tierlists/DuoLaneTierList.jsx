@@ -105,8 +105,31 @@ const Table = ({ columns, data }) => {
                           >
                             {row.cells.map((cell) => {
                               const { key, role } = cell.getCellProps();
+                              let god = row.original.carry
+                              .toLowerCase()
+                              .replaceAll(" ", "-");
+                              let routegod = row.original.carry.replaceAll(
+                                " ",
+                                "_"
+                              );
+                              if (row.original.carry == "Chang'e") {
+                                routegod = "Chang'e";
+                                god = "change";
+                              }
+                              let god2 = row.original.support
+                              .toLowerCase()
+                              .replaceAll(" ", "-");
+                              let routegod2 = row.original.support.replaceAll(
+                                " ",
+                                "_"
+                              );
+                              if (row.original.support == "Chang'e") {
+                                routegod2 = "Chang'e";
+                                god2 = "change";
+                              }
                               if (key.includes("rank")) {
                                 return (
+                                  <>
                                   <div
                                     className="rt-td rank"
                                     style={{
@@ -118,37 +141,10 @@ const Table = ({ columns, data }) => {
                                   >
                                     <span>{(i += 1)}</span>
                                   </div>
-                                );
-                              } else if (key.includes("role")) {
-                                return (
-                                  <div
-                                    className="rt-td role"
-                                    style={{
-                                      minWidth: "40px",
-                                      maxWidth: "60px",
-                                      flex: "1 1 100%",
-                                    }}
-                                    {...cell.getCellProps()}
-                                  >
-                                    <span>{row.original.role}</span>
-                                  </div>
-                                );
-                              } else if (key.includes("god")) {
-                                let god = row.original.god
-                                  .toLowerCase()
-                                  .replaceAll(" ", "-");
-                                let routegod = row.original.god.replaceAll(
-                                  " ",
-                                  "_"
-                                );
-                                if (row.original.god == "Chang'e") {
-                                  routegod = "Chang'e";
-                                  god = "change";
-                                }
-                                return (
+
                                   <div
                                     className="rt-td god"
-                                    style={{ minWidth: "180px", maxWidth: "220px", flex: "1 1 100%" }}
+                                    style={{ minWidth: "140px", maxWidth: "180px", flex: "1 1 100%" }}
                                     {...cell.getCellProps()}
                                   >
                                     <Link
@@ -165,7 +161,7 @@ const Table = ({ columns, data }) => {
                                           >
                                             <img
                                               src={`https://webcdn.hirezstudios.com/smite/god-icons/${god}.jpg`}
-                                              alt={row.original.god}
+                                              alt={row.original.carry}
                                               style={{
                                                 height: "48px",
                                                 width: "48px",
@@ -177,13 +173,91 @@ const Table = ({ columns, data }) => {
                                         </div>
                                       </div>
                                       <strong className="god-name">
-                                        {row.original.god}
+                                        {row.original.carry}
                                       </strong>
                                     </Link>
                                   </div>
-                                );
-                              } else if (key.includes("winRate")) {
-                                return (
+
+                                  
+                                  <div
+                                    className="rt-td win-rate"
+                                    style={{
+                                      minWidth: "70px",
+                                      maxWidth: "90px",
+                                      flex: "1 1 100%",
+                                    }}
+                                    {...cell.getCellProps()}
+                                  >
+                                    <span>
+                                      <b style={{color: winRateColor(row.original.carryWinRate)}}>{row.original.carryWinRate.toFixed(2)}%</b>
+                                    </span>
+                                  </div>
+
+
+                                  <div
+                                    className="rt-td god"
+                                    style={{ minWidth: "160px", maxWidth: "180px", flex: "1 1 100%" }}
+                                    {...cell.getCellProps()}
+                                  >
+                                    <Link
+                                      className="god-played gtm-tierlist-god"
+                                      to={"/".concat(routegod2)}
+                                    >
+                                      <div style={{ position: "relative" }}>
+                                        <div className="god-icon">
+                                          <div
+                                            style={{
+                                              height: "30px",
+                                              width: "30px",
+                                            }}
+                                          >
+                                            <img
+                                              src={`https://webcdn.hirezstudios.com/smite/god-icons/${god2}.jpg`}
+                                              alt={row.original.support}
+                                              style={{
+                                                height: "48px",
+                                                width: "48px",
+                                                transform: "scale(0.625)",
+                                                transformOrigin: "0px 0px 0px",
+                                              }}
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <strong className="god-name">
+                                        {row.original.support}
+                                      </strong>
+                                    </Link>
+                                  </div>
+
+                                  <div
+                                    className="rt-td win-rate"
+                                    style={{
+                                      minWidth: "70px",
+                                      maxWidth: "90px",
+                                      flex: "1 1 100%",
+                                    }}
+                                    {...cell.getCellProps()}
+                                  >
+                                    <span>
+                                      <b style={{color: winRateColor(row.original.supportWinRate)}}>{row.original.supportWinRate.toFixed(2)}%</b>
+                                    </span>
+                                  </div>
+
+                                  <div
+                                    className="rt-td win-rate"
+                                    style={{
+                                      minWidth: "70px",
+                                      maxWidth: "90px",
+                                      flex: "1 1 100%",
+                                    }}
+                                    {...cell.getCellProps()}
+                                  >
+                                    <span>
+                                      <b style={{color: winRateColor(row.original.syneryFactor*10)}}>{row.original.syneryFactor.toFixed(2)}%</b>
+                                    </span>
+                                  </div>
+
                                   <div
                                     className="rt-td win-rate"
                                     style={{
@@ -197,137 +271,7 @@ const Table = ({ columns, data }) => {
                                       <b style={{color: winRateColor(row.original.winRate)}}>{row.original.winRate}%</b>
                                     </span>
                                   </div>
-                                );
-                              } else if (key.includes("kills")) {
-                                return (
-                                  <div
-                                    className="rt-td"
-                                    style={{
-                                      minWidth: "65px",
-                                      maxWidth: "70px",
-                                      flex: "1 1 100%",
-                                    }}
-                                    {...cell.getCellProps()}
-                                  >
-                                    <span>
-                                      <b>{row.original.kills}</b>
-                                    </span>
-                                  </div>
-                                );
-                              } else if (key.includes("deaths")) {
-                                return (
-                                  <div
-                                    className="rt-td"
-                                    style={{
-                                      minWidth: "65px",
-                                      maxWidth: "70px",
-                                      flex: "1 1 100%",
-                                    }}
-                                    {...cell.getCellProps()}
-                                  >
-                                    <span>
-                                      <b>{row.original.deaths}</b>
-                                    </span>
-                                  </div>
-                                );
-                              } else if (key.includes("assists")) {
-                                return (
-                                  <div
-                                    className="rt-td"
-                                    style={{
-                                      minWidth: "65px",
-                                      maxWidth: "70px",
-                                      flex: "1 1 100%",
-                                    }}
-                                    {...cell.getCellProps()}
-                                  >
-                                    <span>
-                                      <b>{row.original.assists}</b>
-                                    </span>
-                                  </div>
-                                );
-                              } else if (key.includes("damageD")) {
-                                return (
-                                  <div
-                                    className="rt-td"
-                                    style={{
-                                      minWidth: "60px",
-                                      maxWidth: "90px",
-                                      flex: "1 1 100%",
-                                    }}
-                                    {...cell.getCellProps()}
-                                  >
-                                    <span>
-                                      <b>{row.original.damageD}</b>
-                                    </span>
-                                  </div>
-                                );
-                              } else if (key.includes("damageTaken")) {
-                                return (
-                                  <div
-                                    className="rt-td"
-                                    style={{
-                                      minWidth: "60px",
-                                      maxWidth: "90px",
-                                      flex: "1 1 100%",
-                                    }}
-                                    {...cell.getCellProps()}
-                                  >
-                                    <span>
-                                      <b>{row.original.damageTaken}</b>
-                                    </span>
-                                  </div>
-                                );
-                              } else if (key.includes("damageMitigated")) {
-                                return (
-                                  <div
-                                    className="rt-td"
-                                    style={{
-                                      minWidth: "60px",
-                                      maxWidth: "90px",
-                                      flex: "1 1 100%",
-                                    }}
-                                    {...cell.getCellProps()}
-                                  >
-                                    <span>
-                                      <b>{row.original.damageMitigated}</b>
-                                    </span>
-                                  </div>
-                                );
-                              } else if (key.includes("healing")) {
-                                return (
-                                  <div
-                                    className="rt-td"
-                                    style={{
-                                      minWidth: "60px",
-                                      maxWidth: "90px",
-                                      flex: "1 1 100%",
-                                    }}
-                                    {...cell.getCellProps()}
-                                  >
-                                    <span>
-                                      <b>{row.original.healing}</b>
-                                    </span>
-                                  </div>
-                                );
-                              } else if (key.includes("selfHealing")) {
-                                return (
-                                  <div
-                                    className="rt-td"
-                                    style={{
-                                      minWidth: "60px",
-                                      maxWidth: "90px",
-                                      flex: "1 1 100%",
-                                    }}
-                                    {...cell.getCellProps()}
-                                  >
-                                    <span>
-                                      <b>{row.original.selfHealing}</b>
-                                    </span>
-                                  </div>
-                                );
-                              } else if (key.includes("games")) {
-                                return (
+
                                   <div
                                     className="rt-td games"
                                     style={{
@@ -341,8 +285,9 @@ const Table = ({ columns, data }) => {
                                       <b>{row.original.games}</b>
                                     </span>
                                   </div>
+                                  </>
                                 );
-                              }
+                              } 
                             })}
                           </div>
                         </div>
@@ -412,7 +357,7 @@ const Table = ({ columns, data }) => {
   );
 };
 
-function CombatTierList(tableType) {
+function DuoLaneTierList(tableType) {
   const [totalData, setTotalData] = useState([]);
   const [counterMatchups, setCounterMatchups] = useState([]);
   const [roles, setRoles] = useState([
@@ -444,25 +389,20 @@ function CombatTierList(tableType) {
       res.json().then((data) => {
         setTotalData([]);
         Object.keys(data).forEach((key) => {
-          Object.keys(data[key]).forEach((godData) => {
+          if (data[key]["count"]+data[key]["losses"] > 250) {
             setTotalData((totalData) => [
               ...totalData,
               {
-                god: data[key][godData].god,
-                role: data[key][godData].role,
-                winRate: data[key][godData].winRate,
-                kills: data[key][godData].kills,
-                deaths: data[key][godData].deaths,
-                assists: data[key][godData].assists,
-                damageD: data[key][godData].damage_,
-                damageTaken: data[key][godData].damageTaken,
-                damageMitigated: data[key][godData].damageMitigated,
-                healing: data[key][godData].healing,
-                selfHealing: data[key][godData].selfHealing,
-                games: data[key][godData].games,
+                carry: data[key]["_id"]["carry"],
+                support: data[key]["_id"]["support"],
+                winRate: data[key]["winRate"],
+                games: data[key]["count"]+data[key]["losses"],
+                carryWinRate: data[key]["carryWinRate"],
+                supportWinRate: data[key]["supportWinRate"],
+                syneryFactor: data[key]["syneryFactor"]
               },
             ]);
-          });
+          }
         });
       })
     );
@@ -475,56 +415,31 @@ function CombatTierList(tableType) {
         accessor: "rank",
       },
       {
-        Header: "Role",
-        accessor: "role",
+        Header: "Carry",
+        accessor: "carry",
       },
       {
-        Header: "God",
-        accessor: "god",
+        Header: "Carry Win Rate",
+        accessor: "carryWinRate",
+        sortType: compareNumericString
+      },
+      {
+        Header: "Support",
+        accessor: "support",
+      },
+      {
+        Header: "Support Win Rate",
+        accessor: "supportWinRate",
+        sortType: compareNumericString
+      },
+      {
+        Header: "Synery Factor",
+        accessor: "syneryFactor",
+        sortType: compareNumericString
       },
       {
         Header: "Win Rate",
         accessor: "winRate",
-        sortType: compareNumericString
-      },
-      {
-        Header: "Kills",
-        accessor: "kills",
-        sortType: compareNumericString
-      },
-      {
-        Header: "Deaths",
-        accessor: "deaths",
-        sortType: compareNumericString
-      },
-      {
-        Header: "Assists",
-        accessor: "assists",
-        sortType: compareNumericString
-      },
-      {
-        Header: "Damage",
-        accessor: "damageD",
-        sortType: compareNumericString
-      },
-      {
-        Header: "Taken",
-        accessor: "damageTaken",
-        sortType: compareNumericString
-      },
-      {
-        Header: "Mitigated",
-        accessor: "damageMitigated",
-        sortType: compareNumericString
-      },
-      {
-        Header: "Healing",
-        accessor: "healing",
-        sortType: compareNumericString
-      },
-      {
-        Header: "Self Healing",
-        accessor: "selfHealing",
         sortType: compareNumericString
       },
       {
@@ -560,4 +475,4 @@ function compareNumericString(rowA, rowB, id, desc) {
   return 0;
 }
 
-export default CombatTierList;
+export default DuoLaneTierList;

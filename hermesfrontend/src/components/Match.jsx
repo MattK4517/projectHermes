@@ -6,7 +6,8 @@ import MuiAccordion from '@material-ui/core/Accordion';
 import MuiAccordionSummary from '@material-ui/core/AccordionSummary';
 import MuiAccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
-import TierListTabs from "./TierListTabs";
+import TierListTabs from "./Tabs/TierListTabs";
+import Tooltip from "@material-ui/core/Tooltip";
 
 class NameForm extends React.Component {
   constructor(props) {
@@ -26,26 +27,53 @@ class NameForm extends React.Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        {" "}
-        <label style={{color: "white"}}>
-          Match ID:
-          <input
-            type="text"
-            value={this.state.value}
-            onChange={this.handleChange}
-          />{" "}
-        </label>
-        <input type="submit" value="Submit" />
-      </form>
+      <div className="content-section">
+        <div className="content-section_header">
+          Search for a Player
+
+          
+        </div>
+        <form onSubmit={this.handleSubmit}>
+          {" "}
+          <label style={{color: "white"}}>
+            Match ID:
+            <input
+              type="text"
+              value={this.state.value}
+              onChange={this.handleChange}
+            />{" "}
+          </label>
+          <input type="submit" value="Submit" />
+        </form>
+        <div className="filler">
+          <h4>
+            Don't have a match? try 1202691204
+          </h4>
+          {/* <br></br> */}
+          <h5>
+            Remember all matches must by Ranked PC Conquest from 10/24/2021 or later (will expand the match types we support soon!)
+          </h5>
+      </div>
+      </div>
     );
   }
 }
 
+const HtmlTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: "#06061f",
+    color: "rgba(0, 0, 0, 0.87)",
+    maxWidth: 220,
+    border: ".5px solid gray",
+    opacity: 100,
+  },
+}))(Tooltip);
+
+
 class BaseMatchSummary extends React.Component {
   render() {
     return (
-      <div className="match-summary-container" style={{minWidth: "300px"}}>
+      <div className="match-summary-container" style={{minWidth: "200px"}}>
         <div className="match-info-header">
           <h3>Ranked Conquest - {this.props.matchId}<br></br>{this.props.date}</h3>
         </div>
@@ -246,8 +274,8 @@ function CustomizedAccordions(player) {
             <div style={{minWidth: "100px"}}>
               {player.role}
             </div>
-            <PlayerBuildDisplay build={player.build} buildType={"items"}/>
-            <PlayerBuildDisplay build={player.relic} buildType={"relics"}/>
+            <PlayerBuildDisplay build={player.godBuild} buildType={"items"}/>
+            {/* <PlayerBuildDisplay build={player.relic} buildType={"relics"}/> */}
             <p>{player.winStatus}</p>
         </AccordionSummary>
         <AccordionDetails style={{background: styling}}>
@@ -256,7 +284,18 @@ function CustomizedAccordions(player) {
               <div className="player-account-info" style={{minWidth: "225px"}}>
                 <span className="player-info-style">Account Level:</span> {player.accountLevel} <br></br>
                 <span className="player-info-style">Ranked MMR:</span> {player.mmr.toFixed(2).toLocaleString()} <br></br>
-                <span className="player-info-style">Player:</span> {player.playerName}
+                <span className="player-info-style">Player:</span> {player.playerName}&nbsp;
+                {/* <Link
+                  to={{
+                    pathname: `/Player/${player.playerName}`,
+                    target: "_blank"
+                  }}
+                >
+                  <span className="player-info-style">Player:</span> {player.playerName}&nbsp;
+                  <span style={{color: "#5f5f7b", fontSize: "14px", fontWeight: "400"}}> 
+                    Click Me!
+                  </span>
+                </Link> */}
               </div>
               <div className="player-kills-info" style={{minWidth: "200px"}}>
                 <div className="KDA">
@@ -376,7 +415,7 @@ class PlayerIcon extends React.Component {
           <div className="god-icon">
             <div style={{height: "32px", width: "32px"}}>
               <img src={`https://webcdn.hirezstudios.com/smite/god-icons/${this.props.god.replaceAll(" ", "-").toLowerCase()}.jpg`} alt={this.props.god} 
-              style={{ height: "32px", width: "32px", transformOrigin: "0px 0px 0px" }}/>
+              style={{ height: "32px", width: "32px", transformOrigin: "0px 0px 0px", border: "2px solid black", borderRadius: "5px" }}/>
             </div>
           </div>
         </div>
@@ -387,25 +426,94 @@ class PlayerIcon extends React.Component {
   }
 }
 
+class CreateItemToolTip extends React.Component {
+  render() {
+    return (
+      <>
+      <div
+        style={{
+          maxHeight: "350px",
+          maxWidth: "750px",
+          color: "#E6E6FA",
+          alignItems: "left",
+          fontSize: "14px",
+        }}
+      >
+        <h5 style={{ width: "100%", fontSize: "1rem", color: "#1E90FF" }}>
+          {this.props.item.DeviceName}
+        </h5>
+        <div>
+          <p>{this.props.item.Description}</p>
+        </div>
+        <div className="item-stats">
+          <div style={{marginLeft:"0px"}}>
+            {this.props.item.ItemDescription.Menuitems.map(
+              (stat) => {
+                return (
+                  <p style={{padding: "0px", margin: "0px"}}>
+                    {stat.Description}: {stat.Value}
+                  </p>
+                );
+              }
+            )}
+          </div>
+          <br></br>
+          <div className="item-passive">
+            <p>{this.props.item.ItemDescription.SecondaryDescription}</p>
+          </div>
+        </div>
+        <p style={{ color: "#D4AF37" }}>
+          <b>Price:</b>{" "}
+          {this.props.item.absolutePrice}(
+          {this.props.item.relativePrice})
+          <img
+            style={{ maxHeight: "20px", maxWidth: "20px", paddingLeft: "3px" }}
+            src="https://i.imgur.com/XofaIQ0.png"
+            alt="gold-img"
+          />
+        </p>
+      </div>
+    </>
+    );
+  }
+}
+
+
+
 class PlayerBuildDisplay extends React.Component {
   render () {
     return(
       <div className={`build-container ${this.props.buildType}`}>
         {this.props.build.map((slot, index) => {
-          if (slot.item) {
-          return (
-            <>
-            <div className="item-image" style={{padding: "5px"}}>
-              <div className="item-image-div">
-                <img
-                  src={`https://webcdn.hirezstudios.com/smite/item-icons/${slot.item.replaceAll(" ","-").replaceAll("'", "").toLowerCase()}.jpg`}
-                  alt={slot.item}
-                />
-              </div>
-            </div>
-            </>
-          )
-          }
+          if (slot.DeviceName) {
+            return(
+              <HtmlTooltip
+                key={index}
+                title={
+                  <React.Fragment>
+                    <CreateItemToolTip
+                      item={slot}
+                    />
+                  </React.Fragment>
+                }
+                placement="top"
+                arrow
+                style={{
+                  paddingRight: "10px"
+                }}
+                >
+                <div className="item-image">
+                  <div className="item-image-div">
+                    <img
+                      src={slot.itemIcon_URL}
+                      alt={slot.DeviceName}
+                      style= {{border: "2px solid black", borderRadius: "5px"}}
+                    />
+                  </div>
+                </div>
+                </HtmlTooltip>
+            )
+            }
         })}
       </div>
     )
@@ -507,7 +615,8 @@ const getImageUrl = (rank) => {
 };
 
 function Match() {
-  const [match, setMatch] = useState("");
+  const startMatchId = window.location.href.split("/")[5];
+  const [match, setMatch] = useState(startMatchId);
   const [matchId, setmatchId] = useState("");
   const [matchLength, setMatchLength] = useState("");
   const [bansWinner, setBansWinner] = useState([]);
@@ -518,7 +627,7 @@ function Match() {
   const [date, setMatchDate] = useState("");
 
   useEffect(() => {
-    fetch("/getmatch/".concat(match)).then((res) =>
+    fetch("/api/getmatch/".concat(match)).then((res) =>
       res.json().then((data) => {
         setBansWinner([]);
         setBansLoser([]);
@@ -569,7 +678,14 @@ function Match() {
                   god: data[key]["godName"],
                   gpm: data[key]["Gold_Per_Minute"],
                   godStats: {...data[key]["godStats"]},
-                  godBuild: {...data[key]["godBuild"]},
+                  godBuild: [
+                    data[key]["godBuild"]["slot1"],
+                    data[key]["godBuild"]["slot2"],
+                    data[key]["godBuild"]["slot3"],
+                    data[key]["godBuild"]["slot4"],
+                    data[key]["godBuild"]["slot5"],
+                    data[key]["godBuild"]["slot6"],
+                ],
                   level: data[key]["Final_Match_Level"],
                   towerDamage: data[key]["Structure_Damage"],
                   towerKills: data[key]["Towers_Destroyed"],
@@ -596,30 +712,32 @@ function Match() {
   }, [match]);
 
   return (
-    <div className="container content-container">
-      <NameForm setMatch={setMatch} />
-      <div className="filler">
-        <h4>
-          Don't have a match? try 1191054312
-        </h4>
-        {/* <br></br> */}
-        <h5>
-          Remember all matches must by Ranked PC Conquest from 8/24/2021 or later (will expand the match types we support soon!)
-        </h5>
-      </div>
-      <div
-        className="match-container"
-      >
-        <BaseMatchSummary
-          matchId={matchId}
-          length={matchLength}
-          bansWinner={bansWinner}
-          bansLoser={bansLoser}
-          mmrWinner={mmrWinner}
-          mmrLoser={mmrLoser}
-          date={date}
-        />
-        <PlayerMatchSummary players={players}/>
+    <div 
+      className="container content-container"
+      style={{maxWidth: "fit-content"}}
+    >
+      <NameForm setMatch={setMatch}/>
+      <div className="content-section" style={{marginTop: "36px"}}>
+        <div className="content-section_header">
+          Match Summary&nbsp;
+          <span style={{color: "#5f5f7b", fontSize: "14px", fontWeight: "400"}}> 
+            Click on players to see thier performance
+          </span>
+        </div>
+        <div
+          className="match-container"
+        >
+          <BaseMatchSummary
+            matchId={matchId}
+            length={matchLength}
+            bansWinner={bansWinner}
+            bansLoser={bansLoser}
+            mmrWinner={mmrWinner}
+            mmrLoser={mmrLoser}
+            date={date}
+          />
+          <PlayerMatchSummary players={players}/>
+        </div>
       </div>
     </div>
   );

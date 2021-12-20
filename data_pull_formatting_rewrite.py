@@ -69,9 +69,11 @@ class GodData:
         mycol =  mydb[self.name]
         set = []
         for match in self.matches:
+            build = {}
             player_ids = []
             for key in match:
-                if "player" in key and match[key]["godName"] == self.name:
+                if "player" in key and match[key]["godName"] == self.name and match[key]["PlayerId"] not in player_ids:
+                    player_ids.append(match[key]["PlayerId"])
                     role_played = match[key]["Role"]
                     rank = normalize_rank(match[key]["Conquest_Tier"])
                     win_status = match[key]["Win_Status"]
