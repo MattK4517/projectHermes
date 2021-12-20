@@ -60,6 +60,7 @@ def get_god_data_role(god, role, rank, patch, mode, matchup="None"):
         # pb_rate = anlz.get_pb_rate(client, newgod, rank, role, patch)
         image = {"url": anlz.get_url(newgod)}
         data_dict = {**build, **image}
+        print(data_dict)
         return data_dict
         
 @app.route('/api/<god>/matchups/<role>/<rank>/<patch>/<mode>')
