@@ -1,26 +1,32 @@
 import { useState, useEffect } from "react";
+import winRateColor from "./mainGodPage/WinRateColor";
 
 const compare = (a, b) => {
   return a.winRate - b.winRate
 }
 
-const useFetch = (pagegod, role, rank, patch) => {
+const useFetch = (pagegod, role, rank, patch, matchup, mode) => {
+  console.log(pagegod)
   const [games, setgames] = useState(0);
-  const [banrate, setbanrate] = useState(0);
-  const [pickrate, setpickrate] = useState(0);
-  const [winrate, setwinrate] = useState(0);
+  // const [banrate, setbanrate] = useState(0);
+  // const [pickrate, setpickrate] = useState(0);
+  // const [winrate, setwinrate] = useState(0);
   const [badmatchups, setbadmatchups] = useState([]);
   const [goodmatchups, setgoodmatchups] = useState([]);
   const [items, setitems] = useState([]);
-  const [itemdata, setitemdata] = useState([]);
+  const [colorStyle, setColorStyle] = useState("white");
   useEffect(() => {
-    let mainFetchStatement = "/".concat(pagegod, "/", role, "/", rank, "/", patch);
+    let mainFetchStatement = "/api/".concat(pagegod, "/", role, "/", rank, "/", patch, "/", mode);
+    if (matchup !== "None"){
+      mainFetchStatement = mainFetchStatement.concat("/", matchup)
+    }
     fetch(mainFetchStatement).then((res) =>
       res.json().then((data) => {
         setgames(data.games);
-        setbanrate(((data.godBans / data.totalMatches) * 100).toFixed(2));
-        setpickrate(((data.games / data.totalMatches) * 100).toFixed(2));
-        setwinrate(data.winRate);
+        // setbanrate(((data.godBans / data.totalMatches) * 100).toFixed(2));
+        // setpickrate(((data.games / data.totalMatches) * 100).toFixed(2));
+        // setwinrate(data.winRate);
+        setColorStyle(winRateColor(data.winRate))
         let displayItems = [];
         Object.keys(data).forEach((key) => {
           if (key.startsWith("slot")) {
@@ -66,10 +72,10 @@ const useFetch = (pagegod, role, rank, patch) => {
       })
     );
 
-  }, [role, rank, patch]);
+  }, [role, rank, patch, matchup, mode]);
   // else if (role && rank){
   //   matchupsFetchStatement = "/".concat(pagegod, "/matchups/", role, "/", rank)
-  let matchupsFetchStatement = "/".concat(pagegod, "/matchups/", role, "/", rank, "/", patch)
+  let matchupsFetchStatement = "/api/".concat(pagegod, "/matchups/", role, "/", rank, "/", patch, "/", mode)
   useEffect(() => {
     fetch(matchupsFetchStatement).then((res) =>
       res.json().then((data) => {
@@ -104,10 +110,10 @@ const useFetch = (pagegod, role, rank, patch) => {
         });
       })
     );
-  }, [role, rank, patch]);
+  }, [role, rank, patch, mode]);
 
-
-  return { games, banrate, pickrate, winrate, badmatchups, goodmatchups, items };
+  return { games, badmatchups, goodmatchups, items, colorStyle };
+  // return { games, banrate, pickrate, winrate, badmatchups, goodmatchups, items, colorStyle };
 };
 
 export default useFetch;

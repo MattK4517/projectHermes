@@ -6,119 +6,19 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { withStyles, makeStyles } from "@material-ui/core/styles";
+import { FilterForm } from "../Filters/FilterForm";
+import winRateColor from '../mainGodPage/WinRateColor';
+import Tooltip from "@material-ui/core/Tooltip";
 
-
-const getImageUrl = (rank) => {
-  let url = "https://i.imgur.com/LVbUJes.png";
-  if (rank == "Bronze") {
-    url = "https://i.imgur.com/pNAGUeR.png";
-  } else if (rank == "Silver") {
-    url = "https://i.imgur.com/Cm5uf15.png";
-  } else if (rank == "Gold") {
-    url = "https://i.imgur.com/L3BmF9F.png";
-  } else if (rank == "Platinum") {
-    url = "https://i.imgur.com/6M3Ezca.png";
-  } else if (rank == "Diamond") {
-    url = "https://i.imgur.com/dtXd0Kv.png";
-  } else if (rank == "Masters") {
-    url = "https://i.imgur.com/2SdBQ4o.png";
-  } else if (rank == "Grandmaster") {
-    url = "https://i.imgur.com/uh3i4hc.png";
-  } else if (rank == "Solo") {
-    url = "https://i.imgur.com/WLU0Cel.png"
-  } else if (rank == "Jungle") {
-    url = "https://i.imgur.com/CyXnzEO.png"
-  } else if (rank == "Mid") {
-    url = "https://i.imgur.com/0oQkAAZ.png"
-  } else if (rank == "Support") {
-    url = "https://i.imgur.com/l7CD2QM.png"
-  } else if (rank == "Carry") {
-    url = "https://i.imgur.com/RlRTbrA.png"
-  } else if (rank == "All Roles") {
-    url = "https://i.imgur.com/ajQP9zO.png"
-  }
-  return url
-}
-
-class FilterForm extends React.Component {
-constructor(props) {
-  super(props);
-  this.state = {value: this.props.role};
-  this.handleChange = this.handleChange.bind(this);
-  this.handleSubmit = this.handleSubmit.bind(this);
-}
-
-handleChange(event) {
-  this.setState({value: event.target.value});
-}
-
-handleSubmit(event) {
-  this.props.roleState(this.props.role)
-  event.preventDefault();
-}
-
-render() {
-  return (
-      <form onSubmit={this.handleSubmit} className="role-filter">
-      <input type="image" src={getImageUrl(this.props.role)}
-      style={{maxWidth: "36px", maxHeight: "36px"}} name="submit" value={this.props.role}></input>
-      </form>
-  )
-}
-}
-
-class DropDownFilter extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { value: this.props.role };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleChange(event) {
-    this.setState({ value: event.target.value });
-  }
-
-  handleSubmit(event) {
-    this.props.changePatch(this.props.patch);
-    event.preventDefault();
-  }
-
-  render() {
-      return (
-        <div style={{margin: "auto", paddingRight: "1rem"}}>
-          <form onSubmit={this.handleSubmit}>
-            <input
-              type="image"
-              style={{ maxWidth: "36px", maxHeight: "36px" }}
-              name="submit"
-              value={this.props.patch}
-            ></input>
-          </form>
-        </div>
-      );
-    }
-}
-
-const StyledMenu = withStyles({
-  paper: {
-    border: '1px solid #d3d4d5',
+const HtmlTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: "#06061f",
+    color: "rgba(0, 0, 0, 0.87)",
+    maxWidth: 220,
+    border: ".5px solid gray",
+    opacity: 100,
   },
-})((props) => (
-  <Menu
-    elevation={0}
-    getContentAnchorEl={null}
-    anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'center',
-    }}
-    transformOrigin={{
-      vertical: 'top',
-      horizontal: 'center',
-    }}
-    {...props}
-  />
-));
+}))(Tooltip);
 
 const Table = ({ columns, data }) => {
   const {
@@ -234,13 +134,13 @@ const Table = ({ columns, data }) => {
                             } else if (key.includes("tier")) {
                               return (
                                 <div className="rt-td tier" style={{ minWidth: "50px", maxWidth: "90px", flex: "1 1 100%" }} {...cell.getCellProps()}>
-                                  <span><b>A</b></span>
+                                  <span><b>{row.original.tier}</b></span>
                                 </div>
                               )
                             } else if (key.includes("winRate")) {
                               return(
                               <div className="rt-td win-rate" style={{ minWidth: "70px", maxWidth: "90px", flex: "1 1 100%" }} {...cell.getCellProps()}>
-                                <span><b>{row.original.winRate}%</b></span>
+                                <span><b style={{color: winRateColor(row.original.winRate)}}>{row.original.winRate}%</b></span>
                               </div>
                               )
                             } else if (key.includes("pickRate")) {
@@ -258,7 +158,7 @@ const Table = ({ columns, data }) => {
                               } else if (key.includes("counterMatchups")) {
                                 return (
                                   <div className="rt-td against" style={{ minWidth: "250px", maxWidth: "270px", flex: "1 1 100%" }} {...cell.getCellProps()}>
-                                      <CounterMatchupDisplay matchups={row.original.counterMatchups}/>
+                                      <CounterMatchupDisplay god={row.original.god} matchups={row.original.counterMatchups}/>
                                   </div>
                                 )
                                 } else if (key.includes("games")) {
@@ -428,6 +328,10 @@ const GetColumnType = (tableType) => {
   return columns
 }
 
+const compare = (a, b) => {
+  return a.winRate - b.winRate
+}
+
 function TierList(tableType) {
   // const [patch, setPatch] = useState("8.9");
   const [totalData, setTotalData] = useState([]);
@@ -439,11 +343,12 @@ function TierList(tableType) {
 
   useEffect(() => {
     //"/gettierlist/".concat(dispRank, "/", role, "/", tableType.tableType, "/", patch
-    fetch("/gettierlist/".concat(dispRank, "/", role, "/", tableType.tableType)).then((res) =>
+    fetch("/api/gettierlist/".concat(dispRank, "/", role, "/", tableType.tableType)).then((res) =>
       res.json().then((data) => {
         setTotalData([]);
         Object.keys(data).forEach((key, index) => {
               Object.keys(data[key]).forEach((godData) => {
+                let matchups = Object.values(data[key][godData].counterMatchups).sort(compare)
                 setTotalData((totalData) => [
                   ...totalData,
                   {
@@ -454,11 +359,10 @@ function TierList(tableType) {
                     pickRate: data[key][godData].pickRate,
                     banRate: data[key][godData].banRate,
                     wins: data[key][godData].wins,
-                    tier: "A",
-                    counterMatchups: Object.keys(data[key][godData].counterMatchups).map((matchup) => {
+                    tier: data[key][godData].tier,
+                    counterMatchups: matchups.map((matchup, index) => {
                       return(
-                        [data[key][godData]["counterMatchups"][matchup].url,
-                        data[key][godData]["counterMatchups"][matchup].enemy]
+                        [matchup.url, matchup.enemy, matchup.winRate, matchup.timesPlayed]
                       )
                     })
                   },
@@ -490,14 +394,20 @@ function TierList(tableType) {
       {
         Header: 'Win Rate',
         accessor: 'winRate',
+        sortType: compareNumericString
+        
       },
       {
         Header: 'Pick Rate',
         accessor: 'pickRate',
+        sortType: compareNumericString
+        
       },
       {
         Header: 'Ban Rate',
         accessor: 'banRate',
+        sortType: compareNumericString
+        
       },
       {
         Header: "Counter Matchups",
@@ -513,43 +423,10 @@ function TierList(tableType) {
   )
   return (
     <>
-      <div className="role-filter-container">
         <div className="filter-form">
-        {roles.map((role) =>{
-            return (
-                <FilterForm role={role}  roleState={setRole}/>
-            )
-            })}
-        {ranks.map((rank) =>{
-            return (
-            <FilterForm role={rank.replaceAll("_", " ")} roleState={setRank}/>
-            )
-        })}
-        {/* <PopupState variant="popover" popupId="demo-popup-menu">
-            {(popupState) => (
-              <React.Fragment>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  {...bindTrigger(popupState)}
-                >
-                  {patch}
-                </Button>
-                <StyledMenu {...bindMenu(popupState)}>
-                  <div>
-                    <MenuItem onClick={popupState.close}>
-                      <DropDownFilter changePatch={setPatch} patch={"8.9"} />
-                    </MenuItem>
-                    <MenuItem onClick={popupState.close}>
-                      <DropDownFilter changePatch={setPatch} patch={"8.8"} />
-                    </MenuItem>
-                  </div>
-                </StyledMenu>
-              </React.Fragment>
-            )}
-          </PopupState> */}
+          <FilterForm filter={role} filters={roles} role={role}  setFilter={setRole}/>
+          <FilterForm filter={dispRank.replaceAll("_", " ")} filters={ranks} role={dispRank.replaceAll("_", " ")} setFilter={setRank}/>
         </div>
-      </div>
     <Table columns={columns} data={totalData}/>
   </>
   )
@@ -560,18 +437,41 @@ class CounterMatchupDisplay extends React.Component {
     return(
       <div className="against-container">
         {this.props.matchups.map((matchup, index) => {
-          if (index < 10) {
+          // console.log(matchup);
+          if (index < 9) {
             let routegod = matchup[1].replaceAll(" ", "_")
+            let styling;
+            if (matchup[2] < 50){
+              styling = {height: "24px", width: "24px"}
+            } else {
+              styling = {height: "24px", width: "24px", opacity: ".4", filter: "grayscale(100%)"}
+            }
             return (
+              <HtmlTooltip
+              title={
+                <React.Fragment>
+                  <CreateMatchupToolTip
+                    god={this.props.god}
+                    winrate={matchup[2]}
+                    enemy={matchup[1]}
+                    enemyURL={matchup[0]}
+                    games={matchup[3]}
+                  />
+                </React.Fragment>
+              }
+              placement="top"
+              arrow
+            >
             <div className="against" key={index}>
               <Link to={"/".concat(routegod)}>
                 <div className="god-face" style={{maxWidth: "100px"}}>
                   <div>
-                    <img src={matchup[0]} alt={matchup[1]} style={{height: "24px", width: "24px"}}></img>
+                    <img src={matchup[0]} alt={matchup[1]} style={styling}></img>
                   </div>
                 </div>
               </Link>
             </div>
+            </HtmlTooltip>
             )
           }
         })}
@@ -580,5 +480,44 @@ class CounterMatchupDisplay extends React.Component {
   }
 }
 
+function compareNumericString(rowA, rowB, id, desc) {
+  let a = Number.parseFloat(rowA.values[id]);
+  let b = Number.parseFloat(rowB.values[id]);
+  if (Number.isNaN(a)) {  // Blanks and non-numeric strings to bottom
+      a = desc ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
+  }
+  if (Number.isNaN(b)) {
+      b = desc ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
+  }
+  if (a > b) return 1; 
+  if (a < b) return -1;
+  return 0;
+}
+
+
+class CreateMatchupToolTip extends React.Component {
+  render() {
+    return (
+      <div className="matchup-tooltip-container">
+        <div className="matchup-tooltip">
+          <div className="god-icon">
+            <div style={{height: "30px", width: "30px"}}>
+              <img src={`https://webcdn.hirezstudios.com/smite/god-icons/${this.props.god.replaceAll(" ", "-").replaceAll("'","").toLowerCase()}.jpg`} alt={this.props.god} 
+                style={{ height: "48px", width: "48px", transform: "scale(0.625)", transformOrigin: "0px 0px 0px" }}/>
+            </div>
+          </div>
+            <span style={{color: "white",  paddingTop: ".3rem"}}>wins&nbsp;<b style={{color: winRateColor(this.props.winrate)}}>{this.props.winrate}%</b>&nbsp;vs&nbsp;</span>
+          <div className="god-icon">
+            <div style={{height: "30px", width: "30px"}}>
+              <img src={this.props.enemyURL} alt={this.props.enemy} 
+                style={{ height: "48px", width: "48px", transform: "scale(0.625)", transformOrigin: "0px 0px 0px" }}/>
+            </div>
+          </div>
+        </div>
+          <p>{this.props.games} games</p>
+        </div>
+    );
+  }
+}
 
 export default TierList;

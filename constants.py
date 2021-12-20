@@ -1,5 +1,5 @@
 
-patch = "8.11"
+patch = "8.12"
 godsDict = {
     "Achilles": 0,
     "Agni": 0,
@@ -135,14 +135,17 @@ ranks = ["Bronze", "Silver", "Gold", "Platinum", "Diamond", "Masters", "Grandmas
 # ranks = ["Bronze", "Silver", "Gold", "Platinum", "Diamond", "Masters", "Grandmaster", "All Ranks"]
 slots = ["slot1", "slot2", "slot3", "slot4", "slot5", "slot6"]
 
+single_combat_stats = ["kills", "deaths", "assists", "damage_player", "damage_taken", "damage_mitigated", "healing", "healing_self"]
+single_objective_stats = ["gold", "damage_bot", "kills_bot", "camps_cleared", "tower_kills", "phoenix_kills", "tower_damage", "objective_assists", "wards_placed"]
+
 Tier_Three_items = [
 "Ninja Tabi", "Shoes of Focus", "Relic Dagger", "Shield of Regrowth", "Lotus Crown", "Heartward Amulet",
 "Sovereignty", "Jade Emperor\'s Crown", "Atalanta\'s Bow", "Shogun\'s Kusari", "Ancile", "Breastplate of Valor", "Divine Ruin",
-"Poisoned Star", "The Sledge", "Mystical Mail", " Charon\'s Coin", "Runeforged Hammer", "Ichaival", "Dominance", "Spirit Robe", 
+"Poisoned Star", "The Sledge", "Mystical Mail", "Charon\'s Coin", "Runeforged Hammer", "Ichaival", "Dominance", "Spirit Robe",
 "Obsidian Shard", "Berserker\'s Shield", "Rod Asclepius", "Void Shield", "Chronos\' Pendant", "Telkhines Ring", "Typhon\'s Fang",
 "Deathbringer", "Reinforced Greaves", "Talaria Boots", "Winged Blade", "Bristlebush Acorn", "Thickbark Acorn", "Odysseus\' Bow",
 "Spectral Armor", "Magi\'s Cloak", "Blackthorn Hammer", "Silverbranch Bow", "Pestilence", "Bulwark of Hope", "Frostbound Hammer",
-"Polynomicon", "Brawler\'s Beat Stick", "Shifter\'s Shield", "Gladiator\'s Shield", "Shadowsteel Shuriken", "Bancroft\'s Talon", 
+"Polynomicon", "Brawler\'s Beat Stick", "Shifter\'s Shield", "Gladiator\'s Shield", "Shadowsteel Shuriken", "Bancroft\'s Talon",
 "Hastened Katana", "Warlock\'s Staff", "Spear of the Magus", "Book of the Dead", "Spear of Desolation", "Malice", "Gem of Isolation",
 "Bloodforge", "Doom Orb", "Rod of Tahuti", "Reinforced Shoes", "Traveler\'s Shoes", "Emperor\'s Armor", "Contagion", "Thistlethorn Acorn",
 "Oni Hunter\'s Garb", "Celestial Legion Helm", "Runic Shield", "Genji\'s Guard", "The Executioner", "Stone of Gaia", "Demonic Grip",
@@ -151,7 +154,8 @@ Tier_Three_items = [
 "Shoes of the Magi", "Warrior Tabi", "Golden Blade", "Evergreen Acorn", "Witchblade", "Soul Eater", "Hydra\'s Lament", "Talisman of Energy",
 "Hide of the Nemean Lion", "Toxic Blade", "Void Stone", "Devourer\'s Gauntlet", "Midgardian Mail", "Soul Gem", "Jotunn\'s Wrath", "Stone of Fal",
 "Pridwen", "Hide of the Urchin", "Caduceus Shield", "Rangda\'s Mask", "Asi", "Arondight", "Ring of Hecate", "Tyrannical Plate Helm", "Soul Reaver",
-"Qin\'s Sais", "Staff of Myrddin", "Mantle of Discord"
+"Qin\'s Sais", "Staff of Myrddin", "Mantle of Discord", "Evolved Gauntlet of Thebes", "Evolved Transcendence", "Evolved Devourer\'s Gauntlet",
+"Evolved Book of Thoth", "Evolved Charon\'s Coin", "Evolved Hide of the Urchin", "Evolved Rage", "Evolved Soul Eater", "Evolved Warlock\'s Staff"
 ]
 
 Starter_items = [

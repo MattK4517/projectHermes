@@ -173,40 +173,20 @@ function Table({ columns, data }) {
     )
   }
 
-function Items(pagegod) {
-  console.log(pagegod)
-  var [url, seturl] = useState(0);
-  const [displaygod, setgod] = useState(0);
-  const [abilities, setabilities] = useState([]);
-  const [patch, setPatch] = useState("8.11")
+function Items(props) {
+  console.log(props)
+  const [patch, setPatch] = useState("8.12")
   const [slotOneItems, setSlotOneItems] = useState([]);
   const [slotTwoItems, setSlotTwoItems] = useState([]);
   const [slotThreeItems, setSlotThreeItems] = useState([]);
   const [slotFourItems, setSlotFourItems] = useState([]);
   const [slotFiveItems, setSlotFiveItems] = useState([]);
   const [slotSixItems, setSlotSixItems] = useState([]);
-  const [roles, setroles] = useState([
-    "Solo",
-    "Jungle",
-    "Mid",
-    "Support",
-    "Carry",
-  ]);
-  const [ranks, setranks] = useState([
-    "Bronze",
-    "Silver",
-    "Gold",
-    "Platinum",
-    "Diamond",
-    "Masters",
-    "Grandmaster",
-    "All_Ranks",
-  ]);
-  const [dispRole, setrole] = useState(pagegod.role);
+  const [dispRole, setrole] = useState(props.role);
   const [dispRank, setrank] = useState("All Ranks");
 
   useEffect(()=> {
-      fetch("/".concat(pagegod.pagegod, "/items/", dispRole, "/", dispRank, "/", patch)).then((res) =>
+      fetch("/api/".concat(props.pagegod, "/items/", props.role, "/", props.rank, "/", props.patch, "/", props.mode)).then((res) =>
       res.json().then((data) => {
         setSlotOneItems([])
         setSlotTwoItems([])
@@ -277,7 +257,7 @@ function Items(pagegod) {
 
           })
       }))
-  }, [dispRole, dispRank, patch])
+  }, [props.role, props.rank, props.patch, props.mode])
 
   const columns = React.useMemo(
     () => [

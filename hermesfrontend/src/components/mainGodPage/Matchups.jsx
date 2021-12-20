@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useTable, useSortBy, usePagination } from "react-table";
 import { Link } from "react-router-dom";
+import winRateColor from "./WinRateColor";
 
 
 const Table = ({ columns, data }) => {
@@ -28,8 +29,8 @@ const Table = ({ columns, data }) => {
           pageIndex: 0,
           sortBy: [
               {
-                  id: 'kills',
-                  desc: true,
+                  id: 'wr',
+                  desc: false,
                   sortType: 'basic',
               }
           ],
@@ -123,12 +124,20 @@ const Table = ({ columns, data }) => {
                                     }}
                                     {...cell.getCellProps()}
                                   >
-                                    <span>{(i += 1)}</span>
+                                    
+                                    <span className="center-aligned">{(i += 1)}</span>
                                   </div>
                                     
                                   <div
                                     className="rt-td god"
-                                    style={{ minWidth: "180px", maxWidth: "220px", flex: "1 1 100%" }}
+                                    style={{ 
+                                      minWidth: "180px", 
+                                      maxWidth: "180px", 
+                                      flex: "1 1 100%",
+                                      display: 'flex',
+                                      alignSelf: "center",
+                                      marginLeft: "10px",
+                                     }}
                                     {...cell.getCellProps()}
                                   >
                                     <Link
@@ -165,13 +174,33 @@ const Table = ({ columns, data }) => {
                                   <div
                                     className="rt-td"
                                     style={{
-                                      minWidth: "65px",
-                                      maxWidth: "70px",
+                                      minWidth: "100px",
+                                      maxWidth: "175px",
                                       flex: "1 1 100%",
+                                      display: 'flex', 
+                                      flexDirection: 'column', 
+                                      justifyContent: 'center'
                                     }}
                                     {...cell.getCellProps()}
                                   >
                                     <span>
+                                      <b style={{color: winRateColor(row.original.wr)}}>{row.original.wr}%</b>
+                                    </span>
+                                  </div>
+
+                                  <div
+                                    className="rt-td"
+                                    style={{
+                                      minWidth: "100px",
+                                      maxWidth: "175px",
+                                      flex: "1 1 100%",
+                                      display: 'flex', 
+                                      flexDirection: 'column', 
+                                      justifyContent: 'center'
+                                    }}
+                                    {...cell.getCellProps()}
+                                  >
+                                    <span className="center-aligned">
                                       <b>{row.original.kills}</b>
                                     </span>
                                   </div>
@@ -179,13 +208,16 @@ const Table = ({ columns, data }) => {
                                   <div
                                     className="rt-td"
                                     style={{
-                                      minWidth: "65px",
-                                      maxWidth: "70px",
+                                      minWidth: "100px",
+                                      maxWidth: "150px",
                                       flex: "1 1 100%",
+                                      display: 'flex', 
+                                      flexDirection: 'column', 
+                                      justifyContent: 'center'
                                     }}
                                     {...cell.getCellProps()}
                                   >
-                                    <span>
+                                    <span className="center-aligned">
                                       <b>{row.original.dmg}</b>
                                     </span>
                                   </div>
@@ -193,13 +225,16 @@ const Table = ({ columns, data }) => {
                                   <div
                                     className="rt-td"
                                     style={{
-                                      minWidth: "65px",
-                                      maxWidth: "70px",
+                                      minWidth: "100px",
+                                      maxWidth: "150px",
                                       flex: "1 1 100%",
+                                      display: 'flex', 
+                                      flexDirection: 'column', 
+                                      justifyContent: 'center'
                                     }}
                                     {...cell.getCellProps()}
                                   >
-                                    <span>
+                                    <span className="center-aligned">
                                       <b>{row.original.gold}</b>
                                     </span>
                                   </div>
@@ -207,14 +242,17 @@ const Table = ({ columns, data }) => {
                                   <div
                                     className="rt-td"
                                     style={{
-                                      minWidth: "65px",
-                                      maxWidth: "70px",
+                                      minWidth: "100px",
+                                      maxWidth: "150px",
                                       flex: "1 1 100%",
+                                      display: 'flex', 
+                                      flexDirection: 'column', 
+                                      justifyContent: 'center'
                                     }}
                                     {...cell.getCellProps()}
                                   >
-                                    <span>
-                                      <b>{row.original.minion}</b>
+                                    <span className="center-aligned">
+                                      <b>{row.original.games}</b>
                                     </span>
                                   </div>
                                     </>
@@ -291,13 +329,10 @@ const Table = ({ columns, data }) => {
 
     
 export default function Matchups(props) {
-    const [dispRank, setRank] = useState(props.rank);
-    const [dispRole, setRole] = useState(props.role);
-    const [dispPatch, setPatch] = useState(props.patch);
-    const god = props.pagegod;
+  console.log(props)
     const [totalData, setTotalData] = useState([]);
     useEffect(() => {
-        fetch("/".concat(god, "/m/", dispRole, "/", dispRank, "/", dispPatch)).then((res) =>
+        fetch("/api/".concat(props.pagegod, "/m/", props.role, "/", props.rank, "/", props.patch, "/", props.mode)).then((res) =>
           res.json().then((data) => {
               setTotalData([]);
               Object.keys(data).forEach(key => {
@@ -306,47 +341,83 @@ export default function Matchups(props) {
                       {
                       dmg: data[key]["dmg"].toFixed(2),
                       kills: data[key]["kills"].toFixed(2),
-                      gold: data[key]["gold"].toFixed(2),
-                      minion: data[key]["minion"].toFixed(2),
                       god: data[key]["god"],
+                      gold: data[key]["gold"].toFixed(),
+                      wr: data[key]["wr"],
+                      games: data[key]["games"],
                       }
                   ])
               })
           })
         );
-      }, [dispRole, dispRank, dispPatch]);
+      }, [props.role, props.rank, props.patch, props.mode]);
     const columns = React.useMemo(
         () => [
           {
             Header: "Rank",
             accessor: "rank",
+            
           },
           {
             Header: "God",
             accessor: "god",
           },
           {
-            Header: "Kill Diff",
-            accessor: "kills",
-          },
-          {
-            Header: "Damage Diff",
-            accessor: "dmg",
-          },
-          {
-            Header: "Gold Diff",
-            accessor: "gold",
-          },
-          {
-            Header: "Minion Kill Diff",
-            accessor: "minion",
-          },
+            Header: "Win Rate",
+            accessor: "wr",
+            sortType: compareNumericString,
 
+          },
+          {
+            Header: "Avg. Kill Diff",
+            accessor: "kills",
+            sortType: compareNumericString,
+
+          },
+          {
+            Header: "Avg. Damage Diff",
+            accessor: "dmg",
+            sortType: compareNumericString,
+
+          },
+          {
+            Header: "Avg. Gold Diff",
+            accessor: "gold",
+            sortType: compareNumericString,
+          },
+          {
+            Header: "Games",
+            accessor: "games",
+            sortType: compareNumericString,
+          },          
         ],
         []
       );
     return(
-        <Table columns={columns} data={totalData} />
+      <div id="content">
+        <div class="stats-tables-page">
+          <div id="stats-tables-container-ID" 
+            className="stats-tables-container content-side-padding" 
+            style={{paddingTop: "100px"}}
+            >
+          <Table columns={columns} data={totalData} />
+          </div>
+        </div>
+      </div>
     )
 
+}
+
+function compareNumericString(rowA, rowB, id, desc) {
+  let a = Number.parseFloat(rowA.values[id]);
+  let b = Number.parseFloat(rowB.values[id]);
+  if (Number.isNaN(a)) {  // Blanks and non-numeric strings to bottom
+      a = desc ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
+  }
+  if (Number.isNaN(b)) {
+      b = desc ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
+  }
+  if (a > b) return 1; 
+  if (a < b) return -1;
+  return 0;
 }
