@@ -17,11 +17,11 @@ def mergeDict(dict1, dict2):
    return dict3
 
 def get_items_by_class(client, class_name, role):
-    build = ["Mystical Mail", "Blackthorn Hammer", "Bulwark of Hope", "Pridwen"]
+    build = ["Divine Ruin", "Book of Thoth", "Evolved Book of Thoth"]
     items = {f"slot{i+1}": {} for i in range(6)}
     for char in class_name:
         print(char)
-        char_items = anlz.get_all_builds(client, char, role, "8.11")
+        char_items = anlz.get_all_builds(client, char, role, "8.12")
         for slot in char_items:
             if "slot" in slot:
                 for item in char_items[slot]:
@@ -40,7 +40,7 @@ def get_items_by_class(client, class_name, role):
                     wr = round(wins/games * 100, 2)
                     f.writelines(f"{slot},{item},{wins},{games},{wr}\n")
 
-get_items_by_class(client, Warriors, "Solo")
+get_items_by_class(client, Mages, "Mid")
 
 def get_combat_stats_by_class(client, class_name):
     mydb= client["single_combat_stats"]

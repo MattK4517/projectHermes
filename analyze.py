@@ -212,12 +212,12 @@ def sort_top_dict(top_dict, client):
 
 def get_all_builds(client, god, role, patch, rank="All Ranks"):
     top_dict = {slot: {} for slot in slots}
-    mydb = client["single_items_test"]
+    mydb = client["single_items"]
     mycol = mydb[god]
     if rank != "All Ranks":
-        myquery = { "role_played": role, "rank": rank, "patch": patch}
+        myquery = { "role_played": role, "rank": rank, "patch": patch, "mode": "RankedConq"}
     else:
-        myquery = { "role_played": role, "patch": patch}
+        myquery = { "role_played": role, "patch": patch, "mode": "RankedConq"}
 
     games = 0
     wins = 0
