@@ -167,3 +167,56 @@ Starter_items = [
 "Sentinel\'s Gift", "Sigil of the Old Guard", "Spartan Flag", "Sundering Axe", "Tainted Amulet", "Tainted Breastplate", "Tainted Steel",
 "The Alternate Timeline", "Vampiric Shroud", "War Banner", "War Flag", "Warding Sigil", "Warrior\'s Axe"
 ]
+
+
+num_hits_dict = {
+    "Achilles": {
+        "Shield of Achilles": 1,
+        "abilityDescription2": 0,
+        "Combat Dodge": 2,
+        "Fatal Strike": 1,
+        "abilityDescription5": 0,
+    },    
+    "Amaterasu": {
+        "abilityDescription1": 0,
+        "Heavenly Reflection Full Charge": 1,
+        "Glorious Charge": 1,
+        "Dazzling Offensive": 3,
+        "abilityDescription5": 0,
+    },
+    "Bellona": {
+        "Shield Bash": 1,
+        "Bludgeon": 1,
+        "Scourge": 1,
+        "Eagle's Rally": 1,
+        "4": 0,
+    }
+}
+
+scaling_dict = {
+    "Achilles": {
+        "Shield of Achilles": 0,
+        "abilityDescription2": 0,
+        "Combat Dodge": 0,
+        "Fatal Strike": 0,
+        "abilityDescription5": 0,
+    },    
+    "Amaterasu": {
+        "abilityDescription1": 0,
+        "Heavenly Reflection Full Charge": 0,
+        "Glorious Charge": 0,
+        "Dazzling Offensive": {
+            "hit1": 0,
+            "hit2": 20,
+            "hit3": 40
+        },
+        "abilityDescription5": 0,
+    },
+    "Bellona": {
+        "Shield Bash": 0,
+        "Bludgeon": 0,
+        "Scourge": 0,
+        "Eagle's Rally": 0,
+        "abilityDescription5": 0,
+    },
+}

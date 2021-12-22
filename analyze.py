@@ -115,13 +115,13 @@ def get_top_builds(client, god, role, patch, mode="Ranked", rank="All Ranks", da
     mydb = client["single_items"]
     mycol = mydb[god]
     if rank == "Platinum+":
-        myquery = { "role_played": role, "rank": {"$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch, "mode": f"{mode}Conq"}
+        myquery = { "role": role, "rank": {"$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch, "mode": f"{mode}Conq"}
     elif rank == "Diamond+":
-        myquery = { "role_played": role, "rank": {"$in":  ["Diamond", "Masters", "Grandmaster"]}, "patch": patch, "mode": f"{mode}Conq"}    
+        myquery = { "role": role, "rank": {"$in":  ["Diamond", "Masters", "Grandmaster"]}, "patch": patch, "mode": f"{mode}Conq"}    
     elif rank != "All Ranks":
-        myquery = { "role_played": role, "rank": rank, "patch": patch, "mode": f"{mode}Conq"}
+        myquery = { "role": role, "rank": rank, "patch": patch, "mode": f"{mode}Conq"}
     else:
-        myquery = { "role_played": role, "patch": patch, "mode": f"{mode}Conq"}
+        myquery = { "role": role, "patch": patch, "mode": f"{mode}Conq"}
 
     # print(myquery)
     games = 0
@@ -230,13 +230,13 @@ def get_all_builds(client, god, role, patch, mode="Ranked", rank="All Ranks"):
     mycol = mydb[god]
 
     if rank == "Platinum+":
-        myquery = { "role_played": role, "rank": {"$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch, "mode": f"{mode}Conq"}
+        myquery = { "role": role, "rank": {"$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch, "mode": f"{mode}Conq"}
     elif rank == "Diamond+":
-        myquery = { "role_played": role, "rank": {"$in":  ["Diamond", "Masters", "Grandmaster"]}, "patch": patch, "mode": f"{mode}Conq"}    
+        myquery = { "role": role, "rank": {"$in":  ["Diamond", "Masters", "Grandmaster"]}, "patch": patch, "mode": f"{mode}Conq"}    
     elif rank != "All Ranks":
-        myquery = { "role_played": role, "rank": rank, "patch": patch, "mode": f"{mode}Conq"}
+        myquery = { "role": role, "rank": rank, "patch": patch, "mode": f"{mode}Conq"}
     else:
-        myquery = { "role_played": role, "patch": patch, "mode": f"{mode}Conq"}
+        myquery = { "role": role, "patch": patch, "mode": f"{mode}Conq"}
 
     print(myquery)
     games = 0
