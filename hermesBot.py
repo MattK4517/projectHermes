@@ -158,6 +158,7 @@ def godAbbreviations(godName):
     return godName.title()
 
 def get_role(god):
+    print(god)
     if god.lower() in (assassin.lower() for assassin in Assassins):
         role = "Jungle"
     elif god.lower() in (guardian.lower() for guardian in Guardians):
@@ -211,7 +212,11 @@ if __name__ == "__main__":
                         god = " ".join(god)
                         actgod = godAbbreviations(god.title()).replace("-", " ")
 
-                data = anlz.get_top_builds(dbClient, actgod, role.capitalize(), patch)
+                if actgod == "Atlas":
+                    data = anlz.get_top_builds(dbClient, actgod, role.capitalize(), patch, "Casual")
+                else :
+                    data = anlz.get_top_builds(dbClient, actgod, role.capitalize(), patch)
+                    
                 ItemWR = []
                 iconURL = anlz.get_url(actgod)
                 if actgod.lower() in (assassin.lower() for assassin in Assassins):
