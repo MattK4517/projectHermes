@@ -12,11 +12,21 @@ class GodAbilities extends React.Component {
       return (
         <>
           {this.props.abilities.map((ability, index) => {
+            let text;
+            if (index === 4) {
+              text = "P"
+            } else {
+              if (index >= 4) {
+                text = index 
+              } else {
+                text = index + 1
+              }
+            }
             return (
               <>
                 <div className="god-ability-wlabel" key={index}>
                   <img src={ability.url} alt={ability.name} />
-                  <div className="ability-label bottom-center">{index}</div>
+                  <div className="ability-label bottom-center">{text}</div>
                 </div>
               </>
             );
