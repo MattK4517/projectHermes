@@ -39,26 +39,25 @@ def delete_match_docs(client, db, col, field, value):
     mycol.delete_many({field: value})
 
 
-def calc_total_matches(ranks, db, rank="All Ranks"):
-    if rank != "All Ranks":
-        ranks = [rank]
+def calc_total_matches(client, ranks):
     matchIds = []
     actTotalGames = 0
     for rank in ranks:
         if rank == "All Ranks":
-             mycol.update_one({"rank": rank, "patch": "8.1"}, {"$set": {"Total_Matches": len(matchIds)}})
+             mycol.update_one({"rank": rank, "patch": "8.12", "mode": "RankedConq"}, {"$set": {"Total_Matches": len(matchIds)}})
              break
-        mydb = client[db]
+        mydb = client["single_items"]
         total_games = 0
         for god in godsDict:
             mycol = mydb[god]
-            myquery = {"rank": rank, "patch": "8.12"}
+            myquery = {"rank": rank, "patch": "8.12", "mode": "RankedConq"}
             games = 0
             for x in mycol.find(myquery, {"_id": 0}):
                 # if x["matchId"] not in matchIds:
                     matchIds.append(x["matchId"])
                     games += 1
             total_games += games
+            print(f"{god} {games}, {total_games}")
         actTotalGames += total_games
         insert_games(rank, total_games)
 
@@ -66,7 +65,8 @@ def calc_total_matches(ranks, db, rank="All Ranks"):
 def insert_games(rank, games):
     mydb = client["Matches"]
     mycol = mydb[f"Total_Matches"]
-    mycol.update_one({"rank": rank, "patch": "8.12"}, {"$set": {"Total_Matches": games}})
+    mycol.update_one({"rank": rank, "patch": "8.12", "mode": "RankedConq"}, {"$set": {"Total_Matches": games}})
+    print(f"{rank} done")
 
 def add_new_urls(client, god):
     god_info_db = client["God_Data"]
@@ -186,12 +186,13 @@ def purge_date(client, dbs, date):
             delete_match_docs(client, db, god, "Entry_Datetime", date)
         
 if __name__ == "__main__":
-    count = 0
-    mydb = client["single_match_stats_test"]
-    for god in godsDict:
-        mycol = mydb[god]
-        count += mycol.count_documents({})
-    print(count)
+    calc_total_matches(client, ranks)
+    # count = 0
+    # mydb = client["single_match_stats_test"]
+    # for god in godsDict:
+    #     mycol = mydb[god]
+    #     count += mycol.count_documents({})
+    # print(count)
     # mycol = mydb["Atlas"]
     # for x in mycol.aggregate([
     #     {"$group": {"_id": "$matchId", "count": {"$sum": 1} }}
@@ -240,11 +241,11 @@ if __name__ == "__main__":
     # mycol = mydb["8.11 Matches"]
     # print(mycol.count_documents({"Entry_Datetime": "11/24/2021"}))
 
-if __name__ == "__main__":
-    # delete_match_docs(client, "Matches", "8.11 Matches", "Entry_Datetime", "12/10/2021")
-    mydb = client["CasualMatches"]
-    mycol = mydb["8.12 Matches"]
-    mycol.delete_many({"Entry_Datetime": "12/16/2021"})
+# if __name__ == "__main__":
+#     # delete_match_docs(client, "Matches", "8.11 Matches", "Entry_Datetime", "12/10/2021")
+#     mydb = client["CasualMatches"]
+#     mycol = mydb["8.12 Matches"]
+#     mycol.delete_many({"Entry_Datetime": "12/16/2021"})
     # print(mycol.count_documents({"Entry_Datetime": "12/10/2021"}))
     # mydb = client["single_items_test"]
     # mycol = mydb["Atlas"]
