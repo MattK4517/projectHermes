@@ -17,6 +17,11 @@ def special_case(ability):
         return 1
     return None
 
+def get_special_ability(ability):
+    if ability == "Raven Shout":
+        return True
+    return False
+
 def get_num_hits(god, ability):
     if special_case(ability):
         return special_case(ability)
@@ -81,8 +86,7 @@ def calc_combo_damage_raw(client, god, levels, power, build):
                 ability_names.append(x[ability]["Summary"])
             else:
                 for item in x[ability]["itemDescription"]["rankitems"]:
-                    if "damage:" in item["description"].lower() or "damage per" in item["description"].lower():
-                        print(ability_names[int(ability[-1])-1], item["value"])
+                    if "damage:" in item["description"].lower() or "damage per" in item["description"].lower() or get_special_ability(ability_names[int(ability[-1])-1]):
                         if levels[ability[-1]] != 0:
                             if len(item["value"].split("(")) > 1:
                                 damage = item["value"].split("(")[0]
@@ -98,7 +102,15 @@ def calc_combo_damage_raw(client, god, levels, power, build):
                                     "abilityName": f"{ability_names[int(ability[-1])-1]} {item['description']}",
                                     "displayName": f"{ability_names[int(ability[-1])-1]}"
                                     })
+
     print(ability_numbers)
+    if god == "Odin":
+        ability_numbers.append(                                    
+            {"damage":  str(int(ability_numbers[0]["damage"]) + round((float(ability_numbers[1]["damage"]) *1.15))), 
+            "scaling": ability_numbers[0]["scaling"], 
+            "abilityName": f"Bird Bomb",
+            "displayName": f"Bird Bomb"
+            })
     for ability, index in enumerate(ability_numbers):
         # print(index["damage"], index["scaling"], 0, god, ability_numbers[ability]['abilityName'])
         damage = calc_ability_damage_raw(index["damage"], index["scaling"], power, god, ability_numbers[ability]['abilityName'])
@@ -113,4 +125,4 @@ levels  =  {
     "4": 5, 
     "5": 5
     }
-calc_combo_damage_raw(client, "King Arthur", levels, 400, 0)
+calc_combo_damage_raw(client, "Odin", levels, 0, 0)
