@@ -252,6 +252,22 @@ num_hits_dict = {
         "Spear Thrust": 2,
         "Grapple": 1,
         "Divine Mastery": 1,
+        "Training Arc": 0,
+    },
+    "Nike": {
+        "Rend": 3,
+        "Barrier Formation Damage": 1,
+        "Barrier Formation Repel Damage": 8,
+        "Valiant Leap": 1,
+        "Sentinel of Zeus": 1,
+    },
+    "Odin": {
+        "Lunge": 1,
+        "Raven Shout": 1,
+        "Gungnir's Might": 1,
+        "Bird Bomb": 1,
+        "Ring of Spears": 1,
+        "Path to Valhalla": 0,
     }
 }
 
@@ -354,5 +370,21 @@ scaling_dict = {
         "Spear Thrust": 0,
         "Grapple": 0,
         "Divine Mastery": 0,
+        "Training Arc": 0,
+    },
+    "Nike": {
+        "Rend": 0,
+        "Barrier Formation Damage": 0,
+        "Barrier Formation Repel Damage": 0,
+        "Valiant Leap": 0,
+        "Sentinel of Zeus": 0,
+    },
+    "Odin": {
+        "Lunge": 0,
+        "Raven Shout": 0,
+        "Gungnir's Might": 0,
+        "Bird Bomb": 0,
+        "Ring of Spears": 0,
+        "Path to Valhalla": 0,
     }
 }
