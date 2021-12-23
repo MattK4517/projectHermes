@@ -2,13 +2,34 @@ import pymongo
 from main import client
 import analyze as anlz
 from constants import num_hits_dict, scaling_dict
+def special_case(ability):
+    if ability == "Twin Cleave (Bladestorm) Cleave Damage":
+        return 2
+    if ability == "Twin Cleave (Bladestorm) Spin Damage":
+        return 5
+    if ability == "Twin Cleave (Bladestorm) Final Damage":
+        return 1
+    if ability == "Sundering Strike (Excalibur's Wrath) Jab Damage":
+        return 1
+    if ability == "Sundering Strike (Excalibur's Wrath) Damage Per Hit":
+        return 6
+    if ability == "Sundering Strike (Excalibur's Wrath) Landing Damage":
+        return 1
+    return None
 
 def get_num_hits(god, ability):
+    if special_case(ability):
+        return special_case(ability)
+
     ability_key = ""
+    if ability[:-1] in num_hits_dict[god]:
+        return num_hits_dict[god][ability[:-1]]
+
     for key in num_hits_dict[god]:
         if key in ability:
             ability_key = key
-    return num_hits_dict[god][ability_key]
+            return num_hits_dict[god][ability_key]
+    return 0
 
 def get_scaling_changes(god, ability, hit):
     ability_key = ""
@@ -60,28 +81,30 @@ def calc_combo_damage_raw(client, god, levels, power, build):
                 ability_names.append(x[ability]["Summary"])
             else:
                 for item in x[ability]["itemDescription"]["rankitems"]:
-                    if "Damage:" in item["description"] or "Damage Per" in item["description"]:
-                        # print(item["value"])
+                    if "damage:" in item["description"].lower() or "damage per" in item["description"].lower():
+                        print(ability_names[int(ability[-1])-1], item["value"])
                         if levels[ability[-1]] != 0:
-                            damage = item["value"].split("(")[0]
                             if len(item["value"].split("(")) > 1:
-                                scaling = item["value"].split("(")[1]
-                            damage = damage.split("/")[levels[ability[-1]] -1]
-                            scaling = scaling.split("%")[0]
-                            if "+" in scaling:
-                                scaling = scaling[scaling.index("+")+1:]
-                            ability_numbers.append(
-                                {"damage": damage, 
-                                "scaling": scaling, 
-                                "abilityName": f"{ability_names[int(ability[-1])-1]} {item['description']}"
-                                })
+                                damage = item["value"].split("(")[0]
+                                if len(item["value"].split("(")) > 1:
+                                    scaling = item["value"].split("(")[1]
+                                damage = damage.split("/")[levels[ability[-1]] -1]
+                                scaling = scaling.split("%")[0]
+                                if "+" in scaling:
+                                    scaling = scaling[scaling.index("+")+1:]
+                                ability_numbers.append(
+                                    {"damage": damage, 
+                                    "scaling": scaling, 
+                                    "abilityName": f"{ability_names[int(ability[-1])-1]} {item['description']}",
+                                    "displayName": f"{ability_names[int(ability[-1])-1]}"
+                                    })
     print(ability_numbers)
     for ability, index in enumerate(ability_numbers):
         # print(index["damage"], index["scaling"], 0, god, ability_numbers[ability]['abilityName'])
-        damage = calc_ability_damage_raw(index["damage"], index["scaling"], 0, god, ability_numbers[ability]['abilityName'])
+        damage = calc_ability_damage_raw(index["damage"], index["scaling"], power, god, ability_numbers[ability]['abilityName'])
         print(f"{ability_numbers[ability]['abilityName']} damage: {damage['damageTotal']}")
         total_damage += damage["damageTotal"]
-    print(total_damage)
+    print(f"{god} Total Damage: {total_damage}")
 
 levels  =  {
     "1": 5, 
@@ -90,4 +113,4 @@ levels  =  {
     "4": 5, 
     "5": 5
     }
-calc_combo_damage_raw(client, "Amaterasu", levels, 0, 0)
+calc_combo_damage_raw(client, "King Arthur", levels, 400, 0)

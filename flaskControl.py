@@ -218,6 +218,8 @@ def get_match(matchID):
         matchID = int(matchID)
         if mycol.count_documents({"MatchId": matchID}) == 0:
                 mycol = mydb["8.11 Matches"]
+                if mycol.count_documents({"MatchId": matchID}) == 0:
+                        mycol = mydb["8.12 Matches"]
         for x in mycol.find({"MatchId": matchID}, {'_id': 0}):
                 match = x
 
@@ -234,6 +236,7 @@ def get_match(matchID):
                         ]
 
                         match[key] = {**match[key], **{"godBuild": anlz.get_build_stats(client, build)}}
+        print
         return match
 
 @app.route('/api/<god>/buildpath/<role>/<rank>/<patch>/<mode>')

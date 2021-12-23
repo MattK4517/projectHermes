@@ -172,37 +172,99 @@ Starter_items = [
 num_hits_dict = {
     "Achilles": {
         "Shield of Achilles": 1,
-        "abilityDescription2": 0,
+        "Radiant Glory": 0,
         "Combat Dodge": 2,
         "Fatal Strike": 1,
-        "abilityDescription5": 0,
+        "Gift of the Gods": 0,
     },    
     "Amaterasu": {
-        "abilityDescription1": 0,
+        "Divine Presence": 0,
         "Heavenly Reflection Full Charge": 1,
         "Glorious Charge": 1,
         "Dazzling Offensive": 3,
-        "abilityDescription5": 0,
+        "Illuminating Strike": 0,
     },
     "Bellona": {
         "Shield Bash": 1,
         "Bludgeon": 1,
         "Scourge": 1,
         "Eagle's Rally": 1,
-        "4": 0,
+        "Master of War": 0,
+    },
+    "Chaac": {
+        "Thunder Strike": 1,
+        "Torrent": 1,
+        "Rain Dance": 0,
+        "Storm Call": 1,
+        "Overflow": 0,
+    },
+    "Cu Chulainn": {
+        "Barbed Spear (Ground Slam)": 2,
+        "Vent Anger": 12,
+        "Salmon's Leap (Furious Charge)": 2,
+        "Spear of Mortal Pain (War Cry)": 2,
+        "Berserk": 0,
+    },
+    "Erlang Shen": {
+        "Spot Weakness": 0,
+        "Pin": 1,
+        "72 Transformations": 1,
+        "9 Turns Blessing": 0,
+        "Howling Celestial Dog": 0,
+    },
+        "Gilgamesh": {
+        "Sun-Forged Scimitar": 0,
+        "Drop Kick": 1,
+        "Hero's Advance": 1,
+        "Winds of Shamash": 1,
+        "Winds of Shamash Wind Damage": 11,
+        "Winds of Shamash Binding Damage": 1,
+        "Epic of Gilgamesh": 0
+    },
+    "Guan Yu": {
+        "Conviction": 0,
+        "Warrior's Will": 1,
+        "Taolu Assault": 10,
+        "Cavalry Charge": 6,
+    }, 
+    "Hercules": {
+        "Driving Strike": 1,
+        "Earthbreaker": 1,
+        "Mitigate Wounds": 0,
+        "Excavate": 3,
+    },
+    "Horus": {
+        "Updraft": 1,
+        "Fracture": 1,
+        "Protector's Surge": 0,
+        "To The Skies!": 1,
+        "Resolute": 0
+    },
+    "King Arthur": {
+        "Overhead Slash (Hamstring)": 1,
+        "Battle Stomp (Uppercut)": 1,
+        "Twin Cleave (Bladestorm)": 1,
+        "Sundering Strike (Excalibur's Wrath)": 1,
+        "Steadfast": 0,
+    },
+    "Mulan": {
+        "Cross Strike": 3,
+        "Spear Thrust": 2,
+        "Grapple": 1,
+        "Divine Mastery": 1,
     }
 }
 
 scaling_dict = {
     "Achilles": {
         "Shield of Achilles": 0,
-        "abilityDescription2": 0,
+        "Radiant Glory": 0,
         "Combat Dodge": 0,
         "Fatal Strike": 0,
-        "abilityDescription5": 0,
+        "Gift of the Gods": 0,
     },    
     "Amaterasu": {
-        "abilityDescription1": 0,
+        "Divine Presence": 0,
         "Heavenly Reflection Full Charge": 0,
         "Glorious Charge": 0,
         "Dazzling Offensive": {
@@ -210,13 +272,87 @@ scaling_dict = {
             "hit2": 20,
             "hit3": 40
         },
-        "abilityDescription5": 0,
+        "Illuminating Strike": 0,
     },
     "Bellona": {
         "Shield Bash": 0,
         "Bludgeon": 0,
         "Scourge": 0,
         "Eagle's Rally": 0,
-        "abilityDescription5": 0,
+        "Master of War": 0,
     },
+    "Chaac": {
+        "Thunder Strike": 0,
+        "Torrent": 0,
+        "Rain Dance": 0,
+        "Storm Call": 0,
+        "Overflow": 0,
+    },
+    "Cu Chulainn": {
+        "Barbed Spear (Ground Slam)": 0,
+        "Vent Anger": 0,
+        "Salmon's Leap (Furious Charge)": 0,
+        "Spear of Mortal Pain (War Cry)": 0,
+        "Berserk": 0,
+    },
+    "Erlang Shen": {
+        "Spot Weakness": 0,
+        "Pin": 0,
+        "72 Transformations": 0,
+        "9 Turns Blessing": 0,
+        "Howling Celestial Dog": 0,
+    },
+    "Gilgamesh": {
+        "Sun-Forged Scimitar": 0,
+        "Drop Kick": 0,
+        "Hero's Advance": 0,
+        "Winds of Shamash": 0,
+        "Winds of Shamash": 0,
+        "Winds of Shamash Wind Damage": 0,
+        "Winds of Shamash Binding Damage": 0,
+        "Epic of Gilgamesh": 0
+    },
+    "Guan Yu": {
+        "Conviction": 0,
+        "Warrior's Will": 0,
+        "Taolu Assault": 0,
+        "Cavalry Charge": {         
+            "hit1": 0,
+            "hit2": 20,
+            "hit3": 40,
+            "hit4": 60,
+            "hit5": 80,
+            "hit6": 100,
+        },
+    }, 
+    "Hercules": {
+        "Driving Strike": 0,
+        "Earthbreaker": 0,
+        "Mitigate Wounds": 0,
+        "Excavate": {
+            "hit1": 0,
+            "hit2": -50,
+            "hit3": -50,
+        }
+    },
+    "Horus": {
+        "Updraft": 0,
+        "Fracture": 0,
+        "Protector's Surge": 0,
+        "To The Skies!": 0,
+        "Resolute": 0
+    },
+    "King Arthur": {
+        "Overhead Slash (Hamstring)": 0,
+        "Battle Stomp (Uppercut)": 0,
+        "Twin Cleave (Bladestorm)": 0,
+        "Sundering Strike (Excalibur's Wrath)": 0,
+        "Steadfast": 0,
+    },
+    "Mulan": {
+        "Cross Strike": 0,
+        "Spear Thrust": 0,
+        "Grapple": 0,
+        "Divine Mastery": 0,
+    }
 }
