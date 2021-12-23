@@ -1,7 +1,8 @@
 import pymongo
 from main import client
 import analyze as anlz
-from constants import num_hits_dict, scaling_dict
+from constants import num_hits_dict, scaling_dict, Warriors
+
 def special_case(ability):
     if ability == "Twin Cleave (Bladestorm) Cleave Damage":
         return 2
@@ -15,12 +16,27 @@ def special_case(ability):
         return 6
     if ability == "Sundering Strike (Excalibur's Wrath) Landing Damage":
         return 1
+    if ability == "Fearless Assault Damage:":
+        return 2
     return None
 
 def get_special_ability(ability):
     if ability == "Raven Shout":
         return True
+    if ability == "Web":
+        return True
     return False
+
+def append_special(god, ability_numbers):
+    if god == "Odin":
+        ability_numbers.append(                                    
+            {"damage":  str(int(ability_numbers[0]["damage"]) + round((float(ability_numbers[1]["damage"]) *1.15))), 
+            "scaling": ability_numbers[0]["scaling"], 
+            "abilityName": f"Bird Bomb",
+            "displayName": f"Bird Bomb"
+            })
+    if god == "Arachne":
+        pass
 
 def get_num_hits(god, ability):
     if special_case(ability):
@@ -88,34 +104,43 @@ def calc_combo_damage_raw(client, god, levels, power, build):
                 for item in x[ability]["itemDescription"]["rankitems"]:
                     if "damage:" in item["description"].lower() or "damage per" in item["description"].lower() or get_special_ability(ability_names[int(ability[-1])-1]):
                         if levels[ability[-1]] != 0:
+                            # print(item)
                             if len(item["value"].split("(")) > 1:
                                 damage = item["value"].split("(")[0]
                                 if len(item["value"].split("(")) > 1:
                                     scaling = item["value"].split("(")[1]
-                                damage = damage.split("/")[levels[ability[-1]] -1]
+                                if len(damage.split("/")) > 1:
+                                    damage = damage.split("/")[levels[ability[-1]] -1]
+                                else:
+                                    damage = damage
                                 scaling = scaling.split("%")[0]
                                 if "+" in scaling:
                                     scaling = scaling[scaling.index("+")+1:]
-                                ability_numbers.append(
-                                    {"damage": damage, 
-                                    "scaling": scaling, 
-                                    "abilityName": f"{ability_names[int(ability[-1])-1]} {item['description']}",
-                                    "displayName": f"{ability_names[int(ability[-1])-1]}"
-                                    })
+                            else:
+                                if "damage:" in item["description"].lower() or "damage per" in item["description"].lower():
+                                    if len(item["value"].split(" ")[0].split("/")) > 1:
+                                        damage = item["value"].split(" ")[0].split("/")[levels[ability[-1]] -1]
+                                        scaling = 0
+
+                            ability_numbers.append(
+                                {"damage": damage, 
+                                "scaling": scaling, 
+                                "abilityName": f"{ability_names[int(ability[-1])-1]} {item['description']}",
+                                "displayName": f"{ability_names[int(ability[-1])-1]}"
+                                })
 
     print(ability_numbers)
-    if god == "Odin":
-        ability_numbers.append(                                    
-            {"damage":  str(int(ability_numbers[0]["damage"]) + round((float(ability_numbers[1]["damage"]) *1.15))), 
-            "scaling": ability_numbers[0]["scaling"], 
-            "abilityName": f"Bird Bomb",
-            "displayName": f"Bird Bomb"
-            })
+    for ability in ability_numbers:
+        if "damage" not in ability["abilityName"].lower():
+            ability_numbers.pop(ability_numbers.index(ability))
+    append_special(god, ability_numbers)
+    # print(ability_numbers)
     for ability, index in enumerate(ability_numbers):
         # print(index["damage"], index["scaling"], 0, god, ability_numbers[ability]['abilityName'])
-        damage = calc_ability_damage_raw(index["damage"], index["scaling"], power, god, ability_numbers[ability]['abilityName'])
-        print(f"{ability_numbers[ability]['abilityName']} damage: {damage['damageTotal']}")
-        total_damage += damage["damageTotal"]
+        if "%" not in index["damage"]:
+            damage = calc_ability_damage_raw(index["damage"], index["scaling"], power, god, ability_numbers[ability]['abilityName'])
+            print(f"{ability_numbers[ability]['abilityName']} damage: {damage['damageTotal']}")
+            total_damage += damage["damageTotal"]
     print(f"{god} Total Damage: {total_damage}")
 
 levels  =  {
@@ -125,4 +150,12 @@ levels  =  {
     "4": 5, 
     "5": 5
     }
-calc_combo_damage_raw(client, "Odin", levels, 0, 0)
+
+calc_combo_damage_raw(client, "Fenrir", levels, 0, 0)
+for warrior in Warriors:
+    print(warrior)
+    calc_combo_damage_raw(client, warrior, levels, 0, 0)
+    print("\n")
+
+
+# About 106-108 wraiths in Ah Puch ult

@@ -176,13 +176,43 @@ num_hits_dict = {
         "Combat Dodge": 2,
         "Fatal Strike": 1,
         "Gift of the Gods": 0,
-    },    
+    },
+    "Ah Puch": {
+        "Undead Surge": 2,
+        "Corpse Explosion Initial Damage": 1,
+        "Corpse Explosion Damage per Corpse": 3,
+        "Fleeting Breath Damage per Tick": 4,
+        "Fleeting Breath Additional Damage": 1,
+        "Empty the Crypts": 132,
+        "Hollow Ground": 0,
+    },  
     "Amaterasu": {
         "Divine Presence": 0,
         "Heavenly Reflection Full Charge": 1,
         "Glorious Charge": 1,
         "Dazzling Offensive": 3,
         "Illuminating Strike": 0,
+    },
+    "Arachne": {
+        "Venomous Bite Initial Damage": 1,
+        "Venomous Bite Damage per Tick": 6,
+        "Cocoon": 0,
+        "Web Broodling": 60, # = num broodling * seconds * attacks per seconds (6 * 10 * 1)
+        "Night Crawler": 1,
+    },
+    "Awilix": {
+        "Summon Suku": 1,
+        "Feather Step": 2,
+        "Moonlight Charge": 1,
+        "Gravity Surge": 1,
+        "Initiative": 0,
+    },
+    "Bakasura": {
+        "Take Down": 1,
+        "Eat Minion": 0,
+        "Butcher Blades": 0,
+        "Regurgitate": 72, # = num minions * seconds * attacks per seconds (6 * 8 * 1)
+        "Insatiable Hunger": 0,
     },
     "Bellona": {
         "Shield Bash": 1,
@@ -191,12 +221,29 @@ num_hits_dict = {
         "Eagle's Rally": 1,
         "Master of War": 0,
     },
+    "Camazotz": {
+        "Screech": 1,
+        "Vampire Bats": 1,
+        "Devour": 1,
+        "Bat Out of Hell": 3,
+        "Essence Drinker": 0
+    },
     "Chaac": {
         "Thunder Strike": 1,
         "Torrent": 1,
         "Rain Dance": 0,
         "Storm Call": 1,
         "Overflow": 0,
+    },
+    "Cliodhna": {
+        "Banshee's Wail Scream Damage": 3,
+        "Banshee's Wail Final Hit Damage": 1,
+        "Flickering Visions": 1,
+        "Lurching Claw Dash Damage": 1,
+        "Lurching Claw Claw Damage": 1,
+        "Tearing The Veil Opening Damage": 3,
+        "Tearing The Veil Rift Damage": 60,
+        "Phantasmal": 0,
     },
     "Cu Chulainn": {
         "Barbed Spear (Ground Slam)": 2,
@@ -205,6 +252,15 @@ num_hits_dict = {
         "Spear of Mortal Pain (War Cry)": 2,
         "Berserk": 0,
     },
+    "Da Ji": {
+        "Horrible Burns Burst Damage": 1,
+        "Horrible Burns Damage Per Tick": 3,
+        "One Thousand Cuts": 4,
+        "Trickster Spirit": 1,
+        "Paolao Shot Damage": 3,
+        "Paolao Pull Damage per Tick": 3,
+        "Torture Blades": 0,
+    },
     "Erlang Shen": {
         "Spot Weakness": 0,
         "Pin": 1,
@@ -212,7 +268,14 @@ num_hits_dict = {
         "9 Turns Blessing": 0,
         "Howling Celestial Dog": 0,
     },
-        "Gilgamesh": {
+    "Fenrir": {
+        "Unchained": 1,
+        "Seething Howl": 0,
+        "Brutalize": 4,
+        "Ragnarok": 1,
+        "Unbound Runes": 0,
+    },
+    "Gilgamesh": {
         "Sun-Forged Scimitar": 0,
         "Drop Kick": 1,
         "Hero's Advance": 1,
@@ -268,6 +331,34 @@ num_hits_dict = {
         "Bird Bomb": 1,
         "Ring of Spears": 1,
         "Path to Valhalla": 0,
+    },
+    "Osiris": {
+        "Sickle Strike": 1,
+        "Spirit Flail": 1,
+        "Judgement Tether": 0,
+        "Lord of the Afterlife": 1,
+        "Fragmented": 0,
+    },
+    "Sun Wukong": {
+        "The Magic Cudgel": 1,
+        "Master's Will": 1,
+        "72 Transformations": 1,
+        "Somersault Cloud": 1,
+        "Undefeated Body": 0
+    },
+    "Tyr": {
+        "Fearless": 1,
+        "Power Cleave": 2,
+        "Change Stance": 0,
+        "Lawbringer": 1,
+        "Unyielding": 0,
+    },
+    "Vamana": {
+        "Clear the Path": 1,
+        "Armored Umbrella": 1,
+        "Umbrellarang": 2,
+        "Colossal Fury": 0,
+        "Sleeping Giant": 0
     }
 }
 
@@ -278,7 +369,16 @@ scaling_dict = {
         "Combat Dodge": 0,
         "Fatal Strike": 0,
         "Gift of the Gods": 0,
-    },    
+    },
+    "Ah Puch": {
+        "Undead Surge": 0,
+        "Corpse Explosion Initial Damage": 0,
+        "Corpse Explosion Damage per Corpse": 0,
+        "Fleeting Breath Damage per Tick": 0,
+        "Fleeting Breath Additional Damage": 0,
+        "Empty the Crypts": 0,
+        "Hollow Ground": 0,
+    },  
     "Amaterasu": {
         "Divine Presence": 0,
         "Heavenly Reflection Full Charge": 0,
@@ -290,12 +390,40 @@ scaling_dict = {
         },
         "Illuminating Strike": 0,
     },
+    "Arachne": {
+        "Venomous Bite Initial Damage": 0,
+        "Venomous Bite Damage per Tick": 0,
+        "Cocoon": 0,
+        "Web Broodling": 0,
+        "Night Crawler": 0,
+    },
+    "Awilix": {
+        "Summon Suku": 0,
+        "Feather Step": 0,
+        "Moonlight Charge": 0,
+        "Gravity Surge": 0,
+        "Initiative": 0,
+    },
     "Bellona": {
         "Shield Bash": 0,
         "Bludgeon": 0,
         "Scourge": 0,
         "Eagle's Rally": 0,
         "Master of War": 0,
+    },
+    "Bakasura": {
+        "Take Down": 0,
+        "Eat Minion": 0,
+        "Butcher Blades": 0,
+        "Regurgitate": 0,
+        "Insatiable Hunger": 0,
+    },
+    "Camazotz": {
+        "Screech": 0,
+        "Vampire Bats": 0,
+        "Devour": 0,
+        "Bat Out of Hell": 0,
+        "Essence Drinker": 0
     },
     "Chaac": {
         "Thunder Strike": 0,
@@ -304,6 +432,16 @@ scaling_dict = {
         "Storm Call": 0,
         "Overflow": 0,
     },
+    "Cliodhna": {
+        "Banshee's Wail Scream Damage": 0,
+        "Banshee's Wail Final Hit Damage": 0,
+        "Flickering Visions": 0,
+        "Lurching Claw Dash Damage": 0,
+        "Lurching Claw Claw Damage": 0,
+        "Tearing The Veil Opening Damage": 0,
+        "Tearing The Veil Rift Damage": 0,
+        "Phantasmal": 0,
+    },
     "Cu Chulainn": {
         "Barbed Spear (Ground Slam)": 0,
         "Vent Anger": 0,
@@ -311,12 +449,28 @@ scaling_dict = {
         "Spear of Mortal Pain (War Cry)": 0,
         "Berserk": 0,
     },
+    "Da Ji": {
+        "Horrible Burns Burst Damage": 0,
+        "Horrible Burns Damage Per Tick": 0,
+        "One Thousand Cuts": 0,
+        "Trickster Spirit": 0,
+        "Paolao Shot Damage": 0,
+        "Paolao Pull Damage per Tick": 0,
+        "Torture Blades": 0,
+    },
     "Erlang Shen": {
         "Spot Weakness": 0,
         "Pin": 0,
         "72 Transformations": 0,
         "9 Turns Blessing": 0,
         "Howling Celestial Dog": 0,
+    },
+    "Fenrir": {
+        "Unchained": 0,
+        "Seething Howl": 0,
+        "Brutalize": 0,
+        "Ragnarok": 0,
+        "Unbound Runes": 0,
     },
     "Gilgamesh": {
         "Sun-Forged Scimitar": 0,
@@ -386,5 +540,33 @@ scaling_dict = {
         "Bird Bomb": 0,
         "Ring of Spears": 0,
         "Path to Valhalla": 0,
+    },
+    "Osiris": {
+        "Sickle Strike": 0,
+        "Spirit Flail": 0,
+        "Judgement Tether": 0,
+        "Lord of the Afterlife": 0,
+        "Fragmented": 0,
+    },
+    "Sun Wukong": {
+        "The Magic Cudgel": 0,
+        "Master's Will": 0,
+        "72 Transformations": 0,
+        "Somersault Cloud": 0,
+        "Undefeated Body": 0
+    },
+    "Tyr": {
+        "Fearless": 0,
+        "Power Cleave": 0,
+        "Change Stance": 0,
+        "Lawbringer": 0,
+        "Unyielding": 0,
+    },
+    "Vamana": {
+        "Clear the Path": 0,
+        "Armored Umbrella": 0,
+        "Umbrellarang": 0,
+        "Colossal Fury": 0,
+        "Sleeping Giant": 0
     }
 }
