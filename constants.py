@@ -214,6 +214,15 @@ num_hits_dict = {
         "Regurgitate": 72, # = num minions * seconds * attacks per seconds (6 * 8 * 1)
         "Insatiable Hunger": 0,
     },
+    "Bastet": {
+        "Pounce": 1,
+        "Razor Whip": 4,
+        "Ensnaring Claw Root Damage": 1,
+        "Ensnaring Claw Cat Damage": 4,
+        "Huntress of Bast Initial Hit": 1,
+        "Huntress of Bast Quicksand Damage": 6,
+        "Nightstalker": 0,
+    },
     "Bellona": {
         "Shield Bash": 1,
         "Bludgeon": 1,
@@ -303,6 +312,21 @@ num_hits_dict = {
         "To The Skies!": 1,
         "Resolute": 0
     },
+    "Hun Batz": {
+        "Somersault": 1,
+        "Overhand Smash": 1,
+        "Sacred Monkey": 1,
+        "Fear No Evil": 1,
+        "Infused Strikes": 1
+    },
+    "Kali": {
+        "Nimble Strike": 1,
+        "Lash Damage Per Blade": 3,
+        "Lash Bleed Damage": 6, # bleed dmg ticks * blades ( 6 * 3 )
+        "Incense": 0,
+        "Destruction Damage": 1,
+        "Marked for Death": 0,  
+    },
     "King Arthur": {
         "Overhead Slash (Hamstring)": 1,
         "Battle Stomp (Uppercut)": 1,
@@ -310,12 +334,36 @@ num_hits_dict = {
         "Sundering Strike (Excalibur's Wrath)": 1,
         "Steadfast": 0,
     },
+    "Loki": {
+        "Vanish Damage per Tick": 4,
+        "Agonizing Visions": 8,
+        "Flurry Strike": 5,
+        "Flurry Strike Final Damage": 1,
+        "Assassinate Cripple Damage": 1,
+        "Assassinate Heavy Damage": 1,
+    },
+    "Mercury": {
+        "Made You Look": 1,
+        "Maximum Velocity": 0,
+        "Special Delivery": 4,
+        "Sonic Boom": 1,
+        "Fastest God Alive": 0,
+    },
     "Mulan": {
         "Cross Strike": 3,
         "Spear Thrust": 2,
         "Grapple": 1,
         "Divine Mastery": 1,
         "Training Arc": 0,
+    },
+    "Ne Zha": {
+        "Universe Ring Toss Initial Damage:": 1,
+        "Universe Ring Toss Damage:": 4,
+        "Flaming Spear": 0,
+        "Armillary Sash": 1,
+        "Wind Fire Wheels Damage Per Hit:": 3,
+        "Wind Fire Wheels Damage (Initial/Landing)": 2,
+        "Righteous Spirit": 0
     },
     "Nike": {
         "Rend": 3,
@@ -363,214 +411,22 @@ num_hits_dict = {
 }
 
 scaling_dict = {
-    "Achilles": {
-        "Shield of Achilles": 0,
-        "Radiant Glory": 0,
-        "Combat Dodge": 0,
-        "Fatal Strike": 0,
-        "Gift of the Gods": 0,
-    },
-    "Ah Puch": {
-        "Undead Surge": 0,
-        "Corpse Explosion Initial Damage": 0,
-        "Corpse Explosion Damage per Corpse": 0,
-        "Fleeting Breath Damage per Tick": 0,
-        "Fleeting Breath Additional Damage": 0,
-        "Empty the Crypts": 0,
-        "Hollow Ground": 0,
-    },  
-    "Amaterasu": {
-        "Divine Presence": 0,
-        "Heavenly Reflection Full Charge": 0,
-        "Glorious Charge": 0,
-        "Dazzling Offensive": {
-            "hit1": 0,
-            "hit2": 20,
-            "hit3": 40
+    "Dazzling Offensive": {
+        f"hit{i+1}": 20*i for i in range(3)
         },
-        "Illuminating Strike": 0,
-    },
-    "Arachne": {
-        "Venomous Bite Initial Damage": 0,
-        "Venomous Bite Damage per Tick": 0,
-        "Cocoon": 0,
-        "Web Broodling": 0,
-        "Night Crawler": 0,
-    },
-    "Awilix": {
-        "Summon Suku": 0,
-        "Feather Step": 0,
-        "Moonlight Charge": 0,
-        "Gravity Surge": 0,
-        "Initiative": 0,
-    },
-    "Bellona": {
-        "Shield Bash": 0,
-        "Bludgeon": 0,
-        "Scourge": 0,
-        "Eagle's Rally": 0,
-        "Master of War": 0,
-    },
-    "Bakasura": {
-        "Take Down": 0,
-        "Eat Minion": 0,
-        "Butcher Blades": 0,
-        "Regurgitate": 0,
-        "Insatiable Hunger": 0,
-    },
-    "Camazotz": {
-        "Screech": 0,
-        "Vampire Bats": 0,
-        "Devour": 0,
-        "Bat Out of Hell": 0,
-        "Essence Drinker": 0
-    },
-    "Chaac": {
-        "Thunder Strike": 0,
-        "Torrent": 0,
-        "Rain Dance": 0,
-        "Storm Call": 0,
-        "Overflow": 0,
-    },
-    "Cliodhna": {
-        "Banshee's Wail Scream Damage": 0,
-        "Banshee's Wail Final Hit Damage": 0,
-        "Flickering Visions": 0,
-        "Lurching Claw Dash Damage": 0,
-        "Lurching Claw Claw Damage": 0,
-        "Tearing The Veil Opening Damage": 0,
-        "Tearing The Veil Rift Damage": {
-            **{"hit1": -40,},
-            **{f"hit{i+2}": -80 for i in range (23)}
-
+    "Tearing The Veil Rift Damage": {
+        **{"hit1": -40,},
+        **{f"hit{i+2}": -80 for i in range (23)}
         },
-        "Phantasmal": 0,
-    },
-    "Cu Chulainn": {
-        "Barbed Spear (Ground Slam)": 0,
-        "Vent Anger": 0,
-        "Salmon's Leap (Furious Charge)": 0,
-        "Spear of Mortal Pain (War Cry)": 0,
-        "Berserk": 0,
-    },
-    "Da Ji": {
-        "Horrible Burns Burst Damage": 0,
-        "Horrible Burns Damage Per Tick": 0,
-        "One Thousand Cuts": 0,
-        "Trickster Spirit": 0,
-        "Paolao Shot Damage": 0,
-        "Paolao Pull Damage per Tick": 0,
-        "Torture Blades": 0,
-    },
-    "Erlang Shen": {
-        "Spot Weakness": 0,
-        "Pin": 0,
-        "72 Transformations": 0,
-        "9 Turns Blessing": 0,
-        "Howling Celestial Dog": 0,
-    },
-    "Fenrir": {
-        "Unchained": 0,
-        "Seething Howl": 0,
-        "Brutalize": 0,
-        "Ragnarok": 0,
-        "Unbound Runes": 0,
-    },
-    "Gilgamesh": {
-        "Sun-Forged Scimitar": 0,
-        "Drop Kick": 0,
-        "Hero's Advance": 0,
-        "Winds of Shamash": 0,
-        "Winds of Shamash": 0,
-        "Winds of Shamash Wind Damage": 0,
-        "Winds of Shamash Binding Damage": 0,
-        "Epic of Gilgamesh": 0
-    },
-    "Guan Yu": {
-        "Conviction": 0,
-        "Warrior's Will": 0,
-        "Taolu Assault": 0,
-        "Cavalry Charge": {         
-            "hit1": 0,
-            "hit2": 20,
-            "hit3": 40,
-            "hit4": 60,
-            "hit5": 80,
-            "hit6": 100,
+    "Cavalry Charge": {       
+            f"hit{i+1}": 20*i for i in range(6)
         },
-    }, 
-    "Hercules": {
-        "Driving Strike": 0,
-        "Earthbreaker": 0,
-        "Mitigate Wounds": 0,
-        "Excavate": {
+    "Excavate": {
             "hit1": 0,
             "hit2": -50,
             "hit3": -50,
-        }
-    },
-    "Horus": {
-        "Updraft": 0,
-        "Fracture": 0,
-        "Protector's Surge": 0,
-        "To The Skies!": 0,
-        "Resolute": 0
-    },
-    "King Arthur": {
-        "Overhead Slash (Hamstring)": 0,
-        "Battle Stomp (Uppercut)": 0,
-        "Twin Cleave (Bladestorm)": 0,
-        "Sundering Strike (Excalibur's Wrath)": 0,
-        "Steadfast": 0,
-    },
-    "Mulan": {
-        "Cross Strike": 0,
-        "Spear Thrust": 0,
-        "Grapple": 0,
-        "Divine Mastery": 0,
-        "Training Arc": 0,
-    },
-    "Nike": {
-        "Rend": 0,
-        "Barrier Formation Damage": 0,
-        "Barrier Formation Repel Damage": 0,
-        "Valiant Leap": 0,
-        "Sentinel of Zeus": 0,
-    },
-    "Odin": {
-        "Lunge": 0,
-        "Raven Shout": 0,
-        "Gungnir's Might": 0,
-        "Bird Bomb": 0,
-        "Ring of Spears": 0,
-        "Path to Valhalla": 0,
-    },
-    "Osiris": {
-        "Sickle Strike": 0,
-        "Spirit Flail": 0,
-        "Judgement Tether": 0,
-        "Lord of the Afterlife": 0,
-        "Fragmented": 0,
-    },
-    "Sun Wukong": {
-        "The Magic Cudgel": 0,
-        "Master's Will": 0,
-        "72 Transformations": 0,
-        "Somersault Cloud": 0,
-        "Undefeated Body": 0
-    },
-    "Tyr": {
-        "Fearless": 0,
-        "Power Cleave": 0,
-        "Change Stance": 0,
-        "Lawbringer": 0,
-        "Unyielding": 0,
-    },
-    "Vamana": {
-        "Clear the Path": 0,
-        "Armored Umbrella": 0,
-        "Umbrellarang": 0,
-        "Colossal Fury": 0,
-        "Sleeping Giant": 0
+        },
+    "Universe Ring Toss Damage:": {
+        f"hit{i+1}": -65 for i in range(5)
     }
 }

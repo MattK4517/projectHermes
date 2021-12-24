@@ -14,7 +14,7 @@ __pycache__/flaskControl.cpython-37.pyc
 __pycache__/main.cpython-37.pyc
 venv
 charts
-main
+main.py
 book build.xlsx
 combat_stats.txt
 items.csv
