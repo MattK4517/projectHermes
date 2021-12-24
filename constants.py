@@ -242,7 +242,7 @@ num_hits_dict = {
         "Lurching Claw Dash Damage": 1,
         "Lurching Claw Claw Damage": 1,
         "Tearing The Veil Opening Damage": 3,
-        "Tearing The Veil Rift Damage": 60,
+        "Tearing The Veil Rift Damage": 20,
         "Phantasmal": 0,
     },
     "Cu Chulainn": {
@@ -439,7 +439,11 @@ scaling_dict = {
         "Lurching Claw Dash Damage": 0,
         "Lurching Claw Claw Damage": 0,
         "Tearing The Veil Opening Damage": 0,
-        "Tearing The Veil Rift Damage": 0,
+        "Tearing The Veil Rift Damage": {
+            **{"hit1": -40,},
+            **{f"hit{i+2}": -80 for i in range (23)}
+
+        },
         "Phantasmal": 0,
     },
     "Cu Chulainn": {

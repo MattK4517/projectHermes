@@ -254,8 +254,8 @@ def get_new_id(client, smite_api):
     mydb = client["God_Data"]
     gods = smite_api.getGods()
     for god in range(len(gods)):
-        if gods[god]["latestGod"] == "y":
-            mycol = mydb["Charybdis"]
+        if gods[god]["Name"] == "Cliodhna":
+            mycol = mydb["Cliodhna"]
             data = create_god_data_dict(gods[god])
             mycol.insert_one(data)
 
@@ -460,4 +460,4 @@ def threaded_pull(patch, all_sets, smite_api):
 # with open("cred.txt", "r") as f:
 #     data = f.readlines()
 #     smite_api = SmiteAPI(devId=data[0].strip(), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
-#     print(smite_api.getDataUsed())
+#     get_new_id(client, smite_api)

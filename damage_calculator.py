@@ -66,6 +66,9 @@ def calc_ability_damage_raw(base, scaling, power, god, ability, **procs):
     damage = 0
     for i in range(get_num_hits(god, ability)):
         damage += (float(base) + ((float(scaling)/100) * float(power))) + (float(base) * get_scaling_changes(god, ability, i+1)/100)
+    
+    # if ability == "Tearing The Veil Rift Damage:":
+    #     damage = damage * 3
     if procs:
         for proc in procs:
             proc_damage += proc["damage"]
@@ -151,11 +154,11 @@ levels  =  {
     "5": 5
     }
 
-calc_combo_damage_raw(client, "Fenrir", levels, 0, 0)
-for warrior in Warriors:
-    print(warrior)
-    calc_combo_damage_raw(client, warrior, levels, 0, 0)
-    print("\n")
+calc_combo_damage_raw(client, "Cliodhna", levels, 0, 0)
+# for warrior in Warriors:
+#     print(warrior)
+#     calc_combo_damage_raw(client, warrior, levels, 0, 0)
+#     print("\n")
 
 
 # About 106-108 wraiths in Ah Puch ult
