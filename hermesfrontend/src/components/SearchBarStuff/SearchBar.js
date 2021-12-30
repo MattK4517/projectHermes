@@ -79,7 +79,7 @@ export default function SearchBar(data) {
     if(event.charCode==13){
       if (parseInt(event.target.value)) {
         history.push(`/Match/${event.target.value}`);
-      } else if (event.target.value in data.data !== -1) {
+      } else if (event.target.value in data.data) {
         history.push(`/${event.target.value.toLowerCase().replaceAll(" ", "-").replaceAll("'","")}`);
       }
         else{
@@ -135,7 +135,7 @@ export default function SearchBar(data) {
                 ...params.InputProps,
               }}
               onKeyPress={e => handleKeyPress(e)}
-              label={"Search A God"}
+              label={"Search A God, Player, or Match ID"}
             />
             
           )

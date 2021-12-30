@@ -632,7 +632,6 @@ scaling_dict = {
         },
     "Universe Ring Toss Damage:": {
         f"hit{i+1}": -65 for i in range(5)
-<<<<<<< HEAD
     },
     "Mjolnir's Attunement": {
         "hit1": 0,
@@ -656,7 +655,3 @@ scaling_dict = {
         "hit2": -100 + 15
     },
 }
-=======
-    }
-} 
->>>>>>> 3acfd8b0ad2e5f3fdf48d496e1a79e62e75ca1ff

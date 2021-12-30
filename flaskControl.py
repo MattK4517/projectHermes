@@ -14,6 +14,8 @@ from duo_tier_list import get_lanes
 import pyrez
 from pyrez.api import SmiteAPI
 import flaskHelper as fh
+import json
+from bson import json_util
 
 app = Flask(__name__, static_folder="../hermesfrontend", static_url_path="/")
 # limiter = Limiter(
@@ -60,7 +62,6 @@ def get_god_data_role(god, role, rank, patch, mode, matchup="None"):
         # pb_rate = anlz.get_pb_rate(client, newgod, rank, role, patch)
         image = {"url": anlz.get_url(newgod)}
         data_dict = {**build, **image}
-        print(data_dict)
         return data_dict
         
 @app.route('/api/<god>/matchups/<role>/<rank>/<patch>/<mode>')
@@ -332,8 +333,8 @@ def get_player_god_info(playername, mode):
                         lines = creds.readlines()
                         smite_api = SmiteAPI(devId=lines[0].strip(), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
                         data = anlzpy.create_player_god_dict(smite_api.getQueueStats(playername, fh.convert_mode(mode)), playername, mode)
-                        del data["mode"], data["nametag"]
                         mycol.insert_one(data)
+                        return  json.loads(json_util.dumps(data))
         # del data["_id"]
         return {**data, **anlzpy.get_player_winrate(data)}
         # with open("cred.txt", "r") as creds:
