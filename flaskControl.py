@@ -332,6 +332,7 @@ def get_player_god_info(playername, mode):
                         lines = creds.readlines()
                         smite_api = SmiteAPI(devId=lines[0].strip(), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
                         data = anlzpy.create_player_god_dict(smite_api.getQueueStats(playername, fh.convert_mode(mode)), playername, mode)
+                        del data["mode"], data["nametag"]
                         mycol.insert_one(data)
         # del data["_id"]
         return {**data, **anlzpy.get_player_winrate(data)}

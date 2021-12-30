@@ -274,3 +274,7 @@ if __name__ == "__main__":
     # myquery["_id"] = 0
     # df = pd.DataFrame(json_normalize(mycol.find({}, myquery)))
     # df.to_excel("names.xlsx")
+
+# 2555
+# 157274 + 42560 + 88166 + 37476 + 45612
+# 371,088

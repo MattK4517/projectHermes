@@ -65,6 +65,6 @@ def threaded_process_format(nthreads):
     [ t.join() for t in threads ]
 
 starttime = datetime.now()
-init_api("8.12", "20211219")
+init_api("8.12", "20211220")
 # threaded_process_format(5)
 print(f"ENDED IN {datetime.now() - starttime}")
