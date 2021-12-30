@@ -429,4 +429,4 @@ scaling_dict = {
     "Universe Ring Toss Damage:": {
         f"hit{i+1}": -65 for i in range(5)
     }
-}
+} 

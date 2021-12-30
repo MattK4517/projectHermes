@@ -188,11 +188,13 @@ def purge_date(client, dbs, date):
 if __name__ == "__main__":
     # calc_total_matches(client, ranks)
     # count = 0
-    mydb = client["single_match_stats"]
-    for god in godsDict:
-        if god != "Atlas":
-            mycol = mydb[god]
-            mycol.update_many({"Entry_Datetime": {"$gt": "12/15/2021"}}, {"$set": {"mode": "RankedConq"}})
+    mydb = client["CasualMatches"]
+    myquery = { "$or": [ {f"player{i}.Kills_Penta": {"$gt": 0} } for i in range(10)  ] }
+    # myquery = {"player0.Kills_Penta": {"$gt": 0}}
+    total_count = 0
+    mycol = mydb["8.12 Matches"]
+    print(myquery)
+    print(mycol.count_documents(myquery))
     # print(count)
     # mycol = mydb["Atlas"]
     # for x in mycol.aggregate([
@@ -274,3 +276,7 @@ if __name__ == "__main__":
     # myquery["_id"] = 0
     # df = pd.DataFrame(json_normalize(mycol.find({}, myquery)))
     # df.to_excel("names.xlsx")
+
+# 2555
+# 157274 + 42560 + 88166 + 37476 + 45612
+# 371,088

@@ -75,10 +75,14 @@ export default function SearchBar(data) {
   let history = useHistory();
   
   function handleKeyPress(event){
+    console.log(data.data.indexOf(event.target.value))
     if(event.charCode==13){
       if (parseInt(event.target.value)) {
         history.push(`/Match/${event.target.value}`);
-      } else{
+      } else if (event.target.value in data.data !== -1) {
+        history.push(`/${event.target.value.toLowerCase().replaceAll(" ", "-").replaceAll("'","")}`);
+      }
+        else{
         history.push({
           pathname: `/Player/${event.target.value}`,
           state: {player: event.target.value}
@@ -100,7 +104,7 @@ export default function SearchBar(data) {
         id="god-seach-bar"
         // disableClearable
         options={data.data.map((option) => option.god)}
-        defaultValue={"Search a God"}
+        defaultValue={""}
         clearOnEscape={"true"}
         renderOption={(option) => (
           <React.Fragment>
@@ -131,6 +135,7 @@ export default function SearchBar(data) {
                 ...params.InputProps,
               }}
               onKeyPress={e => handleKeyPress(e)}
+              label={"Search A God"}
             />
             
           )
