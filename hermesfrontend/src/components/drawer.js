@@ -21,6 +21,8 @@ import SearchBar from "./SearchBarStuff/SearchBar";
 import Player from "./PlayerPage/Player";
 import GodStatsDisplay from "./PlayerPage/GodStatsDisplay";
 
+import { PlayerProvider } from "./PlayerPage/PlayerContext"
+
 
 
 const godsDict = {
@@ -402,11 +404,13 @@ const routeComponents = routes.map(({path, component}, key) => <Route exact path
         sx={{ flexGrow: 1, width: "100%"}}
       >
         <Toolbar />
+        <PlayerProvider>
             <Typography>
                 <Switch>
                     {routeComponents}
                 </Switch>
             </Typography>
+         </PlayerProvider>
       </Box>
     </Box>
   );

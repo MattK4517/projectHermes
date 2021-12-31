@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import FilterForm from "../Filters/FilterForm";
 import { Link } from "react-router-dom";
+import { PlayerContext } from './PlayerContext';
 
 const calcKDA = (kills, deaths, assists) => {
   return ((kills + assists / 2) / deaths).toFixed(2);
 };
 
+
 export default function GodDisplay(props) {
-  console.log("god display", props)
+  const [god, setGod] = useContext(PlayerContext)
   const modes = ["Casual", "Ranked"];
   return (
     <div className="content-section content-section_no-padding played-gods">
@@ -21,12 +23,11 @@ export default function GodDisplay(props) {
       </div>
       <div className="god-list">
         {props.godList.map((god) => {
-          console.log(`/player/${props.player}/${god.god.replaceAll(" ", "-").toLowerCase()}`)
           return (
             <Link to={{
               pathname: `/player/${props.player}/${god.god.replaceAll(" ", "-").toLowerCase()}`,
             }}
-            
+            onClick={e => (setGod(e.target.innerHTML))}
               className="god-performance">
               <div className="god-face">
                 <div style={{ height: "30px", width: "30px", borderRadius: "3px" }}>

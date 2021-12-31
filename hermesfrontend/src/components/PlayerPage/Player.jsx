@@ -4,6 +4,7 @@ import RankDisplay from './RankDisplay';
 import GodDisplay from './GodDisplay';
 import { MatchDisplay } from '..';
 
+
 const linkDict = {
   "Achilles": "https://i.imgur.com/KoU1bup.jpg",
   "Agni": "https://i.imgur.com/DNzygMe.jpg",
@@ -244,7 +245,7 @@ export default function Player(props) {
       <div className="player-profile-page" 
       style={{
         paddingTop: "100px",
-        backgroundImage: `radial-gradient(600px 200px at 45% 20%, rgba(7, 7, 32, .3) 0%, #070720 100%), linear-gradient(to right, #070720 30%, rgba(7, 7, 32, 0.8) 100%), url(${topLink})`,
+        backgroundImage: `radial-gradient(600px 200px at 45% 20%, rgba(7, 7, 32, .0) 0%, #070720 100%), linear-gradient(to right, #070720 30%, rgba(7, 7, 32, 0.8) 100%), url(${topLink})`,
         backgroundRepeat: "no-repeat",
         backgroundPosition: "45% 5%"
         }}>
