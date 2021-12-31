@@ -350,3 +350,7 @@ def get_player_match_info(playername, mode):
         if playername == "undefined":
                 return {}
         return anlzpy.find_match_history(client, playername, mode)
+
+@app.route("/api/getplayerspecificgod/<playername>/<god>/<role>/<mode>")
+def get_player_specific_god(playername, god, role, mode):
+        return anlzpy.get_player_god_stats(client, playername, god, role, mode)

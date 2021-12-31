@@ -260,11 +260,12 @@ export default function Player(props) {
             <div className="player-content-main">
               <div className="player-side">
                 <RankDisplay rank={rank} tier={tier} winrate={winRate} games={games} mode={mode}/>
-                <GodDisplay godList={godList} setMode={setMode}/>
+                <GodDisplay godList={godList} setMode={setMode} player={player}/>
               </div>
               <div className="player-main">
                 <MatchDisplay matchList={matchList} player={player} mode={mode}/>
               </div>
+
             </div>
           </div>
           {/* <div className="player-content-container">

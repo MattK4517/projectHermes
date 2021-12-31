@@ -273,15 +273,15 @@ def get_worst_matchups(client, god, role, patch, mode="Ranked", rank="All Ranks"
     mycol = mydb[god]
     matchup_dict = {}
     if rank == "Platinum+":
-        myquery = { "role": role, "rank": {"$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch, "mode": f"{mode}Conq"}
+        myquery = { "role": role, "rank": {"$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch, "mode": f"{mode}Conq", "player": "Nika"}
     elif rank == "Diamond+":
-        myquery = { "role": role, "rank": {"$in":  ["Diamond", "Masters", "Grandmaster"]}, "patch": patch, "mode": f"{mode}Conq"} 
+        myquery = { "role": role, "rank": {"$in":  ["Diamond", "Masters", "Grandmaster"]}, "patch": patch, "mode": f"{mode}Conq", "player": "Nika"} 
     elif rank != "All Ranks":
-        myquery = { "role": role, "rank": rank, "patch": patch, "mode": f"{mode}Conq"}
+        myquery = { "role": role, "rank": rank, "patch": patch, "mode": f"{mode}Conq", "player": "Nika"}
     else:
-        myquery = { "role": role, "patch": patch, "mode": f"{mode}Conq"}
+        myquery = { "role": role, "patch": patch, "mode": f"{mode}Conq", "player": "Nika"}
 
-
+    myquery = {"player": "Nika", "patch": patch}
     games = 0
     wins = 0
     for matchup in mycol.find(myquery, {"_id": 0}):
@@ -846,9 +846,43 @@ def get_lanes(client):
                         }
     return lanes
 
-# if __name__ == "__main__":
-#     client = pymongo.MongoClient(
-#         "mongodb+srv://sysAdmin:9gR7C1aDKclng4jA@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
+if __name__ == "__main__":
+    client = pymongo.MongoClient(
+        "mongodb+srv://sysAdmin:9gR7C1aDKclng4jA@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
+    
+    mydb = client["single_match_stats"]
+    # for god in godsDict:
+    god = "Medusa"
+    myquery = {"role": "Jungle"}
+    mycol = mydb[god]
+    for x in mycol.aggregate([
+            {
+                "$match": myquery
+            },
+            {
+                "$group": {
+                    "_id": "$player",
+                    "kills": { "$avg": "$kills"},
+                    "deaths": { "$avg": "$deaths"},
+                    "damage_": { "$avg": "$damage_player"},
+                    "damageTaken": { "$avg": "$damage_taken"},
+                    "damageMitigated": { "$avg": "$damage_mitigated"},
+                    "healing": { "$avg": "$healing"},
+                    "selfHealing": { "$avg": "$healing_self"},
+                    "gold": { "$avg": "$gold"},
+                    "damageBot": { "$avg": "$damage_bot"},
+                    "killsBot": { "$avg": "$kills_bot"},
+                    "towerKills": { "$avg": "$tower_kills"},
+                    "phoenixKills": { "$avg": "$phoenix_kills"},
+                    "towerDamage": { "$avg": "$tower_damage"},
+                    "wardsPlaced": { "$avg": "$wards_placed"},
+                    "games": {"$sum": 1},
+                },
+            },
+            {"$sort": {"games": -1}},
+            {"$limit": 5},
+        ]):
+            print(god, x)
 #     print(get_combat_stats(client, "Achilles", "Solo", "8.11"))
 #     print(get_objective_stats(client, "Achilles", "Solo", "8.11"))
 #     print(get_winrate(client, "Achilles", "Solo", "8.10"))
