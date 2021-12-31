@@ -20,6 +20,7 @@ export default function GodStatsDisplay(props) {
           filters={modes}
           setFilter={props.setMode}
         />
+        
       </div>
     </div>
   );

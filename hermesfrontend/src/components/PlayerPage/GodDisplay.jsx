@@ -21,10 +21,10 @@ export default function GodDisplay(props) {
       </div>
       <div className="god-list">
         {props.godList.map((god) => {
+          console.log(`/player/${props.player}/${god.god.replaceAll(" ", "-").toLowerCase()}`)
           return (
             <Link to={{
               pathname: `/player/${props.player}/${god.god.replaceAll(" ", "-").toLowerCase()}`,
-              state: { fromDashboard: true }
             }}
             
               className="god-performance">
