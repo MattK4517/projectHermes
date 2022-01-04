@@ -230,15 +230,14 @@ def get_all_builds(client, god, role, patch, mode="Ranked", rank="All Ranks"):
     mycol = mydb[god]
 
     if rank == "Platinum+":
-        myquery = { "role": role, "rank": {"$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch, "mode": f"{mode}Conq"}
+        myquery = { "role_played": role, "rank": {"$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch, "mode": f"{mode}Conq"}
     elif rank == "Diamond+":
-        myquery = { "role": role, "rank": {"$in":  ["Diamond", "Masters", "Grandmaster"]}, "patch": patch, "mode": f"{mode}Conq"}    
+        myquery = { "role_played": role, "rank": {"$in":  ["Diamond", "Masters", "Grandmaster"]}, "patch": patch, "mode": f"{mode}Conq"}    
     elif rank != "All Ranks":
-        myquery = { "role": role, "rank": rank, "patch": patch, "mode": f"{mode}Conq"}
+        myquery = { "role_played": role, "rank": rank, "patch": patch, "mode": f"{mode}Conq"}
     else:
-        myquery = { "role": role, "patch": patch, "mode": f"{mode}Conq"}
+        myquery = { "role_played": role, "patch": patch, "mode": f"{mode}Conq"}
 
-    print(myquery)
     games = 0
     wins = 0
     for x in mycol.find(myquery, {"_id": 0}):
@@ -265,7 +264,8 @@ def get_all_builds(client, god, role, patch, mode="Ranked", rank="All Ranks"):
             test_sort = OrderedDict(sorted(top_dict[slot].items(),
                 key = lambda x: getitem(x[1], "games")))
             top_dict[slot] = dict(test_sort)
-
+    if games == 0:
+        games = 1
     return {**dict(top_dict), **{"games": games, "wins": wins, "winRate": round(wins/games*100, 2)}}
 
 def get_worst_matchups(client, god, role, patch, mode="Ranked", rank="All Ranks"):
@@ -846,10 +846,10 @@ def get_lanes(client):
                         }
     return lanes
 
-# if __name__ == "__main__":
-#     client = pymongo.MongoClient(
-#         "mongodb+srv://sysAdmin:9gR7C1aDKclng4jA@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
-#     print(get_combat_stats(client, "Achilles", "Solo", "8.11"))
+if __name__ == "__main__":
+    client = pymongo.MongoClient(
+        "mongodb+srv://sysAdmin:9gR7C1aDKclng4jA@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
+    print(get_winrate(client, "Achilles", "Solo", "8.12"))
 #     print(get_objective_stats(client, "Achilles", "Solo", "8.11"))
 #     print(get_winrate(client, "Achilles", "Solo", "8.10"))
 #     print(get_pb_rate(client, "Achilles", "All Ranks", "Solo", "8.10"))

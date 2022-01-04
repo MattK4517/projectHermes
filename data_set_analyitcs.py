@@ -16,31 +16,40 @@ import pandas as pd
 #                dict3[key] = [value , dict1[key]]
 #    return dict3
 
-# def get_items_by_class(client, class_name, role):
-#     build = ["Divine Ruin", "Book of Thoth", "Evolved Book of Thoth"]
-#     items = {f"slot{i+1}": {} for i in range(6)}
-#     for char in class_name:
-#         print(char)
-#         char_items = anlz.get_all_builds(client, char, role, "8.12")
-#         for slot in char_items:
-#             if "slot" in slot:
-#                 for item in char_items[slot]:
-#                     if item in items[slot]:
-#                         items[slot][item]["games"] += char_items[slot][item]["games"]
-#                         items[slot][item]["wins"] += char_items[slot][item]["wins"]
-#                     else:
-#                         items[slot][item] = char_items[slot][item]
+def get_items_by_class(client, class_name, role):
+    build = ["Runeforged Hammer"]
+    items = {f"slot{i+1}": {} for i in range(6)}
+    for char in class_name:
+        char_items = anlz.get_all_builds(client, char, role, "8.12")
+        for slot in char_items:
+            if "slot" in slot:
+                for item in char_items[slot]:
+                    if item in items[slot]:
+                        items[slot][item]["games"] += char_items[slot][item]["games"]
+                        items[slot][item]["wins"] += char_items[slot][item]["wins"]
+                    else:
+                        items[slot][item] = char_items[slot][item]
 
-#     with open("items.txt", "w") as f:
-#         for slot in items:
-#             for item in items[slot]:
-#                 if item in build or item in Starter_items and items[slot][item]["games"] > 25:
-#                     games = items[slot][item]["games"]
-#                     wins = items[slot][item]["wins"]
-#                     wr = round(wins/games * 100, 2)
-#                     f.writelines(f"{slot},{item},{wins},{games},{wr}\n")
+            if type(char_items[slot]) is dict:
+                if "Runeforged Hammer" in char_items[slot]:
+                    print(char, slot, char_items[slot]["Runeforged Hammer"]["wins"], char_items[slot]["Runeforged Hammer"]["games"])
 
-# get_items_by_class(client, Mages, "Mid")
+    
+    games = 0 
+    wins = 0
+    with open("items.txt", "a") as f:
+        for slot in items:
+            for item in items[slot]:
+                if item in build and items[slot][item]["games"] > 0:
+                    games += items[slot][item]["games"]
+                    wins += items[slot][item]["wins"]
+                    wr = round(wins/games * 100, 2)
+                    f.writelines(f"{slot},{item},{wins},{games},{wr}\n")
+
+
+# for char_class in [Assassins, Hunters, Warriors]:
+#     for role in roles:
+get_items_by_class(client, Assassins, "Jungle")
 
 # def get_combat_stats_by_class(client, class_name):
 #     mydb= client["single_combat_stats"]
@@ -119,25 +128,25 @@ import pandas as pd
 
 
 
-mydb = client["single_match_stats"]
-# starttime = datetime.now()
-fields = ["gold", "damage_bot", "kills_bot", "tower_kills","phoenix_kills", "tower_damage", "objective_assists", "wards_placed"]
-fields = ["kills", "deaths", "assists", "damage_player", "damage_mitigated", "damage_taken", "healing", "healing_self",]
-dmg_dict = {field: {role: {"god": "", "amount": 0} for role in roles} for field in fields}
-for field in fields:
-    top = 0
-    for god in ["Morgan Le Fay"]:
-        mycol = mydb[god]
-        all_games = []
-        #pymongo.ASCENDING
-        #pymongo.DESCENDING
-        #{"damage_mitigated": {"$gt": 0}
-        #.sort("damage_mitigated", pymongo.DESCENDING)
-        for x in mycol.find({"role": {"$exists": True}, "patch": "8.12", "mode": f"RankedConq"}, {"_id": 0, field: 1, "role": 1, "matchId": 1}).sort(field, pymongo.DESCENDING).limit(1):
-            if x[field] > dmg_dict[field][x["role"]]["amount"]:
-                dmg_dict[field][x["role"]] = {"god": god, "amount": x[field], "matchid": x["matchId"]}
+# mydb = client["single_match_stats"]
+# # starttime = datetime.now()
+# fields = ["gold", "damage_bot", "kills_bot", "tower_kills","phoenix_kills", "tower_damage", "objective_assists", "wards_placed"]
+# fields = ["kills", "deaths", "assists", "damage_player", "damage_mitigated", "damage_taken", "healing", "healing_self",]
+# dmg_dict = {field: {role: {"god": "", "amount": 0} for role in roles} for field in fields}
+# for field in fields:
+#     top = 0
+#     for god in ["Morgan Le Fay"]:
+#         mycol = mydb[god]
+#         all_games = []
+#         #pymongo.ASCENDING
+#         #pymongo.DESCENDING
+#         #{"damage_mitigated": {"$gt": 0}
+#         #.sort("damage_mitigated", pymongo.DESCENDING)
+#         for x in mycol.find({"role": {"$exists": True}, "patch": "8.12", "mode": f"RankedConq"}, {"_id": 0, field: 1, "role": 1, "matchId": 1}).sort(field, pymongo.DESCENDING).limit(1):
+#             if x[field] > dmg_dict[field][x["role"]]["amount"]:
+#                 dmg_dict[field][x["role"]] = {"god": god, "amount": x[field], "matchid": x["matchId"]}
 
-print(dmg_dict)
+# print(dmg_dict)
 #         # mean = sum(all_games) / len(all_games)
 #         # variance = sum([((x - mean) ** 2) for x in all_games]) / len(all_games)
 #         # res = variance ** 0.5
