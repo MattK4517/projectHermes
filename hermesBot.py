@@ -51,8 +51,8 @@ def godAbbreviations(godName):
         godName = "Charybdis"
     elif godName == "chern" or godName == "cherno":
         godName = "Chernobog"
-    elif godName == "lulu":
-        godName = "Cthulu"
+    elif godName == "lulu" or godName == "cthu":
+        godName = "Cthulhu"
     elif godName == "cu" or godName == "cu chu" or godName == "cu chulainn" or godName == "chu chu":
         godName = "Cu-Chulainn"
     elif godName == "daji" or godName == "da ji":

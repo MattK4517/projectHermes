@@ -83,7 +83,6 @@ export default function SearchBarGodPage(data) {
         id="god-seach-bar"
         // disableClearable
         options={data.data.map((option) => option.god)}
-        defaultValue={"Search a Matchup"}
         clearOnEscape={"true"}
         renderOption={(option) => ( 
           <React.Fragment>
@@ -117,6 +116,7 @@ export default function SearchBarGodPage(data) {
               InputProps={{
                 ...params.InputProps,
               }}
+              label={"Search A Matchup"}
             />
           )
         )}

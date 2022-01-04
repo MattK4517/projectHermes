@@ -1,11 +1,13 @@
 import React from "react";
 import FilterForm from "../Filters/FilterForm";
+import { Link } from "react-router-dom";
 
 const calcKDA = (kills, deaths, assists) => {
   return ((kills + assists / 2) / deaths).toFixed(2);
 };
 
 export default function GodDisplay(props) {
+  console.log("god display", props)
   const modes = ["Casual", "Ranked"];
   return (
     <div className="content-section content-section_no-padding played-gods">
@@ -19,8 +21,13 @@ export default function GodDisplay(props) {
       </div>
       <div className="god-list">
         {props.godList.map((god) => {
+          console.log(`/player/${props.player}/${god.god.replaceAll(" ", "-").toLowerCase()}`)
           return (
-            <a href="#" className="god-performance">
+            <Link to={{
+              pathname: `/player/${props.player}/${god.god.replaceAll(" ", "-").toLowerCase()}`,
+            }}
+            
+              className="god-performance">
               <div className="god-face">
                 <div style={{ height: "30px", width: "30px", borderRadius: "3px" }}>
                   <img
@@ -60,7 +67,7 @@ export default function GodDisplay(props) {
                   <div className="total-games">{god.matches} games</div>
                 </div>
               </div>
-            </a>
+            </Link>
           );
         })}
       </div>

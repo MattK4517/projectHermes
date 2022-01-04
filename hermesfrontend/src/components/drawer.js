@@ -19,6 +19,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import SearchBar from "./SearchBarStuff/SearchBar";
 import Player from "./PlayerPage/Player";
+import GodStatsDisplay from "./PlayerPage/GodStatsDisplay";
 
 
 
@@ -172,7 +173,14 @@ const godsDict = {
       path: ["/player/:handle", "/player"],
       component: <Player />,
       god: "",
+    },
+    {
+      path: ["/player/:handle/:handle"],
+      component: <GodStatsDisplay />,
+      god: "",
     }
+    
+
   ]
   Object.keys(godsDict).forEach((god) => {
     routes = [...routes, {

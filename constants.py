@@ -123,7 +123,7 @@ godsDict = {
 
 
 Assassins = ["Arachne", "Awilix", "Bakasura", "Bastet", "Camazotz", "Cliodhna", "Da Ji", "Fenrir", "Hun Batz", "Kali", "Loki", "Mercury", "Ne Zha", "Nemesis", "Pele", "Ratatoskr", "Ravana", "Serqet", "Set", "Susano", "Thanatos", "Thor", "Tsukuyomi"]
-Guardians = ["Ares", "Artio", "Athena", "Atlas", "Bacchus", "Cabrakan", "Cerberus",  "Fafnir", "Ganesha", "Geb", "Jormungandr", "Khepri", "Kumbhakarna", "Kuzenbo", "Sobek", "Sylvanus", "Terra", "Xing Tian", "Yemoja", "Ymir"]
+Guardians = ["Ares", "Artio", "Athena", "Atlas", "Bacchus", "Cabrakan", "Cerberus", "Cthulhu", "Fafnir", "Ganesha", "Geb", "Jormungandr", "Khepri", "Kumbhakarna", "Kuzenbo", "Sobek", "Sylvanus", "Terra", "Xing Tian", "Yemoja", "Ymir"]
 Hunters = ["Ah Muzen Cab", "Anhur", "Apollo", "Artemis", "Cernunnos", "Charybdis","Chernobog", "Chiron", "Cupid", "Danzaburou", "Hachiman", "Heimdallr", "Hou Yi", "Izanami", "Jing Wei", "Medusa", "Neith", "Rama", "Skadi", "Ullr", "Xbalanque"]
 Mages = ["Agni", "Ah Puch", "Anubis", "Ao Kuang", "Aphrodite", "Baba Yaga", "Baron Samedi", "Chang\'e", "Chronos", "Discordia", "Eset", "Freya", "Hades", "He Bo", "Hel", "Hera", "Janus", "Kukulkan", "Merlin", "Morgan Le Fay",
          "Nox", "Nu Wa", "Olorun", "Persephone", "Poseidon", "Ra", "Raijin", "Scylla", "Sol", "The Morrigan", "Thoth", "Tiamat", "Vulcan", "Zeus", "Zhong Kui"]
@@ -177,6 +177,15 @@ num_hits_dict = {
         "Fatal Strike": 1,
         "Gift of the Gods": 0,
     },
+    "Agni": {
+        "Noxious Fumes Damage per Tick": 10,
+        "Noxious Fumes Explosion Damage": 1,
+        "Flame Wave": 1,
+        "Path of Flames Damage per Tick": 4,
+        "Rain Fire": 3,
+        "Combustion": 1,
+        "Combustion Damage per Tick": 6
+    },
     "Ah Puch": {
         "Undead Surge": 2,
         "Corpse Explosion Initial Damage": 1,
@@ -193,6 +202,28 @@ num_hits_dict = {
         "Dazzling Offensive": 3,
         "Illuminating Strike": 0,
     },
+    "Anubis": {
+        "Plague of Locusts": 6,
+        "Mummify": 1,
+        "Grasping Hands": 4,
+        "Death Gaze": 30,
+        "Sorrow": 0
+    },
+    "Ao Kuang": {
+        "Water Illusion": 1,
+        "Dragon Call Attack Damage": 6,
+        "Wild Storm": 1,
+        "King of the Eastern Seas Damage": 1,
+        "King of the Eastern Seas Landing Damage": 1,
+        "Dragon King's Sword": 0,
+    },
+    "Aphrodite": {
+        "Kiss": 0,
+        "Back Off!": 1,
+        "Love Birds": 6,
+        "Undying Love": 0,
+        "Center of Attention": 0,
+    },
     "Arachne": {
         "Venomous Bite Initial Damage": 1,
         "Venomous Bite Damage per Tick": 6,
@@ -207,12 +238,28 @@ num_hits_dict = {
         "Gravity Surge": 1,
         "Initiative": 0,
     },
+    "Baba Yaga": {
+        "Wild Witchcraft": 1,
+        "Baba's Brew": 2,
+        "Blast Off!": 1,
+        "Home Sweet Home Landing Damage:": 1,
+        "Home Sweet Home Burst Damage:": 4,
+        "Home Sweet Home Burn Damage:": 20, # num burns * num bolts ( 3 * 4 )
+    },
     "Bakasura": {
         "Take Down": 1,
         "Eat Minion": 0,
         "Butcher Blades": 0,
         "Regurgitate": 72, # = num minions * seconds * attacks per seconds (6 * 8 * 1)
         "Insatiable Hunger": 0,
+    },
+    "Baron Samedi": {
+        "Vivid Gaze": 1,
+        "Consign Spirits": 1,
+        "Wrap It Up": 5,
+        "Life of the Party Damage Per Tick:": 10,
+        "Life of the Party Damage On Hit": 1,
+        "Hysteria": 0,
     },
     "Bastet": {
         "Pounce": 1,
@@ -244,6 +291,20 @@ num_hits_dict = {
         "Storm Call": 1,
         "Overflow": 0,
     },
+    "Chang'e": {
+        "Crescent Moon Dance": 1,
+        "Moonlit Waltz": 1,
+        "Moonflower Dance": 1,
+        "Waxing Moon": 1,
+        "Jade Rabbit": 0,
+    },
+    "Chronos": {
+        "Time Rift": 1,
+        "Accelerate": 0,
+        "Stop Time": 2,
+        "Rewind": 0,
+        "Time Lord": 1,
+    },
     "Cliodhna": {
         "Banshee's Wail Scream Damage": 3,
         "Banshee's Wail Final Hit Damage": 1,
@@ -270,6 +331,14 @@ num_hits_dict = {
         "Paolao Pull Damage per Tick": 3,
         "Torture Blades": 0,
     },
+    "Discordia": {
+        "Contest of Gods": 0,
+        "Unruly Magic Orb Damage": 1,
+        "Unruly Magic Minor Damage": 6,
+        "Strife": 1,
+        "Erratic Behavior": 0,
+        "Golden Apple of Discord": 1,
+    },   
     "Erlang Shen": {
         "Spot Weakness": 0,
         "Pin": 1,
@@ -277,12 +346,26 @@ num_hits_dict = {
         "9 Turns Blessing": 0,
         "Howling Celestial Dog": 0,
     },
+    "Eset": {
+        "Wing Gust": 4,
+        "Spirit Ball": 1,
+        "Dispel Magic": 0,
+        "Circle of Protection Damage:": 1,
+        "Funeral Rites": 1,
+    },
     "Fenrir": {
         "Unchained": 1,
         "Seething Howl": 0,
         "Brutalize": 4,
         "Ragnarok": 1,
         "Unbound Runes": 0,
+    },
+    "Freya": {
+        "Irradiate": 0,
+        "Pulse": 0,
+        "Banish": 0,
+        "Valkyrie's Discretion": 4,
+        "Brisingamen's Blessing": 0,
     },
     "Gilgamesh": {
         "Sun-Forged Scimitar": 0,
@@ -298,12 +381,43 @@ num_hits_dict = {
         "Warrior's Will": 1,
         "Taolu Assault": 10,
         "Cavalry Charge": 6,
-    }, 
+    },
+    "Hades": {
+        "Death From Below": 1,
+        "Shroud of Darkness": 0,
+        "Devour Souls Damage:": 1,
+        "Devour Souls Detonated Damage:": 3,
+        "Pillar of Agony": 8,
+        "Blight": 0,
+    },
+    "He Bo": {
+        "Water Cannon": 1,
+        "Atlas of the Yellow River": 0,
+        "Waterspout": 1,
+        "Crushing Wave": 1,
+        "Steady Flow": 0,
+    },
+    "Hel": {
+        "Decay (Restoration)": 1,
+        "Hinder (Cleanse)": 0,
+        "Repulse (Inspire)": 1,
+        "Switch Stances": 0,
+        "Stance Attunement": 0,
+    },
+    "Hera": {
+        "Royal Assault Cone Damage:": 1,
+        "Royal Assault Fist Damage:": 2,
+        "Polymorph": 1,
+        "Divine Shroud": 10,
+        "Argus, the Defender": 1,
+        "Commanding Presence": 0,
+    },
     "Hercules": {
         "Driving Strike": 1,
         "Earthbreaker": 1,
         "Mitigate Wounds": 0,
         "Excavate": 3,
+        "Strength from Pain": 0,
     },
     "Horus": {
         "Updraft": 1,
@@ -319,6 +433,13 @@ num_hits_dict = {
         "Fear No Evil": 1,
         "Infused Strikes": 1
     },
+    "Janus": {
+        "Portal": 1,
+        "Unstable Vortex": 2,
+        "Threshold": 0,
+        "Through Space and Time": 1,
+        "Passages": 0,
+    },
     "Kali": {
         "Nimble Strike": 1,
         "Lash Damage Per Blade": 3,
@@ -333,6 +454,13 @@ num_hits_dict = {
         "Twin Cleave (Bladestorm)": 1,
         "Sundering Strike (Excalibur's Wrath)": 1,
         "Steadfast": 0,
+    },
+    "Kukulkan": {
+        "Zephyr": 1,
+        "Slipstream": 0,
+        "Whirlwind": 12,
+        "Spirit Of The Nine Winds": 1,
+        "Power Of The Wind Jewel": 0,
     },
     "Loki": {
         "Vanish Damage per Tick": 4,
@@ -361,9 +489,16 @@ num_hits_dict = {
         "Universe Ring Toss Damage:": 4,
         "Flaming Spear": 0,
         "Armillary Sash": 1,
-        "Wind Fire Wheels Damage Per Hit:": 3,
+        "Wind Fire Wheels Damage per Hit": 6,
         "Wind Fire Wheels Damage (Initial/Landing)": 2,
         "Righteous Spirit": 0
+    },
+    "Nemesis": {
+        "Swift Vengeance": 2,
+        "Slice and Dice": 2,
+        "Retribution": 0,
+        "Divine Judgement": 0,
+        "Scales of Fate": 0,
     },
     "Nike": {
         "Rend": 3,
@@ -387,12 +522,81 @@ num_hits_dict = {
         "Lord of the Afterlife": 1,
         "Fragmented": 0,
     },
+    "Pele": {
+        "Pyroclast Damage:": 2,
+        "Pyroclast Return Damage:": 10, # num return * pyroclast stacks ( 5 * 2 )
+        "Eruption Inner Damage:": 1,
+        "Eruption Outer Damage:": 1,
+        "Magma Rush Damage:": 20,
+        "Magma Rush Amplified Damage:": 10,
+        "Volcanic Lightning Damage:": 1,
+        "Volcanic Lightning Cone Damage:": 3,
+        "Everlasting Flame": 1,
+    },
+    "Ratatoskr": {
+        "Dart": 1,
+        "Flurry": 4,
+        "Acorn Blast": 3,
+        "Through the Cosmos": 1,
+        "Acorn of Yggdrasil": 0,
+    },
+    "Ravana": {
+        "Prana Onslaught": 1,
+        "Overhead Kick": 1,
+        "10-Hand Shadow Fist": 1,
+        "Mystic Rush Damage:": 1,
+        "Chain of Blows": 0,
+    },
+    "Serqet": {
+        "Deathbane": 3,
+        "Catalyst": 0,
+        "Cobra's Kiss": 2,
+        "Ambush": 1,
+        "Last Breath Damage": 1,
+        "Last Breath Poison Damage": 5,
+    },
+    "Set": {
+        "Skewer": 1,
+        "Spawn of Set Dash Damage:": 8,
+    },
     "Sun Wukong": {
         "The Magic Cudgel": 1,
         "Master's Will": 1,
         "72 Transformations": 1,
         "Somersault Cloud": 1,
         "Undefeated Body": 0
+    },
+    "Susano": {
+        "Storm Kata": 3,
+        "Wind Siphon": 1,
+        "Jet Stream": 4,
+        "Typhoon": 1,
+        "Gathering Storm": 0
+    },
+    "Thanatos": {
+        "Death Scythe Damage": 1,
+        "Death Scythe Bonus Damage": 0,
+        "Scent of Death": 0,
+        "Soul Reap": 1,
+        "Hovering Death": 1,
+        "Harvester of Souls": 0,
+    },
+    "Thor": {
+        "Mjolnir's Attunement": 2,
+        "Tectonic Rift": 0,
+        "Berserker Barrage Damage per Tick": 3,
+        "Berserker Barrage Final swing Damage": 1,
+        "Anvil of Dawn Damage": 1,
+        "Anvil of Dawn Arc Damage": 3,
+    },
+    "Tsukuyomi": {
+        "Dark Moon Shuriken": 1,
+        "Kusarigama Swing Damage": 2,
+        "Kusarigama Final Damage": 1,
+        "Silver Moon Caltrops": 10,
+        "Piercing Moonlight Beam Damage": 4,
+        "Piercing Moonlight Dash Damage": 4,
+        "Shingetsu & Mangetsu": 0
     },
     "Tyr": {
         "Fearless": 1,
@@ -428,5 +632,26 @@ scaling_dict = {
         },
     "Universe Ring Toss Damage:": {
         f"hit{i+1}": -65 for i in range(5)
-    }
+    },
+    "Mjolnir's Attunement": {
+        "hit1": 0,
+        "hit2": 100
+    },
+    "Vivid Gaze": {
+        "hit1": 15,
+    },
+    "Spirit Ball": {
+        "hit1": 50,
+    },
+    "Circle of Protection Damage:": {
+        "hit1": 250,
+    },
+    "Royal Assault Fist Damage:": {
+        "hit1": 15,
+        "hit2": 15
+    },
+    "Unstable Vortex": {
+        "hit1": 0,
+        "hit2": -100 + 15
+    },
 }

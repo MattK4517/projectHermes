@@ -64,6 +64,28 @@ def change_special(god, ability_numbers):
         for ability in ability_numbers:
             if ability["abilityName"] == "Special Delivery Minion Damage:":
                 ability_numbers.remove(ability)
+    
+    if god == "Serqet":
+        damage = "0"
+        if ability_numbers[3]["damage"].strip() == "100":
+            damage = "20"
+        if ability_numbers[3]["damage"].strip() == "175":
+            damage = "35"
+        if ability_numbers[3]["damage"].strip() == "250":
+            damage = "50"
+        if ability_numbers[3]["damage"].strip() == "325":
+            damage = "75" 
+        if ability_numbers[3]["damage"].strip() == "400":
+            damage = "90"
+        
+        ability_numbers.append({"damage": damage, 
+        "scaling": "16", 
+        "abilityName": f"Last Breath Poison Damage",
+        "displayName": f"Last Breath Poison"
+        })
+    
+    if god == "Set": 
+        pass
 
 def get_num_hits(god, ability, base):
     if special_case(ability, base):
@@ -120,8 +142,8 @@ def calc_combo_damage_raw(client, god, levels, power, build):
     total_damage = 0
     myfilter = {
                 **{"_id": 0},
-                **{f"abilityDescription{i}": 1 for i in range(abilites)},
-                **{f"Ability_{i}": 1 for i in range(abilites)},
+                **{f"abilityDescription{i+1}": 1 for i in range(abilites)},
+                **{f"Ability_{i+1}": 1 for i in range(abilites)},
     }
     mydb = client["God_Data"]
     mycol = mydb[god]
@@ -133,15 +155,16 @@ def calc_combo_damage_raw(client, god, levels, power, build):
                 ability_names.append(x[ability]["Summary"])
             else:
                 for item in x[ability]["itemDescription"]["rankitems"]:
-                    # print(item)
                     if ("damage:" in item["description"].lower() 
                     or "damage per" in item["description"].lower()
                     or get_special_ability(ability_names[int(ability[-1])-1]) 
                     or "initial hit:" in item["description"].lower()
                     or "damage" in item["description"].lower()
-                    ) and "lane minion damage" not in item["description"].lower() and "self damage" not in item["description"].lower():
+                    ) and ("lane minion damage" not in item["description"].lower()
+                    and "self damage" not in item["description"].lower()
+                    and "jealousy damage" not in item["description"].lower()):
+                        # print(item)
                         if levels[ability[-1]] != 0:
-                            print(item)
                             if len(item["value"].split("(")) > 1:
                                 damage = item["value"].split("(")[0]
                                 if len(item["value"].split("(")) > 1:
@@ -158,8 +181,6 @@ def calc_combo_damage_raw(client, god, levels, power, build):
                                     if len(item["value"].split(" ")[0].split("/")) > 1:
                                         damage = item["value"].split(" ")[0].split("/")[levels[ability[-1]] -1]
                                         scaling = 0
-
-                            print(damage, scaling)
                             ability_numbers.append(
                                 {"damage": damage, 
                                 "scaling": scaling, 
@@ -186,16 +207,16 @@ levels  =  {
     "2": 5, 
     "3": 5, 
     "4": 5, 
-    "5": 0
+    "5": 5
     }
-calc_combo_damage_raw(client, "Cliodhna", levels, 400, 0)
+calc_combo_damage_raw(client, "Kukulkan", levels, 0, 0)
 # for warrior in Warriors:
 #     print(warrior)
 #     calc_combo_damage_raw(client, warrior, levels, 0, 0)
 #     print("\n")
 
-# for assassin in Assassins:
-#     print(assassin)
-#     calc_combo_damage_raw(client, assassin, levels, 0, 0)
-#     print("\n")
+  
 # About 106-108 wraiths in Ah Puch ult
+
+# Set calc
+# Baba Ult
