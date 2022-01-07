@@ -19,13 +19,13 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import SearchBar from "./SearchBarStuff/SearchBar";
 import Player from "./PlayerPage/Player";
+import OverviewDisplay from "./PlayerPage/OverviewDisplay";
 import GodStatsDisplay from "./PlayerPage/GodStatsDisplay";
-
 import { PlayerProvider } from "./PlayerPage/PlayerContext"
 
 
 
-const godsDict = {
+export const godsDict = {
     "Achilles": "Solo",
     "Agni": "Mid",
     "Ah Muzen Cab": "Carry",
@@ -177,8 +177,13 @@ const godsDict = {
       god: "",
     },
     {
-      path: ["/player/:handle/:handle"],
+      path: ["/player/:handle/god-stats"],
       component: <GodStatsDisplay />,
+      god: "",
+    },
+    {
+      path: ["/player/:handle/god-stats/:handle"],
+      component: <OverviewDisplay />,
       god: "",
     }
     
@@ -330,7 +335,7 @@ const routeComponents = routes.map(({path, component}, key) => <Route exact path
                 }}
               />
             </Link>
-            <SearchBar data={routes.slice(5)} />
+            <SearchBar data={routes.slice(8)} />
           </Typography>
         </Toolbar>
       </Root>

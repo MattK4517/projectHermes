@@ -2,6 +2,8 @@ import React, { useContext } from "react";
 import FilterForm from "../Filters/FilterForm";
 import { Link } from "react-router-dom";
 import { PlayerContext } from './PlayerContext';
+import { linkDict, setTopGod } from "./Player"
+import OverviewDisplay from "./OverviewDisplay";
 
 const calcKDA = (kills, deaths, assists) => {
   return ((kills + assists / 2) / deaths).toFixed(2);
@@ -9,7 +11,7 @@ const calcKDA = (kills, deaths, assists) => {
 
 
 export default function GodDisplay(props) {
-  const [god, setGod] = useContext(PlayerContext)
+  const [god, setGod, player, setPlayer, mode, setMode, role, setRole, topLink, setTopLink] = useContext(PlayerContext)
   const modes = ["Casual", "Ranked"];
   return (
     <div className="content-section content-section_no-padding played-gods">
@@ -18,16 +20,21 @@ export default function GodDisplay(props) {
         <FilterForm
           filter={"Queue Type"}
           filters={modes}
-          setFilter={props.setMode}
+          setFilter={setMode}
         />
       </div>
       <div className="god-list">
-        {props.godList.map((god) => {
+        {props.godList.map((god, index) => {
           return (
             <Link to={{
-              pathname: `/player/${props.player}/${god.god.replaceAll(" ", "-").toLowerCase()}`,
+              pathname: `/player/${props.player}/god-stats/${god.god.replaceAll(" ", "-").replaceAll("'", "").toLowerCase()}`,
+              component: <OverviewDisplay />,
+              target: "_blank"
             }}
-            onClick={e => (setGod(e.target.innerHTML))}
+            onClick={e => (
+              setTopLink(setTopGod(props.godList[index]["god"])),
+              setGod(props.godList[index]["god"]), 
+              setPlayer(props.player))}
               className="god-performance">
               <div className="god-face">
                 <div style={{ height: "30px", width: "30px", borderRadius: "3px" }}>

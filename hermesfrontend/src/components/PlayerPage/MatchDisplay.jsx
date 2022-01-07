@@ -229,7 +229,7 @@ export default function MatchDisplay(props) {
                   </div>
                   <div className="stat-group-four">
                     <div className="items-match">
-                      <div className="build">
+                      <div className="build" style={{marginTop: "0px"}}>
                         <div className="build-container">
                           {build.map((item) => {
                             return (

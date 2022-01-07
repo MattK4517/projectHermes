@@ -160,25 +160,26 @@ def add_gold_eff(client, db, col, field_key):
         add_patch_field(client, db, col, matchId, gold_eff, field_key)
 
 def remove_duplicates(client, dbs):
-    for db in dbs:
-        mydb = client[db]
-        for god in godsDict.keys():
-            mycol = mydb[god]
-            starting_number = mycol.count_documents({})
-            doc_ids = []
-            for x in mycol.aggregate([
-                {"$group": {"_id": "$matchId", "count": {"$sum": 1} }}
-            ]):
-                if x["count"] > 1:
-                    for x in mycol.find({"matchId": x["_id"]}, {"_id": 1}):
-                        doc_ids.append(x["_id"])
-                        if len(doc_ids) > 1:
-                            mycol.delete_one({"_id": doc_ids[-1]})
+    # for db in dbs:
+        mydb = client["CasualMatches"]
+        mycol = mydb["8.12 Matches"]
+        # for god in godsDict.keys():
+        #     mycol = mydb[god]
+        doc_ids = []
+        for x in mycol.aggregate([
+            {"$match": {"Entry_Datetime": "12/20/2021"}},
+            {"$group": {"_id": "$MatchId", "count": {"$sum": 1} }}
+        ]):
+            if x["count"] > 1:
+                for x in mycol.find({"MatchId": x["_id"]}, {"_id": 1}):
+                    doc_ids.append(x["_id"])
+                    if len(doc_ids) > 1:
+                        mycol.delete_one({"_id": doc_ids[-1]})
                                 # time.sleep(100)
-            ending_number = mycol.count_documents({})
-            with open("requirements.txt", "a") as f:
-                f.writelines(f"{db} for {god} starting at {starting_number} end at {ending_number}. loss={round(100 -ending_number/starting_number * 100, 2)}\n")
-            print(f"{god} done")
+            # ending_number = mycol.count_documents({})
+            # with open("requirements.txt", "a") as f:
+            #     f.writelines(f"{db} for {god} starting at {starting_number} end at {ending_number}. loss={round(100 -ending_number/starting_number * 100, 2)}\n")
+            # print(f"{god} done")
 
 def purge_date(client, dbs, date):
     for db in dbs:
@@ -186,7 +187,10 @@ def purge_date(client, dbs, date):
             delete_match_docs(client, db, god, "Entry_Datetime", date)
         
 if __name__ == "__main__":
-    calc_total_matches(client, ranks)
+    # calc_total_matches(client, ranks)
+    mydb = client["CasualMatches"]
+    mycol = mydb["8.12 Matches"]
+    print(mycol.count_documents({"Entry_Datetime": "12/22/2021"}))
     # count = 0
     # mydb = client["single_match_stats"]
     # for god in godsDict:
@@ -237,7 +241,8 @@ if __name__ == "__main__":
     # purge_date(client, dbs, "11/4/2021")
     # delete_match_docs(client, "Matches", "8.11 Matches", "Entry_Datetime", "11/24/2021")
 
-    # # remove_duplicates(client, ["single_items", "single_matchups"])
+    # remove_duplicates(client, "none")
+    # print(mycol.count_documents({"Entry_Datetime": "12/19/2021"}))
     # mydb = client["Matches"]
     # mycol = mydb["8.11 Matches"]
     # print(mycol.count_documents({"Entry_Datetime": "11/24/2021"}))

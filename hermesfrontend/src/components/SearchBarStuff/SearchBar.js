@@ -5,6 +5,7 @@
 import { Link, withRouter, useHistory } from "react-router-dom";
 import Match from "../Match";
 import Player from "../PlayerPage/Player";
+// import { godsDict } from './'
 
 // export default function SearchBar({ placeholder, data }) {
 //   const [filteredData, setFilteredData] = useState([]);
@@ -75,7 +76,6 @@ export default function SearchBar(data) {
   let history = useHistory();
   
   function handleKeyPress(event){
-    console.log(data.data.indexOf(event.target.value))
     if(event.charCode==13){
       if (parseInt(event.target.value)) {
         history.push(`/Match/${event.target.value}`);

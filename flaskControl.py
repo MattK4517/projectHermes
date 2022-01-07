@@ -50,7 +50,6 @@ def get_god_matchups(god):
 @app.route('/api/<god>/<role>/<rank>/<patch>/<mode>/<matchup>')
 @app.route('/api/<god>/<role>/<rank>/<patch>/<mode>', methods=["GET", "POST"])
 def get_god_data_role(god, role, rank, patch, mode, matchup="None"):
-        print(god, role, rank, patch, mode)
         newgod = god.replace("_", " ")
         if matchup != "None":
                 return anlz.get_specific_build(client, god, role, patch, matchup, rank)
@@ -81,8 +80,8 @@ def get_god_abilities(god):
 @app.route("/api/gettierlist/<rank>/<role>/<tableType>", methods=["GET", "POST"])
 def get_tier_list(rank, role, tableType):
         retData = {god: {} for god in godsDict}
-        patch = "8.10"
         mydb = client["Tier_list"]
+        patch = "8.12"
         if tableType == "Regular":
                 mycol = mydb["Regular List"]
                 rank = rank.replace("_", " ")
@@ -133,6 +132,7 @@ def get_tier_list(rank, role, tableType):
         
         elif tableType == "Duos":
                 retData = get_lanes()
+
         return retData
 
 
@@ -237,7 +237,6 @@ def get_match(matchID):
                         ]
 
                         match[key] = {**match[key], **{"godBuild": anlz.get_build_stats(client, build)}}
-        print
         return match
 
 @app.route('/api/<god>/buildpath/<role>/<rank>/<patch>/<mode>')
@@ -252,7 +251,6 @@ def get_build_path(god, role, rank, patch, mode):
     else:
         myquery = {"role_played": role, "patch": patch, "mode": f"{mode}Conq"}
     
-    print(myquery)
     for x in mycol.aggregate(
         [
             {
@@ -354,3 +352,11 @@ def get_player_match_info(playername, mode):
 @app.route("/api/getplayerspecificgod/<playername>/<god>/<role>/<mode>")
 def get_player_specific_god(playername, god, role, mode):
         return anlzpy.get_player_god_stats(client, playername, god, role, mode)
+
+
+@app.route('/api/playermatchups/<playername>/<god>/<role>/<patch>/<mode>')
+def get_god_matchups_by_player(playername, god, role, patch, mode):
+        print(playername, god, role, patch, mode)
+        matchups = anlz.get_worst_matchups(client, god, role, patch, mode, player=playername)
+        del matchups["wins"], matchups["games"], matchups["winRate"]
+        return matchups

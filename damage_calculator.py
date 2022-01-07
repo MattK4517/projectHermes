@@ -203,13 +203,13 @@ def calc_combo_damage_raw(client, god, levels, power, build):
     print(f"{god} Total Damage: {total_damage}")
     
 levels  =  {
-    "1": 5, 
-    "2": 5, 
-    "3": 5, 
-    "4": 5, 
+    "1": 1, 
+    "2": 4, 
+    "3": 1, 
+    "4": 1, 
     "5": 5
     }
-calc_combo_damage_raw(client, "Kukulkan", levels, 0, 0)
+calc_combo_damage_raw(client, "Tyr", levels, 65, 0)
 # for warrior in Warriors:
 #     print(warrior)
 #     calc_combo_damage_raw(client, warrior, levels, 0, 0)

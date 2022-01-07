@@ -456,8 +456,8 @@ def threaded_pull(patch, all_sets, smite_api):
 # print(inserted_count)
 # print("error %" + str(round(100 - inserted_count/match_ids_len * 100, 2)))
 
-# with open("cred.txt", "r") as f:
-#     data = f.readlines()
-#     smite_api = SmiteAPI(devId=data[0].strip(), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
-#     # print(smite_api.getPlayerId("mayhem4517"))
-#     print(smite_api.getGodRanks(704292327))
+    # with open("cred.txt", "r") as f:
+    #     data = f.readlines()
+    #     smite_api = SmiteAPI(devId=data[0].strip(), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
+    #     print(smite_api.getPlayer("AutoSpeed"))
+    #     # print(smite_api.getGodRanks(704292327))

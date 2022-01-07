@@ -230,15 +230,14 @@ def get_all_builds(client, god, role, patch, mode="Ranked", rank="All Ranks"):
     mycol = mydb[god]
 
     if rank == "Platinum+":
-        myquery = { "role": role, "rank": {"$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch, "mode": f"{mode}Conq"}
+        myquery = { "role_played": role, "rank": {"$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch, "mode": f"{mode}Conq"}
     elif rank == "Diamond+":
-        myquery = { "role": role, "rank": {"$in":  ["Diamond", "Masters", "Grandmaster"]}, "patch": patch, "mode": f"{mode}Conq"}    
+        myquery = { "role_played": role, "rank": {"$in":  ["Diamond", "Masters", "Grandmaster"]}, "patch": patch, "mode": f"{mode}Conq"}    
     elif rank != "All Ranks":
-        myquery = { "role": role, "rank": rank, "patch": patch, "mode": f"{mode}Conq"}
+        myquery = { "role_played": role, "rank": rank, "patch": patch, "mode": f"{mode}Conq"}
     else:
-        myquery = { "role": role, "patch": patch, "mode": f"{mode}Conq"}
+        myquery = { "role_played": role, "patch": patch, "mode": f"{mode}Conq"}
 
-    print(myquery)
     games = 0
     wins = 0
     for x in mycol.find(myquery, {"_id": 0}):
@@ -268,20 +267,22 @@ def get_all_builds(client, god, role, patch, mode="Ranked", rank="All Ranks"):
 
     return {**dict(top_dict), **{"games": games, "wins": wins, "winRate": round(wins/games*100, 2)}}
 
-def get_worst_matchups(client, god, role, patch, mode="Ranked", rank="All Ranks"):
+def get_worst_matchups(client, god, role, patch, mode="Ranked", rank="All Ranks", player=None):
     mydb = client["single_match_stats"]
     mycol = mydb[god]
     matchup_dict = {}
     if rank == "Platinum+":
-        myquery = { "role": role, "rank": {"$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch, "mode": f"{mode}Conq", "player": "Nika"}
+        myquery = { "role": role, "rank": {"$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch, "mode": f"{mode}Conq"}
     elif rank == "Diamond+":
-        myquery = { "role": role, "rank": {"$in":  ["Diamond", "Masters", "Grandmaster"]}, "patch": patch, "mode": f"{mode}Conq", "player": "Nika"} 
+        myquery = { "role": role, "rank": {"$in":  ["Diamond", "Masters", "Grandmaster"]}, "patch": patch, "mode": f"{mode}Conq"} 
     elif rank != "All Ranks":
-        myquery = { "role": role, "rank": rank, "patch": patch, "mode": f"{mode}Conq", "player": "Nika"}
+        myquery = { "role": role, "rank": rank, "patch": patch, "mode": f"{mode}Conq"}
     else:
-        myquery = { "role": role, "patch": patch, "mode": f"{mode}Conq", "player": "Nika"}
+        myquery = { "role": role, "patch": patch, "mode": f"{mode}Conq"}
 
-    myquery = {"player": "Nika", "patch": patch}
+    if player:
+        myquery = {**myquery, **{"player":  { "$regex" : f"{player}", "$options": "i" }}} 
+    print("worst ms", myquery)
     games = 0
     wins = 0
     for matchup in mycol.find(myquery, {"_id": 0}):
@@ -523,10 +524,10 @@ def get_carry_score(match):
         "goldScore":
             {
             "Winner": {
-                "totalGold": 0,
+                "totalGold": 1,
             },
             "Loser": {
-                "totalGold": 0,
+                "totalGold": 1,
             }
         },
         "damageScore":  {
@@ -553,38 +554,43 @@ def get_carry_score(match):
     }
     }
     match_roles = []
+
     for key in match:
-        try:
-            if "player" in key:
-                ret_data["goldScore"][match[key]["Win_Status"]]["totalGold"] += match[key]["Gold_Earned"]
-                ret_data["damageScore"][match[key]["Win_Status"]]["totalDamage"] += match[key]["Damage_Player"]
-                ret_data["levelDiff"][match[key]["Win_Status"]][match[key]["Role"]] = {"level": match[key]["Final_Match_Level"]}
-                ret_data["killPart"][match[key]["Win_Status"]]["totalKills"] += match[key]["Kills_Player"]
-                match_roles.append(match[key]["Role"])
+        if "player" in key:
+            match_roles.append(match[key]["Role"])
+    if check_roles(match_roles):
+        for key in match:
+            try:
+                if "player" in key:
+                    ret_data["goldScore"][match[key]["Win_Status"]]["totalGold"] += match[key]["Gold_Earned"]
+                    ret_data["damageScore"][match[key]["Win_Status"]]["totalDamage"] += match[key]["Damage_Player"]
+                    ret_data["levelDiff"][match[key]["Win_Status"]][match[key]["Role"]] = {"level": match[key]["Final_Match_Level"]}
+                    ret_data["killPart"][match[key]["Win_Status"]]["totalKills"] += match[key]["Kills_Player"]
 
-            if check_roles(match_roles):
-                for side in ret_data["levelDiff"]:
-                    for role in ret_data["levelDiff"][side]:
-                        if side == "Winner":
-                            opp_side = "Loser"
-                        elif side == "Loser":
-                            opp_side = "Winner"
-                        ret_data["levelDiff"][side][role]["level_diff"] = ret_data["levelDiff"][side][role]["level"] - ret_data["levelDiff"][opp_side][role]["level"]
-                for key in match:
-                    if "player" in key and ret_data["killPart"][match[key]["Win_Status"]]["totalKills"] <= 0:
-                        ret_data["killPart"][match[key]["Win_Status"]][match[key]["Role"]] = {"kills": match[key]["Kills_Player"], "assists": match[key]["Assists"], "killShare": 0}
-                    elif "player" in key:
-                        ret_data["killPart"][match[key]["Win_Status"]][match[key]["Role"]] = {"kills": match[key]["Kills_Player"], "assists": match[key]["Assists"],
-                        "killShare": round((match[key]["Kills_Player"] + match[key]["Assists"]) / ret_data["killPart"][match[key]["Win_Status"]]["totalKills"]* 100, 2)}
+                    # for side in ret_data["levelDiff"]:
+                    #     for role in ret_data["levelDiff"][side]:
+                    #         if side == "Winner":
+                    #             opp_side = "Loser"
+                    #         elif side == "Loser":
+                    #             opp_side = "Winner"
+                    #         ret_data["levelDiff"][side][role]["level_diff"] = ret_data["levelDiff"][side][role]["level"] - ret_data["levelDiff"][opp_side][role]["level"]
+                    for key in match:
+                        if "player" in key and ret_data["killPart"][match[key]["Win_Status"]]["totalKills"] <= 0:
+                            ret_data["killPart"][match[key]["Win_Status"]][match[key]["Role"]] = {"kills": match[key]["Kills_Player"], "assists": match[key]["Assists"], "killShare": 0}
+                        elif "player" in key:
+                            ret_data["killPart"][match[key]["Win_Status"]][match[key]["Role"]] = {"kills": match[key]["Kills_Player"], "assists": match[key]["Assists"],
+                            "killShare": round((match[key]["Kills_Player"] + match[key]["Assists"]) / ret_data["killPart"][match[key]["Win_Status"]]["totalKills"]* 100, 2)}
 
-                    if "player" in key:
-                        ret_data["goldScore"][match[key]["Win_Status"]][match[key]["Role"]] = {"gold": match[key]["Gold_Earned"],
-                                    "goldShare": round(match[key]["Gold_Earned"] / ret_data["goldScore"][match[key]["Win_Status"]]["totalGold"]* 100, 2)}
-                        ret_data["damageScore"][match[key]["Win_Status"]][match[key]["Role"]] = {"damage": match[key]["Damage_Player"],
-                                    "damageShare": round(match[key]["Damage_Player"] / ret_data["damageScore"][match[key]["Win_Status"]]["totalDamage"]* 100, 2)}
-        except KeyError:
-            matchId = match["MatchId"]
-            print(f"Error in: {matchId}")
+                        if "player" in key:
+                            ret_data["goldScore"][match[key]["Win_Status"]][match[key]["Role"]] = {"gold": match[key]["Gold_Earned"],
+                                        "goldShare": round(match[key]["Gold_Earned"] / ret_data["goldScore"][match[key]["Win_Status"]]["totalGold"]* 100, 2)}
+                            ret_data["damageScore"][match[key]["Win_Status"]][match[key]["Role"]] = {"damage": match[key]["Damage_Player"],
+                                        "damageShare": round(match[key]["Damage_Player"] / ret_data["damageScore"][match[key]["Win_Status"]]["totalDamage"]* 100, 2)}
+            except ZeroDivisionError:
+                # print(ret_data)
+                pass
+    else:
+        print(f"ERROR IN: {match['MatchId']}")
     return ret_data
 
 def get_average_gold_share(average_gold_share):
@@ -852,8 +858,8 @@ if __name__ == "__main__":
     
     mydb = client["single_match_stats"]
     # for god in godsDict:
-    god = "Medusa"
-    myquery = {"role": "Jungle"}
+    god = "Set"
+    myquery = {"patch": "8.12"}
     mycol = mydb[god]
     for x in mycol.aggregate([
             {
@@ -880,7 +886,7 @@ if __name__ == "__main__":
                 },
             },
             {"$sort": {"games": -1}},
-            {"$limit": 5},
+            {"$limit": 10},
         ]):
             print(god, x)
 #     print(get_combat_stats(client, "Achilles", "Solo", "8.11"))

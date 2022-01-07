@@ -478,8 +478,9 @@ num_hits_dict = {
         "Fastest God Alive": 0,
     },
     "Mulan": {
-        "Cross Strike": 3,
-        "Spear Thrust": 2,
+        "Cross Strike": 2,
+        "Spear Thrust Damage": 2,
+        "Spear Thrust Bonus Damage:": 1,
         "Grapple": 1,
         "Divine Mastery": 1,
         "Training Arc": 0,

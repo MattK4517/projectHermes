@@ -65,7 +65,7 @@ class GodData:
     #     mycol.insert_many(set)
 
     def calc_items(self):
-        mydb = client["single_items_test"]
+        mydb = client["single_items"]
         mycol =  mydb[self.name]
         set = []
         for match in self.matches:
@@ -93,6 +93,7 @@ class GodData:
                             "matchId": matchId,
                             "patch": match["Patch"],
                             "Entry_Datetime": match["Entry_Datetime"],
+                            "mode": "CasualConq"
                         }
                     )
         mycol.insert_many(set)
@@ -104,7 +105,17 @@ class GodData:
         for match in self.matches:
             player_ids = []
             for key in match:
-                if "player" in key and match[key]["godName"] == self.name:
+                if "player" in key and match[key]["godName"] == self.name and match[key]["PlayerId"] not in player_ids:
+                    player_ids.append(match[key]["PlayerId"])
+                    build = {}
+                    for player_key in match[key]:
+                        if "Item_Purch" in player_key:
+                            item, purch, number = player_key.split("_")
+                            build[f"slot{number}"] = match[key][player_key]
+                        if "Item_Active" in player_key:
+                            item, purch, number = player_key.split("_")
+                            build[f"relic{number}"] = match[key][player_key]
+
                     rank = normalize_rank(match[key]["Conquest_Tier"])
                     role = match[key]["Role"]
                     matchId = match[key]["MatchID"]
@@ -161,6 +172,8 @@ class GodData:
                         "enemy": enemy,
                         "Entry_Datetime": match["Entry_Datetime"],
                         "time": match["Match_Duration"],
+                        "mode": "CasualConq",
+                        self.name: build,
                     })
         mycol.insert_many(set)
 
@@ -216,8 +229,8 @@ def format_no_query(match):
     for god in godsDict:
         godsDict[god] = GodData(god)
         godsDict[god].set_matches(set_matches)
-        godsDict[god].calc_matchups()
-        godsDict[god].calc_items()
+        # godsDict[god].calc_matchups()
+        # godsDict[god].calc_items()
         godsDict[god].calc_match_stats()
 
 
@@ -227,5 +240,6 @@ def threadedd_format_no_query(match):
     for god in godsDict:
         godsDict[god] = GodData(god)
         godsDict[god].set_matches(match)
-        godsDict[god].calc_items()
+        # godsDict[god].calc_items()
         godsDict[god].calc_match_stats()
+        print(f"{god} DONE")
