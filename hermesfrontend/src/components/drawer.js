@@ -21,7 +21,8 @@ import SearchBar from "./SearchBarStuff/SearchBar";
 import Player from "./PlayerPage/Player";
 import OverviewDisplay from "./PlayerPage/OverviewDisplay";
 import GodStatsDisplay from "./PlayerPage/GodStatsDisplay";
-import { PlayerProvider } from "./PlayerPage/PlayerContext"
+import { PlayerProvider } from "./PlayerPage/PlayerContext";
+import DamageCalculator from "./DamageCalculator"
 
 
 
@@ -185,6 +186,11 @@ export const godsDict = {
       path: ["/player/:handle/god-stats/:handle"],
       component: <OverviewDisplay />,
       god: "",
+    },
+    {
+      path: ["/damage_calculator"],
+      component: <DamageCalculator />,
+      god: "",
     }
     
 
@@ -335,7 +341,7 @@ const routeComponents = routes.map(({path, component}, key) => <Route exact path
                 }}
               />
             </Link>
-            <SearchBar data={routes.slice(8)} />
+            <SearchBar data={routes.slice(9)} />
           </Typography>
         </Toolbar>
       </Root>
@@ -364,7 +370,7 @@ const routeComponents = routes.map(({path, component}, key) => <Route exact path
             display: "flex",
             flexDirection: "column",
         }}>
-          {["Home", "Gods", "Tierlist", "Contact", "Match", "Player"].map((text, index) => {
+          {["Home", "Gods", "Tierlist", "Contact", "Match", "Damage Calculator"].map((text, index) => {
             let route = text;
             let icon;
             if (text === "Home"){
@@ -382,7 +388,7 @@ const routeComponents = routes.map(({path, component}, key) => <Route exact path
             else if (text === "Match"){
               icon = <GiIcons.GiSwordClash/>
             }
-            else if (text === "Player"){
+            else if (text === "Damage Calculator"){
               icon = <GiIcons.GiSwordman/>
             }
             else {

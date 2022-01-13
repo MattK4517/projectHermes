@@ -112,16 +112,20 @@ def get_item_data(client, item):
 
 def get_top_builds(client, god, role, patch, mode="Ranked", rank="All Ranks", data=None):
     top_dict = {slot: {} for slot in slots}
-    mydb = client["single_items"]
+    top_dict = {
+        **{f"relic{i+1}": {} for i in range(2)},
+        **top_dict
+    }
+    mydb = client["single_match_stats"]
     mycol = mydb[god]
     if rank == "Platinum+":
-        myquery = { "role_played": role, "rank": {"$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch, "mode": f"{mode}Conq"}
+        myquery = { "role": role, "rank": {"$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch, "mode": f"{mode}Conq"}
     elif rank == "Diamond+":
-        myquery = { "role_played": role, "rank": {"$in":  ["Diamond", "Masters", "Grandmaster"]}, "patch": patch, "mode": f"{mode}Conq"}    
+        myquery = { "role": role, "rank": {"$in":  ["Diamond", "Masters", "Grandmaster"]}, "patch": patch, "mode": f"{mode}Conq"}    
     elif rank != "All Ranks":
-        myquery = { "role_played": role, "rank": rank, "patch": patch, "mode": f"{mode}Conq"}
+        myquery = { "role": role, "rank": rank, "patch": patch, "mode": f"{mode}Conq"}
     else:
-        myquery = { "role_played": role, "patch": patch, "mode": f"{mode}Conq"}
+        myquery = { "role": role, "patch": patch, "mode": f"{mode}Conq"}
 
     # print(myquery)
     games = 0
@@ -148,7 +152,11 @@ def get_top_builds(client, god, role, patch, mode="Ranked", rank="All Ranks", da
 
 
     else:
-        for x in mycol.find(myquery, {"_id": 0}):
+        myquery = {
+            **{god: {"$exists": True}},
+            **myquery
+        }
+        for x in mycol.find(myquery, {"_id": 0, god: 1, "win_status": 1}):
             games += 1
             flag = False
             if x["win_status"] == "Winner":
@@ -175,9 +183,53 @@ def get_top_builds(client, god, role, patch, mode="Ranked", rank="All Ranks", da
 def sort_top_dict(top_dict, client):
     items = ["item1", "item2"]
     all_dict = {slot: {item: {"item": "", "games": 0 } for item in items} for slot in slots}
+    all_dict = {
+        **{f"relic{i+1}": {item: {"item": "", "games": 0 } for item in items} for i in range(2)},
+        **all_dict
+    }
     for slot in top_dict:
-        for item in top_dict[slot]:
-            if (item in Tier_Three_items or item in Starter_items) and slot != "slot1":
+        if "slot" in slot:
+            for item in top_dict[slot]:
+                if (item in Tier_Three_items or item in Starter_items) and slot != "slot1":
+                    if not all_dict[slot]["item1"]["item"]:
+                        all_dict[slot]["item1"] = top_dict[slot][item]
+
+                    elif all_dict[slot]["item1"]["games"] < top_dict[slot][item]["games"]:
+                        all_dict[slot]["item2"] = all_dict[slot]["item1"]
+                        all_dict[slot]["item1"] = top_dict[slot][item]
+
+                    elif all_dict[slot]["item1"]["games"] == top_dict[slot][item]["games"]:
+                        if all_dict[slot]["item1"]["wins"] > top_dict[slot][item]["wins"]:
+                            all_dict[slot]["item2"] == top_dict[slot][item]
+                        else:
+                            all_dict[slot]["item2"] = all_dict[slot]["item1"]
+                            all_dict[slot]["item1"] = top_dict[slot][item]
+
+                    elif not all_dict[slot]["item2"]["item"]:
+                        all_dict[slot]["item2"] = top_dict[slot][item]
+
+                    elif top_dict[slot][item]["games"] > all_dict[slot]["item2"]["games"]:
+                        all_dict[slot]["item2"] = top_dict[slot][item]
+                elif slot == "slot1":
+                    if not all_dict[slot]["item1"]["item"]:
+                        all_dict[slot]["item1"] = top_dict[slot][item]
+
+                    elif all_dict[slot]["item1"]["games"] < top_dict[slot][item]["games"]:
+                        all_dict[slot]["item2"] = all_dict[slot]["item1"]
+                        all_dict[slot]["item1"] = top_dict[slot][item]
+
+                    elif all_dict[slot]["item1"]["games"] == top_dict[slot][item]["games"]:
+                        if all_dict[slot]["item1"]["wins"] > top_dict[slot][item]["wins"]:
+                            all_dict[slot]["item2"] == top_dict[slot][item]
+                        else:
+                            all_dict[slot]["item2"] = all_dict[slot]["item1"]
+                            all_dict[slot]["item1"] = top_dict[slot][item]
+
+                    elif not all_dict[slot]["item2"]["item"]:
+                        all_dict[slot]["item2"] = top_dict[slot][item]
+        
+        elif "relic" in slot:
+            for item in top_dict[slot]:
                 if not all_dict[slot]["item1"]["item"]:
                     all_dict[slot]["item1"] = top_dict[slot][item]
 
@@ -196,23 +248,6 @@ def sort_top_dict(top_dict, client):
                     all_dict[slot]["item2"] = top_dict[slot][item]
 
                 elif top_dict[slot][item]["games"] > all_dict[slot]["item2"]["games"]:
-                    all_dict[slot]["item2"] = top_dict[slot][item]
-            elif slot == "slot1":
-                if not all_dict[slot]["item1"]["item"]:
-                    all_dict[slot]["item1"] = top_dict[slot][item]
-
-                elif all_dict[slot]["item1"]["games"] < top_dict[slot][item]["games"]:
-                    all_dict[slot]["item2"] = all_dict[slot]["item1"]
-                    all_dict[slot]["item1"] = top_dict[slot][item]
-
-                elif all_dict[slot]["item1"]["games"] == top_dict[slot][item]["games"]:
-                    if all_dict[slot]["item1"]["wins"] > top_dict[slot][item]["wins"]:
-                        all_dict[slot]["item2"] == top_dict[slot][item]
-                    else:
-                        all_dict[slot]["item2"] = all_dict[slot]["item1"]
-                        all_dict[slot]["item1"] = top_dict[slot][item]
-
-                elif not all_dict[slot]["item2"]["item"]:
                     all_dict[slot]["item2"] = top_dict[slot][item]
 
 
@@ -282,7 +317,6 @@ def get_worst_matchups(client, god, role, patch, mode="Ranked", rank="All Ranks"
 
     if player:
         myquery = {**myquery, **{"player":  { "$regex" : f"{player}", "$options": "i" }}} 
-    print("worst ms", myquery)
     games = 0
     wins = 0
     for matchup in mycol.find(myquery, {"_id": 0}):
@@ -674,7 +708,6 @@ def get_specific_build(client, god, role, patch, matchup, rank="All Ranks"):
     return get_top_builds(client, god, role, patch, rank=rank, data=builds)
 
 def get_matchups_stats(client, god: str, role: str, patch, rank="All Ranks"):
-    print(type(god), type(role), type(patch), type(rank))
     mydb = client["single_combat_stats"]
     mycol = mydb[str(god)]
     if "All" in rank:
@@ -854,41 +887,45 @@ def get_lanes(client):
 
 if __name__ == "__main__":
     client = pymongo.MongoClient(
-        "mongodb+srv://sysAdmin:9gR7C1aDKclng4jA@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
-    
-    mydb = client["single_match_stats"]
-    # for god in godsDict:
-    god = "Set"
-    myquery = {"patch": "8.12"}
-    mycol = mydb[god]
-    for x in mycol.aggregate([
-            {
-                "$match": myquery
-            },
-            {
-                "$group": {
-                    "_id": "$player",
-                    "kills": { "$avg": "$kills"},
-                    "deaths": { "$avg": "$deaths"},
-                    "damage_": { "$avg": "$damage_player"},
-                    "damageTaken": { "$avg": "$damage_taken"},
-                    "damageMitigated": { "$avg": "$damage_mitigated"},
-                    "healing": { "$avg": "$healing"},
-                    "selfHealing": { "$avg": "$healing_self"},
-                    "gold": { "$avg": "$gold"},
-                    "damageBot": { "$avg": "$damage_bot"},
-                    "killsBot": { "$avg": "$kills_bot"},
-                    "towerKills": { "$avg": "$tower_kills"},
-                    "phoenixKills": { "$avg": "$phoenix_kills"},
-                    "towerDamage": { "$avg": "$tower_damage"},
-                    "wardsPlaced": { "$avg": "$wards_placed"},
-                    "games": {"$sum": 1},
-                },
-            },
-            {"$sort": {"games": -1}},
-            {"$limit": 10},
-        ]):
-            print(god, x)
+    "mongodb+srv://sysAdmin:SFpmxJRX522fZ5fK@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
+
+
+    print(get_top_builds(client, "Achilles", "Solo", "8.12"))
+
+    # mydb = client["single_match_stats"]
+    # # for god in godsDict:
+    # god = "Tiamat"
+    # myquery = {"patch": "8.12"}
+    # mycol = mydb[god]
+    # for x in mycol.aggregate([
+    #         {
+    #             "$match": myquery
+    #         },
+    #         {
+    #             "$group": {
+    #                 "_id": "$player",
+    #                 "kills": { "$avg": "$kills"},
+    #                 "deaths": { "$avg": "$deaths"},
+    #                 "damage_": { "$avg": "$damage_player"},
+    #                 "damageTaken": { "$avg": "$damage_taken"},
+    #                 "damageMitigated": { "$avg": "$damage_mitigated"},
+    #                 "healing": { "$avg": "$healing"},
+    #                 "selfHealing": { "$avg": "$healing_self"},
+    #                 "gold": { "$avg": "$gold"},
+    #                 "damageBot": { "$avg": "$damage_bot"},
+    #                 "killsBot": { "$avg": "$kills_bot"},
+    #                 "towerKills": { "$avg": "$tower_kills"},
+    #                 "phoenixKills": { "$avg": "$phoenix_kills"},
+    #                 "towerDamage": { "$avg": "$tower_damage"},
+    #                 "wardsPlaced": { "$avg": "$wards_placed"},
+    #                 "games": {"$sum": 1},
+    #                 "wins": {"$sum": {"win_status": "Winner"}}
+    #             },
+    #         },
+    #         {"$sort": {"games": -1}},
+    #         {"$limit": 10},
+    #     ]):
+    #         print(god, x)
 #     print(get_combat_stats(client, "Achilles", "Solo", "8.11"))
 #     print(get_objective_stats(client, "Achilles", "Solo", "8.11"))
 #     print(get_winrate(client, "Achilles", "Solo", "8.10"))

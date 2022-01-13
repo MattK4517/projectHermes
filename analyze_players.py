@@ -43,6 +43,10 @@ def find_match_history(client, playername, mode):
         **{f"player{i}.Item_Purch_6": 1 for i in range(10)},
         **{f"player{i}.Win_Status": 1 for i in range(10)},
         **{f"player{i}.Kills_Player": 1 for i in range(10)},
+        **{f"player{i}.Kills_Double": 1 for i in range(10)},
+        **{f"player{i}.Kills_Triple": 1 for i in range(10)},
+        **{f"player{i}.Kills_Quadra": 1 for i in range(10)},
+        **{f"player{i}.Kills_Penta": 1 for i in range(10)},
         **{f"player{i}.Deaths": 1 for i in range(10)},
         **{f"player{i}.Assists": 1 for i in range(10)},
         # **{f"player{i}": 0 for i in range(10)}
@@ -53,6 +57,8 @@ def find_match_history(client, playername, mode):
     # print(mycol.count_documents(myquery))
     ret_data = {}
     for x in mycol.find(myquery, filter):
+        if len(ret_data.keys()) == 25:
+            return ret_data
         for key in x:
             if "player" in key:
                 if verify_player(playername, x[key]["Player_Name"], "none", "none"):
@@ -388,7 +394,8 @@ def grab_stats(player_data):
 
 if __name__ == "__main__":
     client = pymongo.MongoClient(
-    "mongodb+srv://sysAdmin:9gR7C1aDKclng4jA@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
+        "mongodb+srv://sysAdmin:SFpmxJRX522fZ5fK@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
+
     # print(find_match_history(client, "Nika", "Ranked"))
     starttime = datetime.now()
     print(get_player_god_stats(client, "azekill", "Atlas", "Support", "Casual"))

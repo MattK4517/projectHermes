@@ -1859,7 +1859,7 @@ figure.snip0015:hover figcaption::before {
 
 .stat-group-four {
   position: relative;
-  left: -4px;
+  left: -15px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2524,4 +2524,10 @@ figure.snip0015:hover figcaption::before {
 
 .rt-td.god {
   justify-content: flex-start !important;
+}
+
+.single-match-accolades {
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
 }

@@ -108,19 +108,19 @@ class PlayerBuildDisplay extends React.Component {
 }
 
 export default function MatchDisplay(props) {
-  console.log(props.matchList)
+  console.log(props.matchList);
   return (
     <div className="content-section content-section_no-padding match-block">
       <div className="content-section_header">
         <span>Recent Matches</span>
       </div>
       {props.matchList.map((match) => {
-        let player= {}
+        let player = {};
         let build;
         let teamOne = [];
         let teamTwo = [];
         let deaths;
-        console.log(Object.keys(match).length)
+        console.log(Object.keys(match).length);
         Object.keys(match).forEach((key) => {
           if (key.includes("player")) {
             if (match[key]["Win_Status"] === "Winner") {
@@ -128,13 +128,17 @@ export default function MatchDisplay(props) {
             } else {
               teamTwo = [...teamTwo, match[key]];
             }
-            if (match[key]["Player_Name"].toLowerCase().includes(props.player.toLowerCase())) {
-                deaths = match[key].Deaths
-                if (deaths <= 0) {
-                    deaths = 1;
-                } else {
-                    deaths = match[key].Deaths
-                }
+            if (
+              match[key]["Player_Name"]
+                .toLowerCase()
+                .includes(props.player.toLowerCase())
+            ) {
+              deaths = match[key].Deaths;
+              if (deaths <= 0) {
+                deaths = 1;
+              } else {
+                deaths = match[key].Deaths;
+              }
               player = match[key];
               build = [
                 player.Item_Purch_1,
@@ -147,191 +151,254 @@ export default function MatchDisplay(props) {
             }
           }
         });
-        if (player.Player_Name.toLowerCase().includes(props.player.toLowerCase())){
-        return (
-          <div className="match-history">
-            <div className={`match-history-large ${player.Win_Status}`}>
-              <div className="match-summary">
-                {/* <div className={`line line-${player.Win_Status}`} /> */}
-                <div className="content-container" style={{paddingTop: "0px"}}>
-                  <div className="stat-group-one">
-                    <div className="r1">
-                      <div className="queue-type">{props.mode} Conquest</div>
-                      <div className="date">{match.Entry_Datetime}</div>
-                    </div>
-                    <div className="r2 r2_spacing"></div>
-                    <div className="r3">
-                      <div className="win-status">
-                        {player.Win_Status}&nbsp;
+        if (
+          player.Player_Name.toLowerCase().includes(props.player.toLowerCase())
+        ) {
+          return (
+            <div className="match-history">
+              <div className={`match-history-large ${player.Win_Status}`}>
+                <div className="match-summary">
+                  {/* <div className={`line line-${player.Win_Status}`} /> */}
+                  <div
+                    className="content-container"
+                    style={{ paddingTop: "0px" }}
+                  >
+                    <div className="stat-group-one">
+                      <div className="r1">
+                        <div className="queue-type">{props.mode} Conquest</div>
+                        <div className="date">{match.Entry_Datetime}</div>
                       </div>
-                      <div className="match-length">
-                        {match.Minutes}:{match.Match_Duration % 60}
+                      <div className="r2 r2_spacing"></div>
+                      <div className="r3">
+                        <div className="win-status">
+                          {player.Win_Status}&nbsp;
+                        </div>
+                        <div className="match-length">
+                          {match.Minutes}:{match.Match_Duration % 60}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="stat-group-two">
-                    <div className="r1">
-                      <div className="god">
-                        <div className="god-face">
-                          <img
-                            src={`https://webcdn.hirezstudios.com/smite/god-icons/${player.godName
-                              .replaceAll(" ", "-")
-                              .replaceAll("'", "")
-                              .toLowerCase()}.jpg`}
-                            alt={player.godName}
-                          />
-                          <div className="player-level">
-                            {player.Final_Match_Level}
+                    <div className="stat-group-two">
+                      <div className="r1">
+                        <div className="god">
+                          <div className="god-face">
+                            <img
+                              src={`https://webcdn.hirezstudios.com/smite/god-icons/${player.godName
+                                .replaceAll(" ", "-")
+                                .replaceAll("'", "")
+                                .toLowerCase()}.jpg`}
+                              alt={player.godName}
+                            />
+                            <div className="player-level">
+                              {player.Final_Match_Level}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="relics" style={{ minWidth: "22px" }}>
+                          <div className="relic">
+                            <img
+                              src={`https://webcdn.hirezstudios.com/smite/item-icons/${player.Item_Active_1.replaceAll(
+                                " ",
+                                "-"
+                              ).toLowerCase()}.jpg`}
+                              alt={player.Item_Active_1}
+                            />
+                          </div>
+                          <div className="relic">
+                            <img
+                              src={`https://webcdn.hirezstudios.com/smite/item-icons/${player.Item_Active_2.replaceAll(
+                                " ",
+                                "-"
+                              ).toLowerCase()}.jpg`}
+                              alt={player.Item_Active_2}
+                            />
                           </div>
                         </div>
                       </div>
-                      <div className="relics" style={{minWidth: "22px"}}>
-                        <div className="relic">
-                          <img
-                            src={`https://webcdn.hirezstudios.com/smite/item-icons/${player.Item_Active_1.replaceAll(
-                              " ",
-                              "-"
-                            ).toLowerCase()}.jpg`}
-                            alt={player.Item_Active_1}
-                          />
-                        </div>
-                        <div className="relic">
-                          <img
-                            src={`https://webcdn.hirezstudios.com/smite/item-icons/${player.Item_Active_2.replaceAll(
-                              " ",
-                              "-"
-                            ).toLowerCase()}.jpg`}
-                            alt={player.Item_Active_2}
-                          />
-                        </div>
+                    </div>
+                    <div className="stat-group-three">
+                      <div className="KDA-raw">
+                        {player.Kills_Player} / {player.Deaths} /{" "}
+                        {player.Assists}
+                      </div>
+                      <div className="KDA-ratio">
+                        {(
+                          (player.Kills_Player + player.Assists / 2) /
+                          deaths
+                        ).toFixed(2)}{" "}
+                        <span>KDA</span>
+                      </div>
+                      <div>
+                        <Link
+                          to={{
+                            pathname: `Match/${match["MatchId"]}`,
+                            target: "_blank",
+                          }}
+                          className="date"
+                        >
+                          Go to Match
+                        </Link>
                       </div>
                     </div>
-                  </div>
-                  <div className="stat-group-three">
-                    <div className="KDA-raw">
-                      {player.Kills_Player} / {player.Deaths} / {player.Assists}
-                    </div>
-                    <div className="KDA-ratio">
-                      {(
-                        (player.Kills_Player + player.Assists / 2) /
-                        deaths
-                      ).toFixed(2)}{" "}
-                      <span>KDA</span>
-                    </div>
-                    <div>
-                      <Link to={{
-                        pathname: `Match/${match["MatchId"]}`,
-                        target: "_blank"
-                      }}
-                      className="date"
-                      >Go to Match</Link>
-                    </div>
-                  </div>
-                  <div className="stat-group-four">
-                    <div className="items-match">
-                      <div className="build" style={{marginTop: "0px"}}>
-                        <div className="build-container">
-                          {build.map((item) => {
-                            return (
-                              <div
-                                className="item-wrapper"
-                                style={{ width: "22px", height: "22px" }}
-                              >
-                                <div style={{ width: "22px", height: "22px" }}>
-                                  <img
-                                    style={{
-                                      height: "48px",
-                                      width: "48px",
-                                      backgroundPosition: "-96px -96px",
-                                      transform: "scale(0.458333)",
-                                      transformOrigin: "0px 0px 0px",
-                                    }}
-                                    src={`https://webcdn.hirezstudios.com/smite/item-icons/${item
-                                      .replaceAll(" ", "-")
-                                      .replaceAll("'", "")
-                                      .toLowerCase()}.jpg`}
-                                    alt={item}
-                                  />
+                    <div
+                      className="stat-group-four"
+                      style={{ flexDirection: "row" }}
+                    >
+                      <div className="items-match">
+                        <div className="build" style={{ marginTop: "0px" }}>
+                          <div className="build-container">
+                            {build.map((item) => {
+                              return (
+                                <div
+                                  className="item-wrapper"
+                                  style={{ width: "22px", height: "22px" }}
+                                >
+                                  <div
+                                    style={{ width: "22px", height: "22px" }}
+                                  >
+                                    <img
+                                      style={{
+                                        height: "48px",
+                                        width: "48px",
+                                        backgroundPosition: "-96px -96px",
+                                        transform: "scale(0.458333)",
+                                        transformOrigin: "0px 0px 0px",
+                                      }}
+                                      src={`https://webcdn.hirezstudios.com/smite/item-icons/${item
+                                        .replaceAll(" ", "-")
+                                        .replaceAll("'", "")
+                                        .toLowerCase()}.jpg`}
+                                      alt={item}
+                                    />
+                                  </div>
                                 </div>
-                              </div>
-                            );
-                          })}
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="accolades-container">
+                        <div className="single-match-accolades">
+                          <div className="multikill-header-icon">
+                            <img
+                              src="https://i.imgur.com/WD0BJIw.png"
+                              alt="Double Kill"
+                            />
+                          </div>
+                          <div className="multikill-count">
+                            :{player.Kills_Double}
+                          </div>
+                        </div>
+                        <div className="single-match-accolades">
+                          <div className="multikill-header-icon">
+                            <img
+                              src="https://i.imgur.com/Ir6JXme.png"
+                              alt="Triple Kill"
+                            />
+                          </div>
+                          <div className="multikill-count">
+                            :{player.Kills_Triple}
+                          </div>
+                        </div>
+                        <div className="single-match-accolades">
+                          <div className="multikill-header-icon">
+                            <img
+                              src="https://i.imgur.com/x8psc5J.png"
+                              alt="Quadra Kill"
+                            />
+                          </div>
+                          <div className="multikill-count">
+                            :{player.Kills_Quadra}
+                          </div>
+                        </div>
+                        <div className="single-match-accolades">
+                          <div className="multikill-header-icon">
+                            <img
+                              src="https://i.imgur.com/ofYtxOH.png"
+                              alt="Penta Kill"
+                            />
+                          </div>
+                          <div className="multikill-count">
+                            :{player.Kills_Penta}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="stat-group-five">
-                    <div className="team">
-                      {teamOne.map((teamPlayer) => {
-                        let teamPlayerName;
-                        if (teamPlayer.Player_Name) {
-                          teamPlayerName = teamPlayer.Player_Name;
-                        } else {
-                          teamPlayerName = "Hidden";
-                        }
-                        return (
-                          <div className="player-entry">
-                            <div className="god-face">
-                              <img
-                                src={`https://webcdn.hirezstudios.com/smite/god-icons/${teamPlayer.godName
-                                  .replaceAll(" ", "-")
-                                  .replaceAll("'", "")
-                                  .toLowerCase()}.jpg`}
-                                alt={teamPlayer.godName}
-                                style={{
-                                  height: "14px",
-                                  width: "14px",
-                                }}
-                              />
-                            </div>
-                            <div className="player-name">
+                    <div className="stat-group-five">
+                      <div className="team">
+                        {teamOne.map((teamPlayer) => {
+                          let teamPlayerName;
+                          if (teamPlayer.Player_Name) {
+                            teamPlayerName = teamPlayer.Player_Name;
+                          } else {
+                            teamPlayerName = "Hidden";
+                          }
+                          return (
+                            <div className="player-entry">
+                              <div className="god-face">
+                                <img
+                                  src={`https://webcdn.hirezstudios.com/smite/god-icons/${teamPlayer.godName
+                                    .replaceAll(" ", "-")
+                                    .replaceAll("'", "")
+                                    .toLowerCase()}.jpg`}
+                                  alt={teamPlayer.godName}
+                                  style={{
+                                    height: "14px",
+                                    width: "14px",
+                                  }}
+                                />
+                              </div>
+                              <div className="player-name">
                                 <Link
-                                to={{
-                                  pathname: `Match/${match["MatchId"]}`,
-                                  target: "_blank"
-                                }}>{teamPlayerName}</Link>
+                                  to={{
+                                    pathname: `Match/${match["MatchId"]}`,
+                                    target: "_blank",
+                                  }}
+                                >
+                                  {teamPlayerName}
+                                </Link>
+                              </div>
                             </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                    <div className="team">
-                      {teamTwo.map((teamPlayer) => {
-                        let teamPlayerName;
-                        if (teamPlayer.Player_Name) {
-                          teamPlayerName = teamPlayer.Player_Name;
-                        } else {
-                          teamPlayerName = "Hidden";
-                        }
-                        return (
-                          <div className="player-entry">
-                            <div className="god-face">
-                              <img
-                                src={`https://webcdn.hirezstudios.com/smite/god-icons/${teamPlayer.godName
-                                  .replaceAll(" ", "-")
-                                  .replaceAll("'", "")
-                                  .toLowerCase()}.jpg`}
-                                alt={teamPlayer.godName}
-                                style={{
-                                  height: "14px",
-                                  width: "14px",
-                                }}
-                              />
-                            </div>
-                            <div className="player-name">
+                          );
+                        })}
+                      </div>
+                      <div className="team">
+                        {teamTwo.map((teamPlayer) => {
+                          let teamPlayerName;
+                          if (teamPlayer.Player_Name) {
+                            teamPlayerName = teamPlayer.Player_Name;
+                          } else {
+                            teamPlayerName = "Hidden";
+                          }
+                          return (
+                            <div className="player-entry">
+                              <div className="god-face">
+                                <img
+                                  src={`https://webcdn.hirezstudios.com/smite/god-icons/${teamPlayer.godName
+                                    .replaceAll(" ", "-")
+                                    .replaceAll("'", "")
+                                    .toLowerCase()}.jpg`}
+                                  alt={teamPlayer.godName}
+                                  style={{
+                                    height: "14px",
+                                    width: "14px",
+                                  }}
+                                />
+                              </div>
+                              <div className="player-name">
                                 <a>{teamPlayerName}</a>
+                              </div>
                             </div>
-                          </div>
-                        );
-                      })}
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        );
-                    }
+          );
+        }
       })}
     </div>
   );

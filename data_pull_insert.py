@@ -254,9 +254,10 @@ def get_new_id(client, smite_api):
     mydb = client["God_Data"]
     gods = smite_api.getGods()
     for god in range(len(gods)):
-        mycol = mydb[gods[god]["Name"]]
-        data = create_god_data_dict(gods[god])
-        mycol.replace_one({}, data)
+        if gods[god]["Name"] == "Merlin":
+            mycol = mydb[gods[god]["Name"]]
+            data = create_god_data_dict(gods[god])
+            mycol.replace_one({}, data)
 
 def create_god_data_dict(data):
     ret_data = {}

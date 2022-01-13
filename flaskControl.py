@@ -16,6 +16,7 @@ from pyrez.api import SmiteAPI
 import flaskHelper as fh
 import json
 from bson import json_util
+from damage_calculator import calc_combo_damage_raw
 
 app = Flask(__name__, static_folder="../hermesfrontend", static_url_path="/")
 # limiter = Limiter(
@@ -79,6 +80,7 @@ def get_god_abilities(god):
 
 @app.route("/api/gettierlist/<rank>/<role>/<tableType>", methods=["GET", "POST"])
 def get_tier_list(rank, role, tableType):
+        rank = rank.replace("_", " ")
         retData = {god: {} for god in godsDict}
         mydb = client["Tier_list"]
         patch = "8.12"
@@ -360,3 +362,15 @@ def get_god_matchups_by_player(playername, god, role, patch, mode):
         matchups = anlz.get_worst_matchups(client, god, role, patch, mode, player=playername)
         del matchups["wins"], matchups["games"], matchups["winRate"]
         return matchups
+
+@app.route('/api/getdmgcalc/', methods=["GET", "POST"])
+def get_dmg_calc():
+    ret_data = {}
+    if request.method == 'POST':
+        data = request.get_json()
+        print(data)
+        if data["god"].lower() in [god.lower() for god in godsDict]:
+            ret_data = calc_combo_damage_raw(client, data["god"], data["levels"], data["power"], None)
+    
+
+    return ret_data

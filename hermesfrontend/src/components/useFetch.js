@@ -6,7 +6,6 @@ const compare = (a, b) => {
 }
 
 const useFetch = (pagegod, role, rank, patch, matchup, mode) => {
-  console.log(pagegod)
   const [games, setgames] = useState(0);
   // const [banrate, setbanrate] = useState(0);
   // const [pickrate, setpickrate] = useState(0);
@@ -14,6 +13,7 @@ const useFetch = (pagegod, role, rank, patch, matchup, mode) => {
   const [badmatchups, setbadmatchups] = useState([]);
   const [goodmatchups, setgoodmatchups] = useState([]);
   const [items, setitems] = useState([]);
+  const [relics, setRelics] = useState([]);
   const [colorStyle, setColorStyle] = useState("white");
   useEffect(() => {
     let mainFetchStatement = "/api/".concat(pagegod, "/", role, "/", rank, "/", patch, "/", mode);
@@ -28,12 +28,17 @@ const useFetch = (pagegod, role, rank, patch, matchup, mode) => {
         // setwinrate(data.winRate);
         setColorStyle(winRateColor(data.winRate))
         let displayItems = [];
+        let displayRelics = [];
         Object.keys(data).forEach((key) => {
           if (key.startsWith("slot")) {
             displayItems.push(data[key]);
           }
+          else if (key.startsWith("relic")) {
+            displayRelics.push(data[key]);
+          }
         });
         setitems([])
+        setRelics([])
         Object.entries(displayItems).forEach((item) => {
           if (item[1].item1.item && item[1].item2.item){
             setitems((items) => [ 
@@ -69,6 +74,42 @@ const useFetch = (pagegod, role, rank, patch, matchup, mode) => {
             ]);
           }
         });
+        Object.entries(displayRelics).forEach((item) => {
+          if (item[1].item1.item && item[1].item2.item){
+            setRelics((relics) => [ 
+              ...relics,
+              {
+                item: {
+                  item: item[1].item1.item,
+                  games: item[1].item1.games,
+                  url: item[1].item1.url,
+                  wins: item[1].item1.wins,
+                  itemShortDesc: item[1].item1.ShortDesc,
+                  itemAbsolutePrice: item[1].item1.absolutePrice,
+                  itemRelativePrice: item[1].item1.relativePrice,
+                  itemPassive: item[1].item1.ItemDescription.SecondaryDescription,
+                  itemStats: item[1].item1["itemStats"].map((stat) => {
+                    return [stat.Description, stat.Value];
+                  }),
+                },
+                item2: {
+                  item: item[1].item2.item,
+                  games: item[1].item2.games,
+                  url: item[1].item2.url,
+                  wins: item[1].item2.wins,
+                  itemShortDesc: item[1].item2.ShortDesc,
+                  itemAbsolutePrice: item[1].item2.absolutePrice,
+                  itemRelativePrice: item[1].item2.relativePrice,
+                  itemPassive: item[1].item2.ItemDescription.SecondaryDescription,
+                  itemStats: item[1].item2["itemStats"].map((stat) => {
+                    return [stat.Description, stat.Value];
+                  }),
+                },
+              }
+            ]);
+          }
+        });
+        console.log(relics)
       })
     );
 
@@ -112,7 +153,7 @@ const useFetch = (pagegod, role, rank, patch, matchup, mode) => {
     );
   }, [role, rank, patch, mode]);
 
-  return { games, badmatchups, goodmatchups, items, colorStyle };
+  return { games, badmatchups, goodmatchups, items, colorStyle, relics };
   // return { games, banrate, pickrate, winrate, badmatchups, goodmatchups, items, colorStyle };
 };
 

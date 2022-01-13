@@ -7,13 +7,10 @@ from operator import getitem
 import pandas as pd
 from pymongo.encryption import Algorithm
 import analyze as anlz
-from constants import godsDict, roles, ranks, single_combat_stats, single_objective_stats
+from constants import godsDict, roles, ranks, single_combat_stats, single_objective_stats, Warriors
 from pandas.io.json import json_normalize
 import time
-
-client = pymongo.MongoClient(
-    "mongodb+srv://sysAdmin:9gR7C1aDKclng4jA@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
-
+from main import client
 
 def clear_nonmatches(client):
     db_list = client.list_database_names()
@@ -188,15 +185,30 @@ def purge_date(client, dbs, date):
         
 if __name__ == "__main__":
     # calc_total_matches(client, ranks)
-    mydb = client["CasualMatches"]
-    mycol = mydb["8.12 Matches"]
-    print(mycol.count_documents({"Entry_Datetime": "12/22/2021"}))
-    # count = 0
     # mydb = client["single_match_stats"]
+    # mycol = mydb["8.12 Matches"]
+    # print(mycol.count_documents({"Entry_Datetime": "12/22/2021"}))
+    # count = 0
+    mydb = client["single_match_stats"]
     # for god in godsDict:
     #     if god != "Atlas":
-    #         mycol = mydb[god]
-    #         mycol.update_many({"Entry_Datetime": {"$gt": "12/15/2021"}}, {"$set": {"mode": "RankedConq"}})
+    god = "Achilles"
+    mycol = mydb[god]
+    print(mycol.count_documents({"patch": "8.12"}))
+    print(mycol.count_documents({"skin": {"$exists": True}}))
+    # mycol = mydb[god]
+    # for warrior in Warriors:
+    #     games = 0
+    #     wins = 0
+    #     avgKills = 0
+    #     for x in mycol.find({"time": {"$lte": 660}, "patch": "8.12", "enemy": warrior}):
+    #         games += 1
+    #         if x["win_status"] == "Winner":
+    #             wins += 1
+    #         avgKills += x["kills"]
+    #     if games == 0:
+    #         games = 1
+    #     print(f"{god}: {round(wins/games*100, 2)}% v {warrior} Avg. Kills: {round(avgKills/games, 2)}")
     # print(count)
     # mycol = mydb["Atlas"]
     # for x in mycol.aggregate([
