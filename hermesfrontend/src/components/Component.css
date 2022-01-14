@@ -2531,3 +2531,112 @@ figure.snip0015:hover figcaption::before {
   flex-direction: row;
   font-size: 14px;
 }
+
+.combined-section {
+  display: flex;
+  flex-direction: row;
+}
+
+.combined-section .toughest-matchups {
+  width: 75%;
+  margin-right: 24px;
+}
+
+.combined-section .toughest-matchups .matchups {
+  grid-template-columns: repeat(10, 1fr);
+  /* width: 75% */
+  /* margin-right: 24px; */
+}
+
+.relics {
+  width: 25%;
+}
+
+.logo-icon {
+  max-width: 220px;
+}
+
+.logo-icon-small {
+  max-width: 45px;
+}
+
+@media (max-width: 899px) {
+  .combined-section {
+    flex-direction: column;
+  }
+
+  .combined-section .toughest-matchups {
+    width: 100%;
+  }
+
+  .relics {
+    width: 100%;
+  }
+
+  .hidden-tab {
+    display: none !important;
+  }
+  
+  .rt-tr .god {
+    min-width: 35px !important;
+    max-width: 65px !important;
+  }
+
+  .rt-tr .god .god-played .god-name {
+    display: none !important;
+  }
+
+  .rt-tr .tier {
+    display: none !important;
+  }
+  
+  .rt-tr .against {
+    display: none !important;
+  }
+
+  .rt-tr .games {
+    display: none !important;
+  }
+
+  .rt-tr .inline-role {
+    min-width: 75px !important;
+    max-width: 85px !important;
+  }
+  .rt-tr .inline-god {
+    min-width: 75px !important;
+    max-width: 85px !important;
+  }
+
+  .rt-tr .inline-tier {
+    display: none !important;
+  }
+
+  .rt-tr .inline-counterMatchups {
+    display: none !important;
+  }
+
+  .rt-tr .inline-games {
+    display: none !important;
+  }
+
+  .inline-tab-combat {
+    display: none !important;
+  }
+
+  .inline-tab-objective {
+    display: none !important;
+  }
+
+  .inline-tab-duos {
+    display: none !important;
+  }
+
+  .search-bar {
+    display: none !important;
+  }
+  
+  .logo-icon {
+    display: none !important;
+    /* margin-left: 0 !important; */
+  }
+}

@@ -30,8 +30,8 @@ export default class Tab extends Component {
   
       return (
         <li
-          className={className}
           onClick={onClick}
+          className={`inline-tab-${this.props.label.toLowerCase()} ${className}`}
         >
           {label}
         </li>

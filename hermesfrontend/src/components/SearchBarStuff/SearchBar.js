@@ -98,6 +98,7 @@ export default function SearchBar(data) {
         color: "black",
         marginLeft: "15px",
        }}
+       className="search-bar"
       >
       <Autocomplete
         freeSolo

@@ -109,7 +109,6 @@ const useFetch = (pagegod, role, rank, patch, matchup, mode) => {
             ]);
           }
         });
-        console.log(relics)
       })
     );
 
@@ -136,7 +135,7 @@ const useFetch = (pagegod, role, rank, patch, matchup, mode) => {
                 wins: newData[god].wins,
               },
             ]);
-          } else if (newData.length - index < 11) {
+          } else if (newData.length - index < 9) {
             setgoodmatchups((goodmatchups) => [
               ...goodmatchups,
               {

@@ -77,6 +77,7 @@ export default function SearchBarGodPage(data) {
         color: "black",
         marginLeft: "15px",
        }}
+       className="search-bar"
       >
       <Autocomplete
         freeSolo

@@ -393,38 +393,69 @@ export default function BuildPage(props) {
           <GodCounterStats matchups={badmatchups} />
         </div>
       </div>
-      <div
-        className="toughest-matchups content-section"
-      >
-        <div className="content-section_header">
-          Good Matchups&nbsp;
-          <span
-            style={{ color: "#5f5f7b", fontSize: "14px", fontWeight: "400" }}
-          >
-            these gods get countered by {props.props} {props.role}
-          </span>
-          <HtmlTooltip
-            title={
-              <React.Fragment>
-                <CreateMatchupsHelpTooltip god={props.props} />
-              </React.Fragment>
-            }
-            placement="top"
-            arrow
-          >
-            <div style={{ paddingLeft: "25px" }}>
-              <div>
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Icon-round-Question_mark.svg/300px-Icon-round-Question_mark.svg.png"
-                  style={{ maxWidth: "24px", maxHeight: "24px" }}
-                />
+      <div className="combined-section">
+            <div
+              className="toughest-matchups content-section"
+            >
+              <div className="content-section_header">
+                Good Matchups&nbsp;
+                <span
+                  style={{ color: "#5f5f7b", fontSize: "14px", fontWeight: "400" }}
+                >
+                  these gods get countered by {props.props} {props.role}
+                </span>
+                <HtmlTooltip
+                  title={
+                    <React.Fragment>
+                      <CreateMatchupsHelpTooltip god={props.props} />
+                    </React.Fragment>
+                  }
+                  placement="top"
+                  arrow
+                >
+                  <div style={{ paddingLeft: "25px" }}>
+                    <div>
+                      <img
+                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Icon-round-Question_mark.svg/300px-Icon-round-Question_mark.svg.png"
+                        style={{ maxWidth: "24px", maxHeight: "24px" }}
+                      />
+                    </div>
+                  </div>
+                </HtmlTooltip>
+              </div>
+              <div className="matchups" style={goodStyling}>
+                <GodCounterStats matchups={goodmatchups} />
               </div>
             </div>
-          </HtmlTooltip>
-        </div>
-        <div className="matchups" style={goodStyling}>
-          <GodCounterStats matchups={goodmatchups} />
-        </div>
+            <ResponsiveBuild className="build content-section relics" style={styling}>
+        {relics.map((item, index) => {
+          if (item === "None") {
+            return (
+              <>
+                <div className="content-section_header">Build</div>
+                <div className="empty-set">NO DATA TO DISPLAY</div>
+              </>
+            );
+          }
+          if (index === 0) {
+            return (
+              <div className="starter">
+                <div className="content-section_header">
+                  Relics&nbsp;
+                <span
+                  style={{ color: "#5f5f7b", fontSize: "14px", fontWeight: "400" }}
+                >
+                  relics for {props.godname} {props.role}
+                </span>
+                </div>
+                <div>
+                  <BuildStats stats={relics} lower={0} upper={1} />
+                </div>
+              </div>
+            );
+          }
+        })}
+      </ResponsiveBuild>
       </div>
       <ResponsiveBuild className="build content-section" style={styling}>
         {items.map((item, index) => {

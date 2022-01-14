@@ -122,7 +122,7 @@ godsDict = {
 }
 
 
-Assassins = ["Arachne", "Awilix", "Bakasura", "Bastet", "Camazotz", "Da Ji", "Fenrir", "Hun Batz", "Kali", "Loki",
+Assassins = ["Arachne", "Awilix", "Bakasura", "Bastet", "Camazotz", "Cliodhna","Da Ji", "Fenrir", "Hun Batz", "Kali", "Loki",
              "Mercury", "Ne Zha", "Nemesis", "Pele", "Ratatoskr", "Ravana", "Serqet", "Set", "Susano", "Thanatos", "Thor", "Tsukuyomi"]
 Guardians = ["Ares", "Artio", "Athena", "Atlas", "Bacchus", "Cabrakan", "Cerberus", "Cthulhu", "Fafnir", "Ganesha",
              "Geb", "Jormungandr", "Khepri", "Kumbhakarna", "Kuzenbo", "Sobek", "Sylvanus", "Terra", "Xing Tian", "Yemoja", "Ymir"]

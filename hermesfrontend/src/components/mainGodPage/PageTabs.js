@@ -58,10 +58,10 @@ export default function BasicTabs(props) {
      }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab sx={{ color: "white" }} label="Build" {...a11yProps(0)} />
-          <Tab sx={{ color: "white" }} label="Items" {...a11yProps(1)} />
+          <Tab sx={{ color: "white" }} label="Build" {...a11yProps(0)}/>
+          <Tab sx={{ color: "white" }} label="Items" {...a11yProps(1)} className="hidden-tab"/>
           <Tab sx={{ color: "white" }} label="Build Paths" {...a11yProps(2)} />
-          <Tab sx={{ color: "white" }} label="Matchups" {...a11yProps(3)} />
+          <Tab sx={{ color: "white" }} label="Matchups" {...a11yProps(3)} className="hidden-tab"/>
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
