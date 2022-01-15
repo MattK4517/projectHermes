@@ -1,8 +1,8 @@
 import pymongo
 from main import client
 import analyze as anlz
-from constants import num_hits_dict, scaling_dict, percentage_dict, Warriors, Assassins
-
+from constants import num_hits_dict, scaling_dict, percentage_dict, Warriors, Assassins, Hunters, Mages, Guardians
+from random import randint
 def special_case(ability, base):
     base = base.strip()
     if ability == "Twin Cleave (Bladestorm) Cleave Damage":
@@ -279,6 +279,106 @@ def calc_combo_damage_raw(client, god, levels, power, build):
     print(f"{god} Total Damage: {total_damage}")
     return ret_data
 
+def calc_dps_stats(client, god, build):
+    myfilter = {
+                **{"_id": 0},
+                **{f"AttackSpeed": 1}
+    }
+    god = god.title()
+    mydb = client["God_Data"]
+    mycol = mydb[god]
+    baseAS = 0
+    attSpeedIncease = 0
+    attSpeedDecrease = 0
+    power = 0
+    critChance = 0
+    for x in mycol.find({}, myfilter):
+        baseAS = x["AttackSpeed"]
+
+    baseAttSpeedIncrease = baseAS
+
+    itemdb = client["Item_Data"]
+    for item in build:
+        itemcol = itemdb[item]
+        for x in itemcol.find({}, {"ItemDescription": 1}):
+            for stat in x["ItemDescription"]["Menuitems"]:
+                print(item, stat)
+                if stat["Description"] == "Attack Speed":
+                    attSpeedIncease += int(stat["Value"].replace("%", "").replace("+", ""))/100
+                elif "Power" in stat["Description"]:
+                    power += int(stat["Value"].replace("%", "").replace("+", ""))
+                elif "Critical" in stat["Description"]:
+                    critChance += int(stat["Value"].replace("%", "").replace("+", ""))
+        
+    attSpeed = baseAS * (1+(attSpeedIncease - attSpeedDecrease))    
+    attSpeed = round(attSpeed, 2)
+    return (attSpeed,power,baseAttSpeedIncrease,critChance)
+
+def calc_qins_dmg(hp):
+    dmg = 0
+    if hp <= 2000:
+        dmg = round(hp *.03)
+    return dmg 
+
+def calc_auto_dmg(god, power):
+    if (god.lower() in[assassin.lower() for assassin in Assassins]
+    or god.lower() in [warrior.lower() for warrior in Warriors] 
+    or god.lower() in [hunter.lower() for hunter in Hunters]):
+        attDamage = power
+
+    return attDamage
+
+def calc_dps(client, god, build, targetHP, level=20,):
+    attSpeed, power, baseAttSpeed, critChance = calc_dps_stats(client, god, build)
+    temp = anlz.get_god_stats(client, "Achilles", level)
+    print(temp)
+    power += temp["PhysicalPower"]
+    attSpeed += temp["AttackSpeed"] - baseAttSpeed
+    if (god.lower() in[assassin.lower() for assassin in Assassins]
+    or god.lower() in [warrior.lower() for warrior in Warriors] 
+    or god.lower() in [hunter.lower() for hunter in Hunters]):
+        attDamage = power
+    print(attSpeed, power, critChance)
+    dmg = 0
+    item_dmg = 0
+    item_dmg_out = {"Qin's Sais": 0, "Odysseus' Bow": 0, "Total": 0}
+    attDamage = 263
+    qins = 0
+    obow = 0
+    crit = 0
+    for i in range(10):
+        if critChance > 0:
+            if randint(0, 100) <= critChance:
+                crit += 1
+                dmg += attDamage
+        if (i > 0 and i % 4 == 0) and "Odysseus' Bow" in build:
+            item_dmg += round(15 + (power * .6))
+            item_dmg_out["Odysseus' Bow"] += round(15 + (power * .6))
+            dmg += item_dmg
+            item_dmg = 0
+            obow += 1
+        if "Qin's Sais" in build:
+            item_dmg += calc_qins_dmg(targetHP)
+            item_dmg_out["Qin's Sais"] += calc_qins_dmg(targetHP)
+            dmg += item_dmg
+            item_dmg = 0
+            qins += 1
+        
+        dmg += calc_auto_dmg(god, 263)
+        # print(item_dmg_out)
+ 
+    
+    item_dmg_out["Total"] = item_dmg_out["Qin's Sais"] + item_dmg_out["Odysseus' Bow"]
+
+    dps = dmg / attSpeed
+    print(qins, obow, crit)
+    print(f"Damage Autos: {dmg - item_dmg_out['Total']}")
+    print(f"Damage Total: {dmg}")
+    print(f"Damage per Second: {dps}")
+    for key in item_dmg_out:
+        print(f"{key} Item Damage: {item_dmg_out[key]}")
+
+
 if __name__ == "__main__":  
     levels  =  {
         "1": 5, 
@@ -287,14 +387,7 @@ if __name__ == "__main__":
         "4": 5, 
         "5": 5
         }
-    calc_combo_damage_raw(client, "Xing Tian", levels, 0, 0)
-# for warrior in Warriors:
-#     print(warrior)
-#     calc_combo_damage_raw(client, warrior, levels, 0, 0)
-#     print("\n")
+    calc_dps(client, "Achilles", ["The Crusher", "Asi", "Qin's Sais", "Heartseeker", "Wind Demon", "Deathbringer"], 553)
+    # calc_combo_damage_raw(client, "Xing Tian", levels, 0, 0)
 
-  
-# # About 106-108 wraiths in Ah Puch ult
-
-# # Set calc
-# # Baba Ult
+    470 + 83

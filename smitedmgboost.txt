@@ -1,0 +1,81 @@
+Achilles:
+Gift of the Gods : 3 + 2 power per level
+Radiant Glory: Increased % Power
+
+Ah Muzen Cab:
+Hive: Increased % AS
+Stinger: Prot reduction
+
+Amaterasu:
+Illuminating Strike: 10% DMG increase after 3 autos
+Divine Presence: Valor Stance Bonus Power
+
+Anhur:
+Enfeeble: 20 prot reduction
+Shifting Sands 20% increased basic attack damage
+
+Anubis:
+Sorrow: 7 prot steal up to 21
+
+Apollo:
+Audacity: 100% AS for 5 autos
+
+Arachne:
+Predator: 1.5% Basic Attack Damage per 5% missing HP of target
+Cocoon: Increased % AS
+
+Ares:
+Blessed Presence: 30 power per aura
+Searing Flesh: % Max HP of target
+
+Artemis:
+Still Target: 15% Basic Attack Damage to CCed Gods
+Vengeful Assault: Increased % AS
+
+Artio:
+Decompose: 2% prot debuff per ability cast
+
+Athena:
+Reach: autos after an ability have 50% more damage
+
+Awilix:
+Initiative: 30% Physical Power for 2.5s
+Gravity Surge: Increased % AS and power
+
+Baba Yaga:
+Baba's Brew: 7.5% Increased Dmg per red stack
+
+Bacchus:
+Drunk-o-meter: Increased Power
+Chug: Increased Power
+Intoxicate: Increased Power
+
+Bakasura:
+Insatiable Hunger: 7% AS up to 21
+Take Down: 10% Increased Damage
+Butcher Blades: Power, and True Damage on AAs
+
+Baron Samedi:
+Hysteria: 20% increased damage
+Life of the Party: 10% Max HP Damage
+
+Bellona:
+Eagles Rally: Increased Power
+
+Camazotz:
+Screech: Increased Power
+
+Cerberus:
+Ghastly Breath: Prot Reduction
+
+Cernunnos:
+Heavy Glaive: 25% Basic Attack Damage on hit
+Shifter of Seasons: Prot Reduction, Increased on hit Damage
+
+Charybdis:
+Raging Tides: AS, item damage reduction
+Capsize: 30% extra scaling
+
+Chernobog:
+Heart of Cold: 15% + 1% per level basic attack damage
+Vicious Barrage: Increased % AS

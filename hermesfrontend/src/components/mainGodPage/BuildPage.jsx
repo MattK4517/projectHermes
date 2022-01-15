@@ -445,7 +445,7 @@ export default function BuildPage(props) {
                 <span
                   style={{ color: "#5f5f7b", fontSize: "14px", fontWeight: "400" }}
                 >
-                  relics for {props.godname} {props.role}
+                  for {props.pagegod} {props.role}
                 </span>
                 </div>
                 <div>
