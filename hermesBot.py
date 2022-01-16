@@ -240,10 +240,18 @@ if __name__ == "__main__":
                 embed.set_thumbnail(url=iconURL)
                 for i, slot in enumerate(data):
                     if "slot" in slot:
+                        print(data[slot])
                         item1 = data[slot]["item1"]["item"]
                         item2 = data[slot]["item2"]["item"]
-                        item1WR = round(data[slot]["item1"]["wins"]/data[slot]["item1"]["games"]*100 , 2)
-                        item2WR = round(data[slot]["item2"]["wins"]/data[slot]["item2"]["games"]*100, 2)
+                        if item1:
+                            item1WR = round(data[slot]["item1"]["wins"]/data[slot]["item1"]["games"]*100 , 2)
+                        else:
+                            item1WR = 0
+                        if item2:
+                            item2WR = round(data[slot]["item2"]["wins"]/data[slot]["item2"]["games"]*100, 2)
+                        else:
+                            item2WR = 0
+                        
                         embed.add_field(name=f"Slot {i+1}", value=f"{item1} WR: {item1WR}%\n {item2} WR: {item2WR}%", inline=True)
 
                 await message.channel.send(embed=embed)
