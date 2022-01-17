@@ -22,8 +22,8 @@ import Player from "./PlayerPage/Player";
 import OverviewDisplay from "./PlayerPage/OverviewDisplay";
 import GodStatsDisplay from "./PlayerPage/GodStatsDisplay";
 import { PlayerProvider } from "./PlayerPage/PlayerContext";
-import DamageCalculator from "./DamageCalculator"
-
+import DamageCalculator from "./DmgCalcPage/DamageCalculator"
+import { DamageProvider } from './DmgCalcPage/DamageContext';
 
 
 export const godsDict = {
@@ -420,11 +420,13 @@ export default function PermanentDrawerLeft() {
       >
         <Toolbar />
         <PlayerProvider>
-          <Typography>
-            <Switch>
-              {routeComponents}
-            </Switch>
-          </Typography>
+          <DamageProvider>
+            <Typography>
+              <Switch>
+                {routeComponents}
+              </Switch>
+            </Typography>
+          </DamageProvider>
         </PlayerProvider>
       </Box>
     </Box>

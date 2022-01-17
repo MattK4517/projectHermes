@@ -1,4 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext} from "react";
+import ItemBuffs from "./ItemBuffs";
+import DragDrop from "./DragDropGodList";
+import MainCalcSection from "./MainCalcSection";
+import { PlayerContext } from "../PlayerPage/PlayerContext";
 
 class NameForm extends React.Component {
   constructor(props) {
@@ -106,8 +110,11 @@ class NameForm extends React.Component {
   }
 }
 
-export default function CarryScoreSection() {
-  const [god, setGod] = useState("");
+export default function DamageCalculator() {
+  const [
+    god,
+    setGod,
+  ] = useContext(PlayerContext);
   const [levels, setLevels] = useState({
     "1": 1, 
     "2": 1, 
@@ -150,21 +157,39 @@ export default function CarryScoreSection() {
   }, [submit]);
 
   return (
-    <div className="content-section content-section_no-padding avg-carry-score">
-      <div className="content-section_header">Damage Calculator</div>
-      <NameForm
-        setSubmit={setSubmit} 
-        setGod={setGod} 
-        setPower={setPower} 
-        setLevels={setLevels}/>
-    <div className="return">
-        {message.map(ability => {
-            return (
-                <div>{ability.name} {ability.damage.damageTotal}</div>
-            )
-        })}
-        <div>Total Damage: {totalDamage}</div>
-    </div>
+    <div className="player-profile-page">
+      <div
+        className="player-profile-container content-side-padding"
+        style={{ marginLeft: "auto", marginRight: "auto" }}
+      >
+        {/* <NameForm setPlayer={setPlayer} /> */}
+        <div className="player-content-container">
+          <div className="player-content-main">
+            <div className="player-side">
+              <ItemBuffs />
+              <DragDrop />
+            </div>
+            <div className="player-main">
+              <MainCalcSection />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
+
+
+{/* <NameForm
+setSubmit={setSubmit} 
+setGod={setGod} 
+setPower={setPower} 
+setLevels={setLevels}/>
+<div className="return">
+{message.map(ability => {
+    return (
+        <div>{ability.name} {ability.damage.damageTotal}</div>
+    )
+})}
+<div>Total Damage: {totalDamage}</div>
+</div> */}

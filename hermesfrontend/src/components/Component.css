@@ -2640,3 +2640,45 @@ figure.snip0015:hover figcaption::before {
     /* margin-left: 0 !important; */
   }
 }
+
+.buff-checkbox {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.buff-checkbox > * {
+  margin-top: 10px;
+}
+
+.check-box_wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.check-box_wrapper > *{
+  margin-left: 10px;
+}
+
+.gods-container > form {
+  align-self: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(100px,1fr));
+  grid-gap: 12px 12px;
+  padding: 20px;
+  border: 5px solid #2c2c40;
+  background-color: #17172e;
+}
+
+.god-selection {
+  min-width: 64px;
+  min-height: 64px;
+  max-width: 128px;
+  max-height: 128px;
+}
+
+.main-calc {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

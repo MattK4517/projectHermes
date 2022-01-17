@@ -5,10 +5,8 @@ import { Godpage, Gods, TierListPage, Match, Home, ContactForm, Items, MiniDrawe
 import { TierList } from "./components/Tierlists/TierList";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import { styled } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
-import { green } from '@mui/material/colors';
-import { Paper } from "@mui/material";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 const theme = createTheme({
   breakpoints: {
@@ -32,6 +30,7 @@ class App extends React.Component {
   render () {
     // const routeComponents = routes.map(({path, component}, key) => <Route exact path={path} component={() => component} key={key} />);
   return (
+    <DndProvider backend={HTML5Backend}>
     <div className="App">
       <HashRouter>
         <ThemeProvider theme={theme}>
@@ -39,6 +38,7 @@ class App extends React.Component {
         </ThemeProvider>
       </HashRouter>
     </div>
+    </DndProvider>
   );
         }
 }

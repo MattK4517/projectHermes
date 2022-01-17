@@ -285,5 +285,38 @@ Death Scythe: 10% Max HP damage
 Scent of Death: Pen on cast
 
 The Morrigan:
+Doomsayer: 9% Max HP damge 
 
+Thor:
+Warrior's Madness: 10 power per stack max 3
+
+Thoth:
+Dead Reckoning: 3 pen max 5 stacks
+
+Tyr:
+Change Stance: Increased Power
+
+Ullr:
+Expose Weakness: Increased Power
+Wield Bow: Increased % AS
+
+Vamana:
+Colossal Fury: Increased Power
+Sleeping Giant: 20% of phys prot to power, 10% to AS
+
+Vulcan:
+Inferno Cannon: Ignores 25% mag prot
+
+Xbalanque:
+Branching Bola: Additional Basic Attack Damage
+Dead of Night: 5 Phys Power max 6 stacks
+
+Xing Tian:
+Furious Roar: % Max HP damage
+
+Ymir:
+Frostbite: 100% Basic Attack Damage
+
+Zeus:
+Aegis Assault: Increased % AS
 
