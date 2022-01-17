@@ -2682,3 +2682,42 @@ figure.snip0015:hover figcaption::before {
   flex-direction: column;
   align-items: center;
 }
+
+.home-page-section > div {
+  margin-top: 25px;
+}
+
+.home-page-section > p {
+  letter-spacing: .1rem;
+}
+
+.home-page-section .content-section_header {
+  padding-bottom: 5px;
+  border-bottom: 1px solid gray;
+}
+
+.main-nav-link {
+  display: flex;
+  flex-direction: row;
+  /* border-bottom: 1px solid gray; */
+  min-height: 32px;
+  opacity: .8;
+}
+
+.main-nav-link > * {
+  margin-top: auto !important;
+  margin-bottom: auto !important;
+}
+
+.main-nav-link > p {
+  padding-left: 10px;
+}
+
+.link-icon-svg {
+  font-size: 40px;
+}
+
+.main-nav-wrapper {
+  border-top: 1px solid gray;
+  border-bottom: 1px solid gray;
+}

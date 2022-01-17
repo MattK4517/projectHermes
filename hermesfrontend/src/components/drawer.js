@@ -367,6 +367,7 @@ export default function PermanentDrawerLeft() {
           bgColor: "#17172e"
         }} />
         <List
+          className="main-nav-wrapper"
           sx={{
             paddingLeft: "10px",
             color: "#bbbedb",
@@ -379,21 +380,21 @@ export default function PermanentDrawerLeft() {
             let icon;
             if (text === "Home") {
               route = "";
-              icon = <AiIcons.AiFillHome />
+              icon = <AiIcons.AiFillHome className="link-icon-svg"/>
             }
             else if (text === "Gods") {
-              icon = <GiIcons.GiPikeman />
+              icon = <GiIcons.GiPikeman className="link-icon-svg"/>
             } else if (text === "Tierlist") {
-              icon = <AiIcons.AiOutlineBars />
+              icon = <AiIcons.AiOutlineBars className="link-icon-svg"/>
             }
             else if (text === "Contact") {
-              icon = <AiIcons.AiFillMail />
+              icon = <AiIcons.AiFillMail className="link-icon-svg"/>
             }
             else if (text === "Match") {
-              icon = <GiIcons.GiSwordClash />
+              icon = <GiIcons.GiSwordClash className="link-icon-svg"/>
             }
             else if (text === "Damage Calculator") {
-              icon = <GiIcons.GiSwordman />
+              icon = <GiIcons.GiSwordman className="link-icon-svg"/>
             }
             else {
               route = text;
@@ -402,10 +403,10 @@ export default function PermanentDrawerLeft() {
               <>
                 <Link
                   key={index} to={"/".concat((route).replaceAll(" ", "_"))}
-                  className="god-link"
+                  className="main-nav-link"
                   style={{ marginBottom: "20px", marginLeft: "5px" }}
                 >
-                  {icon}{text}
+                  {icon}<p>{text}</p>
                 </Link>
                 {/* <br></br> */}
               </>

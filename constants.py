@@ -524,7 +524,7 @@ num_hits_dict = {
         "Turn of Fate": 1,
         "Ohm": 0,
         "Remove Obstacles": 1,
-        "Dharmic Pillars": 12,
+        "Dharmic Pillars": 3,
         "Good Fortune": 0,
     },
     "Geb": {
