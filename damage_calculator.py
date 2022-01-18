@@ -492,6 +492,7 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, level=20):
     print(f"Damage per Second: {round(dps)}")
     print(f"Percent of {enemy}s HP dealt: {round(dmg/targetHP*100,2)}")
     return round(dmg/targetHP*100,2)
+
 def calc_mitigation(dmg, prot, miti, armor_reduction_per, armor_reduction_flat, pen_per, pen_flat):
     # print(armor_reduction_per, armor_reduction_flat, pen_per, pen_flat)
     # % armor reduction
@@ -516,10 +517,10 @@ if  __name__ == "__main__":
     }
     # avg = 0
     # for i in range(10):
-    # calc_dps(client, "Rama", ["Death's Embrace", "The Crusher", "Asi", "Wind Demon", "The Executioner", "Deathbringer"], 
-    #     "Odin", ["Sundering Axe", "Blackthorn Hammer", "Mystical Mail", "Bulwark of Hope", "Pridwen", "Spectral Armor"], 20, 20)
+    calc_dps(client, "Rama", ["Death's Embrace", "The Crusher", "Asi", "Wind Demon", "The Executioner", "Deathbringer"], 
+        "Odin", ["Sundering Axe", "Blackthorn Hammer", "Mystical Mail", "Bulwark of Hope", "Pridwen", "Spectral Armor"], 20, 20)
     # print(avg/10)
     # for guardian in Guardians:
-    calc_combo_damage_raw(client, "Ganesha", levels, 0, 0)
+    # calc_combo_damage_raw(client, "Ganesha", levels, 0, 0)
 
     # 470 + 83
