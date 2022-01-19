@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useContext} from "react";
 import ItemBuffs from "./ItemBuffs";
-import DragDrop from "./DragDropGodList";
+import DragDrop, { DragDropGodList } from "./DragDropGodList";
 import MainCalcSection from "./MainCalcSection";
-import { PlayerContext } from "../PlayerPage/PlayerContext";
+import { DamageContext } from "./DamageContext";
+
+import { physGods, magGods, physicalItems } from "../constants"
 
 class NameForm extends React.Component {
   constructor(props) {
@@ -111,10 +113,7 @@ class NameForm extends React.Component {
 }
 
 export default function DamageCalculator() {
-  const [
-    god,
-    setGod,
-  ] = useContext(PlayerContext);
+  const [drop, allgods, board, setBoard, god, setGod] = useContext(DamageContext);;
   const [levels, setLevels] = useState({
     "1": 1, 
     "2": 1, 
@@ -136,25 +135,28 @@ export default function DamageCalculator() {
   };
   const [message, setMessage] = useState([])
   let td = 0
-  useEffect(() => {
-    fetch("/api/getdmgcalc/", requestOptions).then((res) =>
-      res.json().then((data) => {
-        setMessage([])
-        td = 0
-        Object.keys(data).map((ability) => {
-            td = td + data[ability]["damage"]["damageTotal"]
-            setMessage(message => [
-                ...message,
-                {
-                    ...data[ability]
-                },
-              ]);
-          });
-        setSubmit(false);
-        setTotalDamage(td)
-      })
-    );
-  }, [submit]);
+  if (physGods.indexOf(god) !== -1) {
+    console.log(god)
+  }
+  // useEffect(() => {
+  //   fetch("/api/getdmgcalc/", requestOptions).then((res) =>
+  //     res.json().then((data) => {
+  //       setMessage([])
+  //       td = 0
+  //       Object.keys(data).map((ability) => {
+  //           td = td + data[ability]["damage"]["damageTotal"]
+  //           setMessage(message => [
+  //               ...message,
+  //               {
+  //                   ...data[ability]
+  //               },
+  //             ]);
+  //         });
+  //       setSubmit(false);
+  //       setTotalDamage(td)
+  //     })
+  //   );
+  // }, [submit]);
 
   return (
     <div className="player-profile-page">
@@ -164,13 +166,17 @@ export default function DamageCalculator() {
       >
         {/* <NameForm setPlayer={setPlayer} /> */}
         <div className="player-content-container">
-          <div className="player-content-main">
+          <div className="damage-content-main">
             <div className="player-side">
               <ItemBuffs />
               <DragDrop />
             </div>
             <div className="player-main">
               <MainCalcSection />
+              <p>{god}</p>
+            </div>
+            <div className="player-side">
+              <DragDropGodList allgods={physicalItems}/>
             </div>
           </div>
         </div>

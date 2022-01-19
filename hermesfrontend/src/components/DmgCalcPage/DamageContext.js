@@ -19,6 +19,7 @@ export const DamageProvider = props => {
         ]
       })
 
+    const [god, setGod] = useState("");
     const [board, setBoard] = useState([]);
 
 
@@ -32,15 +33,13 @@ export const DamageProvider = props => {
 
 
     const addImageToBoard = (id) => {
-        console.log(allgods)
-        console.log(id, allgods.filter(god => god.id == id))
         const pictureList = allgods.filter(god => god.id == id);
         // console.log(pictureList)
         setBoard((board) => [pictureList[0]]);
     };
     return (
         <DamageContext.Provider value={[
-            drop, allgods, board, setBoard
+            drop, allgods, board, setBoard, god, setGod
         ]}>
             {props.children}
         </DamageContext.Provider>

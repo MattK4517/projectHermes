@@ -7,7 +7,7 @@ from operator import getitem
 import pandas as pd
 from pymongo.encryption import Algorithm
 import analyze as anlz
-from constants import godsDict, roles, ranks, single_combat_stats, single_objective_stats, Warriors
+from constants import Tier_Three_items, godsDict, roles, ranks, single_combat_stats, single_objective_stats, Warriors
 from pandas.io.json import json_normalize
 import time
 from main import client
@@ -184,18 +184,32 @@ def purge_date(client, dbs, date):
             delete_match_docs(client, db, god, "Entry_Datetime", date)
         
 if __name__ == "__main__":
+    phys = []
+    mag = []
+    mydb = client["God_Data"]
+    for god in godsDict:
+        mycol = mydb[god]
+        for x in mycol.find({}, {"_id": 0, "Roles": 1, "Name": 1}):
+            if x["Roles"] in ["Warrior", "Hunter", "Assassin"]:
+                phys.append(x["Name"])
+            elif x["Roles"] in ["Mage", "Guardian"]:
+                mag.append(x["Name"])
+    
+    print(phys)
+    print(mag)
+
     # calc_total_matches(client, ranks)
     # mydb = client["single_match_stats"]
     # mycol = mydb["8.12 Matches"]
     # print(mycol.count_documents({"Entry_Datetime": "12/22/2021"}))
     # count = 0
-    mydb = client["single_match_stats"]
+    # mydb = client["single_match_stats"]
     # for god in godsDict:
     #     if god != "Atlas":
-    god = "Achilles"
-    mycol = mydb[god]
-    print(mycol.count_documents({"patch": "8.12"}))
-    print(mycol.count_documents({"skin": {"$exists": True}}))
+    # god = "Achilles"
+    # mycol = mydb[god]
+    # print(mycol.count_documents({"patch": "8.12"}))
+    # print(mycol.count_documents({"skin": {"$exists": True}}))
     # mycol = mydb[god]
     # for warrior in Warriors:
     #     games = 0
