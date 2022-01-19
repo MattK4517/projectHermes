@@ -11,7 +11,7 @@ from data_pull_formatting_rewrite import format_no_query
 import os
 # from data_pull_formatting_rewrite import format_no_query
 client = pymongo.MongoClient(
-    "mongodb+srv://sysAdmin:9gR7C1aDKclng4jA@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
+    "mongodb+srv://sysAdmin:SFpmxJRX522fZ5fK@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
 
 
 
@@ -375,9 +375,9 @@ def get_player_basic(player):
 def run_pull(patch, date=get_date()):
     starttime = datetime.now()
 
-    # with open("cred.txt", "r") as f:
-    #     data = f.readlines()
-    #     smite_api = SmiteAPI(devId=data[0].strip(), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
+    with open("cred.txt", "r") as f:
+        data = f.readlines()
+        smite_api = SmiteAPI(devId=data[0].strip(), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
 
     mydb = client["test"]
     mycol = mydb[f"{patch} Matches"]
@@ -391,10 +391,12 @@ def run_pull(patch, date=get_date()):
     set_length = 10
     inserted_count = 0
 
-    all_sets = create_sets(match_ids)
+    # all_sets = create_sets(match_ids)
+    all_sets = [1217938019]
     # total = 0
     for set in all_sets:
         match_details = smite_api.getMatch(set)
+        print(match_details)
         for i in range(len(match_details) // 10):
             match_dict = create_match_dict(match_details[i*set_length], patch)
             for k in range(10):
@@ -406,6 +408,7 @@ def run_pull(patch, date=get_date()):
             match_dict["levelDiff"] = carry_score["levelDiff"]
             match_dict["killPart"] = carry_score["killPart"]
             match_dict["efficiency"] = anlz.get_gold_eff(match_dict["killPart"], match_dict["carryScore"])
+            # print(match_dict)
             mycol.insert_one(match_dict)
             format_no_query(match_dict)
             inserted_count += 1
@@ -447,6 +450,7 @@ def threaded_pull(patch, all_sets, smite_api):
             # match_dict["efficiency"] = anlz.get_gold_eff(match_dict["killPart"], match_dict["carryScore"])
             set_data.append(match_dict)
             # format_no_query(match_dict)
+        print(set_data)
         mycol.insert_many(set_data)
         inserted_count += 1
         if inserted_count == round(len(all_sets)/2):
@@ -454,6 +458,8 @@ def threaded_pull(patch, all_sets, smite_api):
 
 
     print(f"Pull Completed in " + str(datetime.now() - starttime))
+
+run_pull("8.12")
 # print(inserted_count)
 # print("error %" + str(round(100 - inserted_count/match_ids_len * 100, 2)))
 

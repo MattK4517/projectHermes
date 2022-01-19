@@ -57,7 +57,7 @@ def godAbbreviations(godName):
     elif godName == "lulu" or godName == "cthu":
         godName = "Cthulhu"
     elif godName == "cu" or godName == "cu chu" or godName == "cu chulainn" or godName == "chu chu":
-        godName = "Cu-Chulainn"
+        godName = "Cu Chulainn"
     elif godName == "daji" or godName == "da ji":
         godName = "Da-Ji"
     elif godName == "danza":
@@ -65,7 +65,7 @@ def godAbbreviations(godName):
     elif godName == "disco":
         godName = "Discordia"
     elif godName == "erlang" or godName == "erlang shen":
-        godName = "Erlang-Shen"
+        godName = "Erlang Shen"
     elif godName == "isis":
         godName = "Eset"
     elif godName == "faf":
@@ -113,7 +113,7 @@ def godAbbreviations(godName):
     elif godName == "morgan le fay" or godName == "morgan" or godName == "morgan fay" or godName == "morg":
         godName = "Morgan-Le-Fay"
     elif godName == "nezha" or godName == "ne zha":
-        godName = "Ne-Zha"
+        godName = "Ne Zha"
     elif godName == "nem":
         godName = "Nemesis"
     elif godName == "nuwa" or godName == "nu wa":
@@ -135,7 +135,7 @@ def godAbbreviations(godName):
     elif godName == "serq":
         godName = "Serqet"
     elif godName == "swk" or godName == "wukong" or godName == "sun wukong":
-        godName = "Sun-Wukong"
+        godName = "Sun Wukong"
     elif godName == "susan" or godName == "sus":
         godName = "Susano"
     elif godName == "sylv"or godName == "tree":
@@ -143,7 +143,7 @@ def godAbbreviations(godName):
     elif godName == "thana" or godName == "than":
         godName = "Thanatos"
     elif godName == "morrigan" or godName == "morri" or godName == "the morrigan":
-        godName = "The-Morrigan"
+        godName = "The Morrigan"
     elif godName == "tia":
         godName = "Tiamat"
     elif godName == "tsuku" or godName == "tsuki" or godName == "tsu":
@@ -153,7 +153,7 @@ def godAbbreviations(godName):
     elif godName == "xbal":
         godName = "Xbalanque"
     elif godName == "xing" or godName == "xing tian" or godName == "XT":
-        godName = "Xing-tian"
+        godName = "Xing Tian"
     elif godName == "yem":
         godName = "Yemoja"
     elif godName == "zhong" or godName == "zhong kui":
@@ -161,7 +161,7 @@ def godAbbreviations(godName):
     return godName.title()
 
 def get_role(god):
-    role = "none"
+    print(god)
     if god.lower() in (assassin.lower() for assassin in Assassins):
         role = "Jungle"
     elif god.lower() in (guardian.lower() for guardian in Guardians):
@@ -191,7 +191,7 @@ if __name__ == "__main__":
             return
         # each message has a bunch of attributes. Here are a few.
         # check out more by print(dir(message)) for example.
-        print(f"{message.guild}: {message.channel}: {message.author}: {message.author.name}: {message.content}")
+        # print(f"{message.guild}: {message.channel}: {message.author}: {message.author.name}: {message.content}")
 
         if message.content.lower().startswith("$build"):
             m = message.content.split(" ")
@@ -200,8 +200,9 @@ if __name__ == "__main__":
             else:
                 role = "none"
                 if len(m) == 2 or (len(m) > 2 and m[-1].lower() not in ["solo", "jungle", "mid", "support", "carry"]):
-                    actgod = m[1]
-                    actgod = godAbbreviations(actgod.strip()).replace("-"," ")
+                    god = m[1:len(m)]
+                    god = " ".join(god)
+                    actgod = godAbbreviations(god).replace("-"," ")
                     role = get_role(actgod)
                 else:
                     actgod = ""
@@ -215,6 +216,7 @@ if __name__ == "__main__":
                     else:
                         god = " ".join(god)
                         actgod = godAbbreviations(god.title()).replace("-", " ")
+                        # role = get_role(actgod)
 
                 if actgod == "Atlas":
                     data = anlz.get_top_builds(dbClient, actgod, role.capitalize(), patch, "Casual")
@@ -240,7 +242,6 @@ if __name__ == "__main__":
                 embed.set_thumbnail(url=iconURL)
                 for i, slot in enumerate(data):
                     if "slot" in slot:
-                        print(data[slot])
                         item1 = data[slot]["item1"]["item"]
                         item2 = data[slot]["item2"]["item"]
                         if item1:
@@ -251,7 +252,7 @@ if __name__ == "__main__":
                             item2WR = round(data[slot]["item2"]["wins"]/data[slot]["item2"]["games"]*100, 2)
                         else:
                             item2WR = 0
-                        
+
                         embed.add_field(name=f"Slot {i+1}", value=f"{item1} WR: {item1WR}%\n {item2} WR: {item2WR}%", inline=True)
 
                 await message.channel.send(embed=embed)
@@ -284,7 +285,6 @@ if __name__ == "__main__":
                     data = anlz.get_worst_matchups(dbClient, actgod, role.capitalize(), patch, "Ranked")
 
                 iconURL = anlz.get_url(actgod)
-                color = False
                 if actgod.lower() in (assassin.lower() for assassin in Assassins):
                     color = "fce703"
                 elif actgod.lower() in (guardian.lower() for guardian in Guardians):
@@ -295,8 +295,6 @@ if __name__ == "__main__":
                     color = "9a1af0"
                 elif actgod.lower() in (warrior.lower() for warrior in Warriors):
                     color = "fc0303"
-                if not color:
-                    await message.channel.send(f"God Not Found, check spelling of: {message.content.lower()}")
                 embed=discord.Embed(title=actgod+" "+role+" Worst Matchups".title(), description="Games: {} | Wins: {} | WR: {} \n [See more info here](https://www.smitestats.gg/#/{})".format(data["games"], data["wins"], data["winRate"], actgod.replace(" ", "_")), color = int(color, base=16))
                 embed.set_thumbnail(url=iconURL)
                 for i, matchup in enumerate(data):
@@ -332,7 +330,6 @@ if __name__ == "__main__":
                     data = anlz.get_worst_matchups(dbClient, actgod, role.capitalize(), patch, "Ranked")
 
                 iconURL = anlz.get_url(actgod)
-                color = False
                 if actgod.lower() in (assassin.lower() for assassin in Assassins):
                     color = "fce703"
                 elif actgod.lower() in (guardian.lower() for guardian in Guardians):
@@ -343,8 +340,6 @@ if __name__ == "__main__":
                     color = "9a1af0"
                 elif actgod.lower() in (warrior.lower() for warrior in Warriors):
                     color = "fc0303"
-                if not color:
-                    await message.channel.send(f"God Not Found, check spelling of: {message.content.lower()}")
                 embed=discord.Embed(title=f"{actgod} {role} Best Matchups".title(), description="Games: {} | Wins: {} | WR: {} \n [See more info here](https://www.smitestats.gg/#/{})".format(data["games"], data["wins"], data["winRate"], actgod.replace(" ", "_")), color = int(color, base=16))
                 embed.set_thumbnail(url=iconURL)
                 for i, matchup in enumerate(data):
@@ -380,7 +375,6 @@ if __name__ == "__main__":
                     data = anlz.get_build_path(dbClient, actgod, role.capitalize(), patch)
 
                 iconURL = anlz.get_url(actgod)
-                color = False
                 if actgod.lower() in (assassin.lower() for assassin in Assassins):
                     color = "fce703"
                 elif actgod.lower() in (guardian.lower() for guardian in Guardians):
@@ -391,8 +385,6 @@ if __name__ == "__main__":
                     color = "9a1af0"
                 elif actgod.lower() in (warrior.lower() for warrior in Warriors):
                     color = "fc0303"
-                if not color:
-                    await message.channel.send(f"God Not Found, check spelling of: {message.content.lower()}")
                 embed=discord.Embed(title=f"{actgod} {role} Build Paths".title(), description="[See more info here](https://www.smitestats.gg/#/{})".format(actgod.replace(" ", "_")), color = int(color, base=16))
                 embed.set_thumbnail(url=iconURL)
                 for i, path in enumerate(data):
