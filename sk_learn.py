@@ -10,10 +10,7 @@ import os
 from constants import Hunters
 from bson import BSON
 from bson import json_util
-
-client = pymongo.MongoClient(
-    "mongodb+srv://sysAdmin:vJGCNFK6QryplwYs@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
-
+from main import client
 # col_names = ["gold", "damage_bot", "kills_bot", "tower_kills", "phoenix_kills", "tower_damage", "objective_assists", "wards_placed"]
 # mydb = client["single_objective_stats"]
 

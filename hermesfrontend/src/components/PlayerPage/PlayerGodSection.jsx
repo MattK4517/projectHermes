@@ -1,25 +1,21 @@
 import React, { useContext } from "react";
 import { PlayerContext } from "./PlayerContext";
 import winRateColor from "../mainGodPage/WinRateColor";
+import { setTopGod } from "./Player"
 
 export default function PlayerGodSection(props) {
   const [
-    god,
-    setGod,
-    player,
-    setPlayer,
-    mode,
-    setMode,
-    role,
-    setRole,
-    topLink,
-    setTopLink,
+    god, setGod, player, setPlayer, mode, setMode,
+    role, setRole, topLink, setTopLink, icon, setIcon,
+    playerLevel, setPlayerLevel, tab, setTab,
   ] = useContext(PlayerContext);
-  console.log(props);
+  console.log(god)
+  setTopLink(setTopGod(god))
+  console.log(topLink)
   return (
     <div className="content-section content-section_no-padding player-specific-god">
       <div className="content-section_header played-gods_header">
-        <span>{god} Performance</span>
+        <span>{god.replaceAll("_", " ").replaceAll("-", " ")} Performance</span>
       </div>
       <div className="player-specific-god_content">
         <div>
@@ -28,7 +24,7 @@ export default function PlayerGodSection(props) {
               <img
                 src={`https://webcdn.hirezstudios.com/smite/god-icons/${god
                   .toLowerCase()
-                  .replaceAll(" ", "-")
+                  .replaceAll("_", "-")
                   .replaceAll("'", "")}.jpg`}
                 alt={god}
               />

@@ -1,7 +1,7 @@
 from re import A, S, X
 from datetime import datetime
 import re
-
+from main import client
 from pymongo.message import kill_cursors
 import errlogger as logger
 import pymongo
@@ -886,9 +886,6 @@ def get_lanes(client):
     return lanes
 
 if __name__ == "__main__":
-    client = pymongo.MongoClient(
-    "mongodb+srv://sysAdmin:SFpmxJRX522fZ5fK@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
-
 
     print(get_top_builds(client, "Achilles", "Solo", "8.12"))
 

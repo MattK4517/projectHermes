@@ -20,7 +20,7 @@ export const DamageProvider = props => {
       })
 
     const [board, setBoard] = useState([]);
-
+    const [build, setBuild] = useState([]);
 
     const [{ isOver }, drop] = useDrop(() => ({
         accept: "image",
@@ -40,7 +40,7 @@ export const DamageProvider = props => {
     };
     return (
         <DamageContext.Provider value={[
-            drop, allgods, board, setBoard
+            drop, allgods, board, setBoard, build, setBuild
         ]}>
             {props.children}
         </DamageContext.Provider>

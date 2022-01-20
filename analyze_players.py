@@ -3,6 +3,7 @@ from constants import godsDict, roles
 import analyze as anlz
 import pymongo
 from datetime import datetime
+from main import client
 
 def find_match_history(client, playername, mode):
     """returns a dict of the match history for a given playername in a give mode 
@@ -22,47 +23,62 @@ def find_match_history(client, playername, mode):
         database = "thread_test"
     mydb = client[database]
     mycol = mydb["8.12 Matches"]
-    myquery = { "$or": [ {f"player{i}.Player_Name": { "$regex" : f"{playername}", "$options": "i" }} for i in range(10) ] }
-    filter = {
-        **{"_id": 0}, 
-        # **{f"player{i}.godBuild": 0 for i in range(10)}, 
-        # **{f"Ban{i}": 0 for i in range(10)},
-        **{f"player{i}.Player_Name": 1 for i in range(10)},
-        **{f"player{i}.godName": 1 for i in range(10)},
-        **{f"MatchId": 1},
-        **{f"player{i}.Item_Active_1": 1 for i in range(10)},
-        **{f"player{i}.Item_Active_2": 1 for i in range(10)},
-        **{f"Entry_Datetime": 1},
-        **{f"Minutes": 1},
-        **{f"Match_Duration": 1},
-        **{f"player{i}.Item_Purch_1": 1 for i in range(10)},
-        **{f"player{i}.Item_Purch_2": 1 for i in range(10)},
-        **{f"player{i}.Item_Purch_3": 1 for i in range(10)},
-        **{f"player{i}.Item_Purch_4": 1 for i in range(10)},
-        **{f"player{i}.Item_Purch_5": 1 for i in range(10)},
-        **{f"player{i}.Item_Purch_6": 1 for i in range(10)},
-        **{f"player{i}.Win_Status": 1 for i in range(10)},
-        **{f"player{i}.Kills_Player": 1 for i in range(10)},
-        **{f"player{i}.Kills_Double": 1 for i in range(10)},
-        **{f"player{i}.Kills_Triple": 1 for i in range(10)},
-        **{f"player{i}.Kills_Quadra": 1 for i in range(10)},
-        **{f"player{i}.Kills_Penta": 1 for i in range(10)},
-        **{f"player{i}.Deaths": 1 for i in range(10)},
-        **{f"player{i}.Assists": 1 for i in range(10)},
-        # **{f"player{i}": 0 for i in range(10)}
+    myquery = {
+    '$search': {
+      'index': 'default',
+      'text': {
+        'query': f'{playername}',
+        'path': {
+          'wildcard': '*'
+        }
+      }
     }
-    if mycol.count_documents(myquery) == 0 and mode == "Casual": # casual match data is stored in 2 different database
-        mydb = client["CasualMatches"]
-        mycol = mydb["8.12 Matches"]
-    # print(mycol.count_documents(myquery))
+  }
     ret_data = {}
-    for x in mycol.find(myquery, filter):
-        if len(ret_data.keys()) == 25:
-            return ret_data
-        for key in x:
-            if "player" in key:
-                if verify_player(playername, x[key]["Player_Name"], "none", "none"):
-                    ret_data[x["MatchId"]] = x
+    for x in mycol.aggregate([myquery]):
+        ret_data[x["MatchId"]] = x
+    # filter = {
+    #     **{"_id": 0}, 
+    #     # **{f"player{i}.godBuild": 0 for i in range(10)}, 
+    #     # **{f"Ban{i}": 0 for i in range(10)},
+    #     **{f"player{i}.Player_Name": 1 for i in range(10)},
+    #     **{f"player{i}.godName": 1 for i in range(10)},
+    #     **{f"MatchId": 1},
+    #     **{f"player{i}.Item_Active_1": 1 for i in range(10)},
+    #     **{f"player{i}.Item_Active_2": 1 for i in range(10)},
+    #     **{f"Entry_Datetime": 1},
+    #     **{f"Minutes": 1},
+    #     **{f"Match_Duration": 1},
+    #     **{f"player{i}.Item_Purch_1": 1 for i in range(10)},
+    #     **{f"player{i}.Item_Purch_2": 1 for i in range(10)},
+    #     **{f"player{i}.Item_Purch_3": 1 for i in range(10)},
+    #     **{f"player{i}.Item_Purch_4": 1 for i in range(10)},
+    #     **{f"player{i}.Item_Purch_5": 1 for i in range(10)},
+    #     **{f"player{i}.Item_Purch_6": 1 for i in range(10)},
+    #     **{f"player{i}.Win_Status": 1 for i in range(10)},
+    #     **{f"player{i}.Kills_Player": 1 for i in range(10)},
+    #     **{f"player{i}.Kills_Double": 1 for i in range(10)},
+    #     **{f"player{i}.Kills_Triple": 1 for i in range(10)},
+    #     **{f"player{i}.Kills_Quadra": 1 for i in range(10)},
+    #     **{f"player{i}.Kills_Penta": 1 for i in range(10)},
+    #     **{f"player{i}.Deaths": 1 for i in range(10)},
+    #     **{f"player{i}.Assists": 1 for i in range(10)},
+    #     # **{f"player{i}": 0 for i in range(10)}
+    # }
+    # if mycol.count_documents(myquery) == 0 and mode == "Casual": # casual match data is stored in 2 different database
+    #     mydb = client["CasualMatches"]
+    #     mycol = mydb["8.12 Matches"]
+    # # print(mycol.count_documents(myquery))
+    # ret_data = {}
+    # for x in mycol.find(myquery, filter):
+    #     if len(ret_data.keys()) == 25:
+    #         return ret_data
+    #     for key in x:
+    #         if "player" in key:
+    #             if verify_player(playername, x[key]["Player_Name"], "none", "none"):
+    #                 ret_data[x["MatchId"]] = x
+
+    print(ret_data.keys())
     return ret_data
 
 def create_player_return_dict(player):
@@ -239,17 +255,17 @@ def verify_player(act_name, playername, act_god, god):
 def get_player_god_stats(client, playername, god, role, mode):
     mydb = client["Matches"]
     mycol = mydb["8.12 Matches"]
-    myquery = { 
-        **{"$or": [ {f"player{i}.Player_Name": { "$regex" : f"{playername}", "$options": "i" }} for i in range(10) ] },
-        # **{"$and": [ {f"player{i}.Role": role} for i in range(10) ] },
-        **{"Patch": "8.12"}
-        }
-    filter = {
-        **{"_id": 0}, 
-        **{f"player{i}.godBuild": 0 for i in range(10)}, 
-        **{f"Ban{i}": 0 for i in range(10)},
-        # **{f"player{i}": 0 for i in range(10)}
-    }
+    # myquery = { 
+    #     **{"$or": [ {f"player{i}.Player_Name": { "$regex" : f"{playername}", "$options": "i" }} for i in range(10) ] },
+    #     # **{"$and": [ {f"player{i}.Role": role} for i in range(10) ] },
+    #     **{"Patch": "8.12"}
+    #     }
+    # filter = {
+    #     **{"_id": 0}, 
+    #     **{f"player{i}.godBuild": 0 for i in range(10)}, 
+    #     **{f"Ban{i}": 0 for i in range(10)},
+    #     # **{f"player{i}": 0 for i in range(10)}
+    # }
     updatedb = client["Players"]
     updatecol = updatedb["Player God Stats"]
     updatedict = { role: {
@@ -296,7 +312,18 @@ def get_player_god_stats(client, playername, god, role, mode):
         "mode": f"{mode}Conq"
         }}
     counter = 0
-    for x in mycol.find(myquery, filter):
+    myquery = {
+    '$search': {
+      'index': 'default',
+      'text': {
+        'query': f'{playername}',
+        'path': {
+          'wildcard': '*'
+        }
+      }
+    }
+  }
+    for x in mycol.aggregate([myquery]):
         temp_data = anlz.get_carry_score(x)
         try:
             for key in x:
@@ -393,10 +420,8 @@ def grab_stats(player_data):
     return ret_data
 
 if __name__ == "__main__":
-    client = pymongo.MongoClient(
-        "mongodb+srv://sysAdmin:SFpmxJRX522fZ5fK@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
-
     # print(find_match_history(client, "Nika", "Ranked"))
     starttime = datetime.now()
-    print(get_player_god_stats(client, "azekill", "Atlas", "Support", "Casual"))
+    print(get_player_god_stats(client, "Nika", "Achilles", "Solo", "Ranked"))
+    # print(find_match_history(client, "nika", "Ranked"))
     print(datetime.now() - starttime)

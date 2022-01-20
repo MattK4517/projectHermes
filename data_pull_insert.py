@@ -9,11 +9,8 @@ from pyrez.models import Smite
 from pyrez.models.MatchHistory import MatchHistory
 from data_pull_formatting_rewrite import format_no_query
 import os
+from main import client
 # from data_pull_formatting_rewrite import format_no_query
-client = pymongo.MongoClient(
-    "mongodb+srv://sysAdmin:SFpmxJRX522fZ5fK@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
-
-
 
 
 
@@ -459,7 +456,7 @@ def threaded_pull(patch, all_sets, smite_api):
 
     print(f"Pull Completed in " + str(datetime.now() - starttime))
 
-run_pull("8.12")
+# run_pull("8.12")
 # print(inserted_count)
 # print("error %" + str(round(100 - inserted_count/match_ids_len * 100, 2)))
 

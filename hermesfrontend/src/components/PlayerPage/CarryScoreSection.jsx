@@ -1,9 +1,19 @@
-import React, {useContext} from 'react';
-import { PlayerContext } from "./PlayerContext"
+import React, { useContext } from "react";
+import { PlayerContext } from "./PlayerContext";
 
 export default function CarryScoreSection(props) {
-const [god, setGod, player, setPlayer, mode, setMode, role, setRole, topLink, setTopLink] =
-useContext(PlayerContext);
+  const [
+    god,
+    setGod,
+    player,
+    setPlayer,
+    mode,
+    setMode,
+    role,
+    setRole,
+    topLink,
+    setTopLink,
+  ] = useContext(PlayerContext);
   return (
     <div className="content-section content-section_no-padding avg-carry-score">
       <div className="content-section_header">
@@ -16,7 +26,10 @@ useContext(PlayerContext);
             <div className="champion-image-container">
               <img
                 className="champion-image"
-                src={`https://webcdn.hirezstudios.com/smite/god-icons/${god.toLowerCase()}.jpg`}
+                src={`https://webcdn.hirezstudios.com/smite/god-icons/${god
+                  .replaceAll("'", "")
+                  .replaceAll("_", "-")
+                  .toLowerCase()}.jpg`}
               />
             </div>
             <div className="role-icon-container">
@@ -53,7 +66,7 @@ useContext(PlayerContext);
                 <div className="bar-container">
                   <div
                     className="avg-score carry-score_hard-carry"
-                    style={{height: "100%", width: "63%"}}
+                    style={{ height: "100%", width: "63%" }}
                   ></div>
                 </div>
               </div>
@@ -62,7 +75,7 @@ useContext(PlayerContext);
                 <div className="bar-container">
                   <div
                     className="personal-record carry-score_hard-carry"
-                    style={{height: "100%", width: "63%"}}
+                    style={{ height: "100%", width: "63%" }}
                   ></div>
                 </div>
               </div>
@@ -78,7 +91,7 @@ useContext(PlayerContext);
                 <div className="bar-container">
                   <div
                     className="avg-score carry-score_hard-carry"
-                    style={{height: "100%", width: "69%"}}
+                    style={{ height: "100%", width: "69%" }}
                   ></div>
                 </div>
               </div>
@@ -87,7 +100,7 @@ useContext(PlayerContext);
                 <div className="bar-container">
                   <div
                     className="personal-record carry-score_hard-carry"
-                    style={{height: "100%", width: "69%"}}
+                    style={{ height: "100%", width: "69%" }}
                   ></div>
                 </div>
               </div>
@@ -102,7 +115,7 @@ useContext(PlayerContext);
                 <div className="bar-container">
                   <div
                     className="avg-score carry-score_teamplay"
-                    style={{height: "100%", width: "62%"}}
+                    style={{ height: "100%", width: "62%" }}
                   ></div>
                 </div>
               </div>
@@ -111,7 +124,7 @@ useContext(PlayerContext);
                 <div className="bar-container">
                   <div
                     className="personal-record carry-score_teamplay"
-                    style={{height: "100%", width: "62%"}}
+                    style={{ height: "100%", width: "62%" }}
                   ></div>
                 </div>
               </div>

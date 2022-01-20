@@ -168,6 +168,7 @@ const compare = (a, b) => {
 };
 
 export const setTopGod = (god) => {
+  console.log(god)
   return linkDict[god];
 };
 export default function Player(props) {

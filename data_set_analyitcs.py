@@ -41,7 +41,7 @@ def get_items_by_class(client, class_name, role):
                     wr = round(wins/games * 100, 2)
                     f.writelines(f"{slot},{item},{wins},{games},{wr}\n")
 
-get_items_by_class(client, godsDict.keys(), "Solo")
+# get_items_by_class(client, godsDict.keys(), "Solo")
 
 # def get_combat_stats_by_class(client, class_name):
 #     mydb= client["single_combat_stats"]
@@ -95,9 +95,6 @@ get_items_by_class(client, godsDict.keys(), "Solo")
 #     print(f"{wins}, {games}, winrate={round(wins/games*100,5)}")
 
 
-# client = pymongo.MongoClient(
-#     "mongodb+srv://sysAdmin:9gR7C1aDKclng4jA@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
-
 
 # match_ids = []
 # mydb = client["single_objective_stats"]
@@ -120,23 +117,29 @@ get_items_by_class(client, godsDict.keys(), "Solo")
 
 
 
-# mydb = client["single_match_stats"]
-# # starttime = datetime.now()
-# fields = ["gold", "damage_bot", "kills_bot", "tower_kills","phoenix_kills", "tower_damage", "objective_assists", "wards_placed"]
-# fields = ["kills", "deaths", "assists", "damage_player", "damage_mitigated", "damage_taken", "healing", "healing_self",]
+mydb = client["single_match_stats"]
+# starttime = datetime.now()
+fields = ["gold", "damage_bot", "kills_bot", "tower_kills","phoenix_kills", "tower_damage", "objective_assists", "wards_placed"]
+fields = ["kills", "deaths", "assists", "damage_player", "damage_mitigated", "damage_taken", "healing", "healing_self",]
 # dmg_dict = {field: {role: {"god": "", "amount": 0} for role in roles} for field in fields}
-# for field in fields:
-#     top = 0
-#     for god in ["Morgan Le Fay"]:
-#         mycol = mydb[god]
-#         all_games = []
-#         #pymongo.ASCENDING
-#         #pymongo.DESCENDING
-#         #{"damage_mitigated": {"$gt": 0}
-#         #.sort("damage_mitigated", pymongo.DESCENDING)
-#         for x in mycol.find({"role": {"$exists": True}, "patch": "8.12", "mode": f"RankedConq"}, {"_id": 0, field: 1, "role": 1, "matchId": 1}).sort(field, pymongo.DESCENDING).limit(1):
-#             if x[field] > dmg_dict[field][x["role"]]["amount"]:
-#                 dmg_dict[field][x["role"]] = {"god": god, "amount": x[field], "matchid": x["matchId"]}
+for field in ["deaths"]:
+    top = 0
+    for god in Mages:
+        mycol = mydb[god]
+        all_games = []
+        #pymongo.ASCENDING
+        #pymongo.DESCENDING
+        #{"damage_mitigated": {"$gt": 0}
+        #.sort("damage_mitigated", pymongo.DESCENDING)
+        avg_deaths = 0
+        deaths = 0
+        games = 0
+        for x in mycol.find({"role": {"$exists": True}, "patch": "8.12", "mode": f"RankedConq"}, {"_id": 0, field: 1, "role": 1, "matchId": 1}):
+            deaths += x["deaths"]
+            games += 1
+        avg_deaths += deaths/games
+        print(f"{god} Avg Deaths: {deaths/games}")
+    print(avg_deaths)
 
 # print(dmg_dict)
 # #         # mean = sum(all_games) / len(all_games)

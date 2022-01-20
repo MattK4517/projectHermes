@@ -517,10 +517,10 @@ if  __name__ == "__main__":
     }
     # avg = 0
     # for i in range(10):
-    calc_dps(client, "Rama", ["Death's Embrace", "The Crusher", "Asi", "Wind Demon", "The Executioner", "Deathbringer"], 
-        "Odin", ["Sundering Axe", "Blackthorn Hammer", "Mystical Mail", "Bulwark of Hope", "Pridwen", "Spectral Armor"], 20, 20)
+    calc_dps(client, "Achilles", ["Manikin Mace", "Bloodforge", "Evolved Rage", "Serrated Edge", "Deathbringer", "Wind Demon"], 
+        "Agni", [], 20, 20)
     # print(avg/10)
     # for guardian in Guardians:
-    calc_combo_damage_raw(client, "Baba Yaga", levels, 0, 0)
+    # calc_combo_damage_raw(client, "Baba Yaga", levels, 0, 0)
 
     # 470 + 83
