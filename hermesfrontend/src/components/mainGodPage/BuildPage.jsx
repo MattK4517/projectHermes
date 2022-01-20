@@ -322,7 +322,7 @@ class CreateItemToolTip extends React.Component {
 }
 
 export default function BuildPage(props) {
-  // console.log(props)
+  console.log(props)
   let { games, badmatchups, goodmatchups, items, colorStyle, relics } =
     useFetch(
       props.pagegod,
@@ -362,7 +362,7 @@ export default function BuildPage(props) {
         colorStyle={colorStyle}
         mode={props.mode}
       />
-      <div className="toughest-matchups content-section">
+      {/* <div className="toughest-matchups content-section">
         <div className="content-section_header">
           Counter Matchups&nbsp;
           <span
@@ -392,8 +392,8 @@ export default function BuildPage(props) {
         <div className="matchups" style={styling}>
           <GodCounterStats matchups={badmatchups} />
         </div>
-      </div>
-      <div className="combined-section">
+      </div> */}
+      {/* <div className="combined-section">
             <div
               className="toughest-matchups content-section"
             >
@@ -456,8 +456,8 @@ export default function BuildPage(props) {
           }
         })}
       </ResponsiveBuild>
-      </div>
-      <ResponsiveBuild className="build content-section" style={styling}>
+      </div> */}
+      {/* <ResponsiveBuild className="build content-section" style={styling}>
         {items.map((item, index) => {
           if (item === "None") {
             return (
@@ -527,7 +527,7 @@ export default function BuildPage(props) {
             );
           }
         })}
-      </ResponsiveBuild>
+      </ResponsiveBuild> */}
     </div>
   );
 }

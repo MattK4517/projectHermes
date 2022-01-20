@@ -100,7 +100,7 @@ def get_item_data(client, item):
             itemdata = x
 
         delKeys = ["_id", "ActiveFlag", "ChildItemId", "IconId", "ItemId", "ItemTier", 
-            "RootItemId", "StartingItem", "Type", "itemIcon_URL", "ret_msg"]
+            "RootItemId", "StartingItem", "Type", "itemIcon_URL", "ret_msg", "DeviceName"]
         for element in delKeys:
             del itemdata[element]
 

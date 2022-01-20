@@ -2721,3 +2721,10 @@ figure.snip0015:hover figcaption::before {
   border-top: 1px solid gray;
   border-bottom: 1px solid gray;
 }
+
+.damage-content-main {
+  display: grid;
+  grid-template-columns: 312px 1fr 312px;
+  grid-gap: 24px;
+  width: 1016px;
+}

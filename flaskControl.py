@@ -28,6 +28,7 @@ app = Flask(__name__, static_folder="../hermesfrontend", static_url_path="/")
 @app.route("/api/gods")
 def get_all_gods():
         gdDict = anlz.get_gods()
+        print(gdDict)
         return gdDict
 
 @app.route('/api/main/<god>/<role>/<rank>/<patch>/<mode>', methods=["GET", "POST"])
