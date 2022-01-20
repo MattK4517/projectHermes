@@ -20,7 +20,7 @@ def find_match_history(client, playername, mode):
     if mode == "Ranked":
         database = "Matches"
     elif mode == "Casual":
-        database = "thread_test"
+        database = "CasualMatches"
     mydb = client[database]
     mycol = mydb["8.12 Matches"]
     myquery = {
@@ -253,7 +253,11 @@ def verify_player(act_name, playername, act_god, god):
     return False    
     
 def get_player_god_stats(client, playername, god, role, mode):
-    mydb = client["Matches"]
+    print(playername, god, role, mode)
+    if mode == "Ranked":
+        mydb = client["Matches"]
+    elif mode == "Casual":
+        mydb = client["CasualMatches"]
     mycol = mydb["8.12 Matches"]
     # myquery = { 
     #     **{"$or": [ {f"player{i}.Player_Name": { "$regex" : f"{playername}", "$options": "i" }} for i in range(10) ] },
@@ -422,6 +426,6 @@ def grab_stats(player_data):
 if __name__ == "__main__":
     # print(find_match_history(client, "Nika", "Ranked"))
     starttime = datetime.now()
-    print(get_player_god_stats(client, "Nika", "Achilles", "Solo", "Ranked"))
+    print(get_player_god_stats(client, "azekill", "Atlas", "Support", "Casual"))
     # print(find_match_history(client, "nika", "Ranked"))
     print(datetime.now() - starttime)
