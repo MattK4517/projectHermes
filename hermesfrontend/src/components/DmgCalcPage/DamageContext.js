@@ -23,7 +23,6 @@ export const DamageProvider = props => {
     const [board, setBoard] = useState([]);
     const [build, setBuild] = useState([]);
 
-
     const [{ isOver }, drop] = useDrop(() => ({
         accept: "image",
         drop: (item) => addImageToBoard(item.id),

@@ -31,7 +31,7 @@ export default function GodDisplay(props) {
               component: <OverviewDisplay />,
               target: "_blank"
             }}
-            onClick={e => (
+            onClick={(e) => (
               setTopLink(setTopGod(props.godList[index]["god"])),
               setGod(props.godList[index]["god"]), 
               setPlayer(props.player))}

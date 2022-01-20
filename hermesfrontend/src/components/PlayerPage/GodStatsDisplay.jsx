@@ -407,7 +407,6 @@ function GodStatsDisplay() {
     );
   }, [player, mode]);
 
-  console.log(godList);
   const columns = React.useMemo(
     () => [
       {
@@ -451,7 +450,6 @@ function GodStatsDisplay() {
     ],
     []
   );
-  console.log(godList)
   return (
     <div className="player-profile-page">
       <div

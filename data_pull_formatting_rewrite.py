@@ -1,10 +1,7 @@
 import pymongo
 from datetime import datetime
 from constants import godsDict, roles, ranks, slots
-
-client = pymongo.MongoClient(
-    "mongodb+srv://sysAdmin:9gR7C1aDKclng4jA@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
-
+from main import client
 
 class GodData:
     def __init__(self, god):

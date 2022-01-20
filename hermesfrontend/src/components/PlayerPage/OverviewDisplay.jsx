@@ -6,13 +6,30 @@ import PlayerMatchups from "./PlayerMatchups";
 import PlayerHeader from "./PlayerHeader";
 import PlayerGodSection from "./PlayerGodSection";
 
+export const FormatGod = (god) => {
+  let firstLetter = god.charAt(0).toUpperCase()
+  let firstSection = ""
+  let secondCaps = ""
+  let secondSection = ""
+  if (god.indexOf("-") !== -1) {
+    secondCaps = god.charAt(god.indexOf("-")+1).toUpperCase()
+    firstSection = god.slice(1, god.indexOf("-"))
+    secondSection = god.slice(god.indexOf("-")+2)
+  } else {
+    firstSection = god.slice(1)
+  }
+  return firstLetter+firstSection+" "+secondCaps+secondSection
+}
+
 export default function OverviewDisplay() {
   const [god, setGod, player, setPlayer, mode, setMode, role, setRole, topLink, setTopLink] =
     useContext(PlayerContext);
 
 
-  // console.log(window.location.href.split("/")[6])  
-  setGod(window.location.href.split("/")[7].charAt(0).toUpperCase() + window.location.href.split("/")[7].slice(1) )
+  // console.log(window.location.href.split("/")[6]) 
+  // console.log(window.location.href.split("/")[7].charAt(0).toUpperCase() + window.location.href.split("/")[7].slice(1))
+  let fgod = window.location.href.split("/")[7]
+  setGod(FormatGod(fgod).trim())
   const [goldShare, setGoldShare] = useState("");
   const [goldShareBest, setGoldShareBest] = useState("0");
   const [damageShare, setDamageShare] = useState("");
