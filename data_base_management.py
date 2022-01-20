@@ -186,15 +186,16 @@ def purge_date(client, dbs, date):
 if __name__ == "__main__":
     phys = []
     mag = []
-    mydb = client["God_Data"]
-    for god in godsDict:
-        mycol = mydb[god]
-        for x in mycol.find({}, {"_id": 0, "Roles": 1, "Name": 1}):
-            if x["Roles"] in ["Warrior", "Hunter", "Assassin"]:
-                phys.append(x["Name"])
-            elif x["Roles"] in ["Mage", "Guardian"]:
-                mag.append(x["Name"])
-    
+    mydb = client["Item_Data"]
+    for item in Tier_Three_items:
+        mycol = mydb[item]
+        for x in mycol.find({}, {"_id": 0, "ItemDescription": 1, "DeviceName": 1}):
+            for item in x["ItemDescription"]["Menuitems"]:
+                if "Physical Power" in item["Description"]:
+                    phys.append( {"id" :x["DeviceName"]} )
+                elif "Magical Power" in item["Description"]:
+                    mag.append( {"id": x["DeviceName"]} )
+        
     print(phys)
     print(mag)
 

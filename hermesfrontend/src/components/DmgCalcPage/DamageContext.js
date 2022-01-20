@@ -1,7 +1,7 @@
 import { useDrop } from "react-dnd";
 import React, { useState, useEffect, createContext } from 'react';
 import { godsDict } from "../drawer";
-
+import { physicalItems, magicalItems, physGods, magGods, items } from "../constants"
 
 let allgods = []
 
@@ -21,6 +21,7 @@ export const DamageProvider = props => {
 
     const [god, setGod] = useState("");
     const [board, setBoard] = useState([]);
+    const [build, setBuild] = useState([]);
 
 
     const [{ isOver }, drop] = useDrop(() => ({
@@ -31,6 +32,20 @@ export const DamageProvider = props => {
         }),
     }));
 
+    const [{ isOverItem }, dropItem] = useDrop(() => ({
+        accept: "image",
+        drop: (item) => addItemToBuild(item.id),
+        collect: (monitor) => ({
+            isOverItem: !!monitor.isOver(),
+        }),
+    }));
+
+    const addItemToBuild = (id) => {
+        console.log("getting here")
+        const pictureList = items.filter((picture) => id === picture.id);
+        console.log(pictureList)
+        setBuild((build) => [...build, pictureList[0].id]);
+    };
 
     const addImageToBoard = (id) => {
         const pictureList = allgods.filter(god => god.id == id);
@@ -39,7 +54,7 @@ export const DamageProvider = props => {
     };
     return (
         <DamageContext.Provider value={[
-            drop, allgods, board, setBoard, god, setGod
+            drop, allgods, board, setBoard, god, setGod, build, setBuild, dropItem
         ]}>
             {props.children}
         </DamageContext.Provider>

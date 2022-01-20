@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { DamageContext } from "./DamageContext";
 import Picture from "./Picture";
 import GodSelectionBox from "./GodSelectionBox";
+import BuildSection from "./BuildSection";
 
 export default function MainCalcSection(props) {
     return (
@@ -10,6 +11,7 @@ export default function MainCalcSection(props) {
                 God Selection
             </div>
             <GodSelectionBox />
+            <BuildSection />
         </div>
     )
 }

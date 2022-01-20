@@ -81,9 +81,10 @@ import { DamageContext } from "./DamageContext";
 
 const PictureList = [];
 
-function DragDrop() {
-  const [drop, allgods, board, setBoard, god, setGod] =
+function DragDropGodList(props) {
+  const [drop, allgods, board, setBoard, god, setGod, build, setBuild] =
     useContext(DamageContext);
+    console.log(build)
   return (
     <div className="content-section">
       <div className="content-section_header">God List</div>
@@ -98,23 +99,23 @@ function DragDrop() {
   );
 }
 
-export function DragDropGodList(props) {
+export function DragDropItemList(props) {
   // const [drop, allgods, board, setBoard, god, setGod] = useContext(DamageContext);
   return (
     <div className="content-section">
       <div className="content-section_header">Item List</div>
       <InfiniteScroll dataLength={1} height={"550px"}>
         <div className="gods-container">
-          {props.allgods.map((god) => {
-            let url = `https://webcdn.hirezstudios.com/smite/item-icons/${god
+          {props.items.map((item) => {
+            let url = `https://webcdn.hirezstudios.com/smite/item-icons/${item.id
               .replaceAll("'", "")
               .replaceAll(" ", "-")
               .toLowerCase()}.jpg`;
-            return <Picture url={url} id={god} />;
+            return <Picture url={url} id={item.id} />;
           })}
         </div>
       </InfiniteScroll>
     </div>
   );
 }
-export default DragDrop;
+export default DragDropGodList;

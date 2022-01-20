@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext} from "react";
 import ItemBuffs from "./ItemBuffs";
-import DragDrop, { DragDropGodList } from "./DragDropGodList";
+import DragDropGodList, { DragDropItemList } from "./DragDropGodList";
 import MainCalcSection from "./MainCalcSection";
 import { DamageContext } from "./DamageContext";
 
@@ -169,14 +169,14 @@ export default function DamageCalculator() {
           <div className="damage-content-main">
             <div className="player-side">
               <ItemBuffs />
-              <DragDrop />
+              <DragDropGodList />
             </div>
             <div className="player-main">
               <MainCalcSection />
               <p>{god}</p>
             </div>
             <div className="player-side">
-              <DragDropGodList allgods={physicalItems}/>
+              <DragDropItemList items={physicalItems}/>
             </div>
           </div>
         </div>

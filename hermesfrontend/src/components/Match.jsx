@@ -480,11 +480,11 @@ class CreateItemToolTip extends React.Component {
 
 
 
-class PlayerBuildDisplay extends React.Component {
-  render () {
+export function PlayerBuildDisplay(props) {
+  console.log(props)
     return(
-      <div className={`build-container ${this.props.buildType}`}>
-        {this.props.build.map((slot, index) => {
+      <div className={`build-container ${props.buildType}`}>
+        {props.build.map((slot, index) => {
           if (slot.DeviceName) {
             return(
               <HtmlTooltip
@@ -517,7 +517,6 @@ class PlayerBuildDisplay extends React.Component {
         })}
       </div>
     )
-  }
 }
 
 const reducer = (accumulator, currentValue) => accumulator + currentValue;
