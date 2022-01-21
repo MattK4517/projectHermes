@@ -157,8 +157,8 @@ export default function PlayerGodSection(props) {
           <div className="additional-stats_row">
             <div className="row-icon">
               <img
-                src="https://static.u.gg/lol/static/svg/profile-champion-stats/damage-icon.svg"
-                width="14"
+                src="https://i.imgur.com/kqTxr3r.png"
+                width="32"
               />
             </div>
             <div className="row-label">Max Kills</div>
@@ -167,8 +167,8 @@ export default function PlayerGodSection(props) {
           <div className="additional-stats_row">
             <div className="row-icon">
               <img
-                src="https://static.u.gg/lol/static/svg/profile-champion-stats/death-icon.svg"
-                width="14"
+                src="https://i.imgur.com/pHLndKw.png"
+                width="25"
               />
             </div>
             <div className="row-label">Max Deaths</div>
@@ -177,8 +177,8 @@ export default function PlayerGodSection(props) {
           <div className="additional-stats_row">
             <div className="row-icon">
               <img
-                src="https://static.u.gg/lol/static/svg/profile-champion-stats/damage-icon.svg"
-                width="14"
+                src="https://i.imgur.com/kqTxr3r.png"
+                width="32"
               />
             </div>
             <div className="row-label">Average Damage</div>
@@ -187,7 +187,7 @@ export default function PlayerGodSection(props) {
           <div className="additional-stats_row">
             <div className="row-icon">
               <img
-                src="https://static.u.gg/lol/static/svg/profile-champion-stats/gold-icon.svg"
+                src="https://i.imgur.com/XofaIQ0.png"
                 width="14"
               />
             </div>

@@ -20,7 +20,7 @@ export default function CarryScoreSection(props) {
         <div>Average Carry Score</div>
         <div className="align-items-center">
           <div className="header_avg-score">
-            Avg:&nbsp;<strong>63</strong>
+            Avg:&nbsp;<strong>N/A</strong>
           </div>
           <div className="header_champion">
             <div className="champion-image-container">
@@ -62,20 +62,20 @@ export default function CarryScoreSection(props) {
                 <span>{props.goldShare}%</span>
               </div>
               <div className="cell_bar">
-                <span>63</span>
+                <span>N/A</span>
                 <div className="bar-container">
                   <div
                     className="avg-score carry-score_hard-carry"
-                    style={{ height: "100%", width: "63%" }}
+                    style={{ height: "100%", width: "N/A%" }}
                   ></div>
                 </div>
               </div>
               <div className="cell_bar">
-                <span>63</span>
+                <span>N/A</span>
                 <div className="bar-container">
                   <div
                     className="personal-record carry-score_hard-carry"
-                    style={{ height: "100%", width: "63%" }}
+                    style={{ height: "100%", width: "N/A%" }}
                   ></div>
                 </div>
               </div>
@@ -87,20 +87,20 @@ export default function CarryScoreSection(props) {
               </div>
 
               <div className="cell_bar">
-                <span>69</span>
+                <span>N/A</span>
                 <div className="bar-container">
                   <div
                     className="avg-score carry-score_hard-carry"
-                    style={{ height: "100%", width: "69%" }}
+                    style={{ height: "100%", width: "N/A%" }}
                   ></div>
                 </div>
               </div>
               <div className="cell_bar">
-                <span>69</span>
+                <span>N/A</span>
                 <div className="bar-container">
                   <div
                     className="personal-record carry-score_hard-carry"
-                    style={{ height: "100%", width: "69%" }}
+                    style={{ height: "100%", width: "N/A%" }}
                   ></div>
                 </div>
               </div>
@@ -111,20 +111,20 @@ export default function CarryScoreSection(props) {
                 <span>{props.killShare}%</span>
               </div>
               <div className="cell_bar">
-                <span>62</span>
+                <span>N/A</span>
                 <div className="bar-container">
                   <div
                     className="avg-score carry-score_teamplay"
-                    style={{ height: "100%", width: "62%" }}
+                    style={{ height: "100%", width: "N/A%" }}
                   ></div>
                 </div>
               </div>
               <div className="cell_bar">
-                <span>62</span>
+                <span>N/A</span>
                 <div className="bar-container">
                   <div
                     className="personal-record carry-score_teamplay"
-                    style={{ height: "100%", width: "62%" }}
+                    style={{ height: "100%", width: "N/A%" }}
                   ></div>
                 </div>
               </div>

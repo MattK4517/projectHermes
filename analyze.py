@@ -9,6 +9,7 @@ from collections import OrderedDict
 from operator import getitem
 from math import sqrt
 from constants import godsDict, slots, Tier_Three_items, Starter_items, roles, single_combat_stats, single_objective_stats
+import analyze_players as anlzpy 
 # info pull
 # [godWR, godPR, godBR] - check, matchesPlayed - check
 # relics used
@@ -319,25 +320,46 @@ def get_worst_matchups(client, god, role, patch, mode="Ranked", rank="All Ranks"
         myquery = {**myquery, **{"player":  { "$regex" : f"{player}", "$options": "i" }}} 
     games = 0
     wins = 0
+    # print(myquery)
     for matchup in mycol.find(myquery, {"_id": 0}):
-        # print(matchup)
-        games += 1
-        flag = False
-        if matchup["enemy"]:
-            if matchup["win_status"] == "Winner":
-                flag = True
-                wins += 1
-            if matchup["enemy"] not in matchup_dict:
-                if flag:
-                    matchup_dict[matchup["enemy"]] = {"enemy": matchup["enemy"], "timesPlayed": 1, "wins": 1}
+        if player:
+            if anlzpy.verify_player(matchup["player"], player, "none", "none"):
+                games += 1
+                flag = False
+                if matchup["enemy"]:
+                    if matchup["win_status"] == "Winner":
+                        flag = True
+                        wins += 1
+                    if matchup["enemy"] not in matchup_dict:
+                        if flag:
+                            matchup_dict[matchup["enemy"]] = {"enemy": matchup["enemy"], "timesPlayed": 1, "wins": 1}
+                        else:
+                            matchup_dict[matchup["enemy"]] = {"enemy": matchup["enemy"], "timesPlayed": 1, "wins": 0}
+                    else:
+                        if flag:
+                            matchup_dict[matchup["enemy"]]["timesPlayed"] += 1
+                            matchup_dict[matchup["enemy"]]["wins"] += 1
+                        else: 
+                            matchup_dict[matchup["enemy"]]["timesPlayed"] += 1
+        else:
+            games += 1
+            flag = False
+            if matchup["enemy"]:
+                if matchup["win_status"] == "Winner":
+                    flag = True
+                    wins += 1
+                if matchup["enemy"] not in matchup_dict:
+                    if flag:
+                        matchup_dict[matchup["enemy"]] = {"enemy": matchup["enemy"], "timesPlayed": 1, "wins": 1}
+                    else:
+                        matchup_dict[matchup["enemy"]] = {"enemy": matchup["enemy"], "timesPlayed": 1, "wins": 0}
                 else:
-                    matchup_dict[matchup["enemy"]] = {"enemy": matchup["enemy"], "timesPlayed": 1, "wins": 0}
-            else:
-                if flag:
-                    matchup_dict[matchup["enemy"]]["timesPlayed"] += 1
-                    matchup_dict[matchup["enemy"]]["wins"] += 1
-                else: 
-                    matchup_dict[matchup["enemy"]]["timesPlayed"] += 1
+                    if flag:
+                        matchup_dict[matchup["enemy"]]["timesPlayed"] += 1
+                        matchup_dict[matchup["enemy"]]["wins"] += 1
+                    else: 
+                        matchup_dict[matchup["enemy"]]["timesPlayed"] += 1
+        
             
         
     for matchup in matchup_dict:
@@ -886,8 +908,8 @@ def get_lanes(client):
     return lanes
 
 if __name__ == "__main__":
-
-    print(get_top_builds(client, "Achilles", "Solo", "8.12"))
+    print(get_worst_matchups(client, "Achilles", "Solo", "8.12", mode="Ranked", rank="All Ranks", player="Nika"))
+    # print(get_top_builds(client, "Achilles", "Solo", "8.12"))
 
     # mydb = client["single_match_stats"]
     # # for god in godsDict:
