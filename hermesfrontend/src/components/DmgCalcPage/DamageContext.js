@@ -31,19 +31,24 @@ export const DamageProvider = props => {
         }),
     }));
 
-    const [{ isOverItem }, dropItem] = useDrop(() => ({
+    const [{ isOverItem }, dropItem] = useDrop(() => (
+        {
         accept: "image",
-        drop: (item) => addItemToBuild(item.id),
+        drop: (item) => addItemToBuild(item),
         collect: (monitor) => ({
             isOverItem: !!monitor.isOver(),
         }),
     }));
 
     const addItemToBuild = (id) => {
-        console.log("getting here")
-        const pictureList = items.filter((picture) => id === picture.id);
-        console.log(pictureList)
-        setBuild((build) => [...build, pictureList[0].id]);
+        console.log(id)
+        // if (build.length < 6) {
+        //     const pictureList = items.filter((picture) => id === picture.id);
+        //     setBuild((build) => [...build, pictureList[0].id]);
+        // } else {
+        //     const pictureList = items.filter((picture) => id === picture.id);
+        //     setBuild((build) => [...build, pictureList[0].id]);
+        // }
     };
 
     const addImageToBoard = (id) => {

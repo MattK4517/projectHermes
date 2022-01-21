@@ -129,6 +129,30 @@ export default function CarryScoreSection(props) {
                 </div>
               </div>
             </div>
+            <div className="carry-score_table__row">
+              <div className="row-label">Vision Score</div>
+              <div>
+                <span>{props.wardShare}</span>
+              </div>
+              <div className="cell_bar">
+                <span>N/A</span>
+                <div className="bar-container">
+                  <div
+                    className="avg-score carry-score_teamplay"
+                    style={{ height: "100%", width: "N/A%" }}
+                  ></div>
+                </div>
+              </div>
+              <div className="cell_bar">
+                <span>N/A</span>
+                <div className="bar-container">
+                  <div
+                    className="personal-record carry-score_teamplay"
+                    style={{ height: "100%", width: "N/A%" }}
+                  ></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

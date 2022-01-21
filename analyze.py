@@ -323,7 +323,8 @@ def get_worst_matchups(client, god, role, patch, mode="Ranked", rank="All Ranks"
     # print(myquery)
     for matchup in mycol.find(myquery, {"_id": 0}):
         if player:
-            if anlzpy.verify_player(matchup["player"], player, "none", "none"):
+            # print(matchup)
+            if anlzpy.verify_player(player, matchup["player"], "none", "none"):
                 games += 1
                 flag = False
                 if matchup["enemy"]:
@@ -359,9 +360,7 @@ def get_worst_matchups(client, god, role, patch, mode="Ranked", rank="All Ranks"
                         matchup_dict[matchup["enemy"]]["wins"] += 1
                     else: 
                         matchup_dict[matchup["enemy"]]["timesPlayed"] += 1
-        
-            
-        
+          
     for matchup in matchup_dict:
         matchup_dict[matchup]["winRate"] = round(matchup_dict[matchup]["wins"]/matchup_dict[matchup]["timesPlayed"]*100, 2)
 
@@ -908,7 +907,7 @@ def get_lanes(client):
     return lanes
 
 if __name__ == "__main__":
-    print(get_worst_matchups(client, "Achilles", "Solo", "8.12", mode="Ranked", rank="All Ranks", player="Nika"))
+    print(get_worst_matchups(client, "Achilles", "Solo", "8.12", mode="Ranked", rank="All Ranks", player="GreekGodKillaaa"))
     # print(get_top_builds(client, "Achilles", "Solo", "8.12"))
 
     # mydb = client["single_match_stats"]

@@ -1729,6 +1729,7 @@ figure.snip0015:hover figcaption::before {
 .r1 .queue-type {
   font-size: 12px;
   font-weight: 700;
+  text-align: center;
 }
 
 .date {
@@ -1751,6 +1752,7 @@ figure.snip0015:hover figcaption::before {
 .stat-group-one .r3 {
   display: flex;
   align-items: center;
+  margin-left: 10px;
 }
 
 .r3 .win-status {
@@ -2671,7 +2673,7 @@ figure.snip0015:hover figcaption::before {
 }
 
 .god-selection {
-  background-color: white;
+  /* background-color: white; */
   min-width: 64px;
   min-height: 64px;
   max-width: 128px;
@@ -2736,4 +2738,9 @@ figure.snip0015:hover figcaption::before {
   min-height: 64px;
   max-width: 128px;
   max-height: 128px;
+}
+
+.build-selection {
+  display: flex;
+  flex-direction: row;
 }

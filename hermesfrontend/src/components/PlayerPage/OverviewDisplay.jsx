@@ -52,6 +52,7 @@ export default function OverviewDisplay() {
   const [maxDeaths, setMaxDeaths] = useState(0);  
   const [avgDamage, setAvgDamage] = useState(0);  
   const [avgGold, setAvgGold] = useState(0);  
+  const [avgWards, setAvgWards] = useState(0);
   
   useEffect(() => {
     fetch(
@@ -78,6 +79,7 @@ export default function OverviewDisplay() {
         setMaxDeaths(data.maxDeaths);
         setAvgDamage(data.avgDamage);
         setAvgGold(data.avgGold);
+        setAvgWards(data.avgWards)
         })
     );
   }, [player, role]);
@@ -161,6 +163,7 @@ export default function OverviewDisplay() {
                 damageShareBest={damageShareBest}
                 killShare={killShare}
                 killShareBest={killShareBest}
+                wardShare={avgWards}
               />
             </div>
           </div>

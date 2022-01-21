@@ -167,8 +167,12 @@ const compare = (a, b) => {
   return b.matches - a.matches;
 };
 
+const compareDate = (a, b) => {
+  return b.MatchId - a.MatchId;
+};
+
+
 export const setTopGod = (god) => {
-  console.log(god)
   return linkDict[god];
 };
 export default function Player(props) {
@@ -224,13 +228,13 @@ export default function Player(props) {
   useEffect(() => {
     fetch("/api/getplayermatch/".concat(player, "/", mode)).then((res) =>
       res.json().then((data) => {
-        console.log("getplayermatch", data);
         setMatchList([]);
-        Object.keys(data).map((match) => {
+        let newData = Object.values(data).sort(compareDate);
+        Object.keys(newData).map((match) => {
           setMatchList((matchList) => [
             ...matchList,
             {
-              ...data[match],
+              ...newData[match],
             },
           ]);
         });

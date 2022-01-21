@@ -108,7 +108,6 @@ class PlayerBuildDisplay extends React.Component {
 }
 
 export default function MatchDisplay(props) {
-  console.log(props.matchList);
   return (
     <div className="content-section content-section_no-padding match-block">
       <div className="content-section_header">
@@ -120,7 +119,6 @@ export default function MatchDisplay(props) {
         let teamOne = [];
         let teamTwo = [];
         let deaths;
-        console.log(Object.keys(match).length);
         Object.keys(match).forEach((key, index) => {
           if (key.includes("player")) {
             if (match[key]["Win_Status"] === "Winner") {
