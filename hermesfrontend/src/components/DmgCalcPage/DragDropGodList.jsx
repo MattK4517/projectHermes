@@ -79,18 +79,16 @@ import "../Component.css";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { DamageContext } from "./DamageContext";
 
-const PictureList = [];
-
 function DragDropGodList(props) {
   const [drop, allgods, board, setBoard, god, setGod, build, setBuild] =
     useContext(DamageContext);
-    console.log(build)
   return (
     <div className="content-section">
       <div className="content-section_header">God List</div>
       <InfiniteScroll dataLength={1} height={"550px"}>
         <div className="gods-container">
           {allgods.map((god) => {
+
             return <Picture url={god.url} id={god.id} />;
           })}
         </div>

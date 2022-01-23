@@ -409,3 +409,20 @@ def get_dmg_calc():
                 client, data["god"], data["levels"], data["power"], None)
 
     return ret_data
+
+
+@app.route('/api/getbuildstats/', methods=["GET", "POST"])
+def get_build_calc():
+    ret_data = {}
+    if request.method == 'POST':
+        data = request.get_json()
+        print(data)
+        build = []
+        for key in data:
+            if key != "god":
+                build.append(data[key])
+            else:
+                ret_data["base"] = anlz.get_god_stats(client, data[key], 20)
+        build_stats = anlz.get_build_stats(client, build)
+        ret_data["build"] = build_stats
+    return ret_data

@@ -195,15 +195,15 @@ const AccordionDetails = withStyles((theme) => ({
   },
 }))(MuiAccordionDetails);
 
-const calcBuildStats = (build, base) => {
+export const calcBuildStats = (build, base) => {
   let health = base.Health;
   let mana = base.Mana;
   let moveSpeed = base.Speed;
   let attSpeed = base.AttackSpeed;
   let magProt = base.MagicProtection;
   let physProt = base.PhysicalProtection;
-  let magPower = base.MagicalPower;
-  let physPower = base.PhysicalPower;
+  let magPower = 0;
+  let physPower = 0;
   let HP5 = base.HP5;
   let MP5 = base.MP5;
   let price = 0;
@@ -240,6 +240,8 @@ const calcBuildStats = (build, base) => {
         } else if (itemStat.Description.toUpperCase() == "Magical Power".toUpperCase()) {
           baseAttDamage = baseAttDamage + (parseInt(itemStat.Value) * (1/5))
           magPower = magPower + parseInt(itemStat.Value)
+        } else if (itemStat.Description.toUpperCase() == "Price".toUpperCase()) {
+          price = price + (parseInt(itemStat.Value) * (1/5))
         }
       })
     }

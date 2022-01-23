@@ -2744,3 +2744,7 @@ figure.snip0015:hover figcaption::before {
   display: flex;
   flex-direction: row;
 }
+
+.combat-stats-list > p{
+  margin-bottom: 3px;
+}

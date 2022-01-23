@@ -1,129 +1,134 @@
-import React, { useState, useEffect, useContext} from "react";
+import React, { useState, useEffect, useContext } from "react";
 import ItemBuffs from "./ItemBuffs";
 import DragDropGodList, { DragDropItemList } from "./DragDropGodList";
 import MainCalcSection from "./MainCalcSection";
 import { DamageContext } from "./DamageContext";
-
-import { physGods, magGods, physicalItems } from "../constants"
+import CombatStatSection from "./CombatStatSection"
+import { calcBuildStats } from "../Match";
+import { physGods, magGods, physicalItems, magicalItems } from "../constants";
+import DamageOut from "./DamageOut";
 
 class NameForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { 
-        god: "",
-        power: "0",
-        ability1: "0",
-        ability2: "0",
-        ability3: "0",
-        ability4: "0",
- };
+    this.state = {
+      god: "",
+      power: "0",
+      ability1: "0",
+      ability2: "0",
+      ability3: "0",
+      ability4: "0",
+    };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(event) {
     const value = event.target.value;
-    this.setState({[event.target.name]: value});
+    this.setState({ [event.target.name]: value });
   }
   handleSubmit(event) {
     event.preventDefault();
     this.props.setGod(this.state.god);
     this.props.setPower(this.state.power);
     this.props.setLevels({
-        "1": this.state.ability1,
-        "2": this.state.ability2,
-        "3": this.state.ability3,
-        "4": this.state.ability4,
-        "5": 0
-    })
-      this.props.setSubmit(true)
+      1: this.state.ability1,
+      2: this.state.ability2,
+      3: this.state.ability3,
+      4: this.state.ability4,
+      5: 0,
+    });
+    this.props.setSubmit(true);
     // this.props.setMatch(event.target[0].value);
   }
 
   render() {
     return (
-        <form onSubmit={this.handleSubmit}>
-          {" "}
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            <label style={{ color: "white" }}>
-              God:
-              <input
-                type="text"
-                value={this.state.god}
-                onChange={this.handleChange}
-                name="god"
-              />{" "}
-            </label>
-            <label style={{ color: "white" }}>
-              Power:
-              <input
-                type="text"
-                value={this.state.value}
-                onChange={this.handleChange}
-                name="power"
-              />{" "}
-            </label>
+      <form onSubmit={this.handleSubmit}>
+        {" "}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <label style={{ color: "white" }}>
+            God:
+            <input
+              type="text"
+              value={this.state.god}
+              onChange={this.handleChange}
+              name="god"
+            />{" "}
+          </label>
+          <label style={{ color: "white" }}>
+            Power:
+            <input
+              type="text"
+              value={this.state.value}
+              onChange={this.handleChange}
+              name="power"
+            />{" "}
+          </label>
 
-            <label style={{ color: "white" }}>
-              Ability 1 Level:
-              <input
-                type="text"
-                value={this.state.value}
-                onChange={this.handleChange}
-                name="ability1"
-              />{" "}
-            </label>
-            <label style={{ color: "white" }}>
-                Ability 2 Level:
-              <input
-                type="text"
-                value={this.state.value}
-                onChange={this.handleChange}
-                name="ability2"
-              />{" "}
-            </label>
-            <label style={{ color: "white" }}>
+          <label style={{ color: "white" }}>
+            Ability 1 Level:
+            <input
+              type="text"
+              value={this.state.value}
+              onChange={this.handleChange}
+              name="ability1"
+            />{" "}
+          </label>
+          <label style={{ color: "white" }}>
+            Ability 2 Level:
+            <input
+              type="text"
+              value={this.state.value}
+              onChange={this.handleChange}
+              name="ability2"
+            />{" "}
+          </label>
+          <label style={{ color: "white" }}>
             Ability 3 Level:
-              <input
-                type="text"
-                value={this.state.value}
-                onChange={this.handleChange}
-                name="ability3"
-              />{" "}
-            </label>
-            <label style={{ color: "white" }}>
+            <input
+              type="text"
+              value={this.state.value}
+              onChange={this.handleChange}
+              name="ability3"
+            />{" "}
+          </label>
+          <label style={{ color: "white" }}>
             Ultimate Level:
-              <input
-                type="text"
-                value={this.state.value}
-                onChange={this.handleChange}
-                name="ability4"
-              />{" "}
-            </label>
-          </div>
-          <input type="submit" value="Submit" />
-        </form>
+            <input
+              type="text"
+              value={this.state.value}
+              onChange={this.handleChange}
+              name="ability4"
+            />{" "}
+          </label>
+        </div>
+        <input type="submit" value="Submit" />
+      </form>
     );
   }
 }
 
 export default function DamageCalculator() {
-  const [drop, allgods, board, setBoard, god, setGod] = useContext(DamageContext);;
+  const [drop, allgods, board, setBoard, god, setGod, build, setBuild, dropItem] =
+    useContext(DamageContext);
   const [levels, setLevels] = useState({
-    "1": 1, 
-    "2": 1, 
-    "3": 1, 
-    "4": 1, 
-    "5": 1
+    1: 5,
+    2: 5,
+    3: 5,
+    4: 5,
+    5: 5,
   });
-  const [power, setPower] = useState("");
+  let td = 0
+  const [power, setPower] = useState(0);
   const [submit, setSubmit] = useState(false);
-  const [totalDamage, setTotalDamage] = useState("");
+  const [totalDamage, setTotalDamage] = useState(0);
+
   const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -133,30 +138,72 @@ export default function DamageCalculator() {
       power: power,
     }),
   };
-  const [message, setMessage] = useState([])
-  let td = 0
-  if (physGods.indexOf(god) !== -1) {
-    console.log(god)
-  }
-  // useEffect(() => {
-  //   fetch("/api/getdmgcalc/", requestOptions).then((res) =>
-  //     res.json().then((data) => {
-  //       setMessage([])
-  //       td = 0
-  //       Object.keys(data).map((ability) => {
-  //           td = td + data[ability]["damage"]["damageTotal"]
-  //           setMessage(message => [
-  //               ...message,
-  //               {
-  //                   ...data[ability]
-  //               },
-  //             ]);
-  //         });
-  //       setSubmit(false);
-  //       setTotalDamage(td)
-  //     })
-  //   );
-  // }, [submit]);
+
+  const buildOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      "god": god,
+      ...build
+    }),
+  };
+  const [message, setMessage] = useState([]);
+  const [items, setItems] = useState([]);
+  const [combatStats, setCombatStats] = useState({});
+
+  useEffect(() => {
+    setBuild([])
+    setItems([])
+    setItems(() => {
+      if (physGods.indexOf(god) !== -1) {
+        return [...physicalItems];
+      } else if (magGods.indexOf(god) !== -1) {
+        return [...magicalItems];
+      } else {
+        return [];
+      }
+    });
+  }, [god]);
+
+  useEffect(() => {
+    fetch("/api/getdmgcalc/", requestOptions).then((res) =>
+      res.json().then((data) => {
+        setMessage([])
+        td = 0
+        Object.keys(data).map((ability) => {
+            td = td + data[ability]["damage"]["damageTotal"]
+            setMessage(message => [
+                ...message,
+                {
+                    ...data[ability]
+                },
+              ]);
+          });
+        setTotalDamage(td)
+      })
+    );
+  }, [power]);
+
+    useEffect(() => {
+    fetch("/api/getbuildstats/", buildOptions).then((res) =>
+      res.json().then((data) => {
+        console.log(data)
+        let stats = {...calcBuildStats(data["build"], data["base"])}
+        setCombatStats((combatStats) => {
+          return stats
+        })
+        console.log(stats["physPower"])
+        setPower((power) => {
+          if (physGods.indexOf(god) !== -1){
+            return stats["physPower"]
+          } else if (magGods.indexOf(god) !== -1){
+            return stats["magPower"]
+          }
+        })
+        console.log(power)
+      })
+    );
+  }, [build, god]);
 
   return (
     <div className="player-profile-page">
@@ -173,10 +220,11 @@ export default function DamageCalculator() {
             </div>
             <div className="player-main">
               <MainCalcSection />
-              <p>{god}</p>
+              <DamageOut message={message} totalDamage={totalDamage}/>
             </div>
             <div className="player-side">
-              <DragDropItemList items={physicalItems}/>
+              <CombatStatSection combatStats={combatStats}/>
+              <DragDropItemList items={items} />
             </div>
           </div>
         </div>
@@ -184,18 +232,3 @@ export default function DamageCalculator() {
     </div>
   );
 }
-
-
-{/* <NameForm
-setSubmit={setSubmit} 
-setGod={setGod} 
-setPower={setPower} 
-setLevels={setLevels}/>
-<div className="return">
-{message.map(ability => {
-    return (
-        <div>{ability.name} {ability.damage.damageTotal}</div>
-    )
-})}
-<div>Total Damage: {totalDamage}</div>
-</div> */}
