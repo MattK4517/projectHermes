@@ -1,6 +1,6 @@
 from threading import Thread
 import pyrez
-from datetime import datetime
+from datetime import datetime, timedelta
 from pyrez.api import SmiteAPI
 import pymongo
 import random
@@ -11,11 +11,12 @@ from pyrez.models.MatchHistory import MatchHistory
 from data_pull_formatting_rewrite import format_no_query, threadedd_format_no_query
 from data_pull_insert import create_sets, threaded_pull
 import os
+from pytz import timezone
 # from data_pull_formatting_rewrite import format_no_query
 client = pymongo.MongoClient(
     "mongodb+srv://sysAdmin:9gR7C1aDKclng4jA@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
 
-
+eastern = timezone('US/Eastern')
 
 
 def init_api(patch, date):
@@ -43,6 +44,18 @@ def threaded_process_range(nthreads, id_range, patch, smite_api):
     [ t.start() for t in threads ]
     # wait for the threads to finish
     [ t.join() for t in threads ]
+    
+def get_date_insert():
+    time = datetime.now(eastern)
+    yesterday = time - timedelta(days = 1)
+    ret_string = f"{yesterday.year}{yesterday.month}{yesterday.day}"
+    if yesterday.day < 10:
+        ret_string = f"{yesterday.year}{yesterday.month}0{yesterday.day}"
+    if yesterday.day < 10 and yesterday.month < 10:
+        ret_string = f"{yesterday.year}0{yesterday.month}0{yesterday.day}"
+    elif yesterday.month < 10:
+        ret_string = f"{yesterday.year}0{yesterday.month}{yesterday.day}"
+    return ret_string
 
 def threaded_process_format(nthreads):
     threads = []
@@ -65,6 +78,6 @@ def threaded_process_format(nthreads):
     [ t.join() for t in threads ]
 
 starttime = datetime.now()
-init_api("8.12", "20211220")
-# threaded_process_format(5)
+init_api("8.12", get_date_insert())
+threaded_process_format(5)
 print(f"ENDED IN {datetime.now() - starttime}")
