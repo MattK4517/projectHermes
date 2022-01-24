@@ -13,8 +13,7 @@ from data_pull_insert import create_sets, threaded_pull
 import os
 from pytz import timezone
 # from data_pull_formatting_rewrite import format_no_query
-client = pymongo.MongoClient(
-    "mongodb+srv://sysAdmin:9gR7C1aDKclng4jA@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
+client = pymongo.MongoClient("mongodb+srv://sysAdmin:9gR7C1aDKclng4jA@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
 
 eastern = timezone('US/Eastern')
 
