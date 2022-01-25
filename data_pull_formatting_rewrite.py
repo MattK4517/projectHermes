@@ -232,11 +232,11 @@ def format_no_query(match):
 
 
 def threadedd_format_no_query(match):
-    print("starting format")
     print(len(match))
+    set_matches = [match]
     for god in godsDict:
         godsDict[god] = GodData(god)
-        godsDict[god].set_matches(match)
+        godsDict[god].set_matches(set_matches)
         # godsDict[god].calc_items()
         godsDict[god].calc_match_stats()
         print(f"{god} DONE")

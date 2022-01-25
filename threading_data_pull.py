@@ -11,6 +11,7 @@ from pyrez.models.MatchHistory import MatchHistory
 from data_pull_formatting_rewrite import format_no_query, threadedd_format_no_query
 from data_pull_insert import create_sets, threaded_pull
 import os
+from sys import getsizeof
 # from data_pull_formatting_rewrite import format_no_query
 from main import client
 
@@ -48,14 +49,16 @@ def threaded_process_format(nthreads):
     mydb = client["CasualMatches"]
     mycol = mydb["8.12 Matches"]
     matches = []
-    for x in mycol.find({"Entry_Datetime": "12/23/2021"}, {"_id": 0}):
+    for x in mycol.find({"Entry_Datetime": "1/23/2022"}, {"_id": 0}):
         matches.append(x)
-    for i in range(nthreads):
-        match_data = matches[i::nthreads]
-        # print(ids)
-        print(len(match_data))
-        t = Thread(target=threadedd_format_no_query, args=([match_data]))
-        threads.append(t)
+    
+    print("size:", getsizeof(matches))
+    # for i in range(nthreads):
+    #     match_data = matches[i::nthreads]
+    #     # print(ids)
+    #     print(len(match_data))
+    #     t = Thread(target=threadedd_format_no_query, args=([match_data]))
+    #     threads.append(t)
 
     # start the threads
     [ t.start() for t in threads ]
@@ -63,6 +66,6 @@ def threaded_process_format(nthreads):
     [ t.join() for t in threads ]
 
 starttime = datetime.now()
-# init_api("8.12", "20211223")
-threaded_process_format(1)
+init_api("8.12", "20211226")
+# threaded_process_format(5)
 print(f"ENDED IN {datetime.now() - starttime}")

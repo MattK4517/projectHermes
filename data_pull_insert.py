@@ -7,7 +7,7 @@ import time
 import analyze as anlz
 from pyrez.models import Smite
 from pyrez.models.MatchHistory import MatchHistory
-from data_pull_formatting_rewrite import format_no_query
+from data_pull_formatting_rewrite import threadedd_format_no_query
 import os
 from main import client
 # from data_pull_formatting_rewrite import format_no_query
@@ -379,9 +379,9 @@ def run_pull(patch, date=get_date()):
     mydb = client["test"]
     mycol = mydb[f"{patch} Matches"]
     # date = date
-    # match_ids = smite_api.getMatchIds(426, date=date, hour=-1)
-    #  match_ids_len = len(match_ids)
-    # print(match_ids_len)
+    match_ids = smite_api.getMatchIds(466, date="20220123", hour=-1)
+    match_ids_len = len(match_ids)
+    print(match_ids_len)
     set_ids = []
     all_ids = []
     set_matches = {}
@@ -389,30 +389,28 @@ def run_pull(patch, date=get_date()):
     inserted_count = 0
 
     # all_sets = create_sets(match_ids)
-    all_sets = [1217938019]
     # total = 0
-    for set in all_sets:
-        match_details = smite_api.getMatch(set)
-        print(match_details)
-        for i in range(len(match_details) // 10):
-            match_dict = create_match_dict(match_details[i*set_length], patch)
-            for k in range(10):
-                player = create_player_dict(match_details[(i*10) + k])
-                match_dict["player"+str(k)] = player
-            carry_score = anlz.get_carry_score(match_dict)
-            match_dict["carryScore"] = carry_score["goldScore"]
-            match_dict["damageScore"] = carry_score["damageScore"]
-            match_dict["levelDiff"] = carry_score["levelDiff"]
-            match_dict["killPart"] = carry_score["killPart"]
-            match_dict["efficiency"] = anlz.get_gold_eff(match_dict["killPart"], match_dict["carryScore"])
-            # print(match_dict)
-            mycol.insert_one(match_dict)
-            format_no_query(match_dict)
-            inserted_count += 1
+    # for set in all_sets:
+    #     match_details = smite_api.getMatch(set)
+    #     print(match_details)
+    #     for i in range(len(match_details) // 10):
+    #         match_dict = create_match_dict(match_details[i*set_length], patch)
+    #         for k in range(10):
+    #             player = create_player_dict(match_details[(i*10) + k])
+    #             match_dict["player"+str(k)] = player
+    #         carry_score = anlz.get_carry_score(match_dict)
+    #         match_dict["carryScore"] = carry_score["goldScore"]
+    #         match_dict["damageScore"] = carry_score["damageScore"]
+    #         match_dict["levelDiff"] = carry_score["levelDiff"]
+    #         match_dict["killPart"] = carry_score["killPart"]
+    #         match_dict["efficiency"] = anlz.get_gold_eff(match_dict["killPart"], match_dict["carryScore"])
+    #         # print(match_dict)
+    #         mycol.insert_one(match_dict)
+    #         format_no_query(match_dict)
+    #         inserted_count += 1
 
 
-    print(f"{date} Pull Completed in " + str(datetime.now() - starttime))
-
+    # print(f"{date} Pull Completed in " + str(datetime.now() - starttime))
 
 def threaded_pull(patch, all_sets, smite_api):
     starttime = datetime.now()
@@ -424,12 +422,12 @@ def threaded_pull(patch, all_sets, smite_api):
     mydb = client["CasualMatches"]
     mycol = mydb[f"{patch} Matches"]
     # date = date
-    # match_ids = smite_api.getMatchIds(426, date=date, hour=-1)
+    match_ids = smite_api.getMatchIds(426, date="20211226", hour=-1)
     #  match_ids_len = len(match_ids)
-    # print(match_ids_len)
     set_length = 10
     inserted_count = 0
     # total = 0
+    all_sets = create_sets(match_ids)
     print("Starting pull")
     for set in all_sets:
         set_data = []
@@ -446,9 +444,9 @@ def threaded_pull(patch, all_sets, smite_api):
             # match_dict["killPart"] = carry_score["killPart"]
             # match_dict["efficiency"] = anlz.get_gold_eff(match_dict["killPart"], match_dict["carryScore"])
             set_data.append(match_dict)
-            # format_no_query(match_dict)
-        print(set_data)
+        print(len(set_data))
         mycol.insert_many(set_data)
+        threadedd_format_no_query(set_data)
         inserted_count += 1
         if inserted_count == round(len(all_sets)/2):
             print("halfway")
@@ -465,3 +463,4 @@ def threaded_pull(patch, all_sets, smite_api):
     #     smite_api = SmiteAPI(devId=data[0].strip(), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
     #     print(smite_api.getPlayer("AutoSpeed"))
     #     # print(smite_api.getGodRanks(704292327))
+
