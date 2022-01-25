@@ -454,7 +454,7 @@ def threaded_pull(patch, all_sets, smite_api):
 
     print(f"Pull Completed in " + str(datetime.now() - starttime))
 
-# run_pull("8.12")
+# run_pull("9.1")
 # print(inserted_count)
 # print("error %" + str(round(100 - inserted_count/match_ids_len * 100, 2)))
 

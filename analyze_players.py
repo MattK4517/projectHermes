@@ -22,7 +22,7 @@ def find_match_history(client, playername, mode):
     elif mode == "Casual":
         database = "CasualMatches"
     mydb = client[database]
-    mycol = mydb["8.12 Matches"]
+    mycol = mydb["9.1 Matches"]
     myquery = {
     '$search': {
       'index': 'default',
@@ -67,7 +67,7 @@ def find_match_history(client, playername, mode):
     # }
     # if mycol.count_documents(myquery) == 0 and mode == "Casual": # casual match data is stored in 2 different database
     #     mydb = client["CasualMatches"]
-    #     mycol = mydb["8.12 Matches"]
+    #     mycol = mydb["9.1 Matches"]
     # # print(mycol.count_documents(myquery))
     # ret_data = {}
     # for x in mycol.find(myquery, filter):
@@ -259,11 +259,11 @@ def get_player_god_stats(client, playername, god, role, mode):
         mydb = client["Matches"]
     elif mode == "Casual":
         mydb = client["CasualMatches"]
-    mycol = mydb["8.12 Matches"]
+    mycol = mydb["9.1 Matches"]
     # myquery = { 
     #     **{"$or": [ {f"player{i}.Player_Name": { "$regex" : f"{playername}", "$options": "i" }} for i in range(10) ] },
     #     # **{"$and": [ {f"player{i}.Role": role} for i in range(10) ] },
-    #     **{"Patch": "8.12"}
+    #     **{"Patch": "9.1"}
     #     }
     # filter = {
     #     **{"_id": 0}, 

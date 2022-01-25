@@ -91,7 +91,7 @@ def get_tier_list(rank, role, tableType):
     rank = rank.replace("_", " ")
     retData = {god: {} for god in godsDict}
     mydb = client["Tier_list"]
-    patch = "8.12"
+    patch = "9.1"
     if tableType == "Regular":
         mycol = mydb["Regular List"]
         rank = rank.replace("_", " ")
@@ -230,7 +230,7 @@ def get_all_matchups(god, role, rank, patch, mode):
 @app.route("/api/getmatch/<matchID>")
 def get_match(matchID):
     mydb = client["Matches"]
-    mycol = mydb["8.12 Matches"]
+    mycol = mydb["9.1 Matches"]
     match = ""
     matchID = int(matchID)
     # myquery = {

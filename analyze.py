@@ -908,14 +908,14 @@ def get_lanes(client):
     return lanes
 
 if __name__ == "__main__":
-    # print(get_worst_matchups(client, "Achilles", "Solo", "8.12", mode="Ranked", rank="All Ranks", player="GreekGodKillaaa")
-    print(get_winrate(client, "Atlas", "Support", "8.12", "Casual"))
-    # print(get_top_builds(client, "Achilles", "Solo", "8.12"))
+    # print(get_worst_matchups(client, "Achilles", "Solo", "9.1", mode="Ranked", rank="All Ranks", player="GreekGodKillaaa")
+    print(get_winrate(client, "Atlas", "Support", "9.1", "Casual"))
+    # print(get_top_builds(client, "Achilles", "Solo", "9.1"))
 
     # mydb = client["single_match_stats"]
     # # for god in godsDict:
     # god = "Tiamat"
-    # myquery = {"patch": "8.12"}
+    # myquery = {"patch": "9.1"}
     # mycol = mydb[god]
     # for x in mycol.aggregate([
     #         {

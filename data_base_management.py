@@ -41,13 +41,13 @@ def calc_total_matches(client, ranks):
     actTotalGames = 0
     for rank in ranks:
         if rank == "All Ranks":
-             mycol.update_one({"rank": rank, "patch": "8.12", "mode": "RankedConq"}, {"$set": {"Total_Matches": len(matchIds)}})
+             mycol.update_one({"rank": rank, "patch": "9.1", "mode": "RankedConq"}, {"$set": {"Total_Matches": len(matchIds)}})
              break
         mydb = client["single_items"]
         total_games = 0
         for god in godsDict:
             mycol = mydb[god]
-            myquery = {"rank": rank, "patch": "8.12", "mode": "RankedConq"}
+            myquery = {"rank": rank, "patch": "9.1", "mode": "RankedConq"}
             games = 0
             for x in mycol.find(myquery, {"_id": 0}):
                 # if x["matchId"] not in matchIds:
@@ -62,7 +62,7 @@ def calc_total_matches(client, ranks):
 def insert_games(rank, games):
     mydb = client["Matches"]
     mycol = mydb[f"Total_Matches"]
-    mycol.update_one({"rank": rank, "patch": "8.12", "mode": "RankedConq"}, {"$set": {"Total_Matches": games}})
+    mycol.update_one({"rank": rank, "patch": "9.1", "mode": "RankedConq"}, {"$set": {"Total_Matches": games}})
     print(f"{rank} done")
 
 def add_new_urls(client, god):
@@ -159,7 +159,7 @@ def add_gold_eff(client, db, col, field_key):
 def remove_duplicates(client, dbs):
     # for db in dbs:
         mydb = client["CasualMatches"]
-        mycol = mydb["8.12 Matches"]
+        mycol = mydb["9.1 Matches"]
         # for god in godsDict.keys():
         #     mycol = mydb[god]
         doc_ids = []
@@ -201,7 +201,7 @@ if __name__ == "__main__":
 
     # calc_total_matches(client, ranks)
     # mydb = client["single_match_stats"]
-    # mycol = mydb["8.12 Matches"]
+    # mycol = mydb["9.1 Matches"]
     # print(mycol.count_documents({"Entry_Datetime": "12/22/2021"}))
     # count = 0
     # mydb = client["single_match_stats"]
@@ -209,14 +209,14 @@ if __name__ == "__main__":
     #     if god != "Atlas":
     # god = "Achilles"
     # mycol = mydb[god]
-    # print(mycol.count_documents({"patch": "8.12"}))
+    # print(mycol.count_documents({"patch": "9.1"}))
     # print(mycol.count_documents({"skin": {"$exists": True}}))
     # mycol = mydb[god]
     # for warrior in Warriors:
     #     games = 0
     #     wins = 0
     #     avgKills = 0
-    #     for x in mycol.find({"time": {"$lte": 660}, "patch": "8.12", "enemy": warrior}):
+    #     for x in mycol.find({"time": {"$lte": 660}, "patch": "9.1", "enemy": warrior}):
     #         games += 1
     #         if x["win_status"] == "Winner":
     #             wins += 1
@@ -277,7 +277,7 @@ if __name__ == "__main__":
 # if __name__ == "__main__":
 #     # delete_match_docs(client, "Matches", "8.11 Matches", "Entry_Datetime", "12/10/2021")
 #     mydb = client["CasualMatches"]
-#     mycol = mydb["8.12 Matches"]
+#     mycol = mydb["9.1 Matches"]
 #     mycol.delete_many({"Entry_Datetime": "12/16/2021"})
     # print(mycol.count_documents({"Entry_Datetime": "12/10/2021"}))
     # mydb = client["single_items_test"]
@@ -294,7 +294,7 @@ if __name__ == "__main__":
     #         if god != "Atlas":
     #             mycol = mydb[god]
     # mydb = client["Matches"]
-    # mycol = mydb["8.12 Matches"]
+    # mycol = mydb["9.1 Matches"]
     # mycol.update_many({}, {"$set": {"mode": "RankedConq"}})
 
     # fields = ["carryScore","damageScore", "levelDiff", "killPart", "efficiency"]

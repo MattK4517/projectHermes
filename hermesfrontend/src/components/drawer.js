@@ -187,11 +187,11 @@ let routes = [
     component: <OverviewDisplay />,
     god: "",
   },
-  {
-    path: ["/damage_calculator"],
-    component: <DamageCalculator />,
-    god: "",
-  }
+  // {
+  //   path: ["/damage_calculator"],
+  //   component: <DamageCalculator />,
+  //   god: "",
+  // }
 
 
 ]
@@ -375,7 +375,7 @@ export default function PermanentDrawerLeft() {
             display: "flex",
             flexDirection: "column",
           }}>
-          {["Home", "Gods", "Tierlist", "Contact", "Match", "Damage Calculator"].map((text, index) => {
+          {["Home", "Gods", "Tierlist", "Contact", "Match"].map((text, index) => {
             let route = text;
             let icon;
             if (text === "Home") {

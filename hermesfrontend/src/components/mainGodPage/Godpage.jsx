@@ -297,7 +297,7 @@ function Godpage(props) {
   var [url, seturl] = useState(0);
   const [displaygod, setgod] = useState(0);
   const [abilities, setabilities] = useState([]);
-  const [patch, setPatch] = useState("8.12")
+  const [patch, setPatch] = useState("9.1")
   const [matchup, setMatchup] = useState("None")
   const [roles, setroles] = useState([
     "Solo",
