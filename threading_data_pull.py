@@ -23,17 +23,17 @@ def init_api(patch, date):
         smite_api = SmiteAPI(devId=data[0].strip(), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
     date = date
     match_ids = smite_api.getMatchIds(426, date=date, hour=-1)
-    threaded_process_range(4, create_sets(match_ids), patch, smite_api)
+    threaded_process_range(1, create_sets(match_ids), patch)
     print(len(create_sets(match_ids)))
 
-def threaded_process_range(nthreads, id_range, patch, smite_api):
+def threaded_process_range(nthreads, id_range, patch):
     threads = []
     # create the threads
     for i in range(nthreads):
         ids = id_range[i::nthreads]
         # print(ids)
         print(len(ids))
-        t = Thread(target=threaded_pull, args=(patch,ids, smite_api))
+        t = Thread(target=threaded_pull, args=(patch, ids))
         threads.append(t)
 
     # start the threads
@@ -62,7 +62,8 @@ def threaded_process_format(nthreads):
     # wait for the threads to finish
     [ t.join() for t in threads ]
 
-starttime = datetime.now()
-init_api("9.1", "20211225")
-# threaded_process_format(5)
-print(f"ENDED IN {datetime.now() - starttime}")
+if __name__ == "__main__":
+    starttime = datetime.now()
+    init_api("9.1", "20211225")
+    # threaded_process_format(5)
+    print(f"ENDED IN {datetime.now() - starttime}")

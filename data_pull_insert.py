@@ -247,7 +247,7 @@ def create_sets(data):
     for matchId in data:
         if matchId not in existing:
             set.append(matchId.matchId)
-            if len(set) == 10:
+            if len(set) == 9:
                 sets.append(set)
                 set = []
     if len(set) != 0:
@@ -420,14 +420,13 @@ def run_pull(patch, date=get_date()):
 
     # print(f"{date} Pull Completed in " + str(datetime.now() - starttime))
 
-def threaded_pull(patch, all_sets, smite_api):
+def threaded_pull(patch, all_sets):
     starttime = datetime.now()
+    with open("cred.txt", "r") as f:
+        data = f.readlines()
+        smite_api = SmiteAPI(devId=data[0].strip(), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
 
-    # with open("cred.txt", "r") as f:
-    #     data = f.readlines()
-    #     smite_api = SmiteAPI(devId=data[0].strip(), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
-
-    mydb = client["Matches"]
+    mydb = client["CasualMatches"]
     mycol = mydb[f"{patch} Matches"]
     # date = date
     # match_ids = smite_api.getMatchIds(426, date=date, hour=-1)
@@ -437,9 +436,10 @@ def threaded_pull(patch, all_sets, smite_api):
     inserted_count = 0
     # total = 0
     print("Starting pull")
-    for set in all_sets:
+    for sets in all_sets:
         set_data = []
-        match_details = smite_api.getMatch(set)
+        match_details = smite_api.getMatch(sets)
+        print(match_details)
         for i in range(len(match_details) // 10):
             match_dict = create_match_dict(match_details[i*set_length], patch)
             for k in range(10):
