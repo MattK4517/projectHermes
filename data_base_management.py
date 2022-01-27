@@ -184,29 +184,16 @@ def purge_date(client, dbs, date):
             delete_match_docs(client, db, god, "Entry_Datetime", date)
         
 if __name__ == "__main__":
-    phys = []
-    mag = []
-    mydb = client["Item_Data"]
-    for item in Tier_Three_items:
-        mycol = mydb[item]
-        for x in mycol.find({}, {"_id": 0, "ItemDescription": 1, "DeviceName": 1}):
-            for item in x["ItemDescription"]["Menuitems"]:
-                if "Physical Power" in item["Description"]:
-                    phys.append( {"id" :x["DeviceName"]} )
-                elif "Magical Power" in item["Description"]:
-                    mag.append( {"id": x["DeviceName"]} )
-        
-    print(phys)
-    print(mag)
-
     # calc_total_matches(client, ranks)
     # mydb = client["single_match_stats"]
     # mycol = mydb["8.12 Matches"]
     # print(mycol.count_documents({"Entry_Datetime": "12/22/2021"}))
     # count = 0
-    # mydb = client["single_match_stats"]
-    # for god in godsDict:
-    #     if god != "Atlas":
+    mydb = client["single_match_stats"]
+    for god in godsDict:
+        if god != "Atlas":
+            mycol = mydb[god]
+            mycol.delete_many({})
     # god = "Achilles"
     # mycol = mydb[god]
     # print(mycol.count_documents({"patch": "8.12"}))

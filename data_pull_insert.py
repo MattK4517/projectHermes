@@ -422,12 +422,12 @@ def threaded_pull(patch, all_sets, smite_api):
     mydb = client["CasualMatches"]
     mycol = mydb[f"{patch} Matches"]
     # date = date
-    match_ids = smite_api.getMatchIds(426, date="20211226", hour=-1)
+    # match_ids = smite_api.getMatchIds(426, date=date, hour=-1)
     #  match_ids_len = len(match_ids)
+    # print(match_ids_len)
     set_length = 10
     inserted_count = 0
     # total = 0
-    all_sets = create_sets(match_ids)
     print("Starting pull")
     for set in all_sets:
         set_data = []
@@ -444,11 +444,10 @@ def threaded_pull(patch, all_sets, smite_api):
             # match_dict["killPart"] = carry_score["killPart"]
             # match_dict["efficiency"] = anlz.get_gold_eff(match_dict["killPart"], match_dict["carryScore"])
             set_data.append(match_dict)
-        print(len(set_data))
+            # format_no_query(match_dict)
         mycol.insert_many(set_data)
-        threadedd_format_no_query(set_data)
         inserted_count += 1
-        if inserted_count == round(len(all_sets)/2):
+        if inserted_count > len(all_sets)/2:
             print("halfway")
 
 
