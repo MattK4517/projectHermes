@@ -345,7 +345,7 @@ export default function PermanentDrawerLeft() {
             <MenuItem onClick={handleClose}><Link to={"/tierlist"}>tierlist</Link></MenuItem> */}
               {/* </Menu> */}
             </Hamburger>
-            <SearchBar data={routes.slice(9)} />
+            <SearchBar data={routes.slice(8)} />
           </Typography>
         </Toolbar>
       </Root>
@@ -375,7 +375,7 @@ export default function PermanentDrawerLeft() {
             display: "flex",
             flexDirection: "column",
           }}>
-          {["Home", "Gods", "Tierlist", "Contact", "Match"].map((text, index) => {
+          {["Home", "Gods", "Tierlist", "Contact", "Find A Match"].map((text, index) => {
             let route = text;
             let icon;
             if (text === "Home") {
@@ -390,7 +390,7 @@ export default function PermanentDrawerLeft() {
             else if (text === "Contact") {
               icon = <AiIcons.AiFillMail className="link-icon-svg"/>
             }
-            else if (text === "Match") {
+            else if (text === "Find A Match") {
               icon = <GiIcons.GiSwordClash className="link-icon-svg"/>
             }
             else if (text === "Damage Calculator") {

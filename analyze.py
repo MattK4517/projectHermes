@@ -103,8 +103,6 @@ def get_item_data(client, item):
 "S8 Phantom Veil",
 "S8 Phantom Veil Upgrade"]:
             item = item[3:].strip()
-
-        print(item)
         mydb = client["Item_Data"]
         mycol = mydb[item]
         
@@ -238,6 +236,9 @@ def sort_top_dict(top_dict, client):
 
                     elif not all_dict[slot]["item2"]["item"]:
                         all_dict[slot]["item2"] = top_dict[slot][item]
+
+                    elif top_dict[slot][item]["games"] > all_dict[slot]["item2"]["games"]:
+                        all_dict[slot]["item2"] = top_dict[slot][item]
         
         elif "relic" in slot:
             for item in top_dict[slot]:
@@ -273,7 +274,7 @@ def sort_top_dict(top_dict, client):
 def get_all_builds(client, god, role, patch, mode="Ranked", rank="All Ranks"):
     top_dict = {slot: {} for slot in slots}
     top_dict = {
-        **{f"relic{i+1}": {} for i in range(2)},
+        **{f"relic{i+1}": {} for i in range(4)},
         **top_dict
     }
     mydb = client["single_match_stats"]
@@ -309,7 +310,6 @@ def get_all_builds(client, god, role, patch, mode="Ranked", rank="All Ranks"):
                     if flag:
                         top_dict[slot][item]["wins"] += 1
 
-            print(slot)
             test_sort = OrderedDict(sorted(top_dict[slot].items(),
                 key = lambda x: getitem(x[1], "games")))
             top_dict[slot] = dict(test_sort)
@@ -921,9 +921,10 @@ def get_lanes(client):
     return lanes
 
 if __name__ == "__main__":
+    pass
     # print(get_worst_matchups(client, "Achilles", "Solo", "9.1", mode="Ranked", rank="All Ranks", player="GreekGodKillaaa")
     # print(get_winrate(client, "Atlas", "Support", "9.1", "Casual"))
-    print(get_top_builds(client, "Danzaburou", "Carry", "9.1"))
+    # print(get_pb_rate(client, "Arachne", "Gold", "Solo", "8.12"))
     # print(get_all_builds(client, "Mulan", "Solo", "9.1"))
 
     # mydb = client["single_match_stats"]

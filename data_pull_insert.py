@@ -236,13 +236,20 @@ def create_match_dict(match, patch):
 
 
 def create_sets(data):
+    mydb = client["CasualMatches"]
+    mycol = mydb["9.1 Matches"]
+    existing = []
+    for x in mycol.find({"Entry_Datetime": "1/26/2022"}, {"MatchId": 1, "_id":0}):
+        existing.append(x["MatchId"])
     sets = []
     set = []
+    print(len(existing))
     for matchId in data:
-        set.append(matchId.matchId)
-        if len(set) == 10:
-            sets.append(set)
-            set = []
+        if matchId not in existing:
+            set.append(matchId.matchId)
+            if len(set) == 10:
+                sets.append(set)
+                set = []
     if len(set) != 0:
         sets.append(set)
     return sets
@@ -445,7 +452,6 @@ def threaded_pull(patch, all_sets, smite_api):
             # match_dict["killPart"] = carry_score["killPart"]
             # match_dict["efficiency"] = anlz.get_gold_eff(match_dict["killPart"], match_dict["carryScore"])
             set_data.append(match_dict)
-        print(len(set_data))
         mycol.insert_many(set_data)
         threadedd_format_no_query(set_data)
         inserted_count += 1

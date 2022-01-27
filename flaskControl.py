@@ -37,7 +37,7 @@ def get_god_data(god, role, rank, patch, mode):
     newgod = god.replace("_", " ")
     winrate = anlz.get_winrate(client, god, role, patch, mode, rank)
     pbrate = anlz.get_pb_rate(client, god, rank, role, patch, mode)
-    print(winrate, pbrate)
+    # print(winrate, pbrate)
     return {
         **{
             "url": anlz.get_url(newgod),
@@ -268,16 +268,16 @@ def get_match(matchID):
 
 @app.route('/api/<god>/buildpath/<role>/<rank>/<patch>/<mode>')
 def get_build_path(god, role, rank, patch, mode):
-    mydb = client["single_items"]
+    mydb = client["single_match_stats"]
     mycol = mydb[god]
     index = 0
     games = 0
     builds = {}
     if "All" not in rank:
-        myquery = {"role_played": role, "patch": patch,
+        myquery = {"role": role, "patch": patch,
                    "rank": rank, "mode": f"{mode}Conq"}
     else:
-        myquery = {"role_played": role, "patch": patch, "mode": f"{mode}Conq"}
+        myquery = {"role": role, "patch": patch, "mode": f"{mode}Conq"}
 
     for x in mycol.aggregate(
         [
@@ -326,6 +326,7 @@ def get_build_path(god, role, rank, patch, mode):
 
     builds = dict(test_sort)
 
+    print(builds)
     return builds
 
 
