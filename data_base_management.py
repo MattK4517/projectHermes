@@ -184,10 +184,11 @@ def purge_date(client, dbs, date):
             delete_match_docs(client, db, god, "Entry_Datetime", date)
         
 if __name__ == "__main__":
-    mydb = client["single_god_bans"]
-    for god in godsDict:
-        mycol = mydb[god]
-        mycol.delete_many({"Entry_Datetime": "1/25/2022"})
+    calc_total_matches(client, ranks)
+    # mydb = client["single_god_bans"]
+    # for god in godsDict:
+    #     mycol = mydb[god]
+    #     mycol.delete_many({"Entry_Datetime": "1/25/2022"})
             
     # phys = []
     # mag = []
@@ -209,11 +210,6 @@ if __name__ == "__main__":
     # mycol = mydb["9.1 Matches"]
     # print(mycol.count_documents({"Entry_Datetime": "12/22/2021"}))
     # count = 0
-    mydb = client["single_match_stats"]
-    for god in godsDict:
-        if god != "Atlas":
-            mycol = mydb[god]
-            mycol.delete_many({})
     # god = "Achilles"
     # mycol = mydb[god]
     # print(mycol.count_documents({"patch": "9.1"}))

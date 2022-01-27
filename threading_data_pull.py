@@ -45,10 +45,12 @@ def threaded_process_format(nthreads):
     threads = []
     # create the threads
     mydb = client["CasualMatches"]
-    mycol = mydb["9.1 Matches"]
+    mycol = mydb["8.12 Matches"]
     matches = []
     for x in mycol.find({}, {"_id": 0}):
         matches.append(x)
+        if len(matches) % 10000 == 0:
+            print("10k done")
     
     for i in range(nthreads):
         match_data = matches[i::nthreads]
@@ -63,6 +65,6 @@ def threaded_process_format(nthreads):
     [ t.join() for t in threads ]
 
 starttime = datetime.now()
-init_api("9.1", "20211225")
-# threaded_process_format(5)
+# init_api("9.1", "20211225")
+threaded_process_format(8)
 print(f"ENDED IN {datetime.now() - starttime}")

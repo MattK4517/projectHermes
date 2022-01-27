@@ -921,11 +921,10 @@ def get_lanes(client):
     return lanes
 
 if __name__ == "__main__":
-    pass
     # print(get_worst_matchups(client, "Achilles", "Solo", "9.1", mode="Ranked", rank="All Ranks", player="GreekGodKillaaa")
     # print(get_winrate(client, "Atlas", "Support", "9.1", "Casual"))
     # print(get_pb_rate(client, "Arachne", "Gold", "Solo", "8.12"))
-    # print(get_all_builds(client, "Mulan", "Solo", "9.1"))
+    print(get_all_builds(client, "Achilles", "Solo", "9.1"))
 
     # mydb = client["single_match_stats"]
     # # for god in godsDict:

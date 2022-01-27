@@ -243,7 +243,6 @@ def create_sets(data):
         existing.append(x["MatchId"])
     sets = []
     set = []
-    print(len(existing))
     for matchId in data:
         if matchId not in existing:
             set.append(matchId.matchId)
@@ -453,7 +452,10 @@ def threaded_pull(patch, all_sets, smite_api):
             # match_dict["efficiency"] = anlz.get_gold_eff(match_dict["killPart"], match_dict["carryScore"])
             set_data.append(match_dict)
             # format_no_query(match_dict)
-        mycol.insert_many(set_data)
+        if set_data != []:
+            mycol.insert_many(set_data)
+        else: 
+            print(set)
         inserted_count += 1
         if inserted_count > len(all_sets)/2:
             print("halfway")
