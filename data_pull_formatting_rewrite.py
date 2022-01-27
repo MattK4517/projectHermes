@@ -10,7 +10,7 @@ class GodData:
 
 
     def insert_ban(self, matchId, rank, entry_datetime, patch):
-        mydb = client["single_god_bans_test"]
+        mydb = client["single_god_bans"]
         mycol = mydb[self.name]
         mycol.insert_one({
             "matchId": matchId,
@@ -96,7 +96,7 @@ class GodData:
         mycol.insert_many(set)
 
     def calc_match_stats(self):
-        mydb = client["single_match_stats_test"]
+        mydb = client["single_match_stats"]
         mycol =  mydb[self.name]
         set = []
         for match in self.matches:
@@ -236,11 +236,9 @@ def format_no_query(match):
 
 
 def threadedd_format_no_query(match):
-    print(len(match))
-    set_matches = [match]
     for god in godsDict:
         godsDict[god] = GodData(god)
-        godsDict[god].set_matches(set_matches)
+        godsDict[god].set_matches(match)
         # godsDict[god].calc_items()
         godsDict[god].calc_match_stats()
         print(f"{god} DONE")

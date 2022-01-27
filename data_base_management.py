@@ -209,9 +209,11 @@ if __name__ == "__main__":
     # mycol = mydb["9.1 Matches"]
     # print(mycol.count_documents({"Entry_Datetime": "12/22/2021"}))
     # count = 0
-    # mydb = client["single_match_stats"]
-    # for god in godsDict:
-    #     if god != "Atlas":
+    mydb = client["single_match_stats"]
+    for god in godsDict:
+        if god != "Atlas":
+            mycol = mydb[god]
+            mycol.delete_many({})
     # god = "Achilles"
     # mycol = mydb[god]
     # print(mycol.count_documents({"patch": "9.1"}))
