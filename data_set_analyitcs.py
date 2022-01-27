@@ -22,7 +22,7 @@ def get_items_by_class(client, class_name, role):
     for char in godsDict.keys():
         if char != "Atlas":
             print(char)
-            char_items = anlz.get_all_builds(client, char, role, "8.12")
+            char_items = anlz.get_all_builds(client, char, role, "9.1")
             for slot in char_items:
                 if "slot" in slot:
                     for item in char_items[slot]:
@@ -134,7 +134,7 @@ for field in ["deaths"]:
         avg_deaths = 0
         deaths = 0
         games = 0
-        for x in mycol.find({"role": {"$exists": True}, "patch": "8.12", "mode": f"RankedConq"}, {"_id": 0, field: 1, "role": 1, "matchId": 1}):
+        for x in mycol.find({"role": {"$exists": True}, "patch": "9.1", "mode": f"RankedConq"}, {"_id": 0, field: 1, "role": 1, "matchId": 1}):
             deaths += x["deaths"]
             games += 1
         avg_deaths += deaths/games

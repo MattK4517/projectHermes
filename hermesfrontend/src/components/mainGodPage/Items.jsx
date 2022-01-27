@@ -175,7 +175,7 @@ function Table({ columns, data }) {
 
 function Items(props) {
   console.log(props)
-  const [patch, setPatch] = useState("8.12")
+  const [patch, setPatch] = useState("9.1")
   const [slotOneItems, setSlotOneItems] = useState([]);
   const [slotTwoItems, setSlotTwoItems] = useState([]);
   const [slotThreeItems, setSlotThreeItems] = useState([]);

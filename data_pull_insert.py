@@ -256,6 +256,7 @@ def get_new_id(client, smite_api):
             data = create_god_data_dict(gods[god])
             mycol.replace_one({}, data)
 
+
 def create_god_data_dict(data):
     ret_data = {}
     ret_data["Ability1"] = data["Ability1"]
@@ -419,7 +420,7 @@ def threaded_pull(patch, all_sets, smite_api):
     #     data = f.readlines()
     #     smite_api = SmiteAPI(devId=data[0].strip(), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
 
-    mydb = client["CasualMatches"]
+    mydb = client["Matches"]
     mycol = mydb[f"{patch} Matches"]
     # date = date
     # match_ids = smite_api.getMatchIds(426, date=date, hour=-1)
@@ -453,7 +454,7 @@ def threaded_pull(patch, all_sets, smite_api):
 
     print(f"Pull Completed in " + str(datetime.now() - starttime))
 
-# run_pull("8.12")
+# run_pull("9.1")
 # print(inserted_count)
 # print("error %" + str(round(100 - inserted_count/match_ids_len * 100, 2)))
 
@@ -463,3 +464,58 @@ def threaded_pull(patch, all_sets, smite_api):
     #     print(smite_api.getPlayer("AutoSpeed"))
     #     # print(smite_api.getGodRanks(704292327))
 
+def get_item_abs_price(name, family, tier, tree):
+    price = 0
+    index = 1    
+    for element in tree[family]:
+        if tree[family][element]["Name"] == name:
+            price += tree[family][element]["Price"]
+        
+        if tree[family][element]["Tier"] < tier:
+            price += tree[family][element]["Price"]
+    
+    return price
+    
+
+
+
+def create_item_dict(item, item_prices):
+    ret_data = {}
+    ret_data["ChildItemId"] = item["ChildItemId"]
+    ret_data["DeviceName"] = item["DeviceName"]
+    ret_data["ItemDescription"] = item["ItemDescription"]
+    ret_data["ItemTier"] = item["ItemTier"]
+    ret_data["relativePrice"] = item["Price"]
+    ret_data["absolutePrice"] = get_item_abs_price(item["DeviceName"], item["RootItemId"], item["ItemTier"], item_prices)
+    ret_data["ShortDesc"] = item["ShortDesc"]
+    ret_data["itemIcon_URL"] = item["itemIcon_URL"]
+    return ret_data
+
+def get_new_items(client, smite_api):
+    mydb = client["Item_Data"]
+    prices = {}
+    items = smite_api.getItems()
+    for item in range(len(items)):
+        # print(items[item]["DeviceName"], items[item]["RootItemId"])
+        if items[item]["RootItemId"] not in prices:
+            prices[items[item]["RootItemId"]] = {items[item]["DeviceName"]: {"Price": items[item]["Price"], "Tier": items[item]["ItemTier"], "Name": items[item]["DeviceName"]}}
+        else:
+            prices[items[item]["RootItemId"]][items[item]["DeviceName"]] = {"Price": items[item]["Price"], "Tier": items[item]["ItemTier"], "Name": items[item]["DeviceName"]}
+
+    for item in range(len(items)):
+        mycol = mydb[items[item]["DeviceName"]]
+        item = create_item_dict(items[item], prices)
+        mycol.insert_one(item)
+    # print(prices)
+        # if items[item]["Name"] == "Merlin":
+        #     mycol = mydb[gods[god]["Name"]]
+        #     data = create_god_data_dict(gods[god])
+        #     # mycol.replace_one({}, data)
+
+
+if __name__ == "__main__":
+    with open("cred.txt", "r") as f:
+        data = f.readlines()
+        smite_api = SmiteAPI(devId=data[0].strip(), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
+    print(smite_api.getDataUsed())
+    # get_new_items(client, smite_api)

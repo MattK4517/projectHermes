@@ -496,7 +496,7 @@ export default function BuildPage(pagegod) {
     "Achilles",
     role,
     rank,
-    "8.12",
+    "9.1",
     matchup,
     "Ranked"
   );
@@ -651,7 +651,7 @@ export default function BuildPage(pagegod) {
                         />
                         <DropDownFilter
                           changePatch={null}
-                          patch={"8.12"}
+                          patch={"9.1"}
                           style={{ color: "white" }}
                         />
                       </div>

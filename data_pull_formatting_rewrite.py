@@ -107,9 +107,13 @@ class GodData:
                     build = {}
                     for player_key in match[key]:
                         if "Item_Purch" in player_key:
+                            if "S8" in match[key][player_key]:
+                                match[key][player_key] = match[key][player_key][2:]
                             item, purch, number = player_key.split("_")
                             build[f"slot{number}"] = match[key][player_key]
                         if "Item_Active" in player_key:
+                            if "S8" in match[key][player_key]:
+                                match[key][player_key] = match[key][player_key][2:]
                             item, purch, number = player_key.split("_")
                             build[f"relic{number}"] = match[key][player_key]
 

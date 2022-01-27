@@ -13,7 +13,7 @@ export default function PlayerMatchups(props) {
   const [playerMatchups, setPlayerMatchups] = useState([]);
   useEffect(() => {
     fetch(
-      "/api/playermatchups/".concat(player, "/", god, "/", role, "/8.12/", mode)
+      "/api/playermatchups/".concat(player, "/", god, "/", role, "/9.1/", mode)
     ).then((res) =>
       res.json().then((data) => {
         console.log("playermatchups", data)
