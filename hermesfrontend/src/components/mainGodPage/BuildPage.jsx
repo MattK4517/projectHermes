@@ -132,6 +132,7 @@ const ResponsiveBuild = styled("div")(({ theme }) => ({
 
 class GodRankStats extends React.Component {
   render() {
+    console.log(this.props)
     let banrateMessage;
     if (this.props.mode === "Ranked") {
       banrateMessage = this.props.banrate + "%";
@@ -322,7 +323,6 @@ class CreateItemToolTip extends React.Component {
 }
 
 export default function BuildPage(props) {
-  console.log(props)
   let { games, badmatchups, goodmatchups, items, colorStyle, relics } =
     useFetch(
       props.pagegod,

@@ -359,6 +359,7 @@ function Godpage(props) {
       })
     );
   }, []);
+  console.log(winrate, pickrate, banrate)
   return (
     <>
     <Helmet>

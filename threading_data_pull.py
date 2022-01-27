@@ -23,7 +23,7 @@ def init_api(patch, date):
         smite_api = SmiteAPI(devId=data[0].strip(), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
 
     date = date
-    match_ids = smite_api.getMatchIds(426, date=date, hour=-1)
+    match_ids = smite_api.getMatchIds(451, date=date, hour=-1)
     print(len(match_ids))
     threaded_process_range(4, create_sets(match_ids), patch, smite_api)
     # print(len(create_sets(match_ids)))

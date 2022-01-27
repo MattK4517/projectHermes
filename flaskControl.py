@@ -37,6 +37,7 @@ def get_god_data(god, role, rank, patch, mode):
     newgod = god.replace("_", " ")
     winrate = anlz.get_winrate(client, god, role, patch, mode, rank)
     pbrate = anlz.get_pb_rate(client, god, rank, role, patch, mode)
+    print(winrate, pbrate)
     return {
         **{
             "url": anlz.get_url(newgod),
