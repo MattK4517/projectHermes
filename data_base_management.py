@@ -184,11 +184,55 @@ def purge_date(client, dbs, date):
             delete_match_docs(client, db, god, "Entry_Datetime", date)
         
 if __name__ == "__main__":
-    calc_total_matches(client, ranks)
-    # mydb = client["single_god_bans"]
-    # for god in godsDict:
-    #     mycol = mydb[god]
-    #     mycol.delete_many({"Entry_Datetime": "1/25/2022"})
+    # calc_total_matches(client, ranks)
+    mydb = client["single_match_stats"]
+    mycol = mydb["Total Stats"]
+    winrate = 0
+    games = 0
+    skin = ""
+    winning = []
+    losing = []
+    god = ""
+    test = 0
+    for x in mycol.aggregate(
+        [
+            {
+                "$group": {
+                    "_id": {
+                        "skin": "$player",
+                        "win_status": "$win_status",
+                        # "god": "$god"
+                    },
+                    "count": {"$sum": 1},
+                }
+            },
+            {"$sort": {"count": 1}},
+        ], allowDiskUse = True
+    ):
+        test += 1
+        if test % 1000 == 0:
+            print(f"{test} players done")
+        if x["_id"]["win_status"] == "Winner":
+            winning.append(x)
+        else:
+            losing.append(x)
+    
+
+    for losingSkin in winning:
+        for winningSkin in losing:
+            if "skin" in winningSkin["_id"].keys() and "skin" in losingSkin["_id"].keys():
+                if winningSkin["_id"]["skin"] == losingSkin["_id"]["skin"]:
+                    if winningSkin["count"] + losingSkin["count"] > 0:
+                        tempWin = 100 - round(losingSkin["count"] / (winningSkin["count"] + losingSkin["count"]) * 100,2 )
+                        if tempWin > winrate:
+                            winrate = tempWin
+                            skin = winningSkin["_id"]["skin"]
+                            games = winningSkin["count"] + losingSkin["count"]
+                            # god = winningSkin["_id"]["god"]
+    
+    print(god, skin, winrate, games)
+
+
             
     # phys = []
     # mag = []

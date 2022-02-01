@@ -21,6 +21,8 @@ def find_match_history(client, playername, mode):
         database = "Matches"
     elif mode == "Casual":
         database = "CasualMatches"
+    
+    print(database)
     mydb = client[database]
     mycol = mydb["9.1 Matches"]
     myquery = {
@@ -34,6 +36,7 @@ def find_match_history(client, playername, mode):
       }
     }
   }
+    print(myquery)
     ret_data = {}
     for x in mycol.aggregate([myquery]):
         ret_data[x["MatchId"]] = x
@@ -433,9 +436,10 @@ def grab_stats(player_data):
     return ret_data
 
 if __name__ == "__main__":
-    # print(find_match_history(client, "Nika", "Ranked"))
+    find_match_history(client, "azekill", "Casual")
     starttime = datetime.now()
-    print(verify_player("GreekGodKillaaa", "[60g]GreekGodKillaaa", "0", "0"))
+
+    # print(verify_player("GreekGodKillaaa", "[60g]GreekGodKillaaa", "0", "0"))
     # print(get_player_god_stats(client, "azekill", "Atlas", "Support", "Casual"))
     # print(find_match_history(client, "nika", "Ranked"))
     print(datetime.now() - starttime)

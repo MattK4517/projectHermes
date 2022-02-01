@@ -10,6 +10,11 @@ from operator import getitem
 from math import sqrt
 from constants import godsDict, slots, Tier_Three_items, Starter_items, roles, single_combat_stats, single_objective_stats
 import analyze_players as anlzpy 
+
+import pyrez
+from pyrez.api import SmiteAPI
+from pyrez.models import Smite
+from pyrez.models.MatchHistory import MatchHistory
 # info pull
 # [godWR, godPR, godBR] - check, matchesPlayed - check
 # relics used
@@ -718,7 +723,7 @@ def get_tier(win_rate, pick_rate, ban_rate):
     return tier_letter
 
 def get_specific_build(client, god, role, patch, matchup, rank="All Ranks"):
-    mydb = client["single_matchups"]
+    mydb = client["single_match_stats"]
     mycol = mydb[god]
     match_ids = []
     if "All" in rank:
@@ -921,10 +926,27 @@ def get_lanes(client):
     return lanes
 
 if __name__ == "__main__":
+    with open("cred.txt", "r") as f:
+        data = f.readlines()
+        smite_api = SmiteAPI(devId=data[0].strip(), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
+        print(smite_api.getPlayerId("azekill"))
+        print(smite_api.getQueueStats("azekill", 426))
+
+
+
+
+
+
+
+
+
+
+
+
     # print(get_worst_matchups(client, "Achilles", "Solo", "9.1", mode="Ranked", rank="All Ranks", player="GreekGodKillaaa")
     # print(get_winrate(client, "Atlas", "Support", "9.1", "Casual"))
     # print(get_pb_rate(client, "Arachne", "Gold", "Solo", "8.12"))
-    print(get_all_builds(client, "Achilles", "Solo", "9.1"))
+    # print(get_all_builds(client, "Achilles", "Solo", "9.1"))
 
     # mydb = client["single_match_stats"]
     # # for god in godsDict:

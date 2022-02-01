@@ -407,7 +407,7 @@ export default function BuildPage(props) {
                 <HtmlTooltip
                   title={
                     <React.Fragment>
-                      <CreateMatchupsHelpTooltip god={props.props} />
+                      <CreateMatchupsHelpTooltip god={props.pagegod} />
                     </React.Fragment>
                   }
                   placement="top"
