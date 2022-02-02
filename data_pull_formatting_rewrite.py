@@ -174,7 +174,9 @@ class GodData:
                         "Entry_Datetime": match["Entry_Datetime"],
                         "time": match["Match_Duration"],
                         "mode": "CasualConq",
-                        self.name: build,
+                        "build": build,
+                        "god": self.name,
+                        self.name: build                        
                     })
         mycol.insert_many(set)
 

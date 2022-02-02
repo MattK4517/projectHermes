@@ -39,7 +39,7 @@ def get_items_by_class(client, class_name, role):
                     games = items[slot][item]["games"]
                     wins = items[slot][item]["wins"]
                     wr = round(wins/games * 100, 2)
-                    f.writelines(f"{slot},{item},{wins},{games},{wr}\n")
+                    f.writelines(f"{slot}, {item} , {wins} , {games} , {wr}% \n")
 
 get_items_by_class(client, Mages, "Mid")
 

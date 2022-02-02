@@ -21,6 +21,8 @@ def find_match_history(client, playername, mode):
         database = "Matches"
     elif mode == "Casual":
         database = "CasualMatches"
+    
+    print(database)
     mydb = client[database]
     mycol = mydb["9.1 Matches"]
     myquery = {
@@ -34,9 +36,16 @@ def find_match_history(client, playername, mode):
       }
     }
   }
+    print(myquery)
     ret_data = {}
     for x in mycol.aggregate([myquery]):
-        ret_data[x["MatchId"]] = x
+        if len(ret_data.keys()) >= 35:
+            break
+        for key in x:
+            if "player" in key:
+                if verify_player(x[key]["Player_Name"], playername, "none", "none"):
+                    print("here")
+                    ret_data[x["MatchId"]] = x
     # filter = {
     #     **{"_id": 0}, 
     #     # **{f"player{i}.godBuild": 0 for i in range(10)}, 
@@ -245,11 +254,12 @@ def normalize_tier(tier):
 def verify_player(act_name, playername, act_god, god):
     if act_god.lower() == god.lower():
         name = playername
-        print(name)
+        # print(name)
         if len(playername.split("]")) > 1:
             print("getting hee")
             name = playername.split("]")[1]
         if act_name.lower() == name.lower():
+            print("here")
             return True
     return False    
     
@@ -433,9 +443,10 @@ def grab_stats(player_data):
     return ret_data
 
 if __name__ == "__main__":
-    # print(find_match_history(client, "Nika", "Ranked"))
+    find_match_history(client, "Incon", "Casual")
     starttime = datetime.now()
-    print(verify_player("GreekGodKillaaa", "[60g]GreekGodKillaaa", "0", "0"))
+
+    # print(verify_player("GreekGodKillaaa", "[60g]GreekGodKillaaa", "0", "0"))
     # print(get_player_god_stats(client, "azekill", "Atlas", "Support", "Casual"))
     # print(find_match_history(client, "nika", "Ranked"))
     print(datetime.now() - starttime)

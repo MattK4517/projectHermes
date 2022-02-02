@@ -198,7 +198,8 @@ export default function MatchDisplay(props) {
                               src={`https://webcdn.hirezstudios.com/smite/item-icons/${player.Item_Active_1.replaceAll(
                                 " ",
                                 "-"
-                              ).toLowerCase()}.jpg`}
+                              ).replaceAll("S8-", "")
+                              .toLowerCase()}.jpg`}
                               alt={player.Item_Active_1}
                             />
                           </div>
@@ -207,7 +208,8 @@ export default function MatchDisplay(props) {
                               src={`https://webcdn.hirezstudios.com/smite/item-icons/${player.Item_Active_2.replaceAll(
                                 " ",
                                 "-"
-                              ).toLowerCase()}.jpg`}
+                              ).replaceAll("S8-", "")
+                              .toLowerCase()}.jpg`}
                               alt={player.Item_Active_2}
                             />
                           </div>

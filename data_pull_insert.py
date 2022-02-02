@@ -438,7 +438,7 @@ def threaded_pull(patch, all_sets):
     for sets in all_sets:
         set_data = []
         match_details = smite_api.getMatch(sets)
-        for i in range(len(match_details) // 10):
+        for i in range(1):
             match_dict = create_match_dict(match_details[i*set_length], patch)
             for k in range(10):
                 player = create_player_dict(match_details[(i*10) + k])
@@ -454,9 +454,9 @@ def threaded_pull(patch, all_sets):
         if set_data != []:
             mycol.insert_many(set_data)
         else: 
-            print(set)
+            print(sets)
         inserted_count += 1
-        if inserted_count > len(all_sets)/2:
+        if inserted_count == round(len(all_sets)/2):
             print("halfway")
 
 

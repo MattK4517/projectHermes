@@ -368,12 +368,12 @@ export default function BuildPage(props) {
           <span
             style={{ color: "#5f5f7b", fontSize: "14px", fontWeight: "400" }}
           >
-            these gods counter {props.props} {props.role}
+            these gods counter {props.pagegod} {props.role}
           </span>
           <HtmlTooltip
             title={
               <React.Fragment>
-                <CreateMatchupsHelpTooltip god={props.props} />
+                <CreateMatchupsHelpTooltip god={props.pagegod} />
               </React.Fragment>
             }
             placement="top"
@@ -402,12 +402,12 @@ export default function BuildPage(props) {
                 <span
                   style={{ color: "#5f5f7b", fontSize: "14px", fontWeight: "400" }}
                 >
-                  these gods get countered by {props.props} {props.role}
+                  these gods get countered by {props.pagegod} {props.role}
                 </span>
                 <HtmlTooltip
                   title={
                     <React.Fragment>
-                      <CreateMatchupsHelpTooltip god={props.props} />
+                      <CreateMatchupsHelpTooltip god={props.pagegod} />
                     </React.Fragment>
                   }
                   placement="top"
