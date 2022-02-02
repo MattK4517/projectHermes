@@ -2694,10 +2694,10 @@ figure.snip0015:hover figcaption::before {
   letter-spacing: .1rem;
 }
 
-.home-page-section .content-section_header {
+/* .home-page-section .content-section_header {
   padding-bottom: 5px;
   border-bottom: 1px solid gray;
-}
+} */
 
 .main-nav-link {
   display: flex;
@@ -2747,4 +2747,19 @@ figure.snip0015:hover figcaption::before {
 
 .combat-stats-list > p{
   margin-bottom: 3px;
+}
+
+.home-info {
+  padding: 20px;
+  border: 5px solid #2c2c40;
+  background-color: #17172e;
+}
+
+.grid-block-content .item-row .item-image {
+  padding-right: 25px;
+}
+
+.grid-block > thead {
+  display: flex;
+  justify-content: center;
 }

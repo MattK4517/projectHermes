@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useFetch from "../useFetch";
 import Tooltip from "@material-ui/core/Tooltip";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
@@ -17,6 +17,7 @@ import SearchBarGodPage from "../SearchBarStuff/SearchBarGodPage";
 import RSSFeeder from "../RssFeed";
 import InfiniteScroll from "react-infinite-scroll-component";
 import ChangeLog from "../Changelog";
+import { ItemTable } from "./Items";
 
 const godsDict = {
   "All Gods": "None",
@@ -471,6 +472,26 @@ const CustDiv = styled("div")(({ theme }) => ({
 }));
 
 export default function BuildPage(pagegod) {
+
+  const itemColumns = React.useMemo(
+    () => [
+      {
+        Header: 'Items',
+        accessor: "item",
+      },
+      {
+        Header: 'Games',
+        accessor: "games",
+      },
+      {
+        Header: "Win Rate",
+        accessor: "winRate",
+      },
+    ]
+    ,
+    []
+  )
+
   const [role, setRole] = useState("Solo");
   const [rank, setRank] = useState("All Ranks");
   const [ranks, setranks] = useState([
@@ -500,6 +521,48 @@ export default function BuildPage(pagegod) {
     matchup,
     "Ranked"
   );
+  const [slotOneItems, setSlotOneItems] = useState([]);
+  const [patch, setPatch] = useState("9.1")
+  const [mode, setMode] = useState("Ranked")
+  useEffect(() => {
+    fetch(
+      "/api/".concat(
+        "Achilles",
+        "/items/",
+        role,
+        "/",
+        rank,
+        "/",
+        patch,
+        "/",
+        mode
+      )
+    ).then((res) =>
+      res.json().then((data) => {
+        setSlotOneItems([]);
+        Object.keys(data).forEach((slot) => {
+          if (slot === "slot1") {
+            Object.keys(data[slot]).forEach((item, index) => {
+              if (index < 5) {
+                setSlotOneItems((items) => [
+                  ...items,
+                  {
+                    item: item,
+                    games: data[slot][item]["games"],
+                    winRate: (
+                      (data[slot][item]["wins"] / data[slot][item]["games"]) *
+                      100
+                    ).toFixed(2),
+                  },
+                ]);
+              }
+            });
+          }
+        });
+      })
+    );
+  }, [role, rank, patch, mode]);
+
   return (
     <div
       style={{
@@ -512,7 +575,7 @@ export default function BuildPage(pagegod) {
         className="center"
         style={{
           display: "flex",
-          width: "100%",
+          // width: "100%",
           margin: "auto",
         }}
       >
@@ -584,7 +647,7 @@ export default function BuildPage(pagegod) {
               </span>
             </div>
             <div
-              className="matchups"
+              className="matchups home-info"
               style={{ display: "flex", flexDirection: "column" }}
             >
               <p>
@@ -661,17 +724,18 @@ export default function BuildPage(pagegod) {
                     Tables of Every Item Built on the God
                   </div>
                   <p>
-                    This is too Large to Display Here but on the God Pages its
-                    under the "Items" Tab<br></br>
+                    <ItemTable data={slotOneItems} columns={itemColumns} />
                   </p>
-                  <div className="content-section_header">A Table First 3
-                  Item Build Paths</div>
+                  <div className="content-section_header">
+                    A Table First 3 Item Build Paths
+                  </div>
                   <p>
                     This is too Large to Display Here but on the God Pages its
                     under the "Build Paths" Tab<br></br>
                   </p>
-                  <div className="content-section_header">A Table Breaking
-                  Down Each Matchup in Terms of Preformance Differential
+                  <div className="content-section_header">
+                    A Table Breaking Down Each Matchup in Terms of Preformance
+                    Differential
                   </div>
                   <p>
                     This is too Large to Display Here but on the God Pages its
@@ -699,8 +763,8 @@ export default function BuildPage(pagegod) {
                       {...a11yProps(3)}
                     />
                   </Tabs>
-                  <div className="content-section_header">Ability to Sort
-                  by a Specific Enemy Matchup
+                  <div className="content-section_header">
+                    Ability to Sort by a Specific Enemy Matchup
                   </div>
                   <p>
                     Best to Sort by Enemy Seen Above<br></br>

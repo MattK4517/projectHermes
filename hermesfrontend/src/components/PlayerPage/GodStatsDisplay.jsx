@@ -9,10 +9,10 @@ import { withStyles, makeStyles } from "@material-ui/core/styles";
 import { FilterForm } from "../Filters/FilterForm";
 import winRateColor from "../mainGodPage/WinRateColor";
 import Tooltip from "@material-ui/core/Tooltip";
-import { PlayerContext } from "./PlayerContext"
-import PlayerHeader from "./PlayerHeader"
+import { PlayerContext } from "./PlayerContext";
+import PlayerHeader from "./PlayerHeader";
 
-const Table = ({ columns, data, player}) => {
+const Table = ({ columns, data, player }) => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -50,7 +50,7 @@ const Table = ({ columns, data, player}) => {
   // We don't want to render all 2000 rows for this example, so cap
   // it at 20 for this use case
   const firstPageRows = rows;
-  console.log("player", player)
+  console.log("player", player);
   return (
     <>
       <div className="stats-tables__content-container">
@@ -229,7 +229,8 @@ const Table = ({ columns, data, player}) => {
                                       <b>{row.original.KDA.toFixed(2)}</b>
                                     </span>
                                   </div>
-                                )} else if (key.includes("kills")) {
+                                );
+                              } else if (key.includes("kills")) {
                                 return (
                                   <div
                                     className="rt-td pick-rate"
@@ -273,7 +274,9 @@ const Table = ({ columns, data, player}) => {
                                     {...cell.getCellProps()}
                                   >
                                     <span>
-                                      <b>{(row.original.avgGold).toLocaleString()}</b>
+                                      <b>
+                                        {row.original.avgGold.toLocaleString()}
+                                      </b>
                                     </span>
                                   </div>
                                 );
@@ -389,19 +392,23 @@ function GodStatsDisplay() {
     fetch("/api/getplayergods/".concat(player, "/", mode)).then((res) =>
       res.json().then((data) => {
         let newData = Object.values(data).sort(compare);
-        setGodList([]);;
+        setGodList([]);
         Object.keys(newData).map((god, index) => {
-            if (Object.keys(newData[god]).indexOf("god") !== -1) {
-              setGodList((godList) => [
-                ...godList,
-                {
-                  ...newData[god],
-                  "KDA": (newData[god]["kills"] + (.5 * newData[god]["assists"] )) / newData[god]["deaths"],
-                  "winRate": newData[god]["wins"] / newData[god]["matches"] * 100,
-                  "avgGold": (newData[god]["gold"] / newData[god]["matches"]).toFixed(),
-                },
-              ]);
-            }
+          if (Object.keys(newData[god]).indexOf("god") !== -1) {
+            setGodList((godList) => [
+              ...godList,
+              {
+                ...newData[god],
+                KDA:
+                  (newData[god]["kills"] + 0.5 * newData[god]["assists"]) /
+                  newData[god]["deaths"],
+                winRate: (newData[god]["wins"] / newData[god]["matches"]) * 100,
+                avgGold: (
+                  newData[god]["gold"] / newData[god]["matches"]
+                ).toFixed(),
+              },
+            ]);
+          }
         });
       })
     );
@@ -469,6 +476,28 @@ function GodStatsDisplay() {
         {/* <NameForm setPlayer={setPlayer} /> */}
         <div className={player ?? "undefined"}>
           <PlayerHeader player={player} level={playerLevel} icon={icon} />
+          <div className="filter-manager">
+            <div className="filter-width-wrapper">
+              <div className="filter-manager_container">
+                <div className="filter-manager_label">
+                  <span style={{ color: "white" }}>Stat Filters</span>
+                </div>
+                {/* <div className="role-filter-container"> */}
+                <FilterForm
+                  filter={mode}
+                  god={mode}
+                  filters={["Ranked", "Casual"]}
+                  setFilter={setMode}
+                />
+                {/* </div> */}
+                {/* <DropDownFilter
+                  changePatch={setPatch}
+                  patch={patch}
+                  style={{ color: "white" }}
+                /> */}
+              </div>
+            </div>
+          </div>
         </div>
         <Table columns={columns} data={godList} player={player} />
       </div>

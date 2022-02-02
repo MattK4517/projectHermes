@@ -329,11 +329,11 @@ const Table = ({ columns, data }) => {
 
     
 export default function Matchups(props) {
-  console.log(props)
     const [totalData, setTotalData] = useState([]);
     useEffect(() => {
         fetch("/api/".concat(props.pagegod, "/m/", props.role, "/", props.rank, "/", props.patch, "/", props.mode)).then((res) =>
           res.json().then((data) => {
+            console.log(data)
               setTotalData([]);
               Object.keys(data).forEach(key => {
                   setTotalData((totalData) => [

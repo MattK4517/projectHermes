@@ -255,7 +255,6 @@ function Table({ columns, data }) {
 
 export default function BuildPath(props) {
   const [paths, setPaths] = useState([]);
-  console.log(props)
   useEffect(() => {
     fetch(
       "/api/".concat(

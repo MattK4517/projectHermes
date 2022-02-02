@@ -184,11 +184,12 @@ def purge_date(client, dbs, date):
             delete_match_docs(client, db, god, "Entry_Datetime", date)
         
 if __name__ == "__main__":
-    calc_total_matches(client, ranks)
-    # mydb = client["single_god_bans"]
+    # calc_total_matches(client, ranks)
+    mydb = client["CasualMatches"]
+    mycol = mydb["9.1 Matches"]
     # for god in godsDict:
     #     mycol = mydb[god]
-    #     mycol.delete_many({"Entry_Datetime": "1/25/2022"})
+    mycol.delete_many({"Entry_Datetime": "1/27/2022"})
             
     # phys = []
     # mag = []

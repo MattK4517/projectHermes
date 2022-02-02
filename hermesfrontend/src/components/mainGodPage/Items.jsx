@@ -71,7 +71,7 @@ class CreateItemToolTip extends React.Component {
   }
 }
 
-function Table({ columns, data }) {
+export function ItemTable({ columns, data }) {
     const {
       getTableProps,
       getTableBodyProps,
@@ -174,7 +174,6 @@ function Table({ columns, data }) {
   }
 
 function Items(props) {
-  console.log(props)
   const [patch, setPatch] = useState("9.1")
   const [slotOneItems, setSlotOneItems] = useState([]);
   const [slotTwoItems, setSlotTwoItems] = useState([]);
@@ -259,7 +258,7 @@ function Items(props) {
       }))
   }, [props.role, props.rank, props.patch, props.mode])
 
-  const columns = React.useMemo(
+  const itemColumns = React.useMemo(
     () => [
       {
         Header: 'Items',
@@ -281,12 +280,12 @@ function Items(props) {
   return (
     <>
     <div class="items-table-container">
-      <Table columns={columns} data={slotOneItems} />
-      <Table columns={columns} data={slotTwoItems} />
-      <Table columns={columns} data={slotThreeItems} />
-      <Table columns={columns} data={slotFourItems} />
-      <Table columns={columns} data={slotFiveItems} />
-      <Table columns={columns} data={slotSixItems} />
+      <ItemTable columns={itemColumns} data={slotOneItems} />
+      <ItemTable columns={itemColumns} data={slotTwoItems} />
+      <ItemTable columns={itemColumns} data={slotThreeItems} />
+      <ItemTable columns={itemColumns} data={slotFourItems} />
+      <ItemTable columns={itemColumns} data={slotFiveItems} />
+      <ItemTable columns={itemColumns} data={slotSixItems} />
     </div>
     </>
   );

@@ -332,7 +332,6 @@ function Godpage(props) {
   useEffect(() => {
     fetch("/api/main/".concat(pagegod, "/", dispRole, "/", dispRank, "/", patch, "/", mode)).then((res) =>
       res.json().then((data) => {
-        console.log(data)
         setgod(pagegod);
         seturl(data.url);
         setbanrate(((data.godBans / data.totalMatches) * 100).toFixed(2));
@@ -359,7 +358,6 @@ function Godpage(props) {
       })
     );
   }, []);
-  console.log(winrate, pickrate, banrate)
   return (
     <>
     <Helmet>

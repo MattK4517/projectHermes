@@ -438,7 +438,6 @@ def threaded_pull(patch, all_sets):
     for sets in all_sets:
         set_data = []
         match_details = smite_api.getMatch(sets)
-        print(match_details)
         for i in range(len(match_details) // 10):
             match_dict = create_match_dict(match_details[i*set_length], patch)
             for k in range(10):

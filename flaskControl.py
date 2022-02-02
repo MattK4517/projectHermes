@@ -162,69 +162,7 @@ def get_all_items(god, role, rank, patch, mode):
 
 @app.route('/api/<god>/m/<role>/<rank>/<patch>/<mode>')
 def get_all_matchups(god, role, rank, patch, mode):
-    mydb = client["single_match_stats"]
-    mycol = mydb[god]
-    matchupsdb = client["single_matchups"]
-    matchupscol = matchupsdb[god]
-    if "All" in rank:
-        myquery = {"role": role, "patch": patch, "mode": f"{mode}Conq"}
-    else:
-        myquery = {"role": role, "patch": patch,
-                   "rank": rank, "mode": f"{mode}Conq"}
-
-    avg_dmg_dict = {}
-    total_games = mycol.count_documents(myquery)
-    for x in mycol.aggregate([
-        {
-            "$match": myquery
-        },
-        {
-            "$group": {
-                "_id": "$enemy",
-                "avg_dmg_diff": {"$avg": "$damage_player"},
-                "avg_kill_diff": {"$avg": "$kills"},
-                "avg_gold_diff": {"$avg": "$gold"},
-                "timesPlayed": {"$sum": 1},
-            }
-        }
-    ]):
-        # wins = matchupscol.count_documents({**myquery, **{"enemy": x["_id"], "win_status": "Winner"}})
-        if "All" in rank:
-            wins = matchupscol.count_documents(
-                {"enemy": x["_id"], f"{god}": "Winner", "patch": patch, "role_played": role})
-        else:
-            wins = matchupscol.count_documents(
-                {"enemy": x["_id"], f"{god}": "Winner", "patch": patch, "rank": rank, "role_played": role})
-        if x["timesPlayed"] >= .01 * total_games:
-            avg_dmg_dict[x["_id"]] = {
-                "dmg": x["avg_dmg_diff"],
-                "kills": x["avg_kill_diff"],
-                "gold": x["avg_gold_diff"],
-                "wr": round(wins/x["timesPlayed"]*100, 2),
-                "games": x["timesPlayed"],
-            }
-
-    myquery = {**myquery, **{"enemy": god}}
-    for god in avg_dmg_dict:
-        mycol = mydb[god]
-        for x in mycol.aggregate([
-            {
-                "$match": myquery
-            },
-            {
-                "$group": {
-                    "_id": "$enemy",
-                    "avg_dmg_diff": {"$avg": "$damage_player"},
-                    "avg_kill_diff": {"$avg": "$kills"},
-                    "avg_gold_diff": {"$avg": "$gold"},
-                }
-            },
-        ]):
-            avg_dmg_dict[god]["god"] = god
-            avg_dmg_dict[god]["dmg"] -= x["avg_dmg_diff"]
-            avg_dmg_dict[god]["kills"] -= x["avg_kill_diff"]
-            avg_dmg_dict[god]["gold"] -= x["avg_gold_diff"]
-
+    avg_dmg_dict = anlz.get_matchups_stats(client, god, role, patch, mode, rank)
     return avg_dmg_dict
 
 
@@ -268,65 +206,7 @@ def get_match(matchID):
 
 @app.route('/api/<god>/buildpath/<role>/<rank>/<patch>/<mode>')
 def get_build_path(god, role, rank, patch, mode):
-    mydb = client["single_match_stats"]
-    mycol = mydb[god]
-    index = 0
-    games = 0
-    builds = {}
-    if "All" not in rank:
-        myquery = {"role": role, "patch": patch,
-                   "rank": rank, "mode": f"{mode}Conq"}
-    else:
-        myquery = {"role": role, "patch": patch, "mode": f"{mode}Conq"}
-
-    for x in mycol.aggregate(
-        [
-            {
-                "$match": myquery,
-            },
-            {
-                "$group": {
-                    "_id": {
-                        "slot1": f"${god}.slot1",
-                        "slot2": f"${god}.slot2",
-                        "slot3": f"${god}.slot3",
-                        "win_status": "$win_status",
-                    },
-                    "count": {"$sum": 1},
-                }
-            },
-            {"$sort": {"count": 1}},
-        ]
-    ):
-        games += x["count"]
-        if "{},{},{}".format(x["_id"]["slot1"], x["_id"]["slot2"], x["_id"]["slot3"]) not in builds.keys():
-            builds["{},{},{}".format(x["_id"]["slot1"], x["_id"]["slot2"], x["_id"]["slot3"])] = {
-                "slot1": x["_id"]["slot1"],
-                "slot2": x["_id"]["slot2"],
-                "slot3": x["_id"]["slot3"],
-                "wins": 0,
-                "losses": 0,
-            }
-        if x["_id"]["win_status"] == "Winner":
-            builds["{},{},{}".format(
-                x["_id"]["slot1"], x["_id"]["slot2"], x["_id"]["slot3"])]["wins"] += x["count"]
-        elif x["_id"]["win_status"] == "Loser":
-            builds["{},{},{}".format(
-                x["_id"]["slot1"], x["_id"]["slot2"], x["_id"]["slot3"])]["losses"] += x["count"]
-        index += 1
-    top_five = {}
-    for x in list(builds)[-10:]:
-        for key in builds[x].keys():
-            if "slot" in key:
-                builds[x][key] = anlz.get_item_data(client, builds[x][key])
-        top_five[x] = builds[x]
-
-    test_sort = OrderedDict(sorted(top_five.items(),
-                                   key=lambda x: getitem(x[1], "wins")))
-
-    builds = dict(test_sort)
-
-    print(builds)
+    builds = anlz.get_build_path(client, god, role, patch, mode, rank)
     return builds
 
 
