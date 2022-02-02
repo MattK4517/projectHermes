@@ -162,7 +162,9 @@ Tier_Three_items = [
     "Hide of the Nemean Lion", "Toxic Blade", "Void Stone", "Devourer\'s Gauntlet", "Midgardian Mail", "Soul Gem", "Jotunn\'s Wrath", "Stone of Fal",
     "Pridwen", "Hide of the Urchin", "Caduceus Shield", "Rangda\'s Mask", "Asi", "Arondight", "Ring of Hecate", "Tyrannical Plate Helm", "Soul Reaver",
     "Qin\'s Sais", "Staff of Myrddin", "Mantle of Discord", "Evolved Gauntlet of Thebes", "Evolved Transcendence", "Evolved Devourer\'s Gauntlet",
-    "Evolved Book of Thoth", "Evolved Charon\'s Coin", "Evolved Hide of the Urchin", "Evolved Rage", "Evolved Soul Eater", "Evolved Warlock\'s Staff"
+    "Evolved Book of Thoth", "Evolved Charon\'s Coin", "Evolved Hide of the Urchin", "Evolved Rage", "Evolved Soul Eater", "Evolved Warlock\'s Staff",
+    "Amulet of Silence", "Amulet of the Stronghold", "Jotunn's Ferocity", "Jotunn's Vigor", "Breastplate of Determination", "Breastplate of Vigilance",
+    "Envenomed Deathbringer", "Malicious Deathbringer", "Calamitous Rod of Tahuti", "Nimble Rod of Tahuti"
 ]
 
 Starter_items = [
