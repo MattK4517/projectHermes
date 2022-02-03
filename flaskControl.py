@@ -183,7 +183,7 @@ def get_match(matchID):
     #         }
     #     }
     # }
-
+    print(mycol.count_documents({"MatchId": matchID}))
     # for x in mycol.aggregate([myquery]):
     for x in mycol.find({"MatchId": matchID}, {"_id": 0}):
         match = x

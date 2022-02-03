@@ -254,12 +254,12 @@ def normalize_tier(tier):
 def verify_player(act_name, playername, act_god, god):
     if act_god.lower() == god.lower():
         name = playername
-        # print(name)
-        if len(playername.split("]")) > 1:
-            print("getting hee")
-            name = playername.split("]")[1]
-        if act_name.lower() == name.lower():
-            print("here")
+        if len(act_name.split("]")) > 1:
+
+            name = act_name.split("]")[1]
+        if playername.lower() == name.lower():
+            # print("also here")
+            # print(act_name.lower(), name.lower(), act_name.lower() == name.lower())
             return True
     return False    
     
@@ -342,12 +342,18 @@ def get_player_god_stats(client, playername, god, role, mode):
   }
     for x in mycol.aggregate([myquery]):
         temp_data = anlz.get_carry_score(x)
+        flag = False
         try:
             for key in x:
                 if "player" in key:
                     if verify_player(playername, x[key]["Player_Name"], god, x[key]["godName"]):
-                        match_role = x[key]["Role"]
-                        if match_role == role:
+                        if "All" in role:
+                            flag = True
+                        else:
+                            match_role = x[key]["Role"]
+                            if match_role == role:
+                                flag = True
+                        if flag:
                             match_data = grab_stats(x[key])
                             updatedict["kills"] += match_data["Kills"]
                             updatedict["deaths"] += match_data["Deaths"]
@@ -373,13 +379,13 @@ def get_player_god_stats(client, playername, god, role, mode):
                             updatedict[role]["avgWards"] += match_data["Wards_Placed"]
                             updatedict[role]["avgGold"] += match_data["Gold"]
 
-                            updatedict["avgGoldShare"] += temp_data["goldScore"][x[key]["Win_Status"]][role]["goldShare"]
-                            updatedict["avgDamageShare"] += temp_data["damageScore"][x[key]["Win_Status"]][role]["damageShare"]
-                            updatedict["avgKillShare"] += temp_data["killPart"][x[key]["Win_Status"]][role]["killShare"]
+                            # updatedict["avgGoldShare"] += temp_data["goldScore"][x[key]["Win_Status"]][role]["goldShare"]
+                            # updatedict["avgDamageShare"] += temp_data["damageScore"][x[key]["Win_Status"]][role]["damageShare"]
+                            # updatedict["avgKillShare"] += temp_data["killPart"][x[key]["Win_Status"]][role]["killShare"]
 
-                            updatedict[role]["avgGoldShare"] += temp_data["goldScore"][x[key]["Win_Status"]][role]["goldShare"]
-                            updatedict[role]["avgDamageShare"] += temp_data["damageScore"][x[key]["Win_Status"]][role]["damageShare"]
-                            updatedict[role]["avgKillShare"] += temp_data["killPart"][x[key]["Win_Status"]][role]["killShare"]
+                            # updatedict[role]["avgGoldShare"] += temp_data["goldScore"][x[key]["Win_Status"]][role]["goldShare"]
+                            # updatedict[role]["avgDamageShare"] += temp_data["damageScore"][x[key]["Win_Status"]][role]["damageShare"]
+                            # updatedict[role]["avgKillShare"] += temp_data["killPart"][x[key]["Win_Status"]][role]["killShare"]
                             
                             if match_data["Kills"] > updatedict["maxKills"]:
                                 updatedict["maxKills"] = match_data["Kills"]
@@ -391,6 +397,7 @@ def get_player_god_stats(client, playername, god, role, mode):
                             if match_data["Deaths"] > updatedict[role]["maxDeaths"]:
                                 updatedict[role]["maxDeaths"] = match_data["Deaths"]
                             
+                            # print("getting here")
                             updatedict[role]["games"] += 1
                             updatedict["games"] += 1
                             if x[key]["Win_Status"] == "Winner":
@@ -423,6 +430,7 @@ def get_player_god_stats(client, playername, god, role, mode):
         updatedict["avgWards"] = round(updatedict["avgWards"] / updatedict["games"], 2)
         updatedict["KDA"] = round((updatedict["kills"] + (.5 * updatedict["assists"])) / updatedict["deaths"], 2)
     
+    print(updatedict)
     return updatedict
     # updatecol.insert_one(updatedict)
 
@@ -443,10 +451,23 @@ def grab_stats(player_data):
     return ret_data
 
 if __name__ == "__main__":
-    find_match_history(client, "Incon", "Casual")
+    find_match_history(client, "AleksEnglish", "Ranked")
     starttime = datetime.now()
 
     # print(verify_player("GreekGodKillaaa", "[60g]GreekGodKillaaa", "0", "0"))
-    # print(get_player_god_stats(client, "azekill", "Atlas", "Support", "Casual"))
+    print(get_player_god_stats(client, "aleksenglish", "Bellona", "All Roles", "Casual"))
     # print(find_match_history(client, "nika", "Ranked"))
     print(datetime.now() - starttime)
+
+
+
+# 1219837308 Solo
+# 1219830508 Carry
+# 1219834310 Solo
+# 1220587598 Support
+# 1219817784 Carry
+# 1219826580 Solo
+# 1219840403 Carry
+# 1220919898 Carry
+# 1220115726 Solo
+# 1219820426 Solo

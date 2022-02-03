@@ -490,11 +490,6 @@ function GodStatsDisplay() {
                   setFilter={setMode}
                 />
                 {/* </div> */}
-                {/* <DropDownFilter
-                  changePatch={setPatch}
-                  patch={patch}
-                  style={{ color: "white" }}
-                /> */}
               </div>
             </div>
           </div>

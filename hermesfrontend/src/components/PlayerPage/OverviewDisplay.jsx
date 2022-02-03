@@ -7,29 +7,38 @@ import PlayerHeader from "./PlayerHeader";
 import PlayerGodSection from "./PlayerGodSection";
 
 export const FormatGod = (god) => {
-  let firstLetter = god.charAt(0).toUpperCase()
-  let firstSection = ""
-  let secondCaps = ""
-  let secondSection = ""
+  let firstLetter = god.charAt(0).toUpperCase();
+  let firstSection = "";
+  let secondCaps = "";
+  let secondSection = "";
   if (god.indexOf("-") !== -1) {
-    secondCaps = god.charAt(god.indexOf("-")+1).toUpperCase()
-    firstSection = god.slice(1, god.indexOf("-"))
-    secondSection = god.slice(god.indexOf("-")+2)
+    secondCaps = god.charAt(god.indexOf("-") + 1).toUpperCase();
+    firstSection = god.slice(1, god.indexOf("-"));
+    secondSection = god.slice(god.indexOf("-") + 2);
   } else {
-    firstSection = god.slice(1)
+    firstSection = god.slice(1);
   }
-  return firstLetter+firstSection+" "+secondCaps+secondSection
-}
+  return firstLetter + firstSection + " " + secondCaps + secondSection;
+};
 
 export default function OverviewDisplay() {
-  const [god, setGod, player, setPlayer, mode, setMode, role, setRole, topLink, setTopLink] =
-    useContext(PlayerContext);
+  const [
+    god,
+    setGod,
+    player,
+    setPlayer,
+    mode,
+    setMode,
+    role,
+    setRole,
+    topLink,
+    setTopLink,
+  ] = useContext(PlayerContext);
 
-
-  // console.log(window.location.href.split("/")[6]) 
+  // console.log(window.location.href.split("/")[6])
   // console.log(window.location.href.split("/")[7].charAt(0).toUpperCase() + window.location.href.split("/")[7].slice(1))
-  let fgod = window.location.href.split("/")[7]
-  setGod(FormatGod(fgod).trim())
+  let fgod = window.location.href.split("/")[7];
+  setGod(FormatGod(fgod).trim());
   const [goldShare, setGoldShare] = useState("");
   const [goldShareBest, setGoldShareBest] = useState("0");
   const [damageShare, setDamageShare] = useState("");
@@ -39,7 +48,7 @@ export default function OverviewDisplay() {
   const [KDA, setKDA] = useState(0);
   const [kills, setKills] = useState(0);
   const [deaths, setDeaths] = useState(0);
-  const [assists, setAssists] = useState(0); 
+  const [assists, setAssists] = useState(0);
   const [games, setGames] = useState(0);
   const [winRate, setWinRate] = useState(0);
   const [wins, setWins] = useState(0);
@@ -48,27 +57,35 @@ export default function OverviewDisplay() {
   const [triples, setTriples] = useState(0);
   const [quadras, setQuadras] = useState(0);
   const [pentas, setPentas] = useState(0);
-  const [maxKills, setMaxKills] = useState(0);    
-  const [maxDeaths, setMaxDeaths] = useState(0);  
-  const [avgDamage, setAvgDamage] = useState(0);  
-  const [avgGold, setAvgGold] = useState(0);  
+  const [maxKills, setMaxKills] = useState(0);
+  const [maxDeaths, setMaxDeaths] = useState(0);
+  const [avgDamage, setAvgDamage] = useState(0);
+  const [avgGold, setAvgGold] = useState(0);
   const [avgWards, setAvgWards] = useState(0);
-  
+
   useEffect(() => {
     fetch(
-      "/api/getplayerspecificgod/".concat(player, "/", god, "/", role, "/", mode)
+      "/api/getplayerspecificgod/".concat(
+        player,
+        "/",
+        god,
+        "/",
+        role,
+        "/",
+        mode
+      )
     ).then((res) =>
       res.json().then((data) => {
-        console.log("getplayerspecificgod", data)
-        setKills(data.kills)  
-        setDeaths(data.deaths)  
-        setAssists(data.assists)
-        setGames(data.games)  
-        setKDA(data.KDA)
+        console.log("getplayerspecificgod", data);
+        setKills(data.kills);
+        setDeaths(data.deaths);
+        setAssists(data.assists);
+        setGames(data.games);
+        setKDA(data.KDA);
         setGoldShare(data.avgGoldShare);
         setDamageShare(data.avgDamageShare);
         setkillShare(data.avgKillShare);
-        setWinRate((data.wins/data.games*100).toFixed(0));
+        setWinRate(((data.wins / data.games) * 100).toFixed(0));
         setWins(data.wins);
         setLosses(data.losses);
         setDoubles(data.killsDouble);
@@ -79,10 +96,10 @@ export default function OverviewDisplay() {
         setMaxDeaths(data.maxDeaths);
         setAvgDamage(data.avgDamage);
         setAvgGold(data.avgGold);
-        setAvgWards(data.avgWards)
-        })
+        setAvgWards(data.avgWards);
+      })
     );
-  }, [player, role]);
+  }, [player, role, mode]);
 
   const [roles, setroles] = useState([
     "Solo",
@@ -90,6 +107,7 @@ export default function OverviewDisplay() {
     "Mid",
     "Support",
     "Carry",
+    "All Roles"
   ]);
   return (
     <div className="player-profile-page">
@@ -98,12 +116,9 @@ export default function OverviewDisplay() {
         style={{ marginLeft: "auto", marginRight: "auto" }}
       >
         <div className="content-side-padding background-image-container">
-          <div style={{position: "relative", width: "100%", height: "100%"}}>
+          <div style={{ position: "relative", width: "100%", height: "100%" }}>
             <div class="bg-container">
-              <img
-                class="background-image"
-                src={topLink}
-              />
+              <img class="background-image" src={topLink} />
             </div>
             <div class="gradient-container">
               <div class="gradient"></div>
@@ -114,28 +129,34 @@ export default function OverviewDisplay() {
         <div className={player ?? "undefined"}>
           <PlayerHeader />
           <div className="filter-manager">
-                <div className="filter-width-wrapper">
-                  <div className="filter-manager_container">
-                    <div className="filter-manager_label">
-                      <span style={{ color: "white" }}>Filters</span>
-                    </div>
-                    {/* <div className="role-filter-container"> */}
-                    <FilterForm
-                      filter={role}
-                      god={god}
-                      filters={roles}
-                      setFilter={setRole}
-                    />
-                    {/* </div> */}
-                    {/* <DropDownFilter changePatch={setPatch} patch={patch} style={{color: "white"}}/> */}
-                  </div>
+            <div className="filter-width-wrapper">
+              <div className="filter-manager_container">
+                <div className="filter-manager_label">
+                  <span style={{ color: "white" }}>Filters</span>
                 </div>
+                {/* <div className="role-filter-container"> */}
+                <FilterForm
+                  filter={role}
+                  god={god}
+                  filters={roles}
+                  setFilter={setRole}
+                />
+                <FilterForm
+                  filter={mode}
+                  god={mode}
+                  filters={["Ranked", "Casual"]}
+                  setFilter={setMode}
+                />
+                {/* </div> */}
+                {/* <DropDownFilter changePatch={setPatch} patch={patch} style={{color: "white"}}/> */}
               </div>
+            </div>
+          </div>
         </div>
         <div className="player-content-container">
           <div className="player-content-main">
             <div className="player-side">
-              <PlayerGodSection 
+              <PlayerGodSection
                 KDA={KDA}
                 games={games}
                 kills={kills}
