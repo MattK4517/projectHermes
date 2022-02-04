@@ -393,6 +393,7 @@ export default function Matchups(props) {
         ],
         []
       );
+    if (Object.keys(totalData).length > 0) {
     return(
       <div id="content">
         <div class="stats-tables-page">
@@ -404,7 +405,14 @@ export default function Matchups(props) {
           </div>
         </div>
       </div>
-    )
+    ) } else {
+      return (
+        <div className="content-section">
+          <div className="content-section_header">Matchups</div>
+          <div className="empty-set">NO DATA TO DISPLAY</div>
+        </div>
+      )
+    } 
 
 }
 

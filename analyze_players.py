@@ -120,6 +120,7 @@ def create_player_return_dict(player):
 #     for god in player:
 
 def get_player_basic(player):
+    print(player)
     return {
         "Avatar_URL": player["Avatar_URL"],
         "Created_Datetime": player["Created_Datetime"],
@@ -379,13 +380,12 @@ def get_player_god_stats(client, playername, god, role, mode):
                             updatedict[role]["avgWards"] += match_data["Wards_Placed"]
                             updatedict[role]["avgGold"] += match_data["Gold"]
 
-                            # updatedict["avgGoldShare"] += temp_data["goldScore"][x[key]["Win_Status"]][role]["goldShare"]
-                            # updatedict["avgDamageShare"] += temp_data["damageScore"][x[key]["Win_Status"]][role]["damageShare"]
-                            # updatedict["avgKillShare"] += temp_data["killPart"][x[key]["Win_Status"]][role]["killShare"]
-
-                            # updatedict[role]["avgGoldShare"] += temp_data["goldScore"][x[key]["Win_Status"]][role]["goldShare"]
-                            # updatedict[role]["avgDamageShare"] += temp_data["damageScore"][x[key]["Win_Status"]][role]["damageShare"]
-                            # updatedict[role]["avgKillShare"] += temp_data["killPart"][x[key]["Win_Status"]][role]["killShare"]
+                            updatedict["avgGoldShare"] += temp_data["goldScore"][x[key]["Win_Status"]][x[key]["Role"]]["goldShare"]
+                            updatedict["avgDamageShare"] += temp_data["damageScore"][x[key]["Win_Status"]][x[key]["Role"]]["damageShare"]
+                            updatedict["avgKillShare"] += temp_data["killPart"][x[key]["Win_Status"]][x[key]["Role"]]["killShare"]
+                            updatedict[role]["avgGoldShare"] += temp_data["goldScore"][x[key]["Win_Status"]][x[key]["Role"]]["goldShare"]
+                            updatedict[role]["avgDamageShare"] += temp_data["damageScore"][x[key]["Win_Status"]][x[key]["Role"]]["damageShare"]
+                            updatedict[role]["avgKillShare"] += temp_data["killPart"][x[key]["Win_Status"]][x[key]["Role"]]["killShare"]
                             
                             if match_data["Kills"] > updatedict["maxKills"]:
                                 updatedict["maxKills"] = match_data["Kills"]

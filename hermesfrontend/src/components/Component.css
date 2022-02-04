@@ -12,12 +12,14 @@ body {
   display: flex;
   grid-template-columns: repeat(10, 1fr);
   grid-gap: 12px;
-  justify-content: center;
+  /* justify-content: center; */
 }
 
 .empty-set{
   margin: 0 auto;
   display: flex;
+  color: rgb(187, 190, 219);
+  justify-content: center;
 }
 
 /* .god-name, .win .times-played {
@@ -215,6 +217,7 @@ color: #cddcfe;
   padding: 24px;
   border-radius: 6px;
   background-color: #191937;
+  box-shadow: 0 0 7px purple;
 }
 
 .content-section .content-section_header {
@@ -1350,15 +1353,46 @@ figure.snip0015:hover figcaption::before {
   color: white;
 }
 
-.header-items{
-  padding-right: 10px;
+.drop-down_hover{
+  background-color: #191937 !important;
+  text-align: center;
+}
+.drop-down_hover:hover {
+  background-color: #070720  !important;
+}
+
+.drop-down_icon {
+  display: flex;
+  /* flex-direction: column; */
+  overflow: hidden;
+  text-align: center;
+  width: 100%;
+}
+
+.drop-down_icon > strong {
+  padding-top: .35rem;
+}
+/* .build-path_header {
+  padding: 0 1.5rem;
+  position: relative;
+} */
+
+.build-path_border{
+  border-radius: 6px;
+  box-shadow: 0 0 3px #3273fa;
+  overflow: visible;
+}
+
+.header-islot1{
+  margin-left: 3rem;
 }
 
 .header-games{
-  padding-right: 10px;
+  left: 1.5rem;
 }
 
 .header-winrate{
+  left: .35rem;
   padding-right: 10px;
 }
 
@@ -2641,6 +2675,10 @@ figure.snip0015:hover figcaption::before {
     display: none !important;
     /* margin-left: 0 !important; */
   }
+  .hide {
+    display: none !important;
+    /* margin-left: 0 !important; */
+  }
 }
 
 .buff-checkbox {
@@ -2762,4 +2800,18 @@ figure.snip0015:hover figcaption::before {
 .grid-block > thead {
   display: flex;
   justify-content: center;
+}
+
+.player-tab-header {
+  padding-top: 35px;
+  z-index: 90;
+}
+
+.search-bar_god-page {
+  display: flex ;
+  flex-direction: row;
+}
+
+.adornment {
+  margin-left: 2.5rem;
 }

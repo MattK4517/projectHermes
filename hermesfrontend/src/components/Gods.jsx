@@ -9,7 +9,6 @@ class GodsDisplay extends React.Component {
             <>
             <div className="gods-container">
             {this.props.gods.map((god, index) => {
-                console.log(god)
                 return (
                     <Link key = {index}
                     to={"/".concat((god.name).replaceAll(" ","_"))} 

@@ -195,4 +195,8 @@ def merge_total_stats(client, patch, date):
         updatecol.insert_many(data)            
 
 if __name__ == "__main__":
-    merge_total_stats(client, "9.1", "1/31/2022")
+    # merge_total_stats(client, "9.1", "1/31/2022")
+    mydb = client["Matches"]
+    mycol = mydb["9.1 Matches"]
+    print(mycol.count_documents({"Entry_Datetime": "2/2/2022"}))
+    # mycol.delete_many({"Entry_Datetime": "2/2/2022"})

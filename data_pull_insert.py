@@ -13,7 +13,6 @@ from main import client
 # from data_pull_formatting_rewrite import format_no_query
 
 
-
 def normalize_godId(id):
     godName = ""
     godsDict = {
@@ -214,6 +213,7 @@ def create_player_dict(player):
     # playerDict["godBuild"] = anlz.get_build_stats(client, build)
     return playerDict
 
+
 def create_match_dict(match, patch):
     match_dict = {}
     match_dict["Patch"] = patch
@@ -230,7 +230,7 @@ def create_match_dict(match, patch):
     match_dict["Ban6"] = match["Ban7"]
     match_dict["Ban7"] = match["Ban8"]
     match_dict["Ban8"] = match["Ban9"]
-    match_dict["Ban9"]  = match["Ban10"]
+    match_dict["Ban9"] = match["Ban10"]
     match_dict["First_Ban_Side"] = match["First_Ban_Side"]
     return match_dict
 
@@ -239,19 +239,20 @@ def create_sets(data):
     mydb = client["CasualMatches"]
     mycol = mydb["9.1 Matches"]
     existing = []
-    for x in mycol.find({"Entry_Datetime": "1/26/2022"}, {"MatchId": 1, "_id":0}):
+    for x in mycol.find({"Entry_Datetime": "1/26/2022"}, {"MatchId": 1, "_id": 0}):
         existing.append(x["MatchId"])
     sets = []
     set = []
     for matchId in data:
         if matchId not in existing:
             set.append(matchId.matchId)
-            if len(set) == 9:
+            if len(set) == 10:
                 sets.append(set)
                 set = []
     if len(set) != 0:
         sets.append(set)
     return sets
+
 
 def get_new_id(client, smite_api):
     mydb = client["God_Data"]
@@ -327,9 +328,11 @@ def create_god_data_dict(data):
     ret_data["ret_msg"] = data["ret_msg"]
     return ret_data
 
+
 def get_date():
     time = datetime.now()
     return f"{time.year}{time.month}{time.day}"
+
 
 def get_player_basic(player):
     print(player)
@@ -375,55 +378,16 @@ def get_player_basic(player):
         "Wins": player["Wins"],
     }
 
-#my player id 704292327
-def run_pull(patch, date=get_date()):
-    starttime = datetime.now()
-
-    with open("cred.txt", "r") as f:
-        data = f.readlines()
-        smite_api = SmiteAPI(devId=data[0].strip(), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
-
-    mydb = client["test"]
-    mycol = mydb[f"{patch} Matches"]
-    # date = date
-    match_ids = smite_api.getMatchIds(466, date="20220123", hour=-1)
-    match_ids_len = len(match_ids)
-    print(match_ids_len)
-    set_ids = []
-    all_ids = []
-    set_matches = {}
-    set_length = 10
-    inserted_count = 0
-
-    # all_sets = create_sets(match_ids)
-    # total = 0
-    # for set in all_sets:
-    #     match_details = smite_api.getMatch(set)
-    #     print(match_details)
-    #     for i in range(len(match_details) // 10):
-    #         match_dict = create_match_dict(match_details[i*set_length], patch)
-    #         for k in range(10):
-    #             player = create_player_dict(match_details[(i*10) + k])
-    #             match_dict["player"+str(k)] = player
-    #         carry_score = anlz.get_carry_score(match_dict)
-    #         match_dict["carryScore"] = carry_score["goldScore"]
-    #         match_dict["damageScore"] = carry_score["damageScore"]
-    #         match_dict["levelDiff"] = carry_score["levelDiff"]
-    #         match_dict["killPart"] = carry_score["killPart"]
-    #         match_dict["efficiency"] = anlz.get_gold_eff(match_dict["killPart"], match_dict["carryScore"])
-    #         # print(match_dict)
-    #         mycol.insert_one(match_dict)
-    #         format_no_query(match_dict)
-    #         inserted_count += 1
+# my player id 704292327
 
 
-    # print(f"{date} Pull Completed in " + str(datetime.now() - starttime))
 
 def threaded_pull(patch, all_sets):
     starttime = datetime.now()
     with open("cred.txt", "r") as f:
         data = f.readlines()
-        smite_api = SmiteAPI(devId=data[0].strip(), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
+        smite_api = SmiteAPI(devId=data[0].strip(
+        ), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
 
     mydb = client["CasualMatches"]
     mycol = mydb[f"{patch} Matches"]
@@ -453,12 +417,11 @@ def threaded_pull(patch, all_sets):
             # format_no_query(match_dict)
         if set_data != []:
             mycol.insert_many(set_data)
-        else: 
+        else:
             print(sets)
         inserted_count += 1
         if inserted_count == round(len(all_sets)/2):
             print("halfway")
-
 
     print(f"Pull Completed in " + str(datetime.now() - starttime))
 
@@ -466,25 +429,18 @@ def threaded_pull(patch, all_sets):
 # print(inserted_count)
 # print("error %" + str(round(100 - inserted_count/match_ids_len * 100, 2)))
 
-    # with open("cred.txt", "r") as f:
-    #     data = f.readlines()
-    #     smite_api = SmiteAPI(devId=data[0].strip(), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
-    #     print(smite_api.getPlayer("AutoSpeed"))
-    #     # print(smite_api.getGodRanks(704292327))
 
 def get_item_abs_price(name, family, tier, tree):
     price = 0
-    index = 1    
+    index = 1
     for element in tree[family]:
         if tree[family][element]["Name"] == name:
             price += tree[family][element]["Price"]
-        
+
         if tree[family][element]["Tier"] < tier:
             price += tree[family][element]["Price"]
-    
-    return price
-    
 
+    return price
 
 
 def create_item_dict(item, item_prices):
@@ -494,10 +450,12 @@ def create_item_dict(item, item_prices):
     ret_data["ItemDescription"] = item["ItemDescription"]
     ret_data["ItemTier"] = item["ItemTier"]
     ret_data["relativePrice"] = item["Price"]
-    ret_data["absolutePrice"] = get_item_abs_price(item["DeviceName"], item["RootItemId"], item["ItemTier"], item_prices)
+    ret_data["absolutePrice"] = get_item_abs_price(
+        item["DeviceName"], item["RootItemId"], item["ItemTier"], item_prices)
     ret_data["ShortDesc"] = item["ShortDesc"]
     ret_data["itemIcon_URL"] = item["itemIcon_URL"]
     return ret_data
+
 
 def get_new_items(client, smite_api):
     mydb = client["Item_Data"]
@@ -506,9 +464,11 @@ def get_new_items(client, smite_api):
     for item in range(len(items)):
         # print(items[item]["DeviceName"], items[item]["RootItemId"])
         if items[item]["RootItemId"] not in prices:
-            prices[items[item]["RootItemId"]] = {items[item]["DeviceName"]: {"Price": items[item]["Price"], "Tier": items[item]["ItemTier"], "Name": items[item]["DeviceName"]}}
+            prices[items[item]["RootItemId"]] = {items[item]["DeviceName"]: {
+                "Price": items[item]["Price"], "Tier": items[item]["ItemTier"], "Name": items[item]["DeviceName"]}}
         else:
-            prices[items[item]["RootItemId"]][items[item]["DeviceName"]] = {"Price": items[item]["Price"], "Tier": items[item]["ItemTier"], "Name": items[item]["DeviceName"]}
+            prices[items[item]["RootItemId"]][items[item]["DeviceName"]] = {
+                "Price": items[item]["Price"], "Tier": items[item]["ItemTier"], "Name": items[item]["DeviceName"]}
 
     for item in range(len(items)):
         mycol = mydb[items[item]["DeviceName"]]
@@ -520,10 +480,69 @@ def get_new_items(client, smite_api):
         #     data = create_god_data_dict(gods[god])
         #     # mycol.replace_one({}, data)
 
+def run_pull(patch, date=get_date()):
+    starttime = datetime.now()
+    with open("cred.txt", "r") as f:
+        data = f.readlines()
+        smite_api = SmiteAPI(devId=data[0].strip(
+        ), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
+
+    mydb = client["test"]
+    mycol = mydb[f"{patch} Matches"]
+    date = date
+    match_ids = smite_api.getMatchIds(451, date="20220202", hour=-1)
+    # set_ids = []
+    # all_ids = []
+    # set_matches = {}
+    set_length = 10
+    inserted_count = 0
+    match_ids_len = len(match_ids)
+    print(match_ids_len)
+    all_sets = create_sets(match_ids)
+    total = 0
+    for set in all_sets:
+        try:
+            data = []
+            match_details = smite_api.getMatch(set)
+            total += len(match_details)
+            # current_id = match_details[0]["Match"]
+            # match_dict = create_match_dict(match_details[0], patch)
+            # for i in range(len(match_details)):
+            #     player = create_player_dict(match_details[i])
+            #     data.append(player)
+                # if match_details[i]["Match"] == current_id:
+                #     player = create_player_dict(match_details[i])
+                #     # print(player["godName"])
+                #     match_dict[f"player{i % 10}"] = player
+                #     if "player9" in match_dict.keys():
+                #         data.append(match_dict)
+                # elif match_details[i]["Match"] != current_id:
+                #     match_dict = create_match_dict(match_details[i], patch)
+                #     player = create_player_dict(match_details[i])
+                #     match_dict[f"player{i % 10}"] = player
+                #     current_id = match_details[i]["Match"]
+            # print(len(data))
+            # mycol.insert_many(data)
+            # inserted_count += len(data)
+            #     # carry_score = anlz.get_carry_score(match_dict)
+            #     # match_dict["carryScore"] = carry_score["goldScore"]
+            #     # match_dict["damageScore"] = carry_score["damageScore"]
+            #     # match_dict["levelDiff"] = carry_score["levelDiff"]
+            #     # match_dict["killPart"] = carry_score["killPart"]
+            #     # match_dict["efficiency"] = anlz.get_gold_eff(match_dict["killPart"], match_dict["carryScore"])
+                # format_no_query(match_dict)
+        except IndexError:
+            print(set)
+
+    print(total)
+    print(f"{date} Pull Completed in {str(datetime.now() - starttime)} loss: {round(inserted_count/match_ids_len*100, 2)}")
+
 
 if __name__ == "__main__":
     with open("cred.txt", "r") as f:
         data = f.readlines()
-        smite_api = SmiteAPI(devId=data[0].strip(), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
-    print(smite_api.getDataUsed())
+        smite_api = SmiteAPI(devId=data[0].strip(
+        ), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
+
+    print(smite_api.getMotd())
     # get_new_items(client, smite_api)

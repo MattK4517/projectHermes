@@ -108,6 +108,8 @@ class PlayerBuildDisplay extends React.Component {
 }
 
 export default function MatchDisplay(props) {
+  console.log(props)
+  if (Object.keys(props.matchList).length > 0) {
   return (
     <div className="content-section content-section_no-padding match-block">
       <div className="content-section_header">
@@ -401,5 +403,14 @@ export default function MatchDisplay(props) {
         }
       })}
     </div>
-  );
+  )} else {
+    return(
+    <div className="content-section content-section_no-padding match-block">
+    <div className="content-section_header">
+      <span>Recent Matches</span>
+    </div>
+    <div className="empty-set">NO DATA TO DISPLAY</div>
+    </div>
+    )
+  }
 }

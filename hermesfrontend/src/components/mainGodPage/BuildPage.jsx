@@ -10,9 +10,10 @@ const HtmlTooltip = withStyles((theme) => ({
   tooltip: {
     backgroundColor: "#06061f",
     color: "rgba(0, 0, 0, 0.87)",
-    maxWidth: 220,
-    border: ".5px solid gray",
+    minWidth: "fit-content",
+    border: "1px solid #3273fa",
     opacity: 100,
+    minHeight: "fit-content"
   },
 }))(Tooltip);
 
@@ -432,7 +433,7 @@ export default function BuildPage(props) {
           if (item === "None") {
             return (
               <>
-                <div className="content-section_header">Build</div>
+                <div className="content-section_header">Relics</div>
                 <div className="empty-set">NO DATA TO DISPLAY</div>
               </>
             );

@@ -42,6 +42,14 @@ function a11yProps(index) {
 }
 
 export default function PlayerTabs(props) {
+    React.useEffect(() => {
+        console.log(window.location.href.split("/").length)
+        if (window.location.href.split("/").length === 7) {
+            setValue(1)
+        } else {
+            setValue(0)
+        }
+    })
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {

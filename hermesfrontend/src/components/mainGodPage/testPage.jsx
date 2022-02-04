@@ -565,8 +565,9 @@ export default function BuildPage(pagegod) {
 
   return (
     <div
+    className="container"
       style={{
-        display: "flex",
+        // display: "flex",
         flexDirection: "row",
         width: "100%",
       }}
@@ -576,7 +577,7 @@ export default function BuildPage(pagegod) {
         style={{
           display: "flex",
           // width: "100%",
-          margin: "auto",
+          // margin: "auto",
         }}
       >
         <div
@@ -647,7 +648,7 @@ export default function BuildPage(pagegod) {
               </span>
             </div>
             <div
-              className="matchups home-info"
+              className="matchups"
               style={{ display: "flex", flexDirection: "column" }}
             >
               <p>
@@ -712,20 +713,22 @@ export default function BuildPage(pagegod) {
                           filters={ranks}
                           setFilter={setRank}
                         />
+                        <div className="hide">
                         <DropDownFilter
                           changePatch={null}
                           patch={"9.1"}
                           style={{ color: "white" }}
                         />
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div className="content-section_header">
+                  {/* <div className="content-section_header">
                     Tables of Every Item Built on the God
                   </div>
                   <p>
                     <ItemTable data={slotOneItems} columns={itemColumns} />
-                  </p>
+                  </p> */}
                   <div className="content-section_header">
                     A Table First 3 Item Build Paths
                   </div>

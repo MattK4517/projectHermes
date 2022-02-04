@@ -63,9 +63,10 @@ const HtmlTooltip = withStyles((theme) => ({
   tooltip: {
     backgroundColor: "#06061f",
     color: "rgba(0, 0, 0, 0.87)",
-    maxWidth: 220,
-    border: ".5px solid gray",
+    minWidth: "fit-content",
+    border: "1px solid #3273fa",
     opacity: 100,
+    minHeight: "fit-content"
   },
 }))(Tooltip);
 
@@ -483,7 +484,6 @@ class CreateItemToolTip extends React.Component {
 
 
 export function PlayerBuildDisplay(props) {
-  console.log(props)
     return(
       <div className={`build-container ${props.buildType}`}>
         {props.build.map((slot, index) => {
@@ -695,7 +695,7 @@ function Match() {
                   selfHealing: data[key]["Healing_Player_Self"],
                   skin: data[key]["Skin"],
                   wardsPlaced: data[key]["Wards_Placed"],
-                  carryScore: data["carryScore"][data[key]["Win_Status"]][data[key]["Role"]]["goldShare"],
+                  // carryScore: data["carryScore"][data[key]["Win_Status"]][data[key]["Role"]]["goldShare"],
                   damageScore: data["damageScore"][data[key]["Win_Status"]][data[key]["Role"]]["damageShare"],
                   killPart: data["killPart"][data[key]["Win_Status"]][data[key]["Role"]]["killShare"],
                   levelDiff: data["levelDiff"][data[key]["Win_Status"]][data[key]["Role"]]["level_diff"],

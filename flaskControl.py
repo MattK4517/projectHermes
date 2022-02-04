@@ -199,9 +199,15 @@ def get_match(matchID):
                 match[key]["Item_Purch_6"],
             ]
 
-            match[key] = {**match[key], **
-                          {"godBuild": anlz.get_build_stats(client, build)}}
-    return match
+            match[key] = {**match[key], 
+                          **{"godBuild": anlz.get_build_stats(client, build)},
+                          **{"godStats": anlz.get_god_stats(client, match[key]["godName"], match[key]["Final_Match_Level"])},
+                          }
+
+    return {
+        **match, 
+        **anlz.get_carry_score(match)
+        }
 
 
 @app.route('/api/<god>/buildpath/<role>/<rank>/<patch>/<mode>')
