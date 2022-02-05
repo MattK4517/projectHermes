@@ -5,24 +5,13 @@ import { useTable, useSortBy, usePagination } from "react-table";
 import Tooltip from "@material-ui/core/Tooltip";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import winRateColor from '../mainGodPage/WinRateColor';
+import { HtmlTooltip } from "./GodPageHelpers";
 
-const HtmlTooltip = withStyles((theme) => ({
-  tooltip: {
-    backgroundColor: "#06061f",
-    color: "rgba(0, 0, 0, 0.87)",
-    minWidth: "fit-content",
-    border: "1px solid #3273fa",
-    opacity: 100,
-    minHeight: "fit-content"
-  },
-}))(Tooltip);
-
-class CreateItemToolTip extends React.Component {
-  render() {
-    if (this.props.index == 0) {
-      this.props.item = this.props.item.item;
-    } else if (this.props.index == 1) {
-      this.props.item = this.props.item.item2;
+function CreateItemToolTip(props) {
+    if (props.index == 0) {
+      props.item = props.item.item;
+    } else if (props.index == 1) {
+      props.item = props.item.item2;
     }
     return (
       <>
@@ -36,13 +25,13 @@ class CreateItemToolTip extends React.Component {
           }}
         >
           <h5 style={{ width: "100%", fontSize: "1rem", color: "#1E90FF" }}>
-            {this.props.item.DeviceName}
+            {props.item.DeviceName}
           </h5>
           <div>
-            <p>{this.props.item.itemShortDesc}</p>
+            <p>{props.item.itemShortDesc}</p>
           </div>
           <div className="item-stats">
-            {this.props.item.ItemDescription.Menuitems.map((stat) => {
+            {props.item.ItemDescription.Menuitems.map((stat) => {
               return (
                 <p style={{ left: "0" }}>
                   {stat.Description}: {stat.Value}
@@ -50,11 +39,11 @@ class CreateItemToolTip extends React.Component {
               );
             })}
             <div className="item-passive">
-              <p>{this.props.item.ItemDescription.SecondaryDescription}</p>
+              <p>{props.item.ItemDescription.SecondaryDescription}</p>
             </div>
           </div>
           <p style={{ color: "#D4AF37" }}>
-            <b>Price:</b> {this.props.item.absolutePrice}(
+            <b>Price:</b> {props.item.absolutePrice}(
             {this.props.item.relativePrice})
             <img
               style={{
@@ -69,7 +58,6 @@ class CreateItemToolTip extends React.Component {
         </div>
       </>
     );
-  }
 }
 
 function Table({ columns, data }) {
@@ -147,7 +135,6 @@ function Table({ columns, data }) {
                       // if (row.original.role != this.props.role && this.props.role != "All Roles"){
                       //   console.log(row.original.role, this.props.role)
                       //  }
-                      console.log(row.original)
                       if (
                         row.original.islot1.DeviceName && 
                         row.original.slot2.DeviceName && 

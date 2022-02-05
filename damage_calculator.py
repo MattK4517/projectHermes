@@ -521,6 +521,6 @@ if  __name__ == "__main__":
         # "Agni", [], 20, 20)
     # print(avg/10)
     # for guardian in Guardians:
-    calc_combo_damage_raw(client, "Ah Puch", levels, 0, 0)
+    calc_combo_damage_raw(client, "Ares", levels, 0, 0)
 
     # 470 + 83

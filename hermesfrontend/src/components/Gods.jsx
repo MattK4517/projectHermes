@@ -3,12 +3,11 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Component.css";
 
-class GodsDisplay extends React.Component {
-    render() {
+function GodsDisplay(props){
         return (
             <>
             <div className="gods-container">
-            {this.props.gods.map((god, index) => {
+            {props.gods.map((god, index) => {
                 return (
                     <Link key = {index}
                     to={"/".concat((god.name).replaceAll(" ","_"))} 
@@ -29,7 +28,6 @@ class GodsDisplay extends React.Component {
             </div>
             </>
         )
-    }
 }
 function Gods() {
     const [allgods, setallgods] = useState([]);

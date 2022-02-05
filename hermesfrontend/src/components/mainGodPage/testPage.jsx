@@ -565,7 +565,7 @@ export default function BuildPage(pagegod) {
 
   return (
     <div
-    className="container"
+    className="container home_page"
       style={{
         // display: "flex",
         flexDirection: "row",

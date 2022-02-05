@@ -330,7 +330,7 @@ function Godpage(props) {
   const modes = ["Casual", "Ranked"]
 
   useEffect(() => {
-    fetch("/api/main/".concat(pagegod, "/", dispRole, "/", dispRank, "/", patch, "/", mode)).then((res) =>
+    fetch("/api/main/".concat(pagegod, "/", dispRole, "/", dispRank, "/", patch, "/", mode, "/", matchup)).then((res) =>
       res.json().then((data) => {
         setgod(pagegod);
         seturl(data.url);
@@ -341,7 +341,7 @@ function Godpage(props) {
         // setTier(data.tier)
       })
     );
-  }, [dispRole, dispRank, patch, mode]);
+  }, [dispRole, dispRank, patch, mode, matchup]);
 
   useEffect(() => {
     fetch("/api/".concat(pagegod, "/abilities")).then((res) =>

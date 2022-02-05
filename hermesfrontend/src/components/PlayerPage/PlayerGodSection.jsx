@@ -9,9 +9,7 @@ export default function PlayerGodSection(props) {
     role, setRole, topLink, setTopLink, icon, setIcon,
     playerLevel, setPlayerLevel, tab, setTab,
   ] = useContext(PlayerContext);
-  console.log(god)
   setTopLink(setTopGod(god))
-  console.log(topLink)
   return (
     <div className="content-section content-section_no-padding player-specific-god">
       <div className="content-section_header played-gods_header">

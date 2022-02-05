@@ -31,11 +31,11 @@ def get_all_gods():
     gdDict = anlz.get_gods()
     return gdDict
 
-
+@app.route('/api/main/<god>/<role>/<rank>/<patch>/<mode>/<matchup>', methods=["GET", "POST"])
 @app.route('/api/main/<god>/<role>/<rank>/<patch>/<mode>', methods=["GET", "POST"])
-def get_god_data(god, role, rank, patch, mode):
+def get_god_data(god, role, rank, patch, mode, matchup="None"):
     newgod = god.replace("_", " ")
-    winrate = anlz.get_winrate(client, god, role, patch, mode, rank)
+    winrate = anlz.get_winrate(client, god, role, patch, mode, rank, matchup)
     pbrate = anlz.get_pb_rate(client, god, rank, role, patch, mode)
     # print(winrate, pbrate)
     return {
@@ -58,7 +58,7 @@ def get_god_matchups(god):
 def get_god_data_role(god, role, rank, patch, mode, matchup="None"):
     newgod = god.replace("_", " ")
     if matchup != "None":
-        return anlz.get_specific_build(client, god, role, patch, matchup, rank)
+        return anlz.get_specific_build(client, god, role, patch, matchup, rank, mode)
     elif "All" in rank and matchup == "None":
         build = anlz.get_top_builds(client, god, role, patch, mode)
     elif matchup == "None":

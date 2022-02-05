@@ -291,8 +291,12 @@ def get_player_god_stats(client, playername, god, role, mode):
         "avgGold": 0,
         "avgGoldShare": 0,
         "avgDamageShare": 0,
-        "avgWards": 0,
         "avgKillShare": 0,
+        "avgWards": 0,
+        "maxKillShare": 0,
+        "maxGoldShare": 0,
+        "maxDamageShare": 0,
+        "maxWards": 0,
         "killsDouble": 0,
         "killsTriple": 0,
         "killsQuadra": 0,
@@ -313,8 +317,12 @@ def get_player_god_stats(client, playername, god, role, mode):
         "avgGold": 0,
         "avgGoldShare": 0,
         "avgDamageShare": 0,
-        "avgWards": 0,
         "avgKillShare": 0,
+        "avgWards": 0,
+        "maxKillShare": 0,
+        "maxGoldShare": 0,
+        "maxDamageShare": 0,
+        "maxWards": 0,
         "killsDouble": 0,
         "killsTriple": 0,
         "killsQuadra": 0,
@@ -396,7 +404,21 @@ def get_player_god_stats(client, playername, god, role, mode):
                                 updatedict["maxDeaths"] = match_data["Deaths"]
                             if match_data["Deaths"] > updatedict[role]["maxDeaths"]:
                                 updatedict[role]["maxDeaths"] = match_data["Deaths"]
-                            
+                        
+                            if temp_data["goldScore"][x[key]["Win_Status"]][x[key]["Role"]]["goldShare"] > updatedict["maxGoldShare"]:
+                                updatedict["maxGoldShare"] = temp_data["goldScore"][x[key]["Win_Status"]][x[key]["Role"]]["goldShare"]
+                                
+                            if temp_data["damageScore"][x[key]["Win_Status"]][x[key]["Role"]]["damageShare"] > updatedict["maxDamageShare"]:
+                                updatedict["maxDamageShare"] = temp_data["damageScore"][x[key]["Win_Status"]][x[key]["Role"]]["damageShare"]
+                                
+                            if temp_data["killPart"][x[key]["Win_Status"]][x[key]["Role"]]["killShare"] > updatedict["maxKillShare"]:
+                                updatedict["maxKillShare"] = temp_data["killPart"][x[key]["Win_Status"]][x[key]["Role"]]["killShare"]
+                                
+                            if match_data["Wards_Placed"] > updatedict["maxWards"]:
+                                updatedict["maxWards"] = match_data["Wards_Placed"]
+                                
+
+
                             # print("getting here")
                             updatedict[role]["games"] += 1
                             updatedict["games"] += 1
@@ -451,11 +473,11 @@ def grab_stats(player_data):
     return ret_data
 
 if __name__ == "__main__":
-    find_match_history(client, "AleksEnglish", "Ranked")
+    # find_match_history(client, "AleksEnglish", "Ranked")
     starttime = datetime.now()
 
     # print(verify_player("GreekGodKillaaa", "[60g]GreekGodKillaaa", "0", "0"))
-    print(get_player_god_stats(client, "aleksenglish", "Bellona", "All Roles", "Casual"))
+    print(get_player_god_stats(client, "aleksenglish", "Bellona", "All Roles", "Ranked"))
     # print(find_match_history(client, "nika", "Ranked"))
     print(datetime.now() - starttime)
 

@@ -432,11 +432,10 @@ function TierList(tableType) {
   )
 }
 
-class CounterMatchupDisplay extends React.Component {
-  render () {
+function CounterMatchupDisplay(props) {
     return(
       <div className="against-container">
-        {this.props.matchups.map((matchup, index) => {
+        {props.matchups.map((matchup, index) => {
           // console.log(matchup);
           if (index < 9) {
             let routegod = matchup[1].replaceAll(" ", "_")
@@ -451,7 +450,7 @@ class CounterMatchupDisplay extends React.Component {
               title={
                 <React.Fragment>
                   <CreateMatchupToolTip
-                    god={this.props.god}
+                    god={props.god}
                     winrate={matchup[2]}
                     enemy={matchup[1]}
                     enemyURL={matchup[0]}
@@ -477,7 +476,6 @@ class CounterMatchupDisplay extends React.Component {
         })}
       </div>
     )
-  }
 }
 
 function compareNumericString(rowA, rowB, id, desc) {
@@ -495,29 +493,27 @@ function compareNumericString(rowA, rowB, id, desc) {
 }
 
 
-class CreateMatchupToolTip extends React.Component {
-  render() {
+function CreateMatchupToolTip(props) {
     return (
       <div className="matchup-tooltip-container">
         <div className="matchup-tooltip">
           <div className="god-icon">
             <div style={{height: "30px", width: "30px"}}>
-              <img src={`https://webcdn.hirezstudios.com/smite/god-icons/${this.props.god.replaceAll(" ", "-").replaceAll("'","").toLowerCase()}.jpg`} alt={this.props.god} 
+              <img src={`https://webcdn.hirezstudios.com/smite/god-icons/${props.god.replaceAll(" ", "-").replaceAll("'","").toLowerCase()}.jpg`} alt={props.god} 
                 style={{ height: "48px", width: "48px", transform: "scale(0.625)", transformOrigin: "0px 0px 0px" }}/>
             </div>
           </div>
-            <span style={{color: "white",  paddingTop: ".3rem"}}>wins&nbsp;<b style={{color: winRateColor(this.props.winrate)}}>{this.props.winrate}%</b>&nbsp;vs&nbsp;</span>
+            <span style={{color: "white",  paddingTop: ".3rem"}}>wins&nbsp;<b style={{color: winRateColor(props.winrate)}}>{props.winrate}%</b>&nbsp;vs&nbsp;</span>
           <div className="god-icon">
             <div style={{height: "30px", width: "30px"}}>
-              <img src={this.props.enemyURL} alt={this.props.enemy} 
+              <img src={props.enemyURL} alt={props.enemy} 
                 style={{ height: "48px", width: "48px", transform: "scale(0.625)", transformOrigin: "0px 0px 0px" }}/>
             </div>
           </div>
         </div>
-          <p>{this.props.games} games</p>
+          <p>{props.games} games</p>
         </div>
     );
-  }
 }
 
 export default TierList;

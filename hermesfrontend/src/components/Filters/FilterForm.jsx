@@ -43,7 +43,6 @@ import Select from "@mui/material/Select";
 import { InputAdornment } from "@mui/material";
 
 const getImageUrl = (rank) => {
-  console.log(rank);
   let url = "https://i.imgur.com/LVbUJes.png";
   if (rank == "Bronze") {
     url = "https://i.imgur.com/pNAGUeR.png";

@@ -2,75 +2,12 @@ import React, { useEffect, useState } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
 import { Link } from "react-router-dom";
+import { HtmlTooltip, CreateItemToolTip } from "../mainGodPage/GodPageHelpers";
 
-class CreateItemToolTip extends React.Component {
-  render() {
+function PlayerBuildDisplay(props) {
     return (
-      <>
-        <div
-          style={{
-            maxHeight: "350px",
-            maxWidth: "750px",
-            color: "#E6E6FA",
-            alignItems: "left",
-            fontSize: "14px",
-          }}
-        >
-          <h5 style={{ width: "100%", fontSize: "1rem", color: "#1E90FF" }}>
-            {this.props.item}
-          </h5>
-          {/* <div>
-            <p>{this.props.item.Description}</p>
-          </div>
-          <div className="item-stats">
-            <div style={{ marginLeft: "0px" }}>
-              {this.props.item.ItemDescription.Menuitems.map((stat) => {
-                return (
-                  <p style={{ padding: "0px", margin: "0px" }}>
-                    {stat.Description}: {stat.Value}
-                  </p>
-                );
-              })}
-            </div>
-            <br></br>
-            <div className="item-passive">
-              <p>{this.props.item.ItemDescription.SecondaryDescription}</p>
-            </div>
-          </div>
-          <p style={{ color: "#D4AF37" }}>
-            <b>Price:</b> {this.props.item.absolutePrice}(
-            {this.props.item.relativePrice})
-            <img
-              style={{
-                maxHeight: "20px",
-                maxWidth: "20px",
-                paddingLeft: "3px",
-              }}
-              src="https://i.imgur.com/XofaIQ0.png"
-              alt="gold-img"
-            />
-          </p> */}
-        </div>
-      </>
-    );
-  }
-}
-
-const HtmlTooltip = withStyles((theme) => ({
-  tooltip: {
-    backgroundColor: "#06061f",
-    color: "rgba(0, 0, 0, 0.87)",
-    maxWidth: 220,
-    border: ".5px solid gray",
-    opacity: 100,
-  },
-}))(Tooltip);
-
-class PlayerBuildDisplay extends React.Component {
-  render() {
-    return (
-      <div className={`build-container ${this.props.buildType}`}>
-        {this.props.build.map((item, index) => {
+      <div className={`build-container ${props.buildType}`}>
+        {props.build.map((item, index) => {
           if (item) {
             return (
               <HtmlTooltip
@@ -104,7 +41,6 @@ class PlayerBuildDisplay extends React.Component {
         })}
       </div>
     );
-  }
 }
 
 export default function MatchDisplay(props) {
@@ -279,7 +215,7 @@ export default function MatchDisplay(props) {
                           </div>
                         </div>
                       </div>
-                      <div className="accolades-container">
+                      <div className="accolades-container hide">
                         <div className="single-match-accolades">
                           <div className="multikill-header-icon">
                             <img
