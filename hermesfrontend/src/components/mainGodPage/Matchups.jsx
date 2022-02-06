@@ -66,7 +66,7 @@ const Table = ({ columns, data }) => {
                           // we can add them into the header props
   
                           <div
-                            class={"rt-th inline-".concat(column.id)}
+                            class={"rt-th inline-".concat(column.id, "_matchups")}
                             {...column.getHeaderProps(
                               column.getSortByToggleProps()
                             )}
@@ -121,6 +121,7 @@ const Table = ({ columns, data }) => {
                                       minWidth: "40px",
                                       maxWidth: "60px",
                                       flex: "1 1 100%",
+                                      marginLeft: "2rem"
                                     }}
                                     {...cell.getCellProps()}
                                   >
@@ -131,7 +132,7 @@ const Table = ({ columns, data }) => {
                                   <div
                                     className="rt-td god"
                                     style={{ 
-                                      minWidth: "180px", 
+                                      minWidth: "160px", 
                                       maxWidth: "180px", 
                                       flex: "1 1 100%",
                                       display: 'flex',

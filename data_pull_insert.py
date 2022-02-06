@@ -10,7 +10,9 @@ from pyrez.models.MatchHistory import MatchHistory
 from data_pull_formatting_rewrite import threadedd_format_no_query
 import os
 from main import client
-# from data_pull_formatting_rewrite import format_no_query
+
+
+from data_pull_formatting_rewrite import format_no_query
 
 
 def normalize_godId(id):
@@ -246,7 +248,7 @@ def create_sets(data):
     for matchId in data:
         if matchId not in existing:
             set.append(matchId.matchId)
-            if len(set) == 10:
+            if len(set) == 9:
                 sets.append(set)
                 set = []
     if len(set) != 0:
@@ -537,12 +539,66 @@ def run_pull(patch, date=get_date()):
     print(total)
     print(f"{date} Pull Completed in {str(datetime.now() - starttime)} loss: {round(inserted_count/match_ids_len*100, 2)}")
 
-
-if __name__ == "__main__":
+def run_pull_hourly(patch, hour, date):
+    starttime = datetime.now()
     with open("cred.txt", "r") as f:
         data = f.readlines()
         smite_api = SmiteAPI(devId=data[0].strip(
         ), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
 
-    print(smite_api.getMotd())
+    mydb = client["test"]
+    mycol = mydb[f"{patch} Matches"]
+    temp = client["temp"]
+    tempcol = temp["MatchId"]
+    match_ids = smite_api.getMatchIds(426, date=date, hour=hour)
+    set_length = 10
+    inserted_count = 0
+    match_ids_len = len(match_ids)
+    print(len(match_ids))
+    print(match_ids[0].matchId)
+    tempcol.insert_one({"MatchId": match_ids[-1].matchId})
+    all_sets = create_sets(match_ids)
+    total = 0
+    for set in all_sets:
+        try:
+            data = []
+            match_details = smite_api.getMatch(set)
+            total += len(match_details)
+            current_id = match_details[0]["Match"]
+            match_dict = create_match_dict(match_details[0], patch)
+            for i in range(len(match_details)):
+                player = create_player_dict(match_details[i])
+                data.append(player)
+                if match_details[i]["Match"] == current_id:
+                    player = create_player_dict(match_details[i])
+                    # print(player["godName"])
+                    match_dict[f"player{i % 10}"] = player
+                    if "player9" in match_dict.keys():
+                        data.append(match_dict)
+                elif match_details[i]["Match"] != current_id:
+                    match_dict = create_match_dict(match_details[i], patch)
+                    player = create_player_dict(match_details[i])
+                    match_dict[f"player{i % 10}"] = player
+                    current_id = match_details[i]["Match"]
+            mycol.insert_many(data)
+            print(len(data))
+            format_no_query(data)
+            inserted_count += len(data)
+                # carry_score = anlz.get_carry_score(match_dict)
+                # match_dict["carryScore"] = carry_score["goldScore"]
+                # match_dict["damageScore"] = carry_score["damageScore"]
+                # match_dict["levelDiff"] = carry_score["levelDiff"]
+                # match_dict["killPart"] = carry_score["killPart"]
+                # match_dict["efficiency"] = anlz.get_gold_eff(match_dict["killPart"], match_dict["carryScore"])
+        except IndexError:
+            print(set)
+
+    print(total)
+    print(f"{date} Pull Completed in {str(datetime.now() - starttime)} loss: {round(inserted_count/match_ids_len*100, 2)}")
+
+if __name__ == "__main__":
+    t = datetime.now()
+    curr_time = f"{t.hour-1}"
+    print(curr_time)
+    run_pull_hourly("9.1", curr_time, "20220205")
     # get_new_items(client, smite_api)

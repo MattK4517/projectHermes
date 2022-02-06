@@ -44,7 +44,7 @@ function CreateItemToolTip(props) {
           </div>
           <p style={{ color: "#D4AF37" }}>
             <b>Price:</b> {props.item.absolutePrice}(
-            {this.props.item.relativePrice})
+            {props.item.relativePrice})
             <img
               style={{
                 maxHeight: "20px",

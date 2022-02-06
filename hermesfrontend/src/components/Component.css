@@ -933,6 +933,7 @@ a, a:active, a:focus, a:hover, a:visited {
   /* padding-left: 10px; */
   overflow: hidden;
   justify-content: flex-start;
+  margin-bottom: 1rem;
 }
 
 .filter-item {
@@ -1131,8 +1132,6 @@ figure.snip0015:hover figcaption::before {
 
 .tab-list-active {
   background-color: white;
-  border: solid #ccc;
-  border-width: 1px 1px 0 1px;
 }
 
 /* ITEMS */
@@ -1304,7 +1303,7 @@ figure.snip0015:hover figcaption::before {
 }
 .tabs .tab-list-active {
   background-color: #3273fa;
-  border: none;
+
 }
 
 .tabs li:not(:last-child) {

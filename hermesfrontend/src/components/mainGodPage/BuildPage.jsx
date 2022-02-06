@@ -37,7 +37,7 @@ function GodCounterMatchup(props) {
       <div className="matchup-stats">
         <div
           className="win-rate"
-          style={{ color: winRateColor(props.getMatchups.winRate) }}
+          style={{ color: winRateColor(props.getMatchups.winRate), fontWeight: "725px" }}
         >
           {props.getMatchups.winRate}%
         </div>

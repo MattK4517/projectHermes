@@ -957,5 +957,6 @@ def get_lanes(client):
     return lanes
 
 if __name__ == "__main__":
+    print(get_top_builds(client, "Camazotz", "Solo", "9.1"))
     pass
     # print(get_worst_matchups(client, "Bellona", "Carry", "9.1", player="AleksEnglish"))
