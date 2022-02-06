@@ -8,6 +8,7 @@ import MuiAccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import TierListTabs from "./Tabs/TierListTabs";
 import Tooltip from "@material-ui/core/Tooltip";
+import { HtmlTooltip, CreateItemToolTip } from "../components/mainGodPage/GodPageHelpers";
 
 class NameForm extends React.Component {
   constructor(props) {
@@ -59,31 +60,20 @@ class NameForm extends React.Component {
   }
 }
 
-const HtmlTooltip = withStyles((theme) => ({
-  tooltip: {
-    backgroundColor: "#06061f",
-    color: "rgba(0, 0, 0, 0.87)",
-    maxWidth: 220,
-    border: ".5px solid gray",
-    opacity: 100,
-  },
-}))(Tooltip);
 
-
-class BaseMatchSummary extends React.Component {
-  render() {
+function BaseMatchSummary(props) {
     return (
       <div className="match-summary-container" style={{minWidth: "200px"}}>
         <div className="match-info-header">
-          <h3>Ranked Conquest - {this.props.matchId}<br></br>{this.props.date}</h3>
+          <h3>Ranked Conquest - {props.matchId}<br></br>{props.date}</h3>
         </div>
         <div className="basic-match-info">
           <h4>Basic Match Info</h4>
           <ul>
-            <li>{this.props.length} Minutes</li>
+            <li>{props.length} Minutes</li>
             <li>Winning Side Bans</li>
             <li className="bans-container">
-              {this.props.bansWinner.map((ban) => {
+              {props.bansWinner.map((ban) => {
                 if (ban) {
                   return (
                     <Link
@@ -114,7 +104,7 @@ class BaseMatchSummary extends React.Component {
             </li>
             <li>Loser Side Bans</li>
             <li className="bans-container">
-              {this.props.bansLoser.map((ban) => {
+              {props.bansLoser.map((ban) => {
                 if (ban) {
                   return (
                     <Link
@@ -144,14 +134,13 @@ class BaseMatchSummary extends React.Component {
               })}
             </li>
             <li>Winning Side MMR</li>
-            <li>{(this.props.mmrWinner.reduce(reducer) / 5).toFixed(2) }</li>
+            <li>{(props.mmrWinner.reduce(reducer) / 5).toFixed(2) }</li>
             <li>Losing Side MMR</li>
-            <li>{(this.props.mmrLoser.reduce(reducer) / 5).toFixed(2) }</li>
+            <li>{(props.mmrLoser.reduce(reducer) / 5).toFixed(2) }</li>
           </ul>
         </div>
       </div>
     );
-  }
 }
 
 const Accordion = withStyles({
@@ -392,11 +381,10 @@ function CustomizedAccordions(player) {
   );
 }
 
-class PlayerMatchSummary extends React.Component {
-    render() {
+function PlayerMatchSummary(props) {
         return (
             <div className="match-summary-container-players">
-                {this.props.players.map((player) => {
+                {props.players.map((player) => {
                   return (
                     <div className={"player-container ".concat(player.winStatus)}>
                       {CustomizedAccordions(player)}
@@ -405,85 +393,29 @@ class PlayerMatchSummary extends React.Component {
                 })}
             </div>
         )
-    }
 }
 
-class PlayerIcon extends React.Component {
-  render() {
+function PlayerIcon(props) {
     return (
       <div className="rt-tr god" style={{ minWidth: "155px", maxWidth: "180px", flex: "1 1 100%", display: "flex", alignContent: "center"}}>
-      <Link className="player-god-played" to={"/".concat(this.props.god.replaceAll(" ", "_"))}>
+      <Link className="player-god-played" to={"/".concat(props.god.replaceAll(" ", "_"))}>
         <div style={{position: "relative", minWidth: "40px"}}>
           <div className="god-icon">
             <div style={{height: "32px", width: "32px"}}>
-              <img src={`https://webcdn.hirezstudios.com/smite/god-icons/${this.props.god.replaceAll(" ", "-").toLowerCase()}.jpg`} alt={this.props.god} 
+              <img src={`https://webcdn.hirezstudios.com/smite/god-icons/${props.god.replaceAll(" ", "-").toLowerCase()}.jpg`} alt={props.god} 
               style={{ height: "32px", width: "32px", transformOrigin: "0px 0px 0px", border: "2px solid black", borderRadius: "5px" }}/>
             </div>
           </div>
         </div>
-        <strong className="god-name">{this.props.god}</strong>
+        <strong className="god-name">{props.god}</strong>
       </Link>
     </div>
     )
-  }
-}
-
-class CreateItemToolTip extends React.Component {
-  render() {
-    return (
-      <>
-      <div
-        style={{
-          maxHeight: "350px",
-          maxWidth: "750px",
-          color: "#E6E6FA",
-          alignItems: "left",
-          fontSize: "14px",
-        }}
-      >
-        <h5 style={{ width: "100%", fontSize: "1rem", color: "#1E90FF" }}>
-          {this.props.item.DeviceName}
-        </h5>
-        <div>
-          <p>{this.props.item.Description}</p>
-        </div>
-        <div className="item-stats">
-          <div style={{marginLeft:"0px"}}>
-            {this.props.item.ItemDescription.Menuitems.map(
-              (stat) => {
-                return (
-                  <p style={{padding: "0px", margin: "0px"}}>
-                    {stat.Description}: {stat.Value}
-                  </p>
-                );
-              }
-            )}
-          </div>
-          <br></br>
-          <div className="item-passive">
-            <p>{this.props.item.ItemDescription.SecondaryDescription}</p>
-          </div>
-        </div>
-        <p style={{ color: "#D4AF37" }}>
-          <b>Price:</b>{" "}
-          {this.props.item.absolutePrice}(
-          {this.props.item.relativePrice})
-          <img
-            style={{ maxHeight: "20px", maxWidth: "20px", paddingLeft: "3px" }}
-            src="https://i.imgur.com/XofaIQ0.png"
-            alt="gold-img"
-          />
-        </p>
-      </div>
-    </>
-    );
-  }
 }
 
 
 
 export function PlayerBuildDisplay(props) {
-  console.log(props)
     return(
       <div className={`build-container ${props.buildType}`}>
         {props.build.map((slot, index) => {
@@ -695,7 +627,7 @@ function Match() {
                   selfHealing: data[key]["Healing_Player_Self"],
                   skin: data[key]["Skin"],
                   wardsPlaced: data[key]["Wards_Placed"],
-                  carryScore: data["carryScore"][data[key]["Win_Status"]][data[key]["Role"]]["goldShare"],
+                  // carryScore: data["carryScore"][data[key]["Win_Status"]][data[key]["Role"]]["goldShare"],
                   damageScore: data["damageScore"][data[key]["Win_Status"]][data[key]["Role"]]["damageShare"],
                   killPart: data["killPart"][data[key]["Win_Status"]][data[key]["Role"]]["killShare"],
                   levelDiff: data["levelDiff"][data[key]["Win_Status"]][data[key]["Role"]]["level_diff"],

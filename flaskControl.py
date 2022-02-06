@@ -31,11 +31,11 @@ def get_all_gods():
     gdDict = anlz.get_gods()
     return gdDict
 
-
+@app.route('/api/main/<god>/<role>/<rank>/<patch>/<mode>/<matchup>', methods=["GET", "POST"])
 @app.route('/api/main/<god>/<role>/<rank>/<patch>/<mode>', methods=["GET", "POST"])
-def get_god_data(god, role, rank, patch, mode):
+def get_god_data(god, role, rank, patch, mode, matchup="None"):
     newgod = god.replace("_", " ")
-    winrate = anlz.get_winrate(client, god, role, patch, mode, rank)
+    winrate = anlz.get_winrate(client, god, role, patch, mode, rank, matchup)
     pbrate = anlz.get_pb_rate(client, god, rank, role, patch, mode)
     # print(winrate, pbrate)
     return {
@@ -58,7 +58,7 @@ def get_god_matchups(god):
 def get_god_data_role(god, role, rank, patch, mode, matchup="None"):
     newgod = god.replace("_", " ")
     if matchup != "None":
-        return anlz.get_specific_build(client, god, role, patch, matchup, rank)
+        return anlz.get_specific_build(client, god, role, patch, matchup, rank, mode)
     elif "All" in rank and matchup == "None":
         build = anlz.get_top_builds(client, god, role, patch, mode)
     elif matchup == "None":
@@ -87,8 +87,8 @@ def get_god_abilities(god):
     return anlz.get_abilities(client, god)
 
 
-@app.route("/api/gettierlist/<rank>/<role>/<tableType>", methods=["GET", "POST"])
-def get_tier_list(rank, role, tableType):
+@app.route("/api/gettierlist/<rank>/<role>/<tableType>/<mode>", methods=["GET", "POST"])
+def get_tier_list(rank, role, tableType, mode):
     rank = rank.replace("_", " ")
     retData = {god: {} for god in godsDict}
     mydb = client["Tier_list"]
@@ -102,6 +102,9 @@ def get_tier_list(rank, role, tableType):
             myquery = {"rank": rank, "role": role,
                        "pickRate": {"$gte": 1}, "patch": patch}
 
+        myquery = {**myquery, **{"mode": f"{mode}Conq"}}
+        print(myquery)
+        print(mycol.count_documents(myquery))
         for x in mycol.find(myquery, {"_id": 0}):
             dict_god = x["god"]
             dict_role = x["role"]
@@ -119,6 +122,8 @@ def get_tier_list(rank, role, tableType):
             myquery = {"rank": rank, "role": role,
                        "pickRate": {"$gte": 1}, "patch": patch}
 
+        myquery = {**myquery, **{"mode": f"{mode}Conq"}}
+
         for x in mycol.find(myquery, {"_id": 0}):
             dict_god = x["god"]
             dict_role = x["role"]
@@ -135,6 +140,7 @@ def get_tier_list(rank, role, tableType):
         else:
             myquery = {"rank": rank, "role": role, "pickRate": {"$gte": 1}}
 
+        myquery = {**myquery, **{"mode": f"{mode}Conq"}}
         for x in mycol.find(myquery, {"_id": 0}):
             dict_god = x["god"]
             dict_role = x["role"]
@@ -199,9 +205,15 @@ def get_match(matchID):
                 match[key]["Item_Purch_6"],
             ]
 
-            match[key] = {**match[key], **
-                          {"godBuild": anlz.get_build_stats(client, build)}}
-    return match
+            match[key] = {**match[key], 
+                          **{"godBuild": anlz.get_build_stats(client, build)},
+                          **{"godStats": anlz.get_god_stats(client, match[key]["godName"], match[key]["Final_Match_Level"])},
+                          }
+
+    return {
+        **match, 
+        **anlz.get_carry_score(match)
+        }
 
 
 @app.route('/api/<god>/buildpath/<role>/<rank>/<patch>/<mode>')

@@ -6,71 +6,6 @@ import { useTable, useSortBy, usePagination } from 'react-table';
 import Tooltip from "@material-ui/core/Tooltip";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 
-const HtmlTooltip = withStyles((theme) => ({
-  tooltip: {
-    backgroundColor: "#06061f",
-    color: "rgba(0, 0, 0, 0.87)",
-    maxWidth: 220,
-    border: ".5px solid gray",
-    opacity: 100,
-  },
-}))(Tooltip);
-
-class CreateItemToolTip extends React.Component {
-  render() {
-    console.log(this.props.item)
-    if (this.props.index == 0) {
-      this.props.item = this.props.item.item
-    } else if (this.props.index == 1) {
-      this.props.item = this.props.item.item2
-    }
-    return (
-      <>
-      <div
-        style={{
-          maxHeight: "350px",
-          maxWidth: "750px",
-          color: "#E6E6FA",
-          alignItems: "left",
-          fontSize: "14px",
-        }}
-      >
-        <h5 style={{ width: "100%", fontSize: "1rem", color: "#1E90FF" }}>
-          {this.props.item.DeviceName}
-        </h5>
-        <div>
-          <p>{this.props.item.itemShortDesc}</p>
-        </div>
-        <div className="item-stats">
-            {this.props.item.ItemDescription.Menuitems.map(
-              (stat) => {
-                return (
-                  <p style={{left: "0"}}>
-                    {stat.Description}: {stat.Value}
-                  </p>
-                );
-              }
-            )}
-          <div className="item-passive">
-            <p>{this.props.item.ItemDescription.SecondaryDescription}</p>
-          </div>
-        </div>
-        <p style={{ color: "#D4AF37" }}>
-          <b>Price:</b>{" "}
-          {this.props.item.absolutePrice}(
-          {this.props.item.relativePrice})
-          <img
-            style={{ maxHeight: "20px", maxWidth: "20px", paddingLeft: "3px" }}
-            src="https://i.imgur.com/XofaIQ0.png"
-            alt="gold-img"
-          />
-        </p>
-      </div>
-    </>
-    );
-  }
-}
-
 export function ItemTable({ columns, data }) {
     const {
       getTableProps,
@@ -101,7 +36,7 @@ export function ItemTable({ columns, data }) {
   
     return (
       <>
-        <div class="grid-block" {...getTableProps()} style={{color: "white"}} role="table">
+        <div class="grid-block" {...getTableProps()} style={{color: "white", overflow: "visible"}} role="table">
           <thead>
             {headerGroups.map(headerGroup => (
               <tr {...headerGroup.getHeaderGroupProps()}>
@@ -123,13 +58,14 @@ export function ItemTable({ columns, data }) {
               </tr>
             ))}
           </thead>
-          <div className="grid-block-content" role="rowgroup" {...getTableBodyProps()}>
+          <div className="grid-block-content build-path_border" role="rowgroup" {...getTableBodyProps()}>
             {firstPageRows.map(
               (row, i) => {
                 prepareRow(row);
                 // if (row.original.role != this.props.role && this.props.role != "All Roles"){ 
                 //   console.log(row.original.role, this.props.role)
                 //  }
+                if (row.original.item) {
                 return (
                   <div className="item-row" role="row" {...row.getRowProps()}>
                     {row.cells.map((cell) => {
@@ -164,8 +100,16 @@ export function ItemTable({ columns, data }) {
                       } 
                     }) }
                   </div>
-                )}
-                // }
+                )} else {
+                  console.log("gere")
+                  return (
+                    <div className="content-section">
+                      <div className="content-section_header">Build</div>
+                      <div className="empty-set">NO DATA TO DISPLAY</div>
+                    </div>
+                  )
+                }
+                }
             )}
           </div>
         </div>
@@ -279,7 +223,7 @@ function Items(props) {
 
   return (
     <>
-    <div class="items-table-container">
+    <div class="items-table-container content-section">
       <ItemTable columns={itemColumns} data={slotOneItems} />
       <ItemTable columns={itemColumns} data={slotTwoItems} />
       <ItemTable columns={itemColumns} data={slotThreeItems} />

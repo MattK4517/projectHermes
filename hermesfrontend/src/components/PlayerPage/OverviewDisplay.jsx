@@ -40,11 +40,8 @@ export default function OverviewDisplay() {
   let fgod = window.location.href.split("/")[7];
   setGod(FormatGod(fgod).trim());
   const [goldShare, setGoldShare] = useState("");
-  const [goldShareBest, setGoldShareBest] = useState("0");
   const [damageShare, setDamageShare] = useState("");
-  const [damageShareBest, setDamageShareBest] = useState("0");
   const [killShare, setkillShare] = useState("");
-  const [killShareBest, setKillShareBest] = useState("0");
   const [KDA, setKDA] = useState(0);
   const [kills, setKills] = useState(0);
   const [deaths, setDeaths] = useState(0);
@@ -62,6 +59,11 @@ export default function OverviewDisplay() {
   const [avgDamage, setAvgDamage] = useState(0);
   const [avgGold, setAvgGold] = useState(0);
   const [avgWards, setAvgWards] = useState(0);
+
+  const [maxGoldShare, setMaxGoldShare] = useState(0)
+  const [maxDamageShare, setMaxDamageShare] = useState(0)
+  const [maxKillShare, setMaxKillShare] = useState(0)
+  const [maxWards, setMaxWards] = useState(0)  
 
   useEffect(() => {
     fetch(
@@ -97,6 +99,10 @@ export default function OverviewDisplay() {
         setAvgDamage(data.avgDamage);
         setAvgGold(data.avgGold);
         setAvgWards(data.avgWards);
+        setMaxGoldShare(data.maxGoldShare)
+        setMaxDamageShare(data.maxDamageShare)
+        setMaxKillShare(data.maxKillShare)
+        setMaxWards(data.maxWards)
       })
     );
   }, [player, role, mode]);
@@ -179,12 +185,13 @@ export default function OverviewDisplay() {
             <div className="player-main">
               <CarryScoreSection
                 goldShare={goldShare}
-                goldShareBest={goldShareBest}
+                goldShareBest={maxGoldShare}
                 damageShare={damageShare}
-                damageShareBest={damageShareBest}
+                damageShareBest={maxDamageShare}
                 killShare={killShare}
-                killShareBest={killShareBest}
+                killShareBest={maxKillShare}
                 wardShare={avgWards}
+                wardShareBest={maxWards}
               />
             </div>
           </div>

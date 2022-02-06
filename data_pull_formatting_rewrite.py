@@ -178,7 +178,8 @@ class GodData:
                         "god": self.name,
                         self.name: build                        
                     })
-        mycol.insert_many(set)
+        if len(self.matches) > 0:
+            mycol.insert_many(set)  
 
 def normalize_rank(tier):
     rank = "Error"
@@ -228,19 +229,35 @@ def run_format(patch, date):
         print(f"{god}: {godsDict[god].get_matches()}")
 
 def format_no_query(match):
-    set_matches = [match]
     for god in godsDict:
         godsDict[god] = GodData(god)
-        godsDict[god].set_matches(set_matches)
-        # godsDict[god].calc_matchups()
-        # godsDict[god].calc_items()
+        godsDict[god].set_matches(match)
         godsDict[god].calc_match_stats()
 
 
 def threadedd_format_no_query(match):
     for god in godsDict:
+        print(god)
         godsDict[god] = GodData(god)
         godsDict[god].set_matches(match)
         # godsDict[god].calc_items()
         godsDict[god].calc_match_stats()
         print(f"{god} DONE")
+
+def run_format_hourly(patch, date):
+    mydb = client["CasualMatches"]
+    mycol = mydb[f"{patch} Matches"]
+    temp = client["temp"]
+    tempcol = temp["MatchId"]
+    minId = 0
+    for x in tempcol.find({}):
+        if x["MatchId"] > minId:
+            minId = x["MatchId"]
+    set_matches = []
+    for match in mycol.find({"Entry_Datetime": date, "MatchId": {"$gte": minId}}):
+        set_matches.append(match)
+
+    for god in godsDict:
+        godsDict[god] = GodData(god)
+        godsDict[god].set_matches(set_matches)
+        godsDict[god].calc_match_stats()

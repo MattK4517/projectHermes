@@ -330,7 +330,7 @@ function Godpage(props) {
   const modes = ["Casual", "Ranked"]
 
   useEffect(() => {
-    fetch("/api/main/".concat(pagegod, "/", dispRole, "/", dispRank, "/", patch, "/", mode)).then((res) =>
+    fetch("/api/main/".concat(pagegod, "/", dispRole, "/", dispRank, "/", patch, "/", mode, "/", matchup)).then((res) =>
       res.json().then((data) => {
         setgod(pagegod);
         seturl(data.url);
@@ -341,7 +341,7 @@ function Godpage(props) {
         // setTier(data.tier)
       })
     );
-  }, [dispRole, dispRank, patch, mode]);
+  }, [dispRole, dispRank, patch, mode, matchup]);
 
   useEffect(() => {
     fetch("/api/".concat(pagegod, "/abilities")).then((res) =>
@@ -392,7 +392,7 @@ function Godpage(props) {
                     </div>
                     {/* <div className="role-filter-container"> */}
                     <FilterForm
-                      filter={role}
+                      filter={dispRole}
                       god={pagegod}
                       filters={roles}
                       setFilter={setrole}
@@ -406,7 +406,13 @@ function Godpage(props) {
                           setFilter={setrank}
                         />
                     </div>
-                    <DropDownFilter changePatch={setPatch} patch={patch} style={{color: "white"}}/>
+                    <FilterForm
+                          filter={patch}
+                          god={pagegod}
+                          filters={["9.1", "8.12"]}
+                          setFilter={setPatch}
+                        />
+                    {/* <DropDownFilter changePatch={setPatch} patch={patch} style={{color: "white"}}/> */}
                     <FilterForm
                       filter={mode}
                       god={pagegod}
@@ -414,7 +420,7 @@ function Godpage(props) {
                       setFilter={setMode}
                       rankSet={setrank}
                     />
-                    <SearchBarGodPage data={routes} changeMatchup={setMatchup}/>
+                    <SearchBarGodPage data={routes} changeMatchup={setMatchup} matchup={matchup}/>
                   </div>
                 </div>
               </div>
