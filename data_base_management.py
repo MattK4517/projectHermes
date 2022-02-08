@@ -36,18 +36,18 @@ def delete_match_docs(client, db, col, field, value):
     mycol.delete_many({field: value})
 
 
-def calc_total_matches(client, ranks, mode):
+def calc_total_matches(client, ranks):
     matchIds = []
     actTotalGames = 0
     for rank in ranks:
         if rank == "All Ranks":
-             mycol.update_one({"rank": rank, "patch": "9.1", "mode": f"{mode}Conq"}, {"$set": {"Total_Matches": len(matchIds)}})
+             mycol.update_one({"rank": rank, "patch": "9.1", "mode": "RankedConq"}, {"$set": {"Total_Matches": len(matchIds)}})
              break
         mydb = client["single_match_stats"]
         total_games = 0
         for god in godsDict:
             mycol = mydb[god]
-            myquery = {"rank": rank, "patch": "9.1", "mode": f"{mode}Conq"}
+            myquery = {"rank": rank, "patch": "9.1", "mode": "RankedConq"}
             games = 0
             for x in mycol.find(myquery, {"_id": 0}):
                 # if x["matchId"] not in matchIds:
@@ -59,10 +59,10 @@ def calc_total_matches(client, ranks, mode):
         insert_games(rank, total_games)
 
 
-def insert_games(rank, games, mode):
+def insert_games(rank, games):
     mydb = client["Matches"]
     mycol = mydb[f"Total_Matches"]
-    mycol.update_one({"rank": rank, "patch": "9.1", "mode": f"{mode}Conq"}, {"$set": {"Total_Matches": games}})
+    mycol.update_one({"rank": rank, "patch": "9.1", "mode": "RankedConq"}, {"$set": {"Total_Matches": games}})
     print(f"{rank} done")
 
 def add_new_urls(client, god):
@@ -198,16 +198,13 @@ def merge_total_stats(client, patch, date):
 if __name__ == "__main__":
 
     mydb = client["single_match_stats"]
-    with open("items.txt", "w") as f:
-        for god in godsDict:
-            games = 0
-            dmg = 0
-            max_damage = 0 
-            mycol = mydb[god]
-            for x in mycol.find({}, {"damage_player": 1}):
-                dmg += x["damage_player"]
-                if x["damage_player"] > max_damage:
-                    max_damage = x["damage_player"]
-                games += 1
-            f.writelines(f"{god},{max_damage},{dmg},{games}, {round(dmg/games)}\n")
+    mycol = mydb["Bellona"]
+    games = 0
+    wins = 0
+    for x in mycol.find({"patch": "9.1", "mode": "RankedConq", "player": "[Lаff]AleksEnglish"}, {"win_status": 1}):
+        if x["win_status"] == "Winner":
+            wins += 1
+        games += 1
+
+    print(wins, games, round(wins/games*100, 2))
     

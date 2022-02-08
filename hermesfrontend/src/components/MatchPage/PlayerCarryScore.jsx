@@ -8,7 +8,6 @@ export default function PlayerCarryScore(props) {
                 <div>Damage Score: {props.player.damageScore}%</div>
                 <div>Kill Participation: {props.player.killPart}%</div>
                 <div>Gold Score: {props.player.goldScore}%</div>
-                <div>adsfew</div>
             </div>
         </div>
     )

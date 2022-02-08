@@ -1907,6 +1907,10 @@ figure.snip0015:hover figcaption::before {
   overflow: hidden;
 }
 
+.items-match {
+  margin-right: 3rem;
+}
+
 .build .build-container {
   display: grid;
   grid-template-columns: repeat(3,1fr);
@@ -2830,4 +2834,6 @@ figure.snip0015:hover figcaption::before {
 .carry-score_container {
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
+

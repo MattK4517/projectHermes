@@ -447,7 +447,6 @@ function CustomizedAccordions(player) {
             </div>
           </div>
           <div className="row">
-            <TierListTabs>
               <div label="Build">
                 <div className="build-info" style={{ minWidth: "200px" }}>
                   <span className="player-info-style">Health:</span>{" "}
@@ -495,52 +494,6 @@ function CustomizedAccordions(player) {
                   <br></br>
                 </div>
               </div>
-              <div label="Scoring">
-                <div className="scoring-container">
-                  <div className="stats-container">
-                    <div className="header-section">
-                      <div style={{ height: "32px", width: "32px" }}>
-                        <img
-                          src={`https://webcdn.hirezstudios.com/smite/god-icons/${player.god
-                            .replaceAll(" ", "-")
-                            .toLowerCase()}.jpg`}
-                          alt={player.god}
-                          style={{
-                            height: "32px",
-                            width: "32px",
-                            transformOrigin: "0px 0px 0px",
-                          }}
-                        />
-                      </div>
-                      <div>Carry Score for: {player.playerName}</div>
-                    </div>
-                    <div className="substats-container">
-                      <div className="hardcarry-section">
-                        <div className="substats-header">
-                          <div style={{ marginLeft: "10px" }}>Hard Carry</div>
-                          <div className="avg-box">
-                            <div>Avg: 75</div>
-                          </div>
-                          <div className="hardcarry-score">
-                            {(
-                              (player.carryScore +
-                                player.damageScore +
-                                player.levelDiff) /
-                              3
-                            ).toFixed()}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="teamplay-section"></div>
-                    </div>
-                    <div>
-                      {player.carryScore}, {player.damageScore},{" "}
-                      {player.levelDiff}, {player.killPart}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </TierListTabs>
           </div>
         </div>
       </AccordionDetails>
