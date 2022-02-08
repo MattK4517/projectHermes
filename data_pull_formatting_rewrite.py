@@ -182,7 +182,8 @@ class GodData:
                         "skin": skin,
                         self.name: build,
                     })
-        mycol.insert_many(set)
+        if len(self.matches) > 0:
+            mycol.insert_many(set)  
 
 def normalize_rank(tier):
     rank = "Error"

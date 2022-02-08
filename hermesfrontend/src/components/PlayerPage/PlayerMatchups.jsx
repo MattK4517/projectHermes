@@ -31,7 +31,7 @@ export default function PlayerMatchups(props) {
         });
       })
     );
-  }, [player, role]);
+  }, [player, role, mode]);
   return (
     <div className="content-section content-section_no-padding played-gods">
       <div className="content-section_header played-gods_header">

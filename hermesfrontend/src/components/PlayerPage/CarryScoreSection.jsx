@@ -39,15 +39,6 @@ export default function CarryScoreSection(props) {
         </div>
       </div>
       <div className="carry-score_section">
-        <div className="carry-score_header">
-          <div className="carry-score_header__title carry-score_hard-carry">
-            <img src="https://static.u.gg/lol/static/svg/profile-champion-stats/hard-carry-icon.svg" />
-            <span>Hard Carry</span>
-          </div>
-          <div className="carry-score_header__average carry-score_hard-carry">
-            <span>Avg:</span>&nbsp;<strong>66</strong>
-          </div>
-        </div>
         <div className="carry-score_table">
           <div className="carry-score_table__row carry-score_table__headers carry-score_hard-carry">
             <div></div>
@@ -71,7 +62,7 @@ export default function CarryScoreSection(props) {
                 </div>
               </div>
               <div className="cell_bar">
-                <span>N/A</span>
+                <span>{props.goldShareBest}%</span>
                 <div className="bar-container">
                   <div
                     className="personal-record carry-score_hard-carry"
@@ -96,7 +87,7 @@ export default function CarryScoreSection(props) {
                 </div>
               </div>
               <div className="cell_bar">
-                <span>N/A</span>
+                <span>{props.damageShareBest}%</span>
                 <div className="bar-container">
                   <div
                     className="personal-record carry-score_hard-carry"
@@ -120,7 +111,7 @@ export default function CarryScoreSection(props) {
                 </div>
               </div>
               <div className="cell_bar">
-                <span>N/A</span>
+                <span>{props.killShareBest}%</span>
                 <div className="bar-container">
                   <div
                     className="personal-record carry-score_teamplay"
@@ -144,7 +135,7 @@ export default function CarryScoreSection(props) {
                 </div>
               </div>
               <div className="cell_bar">
-                <span>N/A</span>
+                <span>{props.wardShareBest}</span>
                 <div className="bar-container">
                   <div
                     className="personal-record carry-score_teamplay"

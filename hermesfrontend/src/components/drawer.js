@@ -187,11 +187,11 @@ let routes = [
     component: <OverviewDisplay />,
     god: "",
   },
-  // {
-  //   path: ["/damage_calculator"],
-  //   component: <DamageCalculator />,
-  //   god: "",
-  // }
+  {
+    path: ["/damage_calculator"],
+    component: <DamageCalculator />,
+    god: "",
+  }
 
 
 ]

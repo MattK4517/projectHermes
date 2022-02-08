@@ -6,72 +6,7 @@ import { useTable, useSortBy, usePagination } from 'react-table';
 import Tooltip from "@material-ui/core/Tooltip";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 
-const HtmlTooltip = withStyles((theme) => ({
-  tooltip: {
-    backgroundColor: "#06061f",
-    color: "rgba(0, 0, 0, 0.87)",
-    maxWidth: 220,
-    border: ".5px solid gray",
-    opacity: 100,
-  },
-}))(Tooltip);
-
-class CreateItemToolTip extends React.Component {
-  render() {
-    console.log(this.props.item)
-    if (this.props.index == 0) {
-      this.props.item = this.props.item.item
-    } else if (this.props.index == 1) {
-      this.props.item = this.props.item.item2
-    }
-    return (
-      <>
-      <div
-        style={{
-          maxHeight: "350px",
-          maxWidth: "750px",
-          color: "#E6E6FA",
-          alignItems: "left",
-          fontSize: "14px",
-        }}
-      >
-        <h5 style={{ width: "100%", fontSize: "1rem", color: "#1E90FF" }}>
-          {this.props.item.DeviceName}
-        </h5>
-        <div>
-          <p>{this.props.item.itemShortDesc}</p>
-        </div>
-        <div className="item-stats">
-            {this.props.item.ItemDescription.Menuitems.map(
-              (stat) => {
-                return (
-                  <p style={{left: "0"}}>
-                    {stat.Description}: {stat.Value}
-                  </p>
-                );
-              }
-            )}
-          <div className="item-passive">
-            <p>{this.props.item.ItemDescription.SecondaryDescription}</p>
-          </div>
-        </div>
-        <p style={{ color: "#D4AF37" }}>
-          <b>Price:</b>{" "}
-          {this.props.item.absolutePrice}(
-          {this.props.item.relativePrice})
-          <img
-            style={{ maxHeight: "20px", maxWidth: "20px", paddingLeft: "3px" }}
-            src="https://i.imgur.com/XofaIQ0.png"
-            alt="gold-img"
-          />
-        </p>
-      </div>
-    </>
-    );
-  }
-}
-
-function Table({ columns, data }) {
+export function ItemTable({ columns, data }) {
     const {
       getTableProps,
       getTableBodyProps,
@@ -101,7 +36,7 @@ function Table({ columns, data }) {
   
     return (
       <>
-        <div class="grid-block" {...getTableProps()} style={{color: "white"}} role="table">
+        <div class="grid-block" {...getTableProps()} style={{color: "white", overflow: "visible"}} role="table">
           <thead>
             {headerGroups.map(headerGroup => (
               <tr {...headerGroup.getHeaderGroupProps()}>
@@ -123,13 +58,14 @@ function Table({ columns, data }) {
               </tr>
             ))}
           </thead>
-          <div className="grid-block-content" role="rowgroup" {...getTableBodyProps()}>
+          <div className="grid-block-content build-path_border" role="rowgroup" {...getTableBodyProps()}>
             {firstPageRows.map(
               (row, i) => {
                 prepareRow(row);
                 // if (row.original.role != this.props.role && this.props.role != "All Roles"){ 
                 //   console.log(row.original.role, this.props.role)
                 //  }
+                if (row.original.item) {
                 return (
                   <div className="item-row" role="row" {...row.getRowProps()}>
                     {row.cells.map((cell) => {
@@ -164,8 +100,16 @@ function Table({ columns, data }) {
                       } 
                     }) }
                   </div>
-                )}
-                // }
+                )} else {
+                  console.log("gere")
+                  return (
+                    <div className="content-section">
+                      <div className="content-section_header">Build</div>
+                      <div className="empty-set">NO DATA TO DISPLAY</div>
+                    </div>
+                  )
+                }
+                }
             )}
           </div>
         </div>
@@ -174,7 +118,6 @@ function Table({ columns, data }) {
   }
 
 function Items(props) {
-  console.log(props)
   const [patch, setPatch] = useState("9.1")
   const [slotOneItems, setSlotOneItems] = useState([]);
   const [slotTwoItems, setSlotTwoItems] = useState([]);
@@ -259,7 +202,7 @@ function Items(props) {
       }))
   }, [props.role, props.rank, props.patch, props.mode])
 
-  const columns = React.useMemo(
+  const itemColumns = React.useMemo(
     () => [
       {
         Header: 'Items',
@@ -280,13 +223,13 @@ function Items(props) {
 
   return (
     <>
-    <div class="items-table-container">
-      <Table columns={columns} data={slotOneItems} />
-      <Table columns={columns} data={slotTwoItems} />
-      <Table columns={columns} data={slotThreeItems} />
-      <Table columns={columns} data={slotFourItems} />
-      <Table columns={columns} data={slotFiveItems} />
-      <Table columns={columns} data={slotSixItems} />
+    <div class="items-table-container content-section">
+      <ItemTable columns={itemColumns} data={slotOneItems} />
+      <ItemTable columns={itemColumns} data={slotTwoItems} />
+      <ItemTable columns={itemColumns} data={slotThreeItems} />
+      <ItemTable columns={itemColumns} data={slotFourItems} />
+      <ItemTable columns={itemColumns} data={slotFiveItems} />
+      <ItemTable columns={itemColumns} data={slotSixItems} />
     </div>
     </>
   );

@@ -17,7 +17,7 @@ import pandas as pd
 #    return dict3
 
 def get_items_by_class(client, class_name, role):
-    build = ["Relic Dagger"]
+    build = ["Calamitous Rod of Tahuti"]
     items = {f"slot{i+1}": {} for i in range(6)}
     for char in class_name:
         if char != "Atlas":
@@ -41,7 +41,7 @@ def get_items_by_class(client, class_name, role):
                     wr = round(wins/games * 100, 2)
                     f.writelines(f"{slot}, {item} , {wins} , {games} , {wr}% \n")
 
-get_items_by_class(client, godsDict.keys(), "Support")
+get_items_by_class(client, Mages, "Mid")
 
 # def get_combat_stats_by_class(client, class_name):
 #     mydb= client["single_combat_stats"]

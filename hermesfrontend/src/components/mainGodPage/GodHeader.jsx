@@ -7,11 +7,10 @@ const CustHeader = styled("div")(({ theme }) => ({
   },
 }));
 
-class GodAbilities extends React.Component {
-    render() {
+function GodAbilities(props) {
       return (
         <>
-          {this.props.abilities.map((ability, index) => {
+          {props.abilities.map((ability, index) => {
             let text;
             if (index === 4) {
               text = "P"
@@ -33,7 +32,6 @@ class GodAbilities extends React.Component {
           })}
         </>
       );
-    }
   }
 
 export default class GodHeader extends React.Component {

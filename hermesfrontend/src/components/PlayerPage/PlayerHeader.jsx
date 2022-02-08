@@ -41,7 +41,7 @@ export default function PlayerHeader(props) {
                     </div>
                 </div>
             </div>
-            <div style={{paddingTop: "36px"}}>
+            <div className="player-tab-header">
                 <PlayerTabs/>
             </div>
         </div>

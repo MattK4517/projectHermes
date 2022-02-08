@@ -109,12 +109,12 @@ def get_item_data(client, item):
 "S8 Phantom Veil Upgrade"]:
             item = item[3:].strip()
         mydb = client["Item_Data"]
-        mycol = mydb[item]
+        mycol = mydb[item.strip()]
         
         for x in mycol.find():
             itemdata = x
 
-        delKeys = ["_id", "ChildItemId", "DeviceName", "ItemTier", "itemIcon_URL"]
+        delKeys = ["_id", "ChildItemId", "ItemTier", "itemIcon_URL"]
         for element in delKeys:
             del itemdata[element]
 
@@ -319,6 +319,8 @@ def get_all_builds(client, god, role, patch, mode="Ranked", rank="All Ranks"):
                 key = lambda x: getitem(x[1], "games")))
             top_dict[slot] = dict(test_sort)
 
+    if games == 0:
+        games = 1
     return {**dict(top_dict), **{"games": games, "wins": wins, "winRate": round(wins/games*100, 2)}}
 
 def get_worst_matchups(client, god, role, patch, mode="Ranked", rank="All Ranks", player=None):
@@ -335,7 +337,12 @@ def get_worst_matchups(client, god, role, patch, mode="Ranked", rank="All Ranks"
         myquery = { "role": role, "patch": patch, "mode": f"{mode}Conq"}
 
     if player:
-        myquery = {**myquery, **{"player":  { "$regex" : f"{player}", "$options": "i" }}} 
+        myquery = {**myquery, **{"player":  { "$regex" : f"{player}", "$options": "i" }}}
+
+    if "All" in role:
+        del myquery["role"]
+    
+    print(myquery)
     games = 0
     wins = 0
     # print(myquery)
@@ -404,7 +411,7 @@ def get_worst_matchups(client, god, role, patch, mode="Ranked", rank="All Ranks"
 
     return {**test_sort, **{"games": games, "wins": wins, "winRate": round(wins/games*100, 2)}}
 
-def get_winrate(client, god, role, patch, mode="Ranked", rank="All Ranks"):
+def get_winrate(client, god, role, patch, mode="Ranked", rank="All Ranks", matchup="None"):
     mydb = client["single_match_stats"]
     mycol = mydb[god]
     if rank == "Platinum+":
@@ -416,9 +423,10 @@ def get_winrate(client, god, role, patch, mode="Ranked", rank="All Ranks"):
     else:
         myquery = { "role": role, "patch": patch, "mode": f"{mode}Conq"}
 
+    if matchup != "None":
+        myquery = {**myquery, **{"enemy": matchup}}
     games = 0
     wins = 0
-    print(mycol.count_documents(myquery))
     for x in mycol.find(myquery):
         games += 1
         if x["win_status"] == "Winner":
@@ -722,14 +730,15 @@ def get_tier(win_rate, pick_rate, ban_rate):
 
     return tier_letter
 
-def get_specific_build(client, god, role, patch, matchup, rank="All Ranks"):
+def get_specific_build(client, god, role, patch, matchup, rank="All Ranks", mode="Ranked"):
     mydb = client["single_match_stats"]
     mycol = mydb[god]
     match_ids = []
     if "All" in rank:
-        myquery = {"enemy": matchup, "patch": patch, "role": role}
+        myquery = {"enemy": matchup, "patch": patch, "role": role, "mode": f"{mode}Conq"}
     else:
-        myquery = {"enemy": matchup, "patch": patch, "role": role, "rank": rank}
+        myquery = {"enemy": matchup, "patch": patch, "role": role, "rank": rank,  "mode": f"{mode}Conq"}
+
     for x in mycol.find(myquery, {"_id": 0}):
         match_ids.append(x["matchId"])
 
@@ -745,15 +754,17 @@ def get_specific_build(client, god, role, patch, matchup, rank="All Ranks"):
     ):
         builds.append({**{god: x[god]}, **{"win_status": x["win_status"]}})
 
+
     return get_top_builds(client, god, role, patch, rank=rank, data=builds)
 
-def get_matchups_stats(client, god: str, role: str, patch, rank="All Ranks"):
-    mydb = client["single_combat_stats"]
-    mycol = mydb[str(god)]
+def get_matchups_stats(client, god: str, role: str, patch, mode, rank="All Ranks"):
+    mydb = client["single_match_stats"]
+    mycol = mydb[god]
     if "All" in rank:
-        myquery = {"role": role, "patch": patch}
+        myquery = {"role": role, "patch": patch, "mode": f"{mode}Conq"}
     else:
-        myquery = {"role": role, "patch": patch, "rank": rank}
+        myquery = {"role": role, "patch": patch,
+                   "rank": rank, "mode": f"{mode}Conq"}
 
     avg_dmg_dict = {}
     total_games = mycol.count_documents(myquery)
@@ -764,16 +775,30 @@ def get_matchups_stats(client, god: str, role: str, patch, rank="All Ranks"):
         {
             "$group": {
                 "_id": "$enemy",
-                "avg_dmg_diff": { "$avg": "$damage_player"},
-                "avg_kill_diff": { "$avg": "$kills"},
+                "avg_dmg_diff": {"$avg": "$damage_player"},
+                "avg_kill_diff": {"$avg": "$kills"},
+                "avg_gold_diff": {"$avg": "$gold"},
                 "timesPlayed": {"$sum": 1},
             }
         }
     ]):
+        # wins = matchupscol.count_documents({**myquery, **{"enemy": x["_id"], "win_status": "Winner"}})
+        if "All" in rank:
+            wins = mycol.count_documents(
+                {"enemy": x["_id"], "win_status": "Winner", "patch": patch, "role": role, "mode": f"{mode}Conq"})
+        else:
+            wins = mycol.count_documents(
+                {"enemy": x["_id"], "win_status": "Winner", "patch": patch, "rank": rank, "role": role, "mode": f"{mode}Conq"})
 
         if x["timesPlayed"] >= .01 * total_games:
-            avg_dmg_dict[x["_id"]] = {"dmg": x["avg_dmg_diff"], "kills": x["avg_kill_diff"]}
-    
+            avg_dmg_dict[x["_id"]] = {
+                "dmg": x["avg_dmg_diff"],
+                "kills": x["avg_kill_diff"],
+                "gold": x["avg_gold_diff"],
+                "wr": round(wins/x["timesPlayed"]*100, 2),
+                "games": x["timesPlayed"],
+            }
+
     myquery = {**myquery, **{"enemy": god}}
     for god in avg_dmg_dict:
         mycol = mydb[god]
@@ -784,26 +809,29 @@ def get_matchups_stats(client, god: str, role: str, patch, rank="All Ranks"):
             {
                 "$group": {
                     "_id": "$enemy",
-                    "avg_dmg_diff": { "$avg": "$damage_player"},
-                    "avg_kill_diff": { "$avg": "$kills"}
+                    "avg_dmg_diff": {"$avg": "$damage_player"},
+                    "avg_kill_diff": {"$avg": "$kills"},
+                    "avg_gold_diff": {"$avg": "$gold"},
                 }
             },
         ]):
+            avg_dmg_dict[god]["god"] = god
             avg_dmg_dict[god]["dmg"] -= x["avg_dmg_diff"]
             avg_dmg_dict[god]["kills"] -= x["avg_kill_diff"]
+            avg_dmg_dict[god]["gold"] -= x["avg_gold_diff"]
 
     return avg_dmg_dict
 
-def get_build_path(client, god, role, patch, rank="All Ranks"):
-    mydb = client["single_match_stats_test_test"]
+def get_build_path(client, god, role, patch, mode, rank="All Ranks"):
+    mydb = client["single_match_stats"]
     mycol = mydb[god]
     index = 0
     games = 0
     builds = {}
     if "All" not in rank:
-        myquery = {"role": role, "patch": patch, "rank": rank}
+        myquery = {"role": role, "patch": patch, "rank": rank, "mode": f"{mode}Conq"}
     else:
-        myquery = {"role": role, "patch": patch}
+        myquery = {"role": role, "patch": patch, "mode": f"{mode}Conq"}
 
 
     for x in mycol.aggregate(
@@ -841,6 +869,9 @@ def get_build_path(client, god, role, patch, rank="All Ranks"):
         index += 1
     top_five = {}
     for x in list(builds)[-10:]:
+            for key in builds[x].keys():
+                    if "slot" in key:
+                            builds[x][key] = get_item_data(client, builds[x][key])
             top_five[x] = builds[x]
 
     test_sort = OrderedDict(sorted(top_five.items(),
@@ -926,70 +957,6 @@ def get_lanes(client):
     return lanes
 
 if __name__ == "__main__":
-    with open("cred.txt", "r") as f:
-        data = f.readlines()
-        smite_api = SmiteAPI(devId=data[0].strip(), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
-        print(smite_api.getPlayerId("azekill"))
-        print(smite_api.getQueueStats("azekill", 426))
-
-
-
-
-
-
-
-
-
-
-
-
-    # print(get_worst_matchups(client, "Achilles", "Solo", "9.1", mode="Ranked", rank="All Ranks", player="GreekGodKillaaa")
-    # print(get_winrate(client, "Atlas", "Support", "9.1", "Casual"))
-    # print(get_pb_rate(client, "Arachne", "Gold", "Solo", "8.12"))
-    # print(get_all_builds(client, "Achilles", "Solo", "9.1"))
-
-    # mydb = client["single_match_stats"]
-    # # for god in godsDict:
-    # god = "Tiamat"
-    # myquery = {"patch": "9.1"}
-    # mycol = mydb[god]
-    # for x in mycol.aggregate([
-    #         {
-    #             "$match": myquery
-    #         },
-    #         {
-    #             "$group": {
-    #                 "_id": "$player",
-    #                 "kills": { "$avg": "$kills"},
-    #                 "deaths": { "$avg": "$deaths"},
-    #                 "damage_": { "$avg": "$damage_player"},
-    #                 "damageTaken": { "$avg": "$damage_taken"},
-    #                 "damageMitigated": { "$avg": "$damage_mitigated"},
-    #                 "healing": { "$avg": "$healing"},
-    #                 "selfHealing": { "$avg": "$healing_self"},
-    #                 "gold": { "$avg": "$gold"},
-    #                 "damageBot": { "$avg": "$damage_bot"},
-    #                 "killsBot": { "$avg": "$kills_bot"},
-    #                 "towerKills": { "$avg": "$tower_kills"},
-    #                 "phoenixKills": { "$avg": "$phoenix_kills"},
-    #                 "towerDamage": { "$avg": "$tower_damage"},
-    #                 "wardsPlaced": { "$avg": "$wards_placed"},
-    #                 "games": {"$sum": 1},
-    #                 "wins": {"$sum": {"win_status": "Winner"}}
-    #             },
-    #         },
-    #         {"$sort": {"games": -1}},
-    #         {"$limit": 10},
-    #     ]):
-    #         print(god, x)
-#     print(get_combat_stats(client, "Achilles", "Solo", "8.11"))
-#     print(get_objective_stats(client, "Achilles", "Solo", "8.11"))
-#     print(get_winrate(client, "Achilles", "Solo", "8.10"))
-#     print(get_pb_rate(client, "Achilles", "All Ranks", "Solo", "8.10"))
-
-# print(get_worst_matchups_rewrite(client, "Camazotz", "Solo"))
-
-# print(get_top_builds(client, "Achilles", "Solo"))
-# print(get_item_data(client, "Ancile"))
-# print(get_worst_matchups(client, "Achilles", "Solo"))
-# print(get_worst_matchups_by_rank(client, "Vulcan", "Solo", "Grandmaster", req="flask"))
+    print(get_top_builds(client, "Camazotz", "Solo", "9.1"))
+    pass
+    # print(get_worst_matchups(client, "Bellona", "Carry", "9.1", player="AleksEnglish"))

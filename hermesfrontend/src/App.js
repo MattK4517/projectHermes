@@ -27,10 +27,43 @@ const theme = createTheme({
       xl: 1536,
     },
   },
-  ".MuiContainer-root": {
-    paddingLeft: "0px",
-    paddingRight: "0px",
+  components: {
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#191937",
+          color: "white",
+        },
+        selected: {
+          color: "purple",
+          backgroundColor: "red",
+        },
+        // "selected.hover": {
+        //   color: "red"
+        // }
+      }
+    },
+    MuiList: {
+      styleOverrides: {
+        root: {
+          padding: "0px",
+          focus: "red"
+        }
+      }
+    },
+    MuiSelect: {
+      styleOverrides: {
+        icon: {
+          display: "none"
+        },
+      }
+    },
   },
+  // .MenuItem.Mui-selected {
+  //   styleOverrides: {
+  //     backgroundColor: "teal"
+  //   }
+  // },
 });
 
 class App extends React.Component {

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useTable, useSortBy, usePagination } from "react-table";
 import { Link } from "react-router-dom";
 import winRateColor from "./WinRateColor";
-
+import { compareNumericString } from "../Tierlists/TierListHelpers";
 
 const Table = ({ columns, data }) => {
     const {
@@ -66,7 +66,7 @@ const Table = ({ columns, data }) => {
                           // we can add them into the header props
   
                           <div
-                            class={"rt-th inline-".concat(column.id)}
+                            class={"rt-th inline-".concat(column.id, "_matchups")}
                             {...column.getHeaderProps(
                               column.getSortByToggleProps()
                             )}
@@ -121,6 +121,7 @@ const Table = ({ columns, data }) => {
                                       minWidth: "40px",
                                       maxWidth: "60px",
                                       flex: "1 1 100%",
+                                      marginLeft: "2rem"
                                     }}
                                     {...cell.getCellProps()}
                                   >
@@ -131,7 +132,7 @@ const Table = ({ columns, data }) => {
                                   <div
                                     className="rt-td god"
                                     style={{ 
-                                      minWidth: "180px", 
+                                      minWidth: "160px", 
                                       maxWidth: "180px", 
                                       flex: "1 1 100%",
                                       display: 'flex',
@@ -329,11 +330,11 @@ const Table = ({ columns, data }) => {
 
     
 export default function Matchups(props) {
-  console.log(props)
     const [totalData, setTotalData] = useState([]);
     useEffect(() => {
         fetch("/api/".concat(props.pagegod, "/m/", props.role, "/", props.rank, "/", props.patch, "/", props.mode)).then((res) =>
           res.json().then((data) => {
+            console.log(data)
               setTotalData([]);
               Object.keys(data).forEach(key => {
                   setTotalData((totalData) => [
@@ -393,6 +394,7 @@ export default function Matchups(props) {
         ],
         []
       );
+    if (Object.keys(totalData).length > 0) {
     return(
       <div id="content">
         <div class="stats-tables-page">
@@ -404,20 +406,13 @@ export default function Matchups(props) {
           </div>
         </div>
       </div>
-    )
+    ) } else {
+      return (
+        <div className="content-section">
+          <div className="content-section_header">Matchups</div>
+          <div className="empty-set">NO DATA TO DISPLAY</div>
+        </div>
+      )
+    } 
 
-}
-
-function compareNumericString(rowA, rowB, id, desc) {
-  let a = Number.parseFloat(rowA.values[id]);
-  let b = Number.parseFloat(rowB.values[id]);
-  if (Number.isNaN(a)) {  // Blanks and non-numeric strings to bottom
-      a = desc ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
-  }
-  if (Number.isNaN(b)) {
-      b = desc ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
-  }
-  if (a > b) return 1; 
-  if (a < b) return -1;
-  return 0;
 }
