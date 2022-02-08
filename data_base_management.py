@@ -1,15 +1,15 @@
 
 
-from re import A, match
-import pymongo
-from collections import OrderedDict
-from operator import getitem
-import pandas as pd
-from pymongo.encryption import Algorithm
-import analyze as anlz
+# from re import A, match
+# import pymongo
+# from collections import OrderedDict
+# from operator import getitem
+# import pandas as pd
+# from pymongo.encryption import Algorithm
+# import analyze as anlz
 from constants import Tier_Three_items, godsDict, roles, ranks, single_combat_stats, single_objective_stats, Warriors
-from pandas.io.json import json_normalize
-import time
+# from pandas.io.json import json_normalize
+# import time
 from main import client
 
 def clear_nonmatches(client):
@@ -189,10 +189,25 @@ def merge_total_stats(client, patch, date):
     for god in godsDict:
         mycol = mydb[god]
         data = []
-        for x in mycol.find({"patch": patch, "Entry_Datetime": date}):
+        #, "Entry_Datetime": date
+        for x in mycol.find({"patch": patch}):
             data.append(x)
         print(f"{god}: {len(data)}")
         updatecol.insert_many(data)            
 
 if __name__ == "__main__":
-    merge_total_stats(client, "9.1", "1/31/2022")
+
+    mydb = client["single_match_stats"]
+    with open("items.txt", "w") as f:
+        for god in godsDict:
+            games = 0
+            dmg = 0
+            max_damage = 0 
+            mycol = mydb[god]
+            for x in mycol.find({}, {"damage_player": 1}):
+                dmg += x["damage_player"]
+                if x["damage_player"] > max_damage:
+                    max_damage = x["damage_player"]
+                games += 1
+            f.writelines(f"{god},{max_damage},{dmg},{games}, {round(dmg/games)}\n")
+    
