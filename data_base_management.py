@@ -1,5 +1,6 @@
 
 
+from os import dup
 from re import A, match
 import pymongo
 from collections import OrderedDict
@@ -195,8 +196,19 @@ def merge_total_stats(client, patch, date):
         updatecol.insert_many(data)            
 
 if __name__ == "__main__":
-    pass
     # calc_total_matches(client, ranks)
     mydb = client["CasualMatches"]
     mycol = mydb["9.1 Matches"]
-    print(mycol.count_documents({"Entry_Datetime": "2/4/2022"}))
+    dupegames = 0 
+    for x in mycol.aggregate([
+        {
+            "$group": {
+                "_id": "$MatchId",
+                "count": {"$sum": 1},
+            }
+        },
+        {"$sort": {"count": 1}},
+    ]):
+        if x["count"] > 1 and x["_id"] :
+            dupegames += x["count"]
+    print(dupegames)
