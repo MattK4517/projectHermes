@@ -189,8 +189,8 @@ def calc_ability_damage_raw(base, scaling, power, god, ability, **procs):
     damage = 0
     for i in range(get_num_hits(god, ability, base)):
         # print(get_scaling_changes(god, ability, i+1))
-        damage += (((float(base) + ((float(scaling)/100) * float(power))) + (float(base) *
-                   get_scaling_changes(god, ability, i+1)/100))) * get_percent_change(god, ability, i+1)
+        damage += calc_mitigation((((float(base) + ((float(scaling)/100) * float(power))) + (float(base) *
+                   get_scaling_changes(god, ability, i+1)/100))) * get_percent_change(god, ability, i+1), 48, 0,0,0,0,0)[0]
 
     # if ability == "Tearing The Veil Rift Damage:":
     #     damage = damage * 3
