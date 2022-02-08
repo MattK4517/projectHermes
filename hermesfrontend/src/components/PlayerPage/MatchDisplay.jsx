@@ -3,7 +3,7 @@ import { withStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
 import { Link } from "react-router-dom";
 import { HtmlTooltip, CreateItemToolTip } from "../mainGodPage/GodPageHelpers";
-
+import MultiKillDisplay from "./MultiKillDisplay";
 function PlayerBuildDisplay(props) {
     return (
       <div className={`build-container ${props.buildType}`}>
@@ -215,52 +215,7 @@ export default function MatchDisplay(props) {
                           </div>
                         </div>
                       </div>
-                      <div className="accolades-container hide">
-                        <div className="single-match-accolades">
-                          <div className="multikill-header-icon">
-                            <img
-                              src="https://i.imgur.com/WD0BJIw.png"
-                              alt="Double Kill"
-                            />
-                          </div>
-                          <div className="multikill-count">
-                            :{player.Kills_Double}
-                          </div>
-                        </div>
-                        <div className="single-match-accolades">
-                          <div className="multikill-header-icon">
-                            <img
-                              src="https://i.imgur.com/Ir6JXme.png"
-                              alt="Triple Kill"
-                            />
-                          </div>
-                          <div className="multikill-count">
-                            :{player.Kills_Triple}
-                          </div>
-                        </div>
-                        <div className="single-match-accolades">
-                          <div className="multikill-header-icon">
-                            <img
-                              src="https://i.imgur.com/x8psc5J.png"
-                              alt="Quadra Kill"
-                            />
-                          </div>
-                          <div className="multikill-count">
-                            :{player.Kills_Quadra}
-                          </div>
-                        </div>
-                        <div className="single-match-accolades">
-                          <div className="multikill-header-icon">
-                            <img
-                              src="https://i.imgur.com/ofYtxOH.png"
-                              alt="Penta Kill"
-                            />
-                          </div>
-                          <div className="multikill-count">
-                            :{player.Kills_Penta}
-                          </div>
-                        </div>
-                      </div>
+                      <MultiKillDisplay player={player} />
                     </div>
                     <div className="stat-group-five">
                       <div className="team">

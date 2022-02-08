@@ -2826,3 +2826,8 @@ figure.snip0015:hover figcaption::before {
 .scrolling-section {
   overflow-x: scroll;
 }
+
+.carry-score_container {
+  display: flex;
+  flex-direction: column;
+}
