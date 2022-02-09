@@ -12,7 +12,7 @@ import {
   HtmlTooltip,
   CreateItemToolTip,
 } from "../components/mainGodPage/GodPageHelpers";
-import PlayerCarryScore from "./MatchPage/PlayerCarryScore"
+import PlayerCarryScore from "./MatchPage/PlayerCarryScore";
 
 class NameForm extends React.Component {
   constructor(props) {
@@ -304,48 +304,105 @@ function CustomizedAccordions(player) {
       <AccordionSummary
         aria-controls="panel1d-content"
         id="panel1d-header"
-        style={{ background: styling}}
+        style={{ background: styling }}
       >
-        <div className="player-display-container">
-        <div className="item-image" style={{ minWidth: "100px", alignSelf: "center" }}>
-          <div className="item-image-div">
-            <img
-              src={getImageUrl(player.rank)}
-              alt={player.rank}
-              style={{ minWidth: "64px", minHeight: "64px" }}
-            />
+        <div className="player-display-container ">
+
+          <div className="player-display_mini show">
+            <div className="player-display_row">
+              <div className="item-image-div">
+                <img
+                  src={getImageUrl(player.rank)}
+                  alt={player.rank}
+                  style={{ minWidth: "32px", minHeight: "32px" }}
+                />
+              </div>
+            </div>
+            <div className="player-display_row">
+              <Link
+                className="player-god-played"
+                to={"/".concat(player.god.replaceAll(" ", "_"))}
+              >
+                <div style={{ position: "relative", minWidth: "24px" }}>
+                  <div className="player-icon">
+                    <div className="player-icon_container" style={{ height: "24px", width: "24px" }}>
+                      <img
+                        src={`https://webcdn.hirezstudios.com/smite/god-icons/${player.god
+                          .replaceAll(" ", "-")
+                          .toLowerCase()}.jpg`}
+                        alt={player.god}
+                        style={{
+                          height: "24px",
+                          width: "24px",
+                          transformOrigin: "0px 0px 0px",
+                          border: "2px solid black",
+                          borderRadius: "5px",
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            </div>
+          </div>
+
+          <div
+            className="item-image hide"
+            style={{ minWidth: "100px", alignSelf: "center" }}
+          >
+            <div className="item-image-div">
+              <img
+                src={getImageUrl(player.rank)}
+                alt={player.rank}
+                style={{ minWidth: "64px", minHeight: "64px" }}
+              />
+            </div>
+          </div>
+          <div className="hide">
+            <PlayerIcon god={player.god} />
+          </div>
+          <div
+            className="hide"
+            style={{
+              minWidth: "100px",
+              alignSelf: "center",
+              backgroundColor: "#11112a",
+              borderRadius: "6px",
+              marginRight: "3rem",
+            }}
+          >
+            <div className="drop-down_icon">
+              <div style={{ position: "relative", textAlign: "center" }}>
+                <div className="god-icon">
+                  <div
+                    style={{
+                      height: "30px",
+                      width: "30px",
+                    }}
+                  >
+                    <img
+                      src={getImageUrl(player.role)}
+                      alt={player.role.replaceAll("_", " ")}
+                      style={{
+                        height: "48px",
+                        width: "48px",
+                        transform: "scale(0.625)",
+                        transformOrigin: "0px 0px 0px",
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+              <strong className="god-name">
+                {player.role.replaceAll("_", " ")}
+              </strong>
+            </div>
           </div>
         </div>
-        <PlayerIcon god={player.god} />
-        <div style={{ minWidth: "100px", alignSelf: "center", backgroundColor: "#11112a", borderRadius: "6px", marginRight: "3rem"}}>
-                  <div className="drop-down_icon">
-                    <div style={{ position: "relative", textAlign: "center" }}>
-                      <div className="god-icon">
-                        <div
-                          style={{
-                            height: "30px",
-                            width: "30px",
-                          }}
-                        >
-                          <img
-                            src={getImageUrl(player.role)}
-                            alt={player.role.replaceAll("_", " ")}
-                            style={{
-                              height: "48px",
-                              width: "48px",
-                              transform: "scale(0.625)",
-                              transformOrigin: "0px 0px 0px",
-                            }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <strong className="god-name">{player.role.replaceAll("_", " ")}</strong>
-                  </div>
-        </div>
-        </div>
         <PlayerBuildDisplay build={player.godBuild} buildType={"items"} />
-        <PlayerCarryScore player={player}/>
+        <div className="show">
+          <PlayerCarryScore player={player}/>
+        </div>
         {/* <PlayerBuildDisplay build={player.relic} buildType={"relics"}/> */}
         <p>{player.winStatus}</p>
       </AccordionSummary>
@@ -449,53 +506,47 @@ function CustomizedAccordions(player) {
             </div>
           </div>
           <div className="row">
-              <div label="Build">
-                <div className="build-info" style={{ minWidth: "200px" }}>
-                  <span className="player-info-style">Health:</span>{" "}
-                  {health.toFixed(0)}
-                  <br></br>
-                  <span className="player-info-style">Mana:</span>{" "}
-                  {mana.toFixed(0)}
-                  <br></br>
-                  <span className="player-info-style">
-                    Movement Speed:
-                  </span>{" "}
-                  {moveSpeed}
-                  <br></br>
-                  <span className="player-info-style">Attack Speed:</span>{" "}
-                  {attSpeed.toFixed(2)}
-                  <br></br>
-                  <span className="player-info-style">
-                    Basic Attack Damage:
-                  </span>{" "}
-                  {baseAttDamage.toFixed(0)}
-                  <br></br>
-                  <span className="player-info-style">
-                    Magical Protection:
-                  </span>{" "}
-                  {magProt.toFixed(0)}
-                  <br></br>
-                  <span className="player-info-style">
-                    Physical Protection:
-                  </span>{" "}
-                  {physProt.toFixed(0)}
-                  <br></br>
-                  <span className="player-info-style">HP5:</span>{" "}
-                  {HP5.toFixed(2)}
-                  <br></br>
-                  <span className="player-info-style">MP5:</span>{" "}
-                  {MP5.toFixed(2)}
-                  <br></br>
-                  <span className="player-info-style">
-                    Physical Power:
-                  </span>{" "}
-                  {physPower.toFixed(0)}
-                  <br></br>
-                  <span className="player-info-style">Magical Power:</span>{" "}
-                  {magPower.toFixed(0)}
-                  <br></br>
-                </div>
+            <div label="Build">
+              <div className="build-info" style={{ minWidth: "200px" }}>
+                <span className="player-info-style">Health:</span>{" "}
+                {health.toFixed(0)}
+                <br></br>
+                <span className="player-info-style">Mana:</span>{" "}
+                {mana.toFixed(0)}
+                <br></br>
+                <span className="player-info-style">Movement Speed:</span>{" "}
+                {moveSpeed}
+                <br></br>
+                <span className="player-info-style">Attack Speed:</span>{" "}
+                {attSpeed.toFixed(2)}
+                <br></br>
+                <span className="player-info-style">
+                  Basic Attack Damage:
+                </span>{" "}
+                {baseAttDamage.toFixed(0)}
+                <br></br>
+                <span className="player-info-style">
+                  Magical Protection:
+                </span>{" "}
+                {magProt.toFixed(0)}
+                <br></br>
+                <span className="player-info-style">
+                  Physical Protection:
+                </span>{" "}
+                {physProt.toFixed(0)}
+                <br></br>
+                <span className="player-info-style">HP5:</span> {HP5.toFixed(2)}
+                <br></br>
+                <span className="player-info-style">MP5:</span> {MP5.toFixed(2)}
+                <br></br>
+                <span className="player-info-style">Physical Power:</span>{" "}
+                {physPower.toFixed(0)}
+                <br></br>
+                <span className="player-info-style">Magical Power:</span>{" "}
+                {magPower.toFixed(0)}
+                <br></br>
               </div>
+            </div>
           </div>
         </div>
       </AccordionDetails>
@@ -552,7 +603,9 @@ function PlayerIcon(props) {
             </div>
           </div>
         </div>
-        <strong className="god-name" style={{marginLeft: ".75rem"}}>{props.god}</strong>
+        <strong className="god-name" style={{ marginLeft: ".75rem" }}>
+          {props.god}
+        </strong>
       </Link>
     </div>
   );
@@ -561,7 +614,14 @@ function PlayerIcon(props) {
 export function PlayerBuildDisplay(props) {
   return (
     <div className="items-match">
-      <div className="build" style={{ marginTop: "0px", backgroundColor: "#11112a", display: "flex"}}>
+      <div
+        className="build"
+        style={{
+          marginTop: "0px",
+          backgroundColor: "#11112a",
+          display: "flex",
+        }}
+      >
         <div className="build-container">
           {props.build.map((slot, index) => {
             if (slot.DeviceName) {
@@ -579,27 +639,29 @@ export function PlayerBuildDisplay(props) {
                 //     paddingRight: "10px",
                 //   }}
                 // >
-                  <div
-                    className="item-wrapper"
-                    style={{ width: "36px", height: "36px" }}
-                  >
-                    <div style={{ width: "36px", height: "36px" }}>
-                      <img
-                        style={{
-                          height: "72px",
-                          width: "72px",
-                          backgroundPosition: "-96px -96px",
-                          transform: "scale(0.5)",
-                          transformOrigin: "0px 0px 0px",
-                        }}
-                        src={`https://webcdn.hirezstudios.com/smite/item-icons/${slot.DeviceName
-                          .replaceAll(" ", "-")
-                          .replaceAll("'", "")
-                          .toLowerCase()}.jpg`}
-                        alt={slot.DeviceName}
-                      />
-                    </div>
+                <div
+                  className="item-wrapper"
+                  style={{ width: "36px", height: "36px" }}
+                >
+                  <div class="item-image_container" style={{ width: "36px", height: "36px" }}>
+                    <img
+                      style={{
+                        height: "72px",
+                        width: "72px",
+                        backgroundPosition: "-96px -96px",
+                        transform: "scale(0.5)",
+                        transformOrigin: "0px 0px 0px",
+                      }}
+                      src={`https://webcdn.hirezstudios.com/smite/item-icons/${slot.DeviceName.replaceAll(
+                        " ",
+                        "-"
+                      )
+                        .replaceAll("'", "")
+                        .toLowerCase()}.jpg`}
+                      alt={slot.DeviceName}
+                    />
                   </div>
+                </div>
                 //</HtmlTooltip>
               );
             }

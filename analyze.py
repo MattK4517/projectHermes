@@ -62,6 +62,7 @@ def get_games_played(client, god, rank, role, patch, mode="Ranked"):
         myquery = { "role": role, "rank": rank, "patch": patch, "mode": f"{mode}Conq"}
     else:
         myquery = { "role": role, "patch": patch, "mode": f"{mode}Conq"}
+    print(myquery)
     games = mycol.count_documents(myquery)
     return games
 
@@ -867,6 +868,7 @@ def get_build_path(client, god, role, patch, mode, rank="All Ranks"):
         elif x["_id"]["win_status"] == "Loser":
             builds["{},{},{}".format(x["_id"]["slot1"], x["_id"]["slot2"], x["_id"]["slot3"])]["losses"] += x["count"]
         index += 1
+    print(builds)
     top_five = {}
     for x in list(builds)[-10:]:
             for key in builds[x].keys():
@@ -957,6 +959,6 @@ def get_lanes(client):
     return lanes
 
 if __name__ == "__main__":
-    print(get_top_builds(client, "Camazotz", "Solo", "9.1"))
+    print(get_games_played(client, "Bellona", "All Ranks", "Solo", "9.1"))
     pass
     # print(get_worst_matchups(client, "Bellona", "Carry", "9.1", player="AleksEnglish"))

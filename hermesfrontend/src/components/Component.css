@@ -1,5 +1,8 @@
+
 body {
   background-color: #070720 !important;
+  --winner-color: rgba(50,115,250);
+  --loser-color: rgba(255,78,80,.36);
 }
 .god-icon-style {
   border-radius: 50%;
@@ -1228,6 +1231,7 @@ figure.snip0015:hover figcaption::before {
   display: flex;
   flex-direction: row;
   justify-content: start;
+  overflow: hidden;
 }
 
 .player-god-played {
@@ -2846,18 +2850,53 @@ figure.snip0015:hover figcaption::before {
   /* flex-direction: column; */
 }
 
-@media (max-width: 1139px) {
-  .player-display-container {
-    display: flex;
+@media (max-width: 1200px) {
+  .show {
+    display: flex !important;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    background-color: rgb(17, 17, 42);
+    padding: .25rem;
+    margin-right: 1.2rem;
+    min-width: 45px;
+  }
+  .match-container {
     flex-direction: column;
   }
-  .player-display-container .rt-tr .player-god-played .god-icon {
-    height: 12px;
-    width: 12px;
+  .items-match .build .build-container .item-wrapper,
+  .items-match .build .build-container .item-wrapper  .item-image_container
+  {
+    width: 24px !important;
+    height: 24px !important;
   }
-  .player-display-container .rt-tr .player-god-played .god-icon > img {
-    height: 24px;
-    width: 24px;
-    transform: scale(.5);
+  .items-match .build .build-container .item-wrapper .item-image_container > img{
+    width: 48px !important;
+    height: 48px !important;
+  }
+  .Winner .player-display-container .show {
+    box-shadow: 0 0 3px var(--winner-color);
+  }
+  .Loser .player-display-container .show {
+    box-shadow: 0 0 3px var(--loser-color);
+  }
+  .player-display_row .player-god-played {
+    padding-left: 0px;
+  }
+
+  .player-god-played .player-icon .player-icon_container,
+  .player-god-played .player-icon .player-icon_container > img
+   {
+    width: 36px !important;
+    height: 36px !important;
   }
 }
+
+.show {
+  display: none
+}
+
+.player-display_row {
+  display: flex;
+}
+
