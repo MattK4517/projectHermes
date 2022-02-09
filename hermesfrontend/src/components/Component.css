@@ -2837,3 +2837,27 @@ figure.snip0015:hover figcaption::before {
   justify-content: center;
 }
 
+.light-blue {
+  color: #cddcfe
+}
+
+.player-display-container {
+  display: flex;
+  /* flex-direction: column; */
+}
+
+@media (max-width: 1139px) {
+  .player-display-container {
+    display: flex;
+    flex-direction: column;
+  }
+  .player-display-container .rt-tr .player-god-played .god-icon {
+    height: 12px;
+    width: 12px;
+  }
+  .player-display-container .rt-tr .player-god-played .god-icon > img {
+    height: 24px;
+    width: 24px;
+    transform: scale(.5);
+  }
+}
