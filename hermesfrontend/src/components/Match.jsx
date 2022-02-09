@@ -306,6 +306,7 @@ function CustomizedAccordions(player) {
         id="panel1d-header"
         style={{ background: styling}}
       >
+        <div className="player-display-container">
         <div className="item-image" style={{ minWidth: "100px", alignSelf: "center" }}>
           <div className="item-image-div">
             <img
@@ -341,6 +342,7 @@ function CustomizedAccordions(player) {
                     </div>
                     <strong className="god-name">{player.role.replaceAll("_", " ")}</strong>
                   </div>
+        </div>
         </div>
         <PlayerBuildDisplay build={player.godBuild} buildType={"items"} />
         <PlayerCarryScore player={player}/>

@@ -1,5 +1,15 @@
 
 
+<<<<<<< HEAD
+from os import dup
+from re import A, match
+import pymongo
+from collections import OrderedDict
+from operator import getitem
+import pandas as pd
+from pymongo.encryption import Algorithm
+import analyze as anlz
+=======
 # from re import A, match
 # import pymongo
 # from collections import OrderedDict
@@ -7,6 +17,7 @@
 # import pandas as pd
 # from pymongo.encryption import Algorithm
 # import analyze as anlz
+>>>>>>> f3bb50b5ffcceb155bf335928d31bc563fd3dc08
 from constants import Tier_Three_items, godsDict, roles, ranks, single_combat_stats, single_objective_stats, Warriors
 # from pandas.io.json import json_normalize
 # import time
@@ -196,15 +207,19 @@ def merge_total_stats(client, patch, date):
         updatecol.insert_many(data)            
 
 if __name__ == "__main__":
-
-    mydb = client["single_match_stats"]
-    mycol = mydb["Bellona"]
-    games = 0
-    wins = 0
-    for x in mycol.find({"patch": "9.1", "mode": "RankedConq", "player": "[Lаff]AleksEnglish"}, {"win_status": 1}):
-        if x["win_status"] == "Winner":
-            wins += 1
-        games += 1
-
-    print(wins, games, round(wins/games*100, 2))
-    
+    # calc_total_matches(client, ranks)
+    mydb = client["CasualMatches"]
+    mycol = mydb["9.1 Matches"]
+    dupegames = 0 
+    for x in mycol.aggregate([
+        {
+            "$group": {
+                "_id": "$MatchId",
+                "count": {"$sum": 1},
+            }
+        },
+        {"$sort": {"count": 1}},
+    ]):
+        if x["count"] > 1 and x["_id"] :
+            dupegames += x["count"]
+    print(dupegames)

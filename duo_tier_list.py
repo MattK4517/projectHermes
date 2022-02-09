@@ -17,70 +17,10 @@
 from main import client
 import analyze as anlz
 from math import sqrt
-if __name__ == "__main__":
-    mydb = client["Matches"]
-    mycol = mydb["8.11 Matches"]
-
-
-    duodb = client["Duo_Tierlist"]
-    duocol = duodb["8.11 Matches"]
-    myquery = {f"player{i}.Role": 1 for i in range(10)}
-    myquery = {**myquery, **{f"player{i}.Win_Status": 1 for i in range(10)}, **{"_id": 0, "MatchId": 1, "Patch": 1}, **{f"player{i}.godName": 1 for i in range(10)}}
-    set = []
-    wrs = {}
-    for x in mycol.find({} ,myquery):
-        insert_data = {
-            "winningCarry": "",
-            "winningSupport": "",
-            "losingCarry": "",
-            "losingSupport": "",
-            "MatchId": x["MatchId"],
-            "Patch": x["Patch"],
-        }
-        for player in x.keys():
-            if "player" in player:
-                if x[player]["Role"] == "Carry" and x[player]["Win_Status"] == "Winner":
-                    insert_data["winningCarry"] = x[player]["godName"]
-                    if x[player]["godName"] in wrs:
-                        insert_data["carryWinRate"] = wrs[x[player]["godName"]]
-                    else:
-                        insert_data["carryWinRate"] = anlz.get_winrate(client, x[player]["godName"], "Carry", "8.11")["win_rate"]
-                        wrs[x[player]["godName"]] = insert_data["carryWinRate"]
-
-                elif x[player]["Role"] == "Support" and x[player]["Win_Status"] == "Winner":
-                    insert_data["winningSupport"] = x[player]["godName"]
-                    if x[player]["godName"] in wrs:
-                        insert_data["supportWinRate"] = wrs[x[player]["godName"]]
-                    else:
-                        insert_data["supportWinRate"] = anlz.get_winrate(client, x[player]["godName"], "Support", "8.11")["win_rate"]
-                        wrs[x[player]["godName"]] = insert_data["supportWinRate"]
-
-                elif x[player]["Role"] == "Carry" and x[player]["Win_Status"] == "Loser":
-                    insert_data["losingCarry"] = x[player]["godName"]
-                    if x[player]["godName"] in wrs:
-                        insert_data["carryWinRateLoser"] = wrs[x[player]["godName"]]
-                    else:
-                        insert_data["carryWinRateLoser"] = anlz.get_winrate(client, x[player]["godName"], "Carry", "8.11")["win_rate"]
-                        wrs[x[player]["godName"]] = insert_data["carryWinRateLoser"]
-
-                elif x[player]["Role"] == "Support" and x[player]["Win_Status"] == "Loser":
-                    insert_data["losingSupport"] = x[player]["godName"]
-                    if x[player]["godName"] in wrs:
-                        insert_data["supportWinRateLoser"] = wrs[x[player]["godName"]]
-                    else:
-                        insert_data["supportWinRateLoser"] = anlz.get_winrate(client, x[player]["godName"], "Support", "8.11")["win_rate"]
-                        wrs[x[player]["godName"]] = insert_data["supportWinRateLoser"]
-
-        
-
-        set.append(insert_data)
-        if len(set) > 1000:
-            duocol.insert_many(set)
-            set = []
 
 def get_lanes():
     duodb = client["Duo_Tierlist"]
-    duocol = duodb["8.11 Matches"]
+    duocol = duodb["9.1 Matches"]
     lanes = {}
     myquery = {"Patch": {"$exists": True}}
     winning_lanes = []
@@ -153,3 +93,66 @@ def get_lanes():
                         **{"carryWinRate": winning_duo["winningCarryWR"], "supportWinRate": winning_duo["winningSupportWR"], "syneryFactor": syneryFactor},
                         }
     return lanes
+
+
+if __name__ == "__main__":
+    print(get_lanes())
+    # mydb = client["Matches"]
+    # mycol = mydb["9.1 Matches"]
+
+
+    # duodb = client["Duo_Tierlist"]
+    # duocol = duodb["9.1 Matches"]
+    # myquery = {f"player{i}.Role": 1 for i in range(10)}
+    # myquery = {**myquery, **{f"player{i}.Win_Status": 1 for i in range(10)}, **{"_id": 0, "MatchId": 1, "Patch": 1}, **{f"player{i}.godName": 1 for i in range(10)}}
+    # set = []
+    # wrs = {}
+    # for x in mycol.find({} ,myquery):
+    #     insert_data = {
+    #         "winningCarry": "",
+    #         "winningSupport": "",
+    #         "losingCarry": "",
+    #         "losingSupport": "",
+    #         "MatchId": x["MatchId"],
+    #         "Patch": x["Patch"],
+    #     }
+    #     for player in x.keys():
+    #         if "player" in player:
+    #             if x[player]["Role"] == "Carry" and x[player]["Win_Status"] == "Winner":
+    #                 insert_data["winningCarry"] = x[player]["godName"]
+    #                 if x[player]["godName"] in wrs:
+    #                     insert_data["carryWinRate"] = wrs[x[player]["godName"]]
+    #                 else:
+    #                     insert_data["carryWinRate"] = anlz.get_winrate(client, x[player]["godName"], "Carry", "8.11")["win_rate"]
+    #                     wrs[x[player]["godName"]] = insert_data["carryWinRate"]
+
+    #             elif x[player]["Role"] == "Support" and x[player]["Win_Status"] == "Winner":
+    #                 insert_data["winningSupport"] = x[player]["godName"]
+    #                 if x[player]["godName"] in wrs:
+    #                     insert_data["supportWinRate"] = wrs[x[player]["godName"]]
+    #                 else:
+    #                     insert_data["supportWinRate"] = anlz.get_winrate(client, x[player]["godName"], "Support", "8.11")["win_rate"]
+    #                     wrs[x[player]["godName"]] = insert_data["supportWinRate"]
+
+    #             elif x[player]["Role"] == "Carry" and x[player]["Win_Status"] == "Loser":
+    #                 insert_data["losingCarry"] = x[player]["godName"]
+    #                 if x[player]["godName"] in wrs:
+    #                     insert_data["carryWinRateLoser"] = wrs[x[player]["godName"]]
+    #                 else:
+    #                     insert_data["carryWinRateLoser"] = anlz.get_winrate(client, x[player]["godName"], "Carry", "8.11")["win_rate"]
+    #                     wrs[x[player]["godName"]] = insert_data["carryWinRateLoser"]
+
+    #             elif x[player]["Role"] == "Support" and x[player]["Win_Status"] == "Loser":
+    #                 insert_data["losingSupport"] = x[player]["godName"]
+    #                 if x[player]["godName"] in wrs:
+    #                     insert_data["supportWinRateLoser"] = wrs[x[player]["godName"]]
+    #                 else:
+    #                     insert_data["supportWinRateLoser"] = anlz.get_winrate(client, x[player]["godName"], "Support", "8.11")["win_rate"]
+    #                     wrs[x[player]["godName"]] = insert_data["supportWinRateLoser"]
+
+        
+
+    #     set.append(insert_data)
+    #     if len(set) > 1000:
+    #         duocol.insert_many(set)
+    #         set = []
