@@ -1909,10 +1909,13 @@ figure.snip0015:hover figcaption::before {
   border-radius: 3px;
   background-color: #383864;
   overflow: hidden;
+
 }
 
 .items-match {
-  margin-right: 3rem;
+  margin: 0 1rem;
+  display: flex;
+  align-items: center;
 }
 
 .build .build-container {
@@ -2858,7 +2861,6 @@ figure.snip0015:hover figcaption::before {
     justify-content: center;
     background-color: rgb(17, 17, 42);
     padding: .25rem;
-    margin-right: 1.2rem;
     min-width: 45px;
   }
   .match-container {
@@ -2874,11 +2876,17 @@ figure.snip0015:hover figcaption::before {
     width: 48px !important;
     height: 48px !important;
   }
-  .Winner .player-display-container .show {
-    box-shadow: 0 0 3px var(--winner-color);
+  .Winner .player-display-container .show,
+  .Winner .items-match,
+  .shadow
+  {
+    box-shadow: 0 0 7px var(--winner-color);
   }
-  .Loser .player-display-container .show {
-    box-shadow: 0 0 3px var(--loser-color);
+  .Loser .player-display-container .show,
+  .Loser .items-match,
+  .Loser .shadow
+  {
+    box-shadow: 0 0 7px var(--loser-color);
   }
   .player-display_row .player-god-played {
     padding-left: 0px;
@@ -2900,3 +2908,8 @@ figure.snip0015:hover figcaption::before {
   display: flex;
 }
 
+.player-display-winstat {
+  display: flex;
+  align-items: center;
+  justify-self: center;
+}

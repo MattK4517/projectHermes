@@ -400,11 +400,13 @@ function CustomizedAccordions(player) {
           </div>
         </div>
         <PlayerBuildDisplay build={player.godBuild} buildType={"items"} />
-        <div className="show">
+        <div className="shadow">
           <PlayerCarryScore player={player}/>
         </div>
         {/* <PlayerBuildDisplay build={player.relic} buildType={"relics"}/> */}
-        <p>{player.winStatus}</p>
+        <div className="player-display-winstat">
+          <p>{player.winStatus}</p>
+        </div>
       </AccordionSummary>
       <AccordionDetails style={{ background: styling }}>
         <div
@@ -620,6 +622,7 @@ export function PlayerBuildDisplay(props) {
           marginTop: "0px",
           backgroundColor: "#11112a",
           display: "flex",
+          height: "100%"
         }}
       >
         <div className="build-container">

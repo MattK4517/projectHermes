@@ -2,7 +2,7 @@
 
 export default function MultiKillDisplay(props) {
     return(                      
-    <div className="accolades-container hide">
+    <div className="accolades-container">
     <div className="single-match-accolades">
       <div className="multikill-header-icon">
         <img
