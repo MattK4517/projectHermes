@@ -13,7 +13,10 @@ import {
   CreateItemToolTip,
 } from "../components/mainGodPage/GodPageHelpers";
 import PlayerCarryScore from "./MatchPage/PlayerCarryScore";
+import BaseMatchSummary from "./MatchPage/BaseMatchSummary";
 import { fontWeight } from "@mui/system";
+import MultiKillDisplay from "./PlayerPage/MultiKillDisplay";
+
 
 class NameForm extends React.Component {
   constructor(props) {
@@ -60,87 +63,6 @@ class NameForm extends React.Component {
   }
 }
 
-function BaseMatchSummary(props) {
-  return (
-    <div className="match-summary-container" style={{ minWidth: "200px" }}>
-      <div className="match-info-header">
-        <h3>
-          Ranked Conquest - {props.matchId}
-          <br></br>
-          {props.date}
-        </h3>
-      </div>
-      <div className="basic-match-info">
-        <h4>Basic Match Info</h4>
-        <ul>
-          <li>{props.length} Minutes</li>
-          <li>Winning Side Bans</li>
-          <li className="bans-container">
-            {props.bansWinner.map((ban) => {
-              if (ban) {
-                return (
-                  <Link to={"/".concat(ban.replaceAll(" ", "_"))}>
-                    <div style={{ position: "relative" }}>
-                      <div className="god-icon">
-                        <div style={{ height: "30px", width: "30px" }}>
-                          <img
-                            src={`https://webcdn.hirezstudios.com/smite/god-icons/${ban
-                              .replaceAll(" ", "-")
-                              .toLowerCase()}.jpg`}
-                            alt={ban}
-                            style={{
-                              height: "48px",
-                              width: "48px",
-                              transform: "scale(0.625)",
-                              transformOrigin: "0px 0px 0px",
-                            }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                );
-              }
-            })}
-          </li>
-          <li>Loser Side Bans</li>
-          <li className="bans-container">
-            {props.bansLoser.map((ban) => {
-              if (ban) {
-                return (
-                  <Link to={"/".concat(ban.replaceAll(" ", "_"))}>
-                    <div style={{ position: "relative" }}>
-                      <div className="god-icon">
-                        <div style={{ height: "30px", width: "30px" }}>
-                          <img
-                            src={`https://webcdn.hirezstudios.com/smite/god-icons/${ban
-                              .replaceAll(" ", "-")
-                              .toLowerCase()}.jpg`}
-                            alt={ban}
-                            style={{
-                              height: "48px",
-                              width: "48px",
-                              transform: "scale(0.625)",
-                              transformOrigin: "0px 0px 0px",
-                            }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                );
-              }
-            })}
-          </li>
-          <li>Winning Side MMR</li>
-          <li>{(props.mmrWinner.reduce(reducer) / 5).toFixed(2)}</li>
-          <li>Losing Side MMR</li>
-          <li>{(props.mmrLoser.reduce(reducer) / 5).toFixed(2)}</li>
-        </ul>
-      </div>
-    </div>
-  );
-}
 
 const Accordion = withStyles({
   root: {
@@ -403,7 +325,7 @@ function CustomizedAccordions(player) {
           </div>
         </div>
         <PlayerBuildDisplay buildType={"items"} player={player} />
-        <div className="shadow player-padding_header">
+        <div className="shadow player-padding_header hide">
           <PlayerCarryScore player={player} />
         </div>
         {/* <PlayerBuildDisplay build={player.relic} buildType={"relics"}/> */}
@@ -693,11 +615,10 @@ export function PlayerBuildDisplay(props) {
         {props.player.assists}
         <br></br>
       </div>
+      <MultiKillDisplay player={props.player} />
     </div>
   );
 }
-
-const reducer = (accumulator, currentValue) => accumulator + currentValue;
 
 const setBans = (bans, firstSideWinStatus, setBansWinner, setBansLoser) => {
   if (firstSideWinStatus === "Winner") {
@@ -800,6 +721,10 @@ function Match() {
   const [matchLength, setMatchLength] = useState("");
   const [bansWinner, setBansWinner] = useState([]);
   const [bansLoser, setBansLoser] = useState([]);
+
+  const [godsWinner, setGodsWinner] = useState([]);
+  const [godsLoser, setGodsLoser] = useState([]);
+
   const [mmrWinner, setMMRWinner] = useState([0, 0, 0, 0, 0]);
   const [mmrLoser, setMMRLoser] = useState([0, 0, 0, 0, 0]);
   const [players, setPlayers] = useState([]);
@@ -810,6 +735,8 @@ function Match() {
       res.json().then((data) => {
         setBansWinner([]);
         setBansLoser([]);
+        setGodsWinner([]);
+        setGodsLoser([]);
         setMMRWinner([0, 0, 0, 0, 0]);
         setMMRLoser([0, 0, 0, 0, 0]);
         setPlayers([]);
@@ -820,6 +747,11 @@ function Match() {
             bans = [...bans, data[key]];
           } else if (key.includes("player")) {
             mmrs = [...mmrs, data[key]["Ranked_Stat_Conq"]];
+            if (data[key]["Win_Status"] === "Winner") {
+              setGodsWinner(godsWinner => {[
+                ...godsWinner, data[key]["godName"]
+              ]})
+            }
             setPlayers((player) => [
               ...player,
               {
@@ -931,7 +863,7 @@ function Match() {
             mmrLoser={mmrLoser}
             date={date}
           />
-          <PlayerMatchSummary players={players} />
+          {/* <PlayerMatchSummary players={players} /> */}
         </div>
       </div>
     </div>

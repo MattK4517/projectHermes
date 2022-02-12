@@ -1205,10 +1205,6 @@ figure.snip0015:hover figcaption::before {
   font-size: .8rem;
 }
 
-.bans-container {
-  display: flex;
-}
-
 .KDA {
   font-size: 14px;
   font-weight: 700;
@@ -1220,12 +1216,9 @@ figure.snip0015:hover figcaption::before {
   background-color: #11112a;
   max-width: 100%;
   padding: 10px;
-}
-
-.match-summary-container-players {
-  display: flex;
   flex-direction: column;
 }
+
 
 .player-container {
   display: flex;
@@ -2854,13 +2847,14 @@ figure.snip0015:hover figcaption::before {
   /* flex-direction: column; */
 }
 
+/* MATCH PAGE */
+
 @media (max-width: 899px) {
   .show {
     display: flex !important;
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    background-color: rgb(17, 17, 42);
     padding: .25rem;
     min-width: 45px;
   }
@@ -2880,7 +2874,7 @@ figure.snip0015:hover figcaption::before {
     width: 48px !important;
     height: 48px !important;
   }
-  .Winner .player-display-container .show,
+  /* .Winner .player-display-container .show,
   .Winner .items-match,
   .shadow
   {
@@ -2891,7 +2885,7 @@ figure.snip0015:hover figcaption::before {
   .Loser .shadow
   {
     box-shadow: 0 0 7px var(--loser-color);
-  }
+  } */
   .player-display_row .player-god-played {
     padding-left: 0px;
   }
@@ -2908,6 +2902,36 @@ figure.snip0015:hover figcaption::before {
 
   .shrink-padding {
     padding: 0 12px !important;
+  }
+
+  .accolades-container {
+    display: flex;
+  }
+  .basic-match-info > *,
+  .match-info-header > * {
+    font-size: 14px;
+  }
+  .match-summary-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .basic-match-info ul li li::marker {
+    display: none
+  }
+  .basic-match-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: .5px
+  }
+  .match-info-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: .5px
   }
 }
 
@@ -2927,4 +2951,34 @@ figure.snip0015:hover figcaption::before {
 
 .player-padding_header {
   margin-right: 1rem;
+}
+
+.match-info-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.basic-match-info {
+  display: flex;
+  flex-direction: row;
+}
+
+.bans-container,
+.basic-info-mmrs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bans-container {
+  flex-direction: row;
+}
+
+.basic-info-mmrs {
+  flex-direction: column;
+}
+
+.player-summary-wrapper {
+  margin: 0 auto;
 }
