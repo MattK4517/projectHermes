@@ -2992,7 +2992,8 @@ figure.snip0015:hover figcaption::before {
 
 .basic-match-info {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  text-align: center;
 }
 
 .bans-container,
@@ -3009,6 +3010,25 @@ figure.snip0015:hover figcaption::before {
   flex-direction: column;
 }
 
+
 .player-summary-wrapper {
   margin: 0 auto;
+}
+
+.team-gods-container .bans-container {
+  flex-direction: row !important;
+}
+
+.team-gods-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.team-gods-container:not(:last-child) {
+  margin-right: .5rem;
+}
+
+.match-info-simple {
+  display: flex;
+  flex-direction: row;
 }

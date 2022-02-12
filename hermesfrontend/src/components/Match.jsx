@@ -63,90 +63,6 @@ class NameForm extends React.Component {
   }
 }
 
-<<<<<<< HEAD
-=======
-function BaseMatchSummary(props) {
-  return (
-    <div className="match-summary-container" style={{ minWidth: "200px" }}>
-      <div className="match-info-header">
-        <h3>
-          Ranked Conquest - {props.matchId}
-          <br></br>
-          {props.date}
-        </h3>
-      </div>
-      <div className="basic-match-info">
-        <h4>Basic Match Info</h4>
-        <ul className="match-info-list">
-          <li>{props.length} Minutes</li>
-          <li>Winning Side Bans</li>
-          <li className="bans-container">
-            {props.bansWinner.map((ban) => {
-              if (ban) {
-                return (
-                  <Link to={"/".concat(ban.replaceAll(" ", "_"))}>
-                    <div style={{ position: "relative" }}>
-                      <div className="god-icon">
-                        <div style={{ height: "30px", width: "30px" }}>
-                          <img
-                            src={`https://webcdn.hirezstudios.com/smite/god-icons/${ban
-                              .replaceAll(" ", "-")
-                              .toLowerCase()}.jpg`}
-                            alt={ban}
-                            style={{
-                              height: "48px",
-                              width: "48px",
-                              transform: "scale(0.625)",
-                              transformOrigin: "0px 0px 0px",
-                            }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                );
-              }
-            })}
-          </li>
-          <li>Losing Side Bans</li>
-          <li className="bans-container">
-            {props.bansLoser.map((ban) => {
-              if (ban) {
-                return (
-                  <Link to={"/".concat(ban.replaceAll(" ", "_"))}>
-                    <div style={{ position: "relative" }}>
-                      <div className="god-icon">
-                        <div style={{ height: "30px", width: "30px" }}>
-                          <img
-                            src={`https://webcdn.hirezstudios.com/smite/god-icons/${ban
-                              .replaceAll(" ", "-")
-                              .toLowerCase()}.jpg`}
-                            alt={ban}
-                            style={{
-                              height: "48px",
-                              width: "48px",
-                              transform: "scale(0.625)",
-                              transformOrigin: "0px 0px 0px",
-                            }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                );
-              }
-            })}
-          </li>
-          <li>Winning Side MMR</li>
-          <li>{(props.mmrWinner.reduce(reducer) / 5).toFixed(2)}</li>
-          <li>Losing Side MMR</li>
-          <li>{(props.mmrLoser.reduce(reducer) / 5).toFixed(2)}</li>
-        </ul>
-      </div>
-    </div>
-  );
-}
->>>>>>> 8d783fd2245b010070d5ea6e10550f622cd80170
 
 const Accordion = withStyles({
   root: {
@@ -832,9 +748,13 @@ function Match() {
           } else if (key.includes("player")) {
             mmrs = [...mmrs, data[key]["Ranked_Stat_Conq"]];
             if (data[key]["Win_Status"] === "Winner") {
-              setGodsWinner(godsWinner => {[
+              setGodsWinner((godsWinner) => [
                 ...godsWinner, data[key]["godName"]
-              ]})
+              ]);
+            } else if (data[key]["Win_Status"] === "Loser") {
+              setGodsLoser((godsLoser) => [
+                ...godsLoser, data[key]["godName"]
+              ]);
             }
             setPlayers((player) => [
               ...player,
@@ -946,6 +866,8 @@ function Match() {
             mmrWinner={mmrWinner}
             mmrLoser={mmrLoser}
             date={date}
+            godsWinner={godsWinner}
+            godsLoser={godsLoser}
           />
           {/* <PlayerMatchSummary players={players} /> */}
         </div>
