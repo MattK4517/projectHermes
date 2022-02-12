@@ -72,7 +72,7 @@ function BaseMatchSummary(props) {
       </div>
       <div className="basic-match-info">
         <h4>Basic Match Info</h4>
-        <ul>
+        <ul className="match-info-list">
           <li>{props.length} Minutes</li>
           <li>Winning Side Bans</li>
           <li className="bans-container">
@@ -103,7 +103,7 @@ function BaseMatchSummary(props) {
               }
             })}
           </li>
-          <li>Loser Side Bans</li>
+          <li>Losing Side Bans</li>
           <li className="bans-container">
             {props.bansLoser.map((ban) => {
               if (ban) {
@@ -403,11 +403,11 @@ function CustomizedAccordions(player) {
           </div>
         </div>
         <PlayerBuildDisplay buildType={"items"} player={player} />
-        <div className="shadow player-padding_header">
+        <div className="shadow player-padding_header" style={{overflow: "hidden"}}>
           <PlayerCarryScore player={player} />
         </div>
         {/* <PlayerBuildDisplay build={player.relic} buildType={"relics"}/> */}
-        <div className="player-display-winstat">
+        <div className="player-display-winstat hide">
           <p>{player.winStatus}</p>
         </div>
       </AccordionSummary>
@@ -632,19 +632,19 @@ export function PlayerBuildDisplay(props) {
           {props.player.godBuild.map((slot, index) => {
             if (slot.DeviceName) {
               return (
-                // <HtmlTooltip
-                //   key={index}
-                //   title={
-                //     <React.Fragment>
-                //       <CreateItemToolTip item={slot} />
-                //     </React.Fragment>
-                //   }
-                //   placement="top"
-                //   arrow
-                //   style={{
-                //     paddingRight: "10px",
-                //   }}
-                // >
+                <HtmlTooltip
+                  key={index}
+                  title={
+                    <React.Fragment>
+                      <CreateItemToolTip item={slot} />
+                    </React.Fragment>
+                  }
+                  placement="top"
+                  arrow
+                  style={{
+                    paddingRight: "10px",
+                  }}
+                >
                 <div
                   className="item-wrapper"
                   style={{ width: "36px", height: "36px" }}
@@ -671,7 +671,7 @@ export function PlayerBuildDisplay(props) {
                     />
                   </div>
                 </div>
-                //</HtmlTooltip>
+                </HtmlTooltip>
               );
             }
           })}

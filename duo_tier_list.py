@@ -1,28 +1,32 @@
-### get winrates of adc and support
-### all we need from matches 
+# get winrates of adc and support
+# all we need from matches
 
 ### players.role and players.win_status
 
-### create duo lane data base
-    # {
-    #     winningCarry:
-    #     winningSupport:
-    #     losingCarry:
-    #     losingSupport:
-    #     MatchId:
-    #     patch:
-    # }
+# create duo lane data base
+# {
+#     winningCarry:
+#     winningSupport:
+#     losingCarry:
+#     losingSupport:
+#     MatchId:
+#     patch:
+# }
 
 
 from main import client
 import analyze as anlz
 from math import sqrt
+from constants import patch
+from pymongo import MongoClient
 
-def get_lanes():
+def get_lanes(role_one: str, role_two: str) -> list:
     duodb = client["Duo_Tierlist"]
     duocol = duodb["9.1 Matches"]
+    role_one_lowercase = role_one.lower()
+    role_two_lowercase = role_two.lower()
     lanes = {}
-    myquery = {"Patch": {"$exists": True}}
+    myquery = {"Patch": {"$exists": True}, "Type": f"{role_one}{role_two}"}
     winning_lanes = []
     for x in duocol.aggregate(
             [
@@ -32,18 +36,18 @@ def get_lanes():
                 {
                     "$group": {
                         "_id": {
-                            "carry": "$winningCarry",
-                            "support": "$winningSupport",
+                            f"{role_one_lowercase}": f"$winning{role_one}",
+                            f"{role_two_lowercase}": f"$winning{role_two}",
                         },
-                        "winningCarryWR": {"$avg": "$carryWinRate"},
-                        "winningSupportWR": {"$avg": "$supportWinRate"},
+                        f"winning{role_one}WR": {"$avg": f"${role_one_lowercase}WinRate"},
+                        f"winning{role_two}WR": {"$avg": f"${role_two_lowercase}WinRate"},
                         "count": {"$sum": 1},
                     }
                 },
                 {"$sort": {"count": 1}},
             ]
-            ):
-                winning_lanes.append(x)
+    ):
+        winning_lanes.append(x)
 
     losing_lanes = []
     for x in duocol.aggregate(
@@ -54,105 +58,104 @@ def get_lanes():
                 {
                     "$group": {
                         "_id": {
-                            "carry": "$losingCarry",
-                            "support": "$losingSupport",
-
+                            f"{role_one_lowercase}": f"$losing{role_one}",
+                            f"{role_two_lowercase}": f"$losing{role_two}",
                         },
-                        "winningCarryWR": {"$avg": "$carryWinRate"},
-                        "winningSupportWR": {"$avg": "$supportWinRate"},
+                        f"winning{role_one}WR": {"$avg": f"${role_one_lowercase}WinRate"},
+                        f"winning{role_two}WR": {"$avg": f"${role_two_lowercase}WinRate"},
                         "count": {"$sum": 1},
-                    },
+                    }
                 },
                 {"$sort": {"count": 1}},
             ]
-            ):
-                losing_lanes.append(x)
-    god_wrs = {"carry": {}, "support": {}}
+    ):
+        losing_lanes.append(x)
+    god_wrs = {"mid": {}, "jungle": {}}
     for winning_duo in winning_lanes:
         for losing_duo in losing_lanes:
             if winning_duo["count"] + losing_duo["count"] > 150:
                 if winning_duo["_id"] == losing_duo["_id"]:
-                    # if winning_duo["winningCarryWR"] > 100 or winning_duo["winningSupportWR"] > 100:
-                    #     print(winning_duo)
-                    # if winning_duo["_id"]["carry"] not in god_wrs["carry"]:
-                    #     carryWinRate = winning_duo["winningCarryWR"]
-                    #     god_wrs["carry"][winning_duo["_id"]["carry"]] = winning_duo["winningCarryWR"]
-                    # else:
-                    #     carryWinRate = god_wrs["carry"][winning_duo["_id"]["carry"]]
 
-                    # if winning_duo["_id"]["support"] not in god_wrs["support"]:
-                    #     supportWinRate = winning_duo["winningSupportWR"]
-                    #     god_wrs["support"][winning_duo["_id"]["support"]] = winning_duo["winningSupportWR"]
-                    # else:
-                    #     supportWinRate = god_wrs["support"][winning_duo["_id"]["support"]]
-
-                    syneryFactor = round(winning_duo["count"]/(winning_duo["count"]+losing_duo["count"])*100, 2) - sqrt(winning_duo["winningCarryWR"]* winning_duo["winningSupportWR"])
-                    lanes[str(winning_duo["_id"]["carry"]) + str(winning_duo["_id"]["support"])] = {
-                        **winning_duo, 
-                        **{"losses": losing_duo["count"], "winRate": round(winning_duo["count"]/(winning_duo["count"]+losing_duo["count"])*100, 2) },
-                        **{"carryWinRate": winning_duo["winningCarryWR"], "supportWinRate": winning_duo["winningSupportWR"], "syneryFactor": syneryFactor},
-                        }
+                    syneryFactor = round(winning_duo["count"]/(winning_duo["count"]+losing_duo["count"])*100, 2) - sqrt(
+                        winning_duo[f"winning{role_one}WR"] * winning_duo[f"winning{role_two}WR"])
+                    lanes[str(winning_duo["_id"][role_one_lowercase]) + str(winning_duo["_id"][role_two_lowercase])] = {
+                        **winning_duo,
+                        **{"losses": losing_duo["count"], "winRate": round(winning_duo["count"]/(winning_duo["count"]+losing_duo["count"])*100, 2)},
+                        **{f"{role_one_lowercase}WinRate": winning_duo[f"winning{role_one}WR"], f"{role_two_lowercase}WinRate": winning_duo[f"winning{role_two}WR"], "syneryFactor": syneryFactor},
+                    }
     return lanes
 
+# gen_regular_tier_entry(client, god, role, rank, patch)
+def calc_duo_tier_list(client: MongoClient, role_one: str, role_two: str, patch: str) -> None:
+    mydb = client["Matches"]
+    mycol = mydb["9.1 Matches"]
+    role_one_lowercase = role_one.lower()
+    role_two_lowercase = role_two.lower()
+
+    duodb = client["Duo_Tierlist"]
+    duocol = duodb["9.1 Matches"]
+    myquery = {f"player{i}.Role": 1 for i in range(10)}
+    myquery = {**myquery, **{f"player{i}.Win_Status": 1 for i in range(10)}, **{
+        "_id": 0, "MatchId": 1, "Patch": 1}, **{f"player{i}.godName": 1 for i in range(10)}}
+    set = []
+    wrs = {}
+    for mode in ["Ranked"]:
+        for x in mycol.find({}, myquery):
+            insert_data = {
+                f"winning{role_one}": "",
+                f"winning{role_two}": "",
+                f"losing{role_one}": "",
+                f"losing{role_two}": "",
+                "MatchId": x["MatchId"],
+                "Patch": x["Patch"],
+                "Type": f"{role_one}{role_two}"
+            }
+            for player in x.keys():
+                if "player" in player:
+                    if x[player]["Role"] == role_one and x[player]["Win_Status"] == "Winner":
+                        insert_data[f"winning{role_one}"] = x[player]["godName"]
+                        if x[player]["godName"] in wrs:
+                            insert_data[f"{role_one_lowercase}WinRate"] = wrs[x[player]
+                                                            ["godName"]]
+                        else:
+                            insert_data[f"{role_one_lowercase}WinRate"]= anlz.get_winrate(
+                                client, x[player]["godName"], role_one, patch, mode=mode)["win_rate"]
+                            wrs[x[player]["godName"]] = insert_data[f"{role_one_lowercase}WinRate"]
+
+                    elif x[player]["Role"] == role_two and x[player]["Win_Status"] == "Winner":
+                        insert_data[f"winning{role_two}"] = x[player]["godName"]
+                        if x[player]["godName"] in wrs:
+                            insert_data[f"{role_two_lowercase}WinRate"] = wrs[x[player]["godName"]]
+                        else:
+                            insert_data[f"{role_two_lowercase}WinRate"] = anlz.get_winrate(
+                                client, x[player]["godName"], role_two, patch, mode=mode)["win_rate"]
+                            wrs[x[player]["godName"]
+                                ] = insert_data[f"{role_two_lowercase}WinRate"]
+
+                    elif x[player]["Role"] == role_one and x[player]["Win_Status"] == "Loser":
+                        insert_data[f"losing{role_one}"] = x[player]["godName"]
+                        if x[player]["godName"] in wrs:
+                            insert_data[f"{role_one_lowercase}WinRateLoser"] = wrs[x[player]["godName"]]
+                        else:
+                            insert_data[f"{role_one_lowercase}WinRateLoser"] = anlz.get_winrate(
+                                client, x[player]["godName"], role_one, patch, mode=mode)["win_rate"]
+                            wrs[x[player]["godName"]
+                                ] = insert_data[f"{role_one_lowercase}WinRateLoser"]
+
+                    elif x[player]["Role"] == role_two and x[player]["Win_Status"] == "Loser":
+                        insert_data[f"losing{role_two}"] = x[player]["godName"]
+                        if x[player]["godName"] in wrs:
+                            insert_data[f"{role_two_lowercase}WinRateLoser"] = wrs[x[player]["godName"]]
+                        else:
+                            insert_data[f"{role_two_lowercase}WinRateLoser"] = anlz.get_winrate(
+                                client, x[player]["godName"], role_two, patch, mode=mode)["win_rate"]
+                            wrs[x[player]["godName"]
+                                ] = insert_data[f"{role_two_lowercase}WinRateLoser"]
+
+            set.append(insert_data)
+            if len(set) > 1000:
+                duocol.insert_many(set)
+                set = []
 
 if __name__ == "__main__":
-    print(get_lanes())
-    # mydb = client["Matches"]
-    # mycol = mydb["9.1 Matches"]
-
-
-    # duodb = client["Duo_Tierlist"]
-    # duocol = duodb["9.1 Matches"]
-    # myquery = {f"player{i}.Role": 1 for i in range(10)}
-    # myquery = {**myquery, **{f"player{i}.Win_Status": 1 for i in range(10)}, **{"_id": 0, "MatchId": 1, "Patch": 1}, **{f"player{i}.godName": 1 for i in range(10)}}
-    # set = []
-    # wrs = {}
-    # for x in mycol.find({} ,myquery):
-    #     insert_data = {
-    #         "winningCarry": "",
-    #         "winningSupport": "",
-    #         "losingCarry": "",
-    #         "losingSupport": "",
-    #         "MatchId": x["MatchId"],
-    #         "Patch": x["Patch"],
-    #     }
-    #     for player in x.keys():
-    #         if "player" in player:
-    #             if x[player]["Role"] == "Carry" and x[player]["Win_Status"] == "Winner":
-    #                 insert_data["winningCarry"] = x[player]["godName"]
-    #                 if x[player]["godName"] in wrs:
-    #                     insert_data["carryWinRate"] = wrs[x[player]["godName"]]
-    #                 else:
-    #                     insert_data["carryWinRate"] = anlz.get_winrate(client, x[player]["godName"], "Carry", "8.11")["win_rate"]
-    #                     wrs[x[player]["godName"]] = insert_data["carryWinRate"]
-
-    #             elif x[player]["Role"] == "Support" and x[player]["Win_Status"] == "Winner":
-    #                 insert_data["winningSupport"] = x[player]["godName"]
-    #                 if x[player]["godName"] in wrs:
-    #                     insert_data["supportWinRate"] = wrs[x[player]["godName"]]
-    #                 else:
-    #                     insert_data["supportWinRate"] = anlz.get_winrate(client, x[player]["godName"], "Support", "8.11")["win_rate"]
-    #                     wrs[x[player]["godName"]] = insert_data["supportWinRate"]
-
-    #             elif x[player]["Role"] == "Carry" and x[player]["Win_Status"] == "Loser":
-    #                 insert_data["losingCarry"] = x[player]["godName"]
-    #                 if x[player]["godName"] in wrs:
-    #                     insert_data["carryWinRateLoser"] = wrs[x[player]["godName"]]
-    #                 else:
-    #                     insert_data["carryWinRateLoser"] = anlz.get_winrate(client, x[player]["godName"], "Carry", "8.11")["win_rate"]
-    #                     wrs[x[player]["godName"]] = insert_data["carryWinRateLoser"]
-
-    #             elif x[player]["Role"] == "Support" and x[player]["Win_Status"] == "Loser":
-    #                 insert_data["losingSupport"] = x[player]["godName"]
-    #                 if x[player]["godName"] in wrs:
-    #                     insert_data["supportWinRateLoser"] = wrs[x[player]["godName"]]
-    #                 else:
-    #                     insert_data["supportWinRateLoser"] = anlz.get_winrate(client, x[player]["godName"], "Support", "8.11")["win_rate"]
-    #                     wrs[x[player]["godName"]] = insert_data["supportWinRateLoser"]
-
-        
-
-    #     set.append(insert_data)
-    #     if len(set) > 1000:
-    #         duocol.insert_many(set)
-    #         set = []
+    pass

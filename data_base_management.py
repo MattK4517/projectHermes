@@ -1,6 +1,5 @@
 
 
-<<<<<<< HEAD
 from os import dup
 from re import A, match
 import pymongo
@@ -9,15 +8,6 @@ from operator import getitem
 import pandas as pd
 from pymongo.encryption import Algorithm
 import analyze as anlz
-=======
-# from re import A, match
-# import pymongo
-# from collections import OrderedDict
-# from operator import getitem
-# import pandas as pd
-# from pymongo.encryption import Algorithm
-# import analyze as anlz
->>>>>>> f3bb50b5ffcceb155bf335928d31bc563fd3dc08
 from constants import Tier_Three_items, godsDict, roles, ranks, single_combat_stats, single_objective_stats, Warriors
 # from pandas.io.json import json_normalize
 # import time
@@ -208,18 +198,6 @@ def merge_total_stats(client, patch, date):
 
 if __name__ == "__main__":
     # calc_total_matches(client, ranks)
-    mydb = client["CasualMatches"]
+    mydb = client["Duo_Tierlist"]
     mycol = mydb["9.1 Matches"]
-    dupegames = 0 
-    for x in mycol.aggregate([
-        {
-            "$group": {
-                "_id": "$MatchId",
-                "count": {"$sum": 1},
-            }
-        },
-        {"$sort": {"count": 1}},
-    ]):
-        if x["count"] > 1 and x["_id"] :
-            dupegames += x["count"]
-    print(dupegames)
+    mycol.update_many({"Type": {"$exists": False}}, {"$set": {"Type": "SupportCarry"}})

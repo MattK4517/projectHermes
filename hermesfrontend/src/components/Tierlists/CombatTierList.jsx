@@ -412,7 +412,7 @@ const Table = ({ columns, data }) => {
   );
 };
 
-function CombatTierList(tableType) {
+function CombatTierList(props) {
   const [totalData, setTotalData] = useState([]);
   const [counterMatchups, setCounterMatchups] = useState([]);
   const [roles, setRoles] = useState([
@@ -424,6 +424,8 @@ function CombatTierList(tableType) {
     "All Roles",
   ]);
   const [role, setRole] = useState("All Roles");
+  const [mode, setMode] = useState("Ranked")
+
   const [ranks, setranks] = useState([
     "Bronze",
     "Silver",
@@ -439,7 +441,7 @@ function CombatTierList(tableType) {
   useEffect(() => {
     //"/gettierlist/".concat(dispRank, "/", role, "/", tableType.tableType, "/", patch
     fetch(
-      "/api/gettierlist/".concat(dispRank, "/", role, "/", tableType.tableType)
+      "/api/gettierlist/".concat(dispRank, "/", role, "/", props.tableType, "/", mode)
     ).then((res) =>
       res.json().then((data) => {
         setTotalData([]);
