@@ -17,7 +17,7 @@ import pandas as pd
 #    return dict3
 
 def get_items_by_class(client, class_name, role):
-    build = ["Calamitous Rod of Tahuti"]
+    build = ["Breastplate of Valor", "Breastplate of Determination", "Breastplate of Vigilance"]
     items = {f"slot{i+1}": {} for i in range(6)}
     for char in class_name:
             print(char)
@@ -40,26 +40,27 @@ def get_items_by_class(client, class_name, role):
                     wr = round(wins/games * 100, 2)
                     f.writelines(f"{slot}, {item} , {wins} , {games} , {wr}% \n")
 
-if __name__ == "__main__":
-    items = {item: {"games": 0, "wins": 0} for item in Tier_Three_items}
-    for god in godsDict:
-        for role in roles:
-            char_items = anlz.get_all_builds(client, god, role, "9.1")
-            for slot in char_items:
-                if "slot" in slot:
-                    for item in char_items[slot]:
-                        if item in items:
-                            items[item]["games"] += char_items[slot][item]["games"]
-                            items[item]["wins"] += char_items[slot][item]["wins"]
-        print(f"{god} done")
+get_items_by_class(client, Guardians, "Support")
+# if __name__ == "__main__":
+#     items = {item: {"games": 0, "wins": 0} for item in Tier_Three_items}
+#     for god in godsDict:
+#         for role in roles:
+#             char_items = anlz.get_all_builds(client, god, role, "9.1")
+#             for slot in char_items:
+#                 if "slot" in slot:
+#                     for item in char_items[slot]:
+#                         if item in items:
+#                             items[item]["games"] += char_items[slot][item]["games"]
+#                             items[item]["wins"] += char_items[slot][item]["wins"]
+#         print(f"{god} done")
 
-    with open("items.txt", "w") as f:
-            for item in items:
-                if items[item]["games"] > 0:
-                    games = items[item]["games"]
-                    wins = items[item]["wins"]
-                    wr = round(wins/games * 100, 2)
-                    f.writelines(f"{item} , {wins} , {games} , {wr}% \n")
+#     with open("items.txt", "w") as f:
+#             for item in items:
+#                 if items[item]["games"] > 0:
+#                     games = items[item]["games"]
+#                     wins = items[item]["wins"]
+#                     wr = round(wins/games * 100, 2)
+#                     f.writelines(f"{item} , {wins} , {games} , {wr}% \n")
 # def get_combat_stats_by_class(client, class_name):
 #     mydb= client["single_combat_stats"]
 #     myquery = {"role": "Mid", "patch": "8.10"}
@@ -134,62 +135,62 @@ if __name__ == "__main__":
 
 
 
-mydb = client["single_match_stats"]
-starttime = datetime.now()
-fields = ["gold", "damage_bot", "kills_bot", "tower_kills","phoenix_kills", "tower_damage", "objective_assists", "wards_placed"]
-fields = ["kills", "deaths", "assists", "damage_player", "damage_mitigated", "damage_taken", "healing", "healing_self",]
-dmg_dict = {field: {role: {"god": "", "amount": 0} for role in roles} for field in fields}
-for field in fields:
-    top = 0
-    for god in godsDict:
-        mycol = mydb[god]
-        all_games = []
-        #pymongo.ASCENDING
-        #pymongo.DESCENDING
-        #{"damage_mitigated": {"$gt": 0}
-        #.sort("damage_mitigated", pymongo.DESCENDING)
-        avg_deaths = 0
-        deaths = 0
-        games = 0
-        for x in mycol.find({"role": {"$exists": True}, "patch": "9.1", "mode": f"RankedConq"}, {"_id": 0, field: 1, "role": 1, "matchId": 1}):
-            deaths += x[field]
-            games += 1
-        avg_deaths += deaths/games
-        mean = sum(all_games) / len(all_games)
-        variance = sum([((x - mean) ** 2) for x in all_games]) / len(all_games)
-        res = variance ** 0.5
+# mydb = client["single_match_stats"]
+# starttime = datetime.now()
+# fields = ["gold", "damage_bot", "kills_bot", "tower_kills","phoenix_kills", "tower_damage", "objective_assists", "wards_placed"]
+# fields = ["kills", "deaths", "assists", "damage_player", "damage_mitigated", "damage_taken", "healing", "healing_self",]
+# dmg_dict = {field: {role: {"god": "", "amount": 0} for role in roles} for field in fields}
+# for field in fields:
+#     top = 0
+#     for god in godsDict:
+#         mycol = mydb[god]
+#         all_games = []
+#         #pymongo.ASCENDING
+#         #pymongo.DESCENDING
+#         #{"damage_mitigated": {"$gt": 0}
+#         #.sort("damage_mitigated", pymongo.DESCENDING)
+#         avg_deaths = 0
+#         deaths = 0
+#         games = 0
+#         for x in mycol.find({"role": {"$exists": True}, "patch": "9.1", "mode": f"RankedConq"}, {"_id": 0, field: 1, "role": 1, "matchId": 1}):
+#             deaths += x[field]
+#             games += 1
+#         avg_deaths += deaths/games
+#         mean = sum(all_games) / len(all_games)
+#         variance = sum([((x - mean) ** 2) for x in all_games]) / len(all_games)
+#         res = variance ** 0.5
 
-        print(god)
-        print(f"The Max of the sample is: {max(all_games)}")
-        print(f"The Min of the sample is: {min(all_games)}")
-        print(f"The Average of the sample is: {mean}")
-        print(f"Standard deviation of sample is: {res}")
-        for role in dmg_dict:
-            x = np.array([i for i in range(len(dmg_dict[role]))]) 
-            y = np.array(sorted(dmg_dict[role]))
-            # m, b = np.polyfit(x, y, 1)
-            # plt.plot(x, m*x+b, "r-")
-            plt.scatter(x, y, label=f"{god} - {role}")
-            plt.legend(bbox_to_anchor = (1.05, 0.6), loc='upper left')
-            plt.title(f'{god} {field.replace("_", " ")} across roles')
-            plt.xlabel("# of games")
-            plt.ylabel(f'{field.replace("_", " ")}')
-            plt.tight_layout()
-            if not os.path.exists(f"C:\\Users\\MayheM\\Desktop\\python\\projectHermes\\charts\\_Role Specific\\{god}"):
-                os.mkdir(f"C:\\Users\\MayheM\\Desktop\\python\\projectHermes\\charts\\_Role Specific\\{god}")
+#         print(god)
+#         print(f"The Max of the sample is: {max(all_games)}")
+#         print(f"The Min of the sample is: {min(all_games)}")
+#         print(f"The Average of the sample is: {mean}")
+#         print(f"Standard deviation of sample is: {res}")
+#         for role in dmg_dict:
+#             x = np.array([i for i in range(len(dmg_dict[role]))]) 
+#             y = np.array(sorted(dmg_dict[role]))
+#             # m, b = np.polyfit(x, y, 1)
+#             # plt.plot(x, m*x+b, "r-")
+#             plt.scatter(x, y, label=f"{god} - {role}")
+#             plt.legend(bbox_to_anchor = (1.05, 0.6), loc='upper left')
+#             plt.title(f'{god} {field.replace("_", " ")} across roles')
+#             plt.xlabel("# of games")
+#             plt.ylabel(f'{field.replace("_", " ")}')
+#             plt.tight_layout()
+#             if not os.path.exists(f"C:\\Users\\MayheM\\Desktop\\python\\projectHermes\\charts\\_Role Specific\\{god}"):
+#                 os.mkdir(f"C:\\Users\\MayheM\\Desktop\\python\\projectHermes\\charts\\_Role Specific\\{god}")
 
-            plt.savefig(f"C:\\Users\\MayheM\\Desktop\\python\\projectHermes\\charts\\_Role Specific\\{god}\\{field}", 
-            dpi=None, 
-            facecolor='w', 
-            edgecolor='w',
-            orientation='portrait', 
-            papertype=None, 
-            format=None,
-            transparent=False, 
-            bbox_inches=None, 
-            pad_inches=0.1,
-            metadata=None)
-        # plt.figure()
-        plt.close()
+#             plt.savefig(f"C:\\Users\\MayheM\\Desktop\\python\\projectHermes\\charts\\_Role Specific\\{god}\\{field}", 
+#             dpi=None, 
+#             facecolor='w', 
+#             edgecolor='w',
+#             orientation='portrait', 
+#             papertype=None, 
+#             format=None,
+#             transparent=False, 
+#             bbox_inches=None, 
+#             pad_inches=0.1,
+#             metadata=None)
+#         # plt.figure()
+#         plt.close()
 
-print(f"Completed in {datetime.now() - starttime}")
+# print(f"Completed in {datetime.now() - starttime}")

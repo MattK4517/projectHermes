@@ -1913,7 +1913,7 @@ figure.snip0015:hover figcaption::before {
 }
 
 .items-match {
-  margin: 0 1rem;
+  margin: 0 .25rem;
   display: flex;
   align-items: center;
 }
@@ -2842,6 +2842,7 @@ figure.snip0015:hover figcaption::before {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin-left: .5rem
 }
 
 .light-blue {
@@ -2853,7 +2854,7 @@ figure.snip0015:hover figcaption::before {
   /* flex-direction: column; */
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 899px) {
   .show {
     display: flex !important;
     flex-direction: column;
@@ -2864,6 +2865,9 @@ figure.snip0015:hover figcaption::before {
     min-width: 45px;
   }
   .match-container {
+    flex-direction: column;
+  }
+  .items-match {
     flex-direction: column;
   }
   .items-match .build .build-container .item-wrapper,
@@ -2898,6 +2902,13 @@ figure.snip0015:hover figcaption::before {
     width: 36px !important;
     height: 36px !important;
   }
+  .player-padding_header {
+    margin-right: .6rem;
+  }
+
+  .shrink-padding {
+    padding: 0 12px !important;
+  }
 }
 
 .show {
@@ -2912,4 +2923,8 @@ figure.snip0015:hover figcaption::before {
   display: flex;
   align-items: center;
   justify-self: center;
+}
+
+.player-padding_header {
+  margin-right: 1rem;
 }

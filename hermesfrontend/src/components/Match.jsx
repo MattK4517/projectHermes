@@ -13,6 +13,7 @@ import {
   CreateItemToolTip,
 } from "../components/mainGodPage/GodPageHelpers";
 import PlayerCarryScore from "./MatchPage/PlayerCarryScore";
+import { fontWeight } from "@mui/system";
 
 class NameForm extends React.Component {
   constructor(props) {
@@ -307,7 +308,6 @@ function CustomizedAccordions(player) {
         style={{ background: styling }}
       >
         <div className="player-display-container ">
-
           <div className="player-display_mini show">
             <div className="player-display_row">
               <div className="item-image-div">
@@ -324,20 +324,23 @@ function CustomizedAccordions(player) {
                 to={"/".concat(player.god.replaceAll(" ", "_"))}
               >
                 <div style={{ position: "relative", minWidth: "24px" }}>
-                  <div className="player-icon">
-                    <div className="player-icon_container" style={{ height: "24px", width: "24px" }}>
+                  <div
+                    className="header_champion"
+                    style={{ marginLeft: "0px" }}
+                  >
+                    <div className="champion-image-container">
                       <img
+                        className="champion-image"
                         src={`https://webcdn.hirezstudios.com/smite/god-icons/${player.god
-                          .replaceAll(" ", "-")
+                          .replaceAll("'", "")
+                          .replaceAll("_", "-")
                           .toLowerCase()}.jpg`}
-                        alt={player.god}
-                        style={{
-                          height: "24px",
-                          width: "24px",
-                          transformOrigin: "0px 0px 0px",
-                          border: "2px solid black",
-                          borderRadius: "5px",
-                        }}
+                      />
+                    </div>
+                    <div className="role-icon-container">
+                      <img
+                        src={getImageUrl(player.role)}
+                        style={{ width: "14px", height: "14px" }}
                       />
                     </div>
                   </div>
@@ -358,7 +361,7 @@ function CustomizedAccordions(player) {
               />
             </div>
           </div>
-          <div className="hide">
+          <div className="hide player-display-winstat">
             <PlayerIcon god={player.god} />
           </div>
           <div
@@ -399,9 +402,9 @@ function CustomizedAccordions(player) {
             </div>
           </div>
         </div>
-        <PlayerBuildDisplay build={player.godBuild} buildType={"items"} />
-        <div className="shadow">
-          <PlayerCarryScore player={player}/>
+        <PlayerBuildDisplay buildType={"items"} player={player} />
+        <div className="shadow player-padding_header">
+          <PlayerCarryScore player={player} />
         </div>
         {/* <PlayerBuildDisplay build={player.relic} buildType={"relics"}/> */}
         <div className="player-display-winstat">
@@ -622,11 +625,11 @@ export function PlayerBuildDisplay(props) {
           marginTop: "0px",
           backgroundColor: "#11112a",
           display: "flex",
-          height: "100%"
+          height: "100%",
         }}
       >
         <div className="build-container">
-          {props.build.map((slot, index) => {
+          {props.player.godBuild.map((slot, index) => {
             if (slot.DeviceName) {
               return (
                 // <HtmlTooltip
@@ -646,7 +649,10 @@ export function PlayerBuildDisplay(props) {
                   className="item-wrapper"
                   style={{ width: "36px", height: "36px" }}
                 >
-                  <div class="item-image_container" style={{ width: "36px", height: "36px" }}>
+                  <div
+                    class="item-image_container"
+                    style={{ width: "36px", height: "36px" }}
+                  >
                     <img
                       style={{
                         height: "72px",
@@ -670,6 +676,22 @@ export function PlayerBuildDisplay(props) {
             }
           })}
         </div>
+      </div>
+      <div
+        className="KDA show"
+        style={{
+          flexDirection: "row",
+          fontWeight: "500",
+          fontSize: "12px !important",
+          width: "100%",
+        }}
+      >
+        <span className="player-info-style">KDA: </span> {props.player.kills}
+        <span style={{ color: "#5f5f7b" }}> / </span>
+        <span style={{ color: "#ff4e50" }}>{props.player.deaths}</span>
+        <span style={{ color: "#5f5f7b" }}> / </span>
+        {props.player.assists}
+        <br></br>
       </div>
     </div>
   );
@@ -887,13 +909,16 @@ function Match() {
       style={{ maxWidth: "fit-content" }}
     >
       <NameForm setMatch={setMatch} />
-      <div className="content-section" style={{ marginTop: "36px" }}>
+      <div
+        className="content-section shrink-padding"
+        style={{ marginTop: "36px" }}
+      >
         <div className="content-section_header">
           Match Summary&nbsp;
           <span
             style={{ color: "#5f5f7b", fontSize: "14px", fontWeight: "400" }}
           >
-            Click on players to see thier performance
+            Click on players to see their performance
           </span>
         </div>
         <div className="match-container">

@@ -84,7 +84,7 @@ export default function SearchBar(data) {
       }
         else{
         history.push({
-          pathname: `/Player/${event.target.value}`,
+          pathname: `/Player/${event.target.value.trim()}`,
           state: {player: event.target.value}
         });
       }
