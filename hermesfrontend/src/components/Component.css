@@ -387,6 +387,7 @@ color: #cddcfe;
   grid-template-columns: repeat(6,169px);
   grid-auto-flow: column;
   margin-top: 24px;
+  border-radius: 6px;
 }
 
 .build .starter{
@@ -1225,6 +1226,7 @@ figure.snip0015:hover figcaption::before {
   flex-direction: row;
   justify-content: start;
   overflow: hidden;
+  width: 100%;
 }
 
 .player-god-played {
@@ -2846,6 +2848,25 @@ figure.snip0015:hover figcaption::before {
   display: flex;
   /* flex-direction: column; */
 }
+@media (max-width: 1200px) {
+  .match-container {
+    flex-direction: column;
+  }
+
+}
+
+.Winner .player-display-container .show,
+.Winner .items-match,
+.shadow
+{
+  box-shadow: 0 0 7px var(--winner-color) !important;
+}
+.Loser .player-display-container .show,
+.Loser .items-match,
+.Loser .shadow
+{
+  box-shadow: 0 0 7px var(--loser-color) !important;
+}
 
 /* MATCH PAGE */
 
@@ -2857,9 +2878,6 @@ figure.snip0015:hover figcaption::before {
     justify-content: center;
     padding: .25rem;
     min-width: 45px;
-  }
-  .match-container {
-    flex-direction: column;
   }
   .items-match {
     flex-direction: column;
@@ -2901,7 +2919,13 @@ figure.snip0015:hover figcaption::before {
   }
 
   .shrink-padding {
-    padding: 0 12px !important;
+    padding: 0 6px !important;
+  }
+  .player-stats-breakdown .row {
+    flex-direction: column;
+  }
+  .basic-match-info .match-info-list > *::before {
+    display: none
   }
 
   .accolades-container {
@@ -2933,6 +2957,12 @@ figure.snip0015:hover figcaption::before {
     align-items: center;
     gap: .5px
   }
+}
+
+.player-padding_header {
+  border-radius: 6px;
+  padding: .25rem;
+  margin: .25rem;
 }
 
 .show {

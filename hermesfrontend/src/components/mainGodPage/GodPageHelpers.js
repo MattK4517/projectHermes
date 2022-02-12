@@ -31,28 +31,28 @@ export function CreateItemToolTip(props){
             }}
           >
             <h5 style={{ width: "100%", fontSize: "1rem", color: "#1E90FF" }}>
-              {props.item.item}
+              {props.item.DeviceName}
             </h5>
             <div>
-              <p>{props.item.itemShortDesc}</p>
+              <p>{props.item.ShortDesc}</p>
             </div>
             <div className="item-stats">
               <ul>
-                {props.item.itemStats.map((stat) => {
+                {props.item.ItemDescription.Menuitems.map((stat) => {
                   return (
                     <li style={{ left: "0" }}>
-                      {stat[0]}: {stat[1]}
+                      {stat.Description}: {stat.Value}
                     </li>
                   );
                 })}
               </ul>
               <div className="item-passive">
-                <p>{props.item.itemPassive}</p>
+                <p>{props.item.ItemDescription.SecondaryDescription}</p>
               </div>
             </div>
             <p style={{ color: "#D4AF37" }}>
-              <b>Price:</b> {props.item.itemAbsolutePrice}(
-              {props.item.itemRelativePrice})
+              <b>Price:</b> {props.item.absolutePrice}(
+              {props.item.relativePrice})
               <img
                 style={{
                   maxHeight: "20px",

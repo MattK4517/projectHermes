@@ -120,7 +120,7 @@ def get_item_data(client, item):
             del itemdata[element]
 
         #itemdata = {**itemdata, **{"Descriptions": itemdata["ItemDescription"]["Menuitems"][0]["Description"]}, **{"Value1": itemdata["ItemDescription"]["Menuitems"][0]["Value"]}}
-        itemdata = {**itemdata, **{"itemStats": itemdata["ItemDescription"]["Menuitems"]}}
+        itemdata = {**itemdata}
     else: 
         itemdata = {}
     return itemdata

@@ -7,12 +7,12 @@ import time
 import analyze as anlz
 from pyrez.models import Smite
 from pyrez.models.MatchHistory import MatchHistory
-from data_pull_formatting_rewrite import threadedd_format_no_query
+# from data_pull_formatting_rewrite import threadedd_format_no_query
 import os
 from main import client
 
 
-from data_pull_formatting_rewrite import format_no_query
+# from data_pull_formatting_rewrite import format_no_query
 
 
 def normalize_godId(id):
@@ -597,8 +597,9 @@ def run_pull_hourly(patch, hour, date):
     print(f"{date} Pull Completed in {str(datetime.now() - starttime)} loss: {round(inserted_count/match_ids_len*100, 2)}")
 
 if __name__ == "__main__":
-    t = datetime.now()
-    curr_time = f"{t.hour-1}"
-    print(curr_time)
-    run_pull_hourly("9.1", curr_time, "20220205")
-    # get_new_items(client, smite_api)
+    with open("cred.txt", "r") as f:
+        data = f.readlines()
+        smite_api = SmiteAPI(devId=data[0].strip(
+        ), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
+    # print(smite_api.getPlayerStatus("Mayhem4517"))
+    print(smite_api.getMatch(1224257431))

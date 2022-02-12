@@ -362,7 +362,7 @@ const Table = ({ columns, data }) => {
   );
 };
 
-function ObjectiveTierList(tableType) {
+function ObjectiveTierList(props) {
   const [totalData, setTotalData] = useState([]);
   const [counterMatchups, setCounterMatchups] = useState([]);
   const [roles, setRoles] = useState([
@@ -385,11 +385,13 @@ function ObjectiveTierList(tableType) {
     "All_Ranks",
   ]);
   const [dispRank, setRank] = useState("All_Ranks");
+  const [mode, setMode] = useState("Ranked")
+
 
   useEffect(() => {
     //"/gettierlist/".concat(dispRank, "/", role, "/", tableType.tableType, "/", patch
     fetch(
-      "/api/gettierlist/".concat(dispRank, "/", role, "/", tableType.tableType)
+      "/api/gettierlist/".concat(dispRank, "/", role, "/", props.tableType, "/", mode)
     ).then((res) =>
       res.json().then((data) => {
         setTotalData([]);

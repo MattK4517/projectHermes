@@ -105,25 +105,27 @@ const Table = ({ columns, data }) => {
                           >
                             {row.cells.map((cell) => {
                               const { key, role } = cell.getCellProps();
-                              let god = row.original.carry
+                              let roleOne = Object.keys(row.original["_id"])[0]
+                              let roleTwo = Object.keys(row.original["_id"])[1]
+                              let god = row.original["_id"][roleOne]
                               .toLowerCase()
                               .replaceAll(" ", "-");
-                              let routegod = row.original.carry.replaceAll(
+                              let routegod = row.original["_id"][roleOne].replaceAll(
                                 " ",
                                 "_"
                               );
-                              if (row.original.carry == "Chang'e") {
+                              if (row.original["_id"][roleOne] == "Chang'e") {
                                 routegod = "Chang'e";
                                 god = "change";
                               }
-                              let god2 = row.original.support
+                              let god2 = row.original["_id"][roleTwo]
                               .toLowerCase()
                               .replaceAll(" ", "-");
-                              let routegod2 = row.original.support.replaceAll(
+                              let routegod2 = row.original["_id"][roleTwo].replaceAll(
                                 " ",
                                 "_"
                               );
-                              if (row.original.support == "Chang'e") {
+                              if (row.original["_id"][roleTwo] == "Chang'e") {
                                 routegod2 = "Chang'e";
                                 god2 = "change";
                               }
@@ -161,7 +163,7 @@ const Table = ({ columns, data }) => {
                                           >
                                             <img
                                               src={`https://webcdn.hirezstudios.com/smite/god-icons/${god}.jpg`}
-                                              alt={row.original.carry}
+                                              alt={row.original["_id"][roleOne]}
                                               style={{
                                                 height: "48px",
                                                 width: "48px",
@@ -173,7 +175,7 @@ const Table = ({ columns, data }) => {
                                         </div>
                                       </div>
                                       <strong className="god-name">
-                                        {row.original.carry}
+                                        {row.original["_id"][roleOne]}
                                       </strong>
                                     </Link>
                                   </div>
@@ -189,7 +191,7 @@ const Table = ({ columns, data }) => {
                                     {...cell.getCellProps()}
                                   >
                                     <span>
-                                      <b style={{color: winRateColor(row.original.carryWinRate)}}>{row.original.carryWinRate.toFixed(2)}%</b>
+                                      <b style={{color: winRateColor(row.original[`${[roleOne]}WinRate`])}}>{row.original[`${[roleOne]}WinRate`].toFixed(2)}%</b>
                                     </span>
                                   </div>
 
@@ -213,7 +215,7 @@ const Table = ({ columns, data }) => {
                                           >
                                             <img
                                               src={`https://webcdn.hirezstudios.com/smite/god-icons/${god2}.jpg`}
-                                              alt={row.original.support}
+                                              alt={row.original["_id"][roleTwo]}
                                               style={{
                                                 height: "48px",
                                                 width: "48px",
@@ -225,7 +227,7 @@ const Table = ({ columns, data }) => {
                                         </div>
                                       </div>
                                       <strong className="god-name">
-                                        {row.original.support}
+                                        {row.original["_id"][roleTwo]}
                                       </strong>
                                     </Link>
                                   </div>
@@ -240,7 +242,7 @@ const Table = ({ columns, data }) => {
                                     {...cell.getCellProps()}
                                   >
                                     <span>
-                                      <b style={{color: winRateColor(row.original.supportWinRate)}}>{row.original.supportWinRate.toFixed(2)}%</b>
+                                      <b style={{color: winRateColor(row.original[`${[roleTwo]}WinRate`])}}>{row.original[`${[roleTwo]}WinRate`].toFixed(2)}%</b>
                                     </span>
                                   </div>
 
@@ -282,7 +284,7 @@ const Table = ({ columns, data }) => {
                                     {...cell.getCellProps()}
                                   >
                                     <span>
-                                      <b>{row.original.games}</b>
+                                      <b>{row.original.count}</b>
                                     </span>
                                   </div>
                                   </>
@@ -357,18 +359,17 @@ const Table = ({ columns, data }) => {
   );
 };
 
-function DuoLaneTierList(tableType) {
+function DuoLaneTierList(props) {
   const [totalData, setTotalData] = useState([]);
   const [counterMatchups, setCounterMatchups] = useState([]);
   const [roles, setRoles] = useState([
-    "Solo",
-    "Jungle",
-    "Mid",
-    "Support",
-    "Carry",
-    "All Roles",
+    "Support/Carry",
+    "Solo/Jungle",
+    "Mid/Jungle"
   ]);
-  const [role, setRole] = useState("All Roles");
+  const [role, setRole] = useState("Support/Carry");
+  const [mode, setMode] = useState("Ranked")
+
   const [ranks, setranks] = useState([
     "Bronze",
     "Silver",
@@ -380,26 +381,27 @@ function DuoLaneTierList(tableType) {
     "All_Ranks",
   ]);
   const [dispRank, setRank] = useState("All_Ranks");
+  const [roleOne, setRoleOne] = useState("Support")
+  const [roleTwo, setRoleTwo] = useState("Carry")  
+
+  useEffect(() => {
+    setRoleOne(role.split("/")[0])
+    setRoleTwo(role.split("/")[1])
+  }, [role])
 
   useEffect(() => {
     //"/gettierlist/".concat(dispRank, "/", role, "/", tableType.tableType, "/", patch
     fetch(
-      "/api/gettierlist/".concat(dispRank, "/", role, "/", tableType.tableType)
+      "/api/gettierlist/".concat(dispRank, "/", role.replaceAll("/", "_"), "/", props.tableType, "/", mode)
     ).then((res) =>
       res.json().then((data) => {
-        setTotalData([]);
+        setTotalData([])
         Object.keys(data).forEach((key) => {
           if (data[key]["count"]+data[key]["losses"] > 250) {
             setTotalData((totalData) => [
               ...totalData,
               {
-                carry: data[key]["_id"]["carry"],
-                support: data[key]["_id"]["support"],
-                winRate: data[key]["winRate"],
-                games: data[key]["count"]+data[key]["losses"],
-                carryWinRate: data[key]["carryWinRate"],
-                supportWinRate: data[key]["supportWinRate"],
-                syneryFactor: data[key]["syneryFactor"]
+                ...data[key]
               },
             ]);
           }
@@ -415,21 +417,21 @@ function DuoLaneTierList(tableType) {
         accessor: "rank",
       },
       {
-        Header: "Carry",
-        accessor: "carry",
+        Header: roleTwo,
+        accessor: roleTwo.toLowerCase(),
       },
       {
-        Header: "Carry Win Rate",
-        accessor: "carryWinRate",
+        Header: `${roleTwo} Win Rate`,
+        accessor: `${roleTwo.toLowerCase()}WinRate`,
         sortType: compareNumericString
       },
       {
-        Header: "Support",
-        accessor: "support",
+        Header: roleOne,
+        accessor: roleOne.toLowerCase(),
       },
       {
-        Header: "Support Win Rate",
-        accessor: "supportWinRate",
+        Header: `${roleOne} Win Rate`,
+        accessor: `${roleOne.toLowerCase()}WinRate`,
         sortType: compareNumericString
       },
       {
@@ -444,11 +446,11 @@ function DuoLaneTierList(tableType) {
       },
       {
         Header: "Games",
-        accessor: "games",
+        accessor: "count",
         sortType: compareNumericString
       },
     ],
-    []
+    [roleOne, roleTwo]
   );
   return (
     <>

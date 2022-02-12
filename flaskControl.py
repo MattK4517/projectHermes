@@ -150,7 +150,8 @@ def get_tier_list(rank, role, tableType, mode):
                 retData[dict_god][dict_role] = x
 
     elif tableType == "Duos":
-        retData = get_lanes()
+        role_one, role_two = role.split("_")
+        retData = get_lanes(role_one, role_two)
 
     return retData
 

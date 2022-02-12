@@ -63,6 +63,90 @@ class NameForm extends React.Component {
   }
 }
 
+<<<<<<< HEAD
+=======
+function BaseMatchSummary(props) {
+  return (
+    <div className="match-summary-container" style={{ minWidth: "200px" }}>
+      <div className="match-info-header">
+        <h3>
+          Ranked Conquest - {props.matchId}
+          <br></br>
+          {props.date}
+        </h3>
+      </div>
+      <div className="basic-match-info">
+        <h4>Basic Match Info</h4>
+        <ul className="match-info-list">
+          <li>{props.length} Minutes</li>
+          <li>Winning Side Bans</li>
+          <li className="bans-container">
+            {props.bansWinner.map((ban) => {
+              if (ban) {
+                return (
+                  <Link to={"/".concat(ban.replaceAll(" ", "_"))}>
+                    <div style={{ position: "relative" }}>
+                      <div className="god-icon">
+                        <div style={{ height: "30px", width: "30px" }}>
+                          <img
+                            src={`https://webcdn.hirezstudios.com/smite/god-icons/${ban
+                              .replaceAll(" ", "-")
+                              .toLowerCase()}.jpg`}
+                            alt={ban}
+                            style={{
+                              height: "48px",
+                              width: "48px",
+                              transform: "scale(0.625)",
+                              transformOrigin: "0px 0px 0px",
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              }
+            })}
+          </li>
+          <li>Losing Side Bans</li>
+          <li className="bans-container">
+            {props.bansLoser.map((ban) => {
+              if (ban) {
+                return (
+                  <Link to={"/".concat(ban.replaceAll(" ", "_"))}>
+                    <div style={{ position: "relative" }}>
+                      <div className="god-icon">
+                        <div style={{ height: "30px", width: "30px" }}>
+                          <img
+                            src={`https://webcdn.hirezstudios.com/smite/god-icons/${ban
+                              .replaceAll(" ", "-")
+                              .toLowerCase()}.jpg`}
+                            alt={ban}
+                            style={{
+                              height: "48px",
+                              width: "48px",
+                              transform: "scale(0.625)",
+                              transformOrigin: "0px 0px 0px",
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              }
+            })}
+          </li>
+          <li>Winning Side MMR</li>
+          <li>{(props.mmrWinner.reduce(reducer) / 5).toFixed(2)}</li>
+          <li>Losing Side MMR</li>
+          <li>{(props.mmrLoser.reduce(reducer) / 5).toFixed(2)}</li>
+        </ul>
+      </div>
+    </div>
+  );
+}
+>>>>>>> 8d783fd2245b010070d5ea6e10550f622cd80170
 
 const Accordion = withStyles({
   root: {
@@ -329,7 +413,7 @@ function CustomizedAccordions(player) {
           <PlayerCarryScore player={player} />
         </div>
         {/* <PlayerBuildDisplay build={player.relic} buildType={"relics"}/> */}
-        <div className="player-display-winstat">
+        <div className="player-display-winstat hide">
           <p>{player.winStatus}</p>
         </div>
       </AccordionSummary>
@@ -554,19 +638,19 @@ export function PlayerBuildDisplay(props) {
           {props.player.godBuild.map((slot, index) => {
             if (slot.DeviceName) {
               return (
-                // <HtmlTooltip
-                //   key={index}
-                //   title={
-                //     <React.Fragment>
-                //       <CreateItemToolTip item={slot} />
-                //     </React.Fragment>
-                //   }
-                //   placement="top"
-                //   arrow
-                //   style={{
-                //     paddingRight: "10px",
-                //   }}
-                // >
+                <HtmlTooltip
+                  key={index}
+                  title={
+                    <React.Fragment>
+                      <CreateItemToolTip item={slot} />
+                    </React.Fragment>
+                  }
+                  placement="top"
+                  arrow
+                  style={{
+                    paddingRight: "10px",
+                  }}
+                >
                 <div
                   className="item-wrapper"
                   style={{ width: "36px", height: "36px" }}
@@ -593,7 +677,7 @@ export function PlayerBuildDisplay(props) {
                     />
                   </div>
                 </div>
-                //</HtmlTooltip>
+                </HtmlTooltip>
               );
             }
           })}
