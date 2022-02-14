@@ -103,7 +103,6 @@ function ObjectiveDisplay(props) {
   );
 }
 export default function HeaderMatchInfoSUmmary(props) {
-  console.log(props);
   const [winnerKills, setWinnerKills] = useState(0);
   const [winnerDeaths, setWinnerDeaths] = useState(0);
   const [winnerAssists, setWinnerAssists] = useState(0);
@@ -140,9 +139,9 @@ export default function HeaderMatchInfoSUmmary(props) {
     setLoserWards(0);
     setLoserDistance(0);
     Object.keys(props.matchData).forEach((key) => {
-      console.log(props.matchData);
       if (key.includes("player")) {
         if (props.matchData[key]["Win_Status"] === "Winner") {
+          console.log("winner", props.matchData[key]["Towers_Destroyed"], props.matchData[key]["Kills_Phoenix"])
           setWinnerKills((winnerKills) => {
             return winnerKills + props.matchData[key]["Kills_Player"];
           });
@@ -172,6 +171,7 @@ export default function HeaderMatchInfoSUmmary(props) {
             return winnerDistance + props.matchData[key]["Distance_Traveled"];
           });
         } else if (props.matchData[key]["Win_Status"] === "Loser") {
+          console.log("loser", props.matchData[key]["Towers_Destroyed"], props.matchData[key]["Kills_Phoenix"])
           setLoserKills((loserKills) => {
             return loserKills + props.matchData[key]["Kills_Player"];
           });

@@ -50,7 +50,7 @@ class NameForm extends React.Component {
           <input type="submit" value="Submit" />
         </form>
         <div className="filler">
-          <h4>Don't have a match? try 1202691204</h4>
+          <h4>Don't have a match? try 1219734199</h4>
           {/* <br></br> */}
           <h5>
             Remember all matches must by Ranked PC Conquest from 10/24/2021 or
@@ -613,7 +613,9 @@ export function PlayerBuildDisplay(props) {
         {props.player.assists}
         <br></br>
       </div>
-      <MultiKillDisplay player={props.player} />
+      <div className="show">
+        <MultiKillDisplay player={props.player} />
+      </div>
     </div>
   );
 }
@@ -869,7 +871,7 @@ function Match() {
             godsLoser={godsLoser}
             matchData={matchData}
           />
-          {/* <PlayerMatchSummary players={players} /> */}
+          <PlayerMatchSummary players={players} />
         </div>
       </div>
     </div>

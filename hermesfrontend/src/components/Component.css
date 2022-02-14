@@ -1246,6 +1246,12 @@ figure.snip0015:hover figcaption::before {
 
 .match-summary-container-players{
   max-width: 1014px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-self: center;
+  margin: 0 auto;
 }
 
 .player-stats-breakdown {
