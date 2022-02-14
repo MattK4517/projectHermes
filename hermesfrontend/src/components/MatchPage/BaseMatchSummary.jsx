@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom"
 import TeamDisplay from "./TeamDisplay";
+import HeaderMatchInfoSUmmary from "./HeaderMatchInfoSummary";
 
 const reducer = (accumulator, currentValue) => accumulator + currentValue;
 
@@ -86,7 +87,6 @@ const reducer = (accumulator, currentValue) => accumulator + currentValue;
 //   }
 
 export default function BaseMatchSummary(props) {
-    console.log(props)
     return(
         <div className="match-summary-container" style={{ minWidth: "200px" }}>
         <div className="match-info-header">
@@ -97,6 +97,7 @@ export default function BaseMatchSummary(props) {
         </div>
         <div className="match-info-simple">
             <TeamDisplay bans={props.bansWinner} gods={props.godsWinner} mmr={props.mmrWinner} team={"Winner"}/>
+            <HeaderMatchInfoSUmmary matchData={props.matchData}/>
             <TeamDisplay bans={props.bansLoser} gods={props.godsLoser} mmr={props.mmrLoser} team={"Loser"}/>
         </div>
       </div>

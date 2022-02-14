@@ -17,7 +17,6 @@ import BaseMatchSummary from "./MatchPage/BaseMatchSummary";
 import { fontWeight } from "@mui/system";
 import MultiKillDisplay from "./PlayerPage/MultiKillDisplay";
 
-
 class NameForm extends React.Component {
   constructor(props) {
     super(props);
@@ -62,7 +61,6 @@ class NameForm extends React.Component {
     );
   }
 }
-
 
 const Accordion = withStyles({
   root: {
@@ -567,32 +565,32 @@ export function PlayerBuildDisplay(props) {
                     paddingRight: "10px",
                   }}
                 >
-                <div
-                  className="item-wrapper"
-                  style={{ width: "36px", height: "36px" }}
-                >
                   <div
-                    class="item-image_container"
+                    className="item-wrapper"
                     style={{ width: "36px", height: "36px" }}
                   >
-                    <img
-                      style={{
-                        height: "72px",
-                        width: "72px",
-                        backgroundPosition: "-96px -96px",
-                        transform: "scale(0.5)",
-                        transformOrigin: "0px 0px 0px",
-                      }}
-                      src={`https://webcdn.hirezstudios.com/smite/item-icons/${slot.DeviceName.replaceAll(
-                        " ",
-                        "-"
-                      )
-                        .replaceAll("'", "")
-                        .toLowerCase()}.jpg`}
-                      alt={slot.DeviceName}
-                    />
+                    <div
+                      class="item-image_container"
+                      style={{ width: "36px", height: "36px" }}
+                    >
+                      <img
+                        style={{
+                          height: "72px",
+                          width: "72px",
+                          backgroundPosition: "-96px -96px",
+                          transform: "scale(0.5)",
+                          transformOrigin: "0px 0px 0px",
+                        }}
+                        src={`https://webcdn.hirezstudios.com/smite/item-icons/${slot.DeviceName.replaceAll(
+                          " ",
+                          "-"
+                        )
+                          .replaceAll("'", "")
+                          .toLowerCase()}.jpg`}
+                        alt={slot.DeviceName}
+                      />
+                    </div>
                   </div>
-                </div>
                 </HtmlTooltip>
               );
             }
@@ -729,6 +727,7 @@ function Match() {
   const [mmrLoser, setMMRLoser] = useState([0, 0, 0, 0, 0]);
   const [players, setPlayers] = useState([]);
   const [date, setMatchDate] = useState("");
+  const [matchData, setMatchData] = useState({});
 
   useEffect(() => {
     fetch("/api/getmatch/".concat(match)).then((res) =>
@@ -742,6 +741,7 @@ function Match() {
         setPlayers([]);
         let bans = [];
         let mmrs = [];
+        setMatchData({ ...data });
         Object.keys(data).forEach((key) => {
           if (key.includes("Ban") && key !== "First_Ban_Side") {
             bans = [...bans, data[key]];
@@ -749,12 +749,11 @@ function Match() {
             mmrs = [...mmrs, data[key]["Ranked_Stat_Conq"]];
             if (data[key]["Win_Status"] === "Winner") {
               setGodsWinner((godsWinner) => [
-                ...godsWinner, data[key]["godName"]
+                ...godsWinner,
+                data[key]["godName"],
               ]);
             } else if (data[key]["Win_Status"] === "Loser") {
-              setGodsLoser((godsLoser) => [
-                ...godsLoser, data[key]["godName"]
-              ]);
+              setGodsLoser((godsLoser) => [...godsLoser, data[key]["godName"]]);
             }
             setPlayers((player) => [
               ...player,
@@ -868,6 +867,7 @@ function Match() {
             date={date}
             godsWinner={godsWinner}
             godsLoser={godsLoser}
+            matchData={matchData}
           />
           {/* <PlayerMatchSummary players={players} /> */}
         </div>
