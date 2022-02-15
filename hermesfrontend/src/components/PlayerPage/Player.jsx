@@ -177,20 +177,9 @@ export const setTopGod = (god) => {
 };
 export default function Player(props) {
   const [
-    god,
-    setGod,
-    player,
-    setPlayer,
-    mode,
-    setMode,
-    role,
-    setRole,
-    topLink,
-    setTopLink,
-    icon,
-    setIcon,
-    playerLevel,
-    setPlayerLevel,
+    god, setGod, player, setPlayer, mode, setMode,
+    role, setRole, topLink, setTopLink, icon, setIcon,
+    playerLevel, setPlayerLevel, tab, setTab, patch, setPatch
   ] = useContext(PlayerContext);
   setPlayer(window.location.href.split("/")[5]);
 
@@ -225,9 +214,11 @@ export default function Player(props) {
     );
   }, [player, mode]);
   const [matchList, setMatchList] = useState([]);
+
   useEffect(() => {
-    fetch("/api/getplayermatch/".concat(player, "/", mode)).then((res) =>
+    fetch("/api/getplayermatch/".concat(player, "/", mode, "/", patch)).then((res) =>
       res.json().then((data) => {
+        console.log("here")
         setMatchList([]);
         let newData = Object.values(data).sort(compareDate);
         Object.keys(newData).map((match) => {
@@ -240,7 +231,8 @@ export default function Player(props) {
         });
       })
     );
-  }, [player, mode]);
+  }, [player, mode, patch]);
+
   useEffect(() => {
     fetch("/api/getplayergeneral/".concat(player)).then((res) =>
       res.json().then((data) => {

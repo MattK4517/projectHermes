@@ -13,12 +13,12 @@ export const PlayerProvider = props => {
     const [icon, setIcon] = useState("")
     const [playerLevel, setPlayerLevel] = useState(-1);
     const [tab, setTab] = useState("Build");
-
+    const [patch, setPatch] = useState("9.1");
     return (
         <PlayerContext.Provider value={[
             god, setGod, player, setPlayer, mode, setMode,
             role, setRole, topLink, setTopLink, icon, setIcon,
-            playerLevel, setPlayerLevel, tab, setTab
+            playerLevel, setPlayerLevel, tab, setTab, patch, setPatch
             ]}>
             {props.children}
         </PlayerContext.Provider>

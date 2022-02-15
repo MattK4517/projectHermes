@@ -190,8 +190,11 @@ def get_match(matchID):
     #         }
     #     }
     # }
+    if mycol.count_documents({"MatchId": matchID}) == 0:
+        mydb = client["CasualMatches"]
+        mycol = mydb["9.1 Matches"]
+    
     print(mycol.count_documents({"MatchId": matchID}))
-    # for x in mycol.aggregate([myquery]):
     for x in mycol.find({"MatchId": matchID}, {"_id": 0}):
         match = x
 
@@ -211,10 +214,12 @@ def get_match(matchID):
                           **{"godStats": anlz.get_god_stats(client, match[key]["godName"], match[key]["Final_Match_Level"])},
                           }
 
-    return {
+    retData = {
         **match, 
         **anlz.get_carry_score(match)
         }
+    print(retData)
+    return retData
 
 
 @app.route('/api/<god>/buildpath/<role>/<rank>/<patch>/<mode>')
@@ -273,16 +278,16 @@ def get_player_god_info(playername, mode):
     return {}
 
 
-@app.route("/api/getplayermatch/<playername>/<mode>")
-def get_player_match_info(playername, mode):
+@app.route("/api/getplayermatch/<playername>/<mode>/<patch>")
+def get_player_match_info(playername, mode, patch):
     if playername == "undefined":
         return {}
-    return json.loads(json_util.dumps(anlzpy.find_match_history(client, playername, mode)))
+    return json.loads(json_util.dumps(anlzpy.find_match_history(client, playername, mode, patch)))
 
 
-@app.route("/api/getplayerspecificgod/<playername>/<god>/<role>/<mode>")
-def get_player_specific_god(playername, god, role, mode):
-    return anlzpy.get_player_god_stats(client, playername, god, role, mode)
+@app.route("/api/getplayerspecificgod/<playername>/<god>/<role>/<mode>/<patch>")
+def get_player_specific_god(playername, god, role, mode, patch):
+    return anlzpy.get_player_god_stats(client, playername, god, role, mode, patch)
 
 
 @app.route('/api/playermatchups/<playername>/<god>/<role>/<patch>/<mode>')

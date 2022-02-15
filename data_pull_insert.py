@@ -602,4 +602,5 @@ if __name__ == "__main__":
         smite_api = SmiteAPI(devId=data[0].strip(
         ), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
     # print(smite_api.getPlayerStatus("Mayhem4517"))
-    print(smite_api.getMatch(1224257431))
+    print(smite_api.getMatchIds(429, "20220215", -1))
+    print(smite_api.getMatch(1225274929))

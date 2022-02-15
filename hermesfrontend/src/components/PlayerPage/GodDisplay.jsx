@@ -17,11 +17,6 @@ export default function GodDisplay(props) {
     <div className="content-section content-section_no-padding played-gods">
       <div className="content-section_header played-gods_header">
         <span>Best Gods</span>
-        <FilterForm
-          filter={"Queue Type"}
-          filters={modes}
-          setFilter={setMode}
-        />
       </div>
       <div className="god-list">
         {props.godList.map((god, index) => {

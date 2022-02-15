@@ -5,7 +5,7 @@ import pymongo
 from datetime import datetime
 from main import client
 
-def find_match_history(client, playername, mode):
+def find_match_history(client, playername, mode, patch):
     """returns a dict of the match history for a given playername in a give mode 
 
     Args:
@@ -24,7 +24,7 @@ def find_match_history(client, playername, mode):
     
     print(database)
     mydb = client[database]
-    mycol = mydb["9.1 Matches"]
+    mycol = mydb[f"{patch} Matches"]
     myquery = {
     '$search': {
       'index': 'default',
@@ -264,13 +264,13 @@ def verify_player(act_name, playername, act_god, god):
             return True
     return False    
     
-def get_player_god_stats(client, playername, god, role, mode):
+def get_player_god_stats(client, playername, god, role, mode, patch):
     print(playername, god, role, mode)
     if mode == "Ranked":
         mydb = client["Matches"]
     elif mode == "Casual":
         mydb = client["CasualMatches"]
-    mycol = mydb["9.1 Matches"]
+    mycol = mydb[f"{patch} Matches"]
     # myquery = { 
     #     **{"$or": [ {f"player{i}.Player_Name": { "$regex" : f"{playername}", "$options": "i" }} for i in range(10) ] },
     #     # **{"$and": [ {f"player{i}.Role": role} for i in range(10) ] },
