@@ -248,7 +248,7 @@ def create_sets(data):
     for matchId in data:
         if matchId not in existing:
             set.append(matchId.matchId)
-            if len(set) == 9:
+            if len(set) == 10:
                 sets.append(set)
                 set = []
     if len(set) != 0:
@@ -501,43 +501,44 @@ def run_pull(patch, date=get_date()):
     match_ids_len = len(match_ids)
     print(match_ids_len)
     all_sets = create_sets(match_ids)
+    print(all_sets)
     total = 0
-    for set in all_sets:
-        try:
-            data = []
-            match_details = smite_api.getMatch(set)
-            total += len(match_details)
-            # current_id = match_details[0]["Match"]
-            # match_dict = create_match_dict(match_details[0], patch)
-            # for i in range(len(match_details)):
-            #     player = create_player_dict(match_details[i])
-            #     data.append(player)
-                # if match_details[i]["Match"] == current_id:
-                #     player = create_player_dict(match_details[i])
-                #     # print(player["godName"])
-                #     match_dict[f"player{i % 10}"] = player
-                #     if "player9" in match_dict.keys():
-                #         data.append(match_dict)
-                # elif match_details[i]["Match"] != current_id:
-                #     match_dict = create_match_dict(match_details[i], patch)
-                #     player = create_player_dict(match_details[i])
-                #     match_dict[f"player{i % 10}"] = player
-                #     current_id = match_details[i]["Match"]
-            # print(len(data))
-            # mycol.insert_many(data)
-            # inserted_count += len(data)
-            #     # carry_score = anlz.get_carry_score(match_dict)
-            #     # match_dict["carryScore"] = carry_score["goldScore"]
-            #     # match_dict["damageScore"] = carry_score["damageScore"]
-            #     # match_dict["levelDiff"] = carry_score["levelDiff"]
-            #     # match_dict["killPart"] = carry_score["killPart"]
-            #     # match_dict["efficiency"] = anlz.get_gold_eff(match_dict["killPart"], match_dict["carryScore"])
-                # format_no_query(match_dict)
-        except IndexError:
-            print(set)
+    # for set in all_sets:
+    #     try:
+    #         data = []
+    #         match_details = smite_api.getMatch(set)
+    #         total += len(match_details)
+    #         # current_id = match_details[0]["Match"]
+    #         # match_dict = create_match_dict(match_details[0], patch)
+    #         # for i in range(len(match_details)):
+    #         #     player = create_player_dict(match_details[i])
+    #         #     data.append(player)
+    #             # if match_details[i]["Match"] == current_id:
+    #             #     player = create_player_dict(match_details[i])
+    #             #     # print(player["godName"])
+    #             #     match_dict[f"player{i % 10}"] = player
+    #             #     if "player9" in match_dict.keys():
+    #             #         data.append(match_dict)
+    #             # elif match_details[i]["Match"] != current_id:
+    #             #     match_dict = create_match_dict(match_details[i], patch)
+    #             #     player = create_player_dict(match_details[i])
+    #             #     match_dict[f"player{i % 10}"] = player
+    #             #     current_id = match_details[i]["Match"]
+    #         # print(len(data))
+    #         # mycol.insert_many(data)
+    #         # inserted_count += len(data)
+    #         #     # carry_score = anlz.get_carry_score(match_dict)
+    #         #     # match_dict["carryScore"] = carry_score["goldScore"]
+    #         #     # match_dict["damageScore"] = carry_score["damageScore"]
+    #         #     # match_dict["levelDiff"] = carry_score["levelDiff"]
+    #         #     # match_dict["killPart"] = carry_score["killPart"]
+    #         #     # match_dict["efficiency"] = anlz.get_gold_eff(match_dict["killPart"], match_dict["carryScore"])
+    #             # format_no_query(match_dict)
+    #     except IndexError:
+    #         print(set)
 
-    print(total)
-    print(f"{date} Pull Completed in {str(datetime.now() - starttime)} loss: {round(inserted_count/match_ids_len*100, 2)}")
+    # print(total)
+    # print(f"{date} Pull Completed in {str(datetime.now() - starttime)} loss: {round(inserted_count/match_ids_len*100, 2)}")
 
 def run_pull_hourly(patch, hour, date):
     starttime = datetime.now()
@@ -559,48 +560,43 @@ def run_pull_hourly(patch, hour, date):
     tempcol.insert_one({"MatchId": match_ids[-1].matchId})
     all_sets = create_sets(match_ids)
     total = 0
+    print(all_sets)
     for set in all_sets:
-        try:
-            data = []
-            match_details = smite_api.getMatch(set)
-            total += len(match_details)
-            current_id = match_details[0]["Match"]
-            match_dict = create_match_dict(match_details[0], patch)
-            for i in range(len(match_details)):
-                player = create_player_dict(match_details[i])
-                data.append(player)
-                if match_details[i]["Match"] == current_id:
-                    player = create_player_dict(match_details[i])
-                    # print(player["godName"])
-                    match_dict[f"player{i % 10}"] = player
-                    if "player9" in match_dict.keys():
-                        data.append(match_dict)
-                elif match_details[i]["Match"] != current_id:
-                    match_dict = create_match_dict(match_details[i], patch)
-                    player = create_player_dict(match_details[i])
-                    match_dict[f"player{i % 10}"] = player
-                    current_id = match_details[i]["Match"]
-            mycol.insert_many(data)
-            print(len(data))
-            format_no_query(data)
-            inserted_count += len(data)
-                # carry_score = anlz.get_carry_score(match_dict)
-                # match_dict["carryScore"] = carry_score["goldScore"]
-                # match_dict["damageScore"] = carry_score["damageScore"]
-                # match_dict["levelDiff"] = carry_score["levelDiff"]
-                # match_dict["killPart"] = carry_score["killPart"]
-                # match_dict["efficiency"] = anlz.get_gold_eff(match_dict["killPart"], match_dict["carryScore"])
-        except IndexError:
-            print(set)
+    
+    #     try:
+        data = []
+        match_details = smite_api.getMatch(set)
+        total += len(match_details)
+        ids = []
+        print(len(set), len(match_details), set)
+    #         for i in range(len(match_details)):
+    #             if match_details[i].matchId not in ids:
+    #                 match_dict = create_match_dict(match_details[i], "9.1")
+    #                 data.append(match_dict)
+    #                 ids.append(match_dict["MatchId"])
+    #             else:
+    #                 for match in data:
+    #                     if match["MatchId"] == match_details[i].matchId:
+    #                         player = create_player_dict(match_details[i])
+    #                         match[f"player{len(match.keys())-15}"] = player
 
-    print(total)
-    print(f"{date} Pull Completed in {str(datetime.now() - starttime)} loss: {round(inserted_count/match_ids_len*100, 2)}")
+    #         mycol.insert_many(data)
+    #         print(len(ids), ids)
+    #         print(len(set) == len(data), len(set), len(data))
+    #         # format_no_query(data)
+    #         inserted_count += len(data)
+    #             # carry_score = anlz.get_carry_score(match_dict)
+    #             # match_dict["carryScore"] = carry_score["goldScore"]
+    #             # match_dict["damageScore"] = carry_score["damageScore"]
+    #             # match_dict["levelDiff"] = carry_score["levelDiff"]
+    #             # match_dict["killPart"] = carry_score["killPart"]
+    #             # match_dict["efficiency"] = anlz.get_gold_eff(match_dict["killPart"], match_dict["carryScore"])
+    #     except IndexError:
+    #         print(set)
+
+    # print(total)
+    # print(f"{date} Pull Completed in {str(datetime.now() - starttime)} loss: {round(inserted_count/match_ids_len*100, 2)}")
 
 if __name__ == "__main__":
-    with open("cred.txt", "r") as f:
-        data = f.readlines()
-        smite_api = SmiteAPI(devId=data[0].strip(
-        ), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
-    # print(smite_api.getPlayerStatus("Mayhem4517"))
-    print(smite_api.getMatchIds(429, "20220215", -1))
-    print(smite_api.getMatch(1225274929))
+    run_pull_hourly("9.1", "2", "20220215")
+    #1408
