@@ -110,6 +110,8 @@ export default class FilterForm extends React.Component {
             sx={{
               color: "white",
               bgcolor: "#191937",
+              padding: "0px !important",
+              margin: "0px !important"
             }}
           >
             {this.props.filters.map((filter) => {

@@ -731,6 +731,7 @@ function Match() {
   const [date, setMatchDate] = useState("");
   const [matchData, setMatchData] = useState({});
 
+  console.log(mmrWinner, mmrLoser)
   useEffect(() => {
     fetch("/api/getmatch/".concat(match)).then((res) =>
       res.json().then((data) => {
@@ -832,7 +833,7 @@ function Match() {
           }
         });
         setBans(bans, data["First_Ban_Side"], setBansWinner, setBansLoser);
-        setMMR(mmrs, data["First_Ban_Side"], setMMRWinner, setMMRLoser);
+        setMMR(mmrs, data["First_Ban_Side"], setMMRLoser, setMMRWinner);
         setmatchId(data["MatchId"]);
         setMatchLength(data["Minutes"]);
         setMatchDate(data["Entry_Datetime"]);
