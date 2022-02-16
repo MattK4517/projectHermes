@@ -556,46 +556,43 @@ def run_pull_hourly(patch, hour, date):
     inserted_count = 0
     match_ids_len = len(match_ids)
     print(len(match_ids))
-    print(match_ids[0].matchId)
     tempcol.insert_one({"MatchId": match_ids[-1].matchId})
     all_sets = create_sets(match_ids)
     total = 0
-    print(all_sets)
     for set in all_sets:
     
-    #     try:
-        data = []
-        match_details = smite_api.getMatch(set)
-        total += len(match_details)
-        ids = []
-        print(len(set), len(match_details), set)
-    #         for i in range(len(match_details)):
-    #             if match_details[i].matchId not in ids:
-    #                 match_dict = create_match_dict(match_details[i], "9.1")
-    #                 data.append(match_dict)
-    #                 ids.append(match_dict["MatchId"])
-    #             else:
-    #                 for match in data:
-    #                     if match["MatchId"] == match_details[i].matchId:
-    #                         player = create_player_dict(match_details[i])
-    #                         match[f"player{len(match.keys())-15}"] = player
+        try:
+            data = []
+            match_details = smite_api.getMatch(set)
+            total += len(match_details)
+            ids = []
+            for i in range(len(match_details)):
+                if match_details[i].matchId not in ids:
+                    match_dict = create_match_dict(match_details[i], "9.1")
+                    data.append(match_dict)
+                    ids.append(match_dict["MatchId"])
+                else:
+                    for match in data:
+                        if match["MatchId"] == match_details[i].matchId:
+                            player = create_player_dict(match_details[i])
+                            match[f"player{len(match.keys())-15}"] = player
 
-    #         mycol.insert_many(data)
-    #         print(len(ids), ids)
-    #         print(len(set) == len(data), len(set), len(data))
-    #         # format_no_query(data)
-    #         inserted_count += len(data)
-    #             # carry_score = anlz.get_carry_score(match_dict)
-    #             # match_dict["carryScore"] = carry_score["goldScore"]
-    #             # match_dict["damageScore"] = carry_score["damageScore"]
-    #             # match_dict["levelDiff"] = carry_score["levelDiff"]
-    #             # match_dict["killPart"] = carry_score["killPart"]
-    #             # match_dict["efficiency"] = anlz.get_gold_eff(match_dict["killPart"], match_dict["carryScore"])
-    #     except IndexError:
-    #         print(set)
+            mycol.insert_many(data)
+            print(len(ids), ids)
+            print(len(set) == len(data), len(set), len(data))
+            # format_no_query(data)
+            inserted_count += len(data)
+                # carry_score = anlz.get_carry_score(match_dict)
+                # match_dict["carryScore"] = carry_score["goldScore"]
+                # match_dict["damageScore"] = carry_score["damageScore"]
+                # match_dict["levelDiff"] = carry_score["levelDiff"]
+                # match_dict["killPart"] = carry_score["killPart"]
+                # match_dict["efficiency"] = anlz.get_gold_eff(match_dict["killPart"], match_dict["carryScore"])
+        except IndexError:
+            print(set)
 
-    # print(total)
-    # print(f"{date} Pull Completed in {str(datetime.now() - starttime)} loss: {round(inserted_count/match_ids_len*100, 2)}")
+    print(total)
+    print(f"{date} Pull Completed in {str(datetime.now() - starttime)} loss: {round(inserted_count/match_ids_len*100, 2)}")
 
 if __name__ == "__main__":
     run_pull_hourly("9.1", "2", "20220215")

@@ -194,10 +194,22 @@ def merge_total_stats(client, patch, date):
         for x in mycol.find({"patch": patch}):
             data.append(x)
         print(f"{god}: {len(data)}")
-        updatecol.insert_many(data)            
+        updatecol.insert_many(data)  
 
+def create_match_dict(match, patch):
+    match_dict = {}
+    match_dict["Patch"] = patch
+    match_dict["Entry_Datetime"] = match["Entry_Datetime"]
+    match_dict["MatchId"] = match["MatchID"]
+    return match_dict
+    
 if __name__ == "__main__":
     # calc_total_matches(client, ranks)
-    mydb = client["Duo_Tierlist"]
-    mycol = mydb["9.1 Matches"]
-    mycol.update_many({"Type": {"$exists": False}}, {"$set": {"Type": "SupportCarry"}})
+    mydb = client["CasualMatches"]
+    mycol = mydb["9.1 Matches"]    
+    with open("match doc Ids.txt", "w") as f:
+        for x in mycol.aggregate([
+            {"$group": {"_id": "$MatchId", "count": {"$sum": 1} }},
+            {"$sort": {"count": -1}}
+        ]):
+            f.writelines(f"ID: {x['_id']} count: {x['count']}\n")
