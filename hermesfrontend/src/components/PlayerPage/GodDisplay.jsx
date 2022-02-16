@@ -35,7 +35,7 @@ export default function GodDisplay(props) {
                 <div style={{ height: "30px", width: "30px", borderRadius: "3px" }}>
                   <img
                     src={`https://webcdn.hirezstudios.com/smite/god-icons/${god.god
-                      .replaceAll(" ", "-")
+                      .replaceAll(" ", "-").replaceAll("'", "")
                       .toLowerCase()}.jpg`}
                     alt={god.god}
                     style={{

@@ -22,7 +22,7 @@ export default function PlayerGodSection(props) {
               <img
                 src={`https://webcdn.hirezstudios.com/smite/god-icons/${god
                   .toLowerCase()
-                  .replaceAll("_", "-")
+                  .replaceAll(" ", "-")
                   .replaceAll("'", "")}.jpg`}
                 alt={god}
               />

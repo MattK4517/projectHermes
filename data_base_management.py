@@ -205,11 +205,11 @@ def create_match_dict(match, patch):
     
 if __name__ == "__main__":
     # calc_total_matches(client, ranks)
-    mydb = client["CasualMatches"]
-    mycol = mydb["9.1 Matches"]    
-    with open("match doc Ids.txt", "w") as f:
-        for x in mycol.aggregate([
-            {"$group": {"_id": "$MatchId", "count": {"$sum": 1} }},
-            {"$sort": {"count": -1}}
-        ]):
-            f.writelines(f"ID: {x['_id']} count: {x['count']}\n")
+    # mydb = client["Matches"]
+    # mycol = mydb["9.1 Matches"]
+    # with open("match doc Ids.txt", "w") as f:
+    #     for x in mycol.aggregate([
+    #         {"$group": {"_id": "$MatchId", "count": {"$sum": 1} }},
+    #         {"$sort": {"count": -1}}
+    #     ]):
+    #         f.writelines(f"ID: {x['_id']} count: {x['count']}\n")

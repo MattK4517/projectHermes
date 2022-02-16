@@ -441,6 +441,8 @@ def get_player_god_stats(client, playername, god, role, mode, patch):
         updatedict[role]["avgDamageShare"] = round(updatedict[role]["avgDamageShare"] / updatedict[role]["games"], 2)
         updatedict[role]["avgKillShare"] = round(updatedict[role]["avgKillShare"] / updatedict[role]["games"], 2)
         updatedict[role]["avgWards"] = round(updatedict[role]["avgWards"] / updatedict[role]["games"], 2)
+        if updatedict[role]["deaths"] == 0:
+             updatedict[role]["deaths"] = 1
         updatedict[role]["KDA"] = round((updatedict[role]["kills"] + (.5 * updatedict[role]["assists"])) / updatedict[role]["deaths"], 2)
 
     if updatedict["games"] > 0:
@@ -450,6 +452,8 @@ def get_player_god_stats(client, playername, god, role, mode, patch):
         updatedict["avgDamageShare"] = round(updatedict["avgDamageShare"] / updatedict["games"], 2)
         updatedict["avgKillShare"] = round(updatedict["avgKillShare"] / updatedict["games"], 2)
         updatedict["avgWards"] = round(updatedict["avgWards"] / updatedict["games"], 2)
+        if updatedict["deaths"] == 0:
+             updatedict["deaths"] = 1
         updatedict["KDA"] = round((updatedict["kills"] + (.5 * updatedict["assists"])) / updatedict["deaths"], 2)
     
     print(updatedict)

@@ -28,7 +28,7 @@ export default function CarryScoreSection(props) {
                 className="champion-image"
                 src={`https://webcdn.hirezstudios.com/smite/god-icons/${god
                   .replaceAll("'", "")
-                  .replaceAll("_", "-")
+                  .replaceAll(" ", "-")
                   .toLowerCase()}.jpg`}
               />
             </div>

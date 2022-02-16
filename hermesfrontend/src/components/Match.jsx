@@ -731,6 +731,7 @@ function Match() {
   const [date, setMatchDate] = useState("");
   const [matchData, setMatchData] = useState({});
 
+  const [queueType, setQueueType] = useState("Ranked")
   console.log(mmrWinner, mmrLoser)
   useEffect(() => {
     fetch("/api/getmatch/".concat(match)).then((res) =>
@@ -745,6 +746,7 @@ function Match() {
         let bans = [];
         let mmrs = [];
         setMatchData({ ...data });
+        setQueueType(data["mode"])
         Object.keys(data).forEach((key) => {
           if (key.includes("Ban") && key !== "First_Ban_Side") {
             bans = [...bans, data[key]];
@@ -871,6 +873,7 @@ function Match() {
             godsWinner={godsWinner}
             godsLoser={godsLoser}
             matchData={matchData}
+            queueType={queueType}
           />
           <PlayerMatchSummary players={players} />
         </div>
