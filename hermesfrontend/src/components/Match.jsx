@@ -323,7 +323,7 @@ function CustomizedAccordions(player) {
           </div>
         </div>
         <PlayerBuildDisplay buildType={"items"} player={player} />
-        <div className="shadow player-padding_header hide">
+        <div className="player-padding_header hide">
           <PlayerCarryScore player={player} />
         </div>
         {/* <PlayerBuildDisplay build={player.relic} buildType={"relics"}/> */}

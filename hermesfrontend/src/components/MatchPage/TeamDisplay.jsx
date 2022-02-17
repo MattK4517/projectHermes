@@ -4,7 +4,6 @@ const reducer = (accumulator, currentValue) => accumulator + currentValue;
 
 
 export default function TeamDisplay(props) {
-  console.log(props)
     return ( 
         <div className="basic-match-info">
         <div className="basic-info-bans">

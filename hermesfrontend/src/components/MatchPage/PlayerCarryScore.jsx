@@ -3,7 +3,7 @@ import MultiKillDisplay from "../PlayerPage/MultiKillDisplay";
 export default function PlayerCarryScore(props) {
     console.log(props)
     return(
-        <div style={{backgroundColor: "#11112a", display: "flex"}}>
+        <div className="player-header-carry-score_container">
             <MultiKillDisplay player={props.player} />
             <div className="carry-score_container hide">
                 <div className="light-blue">Dmg %: {props.player.damageScore}%</div>
