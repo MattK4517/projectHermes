@@ -23,16 +23,9 @@ export const FormatGod = (god) => {
 
 export default function OverviewDisplay() {
   const [
-    god,
-    setGod,
-    player,
-    setPlayer,
-    mode,
-    setMode,
-    role,
-    setRole,
-    topLink,
-    setTopLink,
+    god, setGod, player, setPlayer, mode, setMode,
+    role, setRole, topLink, setTopLink, icon, setIcon,
+    playerLevel, setPlayerLevel, tab, setTab, patch, setPatch
   ] = useContext(PlayerContext);
 
   // console.log(window.location.href.split("/")[6])
@@ -74,7 +67,9 @@ export default function OverviewDisplay() {
         "/",
         role,
         "/",
-        mode
+        mode,
+        "/",
+        patch
       )
     ).then((res) =>
       res.json().then((data) => {
@@ -105,7 +100,9 @@ export default function OverviewDisplay() {
         setMaxWards(data.maxWards)
       })
     );
-  }, [player, role, mode]);
+  }, [player, role, mode, patch]);
+
+  const patches = ["9.1", "8.12", "8.11"]
 
   const [roles, setroles] = useState([
     "Solo",
@@ -152,6 +149,12 @@ export default function OverviewDisplay() {
                   god={mode}
                   filters={["Ranked", "Casual"]}
                   setFilter={setMode}
+                />
+                <FilterForm
+                  filter={patch}
+                  god={patch}
+                  filters={patches}
+                  setFilter={setPatch}
                 />
                 {/* </div> */}
                 {/* <DropDownFilter changePatch={setPatch} patch={patch} style={{color: "white"}}/> */}

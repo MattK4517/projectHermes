@@ -91,7 +91,7 @@ export default function BaseMatchSummary(props) {
         <div className="match-summary-container" style={{ minWidth: "200px" }}>
         <div className="match-info-header">
           <h3>
-            Ranked Conquest - {props.matchId}
+            {props.queueType} Conquest - {props.matchId}
           </h3>
           <div style={{display: "flex", justifyContent: "center"}}>{props.length} Minutes - {props.date}</div>
         </div>

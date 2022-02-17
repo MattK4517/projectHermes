@@ -1,14 +1,32 @@
 import React, { useState, useEffect, useContext } from "react";
 import { PlayerContext } from "./PlayerContext";
-import winRateColor from '../mainGodPage/WinRateColor';
+import winRateColor from "../mainGodPage/WinRateColor";
 
 const compare = (a, b) => {
   return b.timesPlayed - a.timesPlayed;
 };
 
 export default function PlayerMatchups(props) {
-  const [god, setGod, player, setPlayer, mode, setMode, role, setRole] =
-    useContext(PlayerContext);
+  const [
+    god,
+    setGod,
+    player,
+    setPlayer,
+    mode,
+    setMode,
+    role,
+    setRole,
+    topLink,
+    setTopLink,
+    icon,
+    setIcon,
+    playerLevel,
+    setPlayerLevel,
+    tab,
+    setTab,
+    patch,
+    setPatch,
+  ] = useContext(PlayerContext);
 
   const [playerMatchups, setPlayerMatchups] = useState([]);
   useEffect(() => {
@@ -16,7 +34,7 @@ export default function PlayerMatchups(props) {
       "/api/playermatchups/".concat(player, "/", god, "/", role, "/9.1/", mode)
     ).then((res) =>
       res.json().then((data) => {
-        console.log("playermatchups", data)
+        console.log("playermatchups", data);
         let newData = Object.values(data).sort(compare);
         setPlayerMatchups([]);
         Object.keys(newData).map((god, index) => {
@@ -31,7 +49,7 @@ export default function PlayerMatchups(props) {
         });
       })
     );
-  }, [player, role, mode]);
+  }, [player, role, mode, patch]);
   return (
     <div className="content-section content-section_no-padding played-gods">
       <div className="content-section_header played-gods_header">
@@ -54,7 +72,12 @@ export default function PlayerMatchups(props) {
               <div className="god-name">{matchup.enemy}</div>
             </div>
             <div>{matchup.timesPlayed}</div>
-            <div className="matchup-winrate" style={{color: winRateColor(matchup.winRate)}}>{matchup.winRate}%</div>
+            <div
+              className="matchup-winrate"
+              style={{ color: winRateColor(matchup.winRate) }}
+            >
+              {matchup.winRate}%
+            </div>
           </div>
         );
       })}

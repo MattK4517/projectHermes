@@ -175,6 +175,7 @@ def get_all_matchups(god, role, rank, patch, mode):
 
 @app.route("/api/getmatch/<matchID>")
 def get_match(matchID):
+    queue_type = "Ranked"
     mydb = client["Matches"]
     mycol = mydb["9.1 Matches"]
     match = ""
@@ -193,6 +194,7 @@ def get_match(matchID):
     if mycol.count_documents({"MatchId": matchID}) == 0:
         mydb = client["CasualMatches"]
         mycol = mydb["9.1 Matches"]
+        queue_type = "Casual"
     
     print(mycol.count_documents({"MatchId": matchID}))
     for x in mycol.find({"MatchId": matchID}, {"_id": 0}):
@@ -216,7 +218,8 @@ def get_match(matchID):
 
     retData = {
         **match, 
-        **anlz.get_carry_score(match)
+        **anlz.get_carry_score(match),
+        **{"mode": queue_type},
         }
     print(retData)
     return retData

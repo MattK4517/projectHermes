@@ -278,7 +278,7 @@ export default function MatchDisplay(props) {
                                 <div className="player-name">
                                   <Link
                                     to={{
-                                      pathname: `Match/${match["MatchId"]}`,
+                                      pathname: `/Match/${match["MatchId"]}`,
                                       target: "_blank",
                                     }}
                                   >

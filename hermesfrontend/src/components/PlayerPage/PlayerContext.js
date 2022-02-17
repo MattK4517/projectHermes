@@ -8,7 +8,7 @@ export const PlayerProvider = props => {
     const [god, setGod] = useState("")
     const [player, setPlayer] = useState("")
     const [mode, setMode] = useState("Ranked")
-    const [role, setRole] = useState("Solo")
+    const [role, setRole] = useState("All Roles")
     const [topLink, setTopLink] = useState("")
     const [icon, setIcon] = useState("")
     const [playerLevel, setPlayerLevel] = useState(-1);
