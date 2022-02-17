@@ -3,7 +3,7 @@ from datetime import datetime
 from constants import Tier_Three_items, godsDict, roles, ranks, slots, Assassins, Guardians, Hunters, Mages, Warriors, Starter_items
 from main import client
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import os 
 import analyze as anlz
 import pandas as pd
@@ -17,7 +17,6 @@ import pandas as pd
 #    return dict3
 
 def get_items_by_class(client, class_name, role):
-    build = ["Breastplate of Valor", "Breastplate of Determination", "Breastplate of Vigilance"]
     items = {f"slot{i+1}": {} for i in range(6)}
     for char in class_name:
             print(char)
@@ -34,33 +33,33 @@ def get_items_by_class(client, class_name, role):
     with open("items.txt", "w") as f:
         for slot in items:
             for item in items[slot]:
-                if item in build and items[slot][item]["games"] > 25:
+                # if item in build and items[slot][item]["games"] > 25:
                     games = items[slot][item]["games"]
                     wins = items[slot][item]["wins"]
                     wr = round(wins/games * 100, 2)
                     f.writelines(f"{slot}, {item} , {wins} , {games} , {wr}% \n")
 
-get_items_by_class(client, Guardians, "Support")
-# if __name__ == "__main__":
-#     items = {item: {"games": 0, "wins": 0} for item in Tier_Three_items}
-#     for god in godsDict:
-#         for role in roles:
-#             char_items = anlz.get_all_builds(client, god, role, "9.1")
-#             for slot in char_items:
-#                 if "slot" in slot:
-#                     for item in char_items[slot]:
-#                         if item in items:
-#                             items[item]["games"] += char_items[slot][item]["games"]
-#                             items[item]["wins"] += char_items[slot][item]["wins"]
-#         print(f"{god} done")
+# get_items_by_class(client, godsDict.keys(), "Support")
+if __name__ == "__main__":
+    items = {item: {"games": 0, "wins": 0} for item in Tier_Three_items}
+    for god in godsDict:
+        for role in roles:
+            char_items = anlz.get_all_builds(client, god, role, "9.1")
+            for slot in char_items:
+                if "slot" in slot:
+                    for item in char_items[slot]:
+                        if item in items:
+                            items[item]["games"] += char_items[slot][item]["games"]
+                            items[item]["wins"] += char_items[slot][item]["wins"]
+        print(f"{god} done")
 
-#     with open("items.txt", "w") as f:
-#             for item in items:
-#                 if items[item]["games"] > 0:
-#                     games = items[item]["games"]
-#                     wins = items[item]["wins"]
-#                     wr = round(wins/games * 100, 2)
-#                     f.writelines(f"{item} , {wins} , {games} , {wr}% \n")
+    with open("items.txt", "w") as f:
+            for item in items:
+                if items[item]["games"] > 0:
+                    games = items[item]["games"]
+                    wins = items[item]["wins"]
+                    wr = round(wins/games * 100, 2)
+                    f.writelines(f"{item} , {wins} , {games} , {wr}% \n")
 # def get_combat_stats_by_class(client, class_name):
 #     mydb= client["single_combat_stats"]
 #     myquery = {"role": "Mid", "patch": "8.10"}

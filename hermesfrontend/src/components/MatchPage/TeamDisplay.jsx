@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom"
-
+import CarryPlayerDisplay from "./CarryPlayerDisplay";
+import { GetCarryPlayer } from "./MatchHelpers";
 const reducer = (accumulator, currentValue) => accumulator + currentValue;
 
 
 export default function TeamDisplay(props) {
+  console.log(props)
     return ( 
         <div className="basic-match-info">
         <div className="basic-info-bans">
@@ -72,6 +74,7 @@ export default function TeamDisplay(props) {
           <div>{props.team} Side MMR</div>
           <div>{(props.mmr.reduce(reducer) / 5).toFixed(2)}</div>
         </div>
+        <CarryPlayerDisplay team={props.team} god={"Chang'e"} carryScore={props.carryScore}/>
     </div>
     )
 }

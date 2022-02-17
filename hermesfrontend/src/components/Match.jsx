@@ -16,6 +16,7 @@ import PlayerCarryScore from "./MatchPage/PlayerCarryScore";
 import BaseMatchSummary from "./MatchPage/BaseMatchSummary";
 import { fontWeight } from "@mui/system";
 import MultiKillDisplay from "./PlayerPage/MultiKillDisplay";
+import { GetCarryPlayer } from "./MatchPage/MatchHelpers";
 
 class NameForm extends React.Component {
   constructor(props) {
@@ -731,8 +732,14 @@ function Match() {
   const [date, setMatchDate] = useState("");
   const [matchData, setMatchData] = useState({});
 
-  const [queueType, setQueueType] = useState("Ranked")
-  console.log(mmrWinner, mmrLoser)
+  const [queueType, setQueueType] = useState("Ranked");
+
+  const [carryPlayerWinner, setCarryPlayerWinner] = useState("");
+  const [carryScoreWinner, setCarryScoreWinner] = useState(0);
+  const [carryPlayerLoser, setCarryPlayerLoser] = useState("");
+  const [carryScoreLoser, setCarryScoreLoser] = useState(0);
+
+  console.log(mmrWinner, mmrLoser);
   useEffect(() => {
     fetch("/api/getmatch/".concat(match)).then((res) =>
       res.json().then((data) => {
@@ -745,8 +752,11 @@ function Match() {
         setPlayers([]);
         let bans = [];
         let mmrs = [];
+        let tempScoreWinner = 0;
+        let tempScoreLoser = 0;
+
         setMatchData({ ...data });
-        setQueueType(data["mode"])
+        setQueueType(data["mode"]);
         Object.keys(data).forEach((key) => {
           if (key.includes("Ban") && key !== "First_Ban_Side") {
             bans = [...bans, data[key]];
@@ -757,6 +767,13 @@ function Match() {
                 ...godsWinner,
                 data[key]["godName"],
               ]);
+              tempScoreWinner = GetCarryPlayer(
+                data["damageScore"][data[key]["Win_Status"]][data[key]["Role"]][
+                  "damageShare"
+                ],                   data["goldScore"][data[key]["Win_Status"]][data[key]["Role"]][
+                  "goldShare"
+                ], data[key]["Wards_Placed"], data[key]["Distance_Travelled"]
+              );
             } else if (data[key]["Win_Status"] === "Loser") {
               setGodsLoser((godsLoser) => [...godsLoser, data[key]["godName"]]);
             }
@@ -874,6 +891,10 @@ function Match() {
             godsLoser={godsLoser}
             matchData={matchData}
             queueType={queueType}
+            carryScoreWinner={carryScoreWinner}
+            carryPlayerWinner={carryPlayerWinner}
+            carryScoreLoser={carryScoreLoser}
+            carryPlayerLoser={carryPlayerLoser}
           />
           <PlayerMatchSummary players={players} />
         </div>

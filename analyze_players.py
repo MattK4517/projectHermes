@@ -39,8 +39,6 @@ def find_match_history(client, playername, mode, patch):
     print(myquery)
     ret_data = {}
     for x in mycol.aggregate([myquery]):
-        if len(ret_data.keys()) >= 35:
-            break
         for key in x:
             if "player" in key:
                 if verify_player(x[key]["Player_Name"], playername, "none", "none"):
@@ -87,7 +85,7 @@ def find_match_history(client, playername, mode, patch):
     #             if verify_player(playername, x[key]["Player_Name"], "none", "none"):
     #                 ret_data[x["MatchId"]] = x
 
-    print(ret_data.keys())
+    print(ret_data.keys(), len(ret_data.keys()))
     return ret_data
 
 def create_player_return_dict(player):
@@ -480,9 +478,7 @@ if __name__ == "__main__":
     # find_match_history(client, "AleksEnglish", "Ranked")
     starttime = datetime.now()
 
-    # print(verify_player("GreekGodKillaaa", "[60g]GreekGodKillaaa", "0", "0"))
-    print(get_player_god_stats(client, "aleksenglish", "Bellona", "All Roles", "Ranked"))
-    # print(find_match_history(client, "nika", "Ranked"))
+    print(len(find_match_history(client, "solødin", "Ranked", "9.1").keys()))
     print(datetime.now() - starttime)
 
 

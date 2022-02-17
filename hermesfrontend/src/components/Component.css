@@ -3042,3 +3042,14 @@ figure.snip0015:hover figcaption::before {
 .test-div {
   background-color: #11112a;
 }
+
+.carry-player-display-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.carry-player_god-played {
+  display: flex;
+  align-items: center;
+  padding-left: 1.5rem;
+}

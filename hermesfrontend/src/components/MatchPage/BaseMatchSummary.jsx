@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 import TeamDisplay from "./TeamDisplay";
 import HeaderMatchInfoSUmmary from "./HeaderMatchInfoSummary";
 
@@ -87,20 +87,35 @@ const reducer = (accumulator, currentValue) => accumulator + currentValue;
 //   }
 
 export default function BaseMatchSummary(props) {
-    return(
-        <div className="match-summary-container" style={{ minWidth: "200px" }}>
-        <div className="match-info-header">
-          <h3>
-            {props.queueType} Conquest - {props.matchId}
-          </h3>
-          <div style={{display: "flex", justifyContent: "center"}}>{props.length} Minutes - {props.date}</div>
-        </div>
-        <div className="match-info-simple">
-            <TeamDisplay bans={props.bansWinner} gods={props.godsWinner} mmr={props.mmrWinner} team={"Winner"}/>
-            <HeaderMatchInfoSUmmary matchData={props.matchData}/>
-            <TeamDisplay bans={props.bansLoser} gods={props.godsLoser} mmr={props.mmrLoser} team={"Loser"}/>
+  return (
+    <div className="match-summary-container" style={{ minWidth: "200px" }}>
+      <div className="match-info-header">
+        <h3>
+          {props.queueType} Conquest - {props.matchId}
+        </h3>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          {props.length} Minutes - {props.date}
         </div>
       </div>
-
-    )
+      <div className="match-info-simple">
+        <TeamDisplay
+          bans={props.bansWinner}
+          gods={props.godsWinner}
+          mmr={props.mmrWinner}
+          team={"Winner"}
+          carryPlayer={props.carryPlayer}
+          carryScore={props.carryScore}
+        />
+        <HeaderMatchInfoSUmmary matchData={props.matchData} />
+        <TeamDisplay
+          bans={props.bansLoser}
+          gods={props.godsLoser}
+          mmr={props.mmrLoser}
+          team={"Loser"}
+          carryPlayer={props.carryPlayer}
+          carryScore={props.carryScore}
+        />
+      </div>
+    </div>
+  );
 }

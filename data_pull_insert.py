@@ -5,11 +5,13 @@ import pymongo
 import random
 import time
 import analyze as anlz
+import analyze_players as anlzpy
 from pyrez.models import Smite
 from pyrez.models.MatchHistory import MatchHistory
 # from data_pull_formatting_rewrite import threadedd_format_no_query
 import os
 from main import client
+from constants import godsDict
 
 
 # from data_pull_formatting_rewrite import format_no_query
@@ -595,5 +597,11 @@ def run_pull_hourly(patch, hour, date):
     print(f"{date} Pull Completed in {str(datetime.now() - starttime)} loss: {round(inserted_count/match_ids_len*100, 2)}")
 
 if __name__ == "__main__":
-    run_pull_hourly("9.1", "2", "20220215")
-    #1408
+    with open("cred.txt", "r") as f:
+        data = f.readlines()
+        smite_api = SmiteAPI(devId=data[0].strip(
+        ), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
+        stats = anlzpy.create_player_god_dict(smite_api.getQueueStats(9573956, 426), "azekill", "Casual")
+        for god in stats:
+            if god in godsDict:
+                print(f"{stats[god]['god']} {stats[god]['matches']}")
