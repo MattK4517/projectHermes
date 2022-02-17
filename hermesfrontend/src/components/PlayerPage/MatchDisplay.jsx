@@ -54,7 +54,6 @@ export default function MatchDisplay(props) {
   ] = useContext(PlayerContext);
   const modes = ["Casual", "Ranked"];
   const patches = ["9.1", "8.12", "8.11"]
-  console.log(props.matchList)
   if (Object.keys(props.matchList).length > 0) {
     return (
       <div className="content-section content-section_no-padding match-block">
@@ -67,11 +66,13 @@ export default function MatchDisplay(props) {
                   filter={"Patch"}
                   filters={patches}
                   setFilter={setPatch}
+                  className="test-div"
                 />
                 <FilterForm
                   filter={"Queue Type"}
                   filters={modes}
                   setFilter={setMode}
+                  className="test-div"
                 />
               </div>
             </div>
