@@ -723,56 +723,6 @@ export default function BuildPage(pagegod) {
                       </div>
                     </div>
                   </div>
-                  {/* <div className="content-section_header">
-                    Tables of Every Item Built on the God
-                  </div>
-                  <p>
-                    <ItemTable data={slotOneItems} columns={itemColumns} />
-                  </p> */}
-                  <div className="content-section_header">
-                    A Table First 3 Item Build Paths
-                  </div>
-                  <p>
-                    This is too Large to Display Here but on the God Pages its
-                    under the "Build Paths" Tab<br></br>
-                  </p>
-                  <div className="content-section_header">
-                    A Table Breaking Down Each Matchup in Terms of Preformance
-                    Differential
-                  </div>
-                  <p>
-                    This is too Large to Display Here but on the God Pages its
-                    under the "Matchups" Tab<br></br>
-                  </p>
-                  <Tabs value={null} aria-label="basic tabs example">
-                    <Tab
-                      sx={{ color: "white" }}
-                      label="Build"
-                      {...a11yProps(0)}
-                    />
-                    <Tab
-                      sx={{ color: "white" }}
-                      label="Items"
-                      {...a11yProps(1)}
-                    />
-                    <Tab
-                      sx={{ color: "white" }}
-                      label="Build Paths"
-                      {...a11yProps(2)}
-                    />
-                    <Tab
-                      sx={{ color: "white" }}
-                      label="Matchups"
-                      {...a11yProps(3)}
-                    />
-                  </Tabs>
-                  <div className="content-section_header">
-                    Ability to Sort by a Specific Enemy Matchup
-                  </div>
-                  <p>
-                    Best to Sort by Enemy Seen Above<br></br>
-                  </p>
-                  <SearchBarGodPage data={routes} changeMatchup={setMatchup} />
                 </ul>
               </p>
             </div>

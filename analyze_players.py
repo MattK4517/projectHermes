@@ -3,7 +3,7 @@ from constants import godsDict, roles
 import analyze as anlz
 import pymongo
 from datetime import datetime
-from main import client
+from __init__ import client
 
 def find_match_history(client, playername, mode, patch):
     """returns a dict of the match history for a given playername in a give mode 

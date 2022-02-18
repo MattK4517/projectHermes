@@ -1,7 +1,7 @@
 import pymongo
 import analyze as anlz
 from constants import godsDict, roles, ranks, patch
-from main import client
+from __init__ import client
 import datetime
 
 def gen_tier_list(client, roles, patch, types, ranks):

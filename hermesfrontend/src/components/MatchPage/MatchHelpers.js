@@ -1,5 +1,5 @@
 
 
-export function GetCarryPlayer(carryScore, damageScore, goldScore, Wards, Distance) {
+export function GetCarryPlayer(damageScore, goldScore, Wards, Distance) {
     return 0 
 }

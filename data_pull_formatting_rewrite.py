@@ -7,7 +7,7 @@ client = pymongo.MongoClient(
 
 
 class GodData:
-    def __init__(self, god):
+    def ___init__(self, god):
         self.name = god
         self.matches = []
 

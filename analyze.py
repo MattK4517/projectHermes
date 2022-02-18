@@ -1,7 +1,7 @@
 from re import A, S, X
 from datetime import datetime
 import re
-from main import client
+from __init__ import client
 from pymongo.message import kill_cursors
 import errlogger as logger
 import pymongo

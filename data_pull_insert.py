@@ -10,7 +10,7 @@ from pyrez.models import Smite
 from pyrez.models.MatchHistory import MatchHistory
 # from data_pull_formatting_rewrite import threadedd_format_no_query
 import os
-from main import client
+from __init__ import client
 from constants import godsDict
 
 

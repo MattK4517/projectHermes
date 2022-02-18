@@ -14,7 +14,7 @@
 # }
 
 
-from main import client
+from __init__ import client
 import analyze as anlz
 from math import sqrt
 from constants import patch

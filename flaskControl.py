@@ -6,7 +6,7 @@ from constants import godsDict, roles
 from flask import Flask, render_template, request
 # from flask_limiter import Limiter
 # from flask_limiter.util import get_remote_address
-from main import client
+from __init__ import client
 from collections import OrderedDict
 from operator import getitem
 import analyze_players as anlzpy
