@@ -4,6 +4,7 @@ from constants import godsDict, roles, ranks, patch
 from __init__ import client
 import datetime
 
+
 def gen_tier_list(client, roles, patch, types, ranks):
     for role in roles:
         for tier_type in types:
@@ -48,7 +49,7 @@ def gen_regular_tier_entry(client, god, role, rank, patch):
         "role": role,
         "rank": rank,
         "god": god,
-        "tier": calc_tier(),
+        "tier": get_tier(),
         "winRate": winRate,
         "pickRate": pick_rate,
         "banRate": ban_rate,
@@ -58,17 +59,50 @@ def gen_regular_tier_entry(client, god, role, rank, patch):
 
     insert_data(client, "Tier_list", "Regular List", tier_entry)
 
-def calc_tier():
-    """
-        waiting for squish
-    """
-    return "A"
+def get_tier(client, win_rate, pick_rate, ban_rate, role, rank):
+    tier_stats = get_tier_stats(client, rank, role)
+    if pick_rate + ban_rate > 100:
+        print(f"error")
+    try:
+        win_rate_diff = win_rate - tier_stats["avgWinRate"]
+        win_rate_score = win_rate_diff / tier_stats["stdDevWinRate"]
+        
+        pick_rate_diff = pick_rate - tier_stats["avgPickRate"]
+        pick_rate_score = pick_rate_diff / tier_stats["stdDevPickRate"]
+        
+        ban_rate_diff = ban_rate - tier_stats["avgBanRate"]
+        ban_rate_score = ban_rate_diff / tier_stats["stdDevBanRate"]
+        
+        tier = (1.75*win_rate_score) + ( (pick_rate_score + (.7*ban_rate_score)) / 2 )
+        # print(tier)
+        if tier < 0:
+            tier_letter = "D"
 
-def calc_win_rate(client, god, role, patch, rank):
-    return anlz.get_winrate(client, god, role, patch, rank)
+        elif tier < .5:
+            tier_letter = "C"
 
-def calc_pick_ban_rate(client, god, rank, role, patch):
-    return anlz.get_pb_rate(client, god, rank, role, patch)
+        elif tier < 1:
+            tier_letter = "B"
+
+        elif tier < 2.5:
+            tier_letter = "A"
+
+        elif tier < 3.5:
+            tier_letter = "S"
+
+        else:
+            tier_letter = "S+"
+
+        return tier_letter
+    except KeyError:
+        print(tier_stats)
+        return "INVALID"
+
+def calc_win_rate(client, god, role, patch, rank, mode="Ranked"):
+    return anlz.get_winrate(client, god, role, patch, mode, rank)
+
+def calc_pick_ban_rate(client, god, rank, role, patch, mode="Ranked"):
+    return anlz.get_pb_rate(client, god, rank, role, patch, mode)
 
 def gen_combat_tier_entry(client, god, role, rank, patch):
     """ gather information to generate combat tier entry
@@ -146,8 +180,63 @@ def get_date():
     time = datetime.datetime.now()
     return f"{time.month}/{time.day}/{time.year}"
 
-if __name__ == '__main__':
-    gen_tier_list(client, roles, "9.1", ["Combat", "Regular", "Objective"], ranks)
+def update_pick_rates(client: pymongo.MongoClient) -> None:
+    mydb = client["Tier_list"]
+    mycol = mydb["Pick Rates"]
+    data = []
+    for god in godsDict:
+        for role in roles:
+            for rank in ranks: 
+                for patch in ["9.1"]:
+                        data.append(
+                            {
+                                **{
+                                    "rank": rank,
+                                    "role": role,
+                                    "patch": patch
+                                },
+                                **calc_win_rate(client, god, role, patch, rank),
+                                **calc_pick_ban_rate(client, god, rank, role, patch)
+                            })
+                        if len(data) >= 1000:
+                            mycol.insert_many(data)
+                            data = []
+        print(f"{god} Done")
+    mycol.insert_many(data)
 
+def get_tier_stats(client: pymongo.MongoClient, rank: str, role: str) -> dict:
+    mydb = client["Tier_list"]
+    mycol = mydb["Regular List"]
+    retData = {}
+    myquery = {"role": role, "rank": rank, "pickRate": {"$gte": 1}}
+    if "All" in role:
+        del myquery["role"]
+
+    for x in mycol.aggregate(
+    [
+        {"$match": myquery},
+        {
+            "$group": {
+                "_id": f"tier stats",
+                "stdDevWinRate": {"$stdDevPop": f"$winRate"},
+                "avgWinRate": {"$avg": f"$winRate"},
+
+                "stdDevPickRate": {"$stdDevPop": f"$pickRate"},
+                "avgPickRate": {"$avg": f"$pickRate"},
+
+                "stdDevBanRate": {"$stdDevPop": f"$banRate"},
+                "avgBanRate": {"$avg": f"$banRate"},
+            }
+        }
+    ]
+    ):
+        retData = x
+    
+    return retData
+if __name__ == '__main__':
+    pass
+    # print(get_tier_stats(client, "All Ranks", "All Roles"))
+    # update_pick_rates(client)
+                    
 
 

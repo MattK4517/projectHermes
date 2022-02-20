@@ -1,6 +1,6 @@
 
 
-export function GetCarryPlayer(damageScore, goldScore, killPart, wards, distance, role, winStatus, scoringAverages) {
+export function GetCarryPlayer(damageScore, goldScore, killPart, wards, distance, assists, role, winStatus, scoringAverages) {
     console.log(scoringAverages)
     let avgDamage = scoringAverages["damageScore"][winStatus][role]["damageShare"]["avg"]
     let stdDevDamage = scoringAverages["damageScore"][winStatus][role]["damageShare"]["stdDev"]
@@ -20,6 +20,6 @@ export function GetCarryPlayer(damageScore, goldScore, killPart, wards, distance
     // console.log(damageScore, avgDamage, scoreDamage)
     // console.log(goldScore, avgGold, scoreGold)
     // console.log(killPart, avgKillPart, scoreKillPart)
-    return scoreDamage + scoreGold + scoreKillPart
+    return scoreDamage + scoreGold + scoreKillPart + ((wards+assists*100000)/distance)
 
 }

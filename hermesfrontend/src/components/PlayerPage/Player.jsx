@@ -236,6 +236,7 @@ export default function Player(props) {
   useEffect(() => {
     fetch("/api/getplayergeneral/".concat(player)).then((res) =>
       res.json().then((data) => {
+        console.log(data)
         setWinRate(data.winRate);
         setGames(data.games);
         setPlayerLevel(data.level);
@@ -245,7 +246,7 @@ export default function Player(props) {
         setGames(data.games);
       })
     );
-  }, [player]);
+  }, [player, mode, patch]);
   // <NameForm setPlayer={setPlayer} />
   return (
     <div className="player-profile-page">

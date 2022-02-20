@@ -203,7 +203,7 @@ export default function HeaderMatchInfoSUmmary(props) {
     });
   }, [props.matchData]);
   return (
-    <div className="match-summary-wrapper_header content-section">
+    <div className="match-summary-wrapper_header content-section hide">
       <div style={{ minWidth: "250px", minHeight: "175px" }}>
         <Example
           winnerKDA={[winnerKills, winnerDeaths, winnerAssists]}

@@ -84,7 +84,6 @@ export default function MatchDisplay(props) {
           let teamOne = [];
           let teamTwo = [];
           let deaths;
-          console.log(match.MatchId)
           Object.keys(match).forEach((key, index) => {
             if (key.includes("player")) {
               if (match[key]["Win_Status"] === "Winner") {

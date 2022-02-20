@@ -20,3 +20,27 @@ export default function winRateColor(winRate) {
     }
     return color;
   }
+
+
+  export function tierColor(tier) {
+    let color = "white";
+    if (tier === "D"){
+      color = "#ff4e50";
+    }
+    else if (tier === "C"){
+      color = "#fcb1b2";
+    }
+    else if (tier === "B"){
+      color = "white";
+    }
+    else if (tier === "A"){
+      color = "#7ea4f4";
+    }
+    else if (tier === "S"){
+      color = "#3273fa";
+    }
+    else if (tier === "S+"){
+      color = "#70ea0f";
+    }
+    return color;
+  }

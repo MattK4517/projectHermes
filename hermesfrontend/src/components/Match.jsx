@@ -734,16 +734,14 @@ function Match() {
 
   const [queueType, setQueueType] = useState("Ranked");
 
-  const [carryPlayerWinner, setCarryPlayerWinner] = useState("Achilles");
+  const [carryPlayerWinner, setCarryPlayerWinner] = useState("");
   const [carryScoreWinner, setCarryScoreWinner] = useState(0);
-  const [carryPlayerLoser, setCarryPlayerLoser] = useState("Achilles");
+  const [carryPlayerLoser, setCarryPlayerLoser] = useState("");
   const [carryScoreLoser, setCarryScoreLoser] = useState(0);
 
 
 
   useEffect(() => {
-    let tempScoreWinner = 0;
-    let tempScoreLoser = 0;
     fetch("/api/getmatch/".concat(match)).then((res) =>
       res.json().then((data) => {
         setBansWinner([]);
@@ -767,33 +765,56 @@ function Match() {
                 ...godsWinner,
                 data[key]["godName"],
               ]);
-
-              tempScoreWinner = GetCarryPlayer(
-                data["damageScore"][data[key]["Win_Status"]][data[key]["Role"]][
-                  "damageShare"
-                ],
-                data["goldScore"][data[key]["Win_Status"]][data[key]["Role"]][
-                  "goldShare"
-                ], 
-                data["killPart"][data[key]["Win_Status"]][data[key]["Role"]][
-                  "killShare"
-                ],
-                data[key]["Wards_Placed"],
-                data[key]["Distance_Travelled"],
-                data[key]["Role"],
-                data[key]["Win_Status"],
-                data["carryScores"])
-
-              console.log(data[key]["godName"], tempScoreWinner > carryScoreWinner, tempScoreWinner, carryScoreWinner)
-              if (tempScoreWinner > carryScoreWinner) {
-                console.log("getting here")
-                  setCarryScoreWinner(tempScoreWinner)
+              setCarryScoreWinner(carryScoreWinner => {
+                let tempScore = GetCarryPlayer(
+                  data["damageScore"][data[key]["Win_Status"]][data[key]["Role"]][
+                    "damageShare"
+                  ],
+                  data["goldScore"][data[key]["Win_Status"]][data[key]["Role"]][
+                    "goldShare"
+                  ], 
+                  data["killPart"][data[key]["Win_Status"]][data[key]["Role"]][
+                    "killShare"
+                  ],
+                  data[key]["Wards_Placed"],
+                  data[key]["Distance_Traveled"],
+                  data[key]["Assists"],
+                  data[key]["Role"],
+                  data[key]["Win_Status"],
+                  data["carryScores"])
+                if (tempScore > carryScoreWinner){
                   setCarryPlayerWinner(data[key]["godName"])
-                  console.log(carryScoreWinner, carryPlayerWinner)
-              }
+                  return tempScore
+                } else {
+                  return carryScoreWinner
+                } })
 
             } else if (data[key]["Win_Status"] === "Loser") {
               setGodsLoser((godsLoser) => [...godsLoser, data[key]["godName"]]);
+
+              setCarryScoreLoser(carryScoreLoser => {
+                let tempScore = GetCarryPlayer(
+                  data["damageScore"][data[key]["Win_Status"]][data[key]["Role"]][
+                    "damageShare"
+                  ],
+                  data["goldScore"][data[key]["Win_Status"]][data[key]["Role"]][
+                    "goldShare"
+                  ], 
+                  data["killPart"][data[key]["Win_Status"]][data[key]["Role"]][
+                    "killShare"
+                  ],
+                  data[key]["Wards_Placed"],
+                  data[key]["Distance_Traveled"],
+                  data[key]["Assists"],
+                  data[key]["Role"],
+                  data[key]["Win_Status"],
+                  data["carryScores"])
+                if (tempScore > carryScoreLoser){
+                  setCarryPlayerLoser(data[key]["godName"])
+                  return tempScore
+                } else {
+                  return carryScoreLoser
+                } })
             }
             setPlayers((player) => [
               ...player,
@@ -877,7 +898,6 @@ function Match() {
       })
     );
   }, [match]);
-
   return (
     <div
       className="container content-container"

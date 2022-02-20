@@ -3051,5 +3051,6 @@ figure.snip0015:hover figcaption::before {
 .carry-player_god-played {
   display: flex;
   align-items: center;
-  padding-left: 1.5rem;
+  flex-direction: column;
+  text-align: center;
 }

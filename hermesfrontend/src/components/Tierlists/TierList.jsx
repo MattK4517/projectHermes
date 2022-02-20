@@ -7,7 +7,7 @@ import Button from "@material-ui/core/Button";
 import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import { FilterForm } from "../Filters/FilterForm";
-import winRateColor from "../mainGodPage/WinRateColor";
+import winRateColor, { tierColor } from "../mainGodPage/WinRateColor";
 import Tooltip from "@material-ui/core/Tooltip";
 import { compareNumericString } from "./TierListHelpers";
 import { HtmlTooltip } from "../mainGodPage/GodPageHelpers";
@@ -201,7 +201,12 @@ const Table = ({ columns, data }) => {
                                     {...cell.getCellProps()}
                                   >
                                     <span>
-                                      <b>{row.original.tier}</b>
+                                      <b                                        
+                                      style={{
+                                          color: tierColor(
+                                            row.original.tier
+                                          ),
+                                        }}>{row.original.tier}</b>
                                     </span>
                                   </div>
                                 );

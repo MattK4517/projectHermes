@@ -8,8 +8,9 @@ import pymongo
 from collections import OrderedDict
 from operator import getitem
 from math import sqrt
-from constants import godsDict, slots, Tier_Three_items, Starter_items, roles, single_combat_stats, single_objective_stats
+from constants import godsDict, slots, Tier_Three_items, Starter_items, roles, single_combat_stats, single_objective_stats, godsDict2
 import analyze_players as anlzpy 
+import create_tier_list
 
 import pyrez
 from pyrez.api import SmiteAPI
@@ -45,6 +46,8 @@ def get_pb_rate(client, god, rank, role, patch, mode="Ranked"):
         myquery = { "patch": patch, "mode": f"{mode}Conq"}
 
     totalMatches = get_total_matches(client, rank, patch, mode)
+    if "All" not in rank:
+        totalMatches = totalMatches / 10
     godBans = bancol.count_documents(myquery)
     games = get_games_played(client, god, rank, role, patch, mode)
     if totalMatches == 0:
@@ -62,7 +65,6 @@ def get_games_played(client, god, rank, role, patch, mode="Ranked"):
         myquery = { "role": role, "rank": rank, "patch": patch, "mode": f"{mode}Conq"}
     else:
         myquery = { "role": role, "patch": patch, "mode": f"{mode}Conq"}
-    print(myquery)
     games = mycol.count_documents(myquery)
     return games
 
@@ -343,7 +345,6 @@ def get_worst_matchups(client, god, role, patch, mode="Ranked", rank="All Ranks"
     if "All" in role:
         del myquery["role"]
     
-    print(myquery)
     games = 0
     wins = 0
     # print(myquery)
@@ -868,7 +869,6 @@ def get_build_path(client, god, role, patch, mode, rank="All Ranks"):
         elif x["_id"]["win_status"] == "Loser":
             builds["{},{},{}".format(x["_id"]["slot1"], x["_id"]["slot2"], x["_id"]["slot3"])]["losses"] += x["count"]
         index += 1
-    print(builds)
     top_five = {}
     for x in list(builds)[-10:]:
             for key in builds[x].keys():
@@ -959,6 +959,9 @@ def get_lanes(client):
     return lanes
 
 if __name__ == "__main__":
-    print(get_games_played(client, "Bellona", "All Ranks", "Solo", "9.1"))
-    pass
-    # print(get_worst_matchups(client, "Bellona", "Carry", "9.1", player="AleksEnglish"))
+    print(create_tier_list.get_tier_stats(client, "All Ranks", "Solo"))
+    # print(get_total_matches(client, "Diamond", "9.1"))
+    for god in godsDict2:
+        winrate = get_winrate(client, god, godsDict2[god], "9.1")["win_rate"]
+        data = get_pb_rate(client, god, "Bronze", godsDict2[god], "9.1")
+        print(god, create_tier_list.get_tier(client, winrate, data["pickRate"], data["banRate"], godsDict2[god], "Diamond"))
