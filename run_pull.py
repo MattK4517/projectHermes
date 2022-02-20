@@ -6,7 +6,7 @@ from pyrez.api import SmiteAPI
 from datetime import datetime, timedelta
 from constants import roles, patch, ranks
 from data_pull_insert import run_pull_hourly
-from data_pull_formatting_rewrite import run_format_hourly
+# from data_pull_formatting_rewrite import run_format_hourly
 from create_tier_list import gen_tier_list
 from pytz import timezone
 import os
@@ -35,19 +35,11 @@ def get_date_insert():
     return ret_string
 
 if __name__ == "__main__":
-    while True:
-        t = datetime.now()
-        curr_time = f"{t.hour-1}"
-        date_insert = get_date_insert()
-        starttime = datetime.now()
         with open("cred.txt", "r") as creds:
             lines = creds.readlines()
             smite_api = SmiteAPI(devId=lines[0].strip(), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
-
-        print(smite_api.getDataUsed())
-        patch = smite_api.getPatchInfo()["version_string"]
-        run_pull_hourly(patch, curr_time, date_insert)
-        time.sleep(3600)
+        
+        print(smite_api.getMatchHistory(704292327))
     # anlz.calc_total_matches(client, ranks, "single_items", patch)
     # today = datetime.date.today()
     # weekday = today.weekday()

@@ -103,8 +103,8 @@ export default function BaseMatchSummary(props) {
           gods={props.godsWinner}
           mmr={props.mmrWinner}
           team={"Winner"}
-          carryPlayer={props.carryPlayer}
-          carryScore={props.carryScore}
+          carryPlayer={props.carryPlayerWinner}
+          carryScore={props.carryScoreWinner}
         />
         <HeaderMatchInfoSUmmary matchData={props.matchData} />
         <TeamDisplay
@@ -112,8 +112,8 @@ export default function BaseMatchSummary(props) {
           gods={props.godsLoser}
           mmr={props.mmrLoser}
           team={"Loser"}
-          carryPlayer={props.carryPlayer}
-          carryScore={props.carryScore}
+          carryPlayer={props.carryPlayerLoser}
+          carryScore={props.carryScoreLoser}
         />
       </div>
     </div>

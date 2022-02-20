@@ -734,13 +734,16 @@ function Match() {
 
   const [queueType, setQueueType] = useState("Ranked");
 
-  const [carryPlayerWinner, setCarryPlayerWinner] = useState("");
+  const [carryPlayerWinner, setCarryPlayerWinner] = useState("Achilles");
   const [carryScoreWinner, setCarryScoreWinner] = useState(0);
-  const [carryPlayerLoser, setCarryPlayerLoser] = useState("");
+  const [carryPlayerLoser, setCarryPlayerLoser] = useState("Achilles");
   const [carryScoreLoser, setCarryScoreLoser] = useState(0);
 
-  console.log(mmrWinner, mmrLoser);
+
+
   useEffect(() => {
+    let tempScoreWinner = 0;
+    let tempScoreLoser = 0;
     fetch("/api/getmatch/".concat(match)).then((res) =>
       res.json().then((data) => {
         setBansWinner([]);
@@ -752,9 +755,6 @@ function Match() {
         setPlayers([]);
         let bans = [];
         let mmrs = [];
-        let tempScoreWinner = 0;
-        let tempScoreLoser = 0;
-
         setMatchData({ ...data });
         setQueueType(data["mode"]);
         Object.keys(data).forEach((key) => {
@@ -767,13 +767,31 @@ function Match() {
                 ...godsWinner,
                 data[key]["godName"],
               ]);
+
               tempScoreWinner = GetCarryPlayer(
                 data["damageScore"][data[key]["Win_Status"]][data[key]["Role"]][
                   "damageShare"
-                ],                   data["goldScore"][data[key]["Win_Status"]][data[key]["Role"]][
+                ],
+                data["goldScore"][data[key]["Win_Status"]][data[key]["Role"]][
                   "goldShare"
-                ], data[key]["Wards_Placed"], data[key]["Distance_Travelled"]
-              );
+                ], 
+                data["killPart"][data[key]["Win_Status"]][data[key]["Role"]][
+                  "killShare"
+                ],
+                data[key]["Wards_Placed"],
+                data[key]["Distance_Travelled"],
+                data[key]["Role"],
+                data[key]["Win_Status"],
+                data["carryScores"])
+
+              console.log(data[key]["godName"], tempScoreWinner > carryScoreWinner, tempScoreWinner, carryScoreWinner)
+              if (tempScoreWinner > carryScoreWinner) {
+                console.log("getting here")
+                  setCarryScoreWinner(tempScoreWinner)
+                  setCarryPlayerWinner(data[key]["godName"])
+                  console.log(carryScoreWinner, carryPlayerWinner)
+              }
+
             } else if (data[key]["Win_Status"] === "Loser") {
               setGodsLoser((godsLoser) => [...godsLoser, data[key]["godName"]]);
             }
@@ -904,3 +922,4 @@ function Match() {
 }
 
 export default Match;
+

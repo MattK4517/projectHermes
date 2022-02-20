@@ -17,6 +17,7 @@ import flaskHelper as fh
 import json
 from bson import json_util
 from damage_calculator import calc_combo_damage_raw
+from carry_score_analytics import get_carry_score_averages
 
 app = Flask(__name__, static_folder="../hermesfrontend", static_url_path="/")
 # limiter = Limiter(
@@ -220,6 +221,7 @@ def get_match(matchID):
         **match, 
         **anlz.get_carry_score(match),
         **{"mode": queue_type},
+        **{"carryScores": get_carry_score_averages()}
         }
     print(retData)
     return retData

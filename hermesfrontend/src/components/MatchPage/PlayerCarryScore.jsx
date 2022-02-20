@@ -1,7 +1,6 @@
 import MultiKillDisplay from "../PlayerPage/MultiKillDisplay";
 
 export default function PlayerCarryScore(props) {
-    console.log(props)
     return(
         <div className="player-header-carry-score_container">
             <MultiKillDisplay player={props.player} />

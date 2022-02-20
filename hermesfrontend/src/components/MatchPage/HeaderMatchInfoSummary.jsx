@@ -141,7 +141,6 @@ export default function HeaderMatchInfoSUmmary(props) {
     Object.keys(props.matchData).forEach((key) => {
       if (key.includes("player")) {
         if (props.matchData[key]["Win_Status"] === "Winner") {
-          console.log("winner", props.matchData[key]["Towers_Destroyed"], props.matchData[key]["Kills_Phoenix"])
           setWinnerKills((winnerKills) => {
             return winnerKills + props.matchData[key]["Kills_Player"];
           });
@@ -171,7 +170,6 @@ export default function HeaderMatchInfoSUmmary(props) {
             return winnerDistance + props.matchData[key]["Distance_Traveled"];
           });
         } else if (props.matchData[key]["Win_Status"] === "Loser") {
-          console.log("loser", props.matchData[key]["Towers_Destroyed"], props.matchData[key]["Kills_Phoenix"])
           setLoserKills((loserKills) => {
             return loserKills + props.matchData[key]["Kills_Player"];
           });
