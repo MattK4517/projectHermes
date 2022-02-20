@@ -5,7 +5,7 @@
 import { Link, withRouter, useHistory } from "react-router-dom";
 import Match from "../Match";
 import Player from "../PlayerPage/Player";
-// import { godsDict } from './'
+import { godsDict } from '../drawer'
 
 // export default function SearchBar({ placeholder, data }) {
 //   const [filteredData, setFilteredData] = useState([]);
@@ -76,17 +76,25 @@ export default function SearchBar(data) {
   let history = useHistory();
   
   function handleKeyPress(event){
+    let flag = false;
     if(event.charCode==13){
       if (parseInt(event.target.value)) {
-        history.push(`/Match/${event.target.value}`);
-      } else if (event.target.value in data.data) {
-        history.push(`/${event.target.value.toLowerCase().replaceAll(" ", "-").replaceAll("'","")}`);
+        history.push(`/Match/${event.target.value.trim()}`);
+      } else if (Object.keys(godsDict).findIndex(element => {
+        console.log(element.toLowerCase() === event.target.value.toLowerCase())
+        return element.toLowerCase() === event.target.value.toLowerCase();
+      }) !== -1) {
+        console.log("GETIIJTOIJANDL:KJALKFJWOP")
+        history.push(`/${event.target.value.trim().toLowerCase().replaceAll(" ", "-").replaceAll("'","")}`)
+        flag = true
       }
-        else{
-        history.push({
-          pathname: `/Player/${event.target.value.trim()}`,
-          state: {player: event.target.value}
-        });
+      else {
+        if (!flag){
+          history.push({
+            pathname: `/Player/${event.target.value.trim()}`,
+            state: {player: event.target.value}
+          });
+        }
       }
   }
   }
