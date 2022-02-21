@@ -42,7 +42,7 @@ def get_god_data(god, role, rank, patch, mode, matchup="None"):
     return {
         **{
             "url": anlz.get_url(newgod),
-            "tier": anlz.get_tier(winrate["win_rate"], pbrate["pickRate"], pbrate["banRate"]),
+            "tier": anlz.get_tier(client, winrate["win_rate"], pbrate["pickRate"], pbrate["banRate"], role, rank),
         },
         **pbrate,
         **winrate

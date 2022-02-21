@@ -219,6 +219,8 @@ def create_player_dict(player):
 
 
 def create_match_dict(match, patch):
+    with open("match doc Ids.txt", "w") as f:
+        f.writelines(f"{match.matchId}\n")
     match_dict = {}
     match_dict["Patch"] = patch
     match_dict["Entry_Datetime"] = match.entryDatetime.split()[0]
@@ -579,11 +581,11 @@ def run_pull_hourly(patch, hour, date):
                             player = create_player_dict(match_details[i])
                             match[f"player{len(match.keys())-15}"] = player
 
-            mycol.insert_many(data)
-            print(len(ids), ids)
-            print(len(set) == len(data), len(set), len(data))
-            # format_no_query(data)
-            inserted_count += len(data)
+            # mycol.insert_many(data)
+            # print(len(ids), ids)
+            # print(len(set) == len(data), len(set), len(data))
+            # # format_no_query(data)
+            # inserted_count += len(data)
                 # carry_score = anlz.get_carry_score(match_dict)
                 # match_dict["carryScore"] = carry_score["goldScore"]
                 # match_dict["damageScore"] = carry_score["damageScore"]

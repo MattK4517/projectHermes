@@ -400,7 +400,6 @@ export default function Matchups(props) {
         <div class="stats-tables-page">
           <div id="stats-tables-container-ID" 
             className="stats-tables-container content-side-padding" 
-            style={{paddingTop: "100px"}}
             >
           <Table columns={columns} data={totalData} />
           </div>

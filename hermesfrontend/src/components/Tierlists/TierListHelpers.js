@@ -13,3 +13,8 @@ export function compareNumericString(rowA, rowB, id, desc) {
     if (a < b) return -1;
     return 0;
   }
+
+  export function compareTier(rowA, rowB, id, desc) {
+      let a = rowA.values[id]
+      let B = rowB.values[id]
+  }

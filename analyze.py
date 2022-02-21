@@ -716,22 +716,75 @@ def check_roles(match_roles):
         return False
     return True
 
-def get_tier(win_rate, pick_rate, ban_rate):
-    tier = (win_rate) + (pick_rate) + (.5 * ban_rate)
-    if tier < 55:
-        tier_letter = "D"
+def get_tier(client, win_rate, pick_rate, ban_rate, role, rank):
+    tier_stats = get_tier_stats(client, rank, role)
+    if pick_rate + ban_rate > 100:
+        print(f"error")
+    try:
+        win_rate_diff = win_rate - tier_stats["avgWinRate"]
+        win_rate_score = win_rate_diff / tier_stats["stdDevWinRate"]
+        
+        pick_rate_diff = pick_rate - tier_stats["avgPickRate"]
+        pick_rate_score = pick_rate_diff / tier_stats["stdDevPickRate"]
+        
+        ban_rate_diff = ban_rate - tier_stats["avgBanRate"]
+        ban_rate_score = ban_rate_diff / tier_stats["stdDevBanRate"]
+        
+        tier = (1.75*win_rate_score) + ( (pick_rate_score + (.7*ban_rate_score)) / 2 )
+        # print(tier)
+        if tier < 0:
+            tier_letter = "D"
 
-    elif tier < 57:
-        tier_letter = "A"
+        elif tier < .5:
+            tier_letter = "C"
 
-    elif tier < 59:
-        tier_letter = "S"
+        elif tier < 1:
+            tier_letter = "B"
 
-    else:
-        tier_letter = "S+"
+        elif tier < 2.5:
+            tier_letter = "A"
 
-    return tier_letter
+        elif tier < 3.5:
+            tier_letter = "S"
 
+        else:
+            tier_letter = "S+"
+
+        return tier_letter
+    except KeyError:
+        print(tier_stats)
+        return "INVALID"
+
+def get_tier_stats(client: pymongo.MongoClient, rank: str, role: str) -> dict:
+    mydb = client["Tier_list"]
+    mycol = mydb["Regular List"]
+    retData = {}
+    myquery = {"role": role, "rank": rank, "pickRate": {"$gte": 1}}
+    if "All" in role:
+        del myquery["role"]
+
+    for x in mycol.aggregate(
+    [
+        {"$match": myquery},
+        {
+            "$group": {
+                "_id": f"tier stats",
+                "stdDevWinRate": {"$stdDevPop": f"$winRate"},
+                "avgWinRate": {"$avg": f"$winRate"},
+
+                "stdDevPickRate": {"$stdDevPop": f"$pickRate"},
+                "avgPickRate": {"$avg": f"$pickRate"},
+
+                "stdDevBanRate": {"$stdDevPop": f"$banRate"},
+                "avgBanRate": {"$avg": f"$banRate"},
+            }
+        }
+    ]
+    ):
+        retData = x
+    
+    return retData
+    
 def get_specific_build(client, god, role, patch, matchup, rank="All Ranks", mode="Ranked"):
     mydb = client["single_match_stats"]
     mycol = mydb[god]

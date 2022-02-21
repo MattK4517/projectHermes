@@ -322,7 +322,7 @@ function Godpage(props) {
   const [tab, setTab] = useState("Build");
   const [dispRole, setrole] = useState(role);
   const [dispRank, setrank] = useState("All Ranks");
-  const [tier, setTier] = useState("S")
+  const [tier, setTier] = useState("")
   const [banrate, setbanrate] = useState(0);
   const [pickrate, setpickrate] = useState(0);
   const [winrate, setwinrate] = useState(0);

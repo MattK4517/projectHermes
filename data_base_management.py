@@ -204,12 +204,13 @@ def create_match_dict(match, patch):
     return match_dict
     
 if __name__ == "__main__":
-    pass
     # calc_total_matches(client, ranks)
-    # mydb = client["CasualMatches"]
-    # mycol = mydb["9.1 Matches"]
-    # for x in mycol.find({"Entry_Datetime": "2/17/2022"}):
-    #     print(x.keys())
+    mydb = client["CasualMatches"]
+    mycol = mydb["9.1 Matches"]
+    # print(mycol.count_documents({"MatchId": 1226366746}))
+    with open("match doc Ids.txt", "w") as f:
+        for x in mycol.find({"Entry_Datetime": "2/20/2022"}, {"MatchId": 1}):
+             f.writelines(f"ID: {x['MatchId']}\n")
     # with open("match doc Ids.txt", "w") as f:
     #     for x in mycol.aggregate([
     #         {"$group": {"_id": "$MatchId", "count": {"$sum": 1} }},

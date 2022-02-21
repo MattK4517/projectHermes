@@ -119,7 +119,7 @@ const Table = ({ columns, data }) => {
                                     }}
                                     {...cell.getCellProps()}
                                   >
-                                    <span>{(i += 1)}</span>
+                                    <span>{(i += 1) + (pageSize * pageIndex)}</span>
                                   </div>
                                 );
                               } else if (key.includes("role")) {
@@ -544,6 +544,7 @@ function TierList(props) {
       {
         Header: "Rank",
         accessor: "rank",
+        disableSortBy: true,
       },
       {
         Header: "Role",
@@ -575,6 +576,7 @@ function TierList(props) {
       {
         Header: "Counter Matchups",
         accessor: "counterMatchups",
+        disableSortBy: true,
       },
       {
         Header: "Games",
@@ -606,7 +608,7 @@ function TierList(props) {
           rankSet={setRank}
         />
       </div>
-      <Table columns={columns} data={totalData} />
+      <Table columns={columns} data={totalData} sortable />
     </>
   );
 }

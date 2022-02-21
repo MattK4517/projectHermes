@@ -24,6 +24,7 @@ import GodStatsDisplay from "./PlayerPage/GodStatsDisplay";
 import { PlayerProvider } from "./PlayerPage/PlayerContext";
 import DamageCalculator from "./DmgCalcPage/DamageCalculator"
 import { DamageProvider } from './DmgCalcPage/DamageContext';
+import { TierListProvider } from './Tierlists/TierListContext';
 
 
 export const godsDict = {
@@ -421,13 +422,15 @@ export default function PermanentDrawerLeft() {
       >
         <Toolbar />
         <PlayerProvider>
-          <DamageProvider>
+        <DamageProvider>
+        <TierListProvider>
             <Typography>
               <Switch>
                 {routeComponents}
               </Switch>
             </Typography>
-          </DamageProvider>
+        </TierListProvider>
+        </DamageProvider>
         </PlayerProvider>
       </Box>
     </Box>

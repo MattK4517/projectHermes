@@ -4,21 +4,18 @@ import CombatTierList from "./Tierlists/CombatTierList";
 import ObjectiveTierList from "./Tierlists/ObjectiveTierList";
 import DuoLaneTierList from "./Tierlists/DuoLaneTierList";
 import React, { useState, useEffect, useMemo } from 'react';
-import { useTable, useSortBy, usePagination } from 'react-table';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet'
 
 
 function TierListPage() {
-    const [initData, setInitData] = useState([])
     const [tableType, setTableType] = useState("Regular")
-    const [counterMatchups, setCounterMatchups] = useState([]);
-    
+    let patch = "1"
     return (
       <>
         <Helmet>
         <meta charSet="utf-8" />
-        <title>{`SMITE ${tableType} Tier List`}</title>
+        <title>{`SMITE ${tableType} Tier List for ${patch}`}</title>
         </Helmet>
         <div id="page-content">
         <div style={{ width: "100%"}}>
@@ -32,14 +29,9 @@ function TierListPage() {
                         <span class="title-header_main">{tableType} Stats Tier List</span>
                         {/* <span class="title-header_secondary">for {role}, {dispRank.replaceAll("_", " ")}</span> */}
                         </h1>
-                        <span style={{color: "white"}}>
-                          WIP give the page some time to load <br></br>
-                          if it doesnt load I'm probably reworking the data<br></br> 
-                          too much spaghetti code running this
-                        </span>
                     </div>
                     <TierListTabs style={{paddingTop: "10px"}} changeTableType={setTableType}>
-                    <div label="Tier List" style={{color: "white"}}>
+                    <div label="Regular" style={{color: "white"}}>
                       <TierList tableType={"Regular"} />
                     </div>
                     <div label="Combat" style={{color: "white"}}>

@@ -405,7 +405,6 @@ color: #cddcfe;
 .item-row {
   display: flex;
   justify-content: center;
-  align-items: center;
 }
 
 .item-row .item-dupe {
@@ -582,6 +581,14 @@ a, a:active, a:focus, a:hover, a:visited {
 .content-side-padding {
   padding-left: 24px;
   padding-right: 24px;
+}
+
+
+@media(max-width:1200px){
+  .Godpage {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
 }
 
 * {
@@ -1148,8 +1155,8 @@ figure.snip0015:hover figcaption::before {
   grid-gap: 6px;
   margin-top: 24px;
   width: 1200px;
-  justify-content: space-between;
-  left: 22%;
+  justify-content: flex-start;
+  left: 27%
 }
 
 /* .grid-block.items-1 {
@@ -2658,25 +2665,22 @@ figure.snip0015:hover figcaption::before {
     display: none !important;
   }
 
-  .rt-tr .inline-counterMatchups {
-    display: none !important;
-  }
+
 
   .rt-tr .inline-games {
     display: none !important;
   }
 
-  .inline-tab-combat {
+  .inline-tab-combat,
+  .inline-tab-objective,
+  .inline-tab-duos,
+  .inline-tab-items,
+  .inline-tab-matchups,
+  .rt-tr .inline-counterMatchups,
+  .rt-tr .inline-games {
     display: none !important;
   }
 
-  .inline-tab-objective {
-    display: none !important;
-  }
-
-  .inline-tab-duos {
-    display: none !important;
-  }
 
   .search-bar {
     display: none !important;
@@ -3053,4 +3057,12 @@ figure.snip0015:hover figcaption::before {
   align-items: center;
   flex-direction: column;
   text-align: center;
+}
+
+.search-bar {
+  justify-content: center;
+}
+
+.tabs {
+  width: 100%;
 }

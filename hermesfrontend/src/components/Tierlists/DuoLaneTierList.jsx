@@ -141,7 +141,7 @@ const Table = ({ columns, data }) => {
                                     }}
                                     {...cell.getCellProps()}
                                   >
-                                    <span>{(i += 1)}</span>
+                                    <span>{(i += 1) + (pageSize * pageIndex)}</span>
                                   </div>
 
                                   <div
