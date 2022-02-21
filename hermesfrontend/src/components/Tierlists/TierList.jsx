@@ -13,6 +13,8 @@ import { compareNumericString } from "./TierListHelpers";
 import { HtmlTooltip } from "../mainGodPage/GodPageHelpers";
 import { getImageUrl } from "../Filters/FilterForm"
 import { TierListContext } from "./TierListContext";
+import { CreateMatchupToolTip } from "./TierListHelpers";
+import { linkDict } from "../PlayerPage/Player"
 
 const Table = ({ columns, data }) => {
   const {
@@ -49,6 +51,11 @@ const Table = ({ columns, data }) => {
     usePagination
   );
 
+  const [
+    god, setGod, mode, setMode, patch, setPatch, rank, setRank,
+    role, setRole, topLink, setTopLink
+  ] = useContext(TierListContext);
+  
   // We don't want to render all 2000 rows for this example, so cap
   // it at 20 for this use case
   const firstPageRows = rows;
@@ -111,6 +118,9 @@ const Table = ({ columns, data }) => {
                             {row.cells.map((cell) => {
                               const { key, role } = cell.getCellProps();
                               if (key.includes("rank")) {
+                                if (((i += 1) + (pageSize * pageIndex)) === 1) {
+                                  setTopLink(linkDict[row.original.god])
+                                }
                                 return (
                                   <div
                                     className="rt-td rank"
@@ -497,11 +507,11 @@ const compare = (a, b) => {
 
 function TierList(props) {
   const [
-    god, setGod, mode, setMode, patch, setPatch, topLink, setTopLink
+    god, setGod, mode, setMode, patch, setPatch, rank, setRank,
+    role, setRole, topLink, setTopLink
   ] = useContext(TierListContext);
   // const [patch, setPatch] = useState("8.9");
   const [totalData, setTotalData] = useState([]);
-  const [counterMatchups, setCounterMatchups] = useState([]);
   const [roles, setRoles] = useState([
     "Solo",
     "Jungle",
@@ -510,7 +520,6 @@ function TierList(props) {
     "Carry",
     "All Roles",
   ]);
-  const [role, setRole] = useState("All Roles");
   const [ranks, setranks] = useState([
     "Bronze",
     "Silver",
@@ -519,14 +528,13 @@ function TierList(props) {
     "Diamond",
     "Masters",
     "Grandmaster",
-    "All_Ranks",
+    "All Ranks",
   ]);
-  const [dispRank, setRank] = useState("All_Ranks");
 
   useEffect(() => {
     //"/gettierlist/".concat(dispRank, "/", role, "/", props.props, "/", patch
     fetch(
-      "/api/gettierlist/".concat(dispRank, "/", role, "/", props.tableType, "/", mode)
+      "/api/gettierlist/".concat(rank, "/", role, "/", props.tableType, "/", mode)
     ).then((res) =>
       res.json().then((data) => {
         setTotalData([]);
@@ -560,7 +568,7 @@ function TierList(props) {
         });
       })
     );
-  }, [dispRank, role, mode]);
+  }, [rank, role, mode]);
 
   const columns = React.useMemo(
     () => [
@@ -618,9 +626,9 @@ function TierList(props) {
           setFilter={setRole}
         />
         <FilterForm
-          filter={dispRank.replaceAll("_", " ")}
+          filter={rank}
           filters={ranks}
-          role={dispRank.replaceAll("_", " ")}
+          role={rank}
           setFilter={setRank}
         />
         <FilterForm
@@ -691,50 +699,5 @@ function CounterMatchupDisplay(props) {
   );
 }
 
-function CreateMatchupToolTip(props) {
-  return (
-    <div className="matchup-tooltip-container">
-      <div className="matchup-tooltip">
-        <div className="god-icon">
-          <div style={{ height: "30px", width: "30px" }}>
-            <img
-              src={`https://webcdn.hirezstudios.com/smite/god-icons/${props.god
-                .replaceAll(" ", "-")
-                .replaceAll("'", "")
-                .toLowerCase()}.jpg`}
-              alt={props.god}
-              style={{
-                height: "48px",
-                width: "48px",
-                transform: "scale(0.625)",
-                transformOrigin: "0px 0px 0px",
-              }}
-            />
-          </div>
-        </div>
-        <span style={{ color: "white", paddingTop: ".3rem" }}>
-          wins&nbsp;
-          <b style={{ color: winRateColor(props.winrate) }}>{props.winrate}%</b>
-          &nbsp;vs&nbsp;
-        </span>
-        <div className="god-icon">
-          <div style={{ height: "30px", width: "30px" }}>
-            <img
-              src={props.enemyURL}
-              alt={props.enemy}
-              style={{
-                height: "48px",
-                width: "48px",
-                transform: "scale(0.625)",
-                transformOrigin: "0px 0px 0px",
-              }}
-            />
-          </div>
-        </div>
-      </div>
-      <p>{props.games} games</p>
-    </div>
-  );
-}
 
 export default TierList;

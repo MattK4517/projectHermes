@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useTable, useSortBy, usePagination } from "react-table";
 import { Link } from "react-router-dom";
 import Menu from '@material-ui/core/Menu';
@@ -8,6 +8,9 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import { FilterForm } from "../Filters/FilterForm";
 import winRateColor from "../mainGodPage/WinRateColor";
+import { TierListContext } from "./TierListContext";
+import { linkDict } from "../PlayerPage/Player"
+
 
 const Table = ({ columns, data }) => {
   const {
@@ -43,6 +46,12 @@ const Table = ({ columns, data }) => {
     useSortBy,
     usePagination
   );
+
+  const [
+    god, setGod, mode, setMode, patch, setPatch, rank, setRank,
+    role, setRole, topLink, setTopLink
+  ] = useContext(TierListContext);
+
 
   // We don't want to render all 2000 rows for this example, so cap
   // it at 20 for this use case
@@ -106,6 +115,9 @@ const Table = ({ columns, data }) => {
                             {row.cells.map((cell) => {
                               const { key, role } = cell.getCellProps();
                               if (key.includes("rank")) {
+                                if (((i += 1) + (pageSize * pageIndex)) === 1) {
+                                  setTopLink(linkDict[row.original.god])
+                                }
                                 return (
                                   <div
                                     className="rt-td rank"
@@ -413,8 +425,12 @@ const Table = ({ columns, data }) => {
 };
 
 function CombatTierList(props) {
+  const [
+    god, setGod, mode, setMode, patch, setPatch, rank, setRank,
+    role, setRole, topLink, setTopLink
+  ] = useContext(TierListContext);
+
   const [totalData, setTotalData] = useState([]);
-  const [counterMatchups, setCounterMatchups] = useState([]);
   const [roles, setRoles] = useState([
     "Solo",
     "Jungle",
@@ -423,8 +439,6 @@ function CombatTierList(props) {
     "Carry",
     "All Roles",
   ]);
-  const [role, setRole] = useState("All Roles");
-  const [mode, setMode] = useState("Ranked")
 
   const [ranks, setranks] = useState([
     "Bronze",
@@ -434,19 +448,19 @@ function CombatTierList(props) {
     "Diamond",
     "Masters",
     "Grandmaster",
-    "All_Ranks",
+    "All Ranks",
   ]);
-  const [dispRank, setRank] = useState("All_Ranks");
 
   useEffect(() => {
     //"/gettierlist/".concat(dispRank, "/", role, "/", tableType.tableType, "/", patch
     fetch(
-      "/api/gettierlist/".concat(dispRank, "/", role, "/", props.tableType, "/", mode)
+      "/api/gettierlist/".concat(rank, "/", role, "/", props.tableType, "/", mode)
     ).then((res) =>
       res.json().then((data) => {
         setTotalData([]);
         Object.keys(data).forEach((key) => {
           Object.keys(data[key]).forEach((godData) => {
+            console.log(data[key])
             setTotalData((totalData) => [
               ...totalData,
               {
@@ -468,13 +482,14 @@ function CombatTierList(props) {
         });
       })
     );
-  }, [dispRank, role]);
+  }, [rank, role]);
 
   const columns = React.useMemo(
     () => [
       {
         Header: "Rank",
         accessor: "rank",
+        disableSoryBy: true,
       },
       {
         Header: "Role",
@@ -541,7 +556,7 @@ function CombatTierList(props) {
     <>
         <div className="filter-form">
           <FilterForm filter={role} filters={roles} role={role}  setFilter={setRole}/>
-          <FilterForm filter={dispRank.replaceAll("_", " ")} filters={ranks} role={dispRank.replaceAll("_", " ")} setFilter={setRank}/>
+          <FilterForm filter={rank} filters={ranks} role={rank} setFilter={setRank}/>
         </div>
       <Table columns={columns} data={totalData} />
     </>

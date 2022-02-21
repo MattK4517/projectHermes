@@ -191,7 +191,7 @@ const Table = ({ columns, data }) => {
                                     {...cell.getCellProps()}
                                   >
                                     <span>
-                                      <b style={{color: winRateColor(row.original[`${[roleOne]}WinRate`])}}>{row.original[`${[roleOne]}WinRate`].toFixed(2)}%</b>
+                                      <b style={{color: "darkgrey"}}>{row.original[`${[roleOne]}WinRate`].toFixed(2)}%</b>
                                     </span>
                                   </div>
 
@@ -242,7 +242,7 @@ const Table = ({ columns, data }) => {
                                     {...cell.getCellProps()}
                                   >
                                     <span>
-                                      <b style={{color: winRateColor(row.original[`${[roleTwo]}WinRate`])}}>{row.original[`${[roleTwo]}WinRate`].toFixed(2)}%</b>
+                                      <b style={{color: "darkgray"}}>{row.original[`${[roleTwo]}WinRate`].toFixed(2)}%</b>
                                     </span>
                                   </div>
 

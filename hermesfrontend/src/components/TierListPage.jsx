@@ -11,7 +11,8 @@ import { TierListContext } from "./Tierlists/TierListContext";
 function TierListPage() {
   const [tableType, setTableType] = useState("Regular");
   const [
-    god, setGod, mode, setMode, patch, setPatch, topLink, setTopLink
+    god, setGod, mode, setMode, patch, setPatch, rank, setRank,
+    role, setRole, topLink, setTopLink
   ] = useContext(TierListContext);
   return (
     <>

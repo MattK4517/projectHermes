@@ -18,50 +18,6 @@ import { fontWeight } from "@mui/system";
 import MultiKillDisplay from "./PlayerPage/MultiKillDisplay";
 import { GetCarryPlayer } from "./MatchPage/MatchHelpers";
 
-class NameForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { value: "" };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleChange(event) {
-    this.setState({ value: event.target.value });
-  }
-  handleSubmit(event) {
-    this.props.setMatch(event.target[0].value);
-    event.preventDefault();
-  }
-
-  render() {
-    return (
-      <div className="content-section">
-        <div className="content-section_header">Search for a Player</div>
-        <form onSubmit={this.handleSubmit}>
-          {" "}
-          <label style={{ color: "white" }}>
-            Match ID:
-            <input
-              type="text"
-              value={this.state.value}
-              onChange={this.handleChange}
-            />{" "}
-          </label>
-          <input type="submit" value="Submit" />
-        </form>
-        <div className="filler">
-          <h4>Don't have a match? try 1219734199</h4>
-          {/* <br></br> */}
-          <h5>
-            Remember all matches must by Ranked PC Conquest from 10/24/2021 or
-            later (will expand the match types we support soon!)
-          </h5>
-        </div>
-      </div>
-    );
-  }
-}
 
 const Accordion = withStyles({
   root: {
@@ -903,7 +859,6 @@ function Match() {
       className="container content-container"
       style={{ maxWidth: "fit-content" }}
     >
-      <NameForm setMatch={setMatch} />
       <div
         className="content-section shrink-padding"
         style={{ marginTop: "36px" }}

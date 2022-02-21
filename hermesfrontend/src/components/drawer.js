@@ -25,6 +25,7 @@ import { PlayerProvider } from "./PlayerPage/PlayerContext";
 import DamageCalculator from "./DmgCalcPage/DamageCalculator"
 import { DamageProvider } from './DmgCalcPage/DamageContext';
 import { TierListProvider } from './Tierlists/TierListContext';
+import FindAMatch from './MatchPage/FindAMatch';
 
 
 export const godsDict = {
@@ -192,6 +193,11 @@ let routes = [
     path: ["/damage_calculator"],
     component: <DamageCalculator />,
     god: "",
+  },
+  {
+    path: ["/find_a_match"],
+    component: <FindAMatch />,
+    god: "",
   }
 
 
@@ -346,7 +352,7 @@ export default function PermanentDrawerLeft() {
             <MenuItem onClick={handleClose}><Link to={"/tierlist"}>tierlist</Link></MenuItem> */}
               {/* </Menu> */}
             </Hamburger>
-            <SearchBar data={routes.slice(8)} />
+            <SearchBar data={routes.slice(10)} />
           </Typography>
         </Toolbar>
       </Root>

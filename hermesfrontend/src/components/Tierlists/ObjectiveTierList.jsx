@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useTable, useSortBy, usePagination } from "react-table";
 import { Link } from "react-router-dom";
 import Menu from '@material-ui/core/Menu';
@@ -8,6 +8,9 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import { FilterForm } from "../Filters/FilterForm";
 import winRateColor from "../mainGodPage/WinRateColor";
+import { TierListContext } from "./TierListContext";
+import { linkDict } from "../PlayerPage/Player"
+
 
 const Table = ({ columns, data }) => {
   const {
@@ -43,6 +46,11 @@ const Table = ({ columns, data }) => {
     useSortBy,
     usePagination
   );
+
+  const [
+    god, setGod, mode, setMode, patch, setPatch, rank, setRank,
+    role, setRole, topLink, setTopLink
+  ] = useContext(TierListContext);
 
   // We don't want to render all 2000 rows for this example, so cap
   // it at 20 for this use case
@@ -117,6 +125,9 @@ const Table = ({ columns, data }) => {
                                 god = "change";
                               }
                               if (key.includes("rank")) {
+                                if (((i += 1) + (pageSize * pageIndex)) === 1) {
+                                  setTopLink(linkDict[row.original.god])
+                                }
                                 return (
                                   <>
                                   <div

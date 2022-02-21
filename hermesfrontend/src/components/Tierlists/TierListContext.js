@@ -11,9 +11,12 @@ export const TierListProvider = props => {
     const [mode, setMode] = useState("Ranked")
     const [patch, setPatch] = useState("9.1");
     const [topLink, setTopLink] = useState("")
+    const [rank, setRank] = useState("All Ranks");
+    const [role, setRole] = useState("All Roles");
     return (
         <TierListContext.Provider value={[
-            god, setGod, mode, setMode, patch, setPatch
+            god, setGod, mode, setMode, patch, setPatch, rank, setRank,
+            role, setRole, topLink, setTopLink
             ]}>
             {props.children}
         </TierListContext.Provider>

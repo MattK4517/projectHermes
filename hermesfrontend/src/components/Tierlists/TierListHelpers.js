@@ -1,4 +1,4 @@
-
+import winRateColor from "../mainGodPage/WinRateColor"
 
 export function compareNumericString(rowA, rowB, id, desc) {
     let a = Number.parseFloat(rowA.values[id]);
@@ -18,3 +18,52 @@ export function compareNumericString(rowA, rowB, id, desc) {
       let a = rowA.values[id]
       let B = rowB.values[id]
   }
+
+export function CreateMatchupToolTip(props) {
+    return (
+      <div className="matchup-tooltip-container">
+        <div className="matchup-tooltip">
+          <div className="god-icon">
+            <div style={{ height: "30px", width: "30px" }}>
+              <img
+                src={`https://webcdn.hirezstudios.com/smite/god-icons/${props.god
+                  .replaceAll(" ", "-")
+                  .replaceAll("'", "")
+                  .toLowerCase()}.jpg`}
+                alt={props.god}
+                style={{
+                  height: "48px",
+                  width: "48px",
+                  transform: "scale(0.625)",
+                  transformOrigin: "0px 0px 0px",
+                }}
+              />
+            </div>
+          </div>
+          <span style={{ color: "white", paddingTop: ".3rem" }}>
+            wins&nbsp;
+            <b style={{ color: winRateColor(props.winrate) }}>{props.winrate}%</b>
+            &nbsp;vs&nbsp;
+          </span>
+          <div className="god-icon">
+            <div style={{ height: "30px", width: "30px" }}>
+              <img
+                src={props.enemyURL}
+                alt={props.enemy}
+                style={{
+                  height: "48px",
+                  width: "48px",
+                  transform: "scale(0.625)",
+                  transformOrigin: "0px 0px 0px",
+                }}
+              />
+            </div>
+          </div>
+        </div>
+        <p>{props.games} games</p>
+      </div>
+    );
+  }
+
+
+  

@@ -84,7 +84,6 @@ export default function SearchBar(data) {
         console.log(element.toLowerCase() === event.target.value.toLowerCase())
         return element.toLowerCase() === event.target.value.toLowerCase();
       }) !== -1) {
-        console.log("GETIIJTOIJANDL:KJALKFJWOP")
         history.push(`/${event.target.value.trim().toLowerCase().replaceAll(" ", "-").replaceAll("'","")}`)
         flag = true
       }
