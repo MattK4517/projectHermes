@@ -106,7 +106,7 @@ def get_tier_list(rank, role, tableType, mode):
         myquery = {**myquery, **{"mode": f"{mode}Conq"}}
         print(myquery)
         print(mycol.count_documents(myquery))
-        for x in mycol.find(myquery, {"_id": 0}):
+        for x in mycol.find(myquery, {"_id": 0}).limit(25):
             dict_god = x["god"]
             dict_role = x["role"]
             if not retData[dict_god]:

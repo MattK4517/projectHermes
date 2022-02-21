@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useTable, useSortBy, usePagination } from "react-table";
 import { Link } from "react-router-dom";
 import Menu from "@material-ui/core/Menu";
@@ -11,6 +11,8 @@ import winRateColor, { tierColor } from "../mainGodPage/WinRateColor";
 import Tooltip from "@material-ui/core/Tooltip";
 import { compareNumericString } from "./TierListHelpers";
 import { HtmlTooltip } from "../mainGodPage/GodPageHelpers";
+import { getImageUrl } from "../Filters/FilterForm"
+import { TierListContext } from "./TierListContext";
 
 const Table = ({ columns, data }) => {
   const {
@@ -133,7 +135,27 @@ const Table = ({ columns, data }) => {
                                     }}
                                     {...cell.getCellProps()}
                                   >
-                                    <span>{row.original.role}</span>
+                                      <div style={{ position: "relative" }}>
+                                        <div className="god-icon">
+                                          <div
+                                            style={{
+                                              height: "30px",
+                                              width: "30px",
+                                            }}
+                                          >
+                                            <img
+                                              src={getImageUrl(row.original.role)}
+                                              alt={row.original.role}
+                                              style={{
+                                                height: "48px",
+                                                width: "48px",
+                                                transform: "scale(0.625)",
+                                                transformOrigin: "0px 0px 0px",
+                                              }}
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
                                   </div>
                                 );
                               } else if (key.includes("god")) {
@@ -474,6 +496,9 @@ const compare = (a, b) => {
 };
 
 function TierList(props) {
+  const [
+    god, setGod, mode, setMode, patch, setPatch, topLink, setTopLink
+  ] = useContext(TierListContext);
   // const [patch, setPatch] = useState("8.9");
   const [totalData, setTotalData] = useState([]);
   const [counterMatchups, setCounterMatchups] = useState([]);
@@ -497,8 +522,6 @@ function TierList(props) {
     "All_Ranks",
   ]);
   const [dispRank, setRank] = useState("All_Ranks");
-
-  const [mode, setMode] = useState("Ranked")
 
   useEffect(() => {
     //"/gettierlist/".concat(dispRank, "/", role, "/", props.props, "/", patch
