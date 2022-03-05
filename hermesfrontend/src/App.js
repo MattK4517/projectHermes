@@ -2,16 +2,8 @@ import React, { useState } from "react";
 // import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { HashRouter as HashRouter, Switch, Route } from "react-router-dom";
 import {
-  Godpage,
-  Gods,
-  TierListPage,
-  Match,
-  Home,
-  ContactForm,
-  Items,
   MiniDrawer,
 } from "./components";
-import { TierList } from "./components/Tierlists/TierList";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import { DndProvider } from "react-dnd";
@@ -66,8 +58,7 @@ const theme = createTheme({
   // },
 });
 
-class App extends React.Component {
-  render() {
+export default function App() {
     // const routeComponents = routes.map(({path, component}, key) => <Route exact path={path} component={() => component} key={key} />);
     return (
       <div className="App">
@@ -80,7 +71,4 @@ class App extends React.Component {
         </HashRouter>
       </div>
     );
-  }
 }
-
-export default App;

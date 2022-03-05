@@ -11,7 +11,7 @@ import * as AiIcons from 'react-icons/ai';
 import * as GiIcons from 'react-icons/gi'
 import { Link } from "react-router-dom";
 import { HashRouter as HashRouter, Switch, Route } from "react-router-dom";
-import { Godpage, Gods, TierListPage, Match, Home, ContactForm, Items } from "./"
+import { Godpage, GodsScreen, TierListPage, Match, Home, ContactForm, Items } from "./"
 import SearchBar from "./SearchBarStuff/SearchBar";
 import Player from "./PlayerPage/Player";
 import OverviewDisplay from "./PlayerPage/OverviewDisplay";
@@ -153,7 +153,7 @@ export const godsDict = {
   },
   {
     path: "/Gods",
-    component: <Gods />,
+    component: <GodsScreen />,
     god: "",
   },
   {
@@ -279,7 +279,6 @@ const Hamburger = styled("div")(({ theme }) => ({
 const drawerWidth = 200;
 export default function PermanentDrawerLeft() {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };

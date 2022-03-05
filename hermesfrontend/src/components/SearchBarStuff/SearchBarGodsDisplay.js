@@ -4,11 +4,12 @@ import * as React from "react";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import Autocomplete from "@mui/material/Autocomplete";
+import { linkDict } from "../PlayerPage/Player";
 
-export default function SearchBar(data) {
+export default function SearchBarGodsDisplay() {
 
   let history = useHistory();
-  
+  let data = Object.keys(godsDict)
   function handleKeyPress(event){
     let flag = false;
     if(event.charCode==13){
@@ -45,7 +46,7 @@ export default function SearchBar(data) {
         freeSolo
         id="god-seach-bar"
         // disableClearable
-        options={data.data.map((option) => option.god)}
+        options={data.map((option) => option)}
         defaultValue={""}
         clearOnEscape={"true"}
         renderOption={(option) => (

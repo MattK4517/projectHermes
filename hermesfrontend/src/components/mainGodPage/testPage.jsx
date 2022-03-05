@@ -517,12 +517,12 @@ export default function BuildPage(pagegod) {
     "Achilles",
     role,
     rank,
-    "9.1",
+    "9.2",
     matchup,
     "Ranked"
   );
   const [slotOneItems, setSlotOneItems] = useState([]);
-  const [patch, setPatch] = useState("9.1")
+  const [patch, setPatch] = useState("9.2")
   const [mode, setMode] = useState("Ranked")
   useEffect(() => {
     fetch(
@@ -716,7 +716,7 @@ export default function BuildPage(pagegod) {
                         <div className="hide">
                         <DropDownFilter
                           changePatch={null}
-                          patch={"9.1"}
+                          patch={"9.2"}
                           style={{ color: "white" }}
                         />
                         </div>
