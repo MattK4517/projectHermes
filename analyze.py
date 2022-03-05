@@ -1,3 +1,4 @@
+from audioop import avg
 from re import A, S, X
 from datetime import datetime
 import re
@@ -144,9 +145,10 @@ def get_top_builds(client, god, role, patch, mode="Ranked", rank="All Ranks", da
     else:
         myquery = { "role": role, "patch": patch, "mode": f"{mode}Conq"}
 
-    # print(myquery)
+    print(myquery)
     games = 0
     wins = 0
+    print(mycol.count_documents(myquery))
     if type(data) is list:
         for x in data:
             games += 1
@@ -855,25 +857,28 @@ def get_matchups_stats(client, god: str, role: str, patch, mode, rank="All Ranks
             }
 
     myquery = {**myquery, **{"enemy": god}}
+    if "" in avg_dmg_dict.keys():
+        del avg_dmg_dict[""]
     for god in avg_dmg_dict:
-        mycol = mydb[god]
-        for x in mycol.aggregate([
-            {
-                "$match": myquery
-            },
-            {
-                "$group": {
-                    "_id": "$enemy",
-                    "avg_dmg_diff": {"$avg": "$damage_player"},
-                    "avg_kill_diff": {"$avg": "$kills"},
-                    "avg_gold_diff": {"$avg": "$gold"},
-                }
-            },
-        ]):
-            avg_dmg_dict[god]["god"] = god
-            avg_dmg_dict[god]["dmg"] -= x["avg_dmg_diff"]
-            avg_dmg_dict[god]["kills"] -= x["avg_kill_diff"]
-            avg_dmg_dict[god]["gold"] -= x["avg_gold_diff"]
+        if god:
+            mycol = mydb[god]
+            for x in mycol.aggregate([
+                {
+                    "$match": myquery
+                },
+                {
+                    "$group": {
+                        "_id": "$enemy",
+                        "avg_dmg_diff": {"$avg": "$damage_player"},
+                        "avg_kill_diff": {"$avg": "$kills"},
+                        "avg_gold_diff": {"$avg": "$gold"},
+                    }
+                },
+            ]):
+                avg_dmg_dict[god]["god"] = god
+                avg_dmg_dict[god]["dmg"] -= x["avg_dmg_diff"]
+                avg_dmg_dict[god]["kills"] -= x["avg_kill_diff"]
+                avg_dmg_dict[god]["gold"] -= x["avg_gold_diff"]
 
     return avg_dmg_dict
 
@@ -1012,9 +1017,10 @@ def get_lanes(client):
     return lanes
 
 if __name__ == "__main__":
-    print(create_tier_list.get_tier_stats(client, "All Ranks", "Solo"))
-    # print(get_total_matches(client, "Diamond", "9.1"))
-    for god in godsDict2:
-        winrate = get_winrate(client, god, godsDict2[god], "9.1")["win_rate"]
-        data = get_pb_rate(client, god, "Bronze", godsDict2[god], "9.1")
-        print(god, create_tier_list.get_tier(client, winrate, data["pickRate"], data["banRate"], godsDict2[god], "Diamond"))
+    print(get_top_builds(client, "Shiva", "Solo", "9.2", "Casual"))
+    # print(create_tier_list.get_tier_stats(client, "All Ranks", "Solo"))
+    # # print(get_total_matches(client, "Diamond", "9.1"))
+    # for god in godsDict2:
+    #     winrate = get_winrate(client, god, godsDict2[god], "9.1")["win_rate"]
+    #     data = get_pb_rate(client, god, "Bronze", godsDict2[god], "9.1")
+    #     print(god, create_tier_list.get_tier(client, winrate, data["pickRate"], data["banRate"], godsDict2[god], "Diamond"))

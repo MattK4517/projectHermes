@@ -264,10 +264,10 @@ def get_new_id(client, smite_api):
     mydb = client["God_Data"]
     gods = smite_api.getGods()
     for god in range(len(gods)):
-        if gods[god]["Name"] == "Merlin":
+        if gods[god]["Name"] == "Shiva":
             mycol = mydb[gods[god]["Name"]]
             data = create_god_data_dict(gods[god])
-            mycol.replace_one({}, data)
+            mycol.insert_one(data)
 
 
 def create_god_data_dict(data):
@@ -599,11 +599,13 @@ def run_pull_hourly(patch, hour, date):
     print(f"{date} Pull Completed in {str(datetime.now() - starttime)} loss: {round(inserted_count/match_ids_len*100, 2)}")
 
 if __name__ == "__main__":
-    with open("cred.txt", "r") as f:
-        data = f.readlines()
-        smite_api = SmiteAPI(devId=data[0].strip(
-        ), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
-        stats = anlzpy.create_player_god_dict(smite_api.getQueueStats(9573956, 426), "azekill", "Casual")
-        for god in stats:
-            if god in godsDict:
-                print(f"{stats[god]['god']} {stats[god]['matches']}")
+    # with open("cred.txt", "r") as f:
+    #     data = f.readlines()
+    #     smite_api = SmiteAPI(devId=data[0].strip(
+    #     ), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
+    # print(get_new_id(client, smite_api))
+    mydb = client["single_match_stats"]
+    for god in godsDict:
+        mycol = mydb[god]
+        mycol.update_many({"Entry_Datetime": {"$not": {"$regex": "2/22/2022", "$options": "i"}}}, {"$set": {"patch": "9.1"}})
+        print(mycol.count_documents({"patch": "9.2"}))

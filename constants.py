@@ -1,5 +1,5 @@
 
-patch = "9.1"
+patch = "9.2"
 godsDict = {
     "Achilles": 0,
     "Agni": 0,
@@ -16,7 +16,6 @@ godsDict = {
     "Artemis": 0,
     "Artio": 0,
     "Athena": 0,
-    "Atlas": 0,
     "Awilix": 0,
     "Baba Yaga": 0,
     "Bacchus": 0,
@@ -34,7 +33,7 @@ godsDict = {
     "Chernobog": 0,
     "Chiron": 0,
     "Chronos": 0,
-    "Cliodhna": 0,
+    # "Cliodhna": 0,
     "Cthulhu": 0,
     "Cu Chulainn": 0,
     "Cupid": 0,
@@ -96,6 +95,7 @@ godsDict = {
     "Scylla": 0,
     "Serqet": 0,
     "Set": 0,
+    "Shiva": 0,
     "Skadi": 0,
     "Sobek": 0,
     "Sol": 0,
@@ -120,6 +120,7 @@ godsDict = {
     "Zeus": 0,
     "Zhong Kui": 0
 }
+
 
 
 Assassins = ["Arachne", "Awilix", "Bakasura", "Bastet", "Camazotz", "Cliodhna","Da Ji", "Fenrir", "Hun Batz", "Kali", "Loki",

@@ -1,4 +1,5 @@
 from datetime import datetime
+from queue import Empty
 import analyze as anlz
 import analyze_players as anlzpy
 import pandas as pd
@@ -178,29 +179,32 @@ def get_all_matchups(god, role, rank, patch, mode):
 def get_match(matchID):
     queue_type = "Ranked"
     mydb = client["Matches"]
-    mycol = mydb["9.1 Matches"]
-    match = ""
+    mycol = mydb["9.2 Matches"]
+    match = {}
     matchID = int(matchID)
-    # myquery = {
-    #     '$search': {
-    #         'index': 'findMatch',
-    #         'text': {
-    #             'query': f'{matchID}',
-    #             'path': {
-    #                 'wildcard': '*'
-    #             }
-    #         }
-    #     }
-    # }
-    if mycol.count_documents({"MatchId": matchID}) == 0:
-        mydb = client["CasualMatches"]
-        mycol = mydb["9.1 Matches"]
-        queue_type = "Casual"
-    
-    print(mycol.count_documents({"MatchId": matchID}))
-    for x in mycol.find({"MatchId": matchID}, {"_id": 0}):
+    myquery = {
+        '$search': {
+            'index': 'findMatch',
+            'text': {
+                'query': f'{matchID}',
+                'path': {
+                    'wildcard': '*'
+                }
+            }
+        }
+    }
+    for x in mycol.aggregate([myquery]):
+        print(x)
         match = x
+    
+    if len(match.keys()) == 0:
+        mydb = client["CasualMatches"]
+        mycol = mydb["9.2 Matches"]
+        for x in mycol.aggregate([myquery]):
+            print(x)
+            match = x
 
+    print(match)
     for key in match:
         if "player" in key:
             build = [

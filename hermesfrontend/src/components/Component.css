@@ -475,6 +475,9 @@ color: #cddcfe;
 .title-header {
   margin-top: 24px;
   margin-bottom: 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .title-header h1, .title-header h1.tier-list {
@@ -2682,9 +2685,6 @@ figure.snip0015:hover figcaption::before {
   }
 
 
-  .search-bar {
-    display: none !important;
-  }
   
   .logo-icon {
     display: none !important;

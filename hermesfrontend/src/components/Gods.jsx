@@ -1,11 +1,11 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import SearchBar from "./SearchBarStuff/SearchBar";
 import "./Component.css";
 
 function GodsDisplay(props){
         return (
-            <>
             <div className="gods-container">
             {props.gods.map((god, index) => {
                 return (
@@ -26,10 +26,12 @@ function GodsDisplay(props){
                 )
             })}
             </div>
-            </>
         )
 }
-function Gods() {
+
+
+export default function Gods() {
+
     const [allgods, setallgods] = useState([]);
 
     useEffect(() => {
@@ -46,13 +48,17 @@ function Gods() {
             })
         }))
     }, []);
+
     return (
         <div className="content">
             <div className="god-home-page">
                 <div className="god-home content-side-pad">
-                    <div className="title-header">
+                    <div className="title-header"> 
                         <h1 className="tier-list">Smite Gods Search</h1>
                         <h2 className="subtitle">Find the best builds for every god!</h2>
+                        <div className="show">
+                            <SearchBar data={allgods} />
+                        </div>
                     </div>
                     <GodsDisplay gods={allgods} />
                 </div>
@@ -60,5 +66,3 @@ function Gods() {
         </div>
     )
 }
-
-export default Gods;

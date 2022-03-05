@@ -2,7 +2,6 @@ import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
-import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
@@ -13,10 +12,6 @@ import * as GiIcons from 'react-icons/gi'
 import { Link } from "react-router-dom";
 import { HashRouter as HashRouter, Switch, Route } from "react-router-dom";
 import { Godpage, Gods, TierListPage, Match, Home, ContactForm, Items } from "./"
-import { color } from '@mui/system';
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import SearchBar from "./SearchBarStuff/SearchBar";
 import Player from "./PlayerPage/Player";
 import OverviewDisplay from "./PlayerPage/OverviewDisplay";
@@ -124,6 +119,7 @@ export const godsDict = {
   "Scylla": "Mid",
   "Serqet": "Jungle",
   "Set": "Jungle",
+  "Shiva": "Solo",
   "Skadi": "Carry",
   "Sobek": "Support",
   "Sol": "Carry",
@@ -148,7 +144,8 @@ export const godsDict = {
   "Zeus": "Mid",
   "Zhong Kui": "Solo"
 }
-let routes = [
+
+ let routes = [
   {
     path: "/",
     component: <Home />,
@@ -229,9 +226,8 @@ const Root = styled(AppBar)(({ theme }) => ({
     backgroundColor: "#0b0b23",
   },
   [theme.breakpoints.down('md')]: {
-    backgroundColor: "#0b0b23",
-    width: "100%",
-    paddingLeft: "125px"
+    display: "flex",
+    alignItems: "center"
   },
 }));
 
@@ -352,7 +348,9 @@ export default function PermanentDrawerLeft() {
             <MenuItem onClick={handleClose}><Link to={"/tierlist"}>tierlist</Link></MenuItem> */}
               {/* </Menu> */}
             </Hamburger>
-            <SearchBar data={routes.slice(10)} />
+            <div className="hide">
+              <SearchBar data={routes.slice(10)} />
+            </div>
           </Typography>
         </Toolbar>
       </Root>

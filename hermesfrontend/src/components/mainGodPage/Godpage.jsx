@@ -250,6 +250,7 @@ const linkDict = {
   "Scylla": "https://i.imgur.com/7NPNf46.jpg",
   "Serqet": "https://i.imgur.com/9odFATg.jpg",
   "Set": "https://i.imgur.com/7hjbLls.jpg",
+  "Shiva": "https://i.imgur.com/R2QEKo8.jpg",
   "Skadi": "https://i.imgur.com/097p6i9.jpg",
   "Sobek": "https://i.imgur.com/LIU5dYN.png",
   "Sol": "https://i.imgur.com/H6PFyOw.jpg",
@@ -297,7 +298,7 @@ function Godpage(props) {
   var [url, seturl] = useState(0);
   const [displaygod, setgod] = useState(0);
   const [abilities, setabilities] = useState([]);
-  const [patch, setPatch] = useState("9.1")
+  const [patch, setPatch] = useState("9.2")
   const [matchup, setMatchup] = useState("None")
   const [roles, setroles] = useState([
     "Solo",
@@ -409,7 +410,7 @@ function Godpage(props) {
                     <FilterForm
                           filter={patch}
                           god={pagegod}
-                          filters={["9.1", "8.12"]}
+                          filters={["9.2", "9.1", "8.12"]}
                           setFilter={setPatch}
                         />
                     {/* <DropDownFilter changePatch={setPatch} patch={patch} style={{color: "white"}}/> */}
