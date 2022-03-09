@@ -399,6 +399,9 @@ def calc_auto_dmg(god, power):
 def calc_dps(client, god, build, enemy, enemy_build, enemy_level, level=20):
     attSpeed, power, baseAttSpeed, critChance, armor_reduction_per, armor_reduction_flat, pen_per, pen_flat = calc_dps_stats(
         client, god, build)
+
+    if "Dominance" in build:
+        pen_per += 10
     temp = anlz.get_god_stats(client, god, level)
     defense_stats = anlz.get_god_stats(client, enemy, enemy_level)
     print(defense_stats)
@@ -515,12 +518,27 @@ if  __name__ == "__main__":
         "4": 5,
         "5": 5
     }
+    calc_dps(client, "Kali", [
+        "Protector of the Jungle",
+        "The Crusher",
+        "The Executioner",
+        "Domanice",
+        "Qin's Sais",
+        "Hastend Katana"
+    ], "Odin", [
+        "Bluestone Brooch",
+        "Runeforged Hammer",
+        "Breastplate of Determination",
+        "Bulwark of Hope",
+        "Pridwen",
+        "Spectral Armor"
+    ], 20, 20)
     # avg = 0
     # for i in range(10):
     # calc_dps(client, "Achilles", ["Manikin Mace", "Bloodforge", "Evolved Rage", "Serrated Edge", "Deathbringer", "Wind Demon"], 
         # "Agni", [], 20, 20)
     # print(avg/10)
     # for guardian in Guardians:
-    calc_combo_damage_raw(client, "Guan Yu", levels, 0, 0)
+    # calc_combo_damage_raw(client, "Guan Yu", levels, 0, 0)
 
     # 470 + 83

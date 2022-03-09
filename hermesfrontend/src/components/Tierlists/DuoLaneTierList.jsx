@@ -1,13 +1,14 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useTable, useSortBy, usePagination } from "react-table";
 import { Link } from "react-router-dom";
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Button from '@material-ui/core/Button';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import Button from "@material-ui/core/Button";
+import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import { FilterForm } from "../Filters/FilterForm";
 import winRateColor from "../mainGodPage/WinRateColor";
+import { TierListContext } from "./TierListContext";
 
 const Table = ({ columns, data }) => {
   const {
@@ -33,12 +34,12 @@ const Table = ({ columns, data }) => {
       initialState: {
         pageIndex: 0,
         sortBy: [
-            {
-                id: 'winRate',
-                desc: true
-            }
-        ]
-    }
+          {
+            id: "winRate",
+            desc: true,
+          },
+        ],
+      },
     },
     useSortBy,
     usePagination
@@ -105,26 +106,24 @@ const Table = ({ columns, data }) => {
                           >
                             {row.cells.map((cell) => {
                               const { key, role } = cell.getCellProps();
-                              let roleOne = Object.keys(row.original["_id"])[0]
-                              let roleTwo = Object.keys(row.original["_id"])[1]
+                              let roleOne = Object.keys(row.original["_id"])[0];
+                              let roleTwo = Object.keys(row.original["_id"])[1];
                               let god = row.original["_id"][roleOne]
-                              .toLowerCase()
-                              .replaceAll(" ", "-");
-                              let routegod = row.original["_id"][roleOne].replaceAll(
-                                " ",
-                                "_"
-                              );
+                                .toLowerCase()
+                                .replaceAll(" ", "-");
+                              let routegod = row.original["_id"][
+                                roleOne
+                              ].replaceAll(" ", "_");
                               if (row.original["_id"][roleOne] == "Chang'e") {
                                 routegod = "Chang'e";
                                 god = "change";
                               }
                               let god2 = row.original["_id"][roleTwo]
-                              .toLowerCase()
-                              .replaceAll(" ", "-");
-                              let routegod2 = row.original["_id"][roleTwo].replaceAll(
-                                " ",
-                                "_"
-                              );
+                                .toLowerCase()
+                                .replaceAll(" ", "-");
+                              let routegod2 = row.original["_id"][
+                                roleTwo
+                              ].replaceAll(" ", "_");
                               if (row.original["_id"][roleTwo] == "Chang'e") {
                                 routegod2 = "Chang'e";
                                 god2 = "change";
@@ -132,164 +131,205 @@ const Table = ({ columns, data }) => {
                               if (key.includes("rank")) {
                                 return (
                                   <>
-                                  <div
-                                    className="rt-td rank"
-                                    style={{
-                                      minWidth: "40px",
-                                      maxWidth: "60px",
-                                      flex: "1 1 100%",
-                                    }}
-                                    {...cell.getCellProps()}
-                                  >
-                                    <span>{(i += 1) + (pageSize * pageIndex)}</span>
-                                  </div>
-
-                                  <div
-                                    className="rt-td god"
-                                    style={{ minWidth: "140px", maxWidth: "180px", flex: "1 1 100%" }}
-                                    {...cell.getCellProps()}
-                                  >
-                                    <Link
-                                      className="god-played gtm-tierlist-god"
-                                      to={"/".concat(routegod)}
+                                    <div
+                                      className="rt-td rank"
+                                      style={{
+                                        minWidth: "40px",
+                                        maxWidth: "60px",
+                                        flex: "1 1 100%",
+                                      }}
+                                      {...cell.getCellProps()}
                                     >
-                                      <div style={{ position: "relative" }}>
-                                        <div className="god-icon">
-                                          <div
-                                            style={{
-                                              height: "30px",
-                                              width: "30px",
-                                            }}
-                                          >
-                                            <img
-                                              src={`https://webcdn.hirezstudios.com/smite/god-icons/${god}.jpg`}
-                                              alt={row.original["_id"][roleOne]}
+                                      <span>
+                                        {(i += 1) + pageSize * pageIndex}
+                                      </span>
+                                    </div>
+
+                                    <div
+                                      className="rt-td god"
+                                      style={{
+                                        minWidth: "140px",
+                                        maxWidth: "180px",
+                                        flex: "1 1 100%",
+                                      }}
+                                      {...cell.getCellProps()}
+                                    >
+                                      <Link
+                                        className="god-played gtm-tierlist-god"
+                                        to={"/".concat(routegod)}
+                                      >
+                                        <div style={{ position: "relative" }}>
+                                          <div className="god-icon">
+                                            <div
                                               style={{
-                                                height: "48px",
-                                                width: "48px",
-                                                transform: "scale(0.625)",
-                                                transformOrigin: "0px 0px 0px",
+                                                height: "30px",
+                                                width: "30px",
                                               }}
-                                            />
+                                            >
+                                              <img
+                                                src={`https://webcdn.hirezstudios.com/smite/god-icons/${god}.jpg`}
+                                                alt={
+                                                  row.original["_id"][roleOne]
+                                                }
+                                                style={{
+                                                  height: "48px",
+                                                  width: "48px",
+                                                  transform: "scale(0.625)",
+                                                  transformOrigin:
+                                                    "0px 0px 0px",
+                                                }}
+                                              />
+                                            </div>
                                           </div>
                                         </div>
-                                      </div>
-                                      <strong className="god-name">
-                                        {row.original["_id"][roleOne]}
-                                      </strong>
-                                    </Link>
-                                  </div>
+                                        <strong className="god-name">
+                                          {row.original["_id"][roleOne]}
+                                        </strong>
+                                      </Link>
+                                    </div>
 
-                                  
-                                  <div
-                                    className="rt-td win-rate"
-                                    style={{
-                                      minWidth: "70px",
-                                      maxWidth: "90px",
-                                      flex: "1 1 100%",
-                                    }}
-                                    {...cell.getCellProps()}
-                                  >
-                                    <span>
-                                      <b style={{color: "darkgrey"}}>{row.original[`${[roleOne]}WinRate`].toFixed(2)}%</b>
-                                    </span>
-                                  </div>
-
-
-                                  <div
-                                    className="rt-td god"
-                                    style={{ minWidth: "160px", maxWidth: "180px", flex: "1 1 100%" }}
-                                    {...cell.getCellProps()}
-                                  >
-                                    <Link
-                                      className="god-played gtm-tierlist-god"
-                                      to={"/".concat(routegod2)}
+                                    <div
+                                      className="rt-td win-rate"
+                                      style={{
+                                        minWidth: "70px",
+                                        maxWidth: "90px",
+                                        flex: "1 1 100%",
+                                      }}
+                                      {...cell.getCellProps()}
                                     >
-                                      <div style={{ position: "relative" }}>
-                                        <div className="god-icon">
-                                          <div
-                                            style={{
-                                              height: "30px",
-                                              width: "30px",
-                                            }}
-                                          >
-                                            <img
-                                              src={`https://webcdn.hirezstudios.com/smite/god-icons/${god2}.jpg`}
-                                              alt={row.original["_id"][roleTwo]}
+                                      <span>
+                                        <b style={{ color: "darkgrey" }}>
+                                          {row.original[
+                                            `${[roleOne]}WinRate`
+                                          ].toFixed(2)}
+                                          %
+                                        </b>
+                                      </span>
+                                    </div>
+
+                                    <div
+                                      className="rt-td god"
+                                      style={{
+                                        minWidth: "160px",
+                                        maxWidth: "180px",
+                                        flex: "1 1 100%",
+                                      }}
+                                      {...cell.getCellProps()}
+                                    >
+                                      <Link
+                                        className="god-played gtm-tierlist-god"
+                                        to={"/".concat(routegod2)}
+                                      >
+                                        <div style={{ position: "relative" }}>
+                                          <div className="god-icon">
+                                            <div
                                               style={{
-                                                height: "48px",
-                                                width: "48px",
-                                                transform: "scale(0.625)",
-                                                transformOrigin: "0px 0px 0px",
+                                                height: "30px",
+                                                width: "30px",
                                               }}
-                                            />
+                                            >
+                                              <img
+                                                src={`https://webcdn.hirezstudios.com/smite/god-icons/${god2}.jpg`}
+                                                alt={
+                                                  row.original["_id"][roleTwo]
+                                                }
+                                                style={{
+                                                  height: "48px",
+                                                  width: "48px",
+                                                  transform: "scale(0.625)",
+                                                  transformOrigin:
+                                                    "0px 0px 0px",
+                                                }}
+                                              />
+                                            </div>
                                           </div>
                                         </div>
-                                      </div>
-                                      <strong className="god-name">
-                                        {row.original["_id"][roleTwo]}
-                                      </strong>
-                                    </Link>
-                                  </div>
+                                        <strong className="god-name">
+                                          {row.original["_id"][roleTwo]}
+                                        </strong>
+                                      </Link>
+                                    </div>
 
-                                  <div
-                                    className="rt-td win-rate"
-                                    style={{
-                                      minWidth: "70px",
-                                      maxWidth: "90px",
-                                      flex: "1 1 100%",
-                                    }}
-                                    {...cell.getCellProps()}
-                                  >
-                                    <span>
-                                      <b style={{color: "darkgray"}}>{row.original[`${[roleTwo]}WinRate`].toFixed(2)}%</b>
-                                    </span>
-                                  </div>
+                                    <div
+                                      className="rt-td win-rate"
+                                      style={{
+                                        minWidth: "70px",
+                                        maxWidth: "90px",
+                                        flex: "1 1 100%",
+                                      }}
+                                      {...cell.getCellProps()}
+                                    >
+                                      <span>
+                                        <b style={{ color: "darkgray" }}>
+                                          {row.original[
+                                            `${[roleTwo]}WinRate`
+                                          ].toFixed(2)}
+                                          %
+                                        </b>
+                                      </span>
+                                    </div>
 
-                                  <div
-                                    className="rt-td win-rate"
-                                    style={{
-                                      minWidth: "70px",
-                                      maxWidth: "90px",
-                                      flex: "1 1 100%",
-                                    }}
-                                    {...cell.getCellProps()}
-                                  >
-                                    <span>
-                                      <b style={{color: winRateColor(row.original.syneryFactor*10)}}>{row.original.syneryFactor.toFixed(2)}%</b>
-                                    </span>
-                                  </div>
+                                    <div
+                                      className="rt-td win-rate"
+                                      style={{
+                                        minWidth: "70px",
+                                        maxWidth: "90px",
+                                        flex: "1 1 100%",
+                                      }}
+                                      {...cell.getCellProps()}
+                                    >
+                                      <span>
+                                        <b
+                                          style={{
+                                            color: winRateColor(
+                                              row.original.syneryFactor * 10
+                                            ),
+                                          }}
+                                        >
+                                          {row.original.syneryFactor.toFixed(2)}
+                                          %
+                                        </b>
+                                      </span>
+                                    </div>
 
-                                  <div
-                                    className="rt-td win-rate"
-                                    style={{
-                                      minWidth: "70px",
-                                      maxWidth: "90px",
-                                      flex: "1 1 100%",
-                                    }}
-                                    {...cell.getCellProps()}
-                                  >
-                                    <span>
-                                      <b style={{color: winRateColor(row.original.winRate)}}>{row.original.winRate}%</b>
-                                    </span>
-                                  </div>
+                                    <div
+                                      className="rt-td win-rate"
+                                      style={{
+                                        minWidth: "70px",
+                                        maxWidth: "90px",
+                                        flex: "1 1 100%",
+                                      }}
+                                      {...cell.getCellProps()}
+                                    >
+                                      <span>
+                                        <b
+                                          style={{
+                                            color: winRateColor(
+                                              row.original.winRate
+                                            ),
+                                          }}
+                                        >
+                                          {row.original.winRate}%
+                                        </b>
+                                      </span>
+                                    </div>
 
-                                  <div
-                                    className="rt-td games"
-                                    style={{
-                                      minWidth: "80px",
-                                      maxWidth: "90px",
-                                      flex: "1 1 100%",
-                                    }}
-                                    {...cell.getCellProps()}
-                                  >
-                                    <span>
-                                      <b>{row.original.count}</b>
-                                    </span>
-                                  </div>
+                                    <div
+                                      className="rt-td games"
+                                      style={{
+                                        minWidth: "80px",
+                                        maxWidth: "90px",
+                                        flex: "1 1 100%",
+                                      }}
+                                      {...cell.getCellProps()}
+                                    >
+                                      <span>
+                                        <b>{row.original.count}</b>
+                                      </span>
+                                    </div>
                                   </>
                                 );
-                              } 
+                              }
                             })}
                           </div>
                         </div>
@@ -360,15 +400,17 @@ const Table = ({ columns, data }) => {
 };
 
 function DuoLaneTierList(props) {
+  const [god, setGod, mode, setMode, patch, setPatch] =
+    useContext(TierListContext);
+
   const [totalData, setTotalData] = useState([]);
   const [counterMatchups, setCounterMatchups] = useState([]);
   const [roles, setRoles] = useState([
     "Support/Carry",
     "Solo/Jungle",
-    "Mid/Jungle"
+    "Mid/Jungle",
   ]);
   const [role, setRole] = useState("Support/Carry");
-  const [mode, setMode] = useState("Ranked")
 
   const [ranks, setranks] = useState([
     "Bronze",
@@ -381,34 +423,44 @@ function DuoLaneTierList(props) {
     "All_Ranks",
   ]);
   const [dispRank, setRank] = useState("All_Ranks");
-  const [roleOne, setRoleOne] = useState("Support")
-  const [roleTwo, setRoleTwo] = useState("Carry")  
+  const [roleOne, setRoleOne] = useState("Support");
+  const [roleTwo, setRoleTwo] = useState("Carry");
 
   useEffect(() => {
-    setRoleOne(role.split("/")[0])
-    setRoleTwo(role.split("/")[1])
-  }, [role])
+    setRoleOne(role.split("/")[0]);
+    setRoleTwo(role.split("/")[1]);
+  }, [role]);
 
   useEffect(() => {
     //"/gettierlist/".concat(dispRank, "/", role, "/", tableType.tableType, "/", patch
     fetch(
-      "/api/gettierlist/".concat(dispRank, "/", role.replaceAll("/", "_"), "/", props.tableType, "/", mode)
+      "/api/gettierlist/".concat(
+        dispRank,
+        "/",
+        role.replaceAll("/", "_"),
+        "/",
+        props.tableType,
+        "/",
+        mode,
+        "/",
+        patch
+      )
     ).then((res) =>
       res.json().then((data) => {
-        setTotalData([])
+        setTotalData([]);
         Object.keys(data).forEach((key) => {
-          if (data[key]["count"]+data[key]["losses"] > 250) {
+          if (data[key]["count"] + data[key]["losses"] > 250) {
             setTotalData((totalData) => [
               ...totalData,
               {
-                ...data[key]
+                ...data[key],
               },
             ]);
           }
         });
       })
     );
-  }, [dispRank, role]);
+  }, [dispRank, role, patch]);
 
   const columns = React.useMemo(
     () => [
@@ -423,7 +475,7 @@ function DuoLaneTierList(props) {
       {
         Header: `${roleTwo} Win Rate`,
         accessor: `${roleTwo.toLowerCase()}WinRate`,
-        sortType: compareNumericString
+        sortType: compareNumericString,
       },
       {
         Header: roleOne,
@@ -432,32 +484,49 @@ function DuoLaneTierList(props) {
       {
         Header: `${roleOne} Win Rate`,
         accessor: `${roleOne.toLowerCase()}WinRate`,
-        sortType: compareNumericString
+        sortType: compareNumericString,
       },
       {
         Header: "Synery Factor",
         accessor: "syneryFactor",
-        sortType: compareNumericString
+        sortType: compareNumericString,
       },
       {
         Header: "Win Rate",
         accessor: "winRate",
-        sortType: compareNumericString
+        sortType: compareNumericString,
       },
       {
         Header: "Games",
         accessor: "count",
-        sortType: compareNumericString
+        sortType: compareNumericString,
       },
     ],
     [roleOne, roleTwo]
   );
   return (
     <>
-        <div className="filter-form">
-          <FilterForm filter={role} filters={roles} role={role}  setFilter={setRole}/>
-          <FilterForm filter={dispRank.replaceAll("_", " ")} filters={ranks} role={dispRank.replaceAll("_", " ")} setFilter={setRank}/>
-        </div>
+      <div className="filter-form">
+        <FilterForm
+          filter={role}
+          filters={roles}
+          role={role}
+          setFilter={setRole}
+        />
+        <FilterForm
+          filter={dispRank.replaceAll("_", " ")}
+          filters={ranks}
+          role={dispRank.replaceAll("_", " ")}
+          setFilter={setRank}
+        />
+        <FilterForm
+          filter={patch}
+          god={"None"}
+          filters={["9.2", "9.1"]}
+          setFilter={setPatch}
+          rankSet={setRank}
+        />
+      </div>
       <Table columns={columns} data={totalData} />
     </>
   );
@@ -466,13 +535,14 @@ function DuoLaneTierList(props) {
 function compareNumericString(rowA, rowB, id, desc) {
   let a = Number.parseFloat(rowA.values[id]);
   let b = Number.parseFloat(rowB.values[id]);
-  if (Number.isNaN(a)) {  // Blanks and non-numeric strings to bottom
-      a = desc ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
+  if (Number.isNaN(a)) {
+    // Blanks and non-numeric strings to bottom
+    a = desc ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
   }
   if (Number.isNaN(b)) {
-      b = desc ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
+    b = desc ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
   }
-  if (a > b) return 1; 
+  if (a > b) return 1;
   if (a < b) return -1;
   return 0;
 }

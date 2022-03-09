@@ -89,12 +89,11 @@ def get_god_abilities(god):
     return anlz.get_abilities(client, god)
 
 
-@app.route("/api/gettierlist/<rank>/<role>/<tableType>/<mode>", methods=["GET", "POST"])
-def get_tier_list(rank, role, tableType, mode):
+@app.route("/api/gettierlist/<rank>/<role>/<tableType>/<mode>/<patch>", methods=["GET", "POST"])
+def get_tier_list(rank, role, tableType, mode, patch):
     rank = rank.replace("_", " ")
     retData = {god: {} for god in godsDict}
     mydb = client["Tier_list"]
-    patch = "9.1"
     if tableType == "Regular":
         mycol = mydb["Regular List"]
         rank = rank.replace("_", " ")
@@ -105,9 +104,8 @@ def get_tier_list(rank, role, tableType, mode):
                        "pickRate": {"$gte": 1}, "patch": patch}
 
         myquery = {**myquery, **{"mode": f"{mode}Conq"}}
-        print(myquery)
-        print(mycol.count_documents(myquery))
-        for x in mycol.find(myquery, {"_id": 0}).limit(25):
+
+        for x in mycol.find(myquery, {"_id": 0}).limit(1):
             dict_god = x["god"]
             dict_role = x["role"]
             if not retData[dict_god]:
@@ -126,7 +124,7 @@ def get_tier_list(rank, role, tableType, mode):
 
         myquery = {**myquery, **{"mode": f"{mode}Conq"}}
 
-        for x in mycol.find(myquery, {"_id": 0}):
+        for x in mycol.find(myquery, {"_id": 0}).limit(1):
             dict_god = x["god"]
             dict_role = x["role"]
             if not retData[dict_god]:
@@ -143,7 +141,7 @@ def get_tier_list(rank, role, tableType, mode):
             myquery = {"rank": rank, "role": role, "pickRate": {"$gte": 1}}
 
         myquery = {**myquery, **{"mode": f"{mode}Conq"}}
-        for x in mycol.find(myquery, {"_id": 0}):
+        for x in mycol.find(myquery, {"_id": 0}).limit(1):
             dict_god = x["god"]
             dict_role = x["role"]
             if not retData[dict_god]:

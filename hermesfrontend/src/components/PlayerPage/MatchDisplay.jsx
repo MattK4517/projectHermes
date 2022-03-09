@@ -205,7 +205,7 @@ export default function MatchDisplay(props) {
                               pathname: `/Match/${match["MatchId"]}`,
                               target: "_blank",
                             }}
-                            className="date"
+                            className="date hide"
                           >
                             Go to Match
                           </Link>
@@ -248,7 +248,9 @@ export default function MatchDisplay(props) {
                             </div>
                           </div>
                         </div>
-                        <MultiKillDisplay player={player} />
+                        <div className="hide">
+                          <MultiKillDisplay player={player} />
+                        </div>
                       </div>
                       <div className="stat-group-five">
                         <div className="team">
@@ -274,7 +276,7 @@ export default function MatchDisplay(props) {
                                     }}
                                   />
                                 </div>
-                                <div className="player-name">
+                                <div className="player-name hide">
                                   <Link
                                     to={{
                                       pathname: `/Match/${match["MatchId"]}`,
@@ -311,7 +313,7 @@ export default function MatchDisplay(props) {
                                     }}
                                   />
                                 </div>
-                                <div className="player-name">
+                                <div className="player-name hide">
                                   <a>{teamPlayerName}</a>
                                 </div>
                               </div>

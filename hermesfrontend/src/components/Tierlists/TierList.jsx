@@ -15,6 +15,7 @@ import { getImageUrl } from "../Filters/FilterForm"
 import { TierListContext } from "./TierListContext";
 import { CreateMatchupToolTip } from "./TierListHelpers";
 import { linkDict } from "../PlayerPage/Player"
+import TierListFilter from "../Filters/TierListFilter";
 
 const Table = ({ columns, data }) => {
   const {
@@ -118,9 +119,6 @@ const Table = ({ columns, data }) => {
                             {row.cells.map((cell) => {
                               const { key, role } = cell.getCellProps();
                               if (key.includes("rank")) {
-                                if (((i += 1) + (pageSize * pageIndex)) === 1) {
-                                  setTopLink(linkDict[row.original.god])
-                                }
                                 return (
                                   <div
                                     className="rt-td rank"
@@ -512,29 +510,11 @@ function TierList(props) {
   ] = useContext(TierListContext);
   // const [patch, setPatch] = useState("8.9");
   const [totalData, setTotalData] = useState([]);
-  const [roles, setRoles] = useState([
-    "Solo",
-    "Jungle",
-    "Mid",
-    "Support",
-    "Carry",
-    "All Roles",
-  ]);
-  const [ranks, setranks] = useState([
-    "Bronze",
-    "Silver",
-    "Gold",
-    "Platinum",
-    "Diamond",
-    "Masters",
-    "Grandmaster",
-    "All Ranks",
-  ]);
 
   useEffect(() => {
     //"/gettierlist/".concat(dispRank, "/", role, "/", props.props, "/", patch
     fetch(
-      "/api/gettierlist/".concat(rank, "/", role, "/", props.tableType, "/", mode)
+      "/api/gettierlist/".concat(rank, "/", role, "/", props.tableType, "/", mode, "/", patch)
     ).then((res) =>
       res.json().then((data) => {
         setTotalData([]);
@@ -562,13 +542,13 @@ function TierList(props) {
                     matchup.timesPlayed,
                   ];
                 }),
-              },
+            },
             ]);
           });
         });
       })
     );
-  }, [rank, role, mode]);
+  }, [rank, role, mode, patch]);
 
   const columns = React.useMemo(
     () => [
@@ -618,27 +598,7 @@ function TierList(props) {
   );
   return (
     <>
-      <div className="filter-form">
-        <FilterForm
-          filter={role}
-          filters={roles}
-          role={role}
-          setFilter={setRole}
-        />
-        <FilterForm
-          filter={rank}
-          filters={ranks}
-          role={rank}
-          setFilter={setRank}
-        />
-        <FilterForm
-          filter={mode}
-          god={"None"}
-          filters={["Ranked", "Casual"]}
-          setFilter={setMode}
-          rankSet={setRank}
-        />
-      </div>
+      <TierListFilter />
       <Table columns={columns} data={totalData} sortable />
     </>
   );

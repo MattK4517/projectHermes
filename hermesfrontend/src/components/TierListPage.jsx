@@ -8,11 +8,21 @@ import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { TierListContext } from "./Tierlists/TierListContext";
 
-function TierListPage() {
+export default function TierListPage() {
   const [tableType, setTableType] = useState("Regular");
   const [
-    god, setGod, mode, setMode, patch, setPatch, rank, setRank,
-    role, setRole, topLink, setTopLink
+    god,
+    setGod,
+    mode,
+    setMode,
+    patch,
+    setPatch,
+    rank,
+    setRank,
+    role,
+    setRole,
+    topLink,
+    setTopLink,
   ] = useContext(TierListContext);
   return (
     <>
@@ -50,7 +60,15 @@ function TierListPage() {
                     <div className="title-header">
                       <h1 className="tier-list">
                         <span class="title-header_main">
-                          {tableType} Stats Tier List for SMITE patch {patch}
+                          <h2 className="god-label">
+                            <span>
+                              <b style={{ color: "white" }}>
+                                {tableType} Stats Tier List
+                              </b>
+                            </span>
+                            <span>&nbsp;for SMITE patch {patch}</span>
+                            <span>&nbsp;{rank}, {role}</span>
+                          </h2>
                         </span>
                         {/* <span class="title-header_secondary">for {role}, {dispRank.replaceAll("_", " ")}</span> */}
                       </h1>
@@ -82,5 +100,3 @@ function TierListPage() {
     </>
   );
 }
-
-export default TierListPage;

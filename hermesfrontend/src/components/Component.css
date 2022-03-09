@@ -11,6 +11,13 @@ body {
   position: center;
 }
 
+.content {
+  display: flex;
+  margin: 0 auto;
+  z-index: 100;
+  width: 100%;
+}
+
 .matchups {
   display: flex;
   grid-template-columns: repeat(10, 1fr);
@@ -629,7 +636,10 @@ a, a:active, a:focus, a:hover, a:visited {
 }
 
 
- .stats-tables-container, .stats-tables__content-container, .tier-list-page-container {
+ .stats-tables-container, 
+ .stats-tables__content-container, 
+ .tier-list-page-container, 
+ .player-content-container {
   margin-left: auto !important;
   margin-right: auto !important;
 }
@@ -1738,533 +1748,6 @@ figure.snip0015:hover figcaption::before {
   white-space: nowrap;
 }
 
-.played-gods_header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16px;
-}
-
-.played-gods {
-  display: flex;
-  flex-direction: column;
-  padding: 16px 24px 24px;
-}
-
-.match-history:not(:last-child) {
-  margin-bottom: 6px;
-}
-
-.line-Winner {
-  background-color: #3273fa;
-}
-
-.line-Loser {
-  background-color: #ff4e50;
-}
-
-.content-container .stat-group-one, .content-container .stat-group-one .r1 { 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.content-container .stat-group-one {
-  height: 100%;
-  justify-content: center;
-}
-
-.r1 .queue-type {
-  font-size: 12px;
-  font-weight: 700;
-  text-align: center;
-}
-
-.date {
-  font-size: 14px;
-  font-weight: 500;
-  color: #cddcfe;
-}
-.r1 .date {
-  font-size: 10px;
-  font-weight: 500;
-  color: #cddcfe;
-}
-
-.stat-group-one .r2 {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.stat-group-one .r3 {
-  display: flex;
-  align-items: center;
-  margin-left: 10px;
-}
-
-.r3 .win-status {
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.r3 .match-length {
-  font-size: 12px;
-  font-weight: 500;
-  color: #cddcfe;
-}
-
-.content-container .stat-group-two {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.stat-group-two .r1 {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.stat-group-two .r1 .god {
-  position: relative;
-  margin-right: 2px;
-}
-
-.stat-group-two .r1 .god .god-face {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 3px;
-  overflow: hidden;
-}
-
-.stat-group-two .r1 .god .god-face img {
-  width: 100%;
-  height: 100%;
-  /* transform: scale(1.1); */
-}
-
-.stat-group-two .r1 .god .player-level {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 16px;
-  border-radius: 3px;
-  background-color: #191937;
-  font-size: 10px;
-  font-weight: 500;
-  text-align: center;
-}
-
-.stat-group-two .r1 .relics {
-  display: flex;
-  flex-direction: column;
-  margin-right: 2px;
-}
-
-.relics .relic :first-child {
-  margin-bottom: 2px;
-}
-
-.relics .relic {
-  width: 22px;
-  height: 22px;
-  border-radius: 3px;
-  background-color: #191937;
-}
-
-.relics .relic > img {
-  width: 100%;
-  height: 100%;
-  border-radius: 3px;
-}
-
-.stat-group-three {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.KDA-raw {
-  margin-bottom: 1px;
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 17px;
-}
-
-.stat-group-three .KDA-ratio {
-  margin-top: 2px;
-  line-height: 13px;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.stat-group-four {
-  margin-right: 12px;
-}
-
-.stat-group-four {
-  position: relative;
-  left: -15px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0 12px;
-}
-
-.items-match .item-wrapper {
-  border-radius: 3px;
-  background-color: #383864;
-  overflow: hidden;
-
-}
-
-.items-match {
-  margin: 0 .25rem;
-  display: flex;
-  align-items: center;
-}
-
-.build .build-container {
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  grid-template-rows: repeat(2,1fr);
-  grid-gap: 2px;
-  justify-content: space-between;
-}
-
-.stat-group-four .build {
-  display: flex;
-}
-
-.stat-group-five {
-  display: flex;
-}
-
-.stat-group-five .team:first-of-type {
-  margin-right: 4px;
-}
-
-.team .player-entry:not(:last-child) {
-  margin-bottom: 2px;
-}
-
-.stat-group-five .team {
-  flex: 1 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.stat-group-five .team .player-entry {
-  display: flex;
-  align-items: center;
-}
-
-.stat-group-five .team .player-entry .god-face{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 5px;
-  height: 14px;
-  width: 14px;
-  border-radius: 2px;
-  border: 1px solid #383864;
-  overflow: hidden;
-}
-
-.stat-group-five .team .player-entry .player-name {
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-  max-width: 60px;
-  font-size: 10px;
-  font-weight: 500;
-  color: #cddcfe;
-  cursor: pointer;
-}
-
-.stat-group-five .team .player-entry .player-name {
-  font-size: 10px;
-  font-weight: 500;
-  color: #cddcfe;
-  cursor: pointer;
-}
-
-.match-summary .content-container {
-  display: grid;
-  grid-template-columns: 16% 19% 15% minmax(120px,22%) minmax(155px,31%) 4%;
-  grid-template-rows: 78px;
-  align-items: center;
-  width: 100%;
-  cursor: pointer;
-}
-
-.match-summary {
-  position: relative;
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: 100px;
-  padding: 0 12px;
-}
-
-.match-history-large {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-radius: 6px;
-  background-color: #191937;
-}
-
-.line {
-  height: 76px;
-  width: 4px;
-  border-radius: 2px;
-}
-
-.player-side {
-  display: grid;
-  grid-template-rows: repeat(auto-fit,minmax(0,-webkit-min-content));
-  grid-template-rows: repeat(auto-fit,minmax(0,min-content));
-  grid-gap: 24px;
-}
-
-.player-content-main {
-  display: grid;
-  grid-template-columns: 312px 1fr;
-  grid-gap: 24px;
-  width: 1016px;
-}
-
-.player-content-container {
-  display: flex;
-  margin-top: 36px;
-}
-
-.god-stats_col-1 .god-name {
-  flex: 1 1;
-  font-size: 12px;
-  font-weight: 700;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-
-.god-performance .god-face {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 7px;
-  width: 36px;
-  height: 36px;
-  border-radius: 6px;
-  overflow: hidden;
-}
-
-.Casual {
-  display: none;
-}
-
-.undefined {
-  display: none;
-}
-
-.single-god {
-  border-bottom: 1px solid grey;
-}
-
-.player-matchups-row {
-  display: grid;
-  grid-template-columns: 1fr 40px 51px;
-  grid-gap: 24px;
-  font-size: 12px;
-  font-weight: 500;
-  color: #cddcfe;
-}
-
-.player-matchups-row:not(:last-child) {
-  margin-bottom: 12px;
-}
-
-.player-matchups-row .enemy-matchup {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.player-matchups-row .enemy-matchup .god-image-player {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 36px;
-  height: 36px;
-  /* border-radius: 50%; */
-}
-
-.player-matchups-row .enemy-matchup .god-image-player > img {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-}
-
-.player-matchups-row .enemy-matchup .god-name {
-  margin-left: 6px;
-  font-size: 12px;
-  font-weight: 500;
-  color: #cddcfe;
-}
-
-
-
-.player-matchups-row > * {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.player-matchups_header {
-  margin-bottom: 17px !important;
-}
-
-.background-image-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: -1;
-  height: 100%;
-}
-
-.bg-container {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  position: sticky;
-  top: 60px;
-  width: 100%;
-  height: 700px;
-  overflow: hidden;
-}
-
-.gradient-container {
-  position: sticky;
-  top: 60px;
-  width: 100%;
-  height: 800px;
-  margin-top: -700px;
-}
-
-.gradient-container .gradient {
-  z-index: 1999;
-  left: 0;
-  width: 100%;
-  height: 125%;
-  background-position: 50% -50px;
-  background-image: radial-gradient(50% 40% at 48% 23%,rgba(7,7,32,0) 20%,#070720 100%),linear-gradient(90deg,#070720,rgba(7,7,32,0)),linear-gradient(0deg,#070720 10%,rgba(7,7,32,0));
-}
-
-.player-specific-god {
-  position: relative;
-  z-index: 0;
-  overflow: hidden;
-  color: #cddcfe;
-  font-weight: 500;
-  padding: 24px !important;
-}
-
-.player-specific-god_background {
-  position: absolute;
-  z-index: -1;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 330px;
-  opacity: .2;
-  background-repeat: no-repeat;
-  background-position: top;
-  background-size: auto 100%;
-}
-
-.player-specific-god_content{
-  display: grid;
-  grid-gap: 24px;
-}
-
-.specific-god-basic {
-  display: flex;
-  align-items: center;
-}
-
-.specific-image-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 24px;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  border: 1px solid #ff9b00;
-  overflow: hidden;
-}
-
-.specific-image-container > img {
-  flex: 0 0 100%;
-  width: 100%;
-  height: 100%;
-  transform: scale(1.1);
-}
-
-.specific-base-stats {
-  flex: 1 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.specific-god-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.specific-god-winrate {
-  flex: 1 1;
-  width: 100%;
-  margin: 24px 0 30px;
-}
-
-.specific-god-winrate-container {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-}
-
-.winrate_text {
-  font-size: 16px;
-}
-
-.winrate_winloss {
-  font-size: 14px;
-}
-
-.winrate_bar {
-  margin-top: 6px;
-  height: 6px;
-  border-radius: 3px;
-  background-color: #11112a;
-  overflow: hidden;
-}
-
-.specific-multikills {
-  display: flex;
-  justify-content: space-between;
-}
-
 .multikill-block {
   position: relative;
   display: flex;
@@ -2684,16 +2167,16 @@ figure.snip0015:hover figcaption::before {
     display: none !important;
   }
 
-
-  
   .logo-icon {
     display: none !important;
     /* margin-left: 0 !important; */
   }
+
   .hide {
     display: none !important;
     /* margin-left: 0 !important; */
   }
+
 }
 
 .buff-checkbox {
@@ -2818,10 +2301,21 @@ figure.snip0015:hover figcaption::before {
 }
 
 .player-tab-header {
-  padding-top: 35px;
-  z-index: 90;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin-top: 24px;
 }
 
+.player-tab-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 44px;
+}
 .search-bar_god-page {
   display: flex ;
   flex-direction: row;
@@ -2858,17 +2352,12 @@ figure.snip0015:hover figcaption::before {
   display: flex;
   /* flex-direction: column; */
 }
-@media (max-width: 1200px) {
-  .match-container {
-    flex-direction: column;
-  }
-
-}
 
 
 /* MATCH PAGE */
 
 @media (max-width: 899px) {
+
   .show {
     display: flex !important;
     flex-direction: column;

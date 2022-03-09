@@ -18,6 +18,7 @@ import RSSFeeder from "../RssFeed";
 import InfiniteScroll from "react-infinite-scroll-component";
 import ChangeLog from "../Changelog";
 import { ItemTable } from "./Items";
+import { CreateItemToolTip } from "./GodPageHelpers";
 
 const godsDict = {
   "All Gods": "None",
@@ -276,38 +277,33 @@ class HomeRankStats extends React.Component {
   }
 }
 
-class BuildStats extends React.Component {
-  render() {
-    return (
-      <>
-        {this.props.stats.map((item, index) => {
-          if (
-            index >= this.props.lower &&
-            index < this.props.upper &&
-            item.item
-          ) {
-            return (
-              <>
-                <BuildStatsElement itemStats={item} key={index} item={item} />
-              </>
-            );
-          }
-        })}
-      </>
-    );
-  }
+function BuildStats(props) {
+  return (
+    <>
+      {props.stats.map((item, index) => {
+        if (index >= props.lower && index < props.upper && item.item) {
+          return (
+            <>
+              <BuildStatsElement key={index} item={item} />
+            </>
+          );
+        }
+      })}
+    </>
+  );
 }
 
-class BuildStatsElement extends React.Component {
-  render() {
-    return (
-      <>
-        <div className="item-row">
+function BuildStatsElement(props) {
+  console.log(props)
+  return (
+    <div className="item-row">
+      {Object.keys(props.item).map((slot) => {
+        return (
           <div className="item-dupe">
             <HtmlTooltip
               title={
                 <React.Fragment>
-                  <CreateItemToolTip item={this.props.item.item} />
+                  <CreateItemToolTip item={props.item[slot]} />
                 </React.Fragment>
               }
               placement="top"
@@ -315,63 +311,25 @@ class BuildStatsElement extends React.Component {
             >
               <div className="item-image">
                 <div className="item-image-div">
-                  <img
-                    src={this.props.item.item.url}
-                    alt={this.props.item.item.item}
-                  />
+                  <img src={props.item[slot].url} alt={props.item[slot].item} />
                 </div>
               </div>
             </HtmlTooltip>
             <div className="item-stats">
               <div className="winrate">
                 {(
-                  (this.props.item.item.wins / this.props.item.item.games) *
+                  (props.item[slot].wins / props.item[slot].games) *
                   100
                 ).toFixed(2)}
                 % WR
               </div>
-              <div className="matches">
-                {this.props.item.item.games} Matches
-              </div>
+              <div className="matches">{props.item[slot].games} Matches</div>
             </div>
           </div>
-
-          <div className="item-dupe">
-            <HtmlTooltip
-              title={
-                <React.Fragment>
-                  <CreateItemToolTip item={this.props.item.item2} />
-                </React.Fragment>
-              }
-              placement="top"
-              arrow
-            >
-              <div className="item-image">
-                <div className="item-image-div">
-                  <img
-                    src={this.props.item.item2.url}
-                    alt={this.props.item.item2.item}
-                  />
-                </div>
-              </div>
-            </HtmlTooltip>
-            <div className="item-stats">
-              <div className="winrate">
-                {(
-                  (this.props.item.item2.wins / this.props.item.item2.games) *
-                  100
-                ).toFixed(2)}
-                % WR
-              </div>
-              <div className="matches">
-                {this.props.item.item2.games} Matches
-              </div>
-            </div>
-          </div>
-        </div>
-      </>
-    );
-  }
+        );
+      })}
+    </div>
+  );
 }
 
 function TabPanel(props) {
@@ -407,62 +365,6 @@ function a11yProps(index) {
   };
 }
 
-class CreateItemToolTip extends React.Component {
-  render() {
-    if (this.props.index == 0) {
-      this.props.item = this.props.item.item;
-    } else if (this.props.index == 1) {
-      this.props.item = this.props.item.item2;
-    }
-    return (
-      <>
-        <div
-          style={{
-            maxHeight: "350px",
-            maxWidth: "750px",
-            color: "#E6E6FA",
-            alignItems: "left",
-            fontSize: "14px",
-          }}
-        >
-          <h5 style={{ width: "100%", fontSize: "1rem", color: "#1E90FF" }}>
-            {this.props.item.item}
-          </h5>
-          <div>
-            <p>{this.props.item.itemShortDesc}</p>
-          </div>
-          <div className="item-stats">
-            <ul>
-              {this.props.item.itemStats.map((stat) => {
-                return (
-                  <li style={{ left: "0" }}>
-                    {stat[0]}: {stat[1]}
-                  </li>
-                );
-              })}
-            </ul>
-            <div className="item-passive">
-              <p>{this.props.item.itemPassive}</p>
-            </div>
-          </div>
-          <p style={{ color: "#D4AF37" }}>
-            <b>Price:</b> {this.props.item.itemAbsolutePrice}(
-            {this.props.item.itemRelativePrice})
-            <img
-              style={{
-                maxHeight: "20px",
-                maxWidth: "20px",
-                paddingLeft: "3px",
-              }}
-              src="https://i.imgur.com/XofaIQ0.png"
-              alt="gold-img"
-            />
-          </p>
-        </div>
-      </>
-    );
-  }
-}
 
 const CustDiv = styled("div")(({ theme }) => ({
   [theme.breakpoints.down("lg")]: {

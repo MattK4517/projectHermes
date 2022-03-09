@@ -10,6 +10,7 @@ import { FilterForm } from "../Filters/FilterForm";
 import winRateColor from "../mainGodPage/WinRateColor";
 import { TierListContext } from "./TierListContext";
 import { linkDict } from "../PlayerPage/Player"
+import TierListFilter from "../Filters/TierListFilter";
 
 
 const Table = ({ columns, data }) => {
@@ -125,9 +126,6 @@ const Table = ({ columns, data }) => {
                                 god = "change";
                               }
                               if (key.includes("rank")) {
-                                if (((i += 1) + (pageSize * pageIndex)) === 1) {
-                                  setTopLink(linkDict[row.original.god])
-                                }
                                 return (
                                   <>
                                   <div
@@ -374,35 +372,17 @@ const Table = ({ columns, data }) => {
 };
 
 function ObjectiveTierList(props) {
-  const [totalData, setTotalData] = useState([]);
-  const [counterMatchups, setCounterMatchups] = useState([]);
-  const [roles, setRoles] = useState([
-    "Solo",
-    "Jungle",
-    "Mid",
-    "Support",
-    "Carry",
-    "All Roles",
-  ]);
-  const [role, setRole] = useState("All Roles");
-  const [ranks, setranks] = useState([
-    "Bronze",
-    "Silver",
-    "Gold",
-    "Platinum",
-    "Diamond",
-    "Masters",
-    "Grandmaster",
-    "All_Ranks",
-  ]);
-  const [dispRank, setRank] = useState("All_Ranks");
-  const [mode, setMode] = useState("Ranked")
+  const [
+    god, setGod, mode, setMode, patch, setPatch, rank, setRank,
+    role, setRole, topLink, setTopLink
+  ] = useContext(TierListContext);
 
+  const [totalData, setTotalData] = useState([]);
 
   useEffect(() => {
-    //"/gettierlist/".concat(dispRank, "/", role, "/", tableType.tableType, "/", patch
+    //"/gettierlist/".concat(rank, "/", role, "/", tableType.tableType, "/", patch
     fetch(
-      "/api/gettierlist/".concat(dispRank, "/", role, "/", props.tableType, "/", mode)
+      "/api/gettierlist/".concat(rank, "/", role, "/", props.tableType, "/", mode, "/", patch)
     ).then((res) =>
       res.json().then((data) => {
         setTotalData([]);
@@ -427,7 +407,7 @@ function ObjectiveTierList(props) {
         });
       })
     );
-  }, [dispRank, role]);
+  }, [rank, role, mode, patch]);
 
   const columns = React.useMemo(
     () => [
@@ -487,10 +467,7 @@ function ObjectiveTierList(props) {
   );
   return (
     <>
-        <div className="filter-form">
-          <FilterForm filter={role} filters={roles} role={role}  setFilter={setRole}/>
-          <FilterForm filter={dispRank.replaceAll("_", " ")} filters={ranks} role={dispRank.replaceAll("_", " ")} setFilter={setRank}/>
-        </div>
+      <TierListFilter />
       <Table columns={columns} data={totalData} />
     </>
   );

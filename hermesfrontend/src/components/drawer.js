@@ -9,9 +9,14 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import * as AiIcons from 'react-icons/ai';
 import * as GiIcons from 'react-icons/gi'
-import { Link } from "react-router-dom";
-import { HashRouter as HashRouter, Switch, Route } from "react-router-dom";
-import { Godpage, GodsScreen, TierListPage, Match, Home, ContactForm, Items } from "./"
+import { HashRouter as HashRouter, Switch, Route, Link } from "react-router-dom";
+import Home from './Home';
+import GodsScreen from './Gods';
+import Godpage from './mainGodPage/Godpage';
+import TierListPage from './TierListPage';
+import ContactForm from "./ContactForm"
+import Match from "./Match"
+// import { Godpage, GodsScreen, TierListPage, Match, Home, ContactForm } from "./"
 import SearchBar from "./SearchBarStuff/SearchBar";
 import Player from "./PlayerPage/Player";
 import OverviewDisplay from "./PlayerPage/OverviewDisplay";
@@ -205,11 +210,6 @@ Object.keys(godsDict).forEach((god) => {
     component: <Godpage god={god} role={godsDict[god]} />,
     "god": god,
   },
-    // {
-    //   path: "/".concat(god.replaceAll(" ", "_"), "/items"),
-    //   component: <Items god={god} role={godsDict[god]}/>,
-    //   "god": god,
-    // }
   ]
 })
 

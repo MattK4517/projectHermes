@@ -599,13 +599,13 @@ def run_pull_hourly(patch, hour, date):
     print(f"{date} Pull Completed in {str(datetime.now() - starttime)} loss: {round(inserted_count/match_ids_len*100, 2)}")
 
 if __name__ == "__main__":
-    # with open("cred.txt", "r") as f:
-    #     data = f.readlines()
-    #     smite_api = SmiteAPI(devId=data[0].strip(
-    #     ), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
-    # print(get_new_id(client, smite_api))
-    mydb = client["single_match_stats"]
-    for god in godsDict:
-        mycol = mydb[god]
-        mycol.update_many({"Entry_Datetime": {"$not": {"$regex": "2/22/2022", "$options": "i"}}}, {"$set": {"patch": "9.1"}})
-        print(mycol.count_documents({"patch": "9.2"}))
+    with open("cred.txt", "r") as f:
+        data = f.readlines()
+        smite_api = SmiteAPI(devId=data[0].strip(
+        ), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
+    get_new_items(client, smite_api)
+    # mydb = client["single_match_stats"]
+    # for god in godsDict:
+    #     mycol = mydb[god]
+    #     mycol.update_many({"Entry_Datetime": {"$not": {"$regex": "2/22/2022", "$options": "i"}}}, {"$set": {"patch": "9.1"}})
+    #     print(mycol.count_documents({"patch": "9.2"}))

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { PlayerContext } from "./PlayerContext"
 import "../Component.css"
-import  PlayerTabs from './PlayerTabs';
 
 export default function PlayerHeader(props) {
     const [
@@ -40,9 +39,6 @@ export default function PlayerHeader(props) {
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="player-tab-header">
-                <PlayerTabs/>
             </div>
         </div>
     )

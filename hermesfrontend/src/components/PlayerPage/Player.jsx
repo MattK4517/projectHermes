@@ -4,6 +4,8 @@ import RankDisplay from "./RankDisplay";
 import GodDisplay from "./GodDisplay";
 import { MatchDisplay } from "..";
 import { PlayerContext } from "./PlayerContext";
+import PlayerTabs from "./PlayerTabs";
+import "./Player.css"
 
 export const linkDict = {
   Achilles: "https://i.imgur.com/KoU1bup.jpg",
@@ -171,15 +173,29 @@ const compareDate = (a, b) => {
   return b.MatchId - a.MatchId;
 };
 
-
 export const setTopGod = (god) => {
   return linkDict[god];
 };
 export default function Player(props) {
   const [
-    god, setGod, player, setPlayer, mode, setMode,
-    role, setRole, topLink, setTopLink, icon, setIcon,
-    playerLevel, setPlayerLevel, tab, setTab, patch, setPatch
+    god,
+    setGod,
+    player,
+    setPlayer,
+    mode,
+    setMode,
+    role,
+    setRole,
+    topLink,
+    setTopLink,
+    icon,
+    setIcon,
+    playerLevel,
+    setPlayerLevel,
+    tab,
+    setTab,
+    patch,
+    setPatch,
   ] = useContext(PlayerContext);
   setPlayer(window.location.href.split("/")[5]);
 
@@ -216,27 +232,28 @@ export default function Player(props) {
   const [matchList, setMatchList] = useState([]);
 
   useEffect(() => {
-    fetch("/api/getplayermatch/".concat(player, "/", mode, "/", patch)).then((res) =>
-      res.json().then((data) => {
-        console.log("here")
-        setMatchList([]);
-        let newData = Object.values(data).sort(compareDate);
-        Object.keys(newData).map((match) => {
-          setMatchList((matchList) => [
-            ...matchList,
-            {
-              ...newData[match],
-            },
+    fetch("/api/getplayermatch/".concat(player, "/", mode, "/", patch)).then(
+      (res) =>
+        res.json().then((data) => {
+          console.log("here");
+          setMatchList([]);
+          let newData = Object.values(data).sort(compareDate);
+          Object.keys(newData).map((match) => {
+            setMatchList((matchList) => [
+              ...matchList,
+              {
+                ...newData[match],
+              },
           ]);
-        });
-      })
+          });
+        })
     );
   }, [player, mode, patch]);
 
   useEffect(() => {
     fetch("/api/getplayergeneral/".concat(player)).then((res) =>
       res.json().then((data) => {
-        console.log(data)
+        console.log(data);
         setWinRate(data.winRate);
         setGames(data.games);
         setPlayerLevel(data.level);
@@ -249,50 +266,57 @@ export default function Player(props) {
   }, [player, mode, patch]);
   // <NameForm setPlayer={setPlayer} />
   return (
-    <div className="player-profile-page">
-      <div
-        className="player-profile-container content-side-padding"
-        style={{ marginLeft: "auto", marginRight: "auto" }}
-      >
-        <div className="content-side-padding background-image-container">
-          <div style={{ position: "relative", width: "100%", height: "100%" }}>
-            <div class="bg-container">
-              <img class="background-image" src={topLink} />
-            </div>
-            <div class="gradient-container">
-              <div class="gradient"></div>
-            </div>
-          </div>
-        </div>
-        {/* <NameForm setPlayer={setPlayer} /> */}
-        <div className={player ?? "undefined"}>
-          <PlayerHeader player={player} level={playerLevel} icon={icon} />
-        </div>
-        <div className="player-content-container">
-          <div className="player-content-main">
-            <div className="player-side">
-              <RankDisplay
-                rank={rank}
-                tier={tier}
-                winrate={winRate}
-                games={games}
-                mode={mode}
-              />
-              <GodDisplay godList={godList} setMode={setMode} player={player} />
-            </div>
-            <div className="player-main">
-              <MatchDisplay matchList={matchList} player={player} mode={mode} />
-            </div>
-          </div>
-        </div>
-        {/* <div className="player-content-container">
-            <div className="player-content-main">
-              <div className="content-section">
-                <div className="content-section_header">Stay Tuned For New Content!</div>
-                Player Profiles and Statistics Coming Soon!
+    <div className="content">
+      <div className="player-profile-page">
+        <div
+          className="player-profile-container content-side-padding"
+          style={{ marginLeft: "auto", marginRight: "auto" }}
+        >
+          <div className="content-side-padding background-image-container">
+            <div
+              style={{ position: "relative", width: "100%", height: "100%" }}
+            >
+              <div class="bg-container">
+                <img class="background-image" src={topLink} />
+              </div>
+              <div class="gradient-container">
+                <div class="gradient"></div>
               </div>
             </div>
-          </div> */}
+          </div>
+          {/* <NameForm setPlayer={setPlayer} /> */}
+          <PlayerHeader player={player} level={playerLevel} icon={icon} />
+          <div className="player-tab-header">
+            <div className="player-tab-container">
+              <PlayerTabs />
+            </div>
+          </div>
+          <div className="player-content-container">
+            <div className="player-content-main">
+              <div className="player-side">
+                <RankDisplay
+                  rank={rank}
+                  tier={tier}
+                  winrate={winRate}
+                  games={games}
+                  mode={mode}
+                />
+                <GodDisplay
+                  godList={godList}
+                  setMode={setMode}
+                  player={player}
+                />
+              </div>
+              <div className="player-main">
+                <MatchDisplay
+                  matchList={matchList}
+                  player={player}
+                  mode={mode}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
