@@ -465,8 +465,8 @@
   }
 
   .avg-carry-score .carry-score_section .carry-score_table .carry-score_table__row {
-    display: grid;
-    grid-auto-flow: column;
+    display: flex;
+    justify-content: space-between;
   }
 
 }
