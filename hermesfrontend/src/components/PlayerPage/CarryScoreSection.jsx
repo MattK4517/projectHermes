@@ -43,7 +43,7 @@ export default function CarryScoreSection(props) {
           <div className="carry-score_table__row carry-score_table__headers carry-score_hard-carry">
             <div></div>
             <div>Your Stats</div>
-            <div>Avg. Score</div>
+            <div className="hide">Avg. Score</div>
             <div>Personal Record</div>
           </div>
           <div className="carry-score_table__body">
@@ -52,7 +52,7 @@ export default function CarryScoreSection(props) {
               <div>
                 <span>{props.goldShare}%</span>
               </div>
-              <div className="cell_bar">
+              <div className="cell_bar hide">
                 <span>N/A</span>
                 <div className="bar-container">
                   <div
@@ -77,7 +77,7 @@ export default function CarryScoreSection(props) {
                 <span>{props.damageShare}%</span>
               </div>
 
-              <div className="cell_bar">
+              <div className="cell_bar hide">
                 <span>N/A</span>
                 <div className="bar-container">
                   <div
@@ -101,7 +101,7 @@ export default function CarryScoreSection(props) {
               <div>
                 <span>{props.killShare}%</span>
               </div>
-              <div className="cell_bar">
+              <div className="cell_bar hide">
                 <span>N/A</span>
                 <div className="bar-container">
                   <div
@@ -125,7 +125,7 @@ export default function CarryScoreSection(props) {
               <div>
                 <span>{props.wardShare}</span>
               </div>
-              <div className="cell_bar">
+              <div className="cell_bar hide">
                 <span>N/A</span>
                 <div className="bar-container">
                   <div

@@ -17,7 +17,7 @@ export default function PlayerGodSection(props) {
       </div>
       <div className="player-specific-god_content">
         <div>
-          <div className="specific-god-basic">
+        <div className="specific-god-basic">
             <div className="specific-image-container">
               <img
                 src={`https://webcdn.hirezstudios.com/smite/god-icons/${god
@@ -180,7 +180,7 @@ export default function PlayerGodSection(props) {
               />
             </div>
             <div className="row-label">Average Damage</div>
-            <div className="row-value">{props.avgDamage.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</div>
+            <div className="row-value">{props?.avgDamage.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</div>
           </div>
           <div className="additional-stats_row">
             <div className="row-icon">
@@ -190,7 +190,7 @@ export default function PlayerGodSection(props) {
               />
             </div>
             <div className="row-label">Average Gold</div>
-            <div className="row-value">{props.avgGold.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</div>
+            <div className="row-value">{props?.avgGold.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</div>
           </div>
         </div>
       </div>

@@ -25,7 +25,7 @@ export default function OverviewDisplay() {
   const [
     god, setGod, player, setPlayer, mode, setMode,
     role, setRole, topLink, setTopLink, icon, setIcon,
-    playerLevel, setPlayerLevel, tab, setTab, patch, setPatch
+    playerLevel, setPlayerLevel, tab, setTab, patch, setPatch, patches
   ] = useContext(PlayerContext);
 
   // console.log(window.location.href.split("/")[6])
@@ -102,8 +102,6 @@ export default function OverviewDisplay() {
     );
   }, [player, role, mode, patch]);
 
-  const patches = ["9.1", "8.12", "8.11"]
-
   const [roles, setroles] = useState([
     "Solo",
     "Jungle",
@@ -163,41 +161,43 @@ export default function OverviewDisplay() {
           </div>
         </div>
         <div className="player-content-container">
-          <div className="player-content-main">
-            <div className="player-side">
-              <PlayerGodSection
-                KDA={KDA}
-                games={games}
-                kills={kills}
-                deaths={deaths}
-                assists={assists}
-                winRate={winRate}
-                wins={wins}
-                losses={losses}
-                doubles={doubles}
-                triples={triples}
-                quadras={quadras}
-                pentas={pentas}
-                maxKills={maxKills}
-                maxDeaths={maxDeaths}
-                avgGold={avgGold}
-                avgDamage={avgDamage}
-              />
-              <PlayerMatchups />
+          <div className="player-overview-stats">
+            <div className="player-content-main">
+              <div className="player-side">
+                <PlayerGodSection
+                  KDA={KDA}
+                  games={games}
+                  kills={kills}
+                  deaths={deaths}
+                  assists={assists}
+                  winRate={winRate}
+                  wins={wins}
+                  losses={losses}
+                  doubles={doubles}
+                  triples={triples}
+                  quadras={quadras}
+                  pentas={pentas}
+                  maxKills={maxKills}
+                  maxDeaths={maxDeaths}
+                  avgGold={avgGold}
+                  avgDamage={avgDamage}
+                />
+                <PlayerMatchups />
+              </div>
+              <div className="player-main">
+                <CarryScoreSection
+                  goldShare={goldShare}
+                  goldShareBest={maxGoldShare}
+                  damageShare={damageShare}
+                  damageShareBest={maxDamageShare}
+                  killShare={killShare}
+                  killShareBest={maxKillShare}
+                  wardShare={avgWards}
+                  wardShareBest={maxWards}
+                />
+              </div>
             </div>
-            <div className="player-main">
-              <CarryScoreSection
-                goldShare={goldShare}
-                goldShareBest={maxGoldShare}
-                damageShare={damageShare}
-                damageShareBest={maxDamageShare}
-                killShare={killShare}
-                killShareBest={maxKillShare}
-                wardShare={avgWards}
-                wardShareBest={maxWards}
-              />
             </div>
-          </div>
         </div>
       </div>
     </div>
