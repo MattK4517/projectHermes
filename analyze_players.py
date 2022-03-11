@@ -37,6 +37,7 @@ def find_match_history(client, playername, mode, patch):
     }
   }
     print(myquery)
+    print(mycol.count_documents({}))
     ret_data = {}
     for x in mycol.aggregate([myquery]):
         for key in x:
@@ -478,7 +479,7 @@ if __name__ == "__main__":
     # find_match_history(client, "AleksEnglish", "Ranked")
     starttime = datetime.now()
 
-    print(len(find_match_history(client, "solødin", "Ranked", "9.1").keys()))
+    print(len(find_match_history(client, "AleksEnglish", "Casual", "9.2")))
     print(datetime.now() - starttime)
 
 

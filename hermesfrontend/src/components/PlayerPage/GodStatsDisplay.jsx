@@ -120,21 +120,7 @@ const Table = ({ columns, data, player }) => {
                                     }}
                                     {...cell.getCellProps()}
                                   >
-                                    <span>{(i += 1)}</span>
-                                  </div>
-                                );
-                              } else if (key.includes("role")) {
-                                return (
-                                  <div
-                                    className="rt-td role"
-                                    style={{
-                                      minWidth: "40px",
-                                      maxWidth: "60px",
-                                      flex: "1 1 100%",
-                                    }}
-                                    {...cell.getCellProps()}
-                                  >
-                                    <span>{row.original.role}</span>
+                                    <span>{(i += 1) + (pageSize * pageIndex)}</span>
                                   </div>
                                 );
                               } else if (key.includes("god")) {
@@ -233,7 +219,7 @@ const Table = ({ columns, data, player }) => {
                               } else if (key.includes("kills")) {
                                 return (
                                   <div
-                                    className="rt-td pick-rate"
+                                    className="rt-td pick-rate hide"
                                     style={{
                                       minWidth: "100px",
                                       maxWidth: "120px",
@@ -249,7 +235,7 @@ const Table = ({ columns, data, player }) => {
                               } else if (key.includes("deaths")) {
                                 return (
                                   <div
-                                    className="rt-td ban-rate"
+                                    className="rt-td ban-rate hide"
                                     style={{
                                       minWidth: "100px",
                                       maxWidth: "120px",
@@ -265,7 +251,7 @@ const Table = ({ columns, data, player }) => {
                               } else if (key.includes("avgGold")) {
                                 return (
                                   <div
-                                    className="rt-td ban-rate"
+                                    className="rt-td ban-rate hide"
                                     style={{
                                       minWidth: "100px",
                                       maxWidth: "120px",

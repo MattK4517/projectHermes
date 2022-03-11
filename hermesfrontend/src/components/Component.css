@@ -2113,31 +2113,10 @@ figure.snip0015:hover figcaption::before {
     width: 100%;
   }
 
-  .hidden-tab {
-    display: none !important;
-  }
-  
   .rt-tr .god {
     min-width: 35px !important;
     max-width: 65px !important;
   }
-
-  .rt-tr .god .god-played .god-name {
-    display: none !important;
-  }
-
-  .rt-tr .tier {
-    display: none !important;
-  }
-  
-  .rt-tr .against {
-    display: none !important;
-  }
-
-  .rt-tr .games {
-    display: none !important;
-  }
-
   .rt-tr .inline-role {
     min-width: 75px !important;
     max-width: 85px !important;
@@ -2147,15 +2126,8 @@ figure.snip0015:hover figcaption::before {
     max-width: 85px !important;
   }
 
-  .rt-tr .inline-tier {
-    display: none !important;
-  }
 
 
-
-  .rt-tr .inline-games {
-    display: none !important;
-  }
 
   .inline-tab-combat,
   .inline-tab-objective,
@@ -2163,7 +2135,18 @@ figure.snip0015:hover figcaption::before {
   .inline-tab-items,
   .inline-tab-matchups,
   .rt-tr .inline-counterMatchups,
-  .rt-tr .inline-games {
+  .rt-tr .inline-games,
+  .rt-tr .inline-tier,
+  .rt-tr .inline-KDA,
+  .rt-tr .inline-kills,
+  .rt-tr .inline-deaths,
+  .rt-tr .inline-avgGold,
+  .rt-tr .games,
+  .rt-tr .against,
+  .rt-tr .tier,
+  .rt-tr .god .god-played .god-name,
+  .hidden-tab
+  {
     display: none !important;
   }
 

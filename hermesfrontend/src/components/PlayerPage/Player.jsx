@@ -263,7 +263,7 @@ export default function Player(props) {
         setGames(data.games);
       })
     );
-  }, [player, mode, patch]);
+  }, [player]);
   // <NameForm setPlayer={setPlayer} />
   return (
     <div className="content">

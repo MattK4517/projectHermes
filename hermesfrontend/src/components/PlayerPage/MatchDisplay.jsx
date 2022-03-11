@@ -50,10 +50,9 @@ export default function MatchDisplay(props) {
   const [
     god, setGod, player, setPlayer, mode, setMode,
     role, setRole, topLink, setTopLink, icon, setIcon,
-    playerLevel, setPlayerLevel, tab, setTab, patch, setPatch
+    playerLevel, setPlayerLevel, tab, setTab, patch, setPatch, patches
   ] = useContext(PlayerContext);
   const modes = ["Casual", "Ranked"];
-  const patches = ["9.1", "8.12", "8.11"]
   if (Object.keys(props.matchList).length > 0) {
     return (
       <div className="content-section content-section_no-padding match-block">

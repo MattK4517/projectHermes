@@ -1017,7 +1017,10 @@ def get_lanes(client):
     return lanes
 
 if __name__ == "__main__":
-    print(get_top_builds(client, "Shiva", "Solo", "9.2", "Casual"))
+    starttime = datetime.now()
+    # print(get_top_builds(client, "Shiva", "Solo", "9.2", "Casual"))
+    print(get_worst_matchups(client, "Shiva", "Solo", "9.2", "Casual"))
+    print(datetime.now() - starttime)
     # print(create_tier_list.get_tier_stats(client, "All Ranks", "Solo"))
     # # print(get_total_matches(client, "Diamond", "9.1"))
     # for god in godsDict2:

@@ -42,8 +42,8 @@ def get_items_by_class(client, class_name, role):
 # get_items_by_class(client, godsDict.keys(), "Support")
 if __name__ == "__main__":
     items = {item: {"games": 0, "wins": 0} for item in Tier_Three_items}
-    for god in godsDict:
-        for role in roles:
+    for god in Warriors:
+        for role in ["Solo"]:
             char_items = anlz.get_all_builds(client, god, role, "9.1")
             for slot in char_items:
                 if "slot" in slot:
