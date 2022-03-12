@@ -105,7 +105,7 @@ def get_tier_list(rank, role, tableType, mode, patch):
 
         myquery = {**myquery, **{"mode": f"{mode}Conq"}}
 
-        for x in mycol.find(myquery, {"_id": 0}).limit(1):
+        for x in mycol.find(myquery, {"_id": 0}):
             dict_god = x["god"]
             dict_role = x["role"]
             if not retData[dict_god]:
@@ -124,7 +124,7 @@ def get_tier_list(rank, role, tableType, mode, patch):
 
         myquery = {**myquery, **{"mode": f"{mode}Conq"}}
 
-        for x in mycol.find(myquery, {"_id": 0}).limit(1):
+        for x in mycol.find(myquery, {"_id": 0}):
             dict_god = x["god"]
             dict_role = x["role"]
             if not retData[dict_god]:
@@ -141,7 +141,7 @@ def get_tier_list(rank, role, tableType, mode, patch):
             myquery = {"rank": rank, "role": role, "pickRate": {"$gte": 1}}
 
         myquery = {**myquery, **{"mode": f"{mode}Conq"}}
-        for x in mycol.find(myquery, {"_id": 0}).limit(1):
+        for x in mycol.find(myquery, {"_id": 0}):
             dict_god = x["god"]
             dict_role = x["role"]
             if not retData[dict_god]:
