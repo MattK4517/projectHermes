@@ -105,6 +105,7 @@ export default function BaseMatchSummary(props) {
           team={"Winner"}
           carryPlayer={props.carryPlayerWinner}
           carryScore={props.carryScoreWinner}
+          queueType={props.queueType}
         />
         <HeaderMatchInfoSUmmary matchData={props.matchData} />
         <TeamDisplay
@@ -114,6 +115,7 @@ export default function BaseMatchSummary(props) {
           team={"Loser"}
           carryPlayer={props.carryPlayerLoser}
           carryScore={props.carryScoreLoser}
+          queueType={props.queueType}
         />
       </div>
     </div>

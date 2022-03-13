@@ -10,7 +10,7 @@ export const PlayerProvider = props => {
     const [mode, setMode] = useState("Ranked")
     const [role, setRole] = useState("All Roles")
     const [topLink, setTopLink] = useState("")
-    const [icon, setIcon] = useState("")
+    const [icon, setIcon] = useState("https://i.imgur.com/KgTaobI.png")
     const [playerLevel, setPlayerLevel] = useState(-1);
     const [tab, setTab] = useState("Build");
     const [patch, setPatch] = useState("9.2");

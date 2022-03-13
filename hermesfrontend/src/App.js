@@ -23,16 +23,12 @@ const theme = createTheme({
     MuiMenuItem: {
       styleOverrides: {
         root: {
+          color: "white",
+          "&.Mui-selected": {
           backgroundColor: "#191937",
           color: "white",
+          }
         },
-        selected: {
-          color: "purple",
-          backgroundColor: "red",
-        },
-        // "selected.hover": {
-        //   color: "red"
-        // }
       }
     },
     MuiList: {

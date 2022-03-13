@@ -1,3 +1,4 @@
+import { Fab } from "@material-ui/core";
 import { Link } from "react-router-dom"
 import CarryPlayerDisplay from "./CarryPlayerDisplay";
 import { GetCarryPlayer } from "./MatchHelpers";
@@ -5,9 +6,12 @@ const reducer = (accumulator, currentValue) => accumulator + currentValue;
 
 
 export default function TeamDisplay(props) {
+
     return ( 
         <div className="basic-match-info">
-        <div className="basic-info-bans">
+        <div className="basic-info-bans"
+          hidden={((props.queueType === "Casual") ? true : false)} 
+        >
         <div>{props.team} Side Bans</div>
           <div className="bans-container">
             {props.bans.map((ban) => {

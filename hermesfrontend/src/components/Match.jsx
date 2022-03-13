@@ -17,7 +17,7 @@ import BaseMatchSummary from "./MatchPage/BaseMatchSummary";
 import { fontWeight } from "@mui/system";
 import MultiKillDisplay from "./PlayerPage/MultiKillDisplay";
 import { GetCarryPlayer } from "./MatchPage/MatchHelpers";
-
+import DamageOut from "./DmgCalcPage/DamageOut";
 
 const Accordion = withStyles({
   root: {
@@ -152,6 +152,7 @@ export const calcBuildStats = (build, base) => {
 };
 
 function CustomizedAccordions(player) {
+
   if (player.playerName === "") {
     player.playerName = "Hidden";
   }
@@ -177,6 +178,11 @@ function CustomizedAccordions(player) {
     baseAttDamage,
     price,
   } = calcBuildStats(player.godBuild, player.godStats);
+
+  // let td = 0
+  // const [totalDamage, setTotalDamage] = useState(0);
+  const message = []
+
   return (
     <Accordion>
       <AccordionSummary
@@ -428,6 +434,9 @@ function CustomizedAccordions(player) {
                 {magPower.toFixed(0)}
                 <br></br>
               </div>
+            </div>
+            <div label="Damage Calc">
+              <DamageOut message={message} totalDamage={1000}/>
             </div>
           </div>
         </div>
@@ -695,8 +704,6 @@ function Match() {
   const [carryPlayerLoser, setCarryPlayerLoser] = useState("");
   const [carryScoreLoser, setCarryScoreLoser] = useState(0);
 
-
-
   useEffect(() => {
     fetch("/api/getmatch/".concat(match)).then((res) =>
       res.json().then((data) => {
@@ -721,14 +728,14 @@ function Match() {
                 ...godsWinner,
                 data[key]["godName"],
               ]);
-              setCarryScoreWinner(carryScoreWinner => {
+              setCarryScoreWinner((carryScoreWinner) => {
                 let tempScore = GetCarryPlayer(
-                  data["damageScore"][data[key]["Win_Status"]][data[key]["Role"]][
-                    "damageShare"
-                  ],
+                  data["damageScore"][data[key]["Win_Status"]][
+                    data[key]["Role"]
+                  ]["damageShare"],
                   data["goldScore"][data[key]["Win_Status"]][data[key]["Role"]][
                     "goldShare"
-                  ], 
+                  ],
                   data["killPart"][data[key]["Win_Status"]][data[key]["Role"]][
                     "killShare"
                   ],
@@ -737,25 +744,26 @@ function Match() {
                   data[key]["Assists"],
                   data[key]["Role"],
                   data[key]["Win_Status"],
-                  data["carryScores"])
-                if (tempScore > carryScoreWinner){
-                  setCarryPlayerWinner(data[key]["godName"])
-                  return tempScore
+                  data["carryScores"]
+                );
+                if (tempScore > carryScoreWinner) {
+                  setCarryPlayerWinner(data[key]["godName"]);
+                  return tempScore;
                 } else {
-                  return carryScoreWinner
-                } })
-
+                  return carryScoreWinner;
+                }
+              });
             } else if (data[key]["Win_Status"] === "Loser") {
               setGodsLoser((godsLoser) => [...godsLoser, data[key]["godName"]]);
 
-              setCarryScoreLoser(carryScoreLoser => {
+              setCarryScoreLoser((carryScoreLoser) => {
                 let tempScore = GetCarryPlayer(
-                  data["damageScore"][data[key]["Win_Status"]][data[key]["Role"]][
-                    "damageShare"
-                  ],
+                  data["damageScore"][data[key]["Win_Status"]][
+                    data[key]["Role"]
+                  ]["damageShare"],
                   data["goldScore"][data[key]["Win_Status"]][data[key]["Role"]][
                     "goldShare"
-                  ], 
+                  ],
                   data["killPart"][data[key]["Win_Status"]][data[key]["Role"]][
                     "killShare"
                   ],
@@ -764,13 +772,15 @@ function Match() {
                   data[key]["Assists"],
                   data[key]["Role"],
                   data[key]["Win_Status"],
-                  data["carryScores"])
-                if (tempScore > carryScoreLoser){
-                  setCarryPlayerLoser(data[key]["godName"])
-                  return tempScore
+                  data["carryScores"]
+                );
+                if (tempScore > carryScoreLoser) {
+                  setCarryPlayerLoser(data[key]["godName"]);
+                  return tempScore;
                 } else {
-                  return carryScoreLoser
-                } })
+                  return carryScoreLoser;
+                }
+              });
             }
             setPlayers((player) => [
               ...player,
@@ -854,6 +864,7 @@ function Match() {
       })
     );
   }, [match]);
+  
   return (
     <div
       className="container content-container"
@@ -897,4 +908,3 @@ function Match() {
 }
 
 export default Match;
-

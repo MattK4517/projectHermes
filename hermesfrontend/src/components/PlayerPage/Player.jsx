@@ -253,11 +253,14 @@ export default function Player(props) {
   useEffect(() => {
     fetch("/api/getplayergeneral/".concat(player)).then((res) =>
       res.json().then((data) => {
+
         console.log(data);
         setWinRate(data.winRate);
         setGames(data.games);
         setPlayerLevel(data.level);
-        setIcon(data.avatar);
+        if (data.avatar !== "") {
+          setIcon(data.avatar);
+        }
         setRank(data.rank);
         setTier(data.tier ?? "");
         setGames(data.games);

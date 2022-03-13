@@ -1,7 +1,6 @@
 
 
 export function GetCarryPlayer(damageScore, goldScore, killPart, wards, distance, assists, role, winStatus, scoringAverages) {
-    console.log(scoringAverages)
     let avgDamage = scoringAverages["damageScore"][winStatus][role]["damageShare"]["avg"]
     let stdDevDamage = scoringAverages["damageScore"][winStatus][role]["damageShare"]["stdDev"]
     let avgDiffDamage = damageScore - avgDamage

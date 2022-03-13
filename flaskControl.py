@@ -1,5 +1,6 @@
 from datetime import datetime
 from queue import Empty
+from re import M
 import analyze as anlz
 import analyze_players as anlzpy
 import pandas as pd
@@ -180,29 +181,17 @@ def get_match(matchID):
     mycol = mydb["9.2 Matches"]
     match = {}
     matchID = int(matchID)
-    myquery = {
-        '$search': {
-            'index': 'findMatch',
-            'text': {
-                'query': f'{matchID}',
-                'path': {
-                    'wildcard': '*'
-                }
-            }
-        }
-    }
-    for x in mycol.aggregate([myquery]):
-        print(x)
+    for x in mycol.find({"MatchId": matchID}):
         match = x
     
     if len(match.keys()) == 0:
         mydb = client["CasualMatches"]
         mycol = mydb["9.2 Matches"]
-        for x in mycol.aggregate([myquery]):
+        queue_type = "Casual"
+        for x in mycol.find({"MatchId": matchID}):
             print(x)
             match = x
 
-    print(match)
     for key in match:
         if "player" in key:
             build = [
@@ -225,8 +214,8 @@ def get_match(matchID):
         **{"mode": queue_type},
         **{"carryScores": get_carry_score_averages()}
         }
-    print(retData)
-    return retData
+    
+    return json.loads(json_util.dumps(retData))
 
 
 @app.route('/api/<god>/buildpath/<role>/<rank>/<patch>/<mode>')

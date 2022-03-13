@@ -204,12 +204,3 @@ def create_match_dict(match, patch):
     match_dict["MatchId"] = match["MatchID"]
     return match_dict
     
-if __name__ == "__main__":
-    mydb = client["single_match_stats"]
-    mycol = mydb["Total Stats"]
-    for x in mycol.aggregate([
-        { "$match": {"player": {"$regex": "MoistQuacker", "$options": "i" }, "win_status": "Loser" } },
-        { "$group": {"_id": "$role", "count": {"$sum": 1 }} },
-    ]):
-        print(x)
-

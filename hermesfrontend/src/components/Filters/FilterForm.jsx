@@ -1,39 +1,3 @@
-// import React from "react";
-
-// export default class DropDownFilter extends React.Component {
-//     constructor(props) {
-//       super(props);
-//       this.state = { value: this.props.role };
-//       this.handleChange = this.handleChange.bind(this);
-//       this.handleSubmit = this.handleSubmit.bind(this);
-//     }
-
-//     handleChange(event) {
-//       this.setState({ value: event.target.value });
-//     }
-
-//     handleSubmit(event) {
-//       this.props.changePatch(this.props.patch);
-//       event.preventDefault();
-//     }
-
-//     render() {
-//         return (
-//           // <div style={{margin: "auto", paddingRight: "1rem"}}>
-//           <div>
-//             <form onSubmit={this.handleSubmit}>
-//               <input
-//                 type="image"
-//                 style={{ maxWidth: "36px", maxHeight: "36px" }}
-//                 name="submit"
-//                 value={this.props.patch}
-//               ></input>
-//             </form>
-//           </div>
-//         );
-//       }
-//   }
-
 import * as React from "react";
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
@@ -114,13 +78,14 @@ export default class FilterForm extends React.Component {
               margin: "0px !important"
             }}
           >
-            {this.props.filters.map((filter) => {
+            {this.props.filters.map((filter, index) => {
               return (
                 <MenuItem
                   sx={{ marginTop: "0px" }}
                   value={filter}
                   selected
                   className="drop-down_hover"
+                  key={index}
                 >
                   <div className="drop-down_icon">
                     <div style={{ position: "relative", textAlign: "center" }}>

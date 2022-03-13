@@ -54,5 +54,6 @@ def get_carry_score_averages():
     return data 
 
 if __name__ == "__main__":
+    print(get_carry_score_averages())
     pass
 
