@@ -73,7 +73,7 @@ export default class FilterForm extends React.Component {
             onChange={this.handleChange}
             sx={{
               color: "white",
-              bgcolor: "#191937",
+              bgcolor: "#423f61",
               padding: "0px !important",
               margin: "0px !important"
             }}

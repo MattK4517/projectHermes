@@ -28,7 +28,10 @@ function GodCounterMatchup(props) {
       <div className="god-icon">
         <img
           className="god-icon-style"
-          src={props.getMatchups.url}
+          src={`https://webcdn.hirezstudios.com/smite/god-icons/${props.getMatchups.enemy
+          .replaceAll("'", "")
+          .replaceAll(" ", "-")
+          .toLowerCase()}.jpg`}
           alt={props.getMatchups.enemy}
         />
       </div>
@@ -37,7 +40,10 @@ function GodCounterMatchup(props) {
       <div className="matchup-stats">
         <div
           className="win-rate"
-          style={{ color: winRateColor(props.getMatchups.winRate), fontWeight: "725px" }}
+          style={{
+            color: winRateColor(props.getMatchups.winRate),
+            fontWeight: "725px",
+          }}
         >
           {props.getMatchups.winRate}%
         </div>
@@ -136,7 +142,15 @@ function BuildStatsElement(props) {
             >
               <div className="item-image">
                 <div className="item-image-div">
-                  <img src={props.item[slot].url} alt={props.item[slot].item} />
+                  <img
+                    src={`https://webcdn.hirezstudios.com/smite/item-icons/${props.item[
+                      slot
+                    ].item
+                      .replaceAll(" ", "-")
+                      .replaceAll("'", "")
+                      .toLowerCase()}.jpg`}
+                    alt={props.item[slot].item}
+                  />
                 </div>
               </div>
             </HtmlTooltip>
@@ -303,11 +317,21 @@ export default function BuildPage(props) {
       >
         {items.map((item, index) => {
           let message = "";
-          if (index === 1) {message = "Second"}
-          if (index === 2) {message = "Third"}
-          if (index === 3) {message = "Fourth"}
-          if (index === 4) {message = "Fifth"}
-          if (index === 5) {message = "Sixth"}
+          if (index === 1) {
+            message = "Second";
+          }
+          if (index === 2) {
+            message = "Third";
+          }
+          if (index === 3) {
+            message = "Fourth";
+          }
+          if (index === 4) {
+            message = "Fifth";
+          }
+          if (index === 5) {
+            message = "Sixth";
+          }
           if (item === "None") {
             return (
               <>
@@ -329,7 +353,7 @@ export default function BuildPage(props) {
             return (
               <div className={`slot${index}`}>
                 <div className="content-section_header">
-                {message} Slot Options
+                  {message} Slot Options
                 </div>
                 <div>
                   <BuildStats stats={items} lower={index} upper={index + 1} />

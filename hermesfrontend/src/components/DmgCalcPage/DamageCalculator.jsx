@@ -115,7 +115,7 @@ class NameForm extends React.Component {
 }
 
 export default function DamageCalculator() {
-  const [drop, allgods, board, setBoard, god, setGod, build, setBuild, dropItem] =
+  const [drop, allgods, board, setBoard, god, setGod, build, setBuild, dropItem, itemType, setItemType] =
     useContext(DamageContext);
   const [levels, setLevels] = useState({
     1: 5,
@@ -155,13 +155,14 @@ export default function DamageCalculator() {
     setBuild([])
     setItems([])
     setItems(() => {
+      console.log(items)
       if (physGods.indexOf(god) !== -1) {
+        setItemType("Physical")
         return [...physicalItems];
-      } else if (magGods.indexOf(god) !== -1) {
-        return [...magicalItems];
       } else {
-        return [];
-      }
+        setItemType("Magical")
+        return [...magicalItems];
+      } 
     });
   }, [god]);
 
@@ -182,7 +183,7 @@ export default function DamageCalculator() {
         setTotalDamage(td)
       })
     );
-  }, [power]);
+  }, [power, god]);
 
     useEffect(() => {
     fetch("/api/getbuildstats/", buildOptions).then((res) =>
@@ -192,7 +193,6 @@ export default function DamageCalculator() {
         setCombatStats((combatStats) => {
           return stats
         })
-        console.log(stats["physPower"])
         setPower((power) => {
           if (physGods.indexOf(god) !== -1){
             return stats["physPower"]
@@ -218,8 +218,9 @@ export default function DamageCalculator() {
               <ItemBuffs />
               <DragDropGodList />
             </div>
-            <div className="player-main">
+            <div className="player-main" style={{width: "100%"}}>
               <MainCalcSection />
+              <br></br>
               <DamageOut message={message} totalDamage={totalDamage}/>
             </div>
             <div className="player-side">

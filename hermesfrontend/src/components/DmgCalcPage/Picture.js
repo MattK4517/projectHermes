@@ -1,14 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useDrag } from "react-dnd";
+import { DamageContext } from "./DamageContext";
 
 function Picture({ id, url }) {
+  const [drop, allgods, board, setBoard, god, setGod, build, setBuild, dropItem, itemType, setItemType] =
+  useContext(DamageContext);
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "image",
     item: { id: id },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
-  }));
+  }), [itemType]);
   return (
     <div className="check-box_wrapper">
       <div className="god-face" style={{ marginLeft: "10px" }}>

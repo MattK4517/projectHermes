@@ -203,4 +203,9 @@ def create_match_dict(match, patch):
     match_dict["Entry_Datetime"] = match["Entry_Datetime"]
     match_dict["MatchId"] = match["MatchID"]
     return match_dict
-    
+
+if __name__ == "__main__":
+    mydb = client["Tier_list"]
+    for db in ["Combat List", "Objective List", "Regular List"]:
+        mycol = mydb[db]
+        mycol.delete_many({"patch": "9.2", "mode": "RankedConq"})

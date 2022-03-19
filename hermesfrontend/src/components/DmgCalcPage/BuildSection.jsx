@@ -17,7 +17,7 @@ export default function BuildSection(props) {
     <div
       className="build-container items"
       ref={dropItem}
-      style={{ backgroundColor: "#17172e", minHeight: "75px" }}
+      style={{ backgroundColor: "#17172e", minHeight: "75px", justifyContent: "space-evenly" }}
     >
       {build.map((item, index) => {
         let url = `https://webcdn.hirezstudios.com/smite/item-icons/${item

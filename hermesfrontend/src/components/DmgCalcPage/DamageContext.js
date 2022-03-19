@@ -70,9 +70,11 @@ export const DamageProvider = props => {
         // console.log(pictureList)
         setBoard((board) => [pictureList[0]]);
     };
+
+    const [itemType, setItemType] = useState("");
     return (
         <DamageContext.Provider value={[
-            drop, allgods, board, setBoard, god, setGod, build, setBuild, dropItem
+            drop, allgods, board, setBoard, god, setGod, build, setBuild, dropItem, itemType, setItemType
         ]}>
             {props.children}
         </DamageContext.Provider>

@@ -276,7 +276,7 @@ def sort_top_dict(top_dict, client):
     for slot in all_dict.keys():
         for item in all_dict[slot].keys():
             all_dict[slot][item] =  {**all_dict[slot][item], **get_item_data(client, all_dict[slot][item]["item"])}
-            all_dict[slot][item]["url"] = get_item(all_dict[slot][item]["item"])
+            # all_dict[slot][item]["url"] = get_item(all_dict[slot][item]["item"])
 
 
     return all_dict
@@ -347,6 +347,7 @@ def get_worst_matchups(client, god, role, patch, mode="Ranked", rank="All Ranks"
     if "All" in role:
         del myquery["role"]
     
+    
     games = 0
     wins = 0
     # print(myquery)
@@ -407,8 +408,8 @@ def get_worst_matchups(client, god, role, patch, mode="Ranked", rank="All Ranks"
     for god in to_remove:
         test_sort.pop(god)
 
-    for key in test_sort.keys():
-        test_sort[key]["url"] = get_url(key)
+    # for key in test_sort.keys():
+    #     test_sort[key]["url"] = get_url(key)
 
     if games == 0:
         games = 1
@@ -1019,8 +1020,7 @@ def get_lanes(client):
 if __name__ == "__main__":
     starttime = datetime.now()
     # print(get_top_builds(client, "Shiva", "Solo", "9.2", "Casual"))
-    print(get_worst_matchups(client, "Shiva", "Solo", "9.2", "Casual"))
-    print(datetime.now() - starttime)
+    print(get_worst_matchups(client, "Arachne", "All", "9.2", "Casual"))
     # print(create_tier_list.get_tier_stats(client, "All Ranks", "Solo"))
     # # print(get_total_matches(client, "Diamond", "9.1"))
     # for god in godsDict2:

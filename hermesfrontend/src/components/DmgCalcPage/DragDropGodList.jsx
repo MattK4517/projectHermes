@@ -98,6 +98,7 @@ function DragDropGodList(props) {
 }
 
 export function DragDropItemList(props) {
+  console.log(props)
   // const [drop, allgods, board, setBoard, god, setGod] = useContext(DamageContext);
   return (
     <div className="content-section">
