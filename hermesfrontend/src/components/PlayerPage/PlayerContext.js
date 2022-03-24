@@ -1,4 +1,4 @@
-import React, {useState, createContext } from 'react';
+import React, { useState, createContext } from 'react';
 
 
 
@@ -13,14 +13,14 @@ export const PlayerProvider = props => {
     const [icon, setIcon] = useState("https://i.imgur.com/KgTaobI.png")
     const [playerLevel, setPlayerLevel] = useState(-1);
     const [tab, setTab] = useState("Build");
-    const [patch, setPatch] = useState("9.2");
-    const patches = ["9.2", "9.1", "8.12"]
+    const [patch, setPatch] = useState("9.3");
+    const patches = ["9.3", "9.2", "9.1"]
     return (
         <PlayerContext.Provider value={[
             god, setGod, player, setPlayer, mode, setMode,
             role, setRole, topLink, setTopLink, icon, setIcon,
             playerLevel, setPlayerLevel, tab, setTab, patch, setPatch, patches
-            ]}>
+        ]}>
             {props.children}
         </PlayerContext.Provider>
     )

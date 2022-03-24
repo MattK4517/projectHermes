@@ -76,14 +76,14 @@ export default class DropDownFilter extends React.Component {
             }}
             // endAdornment={<InputAdornment>{this.props.role}</InputAdornment>}
           >
+            <MenuItem selected className="drop-down_hover" value={"9.3"}>
+              <div className="drop-down_icon">9.3</div>
+            </MenuItem>
             <MenuItem selected className="drop-down_hover" value={"9.2"}>
               <div className="drop-down_icon">9.2</div>
             </MenuItem>
             <MenuItem selected className="drop-down_hover" value={"9.1"}>
               <div className="drop-down_icon">9.1</div>
-            </MenuItem>
-            <MenuItem selected className="drop-down_hover" value={"8.12"}>
-              <div className="drop-down_icon">8.12</div>
             </MenuItem>
             {/* <MenuItem selected 
             className="drop-down_hover" 

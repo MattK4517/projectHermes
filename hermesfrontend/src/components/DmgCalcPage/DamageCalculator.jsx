@@ -3,10 +3,10 @@ import ItemBuffs from "./ItemBuffs";
 import DragDropGodList, { DragDropItemList } from "./DragDropGodList";
 import MainCalcSection from "./MainCalcSection";
 import { DamageContext } from "./DamageContext";
-import CombatStatSection from "./CombatStatSection"
+import CombatStatSection from "./CombatStatSection";
 import { calcBuildStats } from "../Match";
 import { physGods, magGods, physicalItems, magicalItems } from "../constants";
-import DamageOut from "./DamageOut";
+import DamageOut, { DamageOutAA } from "./DamageOut";
 
 class NameForm extends React.Component {
   constructor(props) {
@@ -115,8 +115,19 @@ class NameForm extends React.Component {
 }
 
 export default function DamageCalculator() {
-  const [drop, allgods, board, setBoard, god, setGod, build, setBuild, dropItem, itemType, setItemType] =
-    useContext(DamageContext);
+  const [
+    drop,
+    allgods,
+    board,
+    setBoard,
+    god,
+    setGod,
+    build,
+    setBuild,
+    dropItem,
+    itemType,
+    setItemType,
+  ] = useContext(DamageContext);
   const [levels, setLevels] = useState({
     1: 5,
     2: 5,
@@ -124,10 +135,15 @@ export default function DamageCalculator() {
     4: 5,
     5: 5,
   });
-  let td = 0
+  let td = 0;
   const [power, setPower] = useState(0);
   const [submit, setSubmit] = useState(false);
   const [totalDamage, setTotalDamage] = useState(0);
+  const [message, setMessage] = useState([]);
+  const [totalDamageAA, setTotalDamageAA] = useState(0);
+  const [messageAA, setMessageAA] = useState([]);
+  const [items, setItems] = useState([]);
+  const [combatStats, setCombatStats] = useState({});
 
   const requestOptions = {
     method: "POST",
@@ -139,68 +155,82 @@ export default function DamageCalculator() {
     }),
   };
 
+  const requestOptionsAutoAttck = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      god: god,
+      build: [...build],
+    }),
+  };
   const buildOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      "god": god,
-      ...build
+      god: god,
+      ...build,
     }),
   };
-  const [message, setMessage] = useState([]);
-  const [items, setItems] = useState([]);
-  const [combatStats, setCombatStats] = useState({});
 
   useEffect(() => {
-    setBuild([])
-    setItems([])
+    setBuild([]);
+    setItems([]);
     setItems(() => {
-      console.log(items)
       if (physGods.indexOf(god) !== -1) {
-        setItemType("Physical")
+        setItemType("Physical");
         return [...physicalItems];
       } else {
-        setItemType("Magical")
+        setItemType("Magical");
         return [...magicalItems];
-      } 
+      }
     });
   }, [god]);
 
   useEffect(() => {
     fetch("/api/getdmgcalc/", requestOptions).then((res) =>
       res.json().then((data) => {
-        setMessage([])
-        td = 0
+        setMessage([]);
+        td = 0;
         Object.keys(data).map((ability) => {
-            td = td + data[ability]["damage"]["damageTotal"]
-            setMessage(message => [
-                ...message,
-                {
-                    ...data[ability]
-                },
-              ]);
-          });
-        setTotalDamage(td)
+          td = td + data[ability]["damage"]["damageTotal"];
+          setMessage((message) => [
+            ...message,
+            {
+              ...data[ability],
+            },
+          ]);
+        });
+        setTotalDamage(td);
       })
     );
   }, [power, god]);
 
-    useEffect(() => {
+  useEffect(() => {
+    if (god) {
+      fetch("/api/getautodmgcalc/", requestOptionsAutoAttck).then((res) =>
+        res.json().then((data) => {
+          console.log("ADAKLJWDWAOIJDIOWA", data);
+          setMessageAA(data);
+          setTotalDamageAA(data["Damage Total"]);
+        })
+      );
+    }
+  }, [power, god]);
+
+  useEffect(() => {
     fetch("/api/getbuildstats/", buildOptions).then((res) =>
       res.json().then((data) => {
-        console.log(data)
-        let stats = {...calcBuildStats(data["build"], data["base"])}
+        let stats = { ...calcBuildStats(data["build"], data["base"]) };
         setCombatStats((combatStats) => {
-          return stats
-        })
+          return stats;
+        });
         setPower((power) => {
-          if (physGods.indexOf(god) !== -1){
-            return stats["physPower"]
-          } else if (magGods.indexOf(god) !== -1){
-            return stats["magPower"]
+          if (physGods.indexOf(god) !== -1) {
+            return stats["physPower"];
+          } else if (magGods.indexOf(god) !== -1) {
+            return stats["magPower"];
           }
-        })
-        console.log(power)
+        });
       })
     );
   }, [build, god]);
@@ -218,13 +248,14 @@ export default function DamageCalculator() {
               <ItemBuffs />
               <DragDropGodList />
             </div>
-            <div className="player-main" style={{width: "100%"}}>
+            <div className="player-main" style={{ width: "100%" }}>
               <MainCalcSection />
               <br></br>
-              <DamageOut message={message} totalDamage={totalDamage}/>
+              <DamageOut message={message} totalDamage={totalDamage} />
+              <DamageOutAA message={messageAA} totalDamage={totalDamageAA} />
             </div>
             <div className="player-side">
-              <CombatStatSection combatStats={combatStats}/>
+              <CombatStatSection combatStats={combatStats} />
               <DragDropItemList items={items} />
             </div>
           </div>

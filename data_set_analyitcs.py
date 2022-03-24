@@ -18,9 +18,9 @@ import pandas as pd
 
 def get_items_by_class(client, class_name, role):
     items = {f"slot{i+1}": {} for i in range(6)}
-    for char in class_name:
+    for char in Hunters:
             print(char)
-            char_items = anlz.get_all_builds(client, char, role, "9.1")
+            char_items = anlz.get_all_builds(client, char, role, "9.2")
             for slot in char_items:
                 if "slot" in slot:
                     for item in char_items[slot]:
@@ -42,9 +42,9 @@ def get_items_by_class(client, class_name, role):
 # get_items_by_class(client, godsDict.keys(), "Support")
 if __name__ == "__main__":
     items = {item: {"games": 0, "wins": 0} for item in Tier_Three_items}
-    for god in Warriors:
-        for role in ["Solo"]:
-            char_items = anlz.get_all_builds(client, god, role, "9.1")
+    for god in Hunters:
+        for role in roles:
+            char_items = anlz.get_all_builds(client, god, role, "9.2", rank="Diamond+")
             for slot in char_items:
                 if "slot" in slot:
                     for item in char_items[slot]:

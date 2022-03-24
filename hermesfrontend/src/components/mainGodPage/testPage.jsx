@@ -294,7 +294,7 @@ function BuildStats(props) {
 }
 
 function BuildStatsElement(props) {
-  console.log(props)
+  console.log(props);
   return (
     <div className="item-row">
       {Object.keys(props.item).map((slot) => {
@@ -365,7 +365,6 @@ function a11yProps(index) {
   };
 }
 
-
 const CustDiv = styled("div")(({ theme }) => ({
   [theme.breakpoints.down("lg")]: {
     backgroundColor: "#0000FF",
@@ -374,25 +373,23 @@ const CustDiv = styled("div")(({ theme }) => ({
 }));
 
 export default function BuildPage(pagegod) {
-
   const itemColumns = React.useMemo(
     () => [
       {
-        Header: 'Items',
+        Header: "Items",
         accessor: "item",
       },
       {
-        Header: 'Games',
+        Header: "Games",
         accessor: "games",
       },
       {
         Header: "Win Rate",
         accessor: "winRate",
       },
-    ]
-    ,
+    ],
     []
-  )
+  );
 
   const [role, setRole] = useState("Solo");
   const [rank, setRank] = useState("All Ranks");
@@ -419,13 +416,13 @@ export default function BuildPage(pagegod) {
     "Achilles",
     role,
     rank,
-    "9.2",
+    "9.3",
     matchup,
     "Ranked"
   );
   const [slotOneItems, setSlotOneItems] = useState([]);
-  const [patch, setPatch] = useState("9.2")
-  const [mode, setMode] = useState("Ranked")
+  const [patch, setPatch] = useState("9.3");
+  const [mode, setMode] = useState("Ranked");
   useEffect(() => {
     fetch(
       "/api/".concat(
@@ -467,7 +464,7 @@ export default function BuildPage(pagegod) {
 
   return (
     <div
-    className="container home_page"
+      className="container home_page"
       style={{
         // display: "flex",
         flexDirection: "row",
@@ -616,11 +613,11 @@ export default function BuildPage(pagegod) {
                           setFilter={setRank}
                         />
                         <div className="hide">
-                        <DropDownFilter
-                          changePatch={null}
-                          patch={"9.2"}
-                          style={{ color: "white" }}
-                        />
+                          <DropDownFilter
+                            changePatch={null}
+                            patch={"9.3"}
+                            style={{ color: "white" }}
+                          />
                         </div>
                       </div>
                     </div>

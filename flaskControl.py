@@ -18,7 +18,7 @@ from pyrez.api import SmiteAPI
 import flaskHelper as fh
 import json
 from bson import json_util
-from damage_calculator import calc_combo_damage_raw
+from damage_calculator import calc_dps, calc_combo_damage_raw
 from carry_score_analytics import get_carry_score_averages
 
 app = Flask(__name__, static_folder="../hermesfrontend", static_url_path="/")
@@ -302,10 +302,20 @@ def get_dmg_calc():
         print(data)
         if data["god"].lower() in [god.lower() for god in godsDict]:
             ret_data = calc_combo_damage_raw(
-                client, data["god"], data["levels"], data["power"], None)
+                client, data["god"], data["levels"], data["power"], [], "Odin", [])
 
     return ret_data
 
+@app.route('/api/getautodmgcalc/', methods=["GET", "POST"])
+def get_auto_dmg_calc():
+    ret_data = {}
+    if request.method == 'POST':
+        data = request.get_json()
+        print(data)
+        if data["god"].lower() in [god.lower() for god in godsDict]:
+            ret_data = calc_dps(client, data["god"], data["build"], "Odin", [], 1, 20)
+
+    return ret_data
 
 @app.route('/api/getbuildstats/', methods=["GET", "POST"])
 def get_build_calc():
