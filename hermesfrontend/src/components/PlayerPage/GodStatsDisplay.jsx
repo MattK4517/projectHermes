@@ -120,7 +120,9 @@ const Table = ({ columns, data, player }) => {
                                     }}
                                     {...cell.getCellProps()}
                                   >
-                                    <span>{(i += 1) + (pageSize * pageIndex)}</span>
+                                    <span>
+                                      {(i += 1) + pageSize * pageIndex}
+                                    </span>
                                   </div>
                                 );
                               } else if (key.includes("god")) {
@@ -362,7 +364,7 @@ function GodStatsDisplay() {
     setGod,
     player,
     setPlayer,
-    mode,
+    queue_type,
     setMode,
     role,
     setRole,
@@ -375,7 +377,7 @@ function GodStatsDisplay() {
   ] = useContext(PlayerContext);
   const [godList, setGodList] = useState([]);
   useEffect(() => {
-    fetch("/api/getplayergods/".concat(player, "/", mode)).then((res) =>
+    fetch("/api/getplayergods/".concat(player, "/", queue_type)).then((res) =>
       res.json().then((data) => {
         let newData = Object.values(data).sort(compare);
         setGodList([]);
@@ -398,7 +400,7 @@ function GodStatsDisplay() {
         });
       })
     );
-  }, [player, mode]);
+  }, [player, queue_type]);
 
   const columns = React.useMemo(
     () => [
@@ -470,8 +472,8 @@ function GodStatsDisplay() {
                 </div>
                 {/* <div className="role-filter-container"> */}
                 <FilterForm
-                  filter={mode}
-                  god={mode}
+                  filter={queue_type}
+                  god={queue_type}
                   filters={["Ranked", "Casual"]}
                   setFilter={setMode}
                 />

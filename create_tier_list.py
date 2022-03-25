@@ -15,7 +15,8 @@ def gen_tier_list(client, roles, patch, types, ranks):
                     elif tier_type == "Combat":
                         gen_combat_tier_entry(client, god, role, rank, patch)
                     elif tier_type == "Objective":
-                        gen_objective_tier_entry(client, god, role, rank, patch)
+                        gen_objective_tier_entry(
+                            client, god, role, rank, patch)
                     print(f"god done {god} - {rank} - {role} - {tier_type}")
 
 
@@ -24,7 +25,7 @@ def gen_regular_tier_entry(client, god, role, rank, patch):
         dict fields shown below
     """
     # insert a dict
-    # { 
+    # {
     #     patch, get from args
     #     role, get from args
     #     god, get from args
@@ -38,7 +39,7 @@ def gen_regular_tier_entry(client, god, role, rank, patch):
     wr_data = calc_win_rate(client, god, role, patch, rank)
     winRate = wr_data["win_rate"]
     games = wr_data["games"]
-    pb_data =  calc_pick_ban_rate(client, god, rank, role, patch)
+    pb_data = calc_pick_ban_rate(client, god, rank, role, patch)
     ban_rate = pb_data["banRate"]
     pick_rate = pb_data["pickRate"]
     matchups = anlz.get_worst_matchups(client, god, role, patch, rank)
@@ -60,18 +61,20 @@ def gen_regular_tier_entry(client, god, role, rank, patch):
     insert_data(client, "Tier_list", "Regular List", tier_entry)
 
 
-def calc_win_rate(client, god, role, patch, rank, mode="Ranked"):
-    return anlz.get_winrate(client, god, role, patch, mode, rank)
+def calc_win_rate(client, god, role, patch, rank, queue_type="Ranked"):
+    return anlz.get_winrate(client, god, role, patch, queue_type, rank)
 
-def calc_pick_ban_rate(client, god, rank, role, patch, mode="Ranked"):
-    return anlz.get_pb_rate(client, god, rank, role, patch, mode)
+
+def calc_pick_ban_rate(client, god, rank, role, patch, queue_type="Ranked"):
+    return anlz.get_pb_rate(client, god, rank, role, patch, queue_type)
+
 
 def gen_combat_tier_entry(client, god, role, rank, patch):
     """ gather information to generate combat tier entry
         dict fields shown below
     """
     # insert a dict
-    # { 
+    # {
     #     patch, get from args
     #     role, get from args
     #     god, get from args
@@ -82,7 +85,7 @@ def gen_combat_tier_entry(client, god, role, rank, patch):
     wr_data = calc_win_rate(client, god, role, patch, rank)
     winRate = wr_data["win_rate"]
     games = wr_data["games"]
-    pb_data =  calc_pick_ban_rate(client, god, rank, role, patch)
+    pb_data = calc_pick_ban_rate(client, god, rank, role, patch)
     pick_rate = pb_data["pickRate"]
     tier_entry = {
         "patch": patch,
@@ -95,17 +98,19 @@ def gen_combat_tier_entry(client, god, role, rank, patch):
         "games": games,
     }
 
-    tier_entry = {**tier_entry, ** anlz.get_combat_stats(client, god, role, patch, rank)}
+    tier_entry = {**tier_entry, **
+                  anlz.get_combat_stats(client, god, role, patch, rank)}
     if "_id" in tier_entry:
-        del tier_entry["_id"]   
+        del tier_entry["_id"]
     insert_data(client, "Tier_list", "Combat List", tier_entry)
+
 
 def gen_objective_tier_entry(client, god, role, rank, patch):
     """ gather information to generate combat tier entry
         dict fields shown below
     """
     # insert a dict
-    # { 
+    # {
     #     patch, get from args
     #     role, get from args
     #     god, get from args
@@ -116,7 +121,7 @@ def gen_objective_tier_entry(client, god, role, rank, patch):
     wr_data = calc_win_rate(client, god, role, patch, rank)
     winRate = wr_data["win_rate"]
     games = wr_data["games"]
-    pb_data =  calc_pick_ban_rate(client, god, rank, role, patch)
+    pb_data = calc_pick_ban_rate(client, god, rank, role, patch)
     pick_rate = pb_data["pickRate"]
     tier_entry = {
         "patch": patch,
@@ -128,19 +133,23 @@ def gen_objective_tier_entry(client, god, role, rank, patch):
         "pickRate": pick_rate,
     }
 
-    tier_entry = {**tier_entry, ** anlz.get_objective_stats(client, god, role, patch, rank)}
+    tier_entry = {**tier_entry, **
+                  anlz.get_objective_stats(client, god, role, patch, rank)}
     if "_id" in tier_entry:
-        del tier_entry["_id"]   
+        del tier_entry["_id"]
     insert_data(client, "Tier_list", "Objective List", tier_entry)
+
 
 def insert_data(client, db, col, data):
     mydb = client[db]
     mycol = mydb[col]
     mycol.insert_one(data)
 
+
 def get_date():
     time = datetime.datetime.now()
     return f"{time.month}/{time.day}/{time.year}"
+
 
 def update_pick_rates(client: pymongo.MongoClient) -> None:
     mydb = client["Tier_list"]
@@ -148,29 +157,26 @@ def update_pick_rates(client: pymongo.MongoClient) -> None:
     data = []
     for god in godsDict:
         for role in roles:
-            for rank in ranks: 
+            for rank in ranks:
                 for patch in ["9.1"]:
-                        data.append(
-                            {
-                                **{
-                                    "rank": rank,
-                                    "role": role,
-                                    "patch": patch
-                                },
-                                **calc_win_rate(client, god, role, patch, rank),
-                                **calc_pick_ban_rate(client, god, rank, role, patch)
-                            })
-                        if len(data) >= 1000:
-                            mycol.insert_many(data)
-                            data = []
+                    data.append(
+                        {
+                            **{
+                                "rank": rank,
+                                "role": role,
+                                "patch": patch
+                            },
+                            **calc_win_rate(client, god, role, patch, rank),
+                            **calc_pick_ban_rate(client, god, rank, role, patch)
+                        })
+                    if len(data) >= 1000:
+                        mycol.insert_many(data)
+                        data = []
         print(f"{god} Done")
     mycol.insert_many(data)
 
-    
+
 if __name__ == '__main__':
     pass
     # print(get_tier_stats(client, "All Ranks", "All Roles"))
     # update_pick_rates(client)
-                    
-
-

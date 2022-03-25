@@ -1,15 +1,28 @@
 import React, { useContext } from "react";
 import { PlayerContext } from "./PlayerContext";
 import winRateColor from "../mainGodPage/WinRateColor";
-import { setTopGod } from "./Player"
+import { setTopGod } from "./Player";
 
 export default function PlayerGodSection(props) {
   const [
-    god, setGod, player, setPlayer, mode, setMode,
-    role, setRole, topLink, setTopLink, icon, setIcon,
-    playerLevel, setPlayerLevel, tab, setTab,
+    god,
+    setGod,
+    player,
+    setPlayer,
+    queue_type,
+    setMode,
+    role,
+    setRole,
+    topLink,
+    setTopLink,
+    icon,
+    setIcon,
+    playerLevel,
+    setPlayerLevel,
+    tab,
+    setTab,
   ] = useContext(PlayerContext);
-  setTopLink(setTopGod(god))
+  setTopLink(setTopGod(god));
   return (
     <div className="content-section content-section_no-padding player-specific-god">
       <div className="content-section_header played-gods_header">
@@ -17,7 +30,7 @@ export default function PlayerGodSection(props) {
       </div>
       <div className="player-specific-god_content">
         <div>
-        <div className="specific-god-basic">
+          <div className="specific-god-basic">
             <div className="specific-image-container">
               <img
                 src={`https://webcdn.hirezstudios.com/smite/god-icons/${god
@@ -154,43 +167,37 @@ export default function PlayerGodSection(props) {
         <div className="additional-stats">
           <div className="additional-stats_row">
             <div className="row-icon">
-              <img
-                src="https://i.imgur.com/kqTxr3r.png"
-                width="32"
-              />
+              <img src="https://i.imgur.com/kqTxr3r.png" width="32" />
             </div>
             <div className="row-label">Max Kills</div>
             <div className="row-value">{props.maxKills}</div>
           </div>
           <div className="additional-stats_row">
             <div className="row-icon">
-              <img
-                src="https://i.imgur.com/pHLndKw.png"
-                width="25"
-              />
+              <img src="https://i.imgur.com/pHLndKw.png" width="25" />
             </div>
             <div className="row-label">Max Deaths</div>
             <div className="row-value">{props.maxDeaths}</div>
           </div>
           <div className="additional-stats_row">
             <div className="row-icon">
-              <img
-                src="https://i.imgur.com/kqTxr3r.png"
-                width="32"
-              />
+              <img src="https://i.imgur.com/kqTxr3r.png" width="32" />
             </div>
             <div className="row-label">Average Damage</div>
-            <div className="row-value">{props?.avgDamage.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</div>
+            <div className="row-value">
+              {props?.avgDamage
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+            </div>
           </div>
           <div className="additional-stats_row">
             <div className="row-icon">
-              <img
-                src="https://i.imgur.com/XofaIQ0.png"
-                width="14"
-              />
+              <img src="https://i.imgur.com/XofaIQ0.png" width="14" />
             </div>
             <div className="row-label">Average Gold</div>
-            <div className="row-value">{props?.avgGold.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</div>
+            <div className="row-value">
+              {props?.avgGold.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+            </div>
           </div>
         </div>
       </div>

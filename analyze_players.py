@@ -5,21 +5,21 @@ import pymongo
 from datetime import datetime
 from __init__ import client
 
-def find_match_history(client, playername, mode, patch):
-    """returns a dict of the match history for a given playername in a give mode 
+def find_match_history(client, playername, queue_type, patch):
+    """returns a dict of the match history for a given playername in a give queue_type 
 
     Args:
         client ([MongoClient]): [database connection]
         playername ([String]): [username of player]
-        mode ([String]): [gamemode to get history for]
+        queue_type ([String]): [gamemode to get history for]
 
     Returns:
         [Dict]: [a dict of match data (see sample match for more information)]
     """
     myquery = {}
-    if mode == "Ranked":
+    if queue_type == "Ranked":
         database = "Matches"
-    elif mode == "Casual":
+    elif queue_type == "Casual":
         database = "CasualMatches"
     
     print(database)
@@ -73,7 +73,7 @@ def find_match_history(client, playername, mode, patch):
     #     **{f"player{i}.Assists": 1 for i in range(10)},
     #     # **{f"player{i}": 0 for i in range(10)}
     # }
-    # if mycol.count_documents(myquery) == 0 and mode == "Casual": # casual match data is stored in 2 different database
+    # if mycol.count_documents(myquery) == 0 and queue_type == "Casual": # casual match data is stored in 2 different database
     #     mydb = client["CasualMatches"]
     #     mycol = mydb["9.1 Matches"]
     # # print(mycol.count_documents(myquery))
@@ -162,8 +162,8 @@ def get_player_basic(player):
         "Wins": player["Wins"],
     }
 
-def create_player_god_dict(data, playername, mode):
-    ret_data = {"NameTag": playername, "mode": f"{mode}Conq"}
+def create_player_god_dict(data, playername, queue_type):
+    ret_data = {"NameTag": playername, "queue_type": f"{queue_type}Conq"}
     for god in data:
         losses = god["Losses"]
         if losses == 0:
@@ -263,11 +263,11 @@ def verify_player(act_name, playername, act_god, god):
             return True
     return False    
     
-def get_player_god_stats(client, playername, god, role, mode, patch):
-    print(playername, god, role, mode)
-    if mode == "Ranked":
+def get_player_god_stats(client, playername, god, role, queue_type, patch):
+    print(playername, god, role, queue_type)
+    if queue_type == "Ranked":
         mydb = client["Matches"]
-    elif mode == "Casual":
+    elif queue_type == "Casual":
         mydb = client["CasualMatches"]
     mycol = mydb[f"{patch} Matches"]
     # myquery = { 
@@ -334,7 +334,7 @@ def get_player_god_stats(client, playername, god, role, mode, patch):
         "losses": 0,
         "nameTag": playername,
         "god": god,
-        "mode": f"{mode}Conq"
+        "queue_type": f"{queue_type}Conq"
         }}
     counter = 0
     myquery = {

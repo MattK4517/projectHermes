@@ -29,9 +29,9 @@ function GodCounterMatchup(props) {
         <img
           className="god-icon-style"
           src={`https://webcdn.hirezstudios.com/smite/god-icons/${props.getMatchups.enemy
-          .replaceAll("'", "")
-          .replaceAll(" ", "-")
-          .toLowerCase()}.jpg`}
+            .replaceAll("'", "")
+            .replaceAll(" ", "-")
+            .toLowerCase()}.jpg`}
           alt={props.getMatchups.enemy}
         />
       </div>
@@ -77,9 +77,9 @@ const ResponsiveBuild = styled("div")(({ theme }) => ({
 
 function GodRankStats(props) {
   let banrateMessage;
-  if (props.mode === "Ranked") {
+  if (props.queue_type === "Ranked") {
     banrateMessage = props.banrate + "%";
-  } else if (props.mode === "Casual") {
+  } else if (props.queue_type === "Casual") {
     banrateMessage = "N/A";
   }
   return (
@@ -179,7 +179,7 @@ export default function BuildPage(props) {
       props.rank,
       props.patch,
       props.matchup,
-      props.mode
+      props.queue_type
     );
   if (items.length === 0) {
     items = ["None"];
@@ -209,7 +209,7 @@ export default function BuildPage(props) {
         pickrate={props.pickrate}
         // url={url}
         colorStyle={colorStyle}
-        mode={props.mode}
+        queue_type={props.queue_type}
       />
       <div className="toughest-matchups content-section">
         <div className="content-section_header">

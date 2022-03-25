@@ -1,4 +1,4 @@
-    for mode in ["Ranked"]:
+    for queue_type in ["Ranked"]:
         for x in mycol.find({} ,myquery):
             insert_data = {
                 "winningMid": "",
@@ -15,7 +15,7 @@
                         if x[player]["godName"] in wrs:
                             insert_data["carryWinRate"] = wrs[x[player]["godName"]]
                         else:
-                            insert_data["carryWinRate"] = anlz.get_winrate(client, x[player]["godName"], "Mid", patch, mode=mode)["win_rate"]
+                            insert_data["carryWinRate"] = anlz.get_winrate(client, x[player]["godName"], "Mid", patch, queue_type=queue_type)["win_rate"]
                             wrs[x[player]["godName"]] = insert_data["carryWinRate"]
 
                     elif x[player]["Role"] == "Jungle" and x[player]["Win_Status"] == "Winner":
@@ -23,7 +23,7 @@
                         if x[player]["godName"] in wrs:
                             insert_data["supportWinRate"] = wrs[x[player]["godName"]]
                         else:
-                            insert_data["supportWinRate"] = anlz.get_winrate(client, x[player]["godName"], "Jungle", patch, mode=mode)["win_rate"]
+                            insert_data["supportWinRate"] = anlz.get_winrate(client, x[player]["godName"], "Jungle", patch, queue_type=queue_type)["win_rate"]
                             wrs[x[player]["godName"]] = insert_data["supportWinRate"]
 
                     elif x[player]["Role"] == "Mid" and x[player]["Win_Status"] == "Loser":
@@ -31,7 +31,7 @@
                         if x[player]["godName"] in wrs:
                             insert_data["carryWinRateLoser"] = wrs[x[player]["godName"]]
                         else:
-                            insert_data["carryWinRateLoser"] = anlz.get_winrate(client, x[player]["godName"], "Mid", patch, mode=mode)["win_rate"]
+                            insert_data["carryWinRateLoser"] = anlz.get_winrate(client, x[player]["godName"], "Mid", patch, queue_type=queue_type)["win_rate"]
                             wrs[x[player]["godName"]] = insert_data["carryWinRateLoser"]
 
                     elif x[player]["Role"] == "Jungle" and x[player]["Win_Status"] == "Loser":
@@ -39,7 +39,7 @@
                         if x[player]["godName"] in wrs:
                             insert_data["supportWinRateLoser"] = wrs[x[player]["godName"]]
                         else:
-                            insert_data["supportWinRateLoser"] = anlz.get_winrate(client, x[player]["godName"], "Jungle", patch, mode=mode)["win_rate"]
+                            insert_data["supportWinRateLoser"] = anlz.get_winrate(client, x[player]["godName"], "Jungle", patch, queue_type=queue_type)["win_rate"]
                             wrs[x[player]["godName"]] = insert_data["supportWinRateLoser"]
 
             

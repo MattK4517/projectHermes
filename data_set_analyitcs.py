@@ -4,7 +4,7 @@ from constants import Tier_Three_items, godsDict, roles, ranks, slots, Assassins
 from __init__ import client
 import numpy as np
 # import matplotlib.pyplot as plt
-import os 
+import os
 import analyze as anlz
 import pandas as pd
 
@@ -16,35 +16,38 @@ import pandas as pd
 #                dict3[key] = [value , dict1[key]]
 #    return dict3
 
+
 def get_items_by_class(client, class_name, role):
     items = {f"slot{i+1}": {} for i in range(6)}
     for char in Hunters:
-            print(char)
-            char_items = anlz.get_all_builds(client, char, role, "9.2")
-            for slot in char_items:
-                if "slot" in slot:
-                    for item in char_items[slot]:
-                        if item in items[slot]:
-                            items[slot][item]["games"] += char_items[slot][item]["games"]
-                            items[slot][item]["wins"] += char_items[slot][item]["wins"]
-                        else:
-                            items[slot][item] = char_items[slot][item]
+        print(char)
+        char_items = anlz.get_all_builds(client, char, role, "9.2")
+        for slot in char_items:
+            if "slot" in slot:
+                for item in char_items[slot]:
+                    if item in items[slot]:
+                        items[slot][item]["games"] += char_items[slot][item]["games"]
+                        items[slot][item]["wins"] += char_items[slot][item]["wins"]
+                    else:
+                        items[slot][item] = char_items[slot][item]
 
     with open("items.txt", "w") as f:
         for slot in items:
             for item in items[slot]:
                 # if item in build and items[slot][item]["games"] > 25:
-                    games = items[slot][item]["games"]
-                    wins = items[slot][item]["wins"]
-                    wr = round(wins/games * 100, 2)
-                    f.writelines(f"{slot}, {item} , {wins} , {games} , {wr}% \n")
+                games = items[slot][item]["games"]
+                wins = items[slot][item]["wins"]
+                wr = round(wins/games * 100, 2)
+                f.writelines(f"{slot}, {item} , {wins} , {games} , {wr}% \n")
+
 
 # get_items_by_class(client, godsDict.keys(), "Support")
 if __name__ == "__main__":
     items = {item: {"games": 0, "wins": 0} for item in Tier_Three_items}
     for god in Hunters:
         for role in roles:
-            char_items = anlz.get_all_builds(client, god, role, "9.2", rank="Diamond+")
+            char_items = anlz.get_all_builds(
+                client, god, role, "9.2", rank="Diamond+")
             for slot in char_items:
                 if "slot" in slot:
                     for item in char_items[slot]:
@@ -54,12 +57,12 @@ if __name__ == "__main__":
         print(f"{god} done")
 
     with open("items.txt", "w") as f:
-            for item in items:
-                if items[item]["games"] > 0:
-                    games = items[item]["games"]
-                    wins = items[item]["wins"]
-                    wr = round(wins/games * 100, 2)
-                    f.writelines(f"{item} , {wins} , {games} , {wr}% \n")
+        for item in items:
+            if items[item]["games"] > 0:
+                games = items[item]["games"]
+                wins = items[item]["wins"]
+                wr = round(wins/games * 100, 2)
+                f.writelines(f"{item} , {wins} , {games} , {wr}% \n")
 # def get_combat_stats_by_class(client, class_name):
 #     mydb= client["single_combat_stats"]
 #     myquery = {"role": "Mid", "patch": "8.10"}
@@ -84,7 +87,7 @@ if __name__ == "__main__":
 #             }
 #         ]):
 #             df = pd.DataFrame(x, index=[0])
-#             df.to_csv("test.csv", mode='a', index = False, header=None)
+#             df.to_csv("test.csv", queue_type='a', index = False, header=None)
 
 
 # get_combat_stats_by_class(client, Warriors)
@@ -101,16 +104,15 @@ if __name__ == "__main__":
 #             role = "Carry"
 #         elif god in Mages:
 #             role = "Mid"
-#         else: 
+#         else:
 #             role = "Solo"
 #         for god in char_class:
 #             win_rate = anlz.get_winrate(client, god, role, "8.10")
 #             wins += win_rate["wins"]
 #             games += win_rate["games"]
-        
-    
-#     print(f"{wins}, {games}, winrate={round(wins/games*100,5)}")
 
+
+#     print(f"{wins}, {games}, winrate={round(wins/games*100,5)}")
 
 
 # match_ids = []
@@ -133,7 +135,6 @@ if __name__ == "__main__":
 #     return style
 
 
-
 # mydb = client["single_match_stats"]
 # starttime = datetime.now()
 # fields = ["gold", "damage_bot", "kills_bot", "tower_kills","phoenix_kills", "tower_damage", "objective_assists", "wards_placed"]
@@ -151,7 +152,7 @@ if __name__ == "__main__":
 #         avg_deaths = 0
 #         deaths = 0
 #         games = 0
-#         for x in mycol.find({"role": {"$exists": True}, "patch": "9.1", "mode": f"RankedConq"}, {"_id": 0, field: 1, "role": 1, "matchId": 1}):
+#         for x in mycol.find({"role": {"$exists": True}, "patch": "9.1", "queue_type": f"RankedConq"}, {"_id": 0, field: 1, "role": 1, "matchId": 1}):
 #             deaths += x[field]
 #             games += 1
 #         avg_deaths += deaths/games
@@ -165,7 +166,7 @@ if __name__ == "__main__":
 #         print(f"The Average of the sample is: {mean}")
 #         print(f"Standard deviation of sample is: {res}")
 #         for role in dmg_dict:
-#             x = np.array([i for i in range(len(dmg_dict[role]))]) 
+#             x = np.array([i for i in range(len(dmg_dict[role]))])
 #             y = np.array(sorted(dmg_dict[role]))
 #             # m, b = np.polyfit(x, y, 1)
 #             # plt.plot(x, m*x+b, "r-")
@@ -178,15 +179,15 @@ if __name__ == "__main__":
 #             if not os.path.exists(f"C:\\Users\\MayheM\\Desktop\\python\\projectHermes\\charts\\_Role Specific\\{god}"):
 #                 os.mkdir(f"C:\\Users\\MayheM\\Desktop\\python\\projectHermes\\charts\\_Role Specific\\{god}")
 
-#             plt.savefig(f"C:\\Users\\MayheM\\Desktop\\python\\projectHermes\\charts\\_Role Specific\\{god}\\{field}", 
-#             dpi=None, 
-#             facecolor='w', 
+#             plt.savefig(f"C:\\Users\\MayheM\\Desktop\\python\\projectHermes\\charts\\_Role Specific\\{god}\\{field}",
+#             dpi=None,
+#             facecolor='w',
 #             edgecolor='w',
-#             orientation='portrait', 
-#             papertype=None, 
+#             orientation='portrait',
+#             papertype=None,
 #             format=None,
-#             transparent=False, 
-#             bbox_inches=None, 
+#             transparent=False,
+#             bbox_inches=None,
 #             pad_inches=0.1,
 #             metadata=None)
 #         # plt.figure()

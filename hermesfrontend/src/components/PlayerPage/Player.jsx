@@ -5,7 +5,7 @@ import GodDisplay from "./GodDisplay";
 import { MatchDisplay } from "..";
 import { PlayerContext } from "./PlayerContext";
 import PlayerTabs from "./PlayerTabs";
-import "./Player.css"
+import "./Player.css";
 
 export const linkDict = {
   Achilles: "https://i.imgur.com/KoU1bup.jpg",
@@ -182,7 +182,7 @@ export default function Player(props) {
     setGod,
     player,
     setPlayer,
-    mode,
+    queue_type,
     setMode,
     role,
     setRole,
@@ -205,7 +205,7 @@ export default function Player(props) {
   const [games, setGames] = useState(0);
   const [godList, setGodList] = useState([]);
   useEffect(() => {
-    fetch("/api/getplayergods/".concat(player, "/", mode)).then((res) =>
+    fetch("/api/getplayergods/".concat(player, "/", queue_type)).then((res) =>
       res.json().then((data) => {
         let newData = Object.values(data).sort(compare);
         setGodList([]);
@@ -228,32 +228,32 @@ export default function Player(props) {
         });
       })
     );
-  }, [player, mode]);
+  }, [player, queue_type]);
   const [matchList, setMatchList] = useState([]);
 
   useEffect(() => {
-    fetch("/api/getplayermatch/".concat(player, "/", mode, "/", patch)).then(
-      (res) =>
-        res.json().then((data) => {
-          console.log("here");
-          setMatchList([]);
-          let newData = Object.values(data).sort(compareDate);
-          Object.keys(newData).map((match) => {
-            setMatchList((matchList) => [
-              ...matchList,
-              {
-                ...newData[match],
-              },
+    fetch(
+      "/api/getplayermatch/".concat(player, "/", queue_type, "/", patch)
+    ).then((res) =>
+      res.json().then((data) => {
+        console.log("here");
+        setMatchList([]);
+        let newData = Object.values(data).sort(compareDate);
+        Object.keys(newData).map((match) => {
+          setMatchList((matchList) => [
+            ...matchList,
+            {
+              ...newData[match],
+            },
           ]);
-          });
-        })
+        });
+      })
     );
-  }, [player, mode, patch]);
+  }, [player, queue_type, patch]);
 
   useEffect(() => {
     fetch("/api/getplayergeneral/".concat(player)).then((res) =>
       res.json().then((data) => {
-
         console.log(data);
         setWinRate(data.winRate);
         setGames(data.games);
@@ -302,7 +302,7 @@ export default function Player(props) {
                   tier={tier}
                   winrate={winRate}
                   games={games}
-                  mode={mode}
+                  queue_type={queue_type}
                 />
                 <GodDisplay
                   godList={godList}
@@ -314,7 +314,7 @@ export default function Player(props) {
                 <MatchDisplay
                   matchList={matchList}
                   player={player}
-                  mode={mode}
+                  queue_type={queue_type}
                 />
               </div>
             </div>

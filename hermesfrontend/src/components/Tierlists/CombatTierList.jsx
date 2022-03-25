@@ -1,17 +1,16 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useTable, useSortBy, usePagination } from "react-table";
 import { Link } from "react-router-dom";
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Button from '@material-ui/core/Button';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import Button from "@material-ui/core/Button";
+import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import { FilterForm } from "../Filters/FilterForm";
 import winRateColor from "../mainGodPage/WinRateColor";
 import { TierListContext } from "./TierListContext";
-import { linkDict } from "../PlayerPage/Player"
+import { linkDict } from "../PlayerPage/Player";
 import TierListFilter from "../Filters/TierListFilter";
-
 
 const Table = ({ columns, data }) => {
   const {
@@ -37,22 +36,31 @@ const Table = ({ columns, data }) => {
       initialState: {
         pageIndex: 0,
         sortBy: [
-            {
-                id: 'winRate',
-                desc: true
-            }
-        ]
-    }
+          {
+            id: "winRate",
+            desc: true,
+          },
+        ],
+      },
     },
     useSortBy,
     usePagination
   );
 
   const [
-    god, setGod, mode, setMode, patch, setPatch, rank, setRank,
-    role, setRole, topLink, setTopLink
+    god,
+    setGod,
+    queue_type,
+    setMode,
+    patch,
+    setPatch,
+    rank,
+    setRank,
+    role,
+    setRole,
+    topLink,
+    setTopLink,
   ] = useContext(TierListContext);
-
 
   // We don't want to render all 2000 rows for this example, so cap
   // it at 20 for this use case
@@ -108,7 +116,7 @@ const Table = ({ columns, data }) => {
                       //  }
                       return (
                         <div className="rt-tr-group">
-                        <div
+                          <div
                             className="rt-tr"
                             role="row"
                             {...row.getRowProps()}
@@ -126,7 +134,9 @@ const Table = ({ columns, data }) => {
                                     }}
                                     {...cell.getCellProps()}
                                   >
-                                    <span>{(i += 1) + (pageSize * pageIndex)}</span>
+                                    <span>
+                                      {(i += 1) + pageSize * pageIndex}
+                                    </span>
                                   </div>
                                 );
                               } else if (key.includes("role")) {
@@ -158,7 +168,11 @@ const Table = ({ columns, data }) => {
                                 return (
                                   <div
                                     className="rt-td god"
-                                    style={{ minWidth: "180px", maxWidth: "220px", flex: "1 1 100%" }}
+                                    style={{
+                                      minWidth: "180px",
+                                      maxWidth: "220px",
+                                      flex: "1 1 100%",
+                                    }}
                                     {...cell.getCellProps()}
                                   >
                                     <Link
@@ -204,7 +218,15 @@ const Table = ({ columns, data }) => {
                                     {...cell.getCellProps()}
                                   >
                                     <span>
-                                      <b style={{color: winRateColor(row.original.winRate)}}>{row.original.winRate}%</b>
+                                      <b
+                                        style={{
+                                          color: winRateColor(
+                                            row.original.winRate
+                                          ),
+                                        }}
+                                      >
+                                        {row.original.winRate}%
+                                      </b>
                                     </span>
                                   </div>
                                 );
@@ -424,8 +446,18 @@ const Table = ({ columns, data }) => {
 
 function CombatTierList(props) {
   const [
-    god, setGod, mode, setMode, patch, setPatch, rank, setRank,
-    role, setRole, topLink, setTopLink
+    god,
+    setGod,
+    queue_type,
+    setMode,
+    patch,
+    setPatch,
+    rank,
+    setRank,
+    role,
+    setRole,
+    topLink,
+    setTopLink,
   ] = useContext(TierListContext);
 
   const [totalData, setTotalData] = useState([]);
@@ -433,13 +465,23 @@ function CombatTierList(props) {
   useEffect(() => {
     //"/gettierlist/".concat(dispRank, "/", role, "/", tableType.tableType, "/", patch
     fetch(
-      "/api/gettierlist/".concat(rank, "/", role, "/", props.tableType, "/", mode, "/", patch)
+      "/api/gettierlist/".concat(
+        rank,
+        "/",
+        role,
+        "/",
+        props.tableType,
+        "/",
+        queue_type,
+        "/",
+        patch
+      )
     ).then((res) =>
       res.json().then((data) => {
         setTotalData([]);
         Object.keys(data).forEach((key) => {
           Object.keys(data[key]).forEach((godData) => {
-            console.log(data[key])
+            console.log(data[key]);
             setTotalData((totalData) => [
               ...totalData,
               {
@@ -461,7 +503,7 @@ function CombatTierList(props) {
         });
       })
     );
-  }, [rank, role, mode, patch]);
+  }, [rank, role, queue_type, patch]);
 
   const columns = React.useMemo(
     () => [
@@ -481,52 +523,52 @@ function CombatTierList(props) {
       {
         Header: "Win Rate",
         accessor: "winRate",
-        sortType: compareNumericString
+        sortType: compareNumericString,
       },
       {
         Header: "Kills",
         accessor: "kills",
-        sortType: compareNumericString
+        sortType: compareNumericString,
       },
       {
         Header: "Deaths",
         accessor: "deaths",
-        sortType: compareNumericString
+        sortType: compareNumericString,
       },
       {
         Header: "Assists",
         accessor: "assists",
-        sortType: compareNumericString
+        sortType: compareNumericString,
       },
       {
         Header: "Damage",
         accessor: "damageD",
-        sortType: compareNumericString
+        sortType: compareNumericString,
       },
       {
         Header: "Taken",
         accessor: "damageTaken",
-        sortType: compareNumericString
+        sortType: compareNumericString,
       },
       {
         Header: "Mitigated",
         accessor: "damageMitigated",
-        sortType: compareNumericString
+        sortType: compareNumericString,
       },
       {
         Header: "Healing",
         accessor: "healing",
-        sortType: compareNumericString
+        sortType: compareNumericString,
       },
       {
         Header: "Self Healing",
         accessor: "selfHealing",
-        sortType: compareNumericString
+        sortType: compareNumericString,
       },
       {
         Header: "Games",
         accessor: "games",
-        sortType: compareNumericString
+        sortType: compareNumericString,
       },
     ],
     []
@@ -542,13 +584,14 @@ function CombatTierList(props) {
 function compareNumericString(rowA, rowB, id, desc) {
   let a = Number.parseFloat(rowA.values[id]);
   let b = Number.parseFloat(rowB.values[id]);
-  if (Number.isNaN(a)) {  // Blanks and non-numeric strings to bottom
-      a = desc ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
+  if (Number.isNaN(a)) {
+    // Blanks and non-numeric strings to bottom
+    a = desc ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
   }
   if (Number.isNaN(b)) {
-      b = desc ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
+    b = desc ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
   }
-  if (a > b) return 1; 
+  if (a > b) return 1;
   if (a < b) return -1;
   return 0;
 }

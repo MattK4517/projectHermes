@@ -7,7 +7,7 @@ export default function CarryScoreSection(props) {
     setGod,
     player,
     setPlayer,
-    mode,
+    queue_type,
     setMode,
     role,
     setRole,

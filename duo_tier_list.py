@@ -20,6 +20,7 @@ from math import sqrt
 from constants import patch
 from pymongo import MongoClient
 
+
 def get_lanes(role_one: str, role_two: str) -> list:
     duodb = client["Duo_Tierlist"]
     duocol = duodb["9.1 Matches"]
@@ -86,6 +87,8 @@ def get_lanes(role_one: str, role_two: str) -> list:
     return lanes
 
 # gen_regular_tier_entry(client, god, role, rank, patch)
+
+
 def calc_duo_tier_list(client: MongoClient, role_one: str, role_two: str, patch: str) -> None:
     mydb = client["Matches"]
     mycol = mydb["9.1 Matches"]
@@ -99,7 +102,7 @@ def calc_duo_tier_list(client: MongoClient, role_one: str, role_two: str, patch:
         "_id": 0, "MatchId": 1, "Patch": 1}, **{f"player{i}.godName": 1 for i in range(10)}}
     set = []
     wrs = {}
-    for mode in ["Ranked"]:
+    for queue_type in ["Ranked"]:
         for x in mycol.find({}, myquery):
             insert_data = {
                 f"winning{role_one}": "",
@@ -116,11 +119,12 @@ def calc_duo_tier_list(client: MongoClient, role_one: str, role_two: str, patch:
                         insert_data[f"winning{role_one}"] = x[player]["godName"]
                         if x[player]["godName"] in wrs:
                             insert_data[f"{role_one_lowercase}WinRate"] = wrs[x[player]
-                                                            ["godName"]]
+                                                                              ["godName"]]
                         else:
-                            insert_data[f"{role_one_lowercase}WinRate"]= anlz.get_winrate(
-                                client, x[player]["godName"], role_one, patch, mode=mode)["win_rate"]
-                            wrs[x[player]["godName"]] = insert_data[f"{role_one_lowercase}WinRate"]
+                            insert_data[f"{role_one_lowercase}WinRate"] = anlz.get_winrate(
+                                client, x[player]["godName"], role_one, patch, queue_type=queue_type)["win_rate"]
+                            wrs[x[player]["godName"]
+                                ] = insert_data[f"{role_one_lowercase}WinRate"]
 
                     elif x[player]["Role"] == role_two and x[player]["Win_Status"] == "Winner":
                         insert_data[f"winning{role_two}"] = x[player]["godName"]
@@ -128,7 +132,7 @@ def calc_duo_tier_list(client: MongoClient, role_one: str, role_two: str, patch:
                             insert_data[f"{role_two_lowercase}WinRate"] = wrs[x[player]["godName"]]
                         else:
                             insert_data[f"{role_two_lowercase}WinRate"] = anlz.get_winrate(
-                                client, x[player]["godName"], role_two, patch, mode=mode)["win_rate"]
+                                client, x[player]["godName"], role_two, patch, queue_type=queue_type)["win_rate"]
                             wrs[x[player]["godName"]
                                 ] = insert_data[f"{role_two_lowercase}WinRate"]
 
@@ -138,7 +142,7 @@ def calc_duo_tier_list(client: MongoClient, role_one: str, role_two: str, patch:
                             insert_data[f"{role_one_lowercase}WinRateLoser"] = wrs[x[player]["godName"]]
                         else:
                             insert_data[f"{role_one_lowercase}WinRateLoser"] = anlz.get_winrate(
-                                client, x[player]["godName"], role_one, patch, mode=mode)["win_rate"]
+                                client, x[player]["godName"], role_one, patch, queue_type=queue_type)["win_rate"]
                             wrs[x[player]["godName"]
                                 ] = insert_data[f"{role_one_lowercase}WinRateLoser"]
 
@@ -148,7 +152,7 @@ def calc_duo_tier_list(client: MongoClient, role_one: str, role_two: str, patch:
                             insert_data[f"{role_two_lowercase}WinRateLoser"] = wrs[x[player]["godName"]]
                         else:
                             insert_data[f"{role_two_lowercase}WinRateLoser"] = anlz.get_winrate(
-                                client, x[player]["godName"], role_two, patch, mode=mode)["win_rate"]
+                                client, x[player]["godName"], role_two, patch, queue_type=queue_type)["win_rate"]
                             wrs[x[player]["godName"]
                                 ] = insert_data[f"{role_two_lowercase}WinRateLoser"]
 
@@ -156,6 +160,7 @@ def calc_duo_tier_list(client: MongoClient, role_one: str, role_two: str, patch:
             if len(set) > 1000:
                 duocol.insert_many(set)
                 set = []
+
 
 if __name__ == "__main__":
     pass

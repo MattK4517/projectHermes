@@ -400,7 +400,7 @@ const Table = ({ columns, data }) => {
 };
 
 function DuoLaneTierList(props) {
-  const [god, setGod, mode, setMode, patch, setPatch] =
+  const [god, setGod, queue_type, setMode, patch, setPatch] =
     useContext(TierListContext);
 
   const [totalData, setTotalData] = useState([]);
@@ -441,7 +441,7 @@ function DuoLaneTierList(props) {
         "/",
         props.tableType,
         "/",
-        mode,
+        queue_type,
         "/",
         patch
       )

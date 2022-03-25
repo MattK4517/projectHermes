@@ -23,9 +23,25 @@ export const FormatGod = (god) => {
 
 export default function OverviewDisplay() {
   const [
-    god, setGod, player, setPlayer, mode, setMode,
-    role, setRole, topLink, setTopLink, icon, setIcon,
-    playerLevel, setPlayerLevel, tab, setTab, patch, setPatch, patches
+    god,
+    setGod,
+    player,
+    setPlayer,
+    queue_type,
+    setMode,
+    role,
+    setRole,
+    topLink,
+    setTopLink,
+    icon,
+    setIcon,
+    playerLevel,
+    setPlayerLevel,
+    tab,
+    setTab,
+    patch,
+    setPatch,
+    patches,
   ] = useContext(PlayerContext);
 
   // console.log(window.location.href.split("/")[6])
@@ -53,10 +69,10 @@ export default function OverviewDisplay() {
   const [avgGold, setAvgGold] = useState(0);
   const [avgWards, setAvgWards] = useState(0);
 
-  const [maxGoldShare, setMaxGoldShare] = useState(0)
-  const [maxDamageShare, setMaxDamageShare] = useState(0)
-  const [maxKillShare, setMaxKillShare] = useState(0)
-  const [maxWards, setMaxWards] = useState(0)  
+  const [maxGoldShare, setMaxGoldShare] = useState(0);
+  const [maxDamageShare, setMaxDamageShare] = useState(0);
+  const [maxKillShare, setMaxKillShare] = useState(0);
+  const [maxWards, setMaxWards] = useState(0);
 
   useEffect(() => {
     fetch(
@@ -67,7 +83,7 @@ export default function OverviewDisplay() {
         "/",
         role,
         "/",
-        mode,
+        queue_type,
         "/",
         patch
       )
@@ -94,13 +110,13 @@ export default function OverviewDisplay() {
         setAvgDamage(data.avgDamage);
         setAvgGold(data.avgGold);
         setAvgWards(data.avgWards);
-        setMaxGoldShare(data.maxGoldShare)
-        setMaxDamageShare(data.maxDamageShare)
-        setMaxKillShare(data.maxKillShare)
-        setMaxWards(data.maxWards)
+        setMaxGoldShare(data.maxGoldShare);
+        setMaxDamageShare(data.maxDamageShare);
+        setMaxKillShare(data.maxKillShare);
+        setMaxWards(data.maxWards);
       })
     );
-  }, [player, role, mode, patch]);
+  }, [player, role, queue_type, patch]);
 
   const [roles, setroles] = useState([
     "Solo",
@@ -108,7 +124,7 @@ export default function OverviewDisplay() {
     "Mid",
     "Support",
     "Carry",
-    "All Roles"
+    "All Roles",
   ]);
   return (
     <div className="player-profile-page">
@@ -143,8 +159,8 @@ export default function OverviewDisplay() {
                   setFilter={setRole}
                 />
                 <FilterForm
-                  filter={mode}
-                  god={mode}
+                  filter={queue_type}
+                  god={queue_type}
                   filters={["Ranked", "Casual"]}
                   setFilter={setMode}
                 />
@@ -197,7 +213,7 @@ export default function OverviewDisplay() {
                 />
               </div>
             </div>
-            </div>
+          </div>
         </div>
       </div>
     </div>

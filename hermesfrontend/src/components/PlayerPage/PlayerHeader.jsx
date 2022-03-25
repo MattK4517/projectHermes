@@ -9,7 +9,7 @@ export default function PlayerHeader(props) {
     setGod,
     player,
     setPlayer,
-    mode,
+    queue_type,
     setMode,
     role,
     setRole,
@@ -39,14 +39,16 @@ export default function PlayerHeader(props) {
           <div className="player-profile_info_name">
             <div className="player-name">
               {player}
-              <Link 
-              to={`/player/${player}/`}
-              style={{
+              <Link
+                to={`/player/${player}/`}
+                style={{
                   fontSize: "10px",
                   backgroundColor: "#191937",
-                  padding: ".25rem"
-            }}
-              >Back to Player Page</Link>
+                  padding: ".25rem",
+                }}
+              >
+                Back to Player Page
+              </Link>
             </div>
           </div>
         </div>

@@ -422,7 +422,7 @@ export default function BuildPage(pagegod) {
   );
   const [slotOneItems, setSlotOneItems] = useState([]);
   const [patch, setPatch] = useState("9.3");
-  const [mode, setMode] = useState("Ranked");
+  const [queue_type, setMode] = useState("Ranked");
   useEffect(() => {
     fetch(
       "/api/".concat(
@@ -434,7 +434,7 @@ export default function BuildPage(pagegod) {
         "/",
         patch,
         "/",
-        mode
+        queue_type
       )
     ).then((res) =>
       res.json().then((data) => {
@@ -460,7 +460,7 @@ export default function BuildPage(pagegod) {
         });
       })
     );
-  }, [role, rank, patch, mode]);
+  }, [role, rank, patch, queue_type]);
 
   return (
     <div

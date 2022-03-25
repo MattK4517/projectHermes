@@ -64,17 +64,17 @@ export default function BasicTabs(props) {
       pickrate={props.pickRate}
       banrate={props.banRate}
       matchup={props.matchup}
-      mode={props.mode}
+      queue_type={props.queue_type}
     />
     </div>
     <div label="Items" style={{color: "white"}}>
-    <Items pagegod={props.pagegod} role={props.role} rank={props.rank} patch={props.patch} mode={props.mode}/>
+    <Items pagegod={props.pagegod} role={props.role} rank={props.rank} patch={props.patch} queue_type={props.queue_type}/>
     </div>
     <div label="Build Paths" style={{color: "white"}}>
-    <BuildPath pagegod={props.pagegod} role={props.role} rank={props.rank} patch={props.patch} mode={props.mode}/>
+    <BuildPath pagegod={props.pagegod} role={props.role} rank={props.rank} patch={props.patch} queue_type={props.queue_type}/>
     </div>
     <div label="Matchups" style={{color: "white"}}>
-    <Matchups pagegod={props.pagegod} role={props.role} rank={props.rank} patch={props.patch} mode={props.mode}/>
+    <Matchups pagegod={props.pagegod} role={props.role} rank={props.rank} patch={props.patch} queue_type={props.queue_type}/>
     </div>
     </TierListTabs>
   );
@@ -109,17 +109,17 @@ export {BasicTabs};
       pickrate={props.pickRate}
       banrate={props.banRate}
       matchup={props.matchup}
-      mode={props.mode}
+      queue_type={props.queue_type}
     />
   </TabPanel>
   <TabPanel value={value} index={1}>
-    <Items pagegod={props.pagegod} role={props.role} rank={props.rank} patch={props.patch} mode={props.mode}/>
+    <Items pagegod={props.pagegod} role={props.role} rank={props.rank} patch={props.patch} queue_type={props.queue_type}/>
   </TabPanel>
   <TabPanel value={value} index={2}>
-    <BuildPath pagegod={props.pagegod} role={props.role} rank={props.rank} patch={props.patch} mode={props.mode}/>
+    <BuildPath pagegod={props.pagegod} role={props.role} rank={props.rank} patch={props.patch} queue_type={props.queue_type}/>
   </TabPanel>
   <TabPanel value={value} index={3}>
-    <Matchups pagegod={props.pagegod} role={props.role} rank={props.rank} patch={props.patch} mode={props.mode}/>
+    <Matchups pagegod={props.pagegod} role={props.role} rank={props.rank} patch={props.patch} queue_type={props.queue_type}/>
   </TabPanel>
 </Box> */}
 

@@ -12,7 +12,7 @@ export default function PlayerMatchups(props) {
     setGod,
     player,
     setPlayer,
-    mode,
+    queue_type,
     setMode,
     role,
     setRole,
@@ -31,7 +31,15 @@ export default function PlayerMatchups(props) {
   const [playerMatchups, setPlayerMatchups] = useState([]);
   useEffect(() => {
     fetch(
-      "/api/playermatchups/".concat(player, "/", god, "/", role, "/9.1/", mode)
+      "/api/playermatchups/".concat(
+        player,
+        "/",
+        god,
+        "/",
+        role,
+        "/9.1/",
+        queue_type
+      )
     ).then((res) =>
       res.json().then((data) => {
         console.log("playermatchups", data);
@@ -49,7 +57,7 @@ export default function PlayerMatchups(props) {
         });
       })
     );
-  }, [player, role, mode, patch]);
+  }, [player, role, queue_type, patch]);
   return (
     <div className="content-section content-section_no-padding played-gods">
       <div className="content-section_header played-gods_header">

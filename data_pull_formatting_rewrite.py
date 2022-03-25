@@ -11,7 +11,6 @@ class GodData:
         self.name = god
         self.matches = []
 
-
     def insert_ban(self, matchId, rank, entry_datetime, patch):
         mydb = client["single_god_bans"]
         mycol = mydb[self.name]
@@ -20,8 +19,8 @@ class GodData:
             "rank": rank,
             "patch": patch,
             "Entry_Datetime": entry_datetime,
-            "mode": "RankedConq",
-            })
+            "queue_type": "RankedConq",
+        })
 
     def set_matches(self, data):
         """append match Ids to self.matches when gods in data"""
@@ -34,7 +33,8 @@ class GodData:
                     match_picks += 1
                 if "Ban" in key and match[key] == self.name and match_bans == 0:
                     match_bans += 1
-                    self.insert_ban(match["MatchId"], normalize_rank(match["player0"]["Conquest_Tier"]), match["Entry_Datetime"], match["Patch"])
+                    self.insert_ban(match["MatchId"], normalize_rank(
+                        match["player0"]["Conquest_Tier"]), match["Entry_Datetime"], match["Patch"])
 
     def get_matches(self):
         return len(self.matches)
@@ -67,7 +67,7 @@ class GodData:
 
     def calc_items(self):
         mydb = client["single_items"]
-        mycol =  mydb[self.name]
+        mycol = mydb[self.name]
         set = []
         for match in self.matches:
             build = {}
@@ -94,14 +94,14 @@ class GodData:
                             "matchId": matchId,
                             "patch": match["Patch"],
                             "Entry_Datetime": match["Entry_Datetime"],
-                            "mode": "CasualConq"
+                            "queue_type": "CasualConq"
                         }
                     )
         mycol.insert_many(set)
 
     def calc_match_stats(self):
         mydb = client["single_match_stats"]
-        mycol =  mydb[self.name]
+        mycol = mydb[self.name]
         set = []
         for match in self.matches:
             player_ids = []
@@ -178,12 +178,13 @@ class GodData:
                         "enemy": enemy,
                         "Entry_Datetime": match["Entry_Datetime"],
                         "time": match["Match_Duration"],
-                        "mode": "RankedConq",
+                        "queue_type": "RankedConq",
                         "skin": skin,
                         self.name: build,
                     })
         if len(self.matches) > 0:
-            mycol.insert_many(set)  
+            mycol.insert_many(set)
+
 
 def normalize_rank(tier):
     rank = "Error"
@@ -204,11 +205,9 @@ def normalize_rank(tier):
     return rank
 
 
-
 def get_date():
     time = datetime.now()
     return f"{time.month}/{time.day}/{time.year}"
-
 
 
 # {"Entry_Datetime": {"$lte": "8/30/2021", "$gte": "8/27/2021" }}
@@ -220,7 +219,6 @@ def run_format(patch, date):
     count = 0
     for match in mycol.find({"Entry_Datetime": date}):
         set_matches.append(match)
-
 
     for god in godsDict:
         godsDict[god] = GodData(god)

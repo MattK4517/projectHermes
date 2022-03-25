@@ -1,17 +1,16 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useTable, useSortBy, usePagination } from "react-table";
 import { Link } from "react-router-dom";
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Button from '@material-ui/core/Button';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import Button from "@material-ui/core/Button";
+import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import { FilterForm } from "../Filters/FilterForm";
 import winRateColor from "../mainGodPage/WinRateColor";
 import { TierListContext } from "./TierListContext";
-import { linkDict } from "../PlayerPage/Player"
+import { linkDict } from "../PlayerPage/Player";
 import TierListFilter from "../Filters/TierListFilter";
-
 
 const Table = ({ columns, data }) => {
   const {
@@ -37,20 +36,30 @@ const Table = ({ columns, data }) => {
       initialState: {
         pageIndex: 0,
         sortBy: [
-            {
-                id: 'winRate',
-                desc: true
-            }
-        ]
-    }
+          {
+            id: "winRate",
+            desc: true,
+          },
+        ],
+      },
     },
     useSortBy,
     usePagination
   );
 
   const [
-    god, setGod, mode, setMode, patch, setPatch, rank, setRank,
-    role, setRole, topLink, setTopLink
+    god,
+    setGod,
+    queue_type,
+    setMode,
+    patch,
+    setPatch,
+    rank,
+    setRank,
+    role,
+    setRole,
+    topLink,
+    setTopLink,
   ] = useContext(TierListContext);
 
   // We don't want to render all 2000 rows for this example, so cap
@@ -115,8 +124,8 @@ const Table = ({ columns, data }) => {
                             {row.cells.map((cell) => {
                               const { key, role } = cell.getCellProps();
                               let god = row.original.god
-                              .toLowerCase()
-                              .replaceAll(" ", "-");
+                                .toLowerCase()
+                                .replaceAll(" ", "-");
                               let routegod = row.original.god.replaceAll(
                                 " ",
                                 "_"
@@ -128,180 +137,189 @@ const Table = ({ columns, data }) => {
                               if (key.includes("rank")) {
                                 return (
                                   <>
-                                  <div
-                                    className="rt-td rank"
-                                    style={{
-                                      minWidth: "40px",
-                                      maxWidth: "60px",
-                                      flex: "1 1 100%",
-                                    }}
-                                    {...cell.getCellProps()}
-                                  >
-                                    <span>{(i += 1) + (pageSize * pageIndex)}</span>
-                                  </div>
+                                    <div
+                                      className="rt-td rank"
+                                      style={{
+                                        minWidth: "40px",
+                                        maxWidth: "60px",
+                                        flex: "1 1 100%",
+                                      }}
+                                      {...cell.getCellProps()}
+                                    >
+                                      <span>
+                                        {(i += 1) + pageSize * pageIndex}
+                                      </span>
+                                    </div>
 
                                     <div
-                                    className="rt-td role"
-                                    style={{
-                                      minWidth: "40px",
-                                      maxWidth: "60px",
-                                      flex: "1 1 100%",
-                                    }}
-                                    {...cell.getCellProps()}
-                                  >
-                                    <span>{row.original.role}</span>
-                                  </div>
-
-                                  <div
-                                    className="rt-td god"
-                                    style={{ minWidth: "180px", maxWidth: "220px", flex: "1 1 100%" }}
-                                    {...cell.getCellProps()}
-                                  >
-                                    <Link
-                                      className="god-played gtm-tierlist-god"
-                                      to={"/".concat(routegod)}
+                                      className="rt-td role"
+                                      style={{
+                                        minWidth: "40px",
+                                        maxWidth: "60px",
+                                        flex: "1 1 100%",
+                                      }}
+                                      {...cell.getCellProps()}
                                     >
-                                      <div style={{ position: "relative" }}>
-                                        <div className="god-icon">
-                                          <div
-                                            style={{
-                                              height: "30px",
-                                              width: "30px",
-                                            }}
-                                          >
-                                            <img
-                                              src={`https://webcdn.hirezstudios.com/smite/god-icons/${god}.jpg`}
-                                              alt={row.original.god}
+                                      <span>{row.original.role}</span>
+                                    </div>
+
+                                    <div
+                                      className="rt-td god"
+                                      style={{
+                                        minWidth: "180px",
+                                        maxWidth: "220px",
+                                        flex: "1 1 100%",
+                                      }}
+                                      {...cell.getCellProps()}
+                                    >
+                                      <Link
+                                        className="god-played gtm-tierlist-god"
+                                        to={"/".concat(routegod)}
+                                      >
+                                        <div style={{ position: "relative" }}>
+                                          <div className="god-icon">
+                                            <div
                                               style={{
-                                                height: "48px",
-                                                width: "48px",
-                                                transform: "scale(0.625)",
-                                                transformOrigin: "0px 0px 0px",
+                                                height: "30px",
+                                                width: "30px",
                                               }}
-                                            />
+                                            >
+                                              <img
+                                                src={`https://webcdn.hirezstudios.com/smite/god-icons/${god}.jpg`}
+                                                alt={row.original.god}
+                                                style={{
+                                                  height: "48px",
+                                                  width: "48px",
+                                                  transform: "scale(0.625)",
+                                                  transformOrigin:
+                                                    "0px 0px 0px",
+                                                }}
+                                              />
+                                            </div>
                                           </div>
                                         </div>
-                                      </div>
-                                      <strong className="god-name">
-                                        {row.original.god}
-                                      </strong>
-                                    </Link>
-                                  </div>
+                                        <strong className="god-name">
+                                          {row.original.god}
+                                        </strong>
+                                      </Link>
+                                    </div>
 
-                                  <div
-                                    className="rt-td win-rate"
-                                    style={{
-                                      minWidth: "70px",
-                                      maxWidth: "90px",
-                                      flex: "1 1 100%",
-                                    }}
-                                    {...cell.getCellProps()}
-                                  >
-                                    <span>
-                                      <b style={{color: winRateColor(row.original.winRate)}}>{row.original.winRate}%</b>
-                                    </span>
-                                  </div>
+                                    <div
+                                      className="rt-td win-rate"
+                                      style={{
+                                        minWidth: "70px",
+                                        maxWidth: "90px",
+                                        flex: "1 1 100%",
+                                      }}
+                                      {...cell.getCellProps()}
+                                    >
+                                      <span>
+                                        <b
+                                          style={{
+                                            color: winRateColor(
+                                              row.original.winRate
+                                            ),
+                                          }}
+                                        >
+                                          {row.original.winRate}%
+                                        </b>
+                                      </span>
+                                    </div>
 
-                                  <div
-                                    className="rt-td gold"
-                                    style={{
-                                      minWidth: "70px",
-                                      maxWidth: "90px",
-                                      flex: "1 1 100%",
-                                    }}
-                                    {...cell.getCellProps()}
-                                  >
-                                    <span>
-                                      {row.original.gold.toFixed()}
-                                    </span>
-                                  </div>
+                                    <div
+                                      className="rt-td gold"
+                                      style={{
+                                        minWidth: "70px",
+                                        maxWidth: "90px",
+                                        flex: "1 1 100%",
+                                      }}
+                                      {...cell.getCellProps()}
+                                    >
+                                      <span>{row.original.gold.toFixed()}</span>
+                                    </div>
 
-                                  <div
-                                    className="rt-td killsBot"
-                                    style={{
-                                      minWidth: "70px",
-                                      maxWidth: "90px",
-                                      flex: "1 1 100%",
-                                    }}
-                                    {...cell.getCellProps()}
-                                  >
-                                    <span>
-                                      {row.original.killsBot.toFixed(1)}
-                                    </span>
-                                  </div>
+                                    <div
+                                      className="rt-td killsBot"
+                                      style={{
+                                        minWidth: "70px",
+                                        maxWidth: "90px",
+                                        flex: "1 1 100%",
+                                      }}
+                                      {...cell.getCellProps()}
+                                    >
+                                      <span>
+                                        {row.original.killsBot.toFixed(1)}
+                                      </span>
+                                    </div>
 
-                                  <div
-                                    className="rt-td damageBot"
-                                    style={{
-                                      minWidth: "70px",
-                                      maxWidth: "90px",
-                                      flex: "1 1 100%",
-                                    }}
-                                    {...cell.getCellProps()}
-                                  >
-                                    <span>
-                                      {row.original.damageBot.toFixed()}
-                                    </span>
-                                  </div>
+                                    <div
+                                      className="rt-td damageBot"
+                                      style={{
+                                        minWidth: "70px",
+                                        maxWidth: "90px",
+                                        flex: "1 1 100%",
+                                      }}
+                                      {...cell.getCellProps()}
+                                    >
+                                      <span>
+                                        {row.original.damageBot.toFixed()}
+                                      </span>
+                                    </div>
 
-                                  <div
-                                    className="rt-td towerKills"
-                                    style={{
-                                      minWidth: "70px",
-                                      maxWidth: "90px",
-                                      flex: "1 1 100%",
-                                    }}
-                                    {...cell.getCellProps()}
-                                  >
-                                    <span>
-                                      {row.original.towerKills}
-                                    </span>
-                                  </div>
+                                    <div
+                                      className="rt-td towerKills"
+                                      style={{
+                                        minWidth: "70px",
+                                        maxWidth: "90px",
+                                        flex: "1 1 100%",
+                                      }}
+                                      {...cell.getCellProps()}
+                                    >
+                                      <span>{row.original.towerKills}</span>
+                                    </div>
 
-                                  <div
-                                    className="rt-td phoenixKills"
-                                    style={{
-                                      minWidth: "70px",
-                                      maxWidth: "90px",
-                                      flex: "1 1 100%",
-                                    }}
-                                    {...cell.getCellProps()}
-                                  >
-                                    <span>
-                                      {row.original.phoenixKills}
-                                    </span>
-                                  </div>
+                                    <div
+                                      className="rt-td phoenixKills"
+                                      style={{
+                                        minWidth: "70px",
+                                        maxWidth: "90px",
+                                        flex: "1 1 100%",
+                                      }}
+                                      {...cell.getCellProps()}
+                                    >
+                                      <span>{row.original.phoenixKills}</span>
+                                    </div>
 
-                                  <div
-                                    className="rt-td wardsPlaced"
-                                    style={{
-                                      minWidth: "70px",
-                                      maxWidth: "90px",
-                                      flex: "1 1 100%",
-                                    }}
-                                    {...cell.getCellProps()}
-                                  >
-                                    <span>
-                                      {row.original.wardsPlaced.toFixed()}
-                                    </span>
-                                  </div>
+                                    <div
+                                      className="rt-td wardsPlaced"
+                                      style={{
+                                        minWidth: "70px",
+                                        maxWidth: "90px",
+                                        flex: "1 1 100%",
+                                      }}
+                                      {...cell.getCellProps()}
+                                    >
+                                      <span>
+                                        {row.original.wardsPlaced.toFixed()}
+                                      </span>
+                                    </div>
 
-                                  <div
-                                    className="rt-td games"
-                                    style={{
-                                      minWidth: "80px",
-                                      maxWidth: "90px",
-                                      flex: "1 1 100%",
-                                    }}
-                                    {...cell.getCellProps()}
-                                  >
-                                    <span>
-                                      <b>{row.original.games}</b>
-                                    </span>
-                                  </div>
+                                    <div
+                                      className="rt-td games"
+                                      style={{
+                                        minWidth: "80px",
+                                        maxWidth: "90px",
+                                        flex: "1 1 100%",
+                                      }}
+                                      {...cell.getCellProps()}
+                                    >
+                                      <span>
+                                        <b>{row.original.games}</b>
+                                      </span>
+                                    </div>
                                   </>
                                 );
-                              } 
+                              }
                             })}
                           </div>
                         </div>
@@ -373,8 +391,18 @@ const Table = ({ columns, data }) => {
 
 function ObjectiveTierList(props) {
   const [
-    god, setGod, mode, setMode, patch, setPatch, rank, setRank,
-    role, setRole, topLink, setTopLink
+    god,
+    setGod,
+    queue_type,
+    setMode,
+    patch,
+    setPatch,
+    rank,
+    setRank,
+    role,
+    setRole,
+    topLink,
+    setTopLink,
   ] = useContext(TierListContext);
 
   const [totalData, setTotalData] = useState([]);
@@ -382,7 +410,17 @@ function ObjectiveTierList(props) {
   useEffect(() => {
     //"/gettierlist/".concat(rank, "/", role, "/", tableType.tableType, "/", patch
     fetch(
-      "/api/gettierlist/".concat(rank, "/", role, "/", props.tableType, "/", mode, "/", patch)
+      "/api/gettierlist/".concat(
+        rank,
+        "/",
+        role,
+        "/",
+        props.tableType,
+        "/",
+        queue_type,
+        "/",
+        patch
+      )
     ).then((res) =>
       res.json().then((data) => {
         setTotalData([]);
@@ -407,7 +445,7 @@ function ObjectiveTierList(props) {
         });
       })
     );
-  }, [rank, role, mode, patch]);
+  }, [rank, role, queue_type, patch]);
 
   const columns = React.useMemo(
     () => [
@@ -426,37 +464,37 @@ function ObjectiveTierList(props) {
       {
         Header: "Win Rate",
         accessor: "winRate",
-        sortType: compareNumericString
+        sortType: compareNumericString,
       },
       {
         Header: "Gold",
         accessor: "gold",
-        sortType: compareNumericString
+        sortType: compareNumericString,
       },
       {
         Header: "Minion Kills",
         accessor: "killsBot",
-        sortType: compareNumericString
+        sortType: compareNumericString,
       },
       {
         Header: "Minion Damage",
         accessor: "damageBot",
-        sortType: compareNumericString
+        sortType: compareNumericString,
       },
       {
         Header: "Tower Kills",
         accessor: "towerKills",
-        sortType: compareNumericString
+        sortType: compareNumericString,
       },
       {
         Header: "Phoenix Kills",
         accessor: "phoenixKills",
-        sortType: compareNumericString
+        sortType: compareNumericString,
       },
       {
         Header: "Wards Placed",
         accessor: "wardsPlaced",
-        sortType: compareNumericString
+        sortType: compareNumericString,
       },
       {
         Header: "Games",
@@ -473,17 +511,17 @@ function ObjectiveTierList(props) {
   );
 }
 
-
 function compareNumericString(rowA, rowB, id, desc) {
   let a = Number.parseFloat(rowA.values[id]);
   let b = Number.parseFloat(rowB.values[id]);
-  if (Number.isNaN(a)) {  // Blanks and non-numeric strings to bottom
-      a = desc ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
+  if (Number.isNaN(a)) {
+    // Blanks and non-numeric strings to bottom
+    a = desc ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
   }
   if (Number.isNaN(b)) {
-      b = desc ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
+    b = desc ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
   }
-  if (a > b) return 1; 
+  if (a > b) return 1;
   if (a < b) return -1;
   return 0;
 }

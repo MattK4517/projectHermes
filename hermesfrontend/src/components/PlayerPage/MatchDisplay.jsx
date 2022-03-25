@@ -48,9 +48,25 @@ function PlayerBuildDisplay(props) {
 
 export default function MatchDisplay(props) {
   const [
-    god, setGod, player, setPlayer, mode, setMode,
-    role, setRole, topLink, setTopLink, icon, setIcon,
-    playerLevel, setPlayerLevel, tab, setTab, patch, setPatch, patches
+    god,
+    setGod,
+    player,
+    setPlayer,
+    queue_type,
+    setMode,
+    role,
+    setRole,
+    topLink,
+    setTopLink,
+    icon,
+    setIcon,
+    playerLevel,
+    setPlayerLevel,
+    tab,
+    setTab,
+    patch,
+    setPatch,
+    patches,
   ] = useContext(PlayerContext);
   const modes = ["Casual", "Ranked"];
   if (Object.keys(props.matchList).length > 0) {
@@ -113,10 +129,11 @@ export default function MatchDisplay(props) {
               }
             }
           });
-          if ( player["Player_Name"] &&
-            player["Player_Name"].toLowerCase().includes(
-              props.player.toLowerCase()
-            )
+          if (
+            player["Player_Name"] &&
+            player["Player_Name"]
+              .toLowerCase()
+              .includes(props.player.toLowerCase())
           ) {
             return (
               <div className="match-history">
@@ -130,7 +147,7 @@ export default function MatchDisplay(props) {
                       <div className="stat-group-one">
                         <div className="r1">
                           <div className="queue-type">
-                            {props.mode} Conquest
+                            {props.queue_type} Conquest
                           </div>
                           <div className="date">{match.Entry_Datetime}</div>
                         </div>

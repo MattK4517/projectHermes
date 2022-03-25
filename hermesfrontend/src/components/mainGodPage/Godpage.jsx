@@ -327,7 +327,7 @@ function Godpage(props) {
   const [banrate, setbanrate] = useState(0);
   const [pickrate, setpickrate] = useState(0);
   const [winrate, setwinrate] = useState(0);
-  const [mode, setMode] = useState("Ranked");
+  const [queue_type, setMode] = useState("Ranked");
   const modes = ["Casual", "Ranked"];
 
   useEffect(() => {
@@ -341,7 +341,7 @@ function Godpage(props) {
         "/",
         patch,
         "/",
-        mode,
+        queue_type,
         "/",
         matchup
       )
@@ -356,7 +356,7 @@ function Godpage(props) {
         // setTier(data.tier)
       })
     );
-  }, [dispRole, dispRank, patch, mode, matchup]);
+  }, [dispRole, dispRank, patch, queue_type, matchup]);
 
   useEffect(() => {
     fetch("/api/".concat(pagegod, "/abilities")).then((res) =>
@@ -416,7 +416,7 @@ function Godpage(props) {
                         setFilter={setrole}
                       />
                       {/* </div> */}
-                      <div className={mode}>
+                      <div className={queue_type}>
                         <FilterForm
                           filter={dispRank}
                           god={pagegod}
@@ -432,7 +432,7 @@ function Godpage(props) {
                       />
                       {/* <DropDownFilter changePatch={setPatch} patch={patch} style={{color: "white"}}/> */}
                       <FilterForm
-                        filter={mode}
+                        filter={queue_type}
                         god={pagegod}
                         filters={modes}
                         setFilter={setMode}
@@ -456,7 +456,7 @@ function Godpage(props) {
                   pickRate={pickrate}
                   banRate={banrate}
                   matchup={matchup}
-                  mode={mode}
+                  queue_type={queue_type}
                 />
               </div>
             </div>

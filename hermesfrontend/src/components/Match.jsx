@@ -152,7 +152,6 @@ export const calcBuildStats = (build, base) => {
 };
 
 function CustomizedAccordions(player) {
-
   if (player.playerName === "") {
     player.playerName = "Hidden";
   }
@@ -181,7 +180,7 @@ function CustomizedAccordions(player) {
 
   // let td = 0
   // const [totalDamage, setTotalDamage] = useState(0);
-  const message = []
+  const message = [];
 
   return (
     <Accordion>
@@ -436,7 +435,7 @@ function CustomizedAccordions(player) {
               </div>
             </div>
             <div label="Damage Calc">
-              <DamageOut message={message} totalDamage={1000}/>
+              <DamageOut message={message} totalDamage={1000} />
             </div>
           </div>
         </div>
@@ -717,7 +716,7 @@ function Match() {
         let bans = [];
         let mmrs = [];
         setMatchData({ ...data });
-        setQueueType(data["mode"]);
+        setQueueType(data["queue_type"]);
         Object.keys(data).forEach((key) => {
           if (key.includes("Ban") && key !== "First_Ban_Side") {
             bans = [...bans, data[key]];
@@ -864,7 +863,7 @@ function Match() {
       })
     );
   }, [match]);
-  
+
   return (
     <div
       className="container content-container"

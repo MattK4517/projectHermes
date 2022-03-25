@@ -7,7 +7,7 @@ export const PlayerContext = createContext();
 export const PlayerProvider = props => {
     const [god, setGod] = useState("")
     const [player, setPlayer] = useState("")
-    const [mode, setMode] = useState("Ranked")
+    const [queue_type, setMode] = useState("Ranked")
     const [role, setRole] = useState("All Roles")
     const [topLink, setTopLink] = useState("")
     const [icon, setIcon] = useState("https://i.imgur.com/KgTaobI.png")
@@ -17,7 +17,7 @@ export const PlayerProvider = props => {
     const patches = ["9.3", "9.2", "9.1"]
     return (
         <PlayerContext.Provider value={[
-            god, setGod, player, setPlayer, mode, setMode,
+            god, setGod, player, setPlayer, queue_type, setMode,
             role, setRole, topLink, setTopLink, icon, setIcon,
             playerLevel, setPlayerLevel, tab, setTab, patch, setPatch, patches
         ]}>

@@ -6,7 +6,7 @@ export default function TierListFilter(props) {
   const [
     god,
     setGod,
-    mode,
+    queue_type,
     setMode,
     patch,
     setPatch,
@@ -52,7 +52,7 @@ export default function TierListFilter(props) {
         setFilter={setRank}
       />
       <FilterForm
-        filter={mode}
+        filter={queue_type}
         god={"None"}
         filters={["Ranked", "Casual"]}
         setFilter={setMode}

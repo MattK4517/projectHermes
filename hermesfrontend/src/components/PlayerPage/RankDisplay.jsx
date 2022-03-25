@@ -28,26 +28,32 @@ const getImageUrl = (rank) => {
   return url;
 };
 export default function RankDisplay(props) {
-    return (
-        <div className="content-section content-section_no-padding rank-block">
-            <div className="content-section_header">
-                <span>Rank</span>
+  return (
+    <div className="content-section content-section_no-padding rank-block">
+      <div className="content-section_header">
+        <span>Rank</span>
+      </div>
+      <div className="rank-list">
+        <div className="rank-title">
+          <div className="rank-image-container">
+            <img
+              className="rank-img"
+              src={getImageUrl(props.tier.split(" ")[0])}
+              alt=""
+            />
+          </div>
+          <div>
+            <div className="queue-type">Queue: {props.queue_type} Conquest</div>
+            <div className="rank-text">
+              <strong>{props.tier}</strong>
             </div>
-            <div className="rank-list">
-                <div className="rank-title">
-                    <div className="rank-image-container">
-                        <img className="rank-img" src={getImageUrl(props.tier.split(" ")[0])} alt="" />
-                    </div>
-                    <div>
-                        <div className="queue-type">Queue: {props.mode} Conquest</div>
-                        <div className="rank-text"><strong>{props.tier}</strong></div>
-                        <div className="rank-wins">
-                          <strong>{props.winrate}%</strong>
-                          <span className="total-games">{props.games} games</span>
-                        </div>
-                    </div>
-                </div>
+            <div className="rank-wins">
+              <strong>{props.winrate}%</strong>
+              <span className="total-games">{props.games} games</span>
             </div>
+          </div>
         </div>
-    )
+      </div>
+    </div>
+  );
 }

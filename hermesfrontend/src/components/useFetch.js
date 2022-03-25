@@ -5,7 +5,7 @@ const compare = (a, b) => {
   return a.winRate - b.winRate
 }
 
-const useFetch = (pagegod, role, rank, patch, matchup, mode) => {
+const useFetch = (pagegod, role, rank, patch, matchup, queue_type) => {
   const [games, setgames] = useState(0);
   // const [banrate, setbanrate] = useState(0);
   // const [pickrate, setpickrate] = useState(0);
@@ -16,7 +16,7 @@ const useFetch = (pagegod, role, rank, patch, matchup, mode) => {
   const [relics, setRelics] = useState([]);
   const [colorStyle, setColorStyle] = useState("white");
   useEffect(() => {
-    let mainFetchStatement = "/api/".concat(pagegod, "/", role, "/", rank, "/", patch, "/", mode);
+    let mainFetchStatement = "/api/".concat(pagegod, "/", role, "/", rank, "/", patch, "/", queue_type);
     if (matchup !== "None"){
       mainFetchStatement = mainFetchStatement.concat("/", matchup)
     }
@@ -72,10 +72,10 @@ const useFetch = (pagegod, role, rank, patch, matchup, mode) => {
       })
     );
 
-  }, [role, rank, patch, matchup, mode]);
+  }, [role, rank, patch, matchup, queue_type]);
   // else if (role && rank){
   //   matchupsFetchStatement = "/".concat(pagegod, "/matchups/", role, "/", rank)
-  let matchupsFetchStatement = "/api/".concat(pagegod, "/matchups/", role, "/", rank, "/", patch, "/", mode)
+  let matchupsFetchStatement = "/api/".concat(pagegod, "/matchups/", role, "/", rank, "/", patch, "/", queue_type)
   useEffect(() => {
     fetch(matchupsFetchStatement).then((res) =>
       res.json().then((data) => {
@@ -110,7 +110,7 @@ const useFetch = (pagegod, role, rank, patch, matchup, mode) => {
         });
       })
     );
-  }, [role, rank, patch, mode]);
+  }, [role, rank, patch, queue_type]);
 
   return { games, badmatchups, goodmatchups, items, colorStyle, relics };
   // return { games, banrate, pickrate, winrate, badmatchups, goodmatchups, items, colorStyle };

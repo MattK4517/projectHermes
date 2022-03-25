@@ -11,10 +11,10 @@ import winRateColor, { tierColor } from "../mainGodPage/WinRateColor";
 import Tooltip from "@material-ui/core/Tooltip";
 import { compareNumericString } from "./TierListHelpers";
 import { HtmlTooltip } from "../mainGodPage/GodPageHelpers";
-import { getImageUrl } from "../Filters/FilterForm"
+import { getImageUrl } from "../Filters/FilterForm";
 import { TierListContext } from "./TierListContext";
 import { CreateMatchupToolTip } from "./TierListHelpers";
-import { linkDict } from "../PlayerPage/Player"
+import { linkDict } from "../PlayerPage/Player";
 import TierListFilter from "../Filters/TierListFilter";
 
 const Table = ({ columns, data }) => {
@@ -53,10 +53,20 @@ const Table = ({ columns, data }) => {
   );
 
   const [
-    god, setGod, mode, setMode, patch, setPatch, rank, setRank,
-    role, setRole, topLink, setTopLink
+    god,
+    setGod,
+    queue_type,
+    setMode,
+    patch,
+    setPatch,
+    rank,
+    setRank,
+    role,
+    setRole,
+    topLink,
+    setTopLink,
   ] = useContext(TierListContext);
-  
+
   // We don't want to render all 2000 rows for this example, so cap
   // it at 20 for this use case
   const firstPageRows = rows;
@@ -129,7 +139,9 @@ const Table = ({ columns, data }) => {
                                     }}
                                     {...cell.getCellProps()}
                                   >
-                                    <span>{(i += 1) + (pageSize * pageIndex)}</span>
+                                    <span>
+                                      {(i += 1) + pageSize * pageIndex}
+                                    </span>
                                   </div>
                                 );
                               } else if (key.includes("role")) {
@@ -143,27 +155,27 @@ const Table = ({ columns, data }) => {
                                     }}
                                     {...cell.getCellProps()}
                                   >
-                                      <div style={{ position: "relative" }}>
-                                        <div className="god-icon">
-                                          <div
+                                    <div style={{ position: "relative" }}>
+                                      <div className="god-icon">
+                                        <div
+                                          style={{
+                                            height: "30px",
+                                            width: "30px",
+                                          }}
+                                        >
+                                          <img
+                                            src={getImageUrl(row.original.role)}
+                                            alt={row.original.role}
                                             style={{
-                                              height: "30px",
-                                              width: "30px",
+                                              height: "48px",
+                                              width: "48px",
+                                              transform: "scale(0.625)",
+                                              transformOrigin: "0px 0px 0px",
                                             }}
-                                          >
-                                            <img
-                                              src={getImageUrl(row.original.role)}
-                                              alt={row.original.role}
-                                              style={{
-                                                height: "48px",
-                                                width: "48px",
-                                                transform: "scale(0.625)",
-                                                transformOrigin: "0px 0px 0px",
-                                              }}
-                                            />
-                                          </div>
+                                          />
                                         </div>
                                       </div>
+                                    </div>
                                   </div>
                                 );
                               } else if (key.includes("god")) {
@@ -231,12 +243,13 @@ const Table = ({ columns, data }) => {
                                     {...cell.getCellProps()}
                                   >
                                     <span>
-                                      <b                                        
-                                      style={{
-                                          color: tierColor(
-                                            row.original.tier
-                                          ),
-                                        }}>{row.original.tier}</b>
+                                      <b
+                                        style={{
+                                          color: tierColor(row.original.tier),
+                                        }}
+                                      >
+                                        {row.original.tier}
+                                      </b>
                                     </span>
                                   </div>
                                 );
@@ -505,8 +518,18 @@ const compare = (a, b) => {
 
 function TierList(props) {
   const [
-    god, setGod, mode, setMode, patch, setPatch, rank, setRank,
-    role, setRole, topLink, setTopLink
+    god,
+    setGod,
+    queue_type,
+    setMode,
+    patch,
+    setPatch,
+    rank,
+    setRank,
+    role,
+    setRole,
+    topLink,
+    setTopLink,
   ] = useContext(TierListContext);
   // const [patch, setPatch] = useState("8.9");
   const [totalData, setTotalData] = useState([]);
@@ -514,7 +537,17 @@ function TierList(props) {
   useEffect(() => {
     //"/gettierlist/".concat(dispRank, "/", role, "/", props.props, "/", patch
     fetch(
-      "/api/gettierlist/".concat(rank, "/", role, "/", props.tableType, "/", mode, "/", patch)
+      "/api/gettierlist/".concat(
+        rank,
+        "/",
+        role,
+        "/",
+        props.tableType,
+        "/",
+        queue_type,
+        "/",
+        patch
+      )
     ).then((res) =>
       res.json().then((data) => {
         setTotalData([]);
@@ -542,13 +575,13 @@ function TierList(props) {
                     matchup.timesPlayed,
                   ];
                 }),
-            },
+              },
             ]);
           });
         });
       })
     );
-  }, [rank, role, mode, patch]);
+  }, [rank, role, queue_type, patch]);
 
   const columns = React.useMemo(
     () => [
@@ -658,6 +691,5 @@ function CounterMatchupDisplay(props) {
     </div>
   );
 }
-
 
 export default TierList;

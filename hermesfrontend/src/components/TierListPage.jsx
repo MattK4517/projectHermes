@@ -13,7 +13,7 @@ export default function TierListPage() {
   const [
     god,
     setGod,
-    mode,
+    queue_type,
     setMode,
     patch,
     setPatch,
@@ -67,7 +67,9 @@ export default function TierListPage() {
                               </b>
                             </span>
                             <span>&nbsp;for SMITE patch {patch}</span>
-                            <span>&nbsp;{rank}, {role}</span>
+                            <span>
+                              &nbsp;{rank}, {role}
+                            </span>
                           </h2>
                         </span>
                         {/* <span class="title-header_secondary">for {role}, {dispRank.replaceAll("_", " ")}</span> */}

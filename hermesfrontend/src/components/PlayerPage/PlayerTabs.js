@@ -62,7 +62,7 @@ export default function PlayerTabs(props) {
         setGod,
         player,
         setPlayer,
-        mode,
+        queue_type,
         setMode,
         role,
         setRole,
