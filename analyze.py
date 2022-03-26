@@ -24,6 +24,25 @@ from pyrez.models.MatchHistory import MatchHistory
 # item breakdown - check
 
 
+def get_query(rank, role, patch, queue_type, mode):
+    if rank == "Platinum+":
+        myquery = {"rank": {"$in": ["Platinum", "Diamond", "Masters",
+                                    "Grandmaster"]}, "patch": patch, "queue_type": f"{queue_type}"}
+    elif rank == "Diamond+":
+        myquery = {"rank": {"$in":  ["Diamond", "Masters", "Grandmaster"]},
+                   "patch": patch, "queue_type": f"{queue_type}"}
+    elif rank != "All Ranks":
+        myquery = {"rank": rank, "patch": patch,
+                   "queue_type": f"{queue_type}"}
+    else:
+        myquery = {"patch": patch, "queue_type": f"{queue_type}"}
+
+    if "All" not in role:
+        myquery["role"] = role
+    myquery["mode"] = mode
+    return myquery
+
+
 def get_pb_rate(client, god, rank, role, patch, queue_type="Ranked"):
     """ # need to grab # of matches played by god, number of matches played, number of bans
 
@@ -38,17 +57,7 @@ def get_pb_rate(client, god, rank, role, patch, queue_type="Ranked"):
     bandb = client["single_god_bans"]
     bancol = bandb[god]
     startime = datetime.now()
-    if rank == "Platinum+":
-        myquery = {"rank": {"$in": ["Platinum", "Diamond", "Masters",
-                                    "Grandmaster"]}, "patch": patch, "queue_type": f"{queue_type}Conq"}
-    elif rank == "Diamond+":
-        myquery = {"rank": {"$in":  ["Diamond", "Masters", "Grandmaster"]},
-                   "patch": patch, "queue_type": f"{queue_type}Conq"}
-    elif rank != "All Ranks":
-        myquery = {"rank": rank, "patch": patch,
-                   "queue_type": f"{queue_type}Conq"}
-    else:
-        myquery = {"patch": patch, "queue_type": f"{queue_type}Conq"}
+    myquery = get_query(rank, role, patch, queue_type)
 
     totalMatches = get_total_matches(client, rank, patch, queue_type)
     if "All" not in rank:
@@ -63,18 +72,7 @@ def get_pb_rate(client, god, rank, role, patch, queue_type="Ranked"):
 def get_games_played(client, god, rank, role, patch, queue_type="Ranked"):
     mydb = client["single_match_stats"]
     mycol = mydb[god]
-    if rank == "Platinum+":
-        myquery = {"role": role, "rank": {"$in": [
-            "Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch, "queue_type": f"{queue_type}Conq"}
-    elif rank == "Diamond+":
-        myquery = {"role": role, "rank": {"$in":  [
-            "Diamond", "Masters", "Grandmaster"]}, "patch": patch, "queue_type": f"{queue_type}Conq"}
-    elif rank != "All Ranks":
-        myquery = {"role": role, "rank": rank,
-                   "patch": patch, "queue_type": f"{queue_type}Conq"}
-    else:
-        myquery = {"role": role, "patch": patch,
-                   "queue_type": f"{queue_type}Conq"}
+    myquery = get_query(rank, role, patch, queue_type)
     games = mycol.count_documents(myquery)
     return games
 
@@ -154,23 +152,10 @@ def get_top_builds(client, god, role, patch, queue_type="Ranked", rank="All Rank
     }
     mydb = client["single_match_stats"]
     mycol = mydb[god]
-    if rank == "Platinum+":
-        myquery = {"role": role, "rank": {"$in": [
-            "Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch, "queue_type": f"{queue_type}Conq"}
-    elif rank == "Diamond+":
-        myquery = {"role": role, "rank": {"$in":  [
-            "Diamond", "Masters", "Grandmaster"]}, "patch": patch, "queue_type": f"{queue_type}Conq"}
-    elif rank != "All Ranks":
-        myquery = {"role": role, "rank": rank,
-                   "patch": patch, "queue_type": f"{queue_type}Conq"}
-    else:
-        myquery = {"role": role, "patch": patch,
-                   "queue_type": f"{queue_type}Conq"}
+    myquery = get_query(rank, role, patch, queue_type)
 
-    print(myquery)
     games = 0
     wins = 0
-    print(mycol.count_documents(myquery))
     if type(data) is list:
         for x in data:
             games += 1
@@ -315,19 +300,7 @@ def get_all_builds(client, god, role, patch, queue_type="Ranked", rank="All Rank
     }
     mydb = client["single_match_stats"]
     mycol = mydb[god]
-
-    if rank == "Platinum+":
-        myquery = {"role": role, "rank": {"$in": [
-            "Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch, "queue_type": f"{queue_type}Conq"}
-    elif rank == "Diamond+":
-        myquery = {"role": role, "rank": {"$in":  [
-            "Diamond", "Masters", "Grandmaster"]}, "patch": patch, "queue_type": f"{queue_type}Conq"}
-    elif rank != "All Ranks":
-        myquery = {"role": role, "rank": rank,
-                   "patch": patch, "queue_type": f"{queue_type}Conq"}
-    else:
-        myquery = {"role": role, "patch": patch,
-                   "queue_type": f"{queue_type}Conq"}
+    myquery = get_query(rank, role, patch, queue_type)
 
     games = 0
     wins = 0
@@ -361,27 +334,17 @@ def get_all_builds(client, god, role, patch, queue_type="Ranked", rank="All Rank
     return {**dict(top_dict), **{"games": games, "wins": wins, "winRate": round(wins/games*100, 2)}}
 
 
-def get_worst_matchups(client, god, role, patch, queue_type="Ranked", rank="All Ranks", player=None):
+def get_worst_matchups(client, god, role, patch, queue_type="Ranked", rank="All Ranks", mode="Conquest", player=None):
     mydb = client["single_match_stats"]
     mycol = mydb[god]
     matchup_dict = {}
-    if rank == "Platinum+":
-        myquery = {"role": role, "rank": {"$in": [
-            "Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch, "queue_type": f"{queue_type}Conq"}
-    elif rank == "Diamond+":
-        myquery = {"role": role, "rank": {"$in":  [
-            "Diamond", "Masters", "Grandmaster"]}, "patch": patch, "queue_type": f"{queue_type}Conq"}
-    elif rank != "All Ranks":
-        myquery = {"role": role, "rank": rank,
-                   "patch": patch, "queue_type": f"{queue_type}Conq"}
-    else:
-        myquery = {"role": role, "patch": patch,
-                   "queue_type": f"{queue_type}Conq"}
+    myquery = get_query(rank, role, patch, queue_type, mode)
 
     if player:
         myquery = {**myquery, **
                    {"player":  {"$regex": f"{player}", "$options": "i"}}}
 
+    print(myquery)
     if "All" in role:
         del myquery["role"]
 
@@ -461,18 +424,7 @@ def get_worst_matchups(client, god, role, patch, queue_type="Ranked", rank="All 
 def get_winrate(client, god, role, patch, queue_type="Ranked", rank="All Ranks", matchup="None"):
     mydb = client["single_match_stats"]
     mycol = mydb[god]
-    if rank == "Platinum+":
-        myquery = {"role": role, "rank": {"$in": [
-            "Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch, "queue_type": f"{queue_type}Conq"}
-    elif rank == "Diamond+":
-        myquery = {"role": role, "rank": {"$in":  [
-            "Diamond", "Masters", "Grandmaster"]}, "patch": patch, "queue_type": f"{queue_type}Conq"}
-    elif rank != "All Ranks":
-        myquery = {"role": role, "rank": rank,
-                   "patch": patch, "queue_type": f"{queue_type}Conq"}
-    else:
-        myquery = {"role": role, "patch": patch,
-                   "queue_type": f"{queue_type}Conq"}
+    myquery = get_query(rank, role, patch, queue_type)
 
     if matchup != "None":
         myquery = {**myquery, **{"enemy": matchup}}
@@ -494,15 +446,7 @@ def get_total_matches(client, rank, patch, queue_type="Ranked"):
     mydb = client["Matches"]
     mycol = mydb["Total_Matches"]
     total_games = 0
-    if rank == "Platinum+":
-        myquery = {"rank": {"$in": ["Platinum", "Diamond", "Masters",
-                                    "Grandmaster"]}, "patch": patch, "queue_type": f"{queue_type}Conq"}
-    elif rank == "Diamond+":
-        myquery = {"rank": {"$in":  ["Diamond", "Masters", "Grandmaster"]},
-                   "patch": patch, "queue_type": f"{queue_type}Conq"}
-    else:
-        myquery = {"rank": rank, "patch": patch,
-                   "queue_type": f"{queue_type}Conq"}
+    myquery = get_query(rank, "", patch, queue_type)
 
     for x in mycol.find(myquery, {"Total_Matches": 1, "_id": 0}):
         total_games += x["Total_Matches"]
@@ -513,16 +457,7 @@ def get_combat_stats(client, god, role, patch, rank="All Ranks"):
     mydb = client["single_match_stats"]
     mycol = mydb[god]
     combat_stats = {}
-    if rank == "Platinum+":
-        myquery = {"role": role, "rank": {
-            "$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch}
-    elif rank == "Diamond+":
-        myquery = {"role": role, "rank": {
-            "$in":  ["Diamond", "Masters", "Grandmaster"]}, "patch": patch}
-    elif rank != "All Ranks":
-        myquery = {"role": role, "rank": rank, "patch": patch}
-    else:
-        myquery = {"role": role, "patch": patch}
+    myquery = get_query(rank, role, patch, "")
 
     for x in mycol.aggregate([
         {
@@ -553,16 +488,7 @@ def get_combat_stats(client, god, role, patch, rank="All Ranks"):
 def get_objective_stats(client, god, role, patch, rank="All Ranks"):
     mydb = client["single_match_stats"]
     mycol = mydb[god]
-    if rank == "Platinum+":
-        myquery = {"role": role, "rank": {
-            "$in": ["Platinum", "Diamond", "Masters", "Grandmaster"]}, "patch": patch}
-    elif rank == "Diamond+":
-        myquery = {"role": role, "rank": {
-            "$in":  ["Diamond", "Masters", "Grandmaster"]}, "patch": patch}
-    elif rank != "All Ranks":
-        myquery = {"role": role, "rank": rank, "patch": patch}
-    else:
-        myquery = {"role": role, "patch": patch}
+    myquery = get_query(rank, role, patch, "")
     combat_stats = {}
     for x in mycol.aggregate([
         {
@@ -682,13 +608,13 @@ def get_carry_score(match):
             "Loser": {
                 "totalDamage": 1,
             }
-            },
+        },
         "levelDiff": {
             "Winner": {
             },
             "Loser": {
             }
-            },
+        },
         "killPart": {
                 "Winner": {
                     "totalKills": 0,
@@ -696,7 +622,7 @@ def get_carry_score(match):
                 "Loser": {
                     "totalKills": 0,
                 }
-            }
+        }
     }
     match_roles = []
 
@@ -859,16 +785,16 @@ def get_tier_stats(client: pymongo.MongoClient, rank: str, role: str) -> dict:
     return retData
 
 
-def get_specific_build(client, god, role, patch, matchup, rank="All Ranks", queue_type="Ranked"):
+def get_specific_build(client, god, role, patch, matchup, rank="All Ranks", queue_type="Ranked", mode="Conquest"):
     mydb = client["single_match_stats"]
     mycol = mydb[god]
     match_ids = []
     if "All" in rank:
         myquery = {"enemy": matchup, "patch": patch,
-                   "role": role, "queue_type": f"{queue_type}Conq"}
+                   "role": role, "queue_type": f"{queue_type}"}
     else:
         myquery = {"enemy": matchup, "patch": patch, "role": role,
-                   "rank": rank,  "queue_type": f"{queue_type}Conq"}
+                   "rank": rank,  "queue_type": f"{queue_type}"}
 
     for x in mycol.find(myquery, {"_id": 0}):
         match_ids.append(x["matchId"])
@@ -888,15 +814,15 @@ def get_specific_build(client, god, role, patch, matchup, rank="All Ranks", queu
     return get_top_builds(client, god, role, patch, rank=rank, data=builds)
 
 
-def get_matchups_stats(client, god: str, role: str, patch, queue_type, rank="All Ranks"):
+def get_matchups_stats(client, god: str, role: str, patch, queue_type, rank="All Ranks", mode="Conquest"):
     mydb = client["single_match_stats"]
     mycol = mydb[god]
     if "All" in rank:
         myquery = {"role": role, "patch": patch,
-                   "queue_type": f"{queue_type}Conq"}
+                   "queue_type": f"{queue_type}"}
     else:
         myquery = {"role": role, "patch": patch,
-                   "rank": rank, "queue_type": f"{queue_type}Conq"}
+                   "rank": rank, "queue_type": f"{queue_type}"}
 
     avg_dmg_dict = {}
     total_games = mycol.count_documents(myquery)
@@ -917,10 +843,10 @@ def get_matchups_stats(client, god: str, role: str, patch, queue_type, rank="All
         # wins = matchupscol.count_documents({**myquery, **{"enemy": x["_id"], "win_status": "Winner"}})
         if "All" in rank:
             wins = mycol.count_documents(
-                {"enemy": x["_id"], "win_status": "Winner", "patch": patch, "role": role, "queue_type": f"{queue_type}Conq"})
+                {"enemy": x["_id"], "win_status": "Winner", "patch": patch, "role": role, "queue_type": f"{queue_type}"})
         else:
             wins = mycol.count_documents(
-                {"enemy": x["_id"], "win_status": "Winner", "patch": patch, "rank": rank, "role": role, "queue_type": f"{queue_type}Conq"})
+                {"enemy": x["_id"], "win_status": "Winner", "patch": patch, "rank": rank, "role": role, "queue_type": f"{queue_type}"})
 
         if x["timesPlayed"] >= .01 * total_games:
             avg_dmg_dict[x["_id"]] = {
@@ -966,10 +892,10 @@ def get_build_path(client, god, role, patch, queue_type, rank="All Ranks"):
     builds = {}
     if "All" not in rank:
         myquery = {"role": role, "patch": patch,
-                   "rank": rank, "queue_type": f"{queue_type}Conq"}
+                   "rank": rank, "queue_type": f"{queue_type}"}
     else:
         myquery = {"role": role, "patch": patch,
-                   "queue_type": f"{queue_type}Conq"}
+                   "queue_type": f"{queue_type}"}
 
     for x in mycol.aggregate(
         [
@@ -1101,7 +1027,7 @@ def get_lanes(client):
 if __name__ == "__main__":
     starttime = datetime.now()
     # print(get_top_builds(client, "Shiva", "Solo", "9.2", "Casual"))
-    print(get_worst_matchups(client, "Arachne", "All", "9.2", "Casual"))
+    print(get_worst_matchups(client, "Arachne", "Jungle", "9.3", "Casual"))
     # print(create_tier_list.get_tier_stats(client, "All Ranks", "Solo"))
     # # print(get_total_matches(client, "Diamond", "9.1"))
     # for god in godsDict2:
