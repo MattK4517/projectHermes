@@ -327,8 +327,10 @@ function Godpage(props) {
   const [banrate, setbanrate] = useState(0);
   const [pickrate, setpickrate] = useState(0);
   const [winrate, setwinrate] = useState(0);
-  const [queue_type, setMode] = useState("Ranked");
-  const modes = ["Casual", "Ranked"];
+  const [queueType, setQueueType] = useState("Ranked");
+  const [mode, setMode] = useState("Conquest");
+  const queueTypes = ["Casual", "Ranked"];
+  const modes = ["Joust", "Conquest"];
 
   useEffect(() => {
     fetch(
@@ -341,7 +343,9 @@ function Godpage(props) {
         "/",
         patch,
         "/",
-        queue_type,
+        queueType,
+        "/",
+        mode,
         "/",
         matchup
       )
@@ -356,7 +360,7 @@ function Godpage(props) {
         // setTier(data.tier)
       })
     );
-  }, [dispRole, dispRank, patch, queue_type, matchup]);
+  }, [dispRole, dispRank, patch, queueType, matchup]);
 
   useEffect(() => {
     fetch("/api/".concat(pagegod, "/abilities")).then((res) =>
@@ -409,14 +413,16 @@ function Godpage(props) {
                         <span style={{ color: "white" }}>Stat Filters</span>
                       </div>
                       {/* <div className="role-filter-container"> */}
-                      <FilterForm
-                        filter={dispRole}
-                        god={pagegod}
-                        filters={roles}
-                        setFilter={setrole}
-                      />
+                      <div className={mode}>
+                        <FilterForm
+                          filter={dispRole}
+                          god={pagegod}
+                          filters={roles}
+                          setFilter={setrole}
+                        />
+                      </div>
                       {/* </div> */}
-                      <div className={queue_type}>
+                      <div className={queueType}>
                         <FilterForm
                           filter={dispRank}
                           god={pagegod}
@@ -430,12 +436,18 @@ function Godpage(props) {
                         filters={["9.3", "9.2", "9.1"]}
                         setFilter={setPatch}
                       />
-                      {/* <DropDownFilter changePatch={setPatch} patch={patch} style={{color: "white"}}/> */}
                       <FilterForm
-                        filter={queue_type}
+                        filter={mode}
                         god={pagegod}
                         filters={modes}
                         setFilter={setMode}
+                        rankSet={setrank}
+                      />
+                      <FilterForm
+                        filter={queueType}
+                        god={pagegod}
+                        filters={queueTypes}
+                        setFilter={setQueueType}
                         rankSet={setrank}
                       />
                       <SearchBarGodPage
@@ -456,7 +468,8 @@ function Godpage(props) {
                   pickRate={pickrate}
                   banRate={banrate}
                   matchup={matchup}
-                  queue_type={queue_type}
+                  queueType={queueType}
+                  mode={mode}
                 />
               </div>
             </div>

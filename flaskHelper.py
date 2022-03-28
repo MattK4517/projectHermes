@@ -22,11 +22,15 @@ def validate_gods(client, playername, queue_type):
     return False
 
 
-def convert_mode(queue_type):
-    if queue_type == "Ranked":
+def convert_mode(mode, queue_type):
+    if queue_type == "Ranked" and mode == "Conquest":
         return 451
-    elif queue_type == "Casual":
+    elif queue_type == "Casual" and mode == "Conquest":
         return 426
+    elif queue_type == "Ranked" and mode == "Joust":
+        return 450
+    elif queue_type == "Casual" and mode == "Joust":
+        return 448
 
 
 if __name__ == "__main__":

@@ -1,15 +1,15 @@
 import pymongo
 from datetime import datetime
 from constants import godsDict, roles, ranks, slots
-
-client = pymongo.MongoClient(
-    "mongodb+srv://sysAdmin:Pu78qOfdd2FoTw9O@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
+from __init__ import client
 
 
 class GodData:
-    def ___init__(self, god):
+    def __init__(self, god, mode, queue_type):
         self.name = god
         self.matches = []
+        self.mode = mode
+        self.queue_type = queue_type
 
     def insert_ban(self, matchId, rank, entry_datetime, patch):
         mydb = client["single_god_bans"]
@@ -19,7 +19,7 @@ class GodData:
             "rank": rank,
             "patch": patch,
             "Entry_Datetime": entry_datetime,
-            "queue_type": "RankedConq",
+            "mode": self.mode,
         })
 
     def set_matches(self, data):
@@ -38,32 +38,6 @@ class GodData:
 
     def get_matches(self):
         return len(self.matches)
-
-    # def calc_matchups(self):
-    #     mydb = client["single_matchups_test"]
-    #     mycol = mydb[self.name]
-    #     set = []
-    #     for match in self.matches:
-    #         for key in match:
-    #             if "player" in key and match[key]["godName"] == self.name:
-    #                 flag_player = key
-    #         for key in match:
-    #             if "player" in key and match[key]["Role"] == match[flag_player]["Role"] and match[key]["godName"] != match[flag_player]["godName"]:
-    #                 role_played = match[key]["Role"]
-    #                 enemy = match[key]["godName"]
-    #                 rank = normalize_rank(match[key]["Conquest_Tier"])
-    #                 matchId = match[key]["MatchID"]
-    #                 set.append(
-    #                     {   self.name : match[flag_player]["Win_Status"],
-    #                         "rank": rank,
-    #                         "role_played": role_played,
-    #                         "enemy": enemy,
-    #                         "matchId": matchId,
-    #                         "patch": match["Patch"],
-    #                         "Entry_Datetime": match["Entry_Datetime"],
-    #                     }
-    #                 )
-    #     mycol.insert_many(set)
 
     def calc_items(self):
         mydb = client["single_items"]
@@ -94,7 +68,8 @@ class GodData:
                             "matchId": matchId,
                             "patch": match["Patch"],
                             "Entry_Datetime": match["Entry_Datetime"],
-                            "queue_type": "CasualConq"
+                            "mode": self.mode,
+                            "queue_type": self.queue_type
                         }
                     )
         mycol.insert_many(set)
@@ -112,12 +87,12 @@ class GodData:
                     for player_key in match[key]:
                         if "Item_Purch" in player_key:
                             if "S8" in match[key][player_key]:
-                                match[key][player_key] = match[key][player_key][3:]
+                                match[key][player_key] = match[key][player_key][2:]
                             item, purch, number = player_key.split("_")
                             build[f"slot{number}"] = match[key][player_key]
                         if "Item_Active" in player_key:
                             if "S8" in match[key][player_key]:
-                                match[key][player_key] = match[key][player_key][3:]
+                                match[key][player_key] = match[key][player_key][2:]
                             item, purch, number = player_key.split("_")
                             build[f"relic{number}"] = match[key][player_key]
 
@@ -144,12 +119,14 @@ class GodData:
                     objective_assists = match[key]["Objective_Assists"]
                     player = match[key]["Player_Name"]
                     enemy = ""
+                    enemies = []
                     win_status = match[key]["Win_Status"]
-                    skin = match[key]["Skin"]
 
                     for key in match:
                         if "player" in key and match[key]["godName"] != self.name and match[key]["Role"] == role:
                             enemy = match[key]["godName"]
+                        if "player" in key and match[key]["godName"] != self.name and match[key]["Win_Status"] != win_status:
+                            enemies.append(match[key]["godName"])
 
                     set.append({
                         "player": player,
@@ -176,11 +153,14 @@ class GodData:
                         "win_status": win_status,
                         "patch": match["Patch"],
                         "enemy": enemy,
+                        "enemies": enemies,
                         "Entry_Datetime": match["Entry_Datetime"],
                         "time": match["Match_Duration"],
-                        "queue_type": "RankedConq",
-                        "skin": skin,
-                        self.name: build,
+                        "mode": self.mode,
+                        "queue_type": self.queue_type,
+                        "build": build,
+                        "god": self.name,
+                        self.name: build
                     })
         if len(self.matches) > 0:
             mycol.insert_many(set)
@@ -230,15 +210,9 @@ def run_format(patch, date):
         # godsDict[god].calc_objective_stats()
         print(f"{god}: {godsDict[god].get_matches()}")
 
-# def format_no_query(match):
-#     set_matches = [match]
-#     for god in godsDict:
-#         godsDict[god] = GodData(god)
-#         godsDict[god].set_matches(set_matches)
-#         sum_gods += godsDict[god].get_matches()
-#         godsDict[god].calc_matchups()
-#         godsDict[god].calc_items()
-#         godsDict[god].calc_combat_stats()
-#         godsDict[god].calc_objective_stats()
 
-#         print(f"{god}: {godsDict[god].get_matches()}")
+def format_no_query(match, mode, queue_type):
+    for god in godsDict:
+        godsDict[god] = GodData(god, mode, queue_type)
+        godsDict[god].set_matches(match)
+        godsDict[god].calc_match_stats()

@@ -72,10 +72,9 @@ export default class FilterForm extends React.Component {
             label={this.props.filter}
             onChange={this.handleChange}
             sx={{
-              color: "white",
               bgcolor: "#423f61",
               padding: "0px !important",
-              margin: "0px !important"
+              margin: "0px !important",
             }}
           >
             {this.props.filters.map((filter, index) => {
@@ -109,7 +108,9 @@ export default class FilterForm extends React.Component {
                         </div>
                       </div>
                     </div>
-                    <strong className="god-name">{filter.replaceAll("_", " ")}</strong>
+                    <strong className="god-name" style={{ color: "white" }}>
+                      {filter.replaceAll("_", " ")}
+                    </strong>
                   </div>
                 </MenuItem>
               );

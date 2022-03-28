@@ -95,7 +95,6 @@
   align-self: center;
 }
 
-
 .played-gods_header {
   display: flex;
   align-items: center;
@@ -455,8 +454,8 @@
     left: -1rem;
     padding: 6px;
   }
-  
-  .match-summary { 
+
+  .match-summary {
     padding: 0px;
   }
 
@@ -464,11 +463,13 @@
     font-size: 12px;
   }
 
-  .avg-carry-score .carry-score_section .carry-score_table .carry-score_table__row {
+  .avg-carry-score
+    .carry-score_section
+    .carry-score_table
+    .carry-score_table__row {
     display: flex;
     justify-content: space-between;
   }
-
 }
 
 @media (max-width: 1359px) {
@@ -516,10 +517,6 @@
   height: 36px;
   border-radius: 6px;
   overflow: hidden;
-}
-
-.Casual {
-  display: none;
 }
 
 .undefined {

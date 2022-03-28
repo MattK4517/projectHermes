@@ -150,7 +150,7 @@ export const godsDict = {
   "Zhong Kui": "Solo"
 }
 
- let routes = [
+let routes = [
   {
     path: "/",
     component: <Home />,
@@ -288,7 +288,6 @@ export default function PermanentDrawerLeft() {
   const routeComponents = routes.map(({ path, component }, key) => <Route exact path={path} component={() => component} key={key} />);
   return (
     <Box sx={{ display: 'flex' }}>
-      {/* <CssBaseline /> */}
       <Root
         position="fixed"
         sx={{
@@ -303,7 +302,6 @@ export default function PermanentDrawerLeft() {
           <Typography variant="h6" noWrap component="div"
             sx={{
               display: "flex",
-              // position: "fixed",
             }}
           >
             <Link to={"/"}>
@@ -384,21 +382,21 @@ export default function PermanentDrawerLeft() {
             let icon;
             if (text === "Home") {
               route = "";
-              icon = <AiIcons.AiFillHome className="link-icon-svg"/>
+              icon = <AiIcons.AiFillHome className="link-icon-svg" />
             }
             else if (text === "Gods") {
-              icon = <GiIcons.GiPikeman className="link-icon-svg"/>
+              icon = <GiIcons.GiPikeman className="link-icon-svg" />
             } else if (text === "Tierlist") {
-              icon = <AiIcons.AiOutlineBars className="link-icon-svg"/>
+              icon = <AiIcons.AiOutlineBars className="link-icon-svg" />
             }
             else if (text === "Contact") {
-              icon = <AiIcons.AiFillMail className="link-icon-svg"/>
+              icon = <AiIcons.AiFillMail className="link-icon-svg" />
             }
             else if (text === "Find A Match") {
-              icon = <GiIcons.GiSwordClash className="link-icon-svg"/>
+              icon = <GiIcons.GiSwordClash className="link-icon-svg" />
             }
             else if (text === "Damage Calculator") {
-              icon = <GiIcons.GiSwordman className="link-icon-svg"/>
+              icon = <GiIcons.GiSwordman className="link-icon-svg" />
             }
             else {
               route = text;
@@ -412,12 +410,17 @@ export default function PermanentDrawerLeft() {
                 >
                   {icon}<p>{text}</p>
                 </Link>
-                {/* <br></br> */}
               </>
             )
           })}
         </List>
         <Divider />
+        <div className="legal">
+          Smitestats.gg isn't endorsed by Hi-Rez Studios and doesn't reflect the views or opinions of
+          Hi-Rez Studios or anyone officially involved in producing or managing Smite.
+          Smite and Hi-Rez Studios are trademarks or registered trademarks of Hi-Rez
+          Studios, Inc. Data provided by Hi-Rez Studios. © Hi-Rez Studios, Inc. All rights reserved.
+        </div>
       </CustDrawer>
       <Box
         component="main"
@@ -425,15 +428,15 @@ export default function PermanentDrawerLeft() {
       >
         <Toolbar />
         <PlayerProvider>
-        <DamageProvider>
-        <TierListProvider>
-            <Typography>
-              <Switch>
-                {routeComponents}
-              </Switch>
-            </Typography>
-        </TierListProvider>
-        </DamageProvider>
+          <DamageProvider>
+            <TierListProvider>
+              <Typography>
+                <Switch>
+                  {routeComponents}
+                </Switch>
+              </Typography>
+            </TierListProvider>
+          </DamageProvider>
         </PlayerProvider>
       </Box>
     </Box>

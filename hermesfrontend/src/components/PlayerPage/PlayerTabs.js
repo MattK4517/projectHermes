@@ -43,7 +43,6 @@ function a11yProps(index) {
 
 export default function PlayerTabs(props) {
     React.useEffect(() => {
-        console.log(window.location.href.split("/").length)
         if (window.location.href.split("/").length === 7) {
             setValue(1)
         } else {
@@ -72,7 +71,7 @@ export default function PlayerTabs(props) {
         setIcon,
         playerLevel,
         setPlayerLevel,
-      ] = React.useContext(PlayerContext);
+    ] = React.useContext(PlayerContext);
     return (
         <Box sx={{
             width: '100%',
@@ -82,19 +81,19 @@ export default function PlayerTabs(props) {
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={value}
                     aria-label="basic tabs example">
-                    <Tab 
-                    sx={{ color: "white" }}
-                    {...a11yProps(0)} 
-                    label={"Player Overview"}
-                    to={`/player/${player}`}
-                    component={Link}
+                    <Tab
+                        sx={{ color: "white" }}
+                        {...a11yProps(0)}
+                        label={"Player Overview"}
+                        to={`/player/${player}`}
+                        component={Link}
                     />
-                    <Tab 
-                    sx={{ color: "white" }} 
-                    {...a11yProps(1)} 
-                    label={"Player Gods"}
-                    to={`/player/${player}/god-stats`}
-                    component={Link}
+                    <Tab
+                        sx={{ color: "white" }}
+                        {...a11yProps(1)}
+                        label={"Player Gods"}
+                        to={`/player/${player}/god-stats`}
+                        component={Link}
                     />
                 </Tabs>
             </Box>

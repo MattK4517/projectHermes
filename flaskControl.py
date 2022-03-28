@@ -35,14 +35,15 @@ def get_all_gods():
     return gdDict
 
 
-@app.route('/api/main/<god>/<role>/<rank>/<patch>/<queue_type>/<matchup>', methods=["GET", "POST"])
-@app.route('/api/main/<god>/<role>/<rank>/<patch>/<queue_type>', methods=["GET", "POST"])
-def get_god_data(god, role, rank, patch, queue_type, matchup="None"):
+@app.route('/api/main/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>/<matchup>', methods=["GET", "POST"])
+@app.route('/api/main/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>', methods=["GET", "POST"])
+def get_god_data(god, role, rank, patch, queue_type, mode, matchup="None"):
     newgod = god.replace("_", " ")
     winrate = anlz.get_winrate(
-        client, god, role, patch, queue_type, rank, matchup)
-    pbrate = anlz.get_pb_rate(client, god, rank, role, patch, queue_type)
-    # print(winrate, pbrate)
+        client, god, role, patch, queue_type, rank, matchup=matchup, mode=mode)
+    pbrate = anlz.get_pb_rate(client, god, rank, role,
+                              patch, queue_type=queue_type, mode=mode)
+    print(winrate, pbrate)
     return {
         **{
             "url": anlz.get_url(newgod),
@@ -58,16 +59,18 @@ def get_god_matchups(god):
     return anlz.get_worst_matchups(client, god, "Solo")
 
 
-@app.route('/api/<god>/<role>/<rank>/<patch>/<queue_type>/<matchup>')
-@app.route('/api/<god>/<role>/<rank>/<patch>/<queue_type>', methods=["GET", "POST"])
-def get_god_data_role(god, role, rank, patch, queue_type, matchup="None"):
+@app.route('/api/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>/<matchup>')
+@app.route('/api/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>', methods=["GET", "POST"])
+def get_god_data_role(god, role, rank, patch, queue_type, mode, matchup="None"):
     newgod = god.replace("_", " ")
     if matchup != "None":
-        return anlz.get_specific_build(client, god, role, patch, matchup, rank, queue_type)
+        return anlz.get_specific_build(client, god, role, patch, matchup, rank, queue_type, mode)
     elif "All" in rank and matchup == "None":
-        build = anlz.get_top_builds(client, god, role, patch, queue_type)
+        build = anlz.get_top_builds(
+            client, god, role, patch, queue_type, mode=mode)
     elif matchup == "None":
-        build = anlz.get_top_builds(client, god, role, patch, queue_type, rank)
+        build = anlz.get_top_builds(
+            client, god, role, patch, queue_type, rank, mode=mode)
 
     # pb_rate = anlz.get_pb_rate(client, newgod, rank, role, patch)
     image = {"url": anlz.get_url(newgod)}
@@ -75,14 +78,14 @@ def get_god_data_role(god, role, rank, patch, queue_type, matchup="None"):
     return data_dict
 
 
-@app.route('/api/<god>/matchups/<role>/<rank>/<patch>/<queue_type>')
-def get_god_matchups_by_rank(god, role, rank, patch, queue_type):
+@app.route('/api/<god>/matchups/<role>/<rank>/<patch>/<queue_type>/<mode>')
+def get_god_matchups_by_rank(god, role, rank, patch, queue_type, mode):
     if "All" in rank and patch == "current":
         matchups = anlz.get_worst_matchups(
-            client, god, role, patch, queue_type)
+            client, god, role, patch, queue_type=queue_type, mode=mode)
     else:
         matchups = anlz.get_worst_matchups(
-            client, god, role, patch, queue_type, rank)
+            client, god, role, patch, queue_type=queue_type, rank=rank, mode=mode)
 
     del matchups["wins"], matchups["games"], matchups["winRate"]
     return matchups
@@ -248,41 +251,43 @@ def get_player_general(playername):
     return anlzpy.create_player_return_dict(data)
 
 
-@app.route("/api/getplayergods/<playername>/<queue_type>")
-def get_player_god_info(playername, queue_type):
+@app.route("/api/getplayergods/<playername>/<queue_type>/<mode>")
+def get_player_god_info(playername, queue_type, mode):
+    print(queue_type, mode)
     mydb = client["Players"]
     mycol = mydb["Player Gods"]
+    data = {}
     if playername == "undefined":
         return {}
 
     if fh.validate_gods(client, playername, queue_type):
-        for x in mycol.find({"queue_type": f"{queue_type}Conq", "NameTag": {"$regex": f"{playername}", "$options": "i"}}, {"_id": 0}):
+        for x in mycol.find({"queue_type": queue_type, "NameTag": {"$regex": f"{playername}", "$options": "i"}}, {"_id": 0}):
             data = x
     else:
         with open("cred.txt", "r") as creds:
             lines = creds.readlines()
+
             smite_api = SmiteAPI(devId=lines[0].strip(
             ), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
+            playerId = smite_api.getPlayerId(playername)
+            print(playerId, fh.convert_mode(mode, queue_type))
             data = anlzpy.create_player_god_dict(smite_api.getQueueStats(
-                playername, fh.convert_mode(queue_type)), playername, queue_type)
+                playerId[0]["player_id"], fh.convert_mode(mode, queue_type)), playername, queue_type, mode)
             mycol.insert_one(data)
             return json.loads(json_util.dumps(data))
-    # del data["_id"]
-    return {**data, **anlzpy.get_player_winrate(data)}
-    # with open("cred.txt", "r") as creds:
-    #         lines = creds.readlines()
-    #         smite_api = SmiteAPI(devId=lines[0].strip(), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
-    # playerId = smite_api.getPlayerId(playername)
 
-    # print(smite_api.getQueueStats(playerId, 451))
-    return {}
+    if data == {}:
+        return {}
+    else:
+        print("getting here")
+        return {**data, **anlzpy.get_player_winrate(data)}
 
 
-@app.route("/api/getplayermatch/<playername>/<queue_type>/<patch>")
-def get_player_match_info(playername, queue_type, patch):
+@app.route("/api/getplayermatch/<playername>/<queue_type>/<patch>/<mode>")
+def get_player_match_info(playername, queue_type, patch, mode):
     if playername == "undefined":
         return {}
-    return json.loads(json_util.dumps(anlzpy.find_match_history(client, playername, queue_type, patch)))
+    return json.loads(json_util.dumps(anlzpy.find_match_history(client, playername, queue_type, patch, mode)))
 
 
 @app.route("/api/getplayerspecificgod/<playername>/<god>/<role>/<queue_type>/<patch>")

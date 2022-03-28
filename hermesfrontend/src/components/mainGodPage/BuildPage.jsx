@@ -77,9 +77,9 @@ const ResponsiveBuild = styled("div")(({ theme }) => ({
 
 function GodRankStats(props) {
   let banrateMessage;
-  if (props.queue_type === "Ranked") {
+  if (props.queueType === "Ranked") {
     banrateMessage = props.banrate + "%";
-  } else if (props.queue_type === "Casual") {
+  } else if (props.queueType === "Casual") {
     banrateMessage = "N/A";
   }
   return (
@@ -179,7 +179,8 @@ export default function BuildPage(props) {
       props.rank,
       props.patch,
       props.matchup,
-      props.queue_type
+      props.queueType,
+      props.mode
     );
   if (items.length === 0) {
     items = ["None"];
@@ -209,7 +210,7 @@ export default function BuildPage(props) {
         pickrate={props.pickrate}
         // url={url}
         colorStyle={colorStyle}
-        queue_type={props.queue_type}
+        queueType={props.queueType}
       />
       <div className="toughest-matchups content-section">
         <div className="content-section_header">

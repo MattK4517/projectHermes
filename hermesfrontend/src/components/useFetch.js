@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
+import { GiModernCity } from "react-icons/gi";
 import winRateColor from "./mainGodPage/WinRateColor";
 
 const compare = (a, b) => {
   return a.winRate - b.winRate
 }
 
-const useFetch = (pagegod, role, rank, patch, matchup, queue_type) => {
+const useFetch = (pagegod, role, rank, patch, matchup, queueType, mode) => {
+  console.log(pagegod, role, rank, patch, matchup, queueType, mode)
   const [games, setgames] = useState(0);
   // const [banrate, setbanrate] = useState(0);
   // const [pickrate, setpickrate] = useState(0);
@@ -16,12 +18,14 @@ const useFetch = (pagegod, role, rank, patch, matchup, queue_type) => {
   const [relics, setRelics] = useState([]);
   const [colorStyle, setColorStyle] = useState("white");
   useEffect(() => {
-    let mainFetchStatement = "/api/".concat(pagegod, "/", role, "/", rank, "/", patch, "/", queue_type);
-    if (matchup !== "None"){
+    let mainFetchStatement = "/api/".concat(pagegod, "/", role, "/", rank, "/", patch, "/", queueType, "/", mode);
+    if (matchup !== "None") {
       mainFetchStatement = mainFetchStatement.concat("/", matchup)
     }
     fetch(mainFetchStatement).then((res) =>
       res.json().then((data) => {
+        console.log(mainFetchStatement)
+        console.log(data)
         setgames(data.games);
         // setbanrate(((data.godBans / data.totalMatches) * 100).toFixed(2));
         // setpickrate(((data.games / data.totalMatches) * 100).toFixed(2));
@@ -40,8 +44,8 @@ const useFetch = (pagegod, role, rank, patch, matchup, queue_type) => {
         setitems([])
         setRelics([])
         Object.entries(displayItems).forEach((item) => {
-          if (item[1].item1.item && item[1].item2.item){
-            setitems((items) => [ 
+          if (item[1].item1.item && item[1].item2.item) {
+            setitems((items) => [
               ...items,
               {
                 item: {
@@ -55,8 +59,8 @@ const useFetch = (pagegod, role, rank, patch, matchup, queue_type) => {
           }
         });
         Object.entries(displayRelics).forEach((item) => {
-          if (item[1].item1.item && item[1].item2.item){
-            setRelics((relics) => [ 
+          if (item[1].item1.item && item[1].item2.item) {
+            setRelics((relics) => [
               ...relics,
               {
                 item: {
@@ -72,10 +76,10 @@ const useFetch = (pagegod, role, rank, patch, matchup, queue_type) => {
       })
     );
 
-  }, [role, rank, patch, matchup, queue_type]);
+  }, [role, rank, patch, matchup, queueType, mode]);
   // else if (role && rank){
   //   matchupsFetchStatement = "/".concat(pagegod, "/matchups/", role, "/", rank)
-  let matchupsFetchStatement = "/api/".concat(pagegod, "/matchups/", role, "/", rank, "/", patch, "/", queue_type)
+  let matchupsFetchStatement = "/api/".concat(pagegod, "/matchups/", role, "/", rank, "/", patch, "/", queueType, "/", mode)
   useEffect(() => {
     fetch(matchupsFetchStatement).then((res) =>
       res.json().then((data) => {
@@ -110,7 +114,7 @@ const useFetch = (pagegod, role, rank, patch, matchup, queue_type) => {
         });
       })
     );
-  }, [role, rank, patch, queue_type]);
+  }, [role, rank, patch, queueType, mode]);
 
   return { games, badmatchups, goodmatchups, items, colorStyle, relics };
   // return { games, banrate, pickrate, winrate, badmatchups, goodmatchups, items, colorStyle };

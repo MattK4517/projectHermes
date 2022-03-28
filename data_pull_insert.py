@@ -8,7 +8,7 @@ import analyze as anlz
 import analyze_players as anlzpy
 from pyrez.models import Smite
 from pyrez.models.MatchHistory import MatchHistory
-# from data_pull_formatting_rewrite import threadedd_format_no_query
+from data_pull_formatting_rewrite import format_no_query
 import os
 from __init__ import client
 from constants import godsDict
@@ -387,7 +387,6 @@ def get_player_basic(player):
 # my player id 704292327
 
 
-
 def threaded_pull(patch, all_sets):
     starttime = datetime.now()
     with open("cred.txt", "r") as f:
@@ -486,6 +485,7 @@ def get_new_items(client, smite_api):
         #     data = create_god_data_dict(gods[god])
         #     # mycol.replace_one({}, data)
 
+
 def run_pull(patch, date=get_date()):
     starttime = datetime.now()
     with open("cred.txt", "r") as f:
@@ -544,6 +544,7 @@ def run_pull(patch, date=get_date()):
     # print(total)
     # print(f"{date} Pull Completed in {str(datetime.now() - starttime)} loss: {round(inserted_count/match_ids_len*100, 2)}")
 
+
 def run_pull_hourly(patch, hour, date):
     starttime = datetime.now()
     with open("cred.txt", "r") as f:
@@ -564,7 +565,7 @@ def run_pull_hourly(patch, hour, date):
     all_sets = create_sets(match_ids)
     total = 0
     for set in all_sets:
-    
+
         try:
             data = []
             match_details = smite_api.getMatch(set)
@@ -580,32 +581,83 @@ def run_pull_hourly(patch, hour, date):
                         if match["MatchId"] == match_details[i].matchId:
                             player = create_player_dict(match_details[i])
                             match[f"player{len(match.keys())-15}"] = player
-
-            # mycol.insert_many(data)
-            # print(len(ids), ids)
-            # print(len(set) == len(data), len(set), len(data))
-            # # format_no_query(data)
-            # inserted_count += len(data)
-                # carry_score = anlz.get_carry_score(match_dict)
-                # match_dict["carryScore"] = carry_score["goldScore"]
-                # match_dict["damageScore"] = carry_score["damageScore"]
-                # match_dict["levelDiff"] = carry_score["levelDiff"]
-                # match_dict["killPart"] = carry_score["killPart"]
-                # match_dict["efficiency"] = anlz.get_gold_eff(match_dict["killPart"], match_dict["carryScore"])
         except IndexError:
             print(set)
 
     print(total)
     print(f"{date} Pull Completed in {str(datetime.now() - starttime)} loss: {round(inserted_count/match_ids_len*100, 2)}")
 
+
+def run_pull_hourly_joust(patch, hour, date):
+    starttime = datetime.now()
+    with open("cred.txt", "r") as f:
+        data = f.readlines()
+        smite_api = SmiteAPI(devId=data[0].strip(
+        ), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
+
+    mydb = client["CasualMatches"]
+    mycol = mydb[f"{patch} Joust Matches"]
+    match_ids = smite_api.getMatchIds(448, date=date, hour=hour)
+    set_length = 10
+    inserted_count = 0
+    match_ids_len = len(match_ids)
+    print(f"Joust: {len(match_ids)}")
+    all_sets = create_sets(match_ids)
+    total = 0
+    data = []
+    for set in all_sets:
+        if inserted_count >= 100:
+            break
+        try:
+            data = []
+            match_details = smite_api.getMatch(set)
+            total += len(match_details)
+            ids = []
+            for i in range(len(match_details)):
+                if match_details[i].matchId not in ids:
+                    match_dict = create_match_dict(match_details[i], patch)
+                    player = create_player_dict(match_details[i])
+                    match_dict[f"player{len(match_dict.keys())-15}"] = player
+                    data.append(match_dict)
+                    ids.append(match_dict["MatchId"])
+                else:
+                    for match in data:
+                        if match["MatchId"] == match_details[i].matchId:
+                            player = create_player_dict(match_details[i])
+                            match[f"player{len(match.keys())-15}"] = player
+
+            mycol.insert_many(data)
+            format_no_query(data, "Joust", "Casual")
+            inserted_count += len(data)
+        except IndexError:
+            print(set)
+        except TypeError:
+            print(f"{date} Pull Completed in {str(datetime.now() - starttime)} loss: {round(100 - (inserted_count/match_ids_len*100), 2)}")
+
+    print(f"{date} Pull Completed in {str(datetime.now() - starttime)} loss: {round(100 - (inserted_count/match_ids_len*100), 2)}")
+
+
 if __name__ == "__main__":
     with open("cred.txt", "r") as f:
         data = f.readlines()
         smite_api = SmiteAPI(devId=data[0].strip(
         ), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
-    get_new_items(client, smite_api)
+        playerId = smite_api.getPlayerId("Rawjik")
+        print(playerId)
+        data = smite_api.getQueueStats(playerId[0]["player_id"], 448)
+        print(data)
+    # run_pull_hourly_joust("9.3", -1, "20220326")
+
+    # with open("cred.txt", "r") as f:
+    #     data = f.readlines()
+    #     smite_api = SmiteAPI(devId=data[0].strip(
+    #     ), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
+    # get_new_items(client, smite_api)
     # mydb = client["single_match_stats"]
     # for god in godsDict:
     #     mycol = mydb[god]
     #     mycol.update_many({"Entry_Datetime": {"$not": {"$regex": "2/22/2022", "$options": "i"}}}, {"$set": {"patch": "9.1"}})
     #     print(mycol.count_documents({"patch": "9.2"}))
+
+
+# Rat1Boss

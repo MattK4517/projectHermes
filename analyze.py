@@ -40,10 +40,12 @@ def get_query(rank, role, patch, queue_type, mode):
     if "All" not in role:
         myquery["role"] = role
     myquery["mode"] = mode
+    if mode == "Joust":
+        del myquery["role"]
     return myquery
 
 
-def get_pb_rate(client, god, rank, role, patch, queue_type="Ranked"):
+def get_pb_rate(client, god, rank, role, patch, queue_type="Ranked", mode="Conquest"):
     """ # need to grab # of matches played by god, number of matches played, number of bans
 
     Args:
@@ -57,22 +59,24 @@ def get_pb_rate(client, god, rank, role, patch, queue_type="Ranked"):
     bandb = client["single_god_bans"]
     bancol = bandb[god]
     startime = datetime.now()
-    myquery = get_query(rank, role, patch, queue_type)
+    myquery = get_query(rank, role, patch, queue_type, mode)
 
-    totalMatches = get_total_matches(client, rank, patch, queue_type)
+    totalMatches = get_total_matches(
+        client, rank, patch, queue_type=queue_type, mode=mode)
     if "All" not in rank:
         totalMatches = totalMatches / 10
     godBans = bancol.count_documents(myquery)
-    games = get_games_played(client, god, rank, role, patch, queue_type)
+    games = get_games_played(client, god, rank, role,
+                             patch, queue_type=queue_type, mode=mode)
     if totalMatches == 0:
         totalMatches = 1
     return {"godBans": godBans, "totalMatches": totalMatches, "banRate": round(godBans/totalMatches * 100, 2), "pickRate": round(games/totalMatches * 100, 2)}
 
 
-def get_games_played(client, god, rank, role, patch, queue_type="Ranked"):
+def get_games_played(client, god, rank, role, patch, queue_type="Ranked", mode="Conquest"):
     mydb = client["single_match_stats"]
     mycol = mydb[god]
-    myquery = get_query(rank, role, patch, queue_type)
+    myquery = get_query(rank, role, patch, queue_type, mode)
     games = mycol.count_documents(myquery)
     return games
 
@@ -144,7 +148,7 @@ def get_item_data(client, item):
     return itemdata
 
 
-def get_top_builds(client, god, role, patch, queue_type="Ranked", rank="All Ranks", data=None):
+def get_top_builds(client, god, role, patch, queue_type="Ranked", rank="All Ranks", mode="Conquest", data=None):
     top_dict = {slot: {} for slot in slots}
     top_dict = {
         **{f"relic{i+1}": {} for i in range(2)},
@@ -152,8 +156,8 @@ def get_top_builds(client, god, role, patch, queue_type="Ranked", rank="All Rank
     }
     mydb = client["single_match_stats"]
     mycol = mydb[god]
-    myquery = get_query(rank, role, patch, queue_type)
-
+    myquery = get_query(rank, role, patch, queue_type, mode)
+    print(mycol.count_documents(myquery))
     games = 0
     wins = 0
     if type(data) is list:
@@ -377,23 +381,44 @@ def get_worst_matchups(client, god, role, patch, queue_type="Ranked", rank="All 
         else:
             games += 1
             flag = False
-            if matchup["enemy"]:
-                if matchup["win_status"] == "Winner":
-                    flag = True
-                    wins += 1
-                if matchup["enemy"] not in matchup_dict:
-                    if flag:
-                        matchup_dict[matchup["enemy"]] = {
-                            "enemy": matchup["enemy"], "timesPlayed": 1, "wins": 1}
+            if mode == "Conqust":
+                if matchup["enemy"]:
+                    if matchup["win_status"] == "Winner":
+                        flag = True
+                        wins += 1
+                    if matchup["enemy"] not in matchup_dict:
+                        if flag:
+                            matchup_dict[matchup["enemy"]] = {
+                                "enemy": matchup["enemy"], "timesPlayed": 1, "wins": 1}
+                        else:
+                            matchup_dict[matchup["enemy"]] = {
+                                "enemy": matchup["enemy"], "timesPlayed": 1, "wins": 0}
                     else:
-                        matchup_dict[matchup["enemy"]] = {
-                            "enemy": matchup["enemy"], "timesPlayed": 1, "wins": 0}
-                else:
-                    if flag:
-                        matchup_dict[matchup["enemy"]]["timesPlayed"] += 1
-                        matchup_dict[matchup["enemy"]]["wins"] += 1
-                    else:
-                        matchup_dict[matchup["enemy"]]["timesPlayed"] += 1
+                        if flag:
+                            matchup_dict[matchup["enemy"]]["timesPlayed"] += 1
+                            matchup_dict[matchup["enemy"]]["wins"] += 1
+                        else:
+                            matchup_dict[matchup["enemy"]]["timesPlayed"] += 1
+
+            elif mode == "Joust":
+                for enemy in matchup["enemies"]:
+                    if enemy:
+                        if matchup["win_status"] == "Winner":
+                            flag = True
+                            wins += 1
+                        if enemy not in matchup_dict:
+                            if flag:
+                                matchup_dict[enemy] = {
+                                    "enemy": enemy, "timesPlayed": 1, "wins": 1}
+                            else:
+                                matchup_dict[enemy] = {
+                                    "enemy": enemy, "timesPlayed": 1, "wins": 0}
+                        else:
+                            if flag:
+                                matchup_dict[enemy]["timesPlayed"] += 1
+                                matchup_dict[enemy]["wins"] += 1
+                            else:
+                                matchup_dict[enemy]["timesPlayed"] += 1
 
     for matchup in matchup_dict:
         matchup_dict[matchup]["winRate"] = round(
@@ -421,10 +446,10 @@ def get_worst_matchups(client, god, role, patch, queue_type="Ranked", rank="All 
     return {**test_sort, **{"games": games, "wins": wins, "winRate": round(wins/games*100, 2)}}
 
 
-def get_winrate(client, god, role, patch, queue_type="Ranked", rank="All Ranks", matchup="None"):
+def get_winrate(client, god, role, patch, queue_type="Ranked", rank="All Ranks", mode="Conquest", matchup="None"):
     mydb = client["single_match_stats"]
     mycol = mydb[god]
-    myquery = get_query(rank, role, patch, queue_type)
+    myquery = get_query(rank, role, patch, queue_type, mode=mode)
 
     if matchup != "None":
         myquery = {**myquery, **{"enemy": matchup}}
@@ -442,11 +467,11 @@ def get_winrate(client, god, role, patch, queue_type="Ranked", rank="All Ranks",
     return {"wins": wins, "games": games, "win_rate": win_rate}
 
 
-def get_total_matches(client, rank, patch, queue_type="Ranked"):
+def get_total_matches(client, rank, patch, queue_type="Ranked", mode="Conquest"):
     mydb = client["Matches"]
     mycol = mydb["Total_Matches"]
     total_games = 0
-    myquery = get_query(rank, "", patch, queue_type)
+    myquery = get_query(rank, "", patch, queue_type, mode)
 
     for x in mycol.find(myquery, {"Total_Matches": 1, "_id": 0}):
         total_games += x["Total_Matches"]

@@ -52,8 +52,8 @@ export default function MatchDisplay(props) {
     setGod,
     player,
     setPlayer,
-    queue_type,
-    setMode,
+    queueType,
+    setQueueType,
     role,
     setRole,
     topLink,
@@ -67,8 +67,11 @@ export default function MatchDisplay(props) {
     patch,
     setPatch,
     patches,
+    mode,
+    setMode,
+    queueTypes,
+    modes,
   ] = useContext(PlayerContext);
-  const modes = ["Casual", "Ranked"];
   if (Object.keys(props.matchList).length > 0) {
     return (
       <div className="content-section content-section_no-padding match-block">
@@ -85,7 +88,7 @@ export default function MatchDisplay(props) {
                 />
                 <FilterForm
                   filter={"Queue Type"}
-                  filters={modes}
+                  filters={["Ranked", "Casual"]}
                   setFilter={setMode}
                   className="test-div"
                 />
@@ -147,7 +150,7 @@ export default function MatchDisplay(props) {
                       <div className="stat-group-one">
                         <div className="r1">
                           <div className="queue-type">
-                            {props.queue_type} Conquest
+                            {props.queueType} Conquest
                           </div>
                           <div className="date">{match.Entry_Datetime}</div>
                         </div>
@@ -355,14 +358,15 @@ export default function MatchDisplay(props) {
             <div className="filter-width-wrapper">
               <div className="filter-manager_container">
                 <FilterForm
-                  filter={"Patch"}
-                  filters={patches}
+                  filter={patch}
+                  filters={["9.3", "9.2", "9.1"]}
                   setFilter={setPatch}
                 />
+                <FilterForm filter={mode} filters={modes} setFilter={setMode} />
                 <FilterForm
-                  filter={"Queue Type"}
-                  filters={modes}
-                  setFilter={setMode}
+                  filter={queueType}
+                  filters={queueTypes}
+                  setFilter={setQueueType}
                 />
               </div>
             </div>

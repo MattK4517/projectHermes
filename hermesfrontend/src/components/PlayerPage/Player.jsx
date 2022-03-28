@@ -6,6 +6,7 @@ import { MatchDisplay } from "..";
 import { PlayerContext } from "./PlayerContext";
 import PlayerTabs from "./PlayerTabs";
 import "./Player.css";
+import { GiModernCity } from "react-icons/gi";
 
 export const linkDict = {
   Achilles: "https://i.imgur.com/KoU1bup.jpg",
@@ -182,8 +183,8 @@ export default function Player(props) {
     setGod,
     player,
     setPlayer,
-    queue_type,
-    setMode,
+    queueType,
+    setQueueType,
     role,
     setRole,
     topLink,
@@ -196,6 +197,10 @@ export default function Player(props) {
     setTab,
     patch,
     setPatch,
+    patches,
+    mode,
+    setMode,
+    queueTypes,
   ] = useContext(PlayerContext);
   setPlayer(window.location.href.split("/")[5]);
 
@@ -205,38 +210,52 @@ export default function Player(props) {
   const [games, setGames] = useState(0);
   const [godList, setGodList] = useState([]);
   useEffect(() => {
-    fetch("/api/getplayergods/".concat(player, "/", queue_type)).then((res) =>
-      res.json().then((data) => {
-        let newData = Object.values(data).sort(compare);
-        setGodList([]);
-        setWinRate(data.winRate);
-        setGames(data.games);
-        Object.keys(newData).map((god, index) => {
-          if (index === 0) {
-            setTopLink(setTopGod(newData[index]["god"]));
-          }
-          if (index < 10) {
-            if (Object.keys(newData[god]).indexOf("god") !== -1) {
-              setGodList((godList) => [
-                ...godList,
-                {
-                  ...newData[god],
-                },
-              ]);
+    fetch("/api/getplayergods/".concat(player, "/", queueType, "/", mode)).then(
+      (res) =>
+        res.json().then((data) => {
+          let newData = Object.values(data).sort(compare);
+          let tempGames;
+          let tempWins;
+          setGodList([]);
+          Object.keys(newData).map((god, index) => {
+            tempGames += newData[index]["matches"];
+            tempWins += newData[index]["wins"];
+            console.log(tempGames);
+            if (index === 0) {
+              setTopLink(setTopGod(newData[index]["god"]));
             }
-          }
-        });
-      })
+            if (index < 10) {
+              if (Object.keys(newData[god]).indexOf("god") !== -1) {
+                setGodList((godList) => [
+                  ...godList,
+                  {
+                    ...newData[god],
+                  },
+                ]);
+              }
+            }
+          });
+          console.log(tempGames);
+          setGames(tempGames);
+          // setWinRate(tempWins / tempGames);
+        })
     );
-  }, [player, queue_type]);
+  }, [player, queueType, mode]);
   const [matchList, setMatchList] = useState([]);
 
   useEffect(() => {
     fetch(
-      "/api/getplayermatch/".concat(player, "/", queue_type, "/", patch)
+      "/api/getplayermatch/".concat(
+        player,
+        "/",
+        queueType,
+        "/",
+        patch,
+        "/",
+        mode
+      )
     ).then((res) =>
       res.json().then((data) => {
-        console.log("here");
         setMatchList([]);
         let newData = Object.values(data).sort(compareDate);
         Object.keys(newData).map((match) => {
@@ -249,21 +268,17 @@ export default function Player(props) {
         });
       })
     );
-  }, [player, queue_type, patch]);
+  }, [player, queueType, patch, mode]);
 
   useEffect(() => {
     fetch("/api/getplayergeneral/".concat(player)).then((res) =>
       res.json().then((data) => {
-        console.log(data);
-        setWinRate(data.winRate);
-        setGames(data.games);
         setPlayerLevel(data.level);
         if (data.avatar !== "") {
           setIcon(data.avatar);
         }
         setRank(data.rank);
         setTier(data.tier ?? "");
-        setGames(data.games);
       })
     );
   }, [player]);
@@ -302,19 +317,15 @@ export default function Player(props) {
                   tier={tier}
                   winrate={winRate}
                   games={games}
-                  queue_type={queue_type}
+                  queueType={queueType}
                 />
-                <GodDisplay
-                  godList={godList}
-                  setMode={setMode}
-                  player={player}
-                />
+                <GodDisplay godList={godList} player={player} />
               </div>
               <div className="player-main">
                 <MatchDisplay
                   matchList={matchList}
                   player={player}
-                  queue_type={queue_type}
+                  queueType={queueType}
                 />
               </div>
             </div>

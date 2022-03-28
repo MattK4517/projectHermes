@@ -225,4 +225,5 @@ if __name__ == "__main__":
     mydb = client["single_match_stats"]
     for god in godsDict:
         mycol = mydb[god]
-        mycol.rename({}, {"mode": "queue_type"})
+        print(god, mycol.count_documents({"mode": "Joust"}))
+        # mycol.rename({}, {"mode": "queue_type"})
