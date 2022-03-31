@@ -1,5 +1,5 @@
 from audioop import avg
-from re import A, S, X
+from re import A, M, S, X
 from datetime import datetime
 import re
 from __init__ import client
@@ -9,7 +9,7 @@ import pymongo
 from collections import OrderedDict
 from operator import getitem
 from math import sqrt
-from constants import godsDict, slots, Tier_Three_items, Starter_items, roles, single_combat_stats, single_objective_stats, godsDict2
+from constants import godsDict, slots, Tier_Three_items, Starter_items, roles, single_combat_stats, single_objective_stats, godsDict2, ranks
 import analyze_players as anlzpy
 import create_tier_list
 
@@ -40,7 +40,8 @@ def get_query(rank, role, patch, queue_type, mode):
     if "All" not in role:
         myquery["role"] = role
     myquery["mode"] = mode
-    if mode == "Joust":
+
+    if mode == "Joust" and "role" in myquery.keys():
         del myquery["role"]
     return myquery
 
@@ -58,13 +59,14 @@ def get_pb_rate(client, god, rank, role, patch, queue_type="Ranked", mode="Conqu
     godBans = 0
     bandb = client["single_god_bans"]
     bancol = bandb[god]
-    startime = datetime.now()
     myquery = get_query(rank, role, patch, queue_type, mode)
 
     totalMatches = get_total_matches(
         client, rank, patch, queue_type=queue_type, mode=mode)
     if "All" not in rank:
         totalMatches = totalMatches / 10
+    del myquery["queue_type"]
+    # print(myquery)
     godBans = bancol.count_documents(myquery)
     games = get_games_played(client, god, rank, role,
                              patch, queue_type=queue_type, mode=mode)
@@ -141,7 +143,7 @@ def get_item_data(client, item):
         for element in delKeys:
             del itemdata[element]
 
-        #itemdata = {**itemdata, **{"Descriptions": itemdata["ItemDescription"]["Menuitems"][0]["Description"]}, **{"Value1": itemdata["ItemDescription"]["Menuitems"][0]["Value"]}}
+        # itemdata = {**itemdata, **{"Descriptions": itemdata["ItemDescription"]["Menuitems"][0]["Description"]}, **{"Value1": itemdata["ItemDescription"]["Menuitems"][0]["Value"]}}
         itemdata = {**itemdata}
     else:
         itemdata = {}
@@ -157,7 +159,7 @@ def get_top_builds(client, god, role, patch, queue_type="Ranked", rank="All Rank
     mydb = client["single_match_stats"]
     mycol = mydb[god]
     myquery = get_query(rank, role, patch, queue_type, mode)
-    print(mycol.count_documents(myquery))
+    # print(mycol.count_documents(myquery))
     games = 0
     wins = 0
     if type(data) is list:
@@ -296,7 +298,7 @@ def sort_top_dict(top_dict, client):
     return all_dict
 
 
-def get_all_builds(client, god, role, patch, queue_type="Ranked", rank="All Ranks"):
+def get_all_builds(client, god, role, patch, queue_type="Ranked", rank="All Ranks", mode="Conquest"):
     top_dict = {slot: {} for slot in slots}
     top_dict = {
         **{f"relic{i+1}": {} for i in range(4)},
@@ -304,7 +306,7 @@ def get_all_builds(client, god, role, patch, queue_type="Ranked", rank="All Rank
     }
     mydb = client["single_match_stats"]
     mycol = mydb[god]
-    myquery = get_query(rank, role, patch, queue_type)
+    myquery = get_query(rank, role, patch, queue_type, mode)
 
     games = 0
     wins = 0
@@ -348,16 +350,15 @@ def get_worst_matchups(client, god, role, patch, queue_type="Ranked", rank="All 
         myquery = {**myquery, **
                    {"player":  {"$regex": f"{player}", "$options": "i"}}}
 
-    print(myquery)
+    # print(myquery)
     if "All" in role:
         del myquery["role"]
 
     games = 0
     wins = 0
-    # print(myquery)
     for matchup in mycol.find(myquery, {"_id": 0}):
         if player:
-            # print(matchup)
+            # #print(matchup)
             if anlzpy.verify_player(player, matchup["player"], "none", "none"):
                 games += 1
                 flag = False
@@ -381,7 +382,7 @@ def get_worst_matchups(client, god, role, patch, queue_type="Ranked", rank="All 
         else:
             games += 1
             flag = False
-            if mode == "Conqust":
+            if mode == "Conquest":
                 if matchup["enemy"]:
                     if matchup["win_status"] == "Winner":
                         flag = True
@@ -478,11 +479,11 @@ def get_total_matches(client, rank, patch, queue_type="Ranked", mode="Conquest")
     return total_games
 
 
-def get_combat_stats(client, god, role, patch, rank="All Ranks"):
+def get_combat_stats(client, god, role, patch, rank="All Ranks", queue_type="Ranked", mode="Conquest"):
     mydb = client["single_match_stats"]
     mycol = mydb[god]
     combat_stats = {}
-    myquery = get_query(rank, role, patch, "")
+    myquery = get_query(rank, role, patch, queue_type, mode)
 
     for x in mycol.aggregate([
         {
@@ -510,11 +511,11 @@ def get_combat_stats(client, god, role, patch, rank="All Ranks"):
     return combat_stats
 
 
-def get_objective_stats(client, god, role, patch, rank="All Ranks"):
+def get_objective_stats(client, god, role, patch, rank="All Ranks", queue_type="Ranked", mode="Conquest"):
     mydb = client["single_match_stats"]
     mycol = mydb[god]
-    myquery = get_query(rank, role, patch, "")
     combat_stats = {}
+    myquery = get_query(rank, role, patch, queue_type, mode)
     for x in mycol.aggregate([
         {
             "$match": myquery
@@ -533,7 +534,7 @@ def get_objective_stats(client, god, role, patch, rank="All Ranks"):
             }
         }
     ]):
-        # print(x)
+        # #print(x)
         combat_stats = x
         for key, val in enumerate(combat_stats):
             if type(combat_stats[val]) is float or type(combat_stats[val]) is int:
@@ -688,7 +689,7 @@ def get_carry_score(match):
                             ret_data["damageScore"][match[key]["Win_Status"]][match[key]["Role"]] = {"damage": match[key]["Damage_Player"],
                                                                                                      "damageShare": round(match[key]["Damage_Player"] / ret_data["damageScore"][match[key]["Win_Status"]]["totalDamage"] * 100, 2)}
             except ZeroDivisionError:
-                # print(ret_data)
+                # #print(ret_data)
                 pass
     else:
         print(f"ERROR IN: {match['MatchId']}")
@@ -731,7 +732,7 @@ def get_gold_eff(kill_part, gold_eff):
 
 
 def check_roles(match_roles):
-    # print(match_roles)
+    # #print(match_roles)
     match_roles.sort()
     if match_roles != ['Carry', 'Carry', 'Jungle', 'Jungle', 'Mid', 'Mid', 'Solo', 'Solo', 'Support', 'Support']:
         return False
@@ -754,7 +755,7 @@ def get_tier(client, win_rate, pick_rate, ban_rate, role, rank):
 
         tier = (1.75*win_rate_score) + \
             ((pick_rate_score + (.7*ban_rate_score)) / 2)
-        # print(tier)
+        # #print(tier)
         if tier < 0:
             tier_letter = "D"
 
@@ -775,7 +776,7 @@ def get_tier(client, win_rate, pick_rate, ban_rate, role, rank):
 
         return tier_letter
     except KeyError:
-        print(tier_stats)
+        # print(tier_stats)
         return "INVALID"
 
 
@@ -1026,7 +1027,7 @@ def get_lanes(client):
             if winning_duo["count"] + losing_duo["count"] > 150:
                 if winning_duo["_id"] == losing_duo["_id"]:
                     # if winning_duo["winningCarryWR"] > 100 or winning_duo["winningSupportWR"] > 100:
-                    #     print(winning_duo)
+                    #     #print(winning_duo)
                     # if winning_duo["_id"]["carry"] not in god_wrs["carry"]:
                     #     carryWinRate = winning_duo["winningCarryWR"]
                     #     god_wrs["carry"][winning_duo["_id"]["carry"]] = winning_duo["winningCarryWR"]
@@ -1049,13 +1050,59 @@ def get_lanes(client):
     return lanes
 
 
+def calc_total_matches(client, ranks, patch, queue_type, mode):
+    matchIds = []
+    actTotalGames = 0
+    if queue_type == "Casual":
+        mydb = client["CasualMatches"]
+        if mode == "Conquest":
+            mycol = mydb[f"{patch} Matches"]
+        elif mode == "Joust":
+            mycol = mydb[f"{patch} Joust Matches"]
+
+        insert_games("All Ranks", mycol.count_documents(
+            {}), patch, queue_type, mode)
+        return
+
+    for rank in ranks:
+        myquery = get_query(rank, "", patch, queue_type, mode)
+        if rank == "All Ranks":
+            mycol.update_one(myquery, {
+                             "$set": {"Total_Matches": len(matchIds)}})
+            break
+        mydb = client["single_match_stats"]
+        total_games = 0
+        for god in godsDict:
+            mycol = mydb[god]
+            games = 0
+            for x in mycol.find(myquery, {"_id": 0}):
+                # if x["matchId"] not in matchIds:
+                matchIds.append(x["matchId"])
+                games += 1
+            total_games += games
+        actTotalGames += total_games
+        insert_games(rank, total_games, patch, queue_type, mode)
+
+
+def insert_games(rank, games, patch, queue_type, mode):
+    mydb = client["Matches"]
+    mycol = mydb[f"Total_Matches"]
+    myquery = get_query(rank, "", patch, queue_type, mode)
+    mycol.insert_one({**myquery, **{"Total_Matches": games}})
+    # mycol.update_one({"rank": rank, "patch": patch, "queue_type": "RankedConq"}, {"$set": {"Total_Matches": games}})
+    #print(f"{rank} done")
+
+
 if __name__ == "__main__":
     starttime = datetime.now()
-    # print(get_top_builds(client, "Shiva", "Solo", "9.2", "Casual"))
-    print(get_worst_matchups(client, "Arachne", "Jungle", "9.3", "Casual"))
-    # print(create_tier_list.get_tier_stats(client, "All Ranks", "Solo"))
-    # # print(get_total_matches(client, "Diamond", "9.1"))
+    # print(get_worst_matchups(client, "Cliodhna", "Solo", "9.3"))
+    # #print(get_top_builds(client, "Shiva", "Solo", "9.2", "Casual"))
+    calc_total_matches(client, ranks, "9.3", "Ranked", "Conquest")
+    # #print(get_winrate(client, "Ah Puch", "All", "9.3", mode="Joust"))
+    # #print(get_pb_rate(client, "Ah Puch", "All Ranks", "All", "9.3", mode="Joust"))
+    # #print(create_tier_list.get_tier_stats(client, "All Ranks", "Solo"))
+    # # #print(get_total_matches(client, "Diamond", "9.1"))
     # for god in godsDict2:
     #     winrate = get_winrate(client, god, godsDict2[god], "9.1")["win_rate"]
     #     data = get_pb_rate(client, god, "Bronze", godsDict2[god], "9.1")
-    #     print(god, create_tier_list.get_tier(client, winrate, data["pickRate"], data["banRate"], godsDict2[god], "Diamond"))
+    #     #print(god, create_tier_list.get_tier(client, winrate, data["pickRate"], data["banRate"], godsDict2[god], "Diamond"))

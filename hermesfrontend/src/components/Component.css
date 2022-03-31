@@ -996,6 +996,16 @@ a:visited {
   -webkit-overflow-scrolling: touch;
 }
 
+@media (max-width: 699px) {
+  .filter-manager {
+    overflow: auto;
+  }
+
+  .row {
+    margin-left: 6px !important;
+  }
+}
+
 .filter-manager .filter-manager_container {
   position: relative;
   display: flex;
@@ -1394,14 +1404,6 @@ figure.snip0015:hover figcaption::before {
 
 .filler {
   color: white;
-}
-
-.drop-down_hover {
-  background-color: #191937 !important;
-  text-align: center;
-}
-.drop-down_hover:hover {
-  background-color: #070720 !important;
 }
 
 .drop-down_icon {

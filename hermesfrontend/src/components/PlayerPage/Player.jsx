@@ -213,14 +213,16 @@ export default function Player(props) {
     fetch("/api/getplayergods/".concat(player, "/", queueType, "/", mode)).then(
       (res) =>
         res.json().then((data) => {
+          console.log(data);
+          setGames(data.games);
+          setWinRate(data.winRate);
+          delete data.games;
+          delete data.winRate;
+          console.log(data);
           let newData = Object.values(data).sort(compare);
-          let tempGames;
-          let tempWins;
+
           setGodList([]);
           Object.keys(newData).map((god, index) => {
-            tempGames += newData[index]["matches"];
-            tempWins += newData[index]["wins"];
-            console.log(tempGames);
             if (index === 0) {
               setTopLink(setTopGod(newData[index]["god"]));
             }
@@ -235,9 +237,6 @@ export default function Player(props) {
               }
             }
           });
-          console.log(tempGames);
-          setGames(tempGames);
-          // setWinRate(tempWins / tempGames);
         })
     );
   }, [player, queueType, mode]);

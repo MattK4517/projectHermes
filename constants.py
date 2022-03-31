@@ -139,7 +139,7 @@ Warriors = ["Amaterasu", "Achilles", "Bellona", "Chaac", "Cu Chulainn", "Erlang 
 roles = ["Carry", "Support", "Mid", "Jungle", "Solo"]
 ranks = ["Bronze", "Silver", "Gold", "Platinum",
          "Diamond", "Masters", "Grandmaster", "All Ranks"]
-# ranks = ["Bronze", "Silver", "Gold", "Platinum", "Diamond", "Masters", "Grandmaster", "All Ranks"]
+all_ranks = ["Bronze", "Silver", "Gold", "Platinum", "Diamond", "Masters", "Grandmaster", "All Ranks"]
 slots = ["slot1", "slot2", "slot3", "slot4", "slot5", "slot6"]
 
 single_combat_stats = ["kills", "deaths", "assists", "damage_player",

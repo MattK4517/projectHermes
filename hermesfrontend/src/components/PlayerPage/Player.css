@@ -395,7 +395,7 @@
 .player-content-main {
   display: flex;
   grid-gap: 24px;
-  width: 1016px;
+  width: 100%;
 }
 
 .player-content-container {

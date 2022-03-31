@@ -360,7 +360,7 @@ function Godpage(props) {
         // setTier(data.tier)
       })
     );
-  }, [dispRole, dispRank, patch, queueType, matchup]);
+  }, [dispRole, dispRank, patch, queueType, matchup, mode]);
 
   useEffect(() => {
     fetch("/api/".concat(pagegod, "/abilities")).then((res) =>
@@ -409,7 +409,7 @@ function Godpage(props) {
                 <div className="filter-manager">
                   <div className="filter-width-wrapper">
                     <div className="filter-manager_container">
-                      <div className="filter-manager_label">
+                      <div className="filter-manager_label hide">
                         <span style={{ color: "white" }}>Stat Filters</span>
                       </div>
                       {/* <div className="role-filter-container"> */}

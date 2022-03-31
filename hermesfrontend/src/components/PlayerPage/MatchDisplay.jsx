@@ -81,16 +81,15 @@ export default function MatchDisplay(props) {
             <div className="filter-width-wrapper">
               <div className="filter-manager_container">
                 <FilterForm
-                  filter={"Patch"}
-                  filters={patches}
+                  filter={patch}
+                  filters={["9.3", "9.2", "9.1"]}
                   setFilter={setPatch}
-                  className="test-div"
                 />
+                <FilterForm filter={mode} filters={modes} setFilter={setMode} />
                 <FilterForm
-                  filter={"Queue Type"}
-                  filters={["Ranked", "Casual"]}
-                  setFilter={setMode}
-                  className="test-div"
+                  filter={queueType}
+                  filters={queueTypes}
+                  setFilter={setQueueType}
                 />
               </div>
             </div>

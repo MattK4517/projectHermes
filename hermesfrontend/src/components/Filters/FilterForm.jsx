@@ -63,11 +63,10 @@ export default class FilterForm extends React.Component {
 
   render() {
     return (
-      <Box sx={{ minWidth: 120 }}>
+      <Box sx={{ minWidth: 120, color: "white" }}>
         <FormControl fullWidth>
           <InputLabel sx={{ color: "white" }}>{this.props.filter}</InputLabel>
           <Select
-            labelId="demo-simple-select-label"
             id="patch-filter"
             label={this.props.filter}
             onChange={this.handleChange}
@@ -75,15 +74,26 @@ export default class FilterForm extends React.Component {
               bgcolor: "#423f61",
               padding: "0px !important",
               margin: "0px !important",
+              textAlign: "Center",
             }}
           >
             {this.props.filters.map((filter, index) => {
               return (
                 <MenuItem
-                  sx={{ marginTop: "0px" }}
+                  sx={{
+                    marginTop: "0px",
+                    backgroundColor: "#191937",
+                    textAlign: "center",
+                    "&:hover": {
+                      backgroundColor: "#383864",
+                    },
+                    "&:active": {
+                      backgroundColor: "#191937",
+                    },
+                  }}
                   value={filter}
                   selected
-                  className="drop-down_hover"
+                  className=""
                   key={index}
                 >
                   <div className="drop-down_icon">

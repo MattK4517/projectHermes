@@ -1,3 +1,4 @@
+from cProfile import run
 import pymongo
 from datetime import datetime
 from constants import godsDict, roles, ranks, slots
@@ -32,9 +33,12 @@ class GodData:
                     self.matches.append(match)
                     match_picks += 1
                 if "Ban" in key and match[key] == self.name and match_bans == 0:
-                    match_bans += 1
-                    self.insert_ban(match["MatchId"], normalize_rank(
-                        match["player0"]["Conquest_Tier"]), match["Entry_Datetime"], match["Patch"])
+                    try:
+                        match_bans += 1
+                        self.insert_ban(match["MatchId"], normalize_rank(
+                            match["player0"]["Conquest_Tier"]), match["Entry_Datetime"], match["Patch"])
+                    except:
+                        print("error")
 
     def get_matches(self):
         return len(self.matches)
@@ -191,24 +195,27 @@ def get_date():
 
 
 # {"Entry_Datetime": {"$lte": "8/30/2021", "$gte": "8/27/2021" }}
-def run_format(patch, date):
+def run_format(patch, date, mode, queue_type):
     sum_gods = 0
     mydb = client["Matches"]
-    mycol = mydb[f"{patch} Matches"]
+    mycol = mydb[f"{patch} Joust Matches"]
     set_matches = []
     count = 0
-    for match in mycol.find({"Entry_Datetime": date}):
+    for match in mycol.find():
         set_matches.append(match)
 
     for god in godsDict:
-        godsDict[god] = GodData(god)
+
+        godsDict[god] = GodData(god, mode, queue_type)
         godsDict[god].set_matches(set_matches)
         sum_gods += godsDict[god].get_matches()
         # godsDict[god].calc_matchups()
         # godsDict[god].calc_items()
         godsDict[god].calc_match_stats()
         # godsDict[god].calc_objective_stats()
+        count += godsDict[god].get_matches()
         print(f"{god}: {godsDict[god].get_matches()}")
+    print(count)
 
 
 def format_no_query(match, mode, queue_type):
@@ -216,3 +223,7 @@ def format_no_query(match, mode, queue_type):
         godsDict[god] = GodData(god, mode, queue_type)
         godsDict[god].set_matches(match)
         godsDict[god].calc_match_stats()
+
+
+if __name__ == "__main__":
+    run_format("9.3", "", "Joust", "Ranked")

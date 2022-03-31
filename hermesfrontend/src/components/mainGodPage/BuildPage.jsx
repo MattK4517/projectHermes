@@ -208,7 +208,6 @@ export default function BuildPage(props) {
         games={games}
         banrate={props.banrate}
         pickrate={props.pickrate}
-        // url={url}
         colorStyle={colorStyle}
         queueType={props.queueType}
       />

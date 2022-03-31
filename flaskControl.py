@@ -1,6 +1,8 @@
 from datetime import datetime
 from queue import Empty
 from re import M
+
+from sklearn.linear_model import GammaRegressor
 import analyze as anlz
 import analyze_players as anlzpy
 import pandas as pd
@@ -96,13 +98,13 @@ def get_god_abilities(god):
     return anlz.get_abilities(client, god)
 
 
-@app.route("/api/gettierlist/<rank>/<role>/<tableType>/<queue_type>/<patch>", methods=["GET", "POST"])
-def get_tier_list(rank, role, tableType, queue_type, patch):
+@app.route("/api/gettierlist/<rank>/<role>/<tableType>/<queue_type>/<patch>/<mode>", methods=["GET", "POST"])
+def get_tier_list(rank, role, tableType, queue_type, patch, mode):
     rank = rank.replace("_", " ")
     retData = {god: {} for god in godsDict}
     mydb = client["Tier_list"]
-    if tableType == "Regular":
-        mycol = mydb["Regular List"]
+    if not tableType == "Duos":
+        mycol = mydb["Test List"]
         rank = rank.replace("_", " ")
         if "All" in role:
             myquery = {"rank": rank, "pickRate": {"$gte": 1}, "patch": patch}
@@ -110,44 +112,10 @@ def get_tier_list(rank, role, tableType, queue_type, patch):
             myquery = {"rank": rank, "role": role,
                        "pickRate": {"$gte": 1}, "patch": patch}
 
-        myquery = {**myquery, **{"queue_type": f"{queue_type}Conq"}}
+        myquery = {**myquery, **{"queue_type": queue_type, "mode": mode}}
 
-        for x in mycol.find(myquery, {"_id": 0}):
-            dict_god = x["god"]
-            dict_role = x["role"]
-            if not retData[dict_god]:
-                retData[dict_god] = {dict_role: x}
-            else:
-                retData[dict_god][dict_role] = x
+        print(myquery)
 
-    elif tableType == "Combat":
-        mycol = mydb["Combat List"]
-        rank = rank.replace("_", " ")
-        if "All" in role:
-            myquery = {"rank": rank, "pickRate": {"$gte": 1}, "patch": patch}
-        else:
-            myquery = {"rank": rank, "role": role,
-                       "pickRate": {"$gte": 1}, "patch": patch}
-
-        myquery = {**myquery, **{"queue_type": f"{queue_type}Conq"}}
-
-        for x in mycol.find(myquery, {"_id": 0}):
-            dict_god = x["god"]
-            dict_role = x["role"]
-            if not retData[dict_god]:
-                retData[dict_god] = {dict_role: x}
-            else:
-                retData[dict_god][dict_role] = x
-
-    elif tableType == "Objective":
-        mycol = mydb["Objective List"]
-        rank = rank.replace("_", " ")
-        if "All" in role:
-            myquery = {"rank": rank, "pickRate": {"$gte": 1}}
-        else:
-            myquery = {"rank": rank, "role": role, "pickRate": {"$gte": 1}}
-
-        myquery = {**myquery, **{"queue_type": f"{queue_type}Conq"}}
         for x in mycol.find(myquery, {"_id": 0}):
             dict_god = x["god"]
             dict_role = x["role"]
@@ -270,11 +238,10 @@ def get_player_god_info(playername, queue_type, mode):
             smite_api = SmiteAPI(devId=lines[0].strip(
             ), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
             playerId = smite_api.getPlayerId(playername)
-            print(playerId, fh.convert_mode(mode, queue_type))
             data = anlzpy.create_player_god_dict(smite_api.getQueueStats(
                 playerId[0]["player_id"], fh.convert_mode(mode, queue_type)), playername, queue_type, mode)
             mycol.insert_one(data)
-            return json.loads(json_util.dumps(data))
+            return json.loads(json_util.dumps({**data, **anlzpy.get_player_winrate(data)}))
 
     if data == {}:
         return {}

@@ -23,13 +23,11 @@ def find_match_history(client, playername, queue_type, patch, mode):
     elif queue_type == "Casual":
         database = "CasualMatches"
 
-    # print(database)
     mydb = client[database]
     mycol = mydb[f"{patch} Matches"]
     if mode == "Joust":
         mycol = mydb[f"{patch} {mode} Matches"]
 
-    # print(mycol)
     myquery = {
         '$search': {
             'index': 'default',
@@ -41,57 +39,12 @@ def find_match_history(client, playername, queue_type, patch, mode):
             }
         }
     }
-    # print(myquery)
-    # print(mycol.count_documents({}))
     ret_data = {}
     for x in mycol.aggregate([myquery]):
         for key in x:
             if "player" in key:
                 if verify_player(x[key]["Player_Name"], playername, "none", "none"):
-                    # print(x[key]["Player_Name"])
                     ret_data[x["MatchId"]] = x
-    # filter = {
-    #     **{"_id": 0},
-    #     # **{f"player{i}.godBuild": 0 for i in range(10)},
-    #     # **{f"Ban{i}": 0 for i in range(10)},
-    #     **{f"player{i}.Player_Name": 1 for i in range(10)},
-    #     **{f"player{i}.godName": 1 for i in range(10)},
-    #     **{f"MatchId": 1},
-    #     **{f"player{i}.Item_Active_1": 1 for i in range(10)},
-    #     **{f"player{i}.Item_Active_2": 1 for i in range(10)},
-    #     **{f"Entry_Datetime": 1},
-    #     **{f"Minutes": 1},
-    #     **{f"Match_Duration": 1},
-    #     **{f"player{i}.Item_Purch_1": 1 for i in range(10)},
-    #     **{f"player{i}.Item_Purch_2": 1 for i in range(10)},
-    #     **{f"player{i}.Item_Purch_3": 1 for i in range(10)},
-    #     **{f"player{i}.Item_Purch_4": 1 for i in range(10)},
-    #     **{f"player{i}.Item_Purch_5": 1 for i in range(10)},
-    #     **{f"player{i}.Item_Purch_6": 1 for i in range(10)},
-    #     **{f"player{i}.Win_Status": 1 for i in range(10)},
-    #     **{f"player{i}.Kills_Player": 1 for i in range(10)},
-    #     **{f"player{i}.Kills_Double": 1 for i in range(10)},
-    #     **{f"player{i}.Kills_Triple": 1 for i in range(10)},
-    #     **{f"player{i}.Kills_Quadra": 1 for i in range(10)},
-    #     **{f"player{i}.Kills_Penta": 1 for i in range(10)},
-    #     **{f"player{i}.Deaths": 1 for i in range(10)},
-    #     **{f"player{i}.Assists": 1 for i in range(10)},
-    #     # **{f"player{i}": 0 for i in range(10)}
-    # }
-    # if mycol.count_documents(myquery) == 0 and queue_type == "Casual": # casual match data is stored in 2 different database
-    #     mydb = client["CasualMatches"]
-    #     mycol = mydb["9.1 Matches"]
-    # # #print(mycol.count_documents(myquery))
-    # ret_data = {}
-    # for x in mycol.find(myquery, filter):
-    #     if len(ret_data.keys()) == 25:
-    #         return ret_data
-    #     for key in x:
-    #         if "player" in key:
-    #             if verify_player(playername, x[key]["Player_Name"], "none", "none"):
-    #                 ret_data[x["MatchId"]] = x
-
-    #print(ret_data.keys(), len(ret_data.keys()))
     return ret_data
 
 
@@ -104,7 +57,6 @@ def create_player_return_dict(player):
     Returns:
         [type]: [description]
     """
-    # #print(player)
     if player["RankedConquest"]["Losses"] == 0:
         losses = 1
     else:
@@ -120,13 +72,8 @@ def create_player_return_dict(player):
     }
     return ret_data
 
-# def get_player_god_stats(player):
-#     ret_data = {}
-#     for god in player:
-
 
 def get_player_basic(player):
-    # print(player)
     return {
         "Avatar_URL": player["Avatar_URL"],
         "Created_Datetime": player["Created_Datetime"],
@@ -268,32 +215,16 @@ def verify_player(act_name, playername, act_god, god):
 
             name = act_name.split("]")[1]
         if playername.lower() == name.lower():
-            # #print("also here")
-            # #print(act_name.lower(), name.lower(), act_name.lower() == name.lower())
             return True
     return False
 
 
 def get_player_god_stats(client, playername, god, role, queue_type, patch):
-    #print(playername, god, role, queue_type)
     if queue_type == "Ranked":
         mydb = client["Matches"]
     elif queue_type == "Casual":
         mydb = client["CasualMatches"]
     mycol = mydb[f"{patch} Matches"]
-    # myquery = {
-    #     **{"$or": [ {f"player{i}.Player_Name": { "$regex" : f"{playername}", "$options": "i" }} for i in range(10) ] },
-    #     # **{"$and": [ {f"player{i}.Role": role} for i in range(10) ] },
-    #     **{"Patch": "9.1"}
-    #     }
-    # filter = {
-    #     **{"_id": 0},
-    #     **{f"player{i}.godBuild": 0 for i in range(10)},
-    #     **{f"Ban{i}": 0 for i in range(10)},
-    #     # **{f"player{i}": 0 for i in range(10)}
-    # }
-    updatedb = client["Players"]
-    updatecol = updatedb["Player God Stats"]
     updatedict = {role: {
         "maxKills": 0,
         "maxDeaths": 0,
@@ -436,7 +367,6 @@ def get_player_god_stats(client, playername, god, role, queue_type, patch):
                             if match_data["Wards_Placed"] > updatedict["maxWards"]:
                                 updatedict["maxWards"] = match_data["Wards_Placed"]
 
-                            # #print("getting here")
                             updatedict[role]["games"] += 1
                             updatedict["games"] += 1
                             if x[key]["Win_Status"] == "Winner":
@@ -446,7 +376,6 @@ def get_player_god_stats(client, playername, god, role, queue_type, patch):
                                 updatedict[role]["losses"] += 1
                                 updatedict["losses"] += 1
         except KeyError as e:
-            # print(e)
             pass
 
         counter += 1
@@ -487,13 +416,10 @@ def get_player_god_stats(client, playername, god, role, queue_type, patch):
         updatedict["KDA"] = round(
             (updatedict["kills"] + (.5 * updatedict["assists"])) / updatedict["deaths"], 2)
 
-    # print(updatedict)
     return updatedict
-    # updatecol.insert_one(updatedict)
 
 
 def grab_stats(player_data):
-    # #print(player_data)
     ret_data = {}
     ret_data["Kills_Double"] = player_data["Kills_Double"]
     ret_data["Kills_Triple"] = player_data["Kills_Triple"]
@@ -514,15 +440,3 @@ if __name__ == "__main__":
 
     #print(find_match_history(client, "Rawjik", "Casual", "9.3", "Joust"))
     #print(datetime.now() - starttime)
-
-
-# 1219837308 Solo
-# 1219830508 Carry
-# 1219834310 Solo
-# 1220587598 Support
-# 1219817784 Carry
-# 1219826580 Solo
-# 1219840403 Carry
-# 1220919898 Carry
-# 1220115726 Solo
-# 1219820426 Solo

@@ -52,21 +52,6 @@ const Table = ({ columns, data }) => {
     usePagination
   );
 
-  const [
-    god,
-    setGod,
-    queue_type,
-    setMode,
-    patch,
-    setPatch,
-    rank,
-    setRank,
-    role,
-    setRole,
-    topLink,
-    setTopLink,
-  ] = useContext(TierListContext);
-
   // We don't want to render all 2000 rows for this example, so cap
   // it at 20 for this use case
   const firstPageRows = rows;
@@ -412,106 +397,6 @@ const Table = ({ columns, data }) => {
   );
 };
 
-const GetColumnType = (props) => {
-  let columns;
-  if (props == "Regular") {
-    columns = [
-      {
-        Header: "Rank",
-        accessor: "rank",
-      },
-      {
-        Header: "Role",
-        accessor: "role",
-      },
-      {
-        Header: "God",
-        accessor: "god",
-      },
-      {
-        Header: "Tier",
-        accessor: "tier",
-      },
-      {
-        Header: "Win Rate",
-        accessor: "winRate",
-      },
-      {
-        Header: "Pick Rate",
-        accessor: "pickRate",
-      },
-      {
-        Header: "Ban Rate",
-        accessor: "banRate",
-      },
-      {
-        Header: "Counter Matchups",
-        accessor: "counterMatchups",
-      },
-      {
-        Header: "Games",
-        accessor: "games",
-      },
-    ];
-  } else if (props == "Combat") {
-    columns = [
-      {
-        Header: "Rank",
-        accessor: "rank",
-      },
-      {
-        Header: "Role",
-        accessor: "role",
-      },
-      {
-        Header: "God",
-        accessor: "god",
-      },
-      {
-        Header: "Win Rate",
-        accessor: "winRate",
-      },
-      {
-        Header: "Kills",
-        accessor: "kills",
-      },
-      {
-        Header: "Deaths",
-        accessor: "deaths",
-      },
-      {
-        Header: "Assists",
-        accessor: "assists",
-      },
-      {
-        Header: "Damage",
-        accessor: "damage",
-      },
-      {
-        Header: "Damage Taken",
-        accessor: "damageTaken",
-      },
-      {
-        Header: "Damage Mitigated",
-        accessor: "damageMitigated",
-      },
-      {
-        Header: "Healing",
-        accessor: "healing",
-      },
-      {
-        Header: "Self Healing",
-        accessor: "selfHealing",
-      },
-      {
-        Header: "Games",
-        accessor: "games",
-      },
-    ];
-  }
-  return columns;
-};
-
 const compare = (a, b) => {
   return a.winRate - b.winRate;
 };
@@ -520,8 +405,8 @@ function TierList(props) {
   const [
     god,
     setGod,
-    queue_type,
-    setMode,
+    queueType,
+    setQueueType,
     patch,
     setPatch,
     rank,
@@ -530,6 +415,8 @@ function TierList(props) {
     setRole,
     topLink,
     setTopLink,
+    mode,
+    setMode,
   ] = useContext(TierListContext);
   // const [patch, setPatch] = useState("8.9");
   const [totalData, setTotalData] = useState([]);
@@ -544,9 +431,11 @@ function TierList(props) {
         "/",
         props.tableType,
         "/",
-        queue_type,
+        queueType,
         "/",
-        patch
+        patch,
+        "/",
+        mode
       )
     ).then((res) =>
       res.json().then((data) => {
@@ -581,7 +470,7 @@ function TierList(props) {
         });
       })
     );
-  }, [rank, role, queue_type, patch]);
+  }, [rank, role, queueType, patch]);
 
   const columns = React.useMemo(
     () => [
@@ -676,8 +565,14 @@ function CounterMatchupDisplay(props) {
                   <div className="god-face" style={{ maxWidth: "100px" }}>
                     <div>
                       <img
-                        src={matchup[0]}
-                        alt={matchup[1]}
+                        src={`https://webcdn.hirezstudios.com/smite/god-icons/${matchup[1]
+                          .toLowerCase()
+                          .replaceAll("'", "")
+                          .replaceAll(" ", "-")}.jpg`}
+                        alt={`https://webcdn.hirezstudios.com/smite/god-icons/${matchup[1]
+                          .toLowerCase()
+                          .replaceAll("'", "")
+                          .replaceAll(" ", "-")}.jpg`}
                         style={styling}
                       ></img>
                     </div>

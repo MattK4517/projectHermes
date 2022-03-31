@@ -38,40 +38,6 @@ def delete_match_docs(client, db, col, field, value):
     mycol.delete_many({field: value})
 
 
-def calc_total_matches(client, ranks, patch):
-    matchIds = []
-    actTotalGames = 0
-    for rank in ranks:
-        if rank == "All Ranks":
-            mycol.update_one({"rank": rank, "patch": patch, "queue_type": "RankedConq"}, {
-                             "$set": {"Total_Matches": len(matchIds)}})
-            break
-        mydb = client["single_match_stats"]
-        total_games = 0
-        for god in godsDict:
-            mycol = mydb[god]
-            myquery = {"rank": rank, "patch": patch,
-                       "queue_type": "RankedConq"}
-            games = 0
-            for x in mycol.find(myquery, {"_id": 0}):
-                # if x["matchId"] not in matchIds:
-                matchIds.append(x["matchId"])
-                games += 1
-            total_games += games
-            print(f"{god} {games}, {total_games}")
-        actTotalGames += total_games
-        insert_games(rank, total_games, patch)
-
-
-def insert_games(rank, games, patch):
-    mydb = client["Matches"]
-    mycol = mydb[f"Total_Matches"]
-    mycol.insert_one({"rank": rank, "patch": patch,
-                     "queue_type": "RankedConq", "Total_Matches": games})
-    # mycol.update_one({"rank": rank, "patch": patch, "queue_type": "RankedConq"}, {"$set": {"Total_Matches": games}})
-    print(f"{rank} done")
-
-
 def add_new_urls(client, god):
     god_info_db = client["God_Data"]
     god_info_col = god_info_db[god]
@@ -225,5 +191,6 @@ if __name__ == "__main__":
     mydb = client["single_match_stats"]
     for god in godsDict:
         mycol = mydb[god]
-        print(god, mycol.count_documents({"mode": "Joust"}))
-        # mycol.rename({}, {"mode": "queue_type"})
+        print(god, mycol.count_documents({"mode": "CasualConq"}))
+        mycol.update_many({"mode": "CasualConq"}, {"$set": {
+                          "mode": "Conquest", "queue_type": "Casual"}})
