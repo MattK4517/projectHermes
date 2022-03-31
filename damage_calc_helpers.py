@@ -1,3 +1,13 @@
+def calc_set_damage(base, ability_level, scaling_changes):
+    damage = 0
+    for i in range(8):
+        if i >= 1:
+            damage += (base * (int(scaling_changes.split("/")[ability_level-1])/100)) * .4
+        else: 
+            damage += base * int(scaling_changes.split("/")[ability_level-1]) /100
+    return damage
+
+        
 def special_case(ability, base):
     base = base.strip()
     if ability == "Twin Cleave (Bladestorm) Cleave Damage":
