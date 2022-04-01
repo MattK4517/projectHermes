@@ -364,8 +364,8 @@ function GodStatsDisplay() {
     setGod,
     player,
     setPlayer,
-    queue_type,
-    setMode,
+    queueType,
+    setQueueType,
     role,
     setRole,
     topLink,
@@ -374,33 +374,44 @@ function GodStatsDisplay() {
     setIcon,
     playerLevel,
     setPlayerLevel,
+    tab,
+    setTab,
+    patch,
+    setPatch,
+    patches,
+    mode,
+    setMode,
+    queueTypes,
+    modes,
   ] = useContext(PlayerContext);
   const [godList, setGodList] = useState([]);
   useEffect(() => {
-    fetch("/api/getplayergods/".concat(player, "/", queue_type)).then((res) =>
-      res.json().then((data) => {
-        let newData = Object.values(data).sort(compare);
-        setGodList([]);
-        Object.keys(newData).map((god, index) => {
-          if (Object.keys(newData[god]).indexOf("god") !== -1) {
-            setGodList((godList) => [
-              ...godList,
-              {
-                ...newData[god],
-                KDA:
-                  (newData[god]["kills"] + 0.5 * newData[god]["assists"]) /
-                  newData[god]["deaths"],
-                winRate: (newData[god]["wins"] / newData[god]["matches"]) * 100,
-                avgGold: (
-                  newData[god]["gold"] / newData[god]["matches"]
-                ).toFixed(),
-              },
-            ]);
-          }
-        });
-      })
+    fetch("/api/getplayergods/".concat(player, "/", queueType, "/", mode)).then(
+      (res) =>
+        res.json().then((data) => {
+          let newData = Object.values(data).sort(compare);
+          setGodList([]);
+          Object.keys(newData).map((god, index) => {
+            if (Object.keys(newData[god]).indexOf("god") !== -1) {
+              setGodList((godList) => [
+                ...godList,
+                {
+                  ...newData[god],
+                  KDA:
+                    (newData[god]["kills"] + 0.5 * newData[god]["assists"]) /
+                    newData[god]["deaths"],
+                  winRate:
+                    (newData[god]["wins"] / newData[god]["matches"]) * 100,
+                  avgGold: (
+                    newData[god]["gold"] / newData[god]["matches"]
+                  ).toFixed(),
+                },
+              ]);
+            }
+          });
+        })
     );
-  }, [player, queue_type]);
+  }, [player, queueType]);
 
   const columns = React.useMemo(
     () => [
@@ -470,14 +481,17 @@ function GodStatsDisplay() {
                 <div className="filter-manager_label">
                   <span style={{ color: "white" }}>Stat Filters</span>
                 </div>
-                {/* <div className="role-filter-container"> */}
                 <FilterForm
-                  filter={queue_type}
-                  god={queue_type}
-                  filters={["Ranked", "Casual"]}
-                  setFilter={setMode}
+                  filter={patch}
+                  filters={["9.3", "9.2", "9.1"]}
+                  setFilter={setPatch}
                 />
-                {/* </div> */}
+                <FilterForm filter={mode} filters={modes} setFilter={setMode} />
+                <FilterForm
+                  filter={queueType}
+                  filters={queueTypes}
+                  setFilter={setQueueType}
+                />
               </div>
             </div>
           </div>

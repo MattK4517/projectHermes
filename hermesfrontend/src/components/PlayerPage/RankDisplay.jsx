@@ -1,3 +1,6 @@
+import { useContext } from "react";
+import { PlayerContext } from "./PlayerContext";
+
 const getImageUrl = (rank) => {
   let url = "https://i.imgur.com/LVbUJes.png";
   if (rank == "Bronze") {
@@ -28,6 +31,31 @@ const getImageUrl = (rank) => {
   return url;
 };
 export default function RankDisplay(props) {
+  const [
+    god,
+    setGod,
+    player,
+    setPlayer,
+    queueType,
+    setQueueType,
+    role,
+    setRole,
+    topLink,
+    setTopLink,
+    icon,
+    setIcon,
+    playerLevel,
+    setPlayerLevel,
+    tab,
+    setTab,
+    patch,
+    setPatch,
+    patches,
+    mode,
+    setMode,
+    queueTypes,
+    modes,
+  ] = useContext(PlayerContext);
   return (
     <div className="content-section content-section_no-padding rank-block">
       <div className="content-section_header">
@@ -43,7 +71,9 @@ export default function RankDisplay(props) {
             />
           </div>
           <div>
-            <div className="queue-type">Queue: {props.queue_type} Conquest</div>
+            <div className="queue-type">
+              Queue: {queueType} {mode}
+            </div>
             <div className="rank-text">
               <strong>{props.tier}</strong>
             </div>

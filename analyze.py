@@ -1064,8 +1064,9 @@ def calc_total_matches(client, ranks, patch, queue_type, mode):
             {}), patch, queue_type, mode)
         return
 
-    for rank in ranks:
+    for rank in ["All Ranks"]:
         myquery = get_query(rank, "", patch, queue_type, mode)
+        del myquery["role"]
         if rank == "All Ranks":
             mycol.update_one(myquery, {
                              "$set": {"Total_Matches": len(matchIds)}})
@@ -1090,13 +1091,13 @@ def insert_games(rank, games, patch, queue_type, mode):
     myquery = get_query(rank, "", patch, queue_type, mode)
     mycol.insert_one({**myquery, **{"Total_Matches": games}})
     # mycol.update_one({"rank": rank, "patch": patch, "queue_type": "RankedConq"}, {"$set": {"Total_Matches": games}})
-    #print(f"{rank} done")
+    print(f"{rank} done")
 
 
 if __name__ == "__main__":
     starttime = datetime.now()
     # print(get_worst_matchups(client, "Cliodhna", "Solo", "9.3"))
-    # #print(get_top_builds(client, "Shiva", "Solo", "9.2", "Casual"))
+    # print(get_top_builds(client, "Shiva", "Solo", "9.2", "Casual"))
     calc_total_matches(client, ranks, "9.3", "Ranked", "Conquest")
     # #print(get_winrate(client, "Ah Puch", "All", "9.3", mode="Joust"))
     # #print(get_pb_rate(client, "Ah Puch", "All Ranks", "All", "9.3", mode="Joust"))
