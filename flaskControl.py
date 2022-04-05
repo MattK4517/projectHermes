@@ -41,6 +41,7 @@ def get_all_gods():
 @app.route('/api/main/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>', methods=["GET", "POST"])
 def get_god_data(god, role, rank, patch, queue_type, mode, matchup="None"):
     newgod = god.replace("_", " ")
+    print(role)
     winrate = anlz.get_winrate(
         client, god, role, patch, queue_type, rank, matchup=matchup, mode=mode)
     pbrate = anlz.get_pb_rate(client, god, rank, role,

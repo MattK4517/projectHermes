@@ -192,7 +192,5 @@ if __name__ == "__main__":
     games = 0
     for god in godsDict:
         mycol = mydb[god]
-        games += mycol.count_documents({"mode": "Conquest", "patch": "9.3",
-                                       "queue_type": "Ranked"})
-
-    print(games)
+        print(god, mycol.count_documents({"mode": "Duel", "patch": "9.3",
+                                          "queue_type": "Ranked"}))

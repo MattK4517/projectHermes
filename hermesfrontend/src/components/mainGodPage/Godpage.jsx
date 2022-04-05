@@ -331,7 +331,7 @@ function Godpage(props) {
   const [queueType, setQueueType] = useState("Ranked");
   const [mode, setMode] = useState("Conquest");
   const queueTypes = ["Casual", "Ranked"];
-  const modes = ["Joust", "Conquest"];
+  const modes = ["Joust", "Conquest", "Duel"];
 
   useEffect(() => {
     fetch(

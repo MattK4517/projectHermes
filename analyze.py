@@ -40,8 +40,9 @@ def get_query(rank, role, patch, queue_type, mode):
         myquery["role"] = role
     myquery["mode"] = mode
 
-    if mode == "Joust" and "role" in myquery.keys():
+    if (mode == "Joust" or mode == "Duel") and "role" in myquery.keys():
         del myquery["role"]
+
     return myquery
 
 
@@ -354,6 +355,7 @@ def get_worst_matchups(client, god, role, patch, queue_type="Ranked", rank="All 
     if "All" in role:
         del myquery["role"]
 
+    print(myquery)
     games = 0
     wins = 0
     for matchup in mycol.find(myquery, {"_id": 0}):
@@ -382,7 +384,7 @@ def get_worst_matchups(client, god, role, patch, queue_type="Ranked", rank="All 
         else:
             games += 1
             flag = False
-            if mode == "Conquest":
+            if mode in ["Conquest", "Duel"]:
                 if matchup["enemy"]:
                     if matchup["win_status"] == "Winner":
                         flag = True
@@ -473,6 +475,7 @@ def get_total_matches(client, rank, patch, queue_type="Ranked", mode="Conquest")
     mycol = mydb["Total_Matches"]
     total_games = 0
     myquery = get_query(rank, "", patch, queue_type, mode)
+    print(myquery)
     myquery["rank"] = rank
     for x in mycol.find(myquery, {"Total_Matches": 1, "_id": 0}):
         total_games += x["Total_Matches"]
@@ -634,13 +637,13 @@ def get_carry_score(match):
             "Loser": {
                 "totalDamage": 1,
             }
-                },
+            },
         "levelDiff": {
             "Winner": {
             },
             "Loser": {
             }
-                },
+            },
         "killPart": {
                 "Winner": {
                     "totalKills": 0,
@@ -648,7 +651,7 @@ def get_carry_score(match):
                 "Loser": {
                     "totalKills": 0,
                 }
-                }
+            }
     }
     match_roles = []
 
@@ -1095,7 +1098,8 @@ def insert_games(rank, games, patch, queue_type, mode):
 
 
 if __name__ == "__main__":
-    # print(get_pb_rate(client, "Cliodhna", "All Ranks", "Jungle", "9.3"))
+    print(get_worst_matchups(client, "Ah Muzen Cab", "None", "9.3", mode="Duel"))
+
     starttime = datetime.now()
     # print(get_worst_matchups(client, "Cliodhna", "Solo", "9.3"))
     # print(get_top_builds(client, "Shiva", "Solo", "9.2", "Casual"))
