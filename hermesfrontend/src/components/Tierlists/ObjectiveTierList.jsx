@@ -50,7 +50,7 @@ const Table = ({ columns, data }) => {
   const [
     god,
     setGod,
-    queue_type,
+    queueType,
     setMode,
     patch,
     setPatch,
@@ -393,8 +393,8 @@ function ObjectiveTierList(props) {
   const [
     god,
     setGod,
-    queue_type,
-    setMode,
+    queueType,
+    setQueueType,
     patch,
     setPatch,
     rank,
@@ -403,6 +403,8 @@ function ObjectiveTierList(props) {
     setRole,
     topLink,
     setTopLink,
+    mode,
+    setMode,
   ] = useContext(TierListContext);
 
   const [totalData, setTotalData] = useState([]);
@@ -417,9 +419,11 @@ function ObjectiveTierList(props) {
         "/",
         props.tableType,
         "/",
-        queue_type,
+        queueType,
         "/",
-        patch
+        patch,
+        "/",
+        mode
       )
     ).then((res) =>
       res.json().then((data) => {
@@ -445,7 +449,7 @@ function ObjectiveTierList(props) {
         });
       })
     );
-  }, [rank, role, queue_type, patch]);
+  }, [rank, role, queueType, patch]);
 
   const columns = React.useMemo(
     () => [

@@ -19,7 +19,7 @@ import pandas as pd
 
 def get_items_by_class(client, class_name, role):
     items = {f"slot{i+1}": {} for i in range(6)}
-    build = ["Golden Blade"]
+    build = [""]
     for char in class_name:
         print(char)
         char_items = anlz.get_all_builds(

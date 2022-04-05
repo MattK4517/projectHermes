@@ -100,11 +100,12 @@ def get_god_abilities(god):
 
 @app.route("/api/gettierlist/<rank>/<role>/<tableType>/<queue_type>/<patch>/<mode>", methods=["GET", "POST"])
 def get_tier_list(rank, role, tableType, queue_type, patch, mode):
+    print(rank, role, tableType, queue_type, patch, mode)
     rank = rank.replace("_", " ")
     retData = {god: {} for god in godsDict}
     mydb = client["Tier_list"]
     if not tableType == "Duos":
-        mycol = mydb["Test List"]
+        mycol = mydb["Combined List"]
         rank = rank.replace("_", " ")
         if "All" in role:
             myquery = {"rank": rank, "pickRate": {"$gte": 1}, "patch": patch}
@@ -114,9 +115,11 @@ def get_tier_list(rank, role, tableType, queue_type, patch, mode):
 
         myquery = {**myquery, **{"queue_type": queue_type, "mode": mode}}
 
-        print(myquery)
+        # print(myquery, mycol.count_documents(myquery))
 
-        for x in mycol.find(myquery, {"_id": 0}):
+        my_filter = fh.get_filter(tableType)
+        # print(my_filter)
+        for x in mycol.find(myquery, my_filter).limit(10):
             dict_god = x["god"]
             dict_role = x["role"]
             if not retData[dict_god]:
@@ -128,7 +131,7 @@ def get_tier_list(rank, role, tableType, queue_type, patch, mode):
         role_one, role_two = role.split("_")
         retData = get_lanes(role_one, role_two)
 
-    return retData
+    return json.loads(json_util.dumps(retData))
 
 
 @app.route("/api/getitemdata/<item>")

@@ -16,6 +16,7 @@ import { GodHeader } from "../mainGodPage/GodHeader";
 import { BasicTabs } from "../mainGodPage/PageTabs";
 import SearchBarGodPage from "../SearchBarStuff/SearchBarGodPage";
 import { Helmet } from "react-helmet";
+import Filter from "../Filters/Filter";
 
 const godsDict = {
   "All Gods": "None",
@@ -321,8 +322,8 @@ function Godpage(props) {
   ]);
 
   const [tab, setTab] = useState("Build");
-  const [dispRole, setrole] = useState(role);
-  const [dispRank, setrank] = useState("All Ranks");
+  const [dispRole, setRole] = useState(role);
+  const [dispRank, setRank] = useState("All Ranks");
   const [tier, setTier] = useState("");
   const [banrate, setbanrate] = useState(0);
   const [pickrate, setpickrate] = useState(0);
@@ -406,58 +407,27 @@ function Godpage(props) {
                   patch={patch}
                   tab={tab}
                 />
-                <div className="filter-manager">
-                  <div className="filter-width-wrapper">
-                    <div className="filter-manager_container">
-                      <div className="filter-manager_label hide">
-                        <span style={{ color: "white" }}>Stat Filters</span>
-                      </div>
-                      {/* <div className="role-filter-container"> */}
-                      <div className={mode}>
-                        <FilterForm
-                          filter={dispRole}
-                          god={pagegod}
-                          filters={roles}
-                          setFilter={setrole}
-                        />
-                      </div>
-                      {/* </div> */}
-                      <div className={queueType}>
-                        <FilterForm
-                          filter={dispRank}
-                          god={pagegod}
-                          filters={ranks}
-                          setFilter={setrank}
-                        />
-                      </div>
-                      <FilterForm
-                        filter={patch}
-                        god={pagegod}
-                        filters={["9.3", "9.2", "9.1"]}
-                        setFilter={setPatch}
-                      />
-                      <FilterForm
-                        filter={mode}
-                        god={pagegod}
-                        filters={modes}
-                        setFilter={setMode}
-                        rankSet={setrank}
-                      />
-                      <FilterForm
-                        filter={queueType}
-                        god={pagegod}
-                        filters={queueTypes}
-                        setFilter={setQueueType}
-                        rankSet={setrank}
-                      />
-                      <SearchBarGodPage
-                        data={routes}
-                        changeMatchup={setMatchup}
-                        matchup={matchup}
-                      />
-                    </div>
-                  </div>
-                </div>
+                <Filter
+                  mode={mode}
+                  role={dispRole}
+                  god={pagegod}
+                  queueType={queueType}
+                  rank={dispRank}
+                  patch={patch}
+                  matchup={matchup}
+                  modeFilters={modes}
+                  patchFilters={["9.3", "9.2", "9.1"]}
+                  roleFilters={roles}
+                  rankFilters={ranks}
+                  queueFilters={queueTypes}
+                  routes={routes}
+                  setRank={setRank}
+                  setRole={setRole}
+                  setPatch={setPatch}
+                  setMode={setMode}
+                  setMatchup={setMatchup}
+                  setQueueType={setQueueType}
+                />
                 <BasicTabs
                   pagegod={pagegod}
                   role={dispRole}

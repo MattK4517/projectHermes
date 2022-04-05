@@ -11,7 +11,6 @@ from operator import getitem
 from math import sqrt
 from constants import godsDict, slots, Tier_Three_items, Starter_items, roles, single_combat_stats, single_objective_stats, godsDict2, ranks
 import analyze_players as anlzpy
-import create_tier_list
 
 import pyrez
 from pyrez.api import SmiteAPI
@@ -65,8 +64,9 @@ def get_pb_rate(client, god, rank, role, patch, queue_type="Ranked", mode="Conqu
         client, rank, patch, queue_type=queue_type, mode=mode)
     if "All" not in rank:
         totalMatches = totalMatches / 10
+    if "role" in myquery.keys():
+        del myquery["role"]
     del myquery["queue_type"]
-    # print(myquery)
     godBans = bancol.count_documents(myquery)
     games = get_games_played(client, god, rank, role,
                              patch, queue_type=queue_type, mode=mode)
@@ -473,7 +473,7 @@ def get_total_matches(client, rank, patch, queue_type="Ranked", mode="Conquest")
     mycol = mydb["Total_Matches"]
     total_games = 0
     myquery = get_query(rank, "", patch, queue_type, mode)
-
+    myquery["rank"] = rank
     for x in mycol.find(myquery, {"Total_Matches": 1, "_id": 0}):
         total_games += x["Total_Matches"]
     return total_games
@@ -634,13 +634,13 @@ def get_carry_score(match):
             "Loser": {
                 "totalDamage": 1,
             }
-        },
+                },
         "levelDiff": {
             "Winner": {
             },
             "Loser": {
             }
-        },
+                },
         "killPart": {
                 "Winner": {
                     "totalKills": 0,
@@ -648,7 +648,7 @@ def get_carry_score(match):
                 "Loser": {
                     "totalKills": 0,
                 }
-        }
+                }
     }
     match_roles = []
 
@@ -1095,12 +1095,12 @@ def insert_games(rank, games, patch, queue_type, mode):
 
 
 if __name__ == "__main__":
+    # print(get_pb_rate(client, "Cliodhna", "All Ranks", "Jungle", "9.3"))
     starttime = datetime.now()
     # print(get_worst_matchups(client, "Cliodhna", "Solo", "9.3"))
     # print(get_top_builds(client, "Shiva", "Solo", "9.2", "Casual"))
-    calc_total_matches(client, ranks, "9.3", "Ranked", "Conquest")
+    # calc_total_matches(client, ranks, "9.3", "Ranked", "Conquest")
     # #print(get_winrate(client, "Ah Puch", "All", "9.3", mode="Joust"))
-    # #print(get_pb_rate(client, "Ah Puch", "All Ranks", "All", "9.3", mode="Joust"))
     # #print(create_tier_list.get_tier_stats(client, "All Ranks", "Solo"))
     # # #print(get_total_matches(client, "Diamond", "9.1"))
     # for god in godsDict2:

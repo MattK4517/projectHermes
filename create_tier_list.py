@@ -18,7 +18,7 @@ def gen_tier_list(client, roles, patch, types, ranks, queue_types, modes):
                                     gen_regular_tier_entry(
                                         client, god, role, rank, patch, queue_type, mode, date)
                                 print(
-                                    f"god done {god} - {rank} - {role} - {tier_type} - {queue_type}")
+                                    f"god done {god} - {rank} - {role} - {tier_type} - {queue_type} - {mode}")
                     elif queue_type == "Casual":
                         for god in godsDict:
                             if tier_type == "Regular":
@@ -67,7 +67,7 @@ def gen_regular_tier_entry(client, god, role, rank, patch, queue_type, mode, dat
         "pickRate": pick_rate,
         "banRate": ban_rate,
         "counterMatchups": matchups,
-        "games": games
+        "games": 0
     }
 
     tier_entry = {**tier_entry, **
@@ -76,10 +76,11 @@ def gen_regular_tier_entry(client, god, role, rank, patch, queue_type, mode, dat
     tier_entry = {**tier_entry, **
                   anlz.get_objective_stats(client, god, role, patch, rank, queue_type, mode)}
 
+    tier_entry["games"] = games
     if "_id" in tier_entry:
         del tier_entry["_id"]
 
-    insert_data(client, "Tier_list", "Test List", tier_entry)
+    insert_data(client, "Tier_list", "Combined List", tier_entry)
 
 
 def get_tier(client, win_rate, pick_rate, ban_rate, role, rank):
@@ -190,5 +191,6 @@ def update_tier(client, roles, patch, ranks, queue_types):
 if __name__ == '__main__':
     starttime = datetime.now()
     gen_tier_list(client, roles, "9.3", [
-                  "Regular"], all_ranks, ["Ranked"], ["Conquest", "Joust"])
+                  "Regular"], all_ranks, ["Ranked"], ["Conquest"])
     print(f"done in {datetime.now() - starttime}")
+

@@ -1,13 +1,14 @@
 import React, { useState, useContext } from "react";
 import FilterForm from "./FilterForm";
+import Filter from "./Filter";
 import { TierListContext } from "../Tierlists/TierListContext";
 
 export default function TierListFilter(props) {
   const [
     god,
     setGod,
-    queue_type,
-    setMode,
+    queueType,
+    setQueueType,
     patch,
     setPatch,
     rank,
@@ -16,6 +17,8 @@ export default function TierListFilter(props) {
     setRole,
     topLink,
     setTopLink,
+    mode,
+    setMode,
   ] = useContext(TierListContext);
 
   const [roles, setRoles] = useState([
@@ -36,36 +39,32 @@ export default function TierListFilter(props) {
     "Grandmaster",
     "All Ranks",
   ]);
+  const modes = ["Conquest", "Joust"];
+  const queueTypes = ["Ranked", "Casual"];
 
   return (
-    <div className="filter-form">
-      <FilterForm
-        filter={role}
-        filters={roles}
+    <>
+      <Filter
+        mode={"none"}
         role={role}
-        setFilter={setRole}
+        god={god}
+        queueType={queueType}
+        rank={rank}
+        patch={patch}
+        matchup={"none"}
+        modeFilters={modes}
+        patchFilters={["9.3", "9.2", "9.1"]}
+        roleFilters={roles}
+        rankFilters={ranks}
+        queueFilters={queueTypes}
+        routes={"none"}
+        setRank={setRank}
+        setRole={setRole}
+        setPatch={setPatch}
+        setMode={setMode}
+        setMatchup={"none"}
+        setQueueType={setQueueType}
       />
-      <FilterForm
-        filter={rank}
-        filters={ranks}
-        role={rank}
-        setFilter={setRank}
-      />
-      <FilterForm
-        filter={queue_type}
-        god={"None"}
-        filters={["Ranked", "Casual"]}
-        setFilter={setMode}
-        rankSet={setRank}
-      />
-
-      <FilterForm
-        filter={patch}
-        god={"None"}
-        filters={["9.3", "9.2", "9.1"]}
-        setFilter={setPatch}
-        rankSet={setRank}
-      />
-    </div>
+    </>
   );
 }

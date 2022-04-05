@@ -33,6 +33,22 @@ def convert_mode(mode, queue_type):
         return 448
 
 
+def get_filter(table_type):
+    my_filter = {"patch": 1, "role": 1, "winRate": 1,
+                 "games": 1, "rank": 1, "god": 1, "_id": 0}
+    if table_type == "Regular":
+        my_filter = {**my_filter, **{"pickRate": 1,
+                                     "banRate": 1, "counterMatchups": 1}}
+    elif table_type == "Combat":
+        my_filter = {**my_filter, **{"kills": 1, "deaths": 1, "damage_": 1,
+                                     "damageTaken": 1, "damageMitigated": 1, "healing": 1, "selfHealing": 1}}
+    elif table_type == "Objective":
+        my_filter = {**my_filter, **{"gold": 1, "damageBot": 1, "killsBot": 1,
+                                     "towerKills": 1, "phoenixKills": 1, "towerDamage": 1, "wardsPlaced": 1}}
+
+    return my_filter
+
+
 if __name__ == "__main__":
     client = pymongo.MongoClient(
         "mongodb+srv://sysAdmin:SFpmxJRX522fZ5fK@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")

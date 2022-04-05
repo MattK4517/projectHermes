@@ -188,9 +188,11 @@ def create_match_dict(match, patch):
 
 
 if __name__ == "__main__":
-    mydb = client["single_god_bans"]
+    mydb = client["single_match_stats"]
+    games = 0
     for god in godsDict:
         mycol = mydb[god]
-        print(god, mycol.count_documents({"mode": "RankedConq"}))
-        mycol.update_many({"mode": "RankedConq"}, {"$set": {
-                          "mode": "Conquest", "queue_type": "Ranked"}})
+        games += mycol.count_documents({"mode": "Conquest", "patch": "9.3",
+                                       "queue_type": "Ranked"})
+
+    print(games)
