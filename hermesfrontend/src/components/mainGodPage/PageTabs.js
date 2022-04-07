@@ -69,13 +69,13 @@ export default function BasicTabs(props) {
         />
       </div>
       <div label="Items" style={{ color: "white" }}>
-        <Items pagegod={props.pagegod} role={props.role} rank={props.rank} patch={props.patch} queueType={props.queueType} />
+        <Items pagegod={props.pagegod} role={props.role} rank={props.rank} patch={props.patch} queueType={props.queueType} mode={props.mode} />
       </div>
       <div label="Build Paths" style={{ color: "white" }}>
-        <BuildPath pagegod={props.pagegod} role={props.role} rank={props.rank} patch={props.patch} queueType={props.queueType} />
+        <BuildPath pagegod={props.pagegod} role={props.role} rank={props.rank} patch={props.patch} queueType={props.queueType} mode={props.mode} />
       </div>
       <div label="Matchups" style={{ color: "white" }}>
-        <Matchups pagegod={props.pagegod} role={props.role} rank={props.rank} patch={props.patch} queueType={props.queueType} />
+        <Matchups pagegod={props.pagegod} role={props.role} rank={props.rank} patch={props.patch} queueType={props.queueType} mode={props.mode} />
       </div>
     </TierListTabs>
   );

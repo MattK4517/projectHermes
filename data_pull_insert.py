@@ -642,10 +642,11 @@ if __name__ == "__main__":
         data = f.readlines()
         smite_api = SmiteAPI(devId=data[0].strip(
         ), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
-        playerId = smite_api.getPlayerId("Rawjik")
-        print(playerId)
-        data = smite_api.getQueueStats(playerId[0]["player_id"], 448)
-        print(data)
+        print(smite_api.getMotd())
+        # playerId = smite_api.getPlayerId("Rawjik")
+        # print(playerId)
+        # data = smite_api.getQueueStats(playerId[0]["player_id"], 448)
+        # print(data)
     # run_pull_hourly_joust("9.3", -1, "20220326")
 
     # with open("cred.txt", "r") as f:

@@ -913,18 +913,13 @@ def get_matchups_stats(client, god: str, role: str, patch, queue_type, rank="All
     return avg_dmg_dict
 
 
-def get_build_path(client, god, role, patch, queue_type, rank="All Ranks"):
+def get_build_path(client, god, role, patch, queue_type, rank="All Ranks", mode="Conquest"):
     mydb = client["single_match_stats"]
     mycol = mydb[god]
     index = 0
     games = 0
     builds = {}
-    if "All" not in rank:
-        myquery = {"role": role, "patch": patch,
-                   "rank": rank, "queue_type": f"{queue_type}"}
-    else:
-        myquery = {"role": role, "patch": patch,
-                   "queue_type": f"{queue_type}"}
+    myquery = get_query(rank, role, patch, queue_type, mode)
 
     for x in mycol.aggregate(
         [

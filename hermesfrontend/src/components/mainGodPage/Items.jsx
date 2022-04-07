@@ -156,7 +156,9 @@ function Items(props) {
         "/",
         props.patch,
         "/",
-        props.queue_type
+        props.queueType,
+        "/",
+        props.mode
       )
     ).then((res) =>
       res.json().then((data) => {
@@ -247,7 +249,7 @@ function Items(props) {
         });
       })
     );
-  }, [props.role, props.rank, props.patch, props.queue_type]);
+  }, [props.role, props.rank, props.patch, props.queueType]);
 
   const itemColumns = React.useMemo(
     () => [
