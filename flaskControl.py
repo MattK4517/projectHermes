@@ -30,6 +30,8 @@ app = Flask(__name__, static_folder="../hermesfrontend", static_url_path="/")
 #         default_limits=["250 per day", "50 per hour"]
 # )
 
+tinyt_chat = []
+
 
 @app.route("/api/gods")
 def get_all_gods():
