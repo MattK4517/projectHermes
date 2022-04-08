@@ -26,6 +26,7 @@ import DamageCalculator from "./DmgCalcPage/DamageCalculator"
 import { DamageProvider } from './DmgCalcPage/DamageContext';
 import { TierListProvider } from './Tierlists/TierListContext';
 import FindAMatch from './MatchPage/FindAMatch';
+import { MainProvider } from './mainGodPage/MainContext';
 
 
 export const godsDict = {
@@ -427,17 +428,19 @@ export default function PermanentDrawerLeft() {
         sx={{ flexGrow: 1, width: "100%" }}
       >
         <Toolbar />
-        <PlayerProvider>
-          <DamageProvider>
-            <TierListProvider>
-              <Typography>
-                <Switch>
-                  {routeComponents}
-                </Switch>
-              </Typography>
-            </TierListProvider>
-          </DamageProvider>
-        </PlayerProvider>
+        <MainProvider>
+          <PlayerProvider>
+            <DamageProvider>
+              <TierListProvider>
+                <Typography>
+                  <Switch>
+                    {routeComponents}
+                  </Switch>
+                </Typography>
+              </TierListProvider>
+            </DamageProvider>
+          </PlayerProvider>
+        </MainProvider>
       </Box>
     </Box>
   );

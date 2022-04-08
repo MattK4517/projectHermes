@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import "../Component.css";
 import styled from "styled-components";
@@ -17,6 +17,7 @@ import { BasicTabs } from "../mainGodPage/PageTabs";
 import SearchBarGodPage from "../SearchBarStuff/SearchBarGodPage";
 import { Helmet } from "react-helmet";
 import Filter from "../Filters/Filter";
+import { MainContext } from "./MainContext";
 
 const godsDict = {
   "All Gods": "None",
@@ -294,44 +295,45 @@ const ImageDiv = styled.div`
 `;
 
 function Godpage(props) {
+  const [
+    god,
+    setGod,
+    role,
+    setRole,
+    rank,
+    setRank,
+    patch,
+    setPatch,
+    queueType,
+    setQueueType,
+    mode,
+    setMode,
+    matchup,
+    setMatchup,
+    patches,
+    queueTypes,
+    modes,
+    ranks,
+    roles,
+  ] = useContext(MainContext);
+
   const pagegod = props.god.replaceAll("_", " ");
-  const role = props.role;
+  setGod(pagegod);
+  const [dispRole, setDispRole] = useState(props.role.replaceAll("_", " "));
+  const [dispRank, setDispRank] = useState(rank.replaceAll("_", " "));
   var [url, seturl] = useState(0);
   const [displaygod, setgod] = useState(0);
   const [abilities, setabilities] = useState([]);
-  const [patch, setPatch] = useState("9.3");
-  const [matchup, setMatchup] = useState("None");
-  const [roles, setroles] = useState([
-    "Solo",
-    "Jungle",
-    "Mid",
-    "Support",
-    "Carry",
-  ]);
-  const [ranks, setranks] = useState([
-    "Bronze",
-    "Silver",
-    "Gold",
-    "Platinum",
-    "Platinum+",
-    "Diamond",
-    "Diamond+",
-    "Masters",
-    "Grandmaster",
-    "All Ranks",
-  ]);
-
   const [tab, setTab] = useState("Build");
-  const [dispRole, setRole] = useState(role);
-  const [dispRank, setRank] = useState("All Ranks");
   const [tier, setTier] = useState("");
   const [banrate, setbanrate] = useState(0);
   const [pickrate, setpickrate] = useState(0);
   const [winrate, setwinrate] = useState(0);
-  const [queueType, setQueueType] = useState("Ranked");
-  const [mode, setMode] = useState("Conquest");
-  const queueTypes = ["Casual", "Ranked"];
-  const modes = ["Joust", "Conquest", "Duel"];
+
+  useEffect(() => {
+    setDispRole(role.replaceAll("_", " "));
+    setDispRank(rank.replaceAll("_", " "));
+  }, [role, rank]);
 
   useEffect(() => {
     fetch(
@@ -361,7 +363,7 @@ function Godpage(props) {
         // setTier(data.tier)
       })
     );
-  }, [dispRole, dispRank, patch, queueType, matchup, mode]);
+  }, [god, dispRole, dispRank, patch, queueType, matchup, mode]);
 
   useEffect(() => {
     fetch("/api/".concat(pagegod, "/abilities")).then((res) =>
@@ -406,6 +408,8 @@ function Godpage(props) {
                   abilities={abilities}
                   patch={patch}
                   tab={tab}
+                  mode={mode}
+                  queueType={queueType}
                 />
                 <Filter
                   mode={mode}
@@ -416,7 +420,7 @@ function Godpage(props) {
                   patch={patch}
                   matchup={matchup}
                   modeFilters={modes}
-                  patchFilters={["9.3", "9.2", "9.1"]}
+                  patchFilters={patches}
                   roleFilters={roles}
                   rankFilters={ranks}
                   queueFilters={queueTypes}
@@ -429,17 +433,10 @@ function Godpage(props) {
                   setQueueType={setQueueType}
                 />
                 <BasicTabs
-                  pagegod={pagegod}
-                  role={dispRole}
-                  rank={dispRank}
-                  patch={patch}
                   changeTab={setTab}
                   winRate={winrate}
                   pickRate={pickrate}
                   banRate={banrate}
-                  matchup={matchup}
-                  queueType={queueType}
-                  mode={mode}
                 />
               </div>
             </div>

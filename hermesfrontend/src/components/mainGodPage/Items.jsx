@@ -1,10 +1,11 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import "../Component.css";
 import styled from "styled-components";
 import { useTable, useSortBy, usePagination } from "react-table";
 import Tooltip from "@material-ui/core/Tooltip";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
+import { MainContext } from "./MainContext";
 
 export function ItemTable({ columns, data }) {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
@@ -40,7 +41,7 @@ export function ItemTable({ columns, data }) {
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
-                // Add the sorting props to control sorting. For this example
+                // Add the sorting to control sorting. For this example
                 // we can add them into the header props
                 <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                   {column.render("Header")}
@@ -64,8 +65,8 @@ export function ItemTable({ columns, data }) {
         >
           {firstPageRows.map((row, i) => {
             prepareRow(row);
-            // if (row.original.role != this.props.role && this.props.role != "All Roles"){
-            //   console.log(row.original.role, this.props.role)
+            // if (row.original.role != this.role && this.role != "All Roles"){
+            //   console.log(row.original.role, this.role)
             //  }
             if (row.original.item) {
               return (
@@ -135,30 +136,51 @@ export function ItemTable({ columns, data }) {
 }
 
 function Items(props) {
-  const [patch, setPatch] = useState("9.1");
+  const [
+    god,
+    setGod,
+    role,
+    setRole,
+    rank,
+    setRank,
+    patch,
+    setPatch,
+    queueType,
+    setQueueType,
+    mode,
+    setMode,
+    matchup,
+    setMatchup,
+    patches,
+    queueTypes,
+    modes,
+    ranks,
+    roles,
+  ] = useContext(MainContext);
+  const [value, setValue] = useState(0);
   const [slotOneItems, setSlotOneItems] = useState([]);
   const [slotTwoItems, setSlotTwoItems] = useState([]);
   const [slotThreeItems, setSlotThreeItems] = useState([]);
   const [slotFourItems, setSlotFourItems] = useState([]);
   const [slotFiveItems, setSlotFiveItems] = useState([]);
   const [slotSixItems, setSlotSixItems] = useState([]);
-  const [dispRole, setrole] = useState(props.role);
+  const [dispRole, setrole] = useState(role);
   const [dispRank, setrank] = useState("All Ranks");
 
   useEffect(() => {
     fetch(
       "/api/".concat(
-        props.pagegod,
+        god,
         "/items/",
-        props.role,
+        role,
         "/",
-        props.rank,
+        rank,
         "/",
-        props.patch,
+        patch,
         "/",
-        props.queueType,
+        queueType,
         "/",
-        props.mode
+        mode
       )
     ).then((res) =>
       res.json().then((data) => {
@@ -249,7 +271,7 @@ function Items(props) {
         });
       })
     );
-  }, [props.role, props.rank, props.patch, props.queueType]);
+  }, [god, role, rank, patch, queueType]);
 
   const itemColumns = React.useMemo(
     () => [

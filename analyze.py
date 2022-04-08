@@ -65,6 +65,7 @@ def get_pb_rate(client, god, rank, role, patch, queue_type="Ranked", mode="Conqu
         client, rank, patch, queue_type=queue_type, mode=mode)
     if "All" not in rank:
         totalMatches = totalMatches / 10
+
     if "role" in myquery.keys():
         del myquery["role"]
     del myquery["queue_type"]
@@ -355,7 +356,6 @@ def get_worst_matchups(client, god, role, patch, queue_type="Ranked", rank="All 
     if "All" in role:
         del myquery["role"]
 
-    print(myquery)
     games = 0
     wins = 0
     for matchup in mycol.find(myquery, {"_id": 0}):
@@ -475,8 +475,8 @@ def get_total_matches(client, rank, patch, queue_type="Ranked", mode="Conquest")
     mycol = mydb["Total_Matches"]
     total_games = 0
     myquery = get_query(rank, "", patch, queue_type, mode)
-    print(myquery)
-    myquery["rank"] = rank
+    if "role" in myquery.keys():
+        del myquery["role"]
     for x in mycol.find(myquery, {"Total_Matches": 1, "_id": 0}):
         total_games += x["Total_Matches"]
     return total_games
@@ -637,13 +637,13 @@ def get_carry_score(match):
             "Loser": {
                 "totalDamage": 1,
             }
-            },
+                },
         "levelDiff": {
             "Winner": {
             },
             "Loser": {
             }
-            },
+                },
         "killPart": {
                 "Winner": {
                     "totalKills": 0,
@@ -651,7 +651,7 @@ def get_carry_score(match):
                 "Loser": {
                     "totalKills": 0,
                 }
-            }
+                }
     }
     match_roles = []
 
@@ -843,17 +843,12 @@ def get_specific_build(client, god, role, patch, matchup, rank="All Ranks", queu
     return get_top_builds(client, god, role, patch, rank=rank, data=builds)
 
 
-def get_matchups_stats(client, god: str, role: str, patch, queue_type, rank="All Ranks", mode="Conquest"):
+def get_matchups_stats(client, god: str, role: str, patch, queue_type="Ranked", rank="All Ranks", mode="Conquest"):
     mydb = client["single_match_stats"]
     mycol = mydb[god]
-    if "All" in rank:
-        myquery = {"role": role, "patch": patch,
-                   "queue_type": f"{queue_type}"}
-    else:
-        myquery = {"role": role, "patch": patch,
-                   "rank": rank, "queue_type": f"{queue_type}"}
-
+    myquery = get_query(rank, role, patch, queue_type, mode)
     avg_dmg_dict = {}
+    print(myquery)
     total_games = mycol.count_documents(myquery)
     for x in mycol.aggregate([
         {
@@ -1093,12 +1088,11 @@ def insert_games(rank, games, patch, queue_type, mode):
 
 
 if __name__ == "__main__":
-    print(get_worst_matchups(client, "Ah Muzen Cab", "None", "9.3", mode="Duel"))
-
     starttime = datetime.now()
+    print(get_matchups_stats(client, "Achilles", "Solo",
+          "9.3", queue_type="Ranked", mode="Conquest"))
     # print(get_worst_matchups(client, "Cliodhna", "Solo", "9.3"))
-    # print(get_top_builds(client, "Shiva", "Solo", "9.2", "Casual"))
-    # calc_total_matches(client, ranks, "9.3", "Ranked", "Conquest")
+    # #print(get_top_builds(client, "Shiva", "Solo", "9.2", "Casual"))
     # #print(get_winrate(client, "Ah Puch", "All", "9.3", mode="Joust"))
     # #print(create_tier_list.get_tier_stats(client, "All Ranks", "Solo"))
     # # #print(get_total_matches(client, "Diamond", "9.1"))

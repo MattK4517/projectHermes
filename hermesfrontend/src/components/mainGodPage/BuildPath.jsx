@@ -1,11 +1,12 @@
 import { Tab } from "@material-ui/core";
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useTable, useSortBy, usePagination } from "react-table";
 import Tooltip from "@material-ui/core/Tooltip";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import winRateColor from "../mainGodPage/WinRateColor";
 import { HtmlTooltip } from "./GodPageHelpers";
+import { MainContext } from "./MainContext";
 
 function CreateItemToolTip(props) {
   if (props.index == 0) {
@@ -322,21 +323,43 @@ function Table({ columns, data }) {
 }
 
 export default function BuildPath(props) {
+  const [
+    god,
+    setGod,
+    role,
+    setRole,
+    rank,
+    setRank,
+    patch,
+    setPatch,
+    queueType,
+    setQueueType,
+    mode,
+    setMode,
+    matchup,
+    setMatchup,
+    patches,
+    queueTypes,
+    modes,
+    ranks,
+    roles,
+  ] = useContext(MainContext);
+
   const [paths, setPaths] = useState([]);
   useEffect(() => {
     fetch(
       "/api/".concat(
-        props.pagegod,
+        god,
         "/buildpath/",
-        props.role,
+        role,
         "/",
-        props.rank,
+        rank,
         "/",
-        props.patch,
+        patch,
         "/",
-        props.queueType,
+        queueType,
         "/",
-        props.mode
+        mode
       )
     ).then((res) =>
       res.json().then((data) => {
@@ -361,7 +384,7 @@ export default function BuildPath(props) {
         });
       })
     );
-  }, [props.role, props.rank, props.patch, props.queueType]);
+  }, [god, role, rank, patch, queueType]);
 
   const columns = React.useMemo(
     () => [

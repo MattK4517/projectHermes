@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useContext } from "react";
 import { useTable, useSortBy, usePagination } from "react-table";
 import { Link } from "react-router-dom";
 import winRateColor from "./WinRateColor";
 import { compareNumericString } from "../Tierlists/TierListHelpers";
+import { MainContext } from "./MainContext";
 
 const Table = ({ columns, data }) => {
   const {
@@ -339,21 +340,42 @@ const Table = ({ columns, data }) => {
 };
 
 export default function Matchups(props) {
+  const [
+    god,
+    setGod,
+    role,
+    setRole,
+    rank,
+    setRank,
+    patch,
+    setPatch,
+    queueType,
+    setQueueType,
+    mode,
+    setMode,
+    matchup,
+    setMatchup,
+    patches,
+    queueTypes,
+    modes,
+    ranks,
+    roles,
+  ] = useContext(MainContext);
   const [totalData, setTotalData] = useState([]);
   useEffect(() => {
     fetch(
       "/api/".concat(
-        props.pagegod,
+        god,
         "/m/",
-        props.role,
+        role,
         "/",
-        props.rank,
+        rank,
         "/",
-        props.patch,
+        patch,
         "/",
-        props.queueType,
+        queueType,
         "/",
-        props.mode
+        mode
       )
     ).then((res) =>
       res.json().then((data) => {
@@ -374,7 +396,7 @@ export default function Matchups(props) {
         });
       })
     );
-  }, [props.role, props.rank, props.patch, props.queueType]);
+  }, [god, role, rank, patch, queueType]);
   const columns = React.useMemo(
     () => [
       {

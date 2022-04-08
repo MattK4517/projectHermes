@@ -9,7 +9,7 @@ import Items from './Items';
 import BuildPath from './BuildPath';
 import Matchups from './Matchups';
 import TierListTabs from '../Tabs/TierListTabs';
-
+import { MainContext } from "./MainContext"
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -45,6 +45,10 @@ function a11yProps(index) {
 }
 
 export default function BasicTabs(props) {
+  const [
+    god, setGod, role, setRole, rank, setRank, patch, setPatch, queueType, setQueueType,
+    mode, setMode, matchup, setMatchup, patches, queueTypes, modes, ranks, roles
+  ] = React.useContext(MainContext)
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -55,27 +59,27 @@ export default function BasicTabs(props) {
     <TierListTabs style={{ paddingTop: "10px" }} changeTableType={props.changeTab}>
       <div label="Build" style={{ color: "white" }}>
         <BuildPage
-          pagegod={props.pagegod}
-          role={props.role}
-          rank={props.rank}
-          patch={props.patch}
+          pagegod={god}
+          role={role}
+          rank={rank}
+          patch={patch}
           changeTab={props.setTab}
           winrate={props.winRate}
           pickrate={props.pickRate}
           banrate={props.banRate}
-          matchup={props.matchup}
-          queueType={props.queueType}
-          mode={props.mode}
+          matchup={matchup}
+          queueType={queueType}
+          mode={mode}
         />
       </div>
       <div label="Items" style={{ color: "white" }}>
-        <Items pagegod={props.pagegod} role={props.role} rank={props.rank} patch={props.patch} queueType={props.queueType} mode={props.mode} />
+        <Items />
       </div>
       <div label="Build Paths" style={{ color: "white" }}>
-        <BuildPath pagegod={props.pagegod} role={props.role} rank={props.rank} patch={props.patch} queueType={props.queueType} mode={props.mode} />
+        <BuildPath />
       </div>
       <div label="Matchups" style={{ color: "white" }}>
-        <Matchups pagegod={props.pagegod} role={props.role} rank={props.rank} patch={props.patch} queueType={props.queueType} mode={props.mode} />
+        <Matchups />
       </div>
     </TierListTabs>
   );
