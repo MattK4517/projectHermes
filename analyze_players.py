@@ -74,6 +74,7 @@ def create_player_return_dict(player):
 
 
 def get_player_basic(player):
+    # my player id 704292327
     return {
         "Avatar_URL": player["Avatar_URL"],
         "Created_Datetime": player["Created_Datetime"],
