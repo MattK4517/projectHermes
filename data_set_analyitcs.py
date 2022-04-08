@@ -16,7 +16,6 @@ import pandas as pd
 #                dict3[key] = [value , dict1[key]]
 #    return dict3
 
-
 def get_items_by_class(client, class_name, role):
     items = {f"slot{i+1}": {} for i in range(6)}
     build = [""]

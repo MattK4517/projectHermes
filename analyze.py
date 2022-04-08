@@ -336,7 +336,6 @@ def get_all_builds(client, god, role, patch, queue_type="Ranked", rank="All Rank
             test_sort = OrderedDict(sorted(top_dict[slot].items(),
                                            key=lambda x: getitem(x[1], "games")))
             top_dict[slot] = dict(test_sort)
-
     if games == 0:
         games = 1
     return {**dict(top_dict), **{"games": games, "wins": wins, "winRate": round(wins/games*100, 2)}}
