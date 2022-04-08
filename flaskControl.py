@@ -116,11 +116,14 @@ def get_tier_list(rank, role, tableType, queue_type, patch, mode):
 
         myquery = {**myquery, **{"queue_type": queue_type, "mode": mode}}
 
+        if mode == "Joust":
+            myquery["pickRate"] = {"$gte": .5}
+
         # print(myquery, mycol.count_documents(myquery))
 
         my_filter = fh.get_filter(tableType)
         # print(my_filter)
-        for x in mycol.find(myquery, my_filter).limit(10):
+        for x in mycol.find(myquery, my_filter):
             dict_god = x["god"]
             dict_role = x["role"]
             if not retData[dict_god]:

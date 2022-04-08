@@ -9,8 +9,25 @@ def gen_tier_list(client, roles, patch, types, ranks, queue_types, modes):
     date = get_date()
     for queue_type in queue_types:
         for mode in modes:
-            for role in roles:
-                for tier_type in types:
+            for tier_type in types:
+                if mode == "Conquest":
+                    for role in roles:
+                        if queue_type == "Ranked":
+                            for rank in ["All Ranks"]:
+                                for god in godsDict:
+                                    if tier_type == "Regular":
+                                        gen_regular_tier_entry(
+                                            client, god, role, rank, patch, queue_type, mode, date)
+                                    print(
+                                        f"god done {god} - {rank} - {role} - {tier_type} - {queue_type} - {mode}")
+                        elif queue_type == "Casual":
+                            for god in godsDict:
+                                if tier_type == "Regular":
+                                    gen_regular_tier_entry(
+                                        client, god, role, "All Ranks", patch, queue_type, mode, date)
+                                print(
+                                    f"god done {god} - {rank} - {role} - {tier_type} - {queue_type} - {mode}")
+                elif mode != "Conquest":
                     if queue_type == "Ranked":
                         for rank in ["All Ranks"]:
                             for god in godsDict:
@@ -191,6 +208,5 @@ def update_tier(client, roles, patch, ranks, queue_types):
 if __name__ == '__main__':
     starttime = datetime.now()
     gen_tier_list(client, roles, "9.3", [
-                  "Regular"], all_ranks, ["Ranked"], ["Conquest"])
+                  "Regular"], all_ranks, ["Ranked"], ["Conquest", "Duel", "Joust"])
     print(f"done in {datetime.now() - starttime}")
-

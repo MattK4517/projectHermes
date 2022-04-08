@@ -642,7 +642,8 @@ if __name__ == "__main__":
         data = f.readlines()
         smite_api = SmiteAPI(devId=data[0].strip(
         ), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
-        print(smite_api.getMotd())
+        print(smite_api.getPlayerStatus("fenrir45-maxmcca"))
+        print(smite_api.getPlayerId("fenrir45-maxmcca"))
         # playerId = smite_api.getPlayerId("Rawjik")
         # print(playerId)
         # data = smite_api.getQueueStats(playerId[0]["player_id"], 448)

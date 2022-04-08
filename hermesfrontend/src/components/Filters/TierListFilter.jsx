@@ -39,7 +39,7 @@ export default function TierListFilter(props) {
     "Grandmaster",
     "All Ranks",
   ]);
-  const modes = ["Conquest", "Joust"];
+  const modes = ["Conquest", "Joust", "Duel"];
   const queueTypes = ["Ranked", "Casual"];
 
   return (

@@ -470,7 +470,7 @@ function TierList(props) {
         });
       })
     );
-  }, [rank, role, queueType, patch]);
+  }, [rank, role, queueType, patch, mode]);
 
   const columns = React.useMemo(
     () => [
