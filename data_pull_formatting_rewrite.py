@@ -6,11 +6,12 @@ from __init__ import client
 
 
 class GodData:
-    def __init__(self, god, mode, queue_type):
+    def __init__(self, god, mode, queue_type, input_type):
         self.name = god
         self.matches = []
         self.mode = mode
         self.queue_type = queue_type
+        self.input_type = input_type
 
     def insert_ban(self, matchId, rank, entry_datetime, patch):
         mydb = client["single_god_bans"]
@@ -21,6 +22,7 @@ class GodData:
             "patch": patch,
             "Entry_Datetime": entry_datetime,
             "mode": self.mode,
+            "input_type": self.input_type
         })
 
     def set_matches(self, data):
@@ -33,50 +35,16 @@ class GodData:
                     self.matches.append(match)
                     match_picks += 1
                 if "Ban" in key and match[key] == self.name and match_bans == 0:
-                    try:
-                        match_bans += 1
+                    match_bans += 1
+                    if self.mode == "Duel":
+                        self.insert_ban(match["MatchId"], normalize_rank(
+                            match["player1"]["Conquest_Tier"]), match["Entry_Datetime"], match["Patch"])
+                    else:
                         self.insert_ban(match["MatchId"], normalize_rank(
                             match["player0"]["Conquest_Tier"]), match["Entry_Datetime"], match["Patch"])
-                    except:
-                        print("error")
 
     def get_matches(self):
         return len(self.matches)
-
-    def calc_items(self):
-        mydb = client["single_items"]
-        mycol = mydb[self.name]
-        set = []
-        for match in self.matches:
-            build = {}
-            player_ids = []
-            for key in match:
-                if "player" in key and match[key]["godName"] == self.name and match[key]["PlayerId"] not in player_ids:
-                    player_ids.append(match[key]["PlayerId"])
-                    role_played = match[key]["Role"]
-                    rank = normalize_rank(match[key]["Conquest_Tier"])
-                    win_status = match[key]["Win_Status"]
-                    matchId = match[key]["MatchID"]
-                    build = {}
-                    for player_key in match[key]:
-                        if "Item_Purch" in player_key:
-                            item, purch, number = player_key.split("_")
-                            build[f"slot{number}"] = match[key][player_key]
-
-                    set.append(
-                        {
-                            self.name: build,
-                            "role_played": role_played,
-                            "rank": rank,
-                            "win_status": win_status,
-                            "matchId": matchId,
-                            "patch": match["Patch"],
-                            "Entry_Datetime": match["Entry_Datetime"],
-                            "mode": self.mode,
-                            "queue_type": self.queue_type
-                        }
-                    )
-        mycol.insert_many(set)
 
     def calc_match_stats(self):
         mydb = client["single_match_stats"]
@@ -127,9 +95,9 @@ class GodData:
                     win_status = match[key]["Win_Status"]
 
                     for key in match:
-                        if "player" in key and match[key]["godName"] != self.name and match[key]["Role"] == role:
+                        if "player" in key and match[key]["Role"] == role and match[key]["Win_Status"] != win_status:
                             enemy = match[key]["godName"]
-                        if "player" in key and match[key]["godName"] != self.name and match[key]["Win_Status"] != win_status:
+                        if "player" in key and match[key]["Win_Status"] != win_status:
                             enemies.append(match[key]["godName"])
 
                     set.append({
@@ -164,7 +132,7 @@ class GodData:
                         "queue_type": self.queue_type,
                         "build": build,
                         "god": self.name,
-                        self.name: build
+                        "input_type": self.input_type,
                     })
         if len(self.matches) > 0:
             mycol.insert_many(set)
@@ -194,36 +162,8 @@ def get_date():
     return f"{time.month}/{time.day}/{time.year}"
 
 
-# {"Entry_Datetime": {"$lte": "8/30/2021", "$gte": "8/27/2021" }}
-def run_format(patch, date, mode, queue_type):
-    sum_gods = 0
-    mydb = client["Matches"]
-    mycol = mydb[f"{patch} Joust Matches"]
-    set_matches = []
-    count = 0
-    for match in mycol.find():
-        set_matches.append(match)
-
+def format_no_query(match, mode, queue_type, input_type):
     for god in godsDict:
-
-        godsDict[god] = GodData(god, mode, queue_type)
-        godsDict[god].set_matches(set_matches)
-        sum_gods += godsDict[god].get_matches()
-        # godsDict[god].calc_matchups()
-        # godsDict[god].calc_items()
-        godsDict[god].calc_match_stats()
-        # godsDict[god].calc_objective_stats()
-        count += godsDict[god].get_matches()
-        print(f"{god}: {godsDict[god].get_matches()}")
-    print(count)
-
-
-def format_no_query(match, mode, queue_type):
-    for god in godsDict:
-        godsDict[god] = GodData(god, mode, queue_type)
+        godsDict[god] = GodData(god, mode, queue_type, input_type)
         godsDict[god].set_matches(match)
         godsDict[god].calc_match_stats()
-
-
-if __name__ == "__main__":
-    run_format("9.3", "", "Joust", "Ranked")

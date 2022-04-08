@@ -1,20 +1,10 @@
 import pyrez
 from datetime import datetime
 from pyrez.api import SmiteAPI
-import pymongo
-import random
-import time
-import analyze as anlz
-import analyze_players as anlzpy
 from pyrez.models import Smite
 from pyrez.models.MatchHistory import MatchHistory
 from data_pull_formatting_rewrite import format_no_query
-import os
 from __init__ import client
-from constants import godsDict
-
-
-# from data_pull_formatting_rewrite import format_no_query
 
 
 def normalize_godId(id):
@@ -164,7 +154,6 @@ def create_player_dict(player):
     playerDict["Final_Match_Level"] = player["Final_Match_Level"]
     playerDict["godId"] = player["GodId"]
     playerDict["godName"] = normalize_godId(player["GodId"])
-    # playerDict["godStats"] = anlz.get_god_stats(client, normalize_godId(player["GodId"]), player["Final_Match_Level"])
     playerDict["Gold_Earned"] = player.goldEarned
     playerDict["Gold_Per_Minute"] = player.goldPerMinute
     playerDict["Healing"] = player.healing
@@ -214,19 +203,17 @@ def create_player_dict(player):
         playerDict["Item_Purch_5"],
         playerDict["Item_Purch_6"],
     ]
-    # playerDict["godBuild"] = anlz.get_build_stats(client, build)
     return playerDict
 
 
-def create_match_dict(match, patch):
-    with open("match doc Ids.txt", "w") as f:
-        f.writelines(f"{match.matchId}\n")
+def create_match_dict(match, patch, input_type):
     match_dict = {}
     match_dict["Patch"] = patch
     match_dict["Entry_Datetime"] = match.entryDatetime.split()[0]
     match_dict["MatchId"] = match.matchId
     match_dict["Match_Duration"] = match.matchDuration
     match_dict["Minutes"] = match["Minutes"]
+    match_dict["Input_Type"] = input_type
     match_dict["Ban0"] = match["Ban1"]
     match_dict["Ban1"] = match["Ban2"]
     match_dict["Ban2"] = match["Ban3"]
@@ -260,406 +247,86 @@ def create_sets(data):
     return sets
 
 
-def get_new_id(client, smite_api):
-    mydb = client["God_Data"]
-    gods = smite_api.getGods()
-    for god in range(len(gods)):
-        if gods[god]["Name"] == "Shiva":
-            mycol = mydb[gods[god]["Name"]]
-            data = create_god_data_dict(gods[god])
-            mycol.insert_one(data)
-
-
-def create_god_data_dict(data):
-    ret_data = {}
-    ret_data["Ability1"] = data["Ability1"]
-    ret_data["Ability2"] = data["Ability2"]
-    ret_data["Ability3"] = data["Ability3"]
-    ret_data["Ability4"] = data["Ability4"]
-    ret_data["Ability5"] = data["Ability5"]
-    ret_data["AbilityId1"] = data["AbilityId1"]
-    ret_data["AbilityId2"] = data["AbilityId2"]
-    ret_data["AbilityId3"] = data["AbilityId3"]
-    ret_data["AbilityId4"] = data["AbilityId4"]
-    ret_data["AbilityId5"] = data["AbilityId5"]
-    ret_data["Ability_1"] = data["Ability_1"]
-    ret_data["Ability_2"] = data["Ability_2"]
-    ret_data["Ability_3"] = data["Ability_3"]
-    ret_data["Ability_4"] = data["Ability_4"]
-    ret_data["Ability_5"] = data["Ability_5"]
-    ret_data["AttackSpeed"] = data["AttackSpeed"]
-    ret_data["AttackSpeedPerLevel"] = data["AttackSpeedPerLevel"]
-    ret_data["AutoBanned"] = data["AutoBanned"]
-    ret_data["Cons"] = data["Cons"]
-    ret_data["HP5PerLevel"] = data["HP5PerLevel"]
-    ret_data["Health"] = data["Health"]
-    ret_data["HealthPerFive"] = data["HealthPerFive"]
-    ret_data["HealthPerLevel"] = data["HealthPerLevel"]
-    ret_data["Lore"] = data["Lore"]
-    ret_data["MagicProtection"] = data["MagicProtection"]
-    ret_data["MagicProtectionPerLevel"] = data["MagicProtectionPerLevel"]
-    ret_data["MagicalPower"] = data["MagicalPower"]
-    ret_data["MagicalPowerPerLevel"] = data["MagicalPowerPerLevel"]
-    ret_data["MP5PerLevel"] = data["MP5PerLevel"]
-    ret_data["Mana"] = data["Mana"]
-    ret_data["ManaPerFive"] = data["ManaPerFive"]
-    ret_data["ManaPerLevel"] = data["ManaPerLevel"]
-    ret_data["Name"] = data["Name"]
-    ret_data["OnFreeRotation"] = data["OnFreeRotation"]
-    ret_data["Pantheon"] = data["Pantheon"]
-    ret_data["PhysicalPower"] = data["PhysicalPower"]
-    ret_data["PhysicalPowerPerLevel"] = data["PhysicalPowerPerLevel"]
-    ret_data["PhysicalProtection"] = data["PhysicalProtection"]
-    ret_data["PhysicalProtectionPerLevel"] = data["PhysicalProtectionPerLevel"]
-    ret_data["Pros"] = data["Pros"]
-    ret_data["Roles"] = data["Roles"]
-    ret_data["Speed"] = data["Speed"]
-    ret_data["Title"] = data["Title"]
-    ret_data["Type"] = data["Type"]
-    ret_data["abilityDescription1"] = data["abilityDescription1"]
-    ret_data["abilityDescription2"] = data["abilityDescription2"]
-    ret_data["abilityDescription3"] = data["abilityDescription3"]
-    ret_data["abilityDescription4"] = data["abilityDescription4"]
-    ret_data["abilityDescription5"] = data["abilityDescription5"]
-    ret_data["basicAttack"] = data["basicAttack"]
-    ret_data["godAbility1_URL"] = data["godAbility1_URL"]
-    ret_data["godAbility2_URL"] = data["godAbility2_URL"]
-    ret_data["godAbility3_URL"] = data["godAbility3_URL"]
-    ret_data["godAbility4_URL"] = data["godAbility4_URL"]
-    ret_data["godAbility5_URL"] = data["godAbility5_URL"]
-    ret_data["godCard_URL"] = data["godCard_URL"]
-    ret_data["godIcon_URL"] = data["godIcon_URL"]
-    ret_data["id"] = data["id"]
-    ret_data["latestGod"] = data["latestGod"]
-    ret_data["ret_msg"] = data["ret_msg"]
-    return ret_data
-
-
 def get_date():
     time = datetime.now()
     return f"{time.year}{time.month}{time.day}"
 
 
-def get_player_basic(player):
-    print(player)
-    return {
-        "Avatar_URL": player["Avatar_URL"],
-        "Created_Datetime": player["Created_Datetime"],
-        "HoursPlayed": player["HoursPlayed"],
-        "Leaves": player["Leaves"],
-        "Level": player["Level"],
-        "Losses": player["Losses"],
-        "MinutesPlayed": player["MinutesPlayed"],
-        "Name": player["Name"],
-        "NameTag": player["hz_player_name"],
-        "Rank_Stat_Conquest": player["Rank_Stat_Conquest"],
-        "Rank_Stat_Conquest_Controller": player["Rank_Stat_Conquest_Controller"],
-        "RankedConquest": {
-            "Leaves": player["RankedConquest"]["Leaves"],
-            "Losses": player["RankedConquest"]["Losses"],
-            "Points": player["RankedConquest"]["Points"],
-            "Rank": player["RankedConquest"]["Rank"],
-            "Rank_Stat": player["RankedConquest"]["Rank_Stat"],
-            "Rank_Stat_Conquest": player["RankedConquest"]["Rank_Stat_Conquest"],
-            "Rank_Variance": player["RankedConquest"]["Rank_Variance"],
-            "Season": player["RankedConquest"]["Season"],
-            "Tier": player["RankedConquest"]["Tier"],
-            "Wins": player["RankedConquest"]["Wins"],
-        },
-        "RankedConquestController": {
-            "Leaves": player["RankedConquestController"]["Leaves"],
-            "Losses": player["RankedConquestController"]["Losses"],
-            "Points": player["RankedConquestController"]["Points"],
-            "Rank": player["RankedConquestController"]["Rank"],
-            "Rank_Stat": player["RankedConquestController"]["Rank_Stat"],
-            "Rank_Stat_Conquest": player["RankedConquestController"]["Rank_Stat_Conquest"],
-            "Rank_Variance": player["RankedConquestController"]["Rank_Variance"],
-            "Season": player["RankedConquestController"]["Season"],
-            "Tier": player["RankedConquestController"]["Tier"],
-            "Wins": player["RankedConquestController"]["Wins"],
-        },
-        "Tier_Conquest": player["Tier_Conquest"],
-        "Total_Achievements": player["Total_Achievements"],
-        "Total_Worshippers": player["Total_Worshippers"],
-        "Wins": player["Wins"],
-    }
+def get_queue_id(queue_type, mode, input_type):
+    queue_id = 0
+    if queue_type == "Ranked":
+        if mode == "Conquest":
+            if input_type == "KBM":
+                queue_id = 451
+            elif input_type == "Controller":
+                queue_id = 504
 
-# my player id 704292327
+        elif mode == "Joust":
+            if input_type == "KBM":
+                queue_id = 450
+            elif input_type == "Controller":
+                queue_id = 503
+
+        elif mode == "Duel":
+            if input_type == "KBM":
+                queue_id = 440
+            elif input_type == "Controller":
+                queue_id = 502
+
+    elif queue_type == "Casual":
+        if mode == "Conquest":
+            queue_id = 426
+
+        elif mode == "Joust":
+            queue_id = 448
+
+    return queue_id
 
 
-def threaded_pull(patch, all_sets):
+def run_pull(patch, hour, queue_type, mode, input_type, date=get_date()):
     starttime = datetime.now()
-    with open("cred.txt", "r") as f:
+    with open("/home/matt4517k/mysite/cred.txt", "r") as f:
         data = f.readlines()
         smite_api = SmiteAPI(devId=data[0].strip(
         ), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
 
-    mydb = client["CasualMatches"]
-    mycol = mydb[f"{patch} Matches"]
-    # date = date
-    # match_ids = smite_api.getMatchIds(426, date=date, hour=-1)
-    #  match_ids_len = len(match_ids)
-    # print(match_ids_len)
-    set_length = 10
-    inserted_count = 0
-    # total = 0
-    print("Starting pull")
-    for sets in all_sets:
-        set_data = []
-        match_details = smite_api.getMatch(sets)
-        for i in range(1):
-            match_dict = create_match_dict(match_details[i*set_length], patch)
-            for k in range(10):
-                player = create_player_dict(match_details[(i*10) + k])
-                match_dict["player"+str(k)] = player
-            # carry_score = anlz.get_carry_score(match_dict)
-            # match_dict["carryScore"] = carry_score["goldScore"]
-            # match_dict["damageScore"] = carry_score["damageScore"]
-            # match_dict["levelDiff"] = carry_score["levelDiff"]
-            # match_dict["killPart"] = carry_score["killPart"]
-            # match_dict["efficiency"] = anlz.get_gold_eff(match_dict["killPart"], match_dict["carryScore"])
-            set_data.append(match_dict)
-            # format_no_query(match_dict)
-        if set_data != []:
-            mycol.insert_many(set_data)
-        else:
-            print(sets)
-        inserted_count += 1
-        if inserted_count == round(len(all_sets)/2):
-            print("halfway")
-
-    print(f"Pull Completed in " + str(datetime.now() - starttime))
-
-# run_pull("9.1")
-# print(inserted_count)
-# print("error %" + str(round(100 - inserted_count/match_ids_len * 100, 2)))
-
-
-def get_item_abs_price(name, family, tier, tree):
-    price = 0
-    index = 1
-    for element in tree[family]:
-        if tree[family][element]["Name"] == name:
-            price += tree[family][element]["Price"]
-
-        if tree[family][element]["Tier"] < tier:
-            price += tree[family][element]["Price"]
-
-    return price
-
-
-def create_item_dict(item, item_prices):
-    ret_data = {}
-    ret_data["ChildItemId"] = item["ChildItemId"]
-    ret_data["DeviceName"] = item["DeviceName"]
-    ret_data["ItemDescription"] = item["ItemDescription"]
-    ret_data["ItemTier"] = item["ItemTier"]
-    ret_data["relativePrice"] = item["Price"]
-    ret_data["absolutePrice"] = get_item_abs_price(
-        item["DeviceName"], item["RootItemId"], item["ItemTier"], item_prices)
-    ret_data["ShortDesc"] = item["ShortDesc"]
-    ret_data["itemIcon_URL"] = item["itemIcon_URL"]
-    return ret_data
-
-
-def get_new_items(client, smite_api):
-    mydb = client["Item_Data"]
-    prices = {}
-    items = smite_api.getItems()
-    for item in range(len(items)):
-        # print(items[item]["DeviceName"], items[item]["RootItemId"])
-        if items[item]["RootItemId"] not in prices:
-            prices[items[item]["RootItemId"]] = {items[item]["DeviceName"]: {
-                "Price": items[item]["Price"], "Tier": items[item]["ItemTier"], "Name": items[item]["DeviceName"]}}
-        else:
-            prices[items[item]["RootItemId"]][items[item]["DeviceName"]] = {
-                "Price": items[item]["Price"], "Tier": items[item]["ItemTier"], "Name": items[item]["DeviceName"]}
-
-    for item in range(len(items)):
-        mycol = mydb[items[item]["DeviceName"]]
-        item = create_item_dict(items[item], prices)
-        mycol.insert_one(item)
-    # print(prices)
-        # if items[item]["Name"] == "Merlin":
-        #     mycol = mydb[gods[god]["Name"]]
-        #     data = create_god_data_dict(gods[god])
-        #     # mycol.replace_one({}, data)
-
-
-def run_pull(patch, date=get_date()):
-    starttime = datetime.now()
-    with open("cred.txt", "r") as f:
-        data = f.readlines()
-        smite_api = SmiteAPI(devId=data[0].strip(
-        ), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
-
-    mydb = client["test"]
-    mycol = mydb[f"{patch} Matches"]
+    mydb = client["Matches"]
+    if mode == "Conquest":
+        mycol = mydb[f"{patch} Matches"]
+    else:
+        mycol = mydb[f"{patch} {mode} Matches"]
     date = date
-    match_ids = smite_api.getMatchIds(451, date="20220202", hour=-1)
-    # set_ids = []
-    # all_ids = []
-    # set_matches = {}
-    set_length = 10
+    queue_id = get_queue_id(queue_type, mode)
+    match_ids = smite_api.getMatchIds(queue_id, date=date, hour=hour)
     inserted_count = 0
     match_ids_len = len(match_ids)
-    print(match_ids_len)
     all_sets = create_sets(match_ids)
-    print(all_sets)
-    total = 0
-    # for set in all_sets:
-    #     try:
-    #         data = []
-    #         match_details = smite_api.getMatch(set)
-    #         total += len(match_details)
-    #         # current_id = match_details[0]["Match"]
-    #         # match_dict = create_match_dict(match_details[0], patch)
-    #         # for i in range(len(match_details)):
-    #         #     player = create_player_dict(match_details[i])
-    #         #     data.append(player)
-    #             # if match_details[i]["Match"] == current_id:
-    #             #     player = create_player_dict(match_details[i])
-    #             #     # print(player["godName"])
-    #             #     match_dict[f"player{i % 10}"] = player
-    #             #     if "player9" in match_dict.keys():
-    #             #         data.append(match_dict)
-    #             # elif match_details[i]["Match"] != current_id:
-    #             #     match_dict = create_match_dict(match_details[i], patch)
-    #             #     player = create_player_dict(match_details[i])
-    #             #     match_dict[f"player{i % 10}"] = player
-    #             #     current_id = match_details[i]["Match"]
-    #         # print(len(data))
-    #         # mycol.insert_many(data)
-    #         # inserted_count += len(data)
-    #         #     # carry_score = anlz.get_carry_score(match_dict)
-    #         #     # match_dict["carryScore"] = carry_score["goldScore"]
-    #         #     # match_dict["damageScore"] = carry_score["damageScore"]
-    #         #     # match_dict["levelDiff"] = carry_score["levelDiff"]
-    #         #     # match_dict["killPart"] = carry_score["killPart"]
-    #         #     # match_dict["efficiency"] = anlz.get_gold_eff(match_dict["killPart"], match_dict["carryScore"])
-    #             # format_no_query(match_dict)
-    #     except IndexError:
-    #         print(set)
-
-    # print(total)
-    # print(f"{date} Pull Completed in {str(datetime.now() - starttime)} loss: {round(inserted_count/match_ids_len*100, 2)}")
-
-
-def run_pull_hourly(patch, hour, date):
-    starttime = datetime.now()
-    with open("cred.txt", "r") as f:
-        data = f.readlines()
-        smite_api = SmiteAPI(devId=data[0].strip(
-        ), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
-
-    mydb = client["test"]
-    mycol = mydb[f"{patch} Matches"]
-    temp = client["temp"]
-    tempcol = temp["MatchId"]
-    match_ids = smite_api.getMatchIds(426, date=date, hour=hour)
-    set_length = 10
-    inserted_count = 0
-    match_ids_len = len(match_ids)
-    print(len(match_ids))
-    tempcol.insert_one({"MatchId": match_ids[-1].matchId})
-    all_sets = create_sets(match_ids)
-    total = 0
     for set in all_sets:
 
         try:
             data = []
             match_details = smite_api.getMatch(set)
-            total += len(match_details)
-            ids = []
-            for i in range(len(match_details)):
-                if match_details[i].matchId not in ids:
-                    match_dict = create_match_dict(match_details[i], "9.1")
-                    data.append(match_dict)
-                    ids.append(match_dict["MatchId"])
-                else:
-                    for match in data:
-                        if match["MatchId"] == match_details[i].matchId:
-                            player = create_player_dict(match_details[i])
-                            match[f"player{len(match.keys())-15}"] = player
-        except IndexError:
-            print(set)
-
-    print(total)
-    print(f"{date} Pull Completed in {str(datetime.now() - starttime)} loss: {round(inserted_count/match_ids_len*100, 2)}")
-
-
-def run_pull_hourly_joust(patch, hour, date):
-    starttime = datetime.now()
-    with open("cred.txt", "r") as f:
-        data = f.readlines()
-        smite_api = SmiteAPI(devId=data[0].strip(
-        ), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
-
-    mydb = client["CasualMatches"]
-    mycol = mydb[f"{patch} Joust Matches"]
-    match_ids = smite_api.getMatchIds(448, date=date, hour=hour)
-    set_length = 10
-    inserted_count = 0
-    match_ids_len = len(match_ids)
-    print(f"Joust: {len(match_ids)}")
-    all_sets = create_sets(match_ids)
-    total = 0
-    data = []
-    for set in all_sets:
-        if inserted_count >= 100:
-            break
-        try:
-            data = []
-            match_details = smite_api.getMatch(set)
-            total += len(match_details)
             ids = []
             for i in range(len(match_details)):
                 if match_details[i].matchId not in ids:
                     match_dict = create_match_dict(match_details[i], patch)
                     player = create_player_dict(match_details[i])
-                    match_dict[f"player{len(match_dict.keys())-15}"] = player
+                    match_dict[f"player{len(match_dict.keys())-17}"] = player
                     data.append(match_dict)
                     ids.append(match_dict["MatchId"])
                 else:
                     for match in data:
                         if match["MatchId"] == match_details[i].matchId:
                             player = create_player_dict(match_details[i])
-                            match[f"player{len(match.keys())-15}"] = player
+                            match[f"player{len(match.keys())-17}"] = player
 
             mycol.insert_many(data)
-            format_no_query(data, "Joust", "Casual")
+            format_no_query(data, mode, queue_type, input_type)
             inserted_count += len(data)
+
         except IndexError:
             print(set)
         except TypeError:
             print(f"{date} Pull Completed in {str(datetime.now() - starttime)} loss: {round(100 - (inserted_count/match_ids_len*100), 2)}")
 
-    print(f"{date} Pull Completed in {str(datetime.now() - starttime)} loss: {round(100 - (inserted_count/match_ids_len*100), 2)}")
-
-
-if __name__ == "__main__":
-    with open("cred.txt", "r") as f:
-        data = f.readlines()
-        smite_api = SmiteAPI(devId=data[0].strip(
-        ), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
-        print(smite_api.getPlayerStatus("fenrir45-maxmcca"))
-        print(smite_api.getPlayerId("fenrir45-maxmcca"))
-        # playerId = smite_api.getPlayerId("Rawjik")
-        # print(playerId)
-        # data = smite_api.getQueueStats(playerId[0]["player_id"], 448)
-        # print(data)
-    # run_pull_hourly_joust("9.3", -1, "20220326")
-
-    # with open("cred.txt", "r") as f:
-    #     data = f.readlines()
-    #     smite_api = SmiteAPI(devId=data[0].strip(
-    #     ), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
-    # get_new_items(client, smite_api)
-    # mydb = client["single_match_stats"]
-    # for god in godsDict:
-    #     mycol = mydb[god]
-    #     mycol.update_many({"Entry_Datetime": {"$not": {"$regex": "2/22/2022", "$options": "i"}}}, {"$set": {"patch": "9.1"}})
-    #     print(mycol.count_documents({"patch": "9.2"}))
-
-
-# Rat1Boss
+    print(f"{date} Pull Completed in {str(datetime.now() - starttime)} loss: {100-round(inserted_count/match_ids_len*100, 2)}")
