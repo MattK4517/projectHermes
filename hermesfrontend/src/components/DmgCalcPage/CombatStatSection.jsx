@@ -13,7 +13,6 @@ export default function CombatStatSection(props) {
     setBuild,
     dropItem,
   ] = useContext(DamageContext);
-  console.log(props.combatStats);
   return (
     <div className="content-section">
       <div className="content-section_header">{god} Stats</div>
@@ -25,7 +24,7 @@ export default function CombatStatSection(props) {
                 {stat}: {props.combatStats[stat].toFixed(2)}
               </p>
             );
-          } else { 
+          } else {
             return (
               <p>
                 {stat}: {props.combatStats[stat].toFixed()}

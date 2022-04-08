@@ -88,7 +88,6 @@ function DragDropGodList(props) {
       <InfiniteScroll dataLength={1} height={"550px"}>
         <div className="gods-container">
           {allgods.map((god) => {
-
             return <Picture url={god.url} id={god.id} />;
           })}
         </div>
@@ -98,7 +97,6 @@ function DragDropGodList(props) {
 }
 
 export function DragDropItemList(props) {
-  console.log(props)
   // const [drop, allgods, board, setBoard, god, setGod] = useContext(DamageContext);
   return (
     <div className="content-section">
