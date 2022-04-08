@@ -1,5 +1,6 @@
 
 
+from os import dup
 from re import A, match
 import pymongo
 from collections import OrderedDict
@@ -7,12 +8,10 @@ from operator import getitem
 import pandas as pd
 from pymongo.encryption import Algorithm
 import analyze as anlz
-from constants import godsDict, roles, ranks, single_combat_stats, single_objective_stats
-from pandas.io.json import json_normalize
-import time
-
-client = pymongo.MongoClient(
-    "mongodb+srv://sysAdmin:9gR7C1aDKclng4jA@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
+from constants import Tier_Three_items, godsDict, roles, ranks, single_combat_stats, single_objective_stats, Warriors
+# from pandas.io.json import json_normalize
+# import time
+from __init__ import client
 
 
 def clear_nonmatches(client):
@@ -38,35 +37,6 @@ def delete_match_docs(client, db, col, field, value):
     mycol = mydb[col]
     mycol.delete_many({field: value})
 
-
-def calc_total_matches(client, ranks):
-    matchIds = []
-    actTotalGames = 0
-    for rank in ranks:
-        if rank == "All Ranks":
-             mycol.update_one({"rank": rank, "patch": "8.12", "mode": "RankedConq"}, {"$set": {"Total_Matches": len(matchIds)}})
-             break
-        mydb = client["single_items"]
-        total_games = 0
-        for god in godsDict:
-            mycol = mydb[god]
-            myquery = {"rank": rank, "patch": "8.12", "mode": "RankedConq"}
-            games = 0
-            for x in mycol.find(myquery, {"_id": 0}):
-                # if x["matchId"] not in matchIds:
-                    matchIds.append(x["matchId"])
-                    games += 1
-            total_games += games
-            print(f"{god} {games}, {total_games}")
-        actTotalGames += total_games
-        insert_games(rank, total_games)
-
-
-def insert_games(rank, games):
-    mydb = client["Matches"]
-    mycol = mydb[f"Total_Matches"]
-    mycol.update_one({"rank": rank, "patch": "8.12", "mode": "RankedConq"}, {"$set": {"Total_Matches": games}})
-    print(f"{rank} done")
 
 def add_new_urls(client, god):
     god_info_db = client["God_Data"]
@@ -94,6 +64,7 @@ def add_new_urls(client, god):
         "Abilities_urls": ability_urls,
     })
 
+
 def add_patch_field(client, db, col, matchId, carry_score, field_key):
     mydb = client[db]
     mycol = mydb[col]
@@ -103,11 +74,13 @@ def add_patch_field(client, db, col, matchId, carry_score, field_key):
         {"$set": {field_key: carry_score}},
     )
 
+
 def get_one_match(client, db, col):
     mydb = client[db]
     mycol = mydb[col]
     for x in mycol.find({"MatchId": 1191575208}, {"_id": 0}):
         return x
+
 
 def add_carry_score(client, db, col, field_key):
     myquery = {"Patch": "8.9"}
@@ -119,6 +92,7 @@ def add_carry_score(client, db, col, field_key):
         carry_score = anlz.get_gold_score(x)
         add_patch_field(client, db, col, matchId, carry_score, field_key)
 
+
 def add_damage_score(client, db, col, field_key):
     myquery = {"Patch": "8.9"}
     mydb = client[db]
@@ -128,6 +102,7 @@ def add_damage_score(client, db, col, field_key):
         matchId = x["MatchId"]
         damage_score = anlz.get_damage_score(x)
         add_patch_field(client, db, col, matchId, damage_score, field_key)
+
 
 def add_level_diff(client, db, col, field_key):
     myquery = {"Patch": "8.9"}
@@ -139,6 +114,7 @@ def add_level_diff(client, db, col, field_key):
         level_diff = anlz.get_level_diff(x)
         add_patch_field(client, db, col, matchId, level_diff, field_key)
 
+
 def add_kill_part(client, db, col, field_key):
     myquery = {"Patch": "8.9"}
     mydb = client[db]
@@ -149,132 +125,72 @@ def add_kill_part(client, db, col, field_key):
         kill_part = anlz.get_kill_part(x)
         add_patch_field(client, db, col, matchId, kill_part, field_key)
 
+
 def add_gold_eff(client, db, col, field_key):
     myquery = {"Patch": "8.9"}
     mydb = client[db]
     mycol = mydb[col]
     gold_eff = {}
-    for x in mycol.find(myquery, {"carryScore": 1, "killPart": 1,"_id": 0, "MatchId": 1}):
+    for x in mycol.find(myquery, {"carryScore": 1, "killPart": 1, "_id": 0, "MatchId": 1}):
         matchId = x["MatchId"]
         gold_eff = anlz.get_gold_eff(x["killPart"], x["carryScore"])
         add_patch_field(client, db, col, matchId, gold_eff, field_key)
 
+
 def remove_duplicates(client, dbs):
-    for db in dbs:
-        mydb = client[db]
-        for god in godsDict.keys():
-            mycol = mydb[god]
-            starting_number = mycol.count_documents({})
-            doc_ids = []
-            for x in mycol.aggregate([
-                {"$group": {"_id": "$matchId", "count": {"$sum": 1} }}
-            ]):
-                if x["count"] > 1:
-                    for x in mycol.find({"matchId": x["_id"]}, {"_id": 1}):
-                        doc_ids.append(x["_id"])
-                        if len(doc_ids) > 1:
-                            mycol.delete_one({"_id": doc_ids[-1]})
-                                # time.sleep(100)
-            ending_number = mycol.count_documents({})
-            with open("requirements.txt", "a") as f:
-                f.writelines(f"{db} for {god} starting at {starting_number} end at {ending_number}. loss={round(100 -ending_number/starting_number * 100, 2)}\n")
-            print(f"{god} done")
+    # for db in dbs:
+    mydb = client["CasualMatches"]
+    mycol = mydb["9.1 Matches"]
+    # for god in godsDict.keys():
+    #     mycol = mydb[god]
+    doc_ids = []
+    for x in mycol.aggregate([
+        {"$match": {"Entry_Datetime": "12/20/2021"}},
+        {"$group": {"_id": "$MatchId", "count": {"$sum": 1}}}
+    ]):
+        if x["count"] > 1:
+            for x in mycol.find({"MatchId": x["_id"]}, {"_id": 1}):
+                doc_ids.append(x["_id"])
+                if len(doc_ids) > 1:
+                    mycol.delete_one({"_id": doc_ids[-1]})
+                    # time.sleep(100)
+        # ending_number = mycol.count_documents({})
+        # with open("requirements.txt", "a") as f:
+        #     f.writelines(f"{db} for {god} starting at {starting_number} end at {ending_number}. loss={round(100 -ending_number/starting_number * 100, 2)}\n")
+        # print(f"{god} done")
+
 
 def purge_date(client, dbs, date):
     for db in dbs:
         for god in godsDict.keys():
             delete_match_docs(client, db, god, "Entry_Datetime", date)
-        
+
+
+def merge_total_stats(client, patch, date):
+    mydb = client["single_match_stats"]
+    updatecol = mydb["Total Stats"]
+    for god in godsDict:
+        mycol = mydb[god]
+        data = []
+        # , "Entry_Datetime": date
+        for x in mycol.find({"patch": patch}):
+            data.append(x)
+        print(f"{god}: {len(data)}")
+        updatecol.insert_many(data)
+
+
+def create_match_dict(match, patch):
+    match_dict = {}
+    match_dict["Patch"] = patch
+    match_dict["Entry_Datetime"] = match["Entry_Datetime"]
+    match_dict["MatchId"] = match["MatchID"]
+    return match_dict
+
+
 if __name__ == "__main__":
-    calc_total_matches(client, ranks)
-    # count = 0
-    # mydb = client["single_match_stats"]
-    # for god in godsDict:
-    #     if god != "Atlas":
-    #         mycol = mydb[god]
-    #         mycol.update_many({"Entry_Datetime": {"$gt": "12/15/2021"}}, {"$set": {"mode": "RankedConq"}})
-    # print(count)
-    # mycol = mydb["Atlas"]
-    # for x in mycol.aggregate([
-    #     {"$group": {"_id": "$matchId", "count": {"$sum": 1} }}
-    # ]):
-    #     if x["count"] > 1:
-    #         print(x["count"], x["_id"])
-    #         count += x["count"]
-    # print(count)
-
-    # mydb = client["Matches"]
-    # cols = ["8.9 Matches", "8.10 Matches", "8.11 Matches"]
-    # myquery = {**{f"player{i}.Ranked_Stat_Conq": 1 for i in range(10)}, **{f"player{i}.Player_Name": 1 for i in range(10)}, **{"_id": 0}}
-    # low_elo = {}
-    # count = 0
-    # for col in cols:
-    #     mycol = mydb[col]
-    #     for x in mycol.find({}, myquery):
-    #         for player in x:
-    #             if x[player]["Ranked_Stat_Conq"] > 3300:
-    #                 count += 1
-    #                 playerName = x[player]["Player_Name"]
-    #                 low_elo[playerName] = x[player]
-    
-    # test_sort = OrderedDict(sorted(low_elo.items(),
-    # key = lambda x: getitem(x[1], "Ranked_Stat_Conq")))
-    # low_elo = dict(test_sort)
-    # print(low_elo)
-    # print(len(low_elo))
-    # print(count)
-    # mydb = client["single_matchups"]
-    # insertdb = client["single_match_stats"]
-    # for god in godsDict:
-    #     mycol = mydb[god]
-    #     insertcol = insertdb[god]
-    #     myquery = {"patch": "8.11"}
-    #     for x in mycol.find(myquery, {"enemy": 1, "matchId": 1}):
-    #         insertcol.update_one({"matchId": x["matchId"]}, {"$set": {"enemy": x["enemy"]}})
-
-
-    # dbs = ["single_god_bans", "single_items", "single_matchups", "single_combat_stats", "single_objective_stats"]
-    # purge_date(client, dbs, "11/4/2021")
-    # delete_match_docs(client, "Matches", "8.11 Matches", "Entry_Datetime", "11/24/2021")
-
-    # # remove_duplicates(client, ["single_items", "single_matchups"])
-    # mydb = client["Matches"]
-    # mycol = mydb["8.11 Matches"]
-    # print(mycol.count_documents({"Entry_Datetime": "11/24/2021"}))
-
-# if __name__ == "__main__":
-#     # delete_match_docs(client, "Matches", "8.11 Matches", "Entry_Datetime", "12/10/2021")
-#     mydb = client["CasualMatches"]
-#     mycol = mydb["8.12 Matches"]
-#     mycol.delete_many({"Entry_Datetime": "12/16/2021"})
-    # print(mycol.count_documents({"Entry_Datetime": "12/10/2021"}))
-    # mydb = client["single_items_test"]
-    # mycol = mydb["Atlas"]
-    # for x in mycol.aggregate([
-    #     {"$group": {"_id": "$matchId", "count": {"$sum": 1} }}
-    # ]):
-    #     if x["count"] > 1:
-    #         print(x["count"], x["_id"])
-    # dbs = ["single_combat_stats", "single_god_bans", "single_items", "single_matchups", "single_objective_stats", "single_match_stats"]
-    # for db in dbs:
-    #     mydb = client[db]
-    #     for god in godsDict.keys():
-    #         if god != "Atlas":
-    #             mycol = mydb[god]
-    # mydb = client["Matches"]
-    # mycol = mydb["8.12 Matches"]
-    # mycol.update_many({}, {"$set": {"mode": "RankedConq"}})
-
-    # fields = ["carryScore","damageScore", "levelDiff", "killPart", "efficiency"]
-    # mydb = client["Matches"] 
-    # mycol = mydb["8.9 Matches"]
-    # for x in mycol.find({"MatchId": 1190137864}, {"_id": 0}):
-    #     carryScore = anlz.get_gold_eff(anlz.get_kill_part(x), anlz.get_gold_score(x))
-    # myquery = {"player"+str(i)+".Player_Name": 1 for i in range(10)}
-    # myquery["_id"] = 0
-    # df = pd.DataFrame(json_normalize(mycol.find({}, myquery)))
-    # df.to_excel("names.xlsx")
-
-# 2555
-# 157274 + 42560 + 88166 + 37476 + 45612
-# 371,088
+    mydb = client["single_match_stats"]
+    games = 0
+    for god in godsDict:
+        mycol = mydb[god]
+        print(god, mycol.count_documents({"mode": "Duel", "patch": "9.3",
+                                          "queue_type": "Ranked"}))

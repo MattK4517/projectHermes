@@ -2,7 +2,6 @@ import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
-import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
@@ -10,191 +9,210 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import * as AiIcons from 'react-icons/ai';
 import * as GiIcons from 'react-icons/gi'
-import { Link } from "react-router-dom";
-import { HashRouter as HashRouter, Switch, Route} from "react-router-dom";
-import { Godpage, Gods, TierListPage, Match, Home, ContactForm, Items } from "./"
-import { color } from '@mui/system';
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
+import { HashRouter as HashRouter, Switch, Route, Link } from "react-router-dom";
+import Home from './Home';
+import GodsScreen from './Gods';
+import Godpage from './mainGodPage/Godpage';
+import TierListPage from './TierListPage';
+import ContactForm from "./ContactForm"
+import Match from "./Match"
+// import { Godpage, GodsScreen, TierListPage, Match, Home, ContactForm } from "./"
 import SearchBar from "./SearchBarStuff/SearchBar";
 import Player from "./PlayerPage/Player";
+import OverviewDisplay from "./PlayerPage/OverviewDisplay";
 import GodStatsDisplay from "./PlayerPage/GodStatsDisplay";
+import { PlayerProvider } from "./PlayerPage/PlayerContext";
+import DamageCalculator from "./DmgCalcPage/DamageCalculator"
+import { DamageProvider } from './DmgCalcPage/DamageContext';
+import { TierListProvider } from './Tierlists/TierListContext';
+import FindAMatch from './MatchPage/FindAMatch';
+import { MainProvider } from './mainGodPage/MainContext';
 
 
+export const godsDict = {
+  "Achilles": "Solo",
+  "Agni": "Mid",
+  "Ah Muzen Cab": "Carry",
+  "Ah Puch": "Mid",
+  "Amaterasu": "Solo",
+  "Anhur": "Carry",
+  "Anubis": "Mid",
+  "Ao Kuang": "Jungle",
+  "Aphrodite": "Mid",
+  "Apollo": "Carry",
+  "Arachne": "Jungle",
+  "Ares": "Support",
+  "Artemis": "Carry",
+  "Artio": "Support",
+  "Athena": "Support",
+  "Atlas": "Support",
+  "Awilix": "Jungle",
+  "Baba Yaga": "Mid",
+  "Bacchus": "Supprt",
+  "Bakasura": "Jungle",
+  "Baron Samedi": "Mid",
+  "Bastet": "Jungle",
+  "Bellona": "Solo",
+  "Cabrakan": "Support",
+  "Camazotz": "Jungle",
+  "Cerberus": "Support",
+  "Cernunnos": "Carry",
+  "Chaac": "Solo",
+  "Chang\'e": "Mid",
+  "Charybdis": "Carry",
+  "Chernobog": "Carry",
+  "Chiron": "Carry",
+  "Chronos": "Carry",
+  "Cliodhna": "Jungle",
+  "Cthulhu": "Support",
+  "Cu Chulainn": "Solo",
+  "Cupid": "Carry",
+  "Da Ji": "Jungle",
+  "Danzaburou": "Carry",
+  "Discordia": "Mid",
+  "Erlang Shen": "Jungle",
+  "Eset": "Mid",
+  "Fafnir": "Support",
+  "Fenrir": "Jungle",
+  "Freya": "Carry",
+  "Ganesha": "Support",
+  "Geb": "Support",
+  "Gilgamesh": "Solo",
+  "Guan Yu": "Solo",
+  "Hachiman": "Carry",
+  "Hades": "Mid",
+  "He Bo": "Mid",
+  "Heimdallr": "Carry",
+  "Hel": "Mid",
+  "Hera": "Mid",
+  "Hercules": "Solo",
+  "Horus": "Support",
+  "Hou Yi": "Carry",
+  "Hun Batz": "Jungle",
+  "Izanami": "Carry",
+  "Janus": "Mid",
+  "Jing Wei": "Carry",
+  "Jormungandr": "Solo",
+  "Kali": "Jungle",
+  "Khepri": "Support",
+  "King Arthur": "Solo",
+  "Kukulkan": "Mid",
+  "Kumbhakarna": "Support",
+  "Kuzenbo": "Support",
+  "Loki": "Jungle",
+  "Medusa": "Carry",
+  "Mercury": "Jungle",
+  "Merlin": "Mid",
+  "Morgan Le Fay": "Mid",
+  "Mulan": "Solo",
+  "Ne Zha": "Jungle",
+  "Neith": "Carry",
+  "Nemesis": "Jungle",
+  "Nike": "Solo",
+  "Nox": "Mid",
+  "Nu Wa": "Mid",
+  "Odin": "Solo",
+  "Olorun": "Carry",
+  "Osiris": "Solo",
+  "Pele": "Jungle",
+  "Persephone": "Mid",
+  "Poseidon": "Mid",
+  "Ra": "Mid",
+  "Raijin": "Mid",
+  "Rama": "Carry",
+  "Ratatoskr": "Jungle",
+  "Ravana": "Jungle",
+  "Scylla": "Mid",
+  "Serqet": "Jungle",
+  "Set": "Jungle",
+  "Shiva": "Solo",
+  "Skadi": "Carry",
+  "Sobek": "Support",
+  "Sol": "Carry",
+  "Sun Wukong": "Solo",
+  "Susano": "Jungle",
+  "Sylvanus": "Support",
+  "Terra": "Support",
+  "Thanatos": "Jungle",
+  "The Morrigan": "Mid",
+  "Thor": "Jungle",
+  "Thoth": "Mid",
+  "Tiamat": "Mid",
+  "Tsukuyomi": "Jungle",
+  "Tyr": "Solo",
+  "Ullr": "Carry",
+  "Vamana": "Solo",
+  "Vulcan": "Mid",
+  "Xbalanque": "Carry",
+  "Xing Tian": "Support",
+  "Yemoja": "Support",
+  "Ymir": "Support",
+  "Zeus": "Mid",
+  "Zhong Kui": "Solo"
+}
 
-const godsDict = {
-    "Achilles": "Solo",
-    "Agni": "Mid",
-    "Ah Muzen Cab": "Carry",
-    "Ah Puch": "Mid",
-    "Amaterasu": "Solo",
-    "Anhur": "Carry",
-    "Anubis": "Mid",
-    "Ao Kuang": "Jungle",
-    "Aphrodite": "Mid",
-    "Apollo": "Carry",
-    "Arachne": "Jungle",
-    "Ares": "Support",
-    "Artemis": "Carry",
-    "Artio": "Support",
-    "Athena": "Support",
-    "Atlas": "Support",
-    "Awilix": "Jungle",
-    "Baba Yaga": "Mid",
-    "Bacchus": "Supprt",
-    "Bakasura": "Jungle",
-    "Baron Samedi": "Mid",
-    "Bastet": "Jungle",
-    "Bellona": "Solo",
-    "Cabrakan": "Support",
-    "Camazotz": "Jungle",
-    "Cerberus": "Support",
-    "Cernunnos": "Carry",
-    "Chaac": "Solo",
-    "Chang\'e": "Mid",
-    "Charybdis": "Carry",
-    "Chernobog": "Carry",
-    "Chiron": "Carry",
-    "Chronos": "Carry",
-    "Cliodhna": "Jungle",
-    "Cthulhu": "Support",
-    "Cu Chulainn": "Solo",
-    "Cupid": "Carry",
-    "Da Ji": "Jungle",
-    "Danzaburou": "Carry",
-    "Discordia": "Mid",
-    "Erlang Shen": "Jungle",
-    "Eset": "Mid",
-    "Fafnir": "Support",
-    "Fenrir": "Jungle",
-    "Freya": "Carry",
-    "Ganesha": "Support",
-    "Geb": "Support",
-    "Gilgamesh": "Solo",
-    "Guan Yu": "Solo",
-    "Hachiman": "Carry",
-    "Hades": "Mid",
-    "He Bo": "Mid",
-    "Heimdallr": "Carry",
-    "Hel": "Mid",
-    "Hera": "Mid",
-    "Hercules": "Solo",
-    "Horus": "Support",
-    "Hou Yi": "Carry",
-    "Hun Batz": "Jungle",
-    "Izanami": "Carry",
-    "Janus": "Mid",
-    "Jing Wei": "Carry",
-    "Jormungandr": "Solo",
-    "Kali": "Jungle",
-    "Khepri": "Support",
-    "King Arthur": "Solo",
-    "Kukulkan": "Mid",
-    "Kumbhakarna": "Support",
-    "Kuzenbo": "Support",
-    "Loki": "Jungle",
-    "Medusa": "Carry",
-    "Mercury": "Jungle",
-    "Merlin": "Mid",
-    "Morgan Le Fay": "Mid",
-    "Mulan": "Solo",
-    "Ne Zha": "Jungle",
-    "Neith": "Carry",
-    "Nemesis": "Jungle",
-    "Nike": "Solo",
-    "Nox": "Mid",
-    "Nu Wa": "Mid",
-    "Odin": "Solo",
-    "Olorun": "Carry",
-    "Osiris": "Solo",
-    "Pele": "Jungle",
-    "Persephone": "Mid",
-    "Poseidon": "Mid",
-    "Ra": "Mid",
-    "Raijin": "Mid",
-    "Rama": "Carry",
-    "Ratatoskr": "Jungle",
-    "Ravana": "Jungle",
-    "Scylla": "Mid",
-    "Serqet": "Jungle",
-    "Set": "Jungle",
-    "Skadi": "Carry",
-    "Sobek": "Support",
-    "Sol": "Carry",
-    "Sun Wukong": "Solo",
-    "Susano": "Jungle",
-    "Sylvanus": "Support",
-    "Terra": "Support",
-    "Thanatos": "Jungle",
-    "The Morrigan": "Mid",
-    "Thor": "Jungle",
-    "Thoth": "Mid",
-    "Tiamat": "Mid",
-    "Tsukuyomi": "Jungle",
-    "Tyr": "Solo",
-    "Ullr": "Carry",
-    "Vamana": "Solo",
-    "Vulcan": "Mid",
-    "Xbalanque": "Carry",
-    "Xing Tian": "Support",
-    "Yemoja": "Support",
-    "Ymir": "Support",
-    "Zeus": "Mid",
-    "Zhong Kui": "Solo"
+let routes = [
+  {
+    path: "/",
+    component: <Home />,
+    god: "",
+  },
+  {
+    path: "/Gods",
+    component: <GodsScreen />,
+    god: "",
+  },
+  {
+    path: "/tierlist",
+    component: <TierListPage />,
+    god: "",
+  },
+  {
+    path: "/contact",
+    component: <ContactForm />,
+    god: "",
+  },
+  {
+    path: ["/match/:handle", "/match"],
+    component: <Match />,
+    god: "",
+  },
+  {
+    path: ["/player/:handle", "/player"],
+    component: <Player />,
+    god: "",
+  },
+  {
+    path: ["/player/:handle/god-stats"],
+    component: <GodStatsDisplay />,
+    god: "",
+  },
+  {
+    path: ["/player/:handle/god-stats/:handle"],
+    component: <OverviewDisplay />,
+    god: "",
+  },
+  {
+    path: ["/damage_calculator"],
+    component: <DamageCalculator />,
+    god: "",
+  },
+  {
+    path: ["/find_a_match"],
+    component: <FindAMatch />,
+    god: "",
   }
-  let routes = [
-    {
-      path: "/",
-      component: <Home />,
-      god: "",
-    },
-    {
-      path: "/Gods",
-      component: <Gods />,
-      god: "",
-    },
-    {
-      path: "/tierlist",
-      component: <TierListPage />,
-      god: "",
-    },
-    {
-      path: "/contact",
-      component: <ContactForm />,
-      god: "",
-    },
-    {
-      path: ["/match/:handle", "/match"],
-      component: <Match />,
-      god: "",
-    },
-    {
-      path: ["/player/:handle", "/player"],
-      component: <Player />,
-      god: "",
-    },
-    {
-      path: ["/player/:handle/:handle"],
-      component: <GodStatsDisplay />,
-      god: "",
-    }
-    
 
+
+]
+Object.keys(godsDict).forEach((god) => {
+  routes = [...routes, {
+    path: "/".concat(god).replaceAll(" ", "_"),
+    component: <Godpage god={god} role={godsDict[god]} />,
+    "god": god,
+  },
   ]
-  Object.keys(godsDict).forEach((god) => {
-    routes = [...routes, {
-      path: "/".concat(god).replaceAll(" ", "_"),
-      component: <Godpage god={god} role={godsDict[god]}/>,
-      "god": god,
-    },
-    // {
-    //   path: "/".concat(god.replaceAll(" ", "_"), "/items"),
-    //   component: <Items god={god} role={godsDict[god]}/>,
-    //   "god": god,
-    // }
-  ]
-  })
+})
 
 const Root = styled(AppBar)(({ theme }) => ({
   padding: theme.spacing(1),
@@ -209,9 +227,8 @@ const Root = styled(AppBar)(({ theme }) => ({
     backgroundColor: "#0b0b23",
   },
   [theme.breakpoints.down('md')]: {
-    backgroundColor: "#0b0b23",
-    width: "100%",
-    paddingLeft: "125px"
+    display: "flex",
+    alignItems: "center"
   },
 }));
 
@@ -219,7 +236,7 @@ const CustDrawer = styled(Drawer)(({ theme }) => ({
   padding: theme.spacing(1),
   bgColor: "#17172e",
   [theme.breakpoints.down('sm')]: {
-    display:  "none",
+    display: "none",
   },
   [theme.breakpoints.up('sm')]: {
   },
@@ -243,19 +260,19 @@ const CustDrawer = styled(Drawer)(({ theme }) => ({
 }));
 
 const Hamburger = styled("div")(({ theme }) => ({
-  [theme.breakpoints.down('sm')]: {
+  [theme.breakpoints.down('md')]: {
     backgroundColor: "#0b0b23",
     color: "000",
     display: "block",
     marginRight: "25px"
   },
-  [theme.breakpoints.up('sm')]: {
+  [theme.breakpoints.up('md')]: {
     backgroundColor: "#00FFFF",
-    display:  "none",
+    display: "none",
   },
   [theme.breakpoints.up('lg')]: {
     backgroundColor: "#0000FF",
-    display:  "none",
+    display: "none",
   },
 }));
 
@@ -263,39 +280,50 @@ const Hamburger = styled("div")(({ theme }) => ({
 const drawerWidth = 200;
 export default function PermanentDrawerLeft() {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
-const routeComponents = routes.map(({path, component}, key) => <Route exact path={path} component={() => component} key={key} />);
+  const routeComponents = routes.map(({ path, component }, key) => <Route exact path={path} component={() => component} key={key} />);
   return (
-    <Box sx={{ display: 'flex'}}>
-      {/* <CssBaseline /> */}
+    <Box sx={{ display: 'flex' }}>
       <Root
         position="fixed"
-        sx={{ 
-            width: `calc(100% - ${drawerWidth+20}px)`,
-            ml: `${drawerWidth}px`,
-            bgcolor: "#17172e",
-            paddingLeft: "0px",
-            paddingRight: "0px"
-         }}
+        sx={{
+          width: `calc(100% - ${drawerWidth + 20}px)`,
+          ml: `${drawerWidth}px`,
+          bgcolor: "#17172e",
+          paddingLeft: "0px",
+          paddingRight: "0px"
+        }}
       >
         <Toolbar>
-          <Typography variant="h6" noWrap component="div" 
-          sx={{
-            display: "flex",
-            // position: "fixed",
-          }}
+          <Typography variant="h6" noWrap component="div"
+            sx={{
+              display: "flex",
+            }}
           >
-          <Hamburger>
-          <Link to={"/"} style={{marginLeft: "10px",paddingRight: "10px"}}><AiIcons.AiFillHome/>Home</Link>
-          <Link to={"/gods"} style={{paddingRight: "10px"}}>Gods</Link>
-          <Link to={"/tierlist"}>Tierlist</Link>
-          {/* <Button
+            <Link to={"/"}>
+              <img
+                src="https://i.imgur.com/1OGq7Nk.png"
+                alt="SmiteStats Icon"
+                className="logo-icon"
+              />
+            </Link>
+            <Hamburger>
+              <Link to={"/"} style={{ marginLeft: "10px", paddingRight: "10px" }}>
+                <img
+                  src="https://i.imgur.com/3KNEQMP.png"
+                  alt="SmiteStats Icon"
+                  className="logo-icon-small"
+                />
+                Home
+              </Link>
+              <Link to={"/gods"} style={{ paddingRight: "10px" }}>Gods</Link>
+              <Link to={"/tierlist"}>Tierlist</Link>
+              {/* <Button
             id="basic-button"
             aria-controls="basic-menu"
             aria-haspopup="true"
@@ -313,22 +341,14 @@ const routeComponents = routes.map(({path, component}, key) => <Route exact path
               'aria-labelledby': 'basic-button',
             }}
           > */}
-            {/* <MenuItem onClick={handleClose}><Link to={"/"}>Gods</Link></MenuItem>
+              {/* <MenuItem onClick={handleClose}><Link to={"/"}>Gods</Link></MenuItem>
             <MenuItem onClick={handleClose}><Link to={"/"}>Gods</Link></MenuItem>
             <MenuItem onClick={handleClose}><Link to={"/tierlist"}>tierlist</Link></MenuItem> */}
-          {/* </Menu> */}
-        </Hamburger>
-        
-            <Link to={"/"}>
-              <img 
-                src="https://i.imgur.com/1OGq7Nk.png" 
-                alt="SmiteStats Icon"
-                style={{
-                  maxWidth: "220px"
-                }}
-              />
-            </Link>
-            <SearchBar data={routes.slice(5)} />
+              {/* </Menu> */}
+            </Hamburger>
+            <div className="hide">
+              <SearchBar data={routes.slice(10)} />
+            </div>
           </Typography>
         </Toolbar>
       </Root>
@@ -336,7 +356,7 @@ const routeComponents = routes.map(({path, component}, key) => <Route exact path
         sx={{
           width: "225px",
           flexShrink: 0,
-          bgColor:"#17172e",
+          bgColor: "#17172e",
           '& .MuiDrawer-paper': {
             bgColor: "#17172e"
           },
@@ -346,67 +366,81 @@ const routeComponents = routes.map(({path, component}, key) => <Route exact path
       >
         <Toolbar />
         <Divider sx={{
-            color: "#bbbedb",
-            bgColor: "#17172e"
-        }}/>
+          color: "#bbbedb",
+          bgColor: "#17172e"
+        }} />
         <List
-        sx={{
+          className="main-nav-wrapper"
+          sx={{
             paddingLeft: "10px",
             color: "#bbbedb",
             bgcolor: "#17172e",
             display: "flex",
             flexDirection: "column",
-        }}>
-          {["Home", "Gods", "Tierlist", "Contact", "Match", "Player"].map((text, index) => {
+          }}>
+          {["Home", "Gods", "Tierlist", "Contact", "Find A Match"].map((text, index) => {
             let route = text;
             let icon;
-            if (text === "Home"){
+            if (text === "Home") {
               route = "";
-              icon = <AiIcons.AiFillHome/>
+              icon = <AiIcons.AiFillHome className="link-icon-svg" />
             }
-            else if (text === "Gods"){
-              icon = <GiIcons.GiPikeman/>
+            else if (text === "Gods") {
+              icon = <GiIcons.GiPikeman className="link-icon-svg" />
             } else if (text === "Tierlist") {
-              icon = <AiIcons.AiOutlineBars/>
+              icon = <AiIcons.AiOutlineBars className="link-icon-svg" />
             }
-            else if (text === "Contact"){
-              icon = <AiIcons.AiFillMail/>
+            else if (text === "Contact") {
+              icon = <AiIcons.AiFillMail className="link-icon-svg" />
             }
-            else if (text === "Match"){
-              icon = <GiIcons.GiSwordClash/>
+            else if (text === "Find A Match") {
+              icon = <GiIcons.GiSwordClash className="link-icon-svg" />
             }
-            else if (text === "Player"){
-              icon = <GiIcons.GiSwordman/>
+            else if (text === "Damage Calculator") {
+              icon = <GiIcons.GiSwordman className="link-icon-svg" />
             }
             else {
               route = text;
             }
             return (
-                <>
-              <Link
-                key ={index} to={"/".concat((route).replaceAll(" ","_"))} 
-                className="god-link"
-                style={{marginBottom: "20px", marginLeft: "5px"}}
+              <>
+                <Link
+                  key={index} to={"/".concat((route).replaceAll(" ", "_"))}
+                  className="main-nav-link"
+                  style={{ marginBottom: "20px", marginLeft: "5px" }}
                 >
-                  {icon}{text}
-              </Link>
-              {/* <br></br> */}
+                  {icon}<p>{text}</p>
+                </Link>
               </>
             )
-    })}
+          })}
         </List>
         <Divider />
+        <div className="legal">
+          Smitestats.gg isn't endorsed by Hi-Rez Studios and doesn't reflect the views or opinions of
+          Hi-Rez Studios or anyone officially involved in producing or managing Smite.
+          Smite and Hi-Rez Studios are trademarks or registered trademarks of Hi-Rez
+          Studios, Inc. Data provided by Hi-Rez Studios. © Hi-Rez Studios, Inc. All rights reserved.
+        </div>
       </CustDrawer>
       <Box
         component="main"
-        sx={{ flexGrow: 1, width: "100%"}}
+        sx={{ flexGrow: 1, width: "100%" }}
       >
         <Toolbar />
-            <Typography>
-                <Switch>
+        <MainProvider>
+          <PlayerProvider>
+            <DamageProvider>
+              <TierListProvider>
+                <Typography>
+                  <Switch>
                     {routeComponents}
-                </Switch>
-            </Typography>
+                  </Switch>
+                </Typography>
+              </TierListProvider>
+            </DamageProvider>
+          </PlayerProvider>
+        </MainProvider>
       </Box>
     </Box>
   );

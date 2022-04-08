@@ -1,14 +1,13 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 // import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { HashRouter as HashRouter, Switch, Route} from "react-router-dom";
-import { Godpage, Gods, TierListPage, Match, Home, ContactForm, Items, MiniDrawer } from "./components";
-import { TierList } from "./components/Tierlists/TierList";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { HashRouter as HashRouter, Switch, Route } from "react-router-dom";
+import {
+  MiniDrawer,
+} from "./components";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-import { styled } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
-import { green } from '@mui/material/colors';
-import { Paper } from "@mui/material";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 const theme = createTheme({
   breakpoints: {
@@ -20,27 +19,52 @@ const theme = createTheme({
       xl: 1536,
     },
   },
-  ".MuiContainer-root":
-  {
-    paddingLeft: "0px",
-    paddingRight: "0px",
-  }
+  components: {
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          color: "white",
+          "&.Mui-selected": {
+          backgroundColor: "#191937",
+          color: "white",
+          }
+        },
+      }
+    },
+    MuiList: {
+      styleOverrides: {
+        root: {
+          padding: "0px",
+          focus: "red"
+        }
+      }
+    },
+    MuiSelect: {
+      styleOverrides: {
+        icon: {
+          display: "none"
+        },
+      }
+    },
+  },
+  // .MenuItem.Mui-selected {
+  //   styleOverrides: {
+  //     backgroundColor: "teal"
+  //   }
+  // },
 });
 
-
-class App extends React.Component {
-  render () {
+export default function App() {
     // const routeComponents = routes.map(({path, component}, key) => <Route exact path={path} component={() => component} key={key} />);
-  return (
-    <div className="App">
-      <HashRouter>
-        <ThemeProvider theme={theme}>
-          <MiniDrawer />
-        </ThemeProvider>
-      </HashRouter>
-    </div>
-  );
-        }
+    return (
+      <div className="App">
+        <HashRouter>
+          <DndProvider backend={HTML5Backend}>
+            <ThemeProvider theme={theme}>
+              <MiniDrawer />
+            </ThemeProvider>
+          </DndProvider>
+        </HashRouter>
+      </div>
+    );
 }
-
-export default App;

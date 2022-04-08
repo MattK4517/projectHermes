@@ -1,0 +1,322 @@
+Achilles:
+Gift of the Gods : 3 + 2 power per level
+Radiant Glory: Increased % Power
+
+Ah Muzen Cab:
+Hive: Increased % AS
+Stinger: Prot reduction
+
+Amaterasu:
+Illuminating Strike: 10% DMG increase after 3 autos
+Divine Presence: Valor Stance Bonus Power
+
+Anhur:
+Enfeeble: 20 prot reduction
+Shifting Sands 20% increased basic attack damage
+
+Anubis:
+Sorrow: 7 prot steal up to 21
+
+Apollo:
+Audacity: 100% AS for 5 autos
+
+Arachne:
+Predator: 1.5% Basic Attack Damage per 5% missing HP of target
+Cocoon: Increased % AS
+
+Ares:
+Blessed Presence: 30 power per aura
+Searing Flesh: % Max HP of target
+
+Artemis:
+Still Target: 15% Basic Attack Damage to CCed Gods
+Vengeful Assault: Increased % AS
+
+Artio:
+Decompose: 2% prot debuff per ability cast
+
+Athena:
+Reach: autos after an ability have 50% more damage
+
+Awilix:
+Initiative: 30% Physical Power for 2.5s
+Gravity Surge: Increased % AS and power
+
+Baba Yaga:
+Baba's Brew: 7.5% Increased Dmg per red stack
+
+Bacchus:
+Drunk-o-meter: Increased Power
+Chug: Increased Power
+Intoxicate: Increased Power
+
+Bakasura:
+Insatiable Hunger: 7% AS up to 21
+Take Down: 10% Increased Damage
+Butcher Blades: Power, and True Damage on AAs
+
+Baron Samedi:
+Hysteria: 20% increased damage
+Life of the Party: 10% Max HP Damage
+
+Bellona:
+Eagles Rally: Increased Power
+
+Camazotz:
+Screech: Increased Power
+
+Cerberus:
+Ghastly Breath: Prot Reduction
+
+Cernunnos:
+Heavy Glaive: 25% Basic Attack Damage on hit
+Shifter of Seasons: Prot Reduction, Increased on hit Damage
+
+Charybdis:
+Raging Tides: AS, item damage reduction
+Capsize: 30% extra scaling
+
+Chernobog:
+Heart of Cold: 15% + 1% per level basic attack damage
+Vicious Barrage: Increased % AS
+
+Chiron:
+Herbal Medicine: 5+1 power per level after ability cast
+Giddyup!: Increased Power after ability cast
+
+Chronos:
+Time Lord: 5 power per 2 minutes of gametime
+Accelerate: Increased AS, Section 3 and 4 give bonus damage as well
+
+Cthulhu:
+Prey on Fear: 25 power
+
+Cu Chulainn:
+Berserk: Power in the guy stance
+
+Cupid:
+Lovestruck: 2% damage per stack
+Flutter: Increased % AS
+
+Da Ji:
+Tortue Blades: 7(+7% power) per stack on basic attacks
+
+Discordia:
+Contest of Gods: 5+2 phys per level or 10+3 mag per level power increase
+
+Erlang Shen:
+Howling Celestial Dog: 15% Basic Attack Dmg + 1% max HP damage
+Spot Weakness: Increased Physical Damage on AAs
+72 Transformations: Mink Increased % AS 
+
+Eset:
+Dispel Magic: Mag prot debuff
+
+Fafnir:
+Cursed Strength: 20% Prot Debuff
+Coerce : Increased % AS, Increased % Damage
+
+Fenrir:
+Seething Howl: Increased Physical Power
+
+Freya:
+Irradiate: Increased Bonus Damage on AAs
+Pulse: Increased Bonus Damage on AAs
+
+Ganesha:
+Turn of Fate: 2% Increase Damage
+Dharmic Pillars: Prot Reduction
+
+Geb:
+Cataclysm: 15% Current HP
+
+Gilgamesh:
+Sun-Forged Scimitar: 3% of Gilgas max HP 
+
+Guan Yu:
+Taolu Assault: Prot Steal
+
+Hachimnan:
+Heavenly Banner: Increaed % AS
+
+He Bo:
+Steady Fow: 5% Magic Power Buff
+
+Heimdallr:
+The Vigilant: 2% Power up to 10%, Crits only do .65 extra
+
+Hel:
+Hinder: Prot Debuff
+Stance Attunement: 20% Increased Damage
+
+Hercules:
+Strength from Pain: 2 + 1 power per level
+
+Horus:
+Fracture: Prot Reduction
+
+Hou Yi:
+Mark of the Golden Crow: Increased % dmg for every 10% missing health
+
+Hun Batz:
+Infused StrikesL 15% Increased Basic Attack Damage After Ability 
+
+Izanami:
+Sickle Storm: Increased % AS and AA bonus DMG
+Death Draws Nigh: Increased Pen for every 10% missing hp of iza
+
+Janus:
+Threshold: Additional Mag Power Scaling
+Passages: 15% Increased Scaling on next ability
+
+Jing Wei:
+Persistent Gust: Increased % AS 
+Explosive Bolts: Crit Chance and 110% Damage per shot
+Agility: Increased Power
+
+Kali:
+Incense: Power Buff
+Marked for Death: 10%+1% per level Pen
+
+Khepri:
+Rising Dawn: % Prot Debuff
+
+King Arthur:
+Overhead Slash: Melee Bonus Damage
+Twin Cleave: Prot Shred
+Excals Wrath: 2% Max HP per hit, % Max HP increased dmg
+
+Kukulkan:
+Increased Power by 4% of Max mana
+
+Loki:
+Behind You!: 20% Bonus Damage
+
+Medusa:
+Viper Shot: Increased % AS 
+
+Mercury:
+Maximum Velocity: Increased % AS 
+Fastest God Alive: 40% Increase on first AA, Phys Power equal to 25% of MS from items/ability
+
+Merlin:
+Overload: 10 + 15% power on next AA 
+
+Morgan Le Fay:
+Empowered Blade: 2 + .4 power per level for each symbol
+
+Mulan:
+Cross Strike: 25% AS after cast, 10% AS after Mastery
+Spear Thrust Mastery: 5% Power
+
+Ne Zha:
+Universe Ring Toss: Prot Reduction per hit
+Flaming Spear: Increased % AS, and 15% Crit Chance
+
+Neith:
+Spirit Arrow: 100% Bonus dmg
+
+Nem:
+Divine Judgement: % Current HP  Dmg, 30% Prot Shred, 7% power gain per AA 
+
+Nike:
+Rend: Prot Shred on 2nd hit
+To Victory!: Increased Power hit Stack
+
+Nox:
+Flame of the Night: +3% mag power per stack
+
+Nu Wa:
+Clay Soldiers: Dash Prot Shred
+
+Odin:
+Gungnirs Might: Increased 30% AS
+Ring of Spears: 5 power per ult stack
+Path to Valhalla: 8% power per stack
+
+Olorun:
+Overflowing Divinity: Increased 40% AS
+
+Pele:
+Everlasting Flame: 5+1 phys power per level
+
+Poseidon:
+Trident: Increased AA Base Damage
+Changing Tides: Abilities do 20% increased at max tide
+
+Ra:
+Solar Blessing: Increased Power
+
+Rama:
+Astral Strike: bonus damage on AA
+Infinite Arrows: Increased % AS
+
+Ratatoskr:
+Flurry: Prot Reduction
+
+Ravana:
+Mystic Rush: 10% Dmg Increase
+
+Scylla:
+Crush: % Prot Reduction
+Quick Learner: 25 Power for each ability at rank 5
+
+Serqet:
+Deathbane: 10% Prot Reduction
+Catalyst: 10 or 20% max hp true damage
+
+Set:
+Relentless: 2.5% AS per stack
+
+Sol:
+Unstable Manifestation: 1% mag power and 1.2% AS for every 4% Heat, at 100% sol gains 20% basic attack damge
+
+Sun Wukong: 
+Undefeated Body: 10 + 2 Phys Power per level
+
+Susano:
+Gathering Storm: 25 + (40% phys power) after 4 abilites 
+
+Terra:
+Standing Stones: 7 + (10% Mag power) Basic Attack Damage
+
+Thanatos:
+Death Scythe: 10% Max HP damage
+Scent of Death: Pen on cast
+
+The Morrigan:
+Doomsayer: 9% Max HP damge 
+
+Thor:
+Warrior's Madness: 10 power per stack max 3
+
+Thoth:
+Dead Reckoning: 3 pen max 5 stacks
+
+Tyr:
+Change Stance: Increased Power
+
+Ullr:
+Expose Weakness: Increased Power
+Wield Bow: Increased % AS
+
+Vamana:
+Colossal Fury: Increased Power
+Sleeping Giant: 20% of phys prot to power, 10% to AS
+
+Vulcan:
+Inferno Cannon: Ignores 25% mag prot
+
+Xbalanque:
+Branching Bola: Additional Basic Attack Damage
+Dead of Night: 5 Phys Power max 6 stacks
+
+Xing Tian:
+Furious Roar: % Max HP damage
+
+Ymir:
+Frostbite: 100% Basic Attack Damage
+
+Zeus:
+Aegis Assault: Increased % AS
+

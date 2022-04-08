@@ -35,7 +35,7 @@ export default class TierListTabs extends Component {
             <ol className="tab-list">
               {children.map((child) => {
                 const { label } = child.props;
-    
+                console.log(label);
                 return (
                   <Tab
                     activeTab={activeTab}
