@@ -476,6 +476,7 @@ def get_total_matches(client, rank, patch, queue_type="Ranked", mode="Conquest")
     myquery = get_query(rank, "", patch, queue_type, mode)
     if "role" in myquery.keys():
         del myquery["role"]
+    myquery["rank"] = rank
     for x in mycol.find(myquery, {"Total_Matches": 1, "_id": 0}):
         total_games += x["Total_Matches"]
     return total_games
@@ -1088,8 +1089,7 @@ def insert_games(rank, games, patch, queue_type, mode):
 
 if __name__ == "__main__":
     starttime = datetime.now()
-    print(get_matchups_stats(client, "Achilles", "Solo",
-          "9.3", queue_type="Ranked", mode="Conquest"))
+    print(get_total_matches(client, "All Ranks", "9.3"))
     # print(get_worst_matchups(client, "Cliodhna", "Solo", "9.3"))
     # #print(get_top_builds(client, "Shiva", "Solo", "9.2", "Casual"))
     # #print(get_winrate(client, "Ah Puch", "All", "9.3", mode="Joust"))
