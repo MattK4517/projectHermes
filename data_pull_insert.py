@@ -330,3 +330,11 @@ def run_pull(patch, hour, queue_type, mode, input_type, date=get_date()):
             print(f"{date} Pull Completed in {str(datetime.now() - starttime)} loss: {round(100 - (inserted_count/match_ids_len*100), 2)}")
 
     print(f"{date} Pull Completed in {str(datetime.now() - starttime)} loss: {100-round(inserted_count/match_ids_len*100, 2)}")
+
+
+with open("cred.txt", "r") as f:
+    data = f.readlines()
+    smite_api = SmiteAPI(devId=data[0].strip(
+    ), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
+    print(smite_api.getPlayerId("fenrir45-maxmcca", 9))
+    print(smite_api.getPlayer(505627156))
