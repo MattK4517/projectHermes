@@ -59,17 +59,10 @@ export default function BasicTabs(props) {
     <TierListTabs style={{ paddingTop: "10px" }} changeTableType={props.changeTab}>
       <div label="Build" style={{ color: "white" }}>
         <BuildPage
-          pagegod={god}
-          role={role}
-          rank={rank}
-          patch={patch}
           changeTab={props.setTab}
           winrate={props.winRate}
           pickrate={props.pickRate}
           banrate={props.banRate}
-          matchup={matchup}
-          queueType={queueType}
-          mode={mode}
         />
       </div>
       <div label="Items" style={{ color: "white" }}>

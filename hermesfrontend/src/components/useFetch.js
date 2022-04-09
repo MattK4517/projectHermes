@@ -7,7 +7,7 @@ const compare = (a, b) => {
 }
 
 const useFetch = (pagegod, role, rank, patch, matchup, queueType, mode) => {
-  console.log(pagegod, role, rank, patch, matchup, queueType, mode)
+  // console.log(pagegod, role, rank, patch, matchup, queueType, mode)
   const [games, setgames] = useState(0);
   // const [banrate, setbanrate] = useState(0);
   // const [pickrate, setpickrate] = useState(0);
@@ -24,8 +24,6 @@ const useFetch = (pagegod, role, rank, patch, matchup, queueType, mode) => {
     }
     fetch(mainFetchStatement).then((res) =>
       res.json().then((data) => {
-        console.log(mainFetchStatement)
-        console.log(data)
         setgames(data.games);
         // setbanrate(((data.godBans / data.totalMatches) * 100).toFixed(2));
         // setpickrate(((data.games / data.totalMatches) * 100).toFixed(2));

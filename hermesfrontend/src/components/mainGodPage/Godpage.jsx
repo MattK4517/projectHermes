@@ -317,8 +317,13 @@ function Godpage(props) {
     roles,
   ] = useContext(MainContext);
 
+  useEffect(() => {
+    setRole(props.role.replaceAll("_", " "));
+    setGod(props.god.replaceAll("_", " "));
+  }, []);
+
   const pagegod = props.god.replaceAll("_", " ");
-  setGod(pagegod);
+
   const [dispRole, setDispRole] = useState(props.role.replaceAll("_", " "));
   const [dispRank, setDispRank] = useState(rank.replaceAll("_", " "));
   var [url, seturl] = useState(0);
@@ -329,11 +334,6 @@ function Godpage(props) {
   const [banrate, setbanrate] = useState(0);
   const [pickrate, setpickrate] = useState(0);
   const [winrate, setwinrate] = useState(0);
-
-  useEffect(() => {
-    setDispRole(role.replaceAll("_", " "));
-    setDispRank(rank.replaceAll("_", " "));
-  }, [role, rank]);
 
   useEffect(() => {
     fetch(
