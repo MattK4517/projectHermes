@@ -49,6 +49,14 @@ def get_filter(table_type):
     return my_filter
 
 
+def get_player_id(smite_api, playername):
+    portals = [1, 5, 9, 10, 22, 25, 28]
+    for portal in portals:
+        data = smite_api.getPlayerId(playername, portal)
+        if data:
+            return data[0]["player_id"]
+
+
 if __name__ == "__main__":
     client = pymongo.MongoClient(
         "mongodb+srv://sysAdmin:SFpmxJRX522fZ5fK@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")

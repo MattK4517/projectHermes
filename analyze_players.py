@@ -147,6 +147,9 @@ def get_player_winrate(data):
         if god in godsDict:
             wins += data[god]["wins"]
             games += data[god]["matches"]
+
+    if games == 0:
+        games += 1
     return {"winRate": round(wins/games*100, 2), "games": games}
 
 

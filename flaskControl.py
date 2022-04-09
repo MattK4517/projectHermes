@@ -223,7 +223,9 @@ def get_player_general(playername):
             lines = creds.readlines()
             smite_api = SmiteAPI(devId=lines[0].strip(
             ), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
-            data = anlzpy.get_player_basic(smite_api.getPlayer(playername))
+            player_id = fh.get_player_id(smite_api, playername)
+            test_data = smite_api.getPlayer(player_id)
+            data = anlzpy.get_player_basic(test_data)
             mycol.insert_one(data)
     return anlzpy.create_player_return_dict(data)
 
@@ -246,9 +248,9 @@ def get_player_god_info(playername, queue_type, mode):
 
             smite_api = SmiteAPI(devId=lines[0].strip(
             ), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
-            playerId = smite_api.getPlayerId(playername)
+            player_id = fh.get_player_id(smite_api, playername)
             data = anlzpy.create_player_god_dict(smite_api.getQueueStats(
-                playerId[0]["player_id"], fh.convert_mode(mode, queue_type)), playername, queue_type, mode)
+                player_id, fh.convert_mode(mode, queue_type)), playername, queue_type, mode)
             mycol.insert_one(data)
             return json.loads(json_util.dumps({**data, **anlzpy.get_player_winrate(data)}))
 
