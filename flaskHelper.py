@@ -1,5 +1,6 @@
 import pymongo
 import analyze as anlz
+from pyrez.api import SmiteAPI
 
 
 def validate_player(client, playername):
@@ -22,15 +23,35 @@ def validate_gods(client, playername, queue_type):
     return False
 
 
-def convert_mode(mode, queue_type):
-    if queue_type == "Ranked" and mode == "Conquest":
-        return 451
-    elif queue_type == "Casual" and mode == "Conquest":
-        return 426
-    elif queue_type == "Ranked" and mode == "Joust":
-        return 450
-    elif queue_type == "Casual" and mode == "Joust":
-        return 448
+def get_queue_id(queue_type, mode, input_type):
+    queue_id = 0
+    if queue_type == "Ranked":
+        if mode == "Conquest":
+            if input_type == "KBM":
+                queue_id = 451
+            elif input_type == "Controller":
+                queue_id = 504
+
+        elif mode == "Joust":
+            if input_type == "KBM":
+                queue_id = 450
+            elif input_type == "Controller":
+                queue_id = 503
+
+        elif mode == "Duel":
+            if input_type == "KBM":
+                queue_id = 440
+            elif input_type == "Controller":
+                queue_id = 502
+
+    elif queue_type == "Casual":
+        if mode == "Conquest":
+            queue_id = 426
+
+        elif mode == "Joust":
+            queue_id = 448
+
+    return queue_id
 
 
 def get_filter(table_type):
@@ -49,10 +70,12 @@ def get_filter(table_type):
     return my_filter
 
 
-def get_player_id(smite_api, playername):
+def get_player_id(smite_api: SmiteAPI, playername):
     portals = [1, 5, 9, 10, 22, 25, 28]
     for portal in portals:
+        print(playername, portal)
         data = smite_api.getPlayerId(playername, portal)
+        print(data)
         if data:
             return data[0]["player_id"]
 
@@ -60,5 +83,3 @@ def get_player_id(smite_api, playername):
 if __name__ == "__main__":
     client = pymongo.MongoClient(
         "mongodb+srv://sysAdmin:SFpmxJRX522fZ5fK@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
-
-    print(validate_gods(client, "Nika", "Casual"))

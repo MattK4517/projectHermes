@@ -166,6 +166,32 @@ class NameForm extends React.Component {
   }
 }
 
+const parsePlayer = (data, mode, inputType) => {
+  console.log("DKOWJAFDPOJWOIFJWOIAJ", data);
+  let rank = 0;
+  let seasonGames = 0;
+  let seasonWinRate = 0;
+  if (inputType === "KBM") {
+    seasonGames =
+      data[`Ranked${mode}`]["Wins"] + data[`Ranked${mode}`]["Losses"];
+    rank = data[`Ranked${mode}`]["Tier"];
+    seasonWinRate =
+      data[`Ranked${mode}`]["Wins"] /
+      (data[`Ranked${mode}`]["Wins"] + data[`Ranked${mode}`]["Losses"]);
+  } else if (inputType === "Controller") {
+    console.log("DKOWJAFDPOJWOIFJWOIAJ", data[`Ranked${mode}${inputType}`]);
+    seasonGames =
+      data[`Ranked${mode}${inputType}`]["Wins"] +
+      data[`Ranked${mode}${inputType}`]["Losses"];
+    rank = data[`Ranked${mode}${inputType}`]["Tier"];
+    seasonWinRate =
+      data[`Ranked${mode}${inputType}`]["Wins"] /
+      (data[`Ranked${mode}${inputType}`]["Wins"] +
+        data[`Ranked${mode}${inputType}`]["Losses"]);
+  }
+  return { rank, seasonGames, seasonWinRate };
+};
+
 const compare = (a, b) => {
   return b.matches - a.matches;
 };
@@ -201,6 +227,10 @@ export default function Player(props) {
     mode,
     setMode,
     queueTypes,
+    modes,
+    inputType,
+    setInputType,
+    inputTypes,
   ] = useContext(PlayerContext);
   setPlayer(window.location.href.split("/")[5]);
 
@@ -208,38 +238,47 @@ export default function Player(props) {
   const [tier, setTier] = useState("");
   const [winRate, setWinRate] = useState("");
   const [games, setGames] = useState(0);
+  const [seasonWinRate, setSeasonWinRate] = useState("");
+  const [seasonGames, setSeasonGames] = useState(0);
   const [godList, setGodList] = useState([]);
   useEffect(() => {
-    fetch("/api/getplayergods/".concat(player, "/", queueType, "/", mode)).then(
-      (res) =>
-        res.json().then((data) => {
-          console.log(data);
-          setGames(data.games);
-          setWinRate(data.winRate);
-          delete data.games;
-          delete data.winRate;
-          console.log(data);
-          let newData = Object.values(data).sort(compare);
+    fetch(
+      "/api/getplayergods/".concat(
+        player,
+        "/",
+        queueType,
+        "/",
+        mode,
+        "/",
+        inputType
+      )
+    ).then((res) =>
+      res.json().then((data) => {
+        setGames(data.games);
+        setWinRate(data.winRate);
+        delete data.games;
+        delete data.winRate;
+        let newData = Object.values(data).sort(compare);
 
-          setGodList([]);
-          Object.keys(newData).map((god, index) => {
-            if (index === 0) {
-              setTopLink(setTopGod(newData[index]["god"]));
+        setGodList([]);
+        Object.keys(newData).map((god, index) => {
+          if (index === 0) {
+            setTopLink(setTopGod(newData[index]["god"]));
+          }
+          if (index < 10) {
+            if (Object.keys(newData[god]).indexOf("god") !== -1) {
+              setGodList((godList) => [
+                ...godList,
+                {
+                  ...newData[god],
+                },
+              ]);
             }
-            if (index < 10) {
-              if (Object.keys(newData[god]).indexOf("god") !== -1) {
-                setGodList((godList) => [
-                  ...godList,
-                  {
-                    ...newData[god],
-                  },
-                ]);
-              }
-            }
-          });
-        })
+          }
+        });
+      })
     );
-  }, [player, queueType, mode]);
+  }, [player, queueType, mode, inputType]);
   const [matchList, setMatchList] = useState([]);
 
   useEffect(() => {
@@ -272,15 +311,21 @@ export default function Player(props) {
   useEffect(() => {
     fetch("/api/getplayergeneral/".concat(player)).then((res) =>
       res.json().then((data) => {
-        setPlayerLevel(data.level);
-        if (data.avatar !== "") {
-          setIcon(data.avatar);
+        console.log(data);
+        let newData = parsePlayer(data, mode, inputType);
+        setSeasonGames(newData.seasonGames);
+        setSeasonWinRate((newData.seasonWinRate * 100).toFixed(2));
+        console.log("DKOWJAFDPOJWOIFJWOIAJ", newData);
+        setPlayerLevel(data.Level);
+        if (data.Avatar_URL !== "") {
+          setIcon(data.Avatar_URL);
         }
-        setRank(data.rank);
-        setTier(data.tier ?? "");
+        setRank(newData.rank);
+        setTier(newData.rank);
       })
     );
-  }, [player]);
+  }, [player, mode, inputType]);
+
   // <NameForm setPlayer={setPlayer} />
   return (
     <div className="content">
@@ -317,6 +362,8 @@ export default function Player(props) {
                   winrate={winRate}
                   games={games}
                   queueType={queueType}
+                  seasonGames={seasonGames}
+                  seasonWinRate={seasonWinRate}
                 />
                 <GodDisplay godList={godList} player={player} />
               </div>

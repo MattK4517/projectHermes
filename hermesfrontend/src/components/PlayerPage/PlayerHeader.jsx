@@ -30,7 +30,7 @@ export default function PlayerHeader(props) {
             <div className="border-notch"></div>
             <img
               className="profile-icon-image"
-              src={icon}
+              src={icon ?? "https://i.imgur.com/KgTaobI.png"}
               alt={`${player} icon`}
             />
           </div>

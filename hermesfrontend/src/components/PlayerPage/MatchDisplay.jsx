@@ -71,6 +71,9 @@ export default function MatchDisplay(props) {
     setMode,
     queueTypes,
     modes,
+    inputType,
+    setInputType,
+    inputTypes,
   ] = useContext(PlayerContext);
   if (Object.keys(props.matchList).length > 0) {
     return (
@@ -90,6 +93,11 @@ export default function MatchDisplay(props) {
                   filter={queueType}
                   filters={queueTypes}
                   setFilter={setQueueType}
+                />
+                <FilterForm
+                  filter={inputType}
+                  filters={inputTypes}
+                  setFilter={setInputType}
                 />
               </div>
             </div>

@@ -215,6 +215,7 @@ def get_player_general(playername):
     if playername == "undefined":
         return {}
 
+    # TODO find a way to only pull from database weekly
     if fh.validate_player(client, playername):
         for x in mycol.find({"NameTag": {"$regex": f"{playername}", "$options": "i"}}, {"_id": 0}):
             data = x
@@ -227,11 +228,12 @@ def get_player_general(playername):
             test_data = smite_api.getPlayer(player_id)
             data = anlzpy.get_player_basic(test_data)
             mycol.insert_one(data)
-    return anlzpy.create_player_return_dict(data)
+    # anlzpy.create_player_return_dict(data)
+    return json.loads(json_util.dumps(data))
 
 
-@app.route("/api/getplayergods/<playername>/<queue_type>/<mode>")
-def get_player_god_info(playername, queue_type, mode):
+@app.route("/api/getplayergods/<playername>/<queue_type>/<mode>/<input_type>")
+def get_player_god_info(playername, queue_type, mode, input_type):
     print(queue_type, mode)
     mydb = client["Players"]
     mycol = mydb["Player Gods"]
@@ -250,7 +252,7 @@ def get_player_god_info(playername, queue_type, mode):
             ), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
             player_id = fh.get_player_id(smite_api, playername)
             data = anlzpy.create_player_god_dict(smite_api.getQueueStats(
-                player_id, fh.convert_mode(mode, queue_type)), playername, queue_type, mode)
+                player_id, fh.get_queue_id(queue_type, mode, input_type)), playername, queue_type, mode)
             mycol.insert_one(data)
             return json.loads(json_util.dumps({**data, **anlzpy.get_player_winrate(data)}))
 

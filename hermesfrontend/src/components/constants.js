@@ -133,3 +133,29 @@ export const magGods = [
   "Zeus",
   "Zhong Kui",
 ];
+
+export const normalizeTier = (tier) => {
+  let rank = "Error"
+  if (tier <= 5) {
+    rank = "Bronze"
+  }
+  else if (tier <= 10) {
+    rank = "Silver"
+  }
+  else if (tier <= 15) {
+    rank = "Gold"
+  }
+  else if (tier <= 20) {
+    rank = "Platinum"
+  }
+  else if (tier <= 25) {
+    rank = "Diamond"
+  }
+  else if (tier == 26) {
+    rank = "Masters"
+  }
+  else if (tier == 27) {
+    rank = "Grandmaster"
+  }
+  return rank
+}

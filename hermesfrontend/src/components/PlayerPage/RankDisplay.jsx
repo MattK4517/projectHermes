@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { PlayerContext } from "./PlayerContext";
+import { normalizeTier } from "../constants";
 
 const getImageUrl = (rank) => {
   let url = "https://i.imgur.com/LVbUJes.png";
@@ -66,8 +67,8 @@ export default function RankDisplay(props) {
           <div className="rank-image-container">
             <img
               className="rank-img"
-              src={getImageUrl(props.tier.split(" ")[0])}
-              alt=""
+              src={getImageUrl(normalizeTier(props.tier))}
+              alt={normalizeTier(props.tier)}
             />
           </div>
           <div>
@@ -75,7 +76,14 @@ export default function RankDisplay(props) {
               Queue: {queueType} {mode}
             </div>
             <div className="rank-text">
-              <strong>{props.tier}</strong>
+              <strong>{normalizeTier(props.tier)}</strong>
+            </div>
+            <div
+              className={props.seasonGames > 0 ? "rank-wins" : "show"}
+              style={{ marginTop: "0px" }}
+            >
+              <strong>Season 9: {props.seasonWinRate}%</strong>
+              <span className="total-games">{props.seasonGames} games</span>
             </div>
             <div className="rank-wins">
               <strong>{props.winrate}%</strong>

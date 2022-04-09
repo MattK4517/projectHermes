@@ -1518,7 +1518,6 @@ figure.snip0015:hover figcaption::before {
 .rank-wins {
   display: flex;
   align-items: center;
-  margin-top: 9px;
   font-size: 12px;
 }
 
