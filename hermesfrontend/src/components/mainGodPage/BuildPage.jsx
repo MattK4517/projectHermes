@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import useFetch from "../useFetch";
 import { Link } from "react-router-dom";
 import winRateColor from "./WinRateColor";
 import { styled } from "@mui/system";
 import { HtmlTooltip, CreateItemToolTip } from "./GodPageHelpers";
+import { MainContext } from "./MainContext";
 
 function CreateMatchupsHelpTooltip(props) {
   return (
@@ -77,6 +78,7 @@ const ResponsiveBuild = styled("div")(({ theme }) => ({
 
 function GodRankStats(props) {
   let banrateMessage;
+  console.log(props);
   if (props.queueType === "Ranked") {
     banrateMessage = props.banrate + "%";
   } else if (props.queueType === "Casual") {
@@ -172,16 +174,32 @@ function BuildStatsElement(props) {
 }
 
 export default function BuildPage(props) {
+  const [
+    god,
+    setGod,
+    role,
+    setRole,
+    rank,
+    setRank,
+    patch,
+    setPatch,
+    queueType,
+    setQueueType,
+    mode,
+    setMode,
+    matchup,
+    setMatchup,
+    patches,
+    queueTypes,
+    modes,
+    ranks,
+    roles,
+  ] = useContext(MainContext);
+
+  console.log(props);
+
   let { games, badmatchups, goodmatchups, items, colorStyle, relics } =
-    useFetch(
-      props.pagegod,
-      props.role,
-      props.rank,
-      props.patch,
-      props.matchup,
-      props.queueType,
-      props.mode
-    );
+    useFetch(god, role, rank, patch, matchup, queueType, mode);
   if (items.length === 0) {
     items = ["None"];
   }
@@ -209,7 +227,7 @@ export default function BuildPage(props) {
         banrate={props.banrate}
         pickrate={props.pickrate}
         colorStyle={colorStyle}
-        queueType={props.queueType}
+        queueType={queueType}
       />
       <div className="toughest-matchups content-section">
         <div className="content-section_header">
@@ -217,12 +235,12 @@ export default function BuildPage(props) {
           <span
             style={{ color: "#5f5f7b", fontSize: "14px", fontWeight: "400" }}
           >
-            these gods counter {props.pagegod} {props.role}
+            these gods counter {god} {role}
           </span>
           <HtmlTooltip
             title={
               <React.Fragment>
-                <CreateMatchupsHelpTooltip god={props.pagegod} />
+                <CreateMatchupsHelpTooltip god={god} />
               </React.Fragment>
             }
             placement="top"
@@ -249,12 +267,12 @@ export default function BuildPage(props) {
             <span
               style={{ color: "#5f5f7b", fontSize: "14px", fontWeight: "400" }}
             >
-              these gods get countered by {props.pagegod} {props.role}
+              these gods get countered by {god} {role}
             </span>
             <HtmlTooltip
               title={
                 <React.Fragment>
-                  <CreateMatchupsHelpTooltip god={props.pagegod} />
+                  <CreateMatchupsHelpTooltip god={god} />
                 </React.Fragment>
               }
               placement="top"
@@ -299,7 +317,7 @@ export default function BuildPage(props) {
                         fontWeight: "400",
                       }}
                     >
-                      for {props.pagegod} {props.role}
+                      for {god} {role}
                     </span>
                   </div>
                   <div>

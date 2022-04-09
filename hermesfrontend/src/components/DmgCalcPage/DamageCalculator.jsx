@@ -209,7 +209,6 @@ export default function DamageCalculator() {
     if (god) {
       fetch("/api/getautodmgcalc/", requestOptionsAutoAttck).then((res) =>
         res.json().then((data) => {
-          console.log("ADAKLJWDWAOIJDIOWA", data);
           setMessageAA(data);
           setTotalDamageAA(data["Damage Total"]);
         })
