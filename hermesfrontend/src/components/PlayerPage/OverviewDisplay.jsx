@@ -5,6 +5,7 @@ import CarryScoreSection from "./CarryScoreSection";
 import PlayerMatchups from "./PlayerMatchups";
 import PlayerHeader from "./PlayerHeader";
 import PlayerGodSection from "./PlayerGodSection";
+import Filter from "../Filters/Filter";
 
 export const FormatGod = (god) => {
   let firstLetter = god.charAt(0).toUpperCase();
@@ -27,8 +28,8 @@ export default function OverviewDisplay() {
     setGod,
     player,
     setPlayer,
-    queue_type,
-    setMode,
+    queueType,
+    setQueueType,
     role,
     setRole,
     topLink,
@@ -42,10 +43,15 @@ export default function OverviewDisplay() {
     patch,
     setPatch,
     patches,
+    mode,
+    setMode,
+    queueTypes,
+    modes,
+    inputType,
+    setInputType,
+    inputTypes,
   ] = useContext(PlayerContext);
 
-  // console.log(window.location.href.split("/")[6])
-  // console.log(window.location.href.split("/")[7].charAt(0).toUpperCase() + window.location.href.split("/")[7].slice(1))
   let fgod = window.location.href.split("/")[7];
   setGod(FormatGod(fgod).trim());
   const [goldShare, setGoldShare] = useState("");
@@ -83,7 +89,7 @@ export default function OverviewDisplay() {
         "/",
         role,
         "/",
-        queue_type,
+        queueType,
         "/",
         patch
       )
@@ -116,7 +122,7 @@ export default function OverviewDisplay() {
         setMaxWards(data.maxWards);
       })
     );
-  }, [player, role, queue_type, patch]);
+  }, [player, role, queueType, patch]);
 
   const [roles, setroles] = useState([
     "Solo",
@@ -151,27 +157,49 @@ export default function OverviewDisplay() {
                 <div className="filter-manager_label">
                   <span style={{ color: "white" }}>Filters</span>
                 </div>
-                {/* <div className="role-filter-container"> */}
-                <FilterForm
+                <Filter
+                  mode={mode}
+                  role={role}
+                  god={""}
+                  queueType={queueType}
+                  rank={""}
+                  patch={patch}
+                  matchup={""}
+                  modeFilters={modes}
+                  patchFilters={patches}
+                  roleFilters={roles}
+                  rankFilters={[""]}
+                  queueFilters={queueTypes}
+                  routes={""}
+                  setRank={() => {
+                    return;
+                  }}
+                  setRole={setRole}
+                  setPatch={setPatch}
+                  setMode={setMode}
+                  setMatchup={() => {
+                    return;
+                  }}
+                  setQueueType={setQueueType}
+                />
+                {/* <FilterForm
                   filter={role}
                   god={god}
                   filters={roles}
                   setFilter={setRole}
                 />
                 <FilterForm
-                  filter={queue_type}
-                  god={queue_type}
+                  filter={queueType}
+                  god={queueType}
                   filters={["Ranked", "Casual"]}
                   setFilter={setMode}
                 />
                 <FilterForm
                   filter={patch}
                   god={patch}
-                  filters={patches}
+                  filters={["All Patches", ...patches]}
                   setFilter={setPatch}
-                />
-                {/* </div> */}
-                {/* <DropDownFilter changePatch={setPatch} patch={patch} style={{color: "white"}}/> */}
+                /> */}
               </div>
             </div>
           </div>

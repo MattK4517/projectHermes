@@ -1,5 +1,5 @@
 from data_pull_formatting_rewrite import normalize_rank
-from constants import godsDict, roles
+from constants import godsDict, roles, patches
 import analyze as anlz
 import pymongo
 from datetime import datetime
@@ -7,7 +7,7 @@ from __init__ import client
 
 
 def find_match_history(client, playername, queue_type, patch, mode):
-    """returns a dict of the match history for a given playername in a give queue_type 
+    """returns a dict of the match history for a given playername in a give queue_type
 
     Args:
         client ([MongoClient]): [database connection]
@@ -45,6 +45,7 @@ def find_match_history(client, playername, queue_type, patch, mode):
             if "player" in key:
                 if verify_player(x[key]["Player_Name"], playername, "none", "none"):
                     ret_data[x["MatchId"]] = x
+
     return ret_data
 
 
@@ -143,8 +144,8 @@ def get_player_basic(player):
     }
 
 
-def create_player_god_dict(data, playername, queue_type, mode):
-    ret_data = {"NameTag": playername, "queue_type": queue_type, "mode": mode}
+def create_player_god_dict(data, playername, queue_type, mode, input_type):
+    ret_data = {"NameTag": playername, "queue_type": queue_type, "mode": mode, "input_type": input_type}
     for god in data:
         losses = god["Losses"]
         if losses == 0:
@@ -249,11 +250,6 @@ def verify_player(act_name, playername, act_god, god):
 
 
 def get_player_god_stats(client, playername, god, role, queue_type, patch):
-    if queue_type == "Ranked":
-        mydb = client["Matches"]
-    elif queue_type == "Casual":
-        mydb = client["CasualMatches"]
-    mycol = mydb[f"{patch} Matches"]
     updatedict = {role: {
         "maxKills": 0,
         "maxDeaths": 0,
@@ -307,6 +303,60 @@ def get_player_god_stats(client, playername, god, role, queue_type, patch):
                      "god": god,
                      "queue_type": f"{queue_type}Conq"
                      }}
+
+    if queue_type == "Ranked":
+        mydb = client["Matches"]
+    elif queue_type == "Casual":
+        mydb = client["CasualMatches"]
+    mycol = mydb[f"{patch} Matches"]
+    if "All" in patch:
+        for patch in patches:
+            mycol = mydb[f"{patch} Matches"]
+            run_loop(playername, god, role, mycol, updatedict)
+    else:
+        run_loop(playername, god, role, mycol, updatedict)
+
+    if updatedict[role]["games"] > 0:
+        updatedict[role]["avgDamage"] = round(
+            updatedict[role]["avgDamage"] / updatedict[role]["games"], 2)
+        updatedict[role]["avgGold"] = round(
+            updatedict[role]["avgGold"] / updatedict[role]["games"], 2)
+        updatedict[role]["avgGoldShare"] = round(
+            updatedict[role]["avgGoldShare"] / updatedict[role]["games"], 2)
+        updatedict[role]["avgDamageShare"] = round(
+            updatedict[role]["avgDamageShare"] / updatedict[role]["games"], 2)
+        updatedict[role]["avgKillShare"] = round(
+            updatedict[role]["avgKillShare"] / updatedict[role]["games"], 2)
+        updatedict[role]["avgWards"] = round(
+            updatedict[role]["avgWards"] / updatedict[role]["games"], 2)
+        if updatedict[role]["deaths"] == 0:
+            updatedict[role]["deaths"] = 1
+        updatedict[role]["KDA"] = round(
+            (updatedict[role]["kills"] + (.5 * updatedict[role]["assists"])) / updatedict[role]["deaths"], 2)
+
+    if updatedict["games"] > 0:
+        updatedict["avgDamage"] = round(
+            updatedict["avgDamage"] / updatedict["games"], 2)
+        updatedict["avgGold"] = round(
+            updatedict["avgGold"] / updatedict["games"], 2)
+        updatedict["avgGoldShare"] = round(
+            updatedict["avgGoldShare"] / updatedict["games"], 2)
+        updatedict["avgDamageShare"] = round(
+            updatedict["avgDamageShare"] / updatedict["games"], 2)
+        updatedict["avgKillShare"] = round(
+            updatedict["avgKillShare"] / updatedict["games"], 2)
+        updatedict["avgWards"] = round(
+            updatedict["avgWards"] / updatedict["games"], 2)
+        if updatedict["deaths"] == 0:
+            updatedict["deaths"] = 1
+        updatedict["KDA"] = round(
+            (updatedict["kills"] + (.5 * updatedict["assists"])) / updatedict["deaths"], 2)
+
+    return updatedict
+
+
+def run_loop(playername, god, role, mycol, updatedict):
+
     counter = 0
     myquery = {
         '$search': {
@@ -409,44 +459,6 @@ def get_player_god_stats(client, playername, god, role, queue_type, patch):
 
         counter += 1
 
-    if updatedict[role]["games"] > 0:
-        updatedict[role]["avgDamage"] = round(
-            updatedict[role]["avgDamage"] / updatedict[role]["games"], 2)
-        updatedict[role]["avgGold"] = round(
-            updatedict[role]["avgGold"] / updatedict[role]["games"], 2)
-        updatedict[role]["avgGoldShare"] = round(
-            updatedict[role]["avgGoldShare"] / updatedict[role]["games"], 2)
-        updatedict[role]["avgDamageShare"] = round(
-            updatedict[role]["avgDamageShare"] / updatedict[role]["games"], 2)
-        updatedict[role]["avgKillShare"] = round(
-            updatedict[role]["avgKillShare"] / updatedict[role]["games"], 2)
-        updatedict[role]["avgWards"] = round(
-            updatedict[role]["avgWards"] / updatedict[role]["games"], 2)
-        if updatedict[role]["deaths"] == 0:
-            updatedict[role]["deaths"] = 1
-        updatedict[role]["KDA"] = round(
-            (updatedict[role]["kills"] + (.5 * updatedict[role]["assists"])) / updatedict[role]["deaths"], 2)
-
-    if updatedict["games"] > 0:
-        updatedict["avgDamage"] = round(
-            updatedict["avgDamage"] / updatedict["games"], 2)
-        updatedict["avgGold"] = round(
-            updatedict["avgGold"] / updatedict["games"], 2)
-        updatedict["avgGoldShare"] = round(
-            updatedict["avgGoldShare"] / updatedict["games"], 2)
-        updatedict["avgDamageShare"] = round(
-            updatedict["avgDamageShare"] / updatedict["games"], 2)
-        updatedict["avgKillShare"] = round(
-            updatedict["avgKillShare"] / updatedict["games"], 2)
-        updatedict["avgWards"] = round(
-            updatedict["avgWards"] / updatedict["games"], 2)
-        if updatedict["deaths"] == 0:
-            updatedict["deaths"] = 1
-        updatedict["KDA"] = round(
-            (updatedict["kills"] + (.5 * updatedict["assists"])) / updatedict["deaths"], 2)
-
-    return updatedict
-
 
 def grab_stats(player_data):
     ret_data = {}
@@ -466,6 +478,7 @@ def grab_stats(player_data):
 if __name__ == "__main__":
     # find_match_history(client, "AleksEnglish", "Ranked")
     starttime = datetime.now()
-
-    #print(find_match_history(client, "Rawjik", "Casual", "9.3", "Joust"))
-    #print(datetime.now() - starttime)
+    print(get_player_god_stats(client, "Taerithroen",
+          "Merlin", "All Roles", "Ranked", "All Patches"))
+    # print(find_match_history(client, "Rawjik", "Casual", "9.3", "Joust"))
+    # print(datetime.now() - starttime)

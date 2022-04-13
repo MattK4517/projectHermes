@@ -233,7 +233,8 @@ def get_player_general(playername):
 
 
 @app.route("/api/getplayergods/<playername>/<queue_type>/<mode>/<input_type>")
-def get_player_god_info(playername, queue_type, mode, input_type):
+@app.route("/api/getplayergods/<playername>/<queue_type>/<mode>/")
+def get_player_god_info(playername, queue_type, mode, input_type="KBM"):
     print(queue_type, mode)
     mydb = client["Players"]
     mycol = mydb["Player Gods"]
@@ -241,8 +242,11 @@ def get_player_god_info(playername, queue_type, mode, input_type):
     if playername == "undefined":
         return {}
 
-    if fh.validate_gods(client, playername, queue_type):
-        for x in mycol.find({"queue_type": queue_type, "NameTag": {"$regex": f"{playername}", "$options": "i"}}, {"_id": 0}):
+    print(mycol.count_documents({"queue_type": queue_type, "mode": mode, "input_type": input_type, "NameTag": {
+          "$regex": f"{playername}", "$options": "i"}}))
+    if fh.validate_gods(client, playername, queue_type, mode, input_type):
+        print("getting here")
+        for x in mycol.find({"queue_type": queue_type, "mode": mode, "input_type": input_type, "NameTag": {"$regex": f"{playername}", "$options": "i"}}, {"_id": 0}):
             data = x
     else:
         with open("cred.txt", "r") as creds:
@@ -252,7 +256,7 @@ def get_player_god_info(playername, queue_type, mode, input_type):
             ), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
             player_id = fh.get_player_id(smite_api, playername)
             data = anlzpy.create_player_god_dict(smite_api.getQueueStats(
-                player_id, fh.get_queue_id(queue_type, mode, input_type)), playername, queue_type, mode)
+                player_id, fh.get_queue_id(queue_type, mode, input_type)), playername, queue_type, mode, input_type)
             mycol.insert_one(data)
             return json.loads(json_util.dumps({**data, **anlzpy.get_player_winrate(data)}))
 
@@ -275,10 +279,10 @@ def get_player_specific_god(playername, god, role, queue_type, patch):
     return anlzpy.get_player_god_stats(client, playername, god, role, queue_type, patch)
 
 
-@app.route('/api/playermatchups/<playername>/<god>/<role>/<patch>/<queue_type>')
-def get_god_matchups_by_player(playername, god, role, patch, queue_type):
+@app.route('/api/playermatchups/<playername>/<god>/<role>/<patch>/<queue_type>/<mode>')
+def get_god_matchups_by_player(playername, god, role, patch, queue_type, mode):
     matchups = anlz.get_worst_matchups(
-        client, god, role, patch, queue_type, player=playername)
+        client, god, role, patch, queue_type, mode=mode,  player=playername)
     del matchups["wins"], matchups["games"], matchups["winRate"]
     return matchups
 

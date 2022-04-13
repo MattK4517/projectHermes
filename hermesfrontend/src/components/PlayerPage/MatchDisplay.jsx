@@ -6,6 +6,7 @@ import { HtmlTooltip, CreateItemToolTip } from "../mainGodPage/GodPageHelpers";
 import MultiKillDisplay from "./MultiKillDisplay";
 import FilterForm from "../Filters/FilterForm";
 import { PlayerContext } from "./PlayerContext";
+import { PlayerFilter } from "../Filters/Filter";
 
 function PlayerBuildDisplay(props) {
   return (
@@ -80,28 +81,20 @@ export default function MatchDisplay(props) {
       <div className="content-section content-section_no-padding match-block">
         <div className="content-section_header played-gods_header">
           <span>Recent Matches</span>
-          <div className="filter-manager">
-            <div className="filter-width-wrapper">
-              <div className="filter-manager_container">
-                <FilterForm
-                  filter={patch}
-                  filters={["9.3", "9.2", "9.1"]}
-                  setFilter={setPatch}
-                />
-                <FilterForm filter={mode} filters={modes} setFilter={setMode} />
-                <FilterForm
-                  filter={queueType}
-                  filters={queueTypes}
-                  setFilter={setQueueType}
-                />
-                <FilterForm
-                  filter={inputType}
-                  filters={inputTypes}
-                  setFilter={setInputType}
-                />
-              </div>
-            </div>
-          </div>
+          <PlayerFilter
+            patch={patch}
+            mode={mode}
+            queueType={queueType}
+            inputType={inputType}
+            patches={patches}
+            modes={modes}
+            inputTypes={inputTypes}
+            queueTypes={queueTypes}
+            setPatch={setPatch}
+            setMode={setMode}
+            setQueueType={setQueueType}
+            setInputType={setInputType}
+          />
         </div>
         {props.matchList.map((match) => {
           let player = {};

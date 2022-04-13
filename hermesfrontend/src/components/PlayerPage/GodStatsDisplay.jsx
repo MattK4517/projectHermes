@@ -11,6 +11,7 @@ import winRateColor from "../mainGodPage/WinRateColor";
 import Tooltip from "@material-ui/core/Tooltip";
 import { PlayerContext } from "./PlayerContext";
 import PlayerHeader from "./PlayerHeader";
+import { PlayerFilter } from "../Filters/Filter";
 
 const Table = ({ columns, data, player }) => {
   const {
@@ -358,6 +359,14 @@ const compare = (a, b) => {
   return a.winRate - b.winRate;
 };
 
+const getKDA = (kills, deaths, assists) => {
+  if (deaths > 0) {
+    return (kills + 0.5 * assists) / deaths;
+  } else {
+    return kills + 0.5 * assists;
+  }
+};
+
 function GodStatsDisplay() {
   const [
     god,
@@ -383,35 +392,49 @@ function GodStatsDisplay() {
     setMode,
     queueTypes,
     modes,
+    inputType,
+    setInputType,
+    inputTypes,
   ] = useContext(PlayerContext);
+  const roles = ["Solo", "Jungle", "Mid", "Support", "Carry"];
   const [godList, setGodList] = useState([]);
   useEffect(() => {
-    fetch("/api/getplayergods/".concat(player, "/", queueType, "/", mode)).then(
-      (res) =>
-        res.json().then((data) => {
-          let newData = Object.values(data).sort(compare);
-          setGodList([]);
-          Object.keys(newData).map((god, index) => {
-            if (Object.keys(newData[god]).indexOf("god") !== -1) {
-              setGodList((godList) => [
-                ...godList,
-                {
-                  ...newData[god],
-                  KDA:
-                    (newData[god]["kills"] + 0.5 * newData[god]["assists"]) /
-                    newData[god]["deaths"],
-                  winRate:
-                    (newData[god]["wins"] / newData[god]["matches"]) * 100,
-                  avgGold: (
-                    newData[god]["gold"] / newData[god]["matches"]
-                  ).toFixed(),
-                },
-              ]);
-            }
-          });
-        })
+    fetch(
+      "/api/getplayergods/".concat(
+        player,
+        "/",
+        queueType,
+        "/",
+        mode,
+        "/",
+        inputType
+      )
+    ).then((res) =>
+      res.json().then((data) => {
+        let newData = Object.values(data).sort(compare);
+        setGodList([]);
+        Object.keys(newData).map((god, index) => {
+          if (Object.keys(newData[god]).indexOf("god") !== -1) {
+            setGodList((godList) => [
+              ...godList,
+              {
+                ...newData[god],
+                KDA: getKDA(
+                  newData[god]["kills"],
+                  newData[god]["deaths"],
+                  newData[god]["assists"]
+                ),
+                winRate: (newData[god]["wins"] / newData[god]["matches"]) * 100,
+                avgGold: (
+                  newData[god]["gold"] / newData[god]["matches"]
+                ).toFixed(),
+              },
+            ]);
+          }
+        });
+      })
     );
-  }, [player, queueType]);
+  }, [player, queueType, mode, inputType]);
 
   const columns = React.useMemo(
     () => [
@@ -475,26 +498,20 @@ function GodStatsDisplay() {
         {/* <NameForm setPlayer={setPlayer} /> */}
         <div className={player ?? "undefined"}>
           <PlayerHeader player={player} level={playerLevel} icon={icon} />
-          <div className="filter-manager">
-            <div className="filter-width-wrapper">
-              <div className="filter-manager_container">
-                <div className="filter-manager_label">
-                  <span style={{ color: "white" }}>Stat Filters</span>
-                </div>
-                <FilterForm
-                  filter={patch}
-                  filters={["9.3", "9.2", "9.1"]}
-                  setFilter={setPatch}
-                />
-                <FilterForm filter={mode} filters={modes} setFilter={setMode} />
-                <FilterForm
-                  filter={queueType}
-                  filters={queueTypes}
-                  setFilter={setQueueType}
-                />
-              </div>
-            </div>
-          </div>
+          <PlayerFilter
+            patch={patch}
+            mode={mode}
+            queueType={queueType}
+            inputType={inputType}
+            patches={patches}
+            modes={modes}
+            inputTypes={inputTypes}
+            queueTypes={queueTypes}
+            setPatch={setPatch}
+            setMode={setMode}
+            setQueueType={setQueueType}
+            setInputType={setInputType}
+          />
         </div>
         <Table columns={columns} data={godList} player={player} />
       </div>

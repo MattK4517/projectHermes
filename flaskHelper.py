@@ -13,12 +13,12 @@ def validate_player(client, playername):
     return False
 
 
-def validate_gods(client, playername, queue_type):
+def validate_gods(client, playername, queue_type, mode, input_type):
     mydb = client["Players"]
     mycol = mydb["Player Gods"]
-    print(mycol.count_documents({"queue_type": f"{queue_type}Conq", "NameTag": {
+    print(mycol.count_documents({"queue_type": queue_type, "mode": mode, "NameTag": {
           "$regex": f"{playername}", "$options": "i"}}))
-    if mycol.count_documents({"queue_type": f"{queue_type}Conq", "NameTag": {"$regex": f"{playername}", "$options": "i"}}) > 0:
+    if mycol.count_documents({"queue_type": queue_type, "mode": mode, "input_type": input_type, "NameTag": {"$regex": f"{playername}", "$options": "i"}}) > 0:
         return True
     return False
 
@@ -81,5 +81,5 @@ def get_player_id(smite_api: SmiteAPI, playername):
 
 
 if __name__ == "__main__":
-    client = pymongo.MongoClient(
-        "mongodb+srv://sysAdmin:SFpmxJRX522fZ5fK@cluster0.7s0ic.mongodb.net/Cluster0?retryWrites=true&w=majority", ssl=True, ssl_cert_reqs="CERT_NONE")
+    from __init__ import client
+    print(validate_gods(client, "Mayhem4517", "Ranked", "Conquest"))

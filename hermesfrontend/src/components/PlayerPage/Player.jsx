@@ -167,7 +167,6 @@ class NameForm extends React.Component {
 }
 
 const parsePlayer = (data, mode, inputType) => {
-  console.log("DKOWJAFDPOJWOIFJWOIAJ", data);
   let rank = 0;
   let seasonGames = 0;
   let seasonWinRate = 0;
@@ -278,7 +277,7 @@ export default function Player(props) {
         });
       })
     );
-  }, [player, queueType, mode, inputType]);
+  }, [player]);
   const [matchList, setMatchList] = useState([]);
 
   useEffect(() => {
@@ -315,7 +314,6 @@ export default function Player(props) {
         let newData = parsePlayer(data, mode, inputType);
         setSeasonGames(newData.seasonGames);
         setSeasonWinRate((newData.seasonWinRate * 100).toFixed(2));
-        console.log("DKOWJAFDPOJWOIFJWOIAJ", newData);
         setPlayerLevel(data.Level);
         if (data.Avatar_URL !== "") {
           setIcon(data.Avatar_URL);
