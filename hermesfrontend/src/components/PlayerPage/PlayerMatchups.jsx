@@ -12,8 +12,8 @@ export default function PlayerMatchups(props) {
     setGod,
     player,
     setPlayer,
-    queue_type,
-    setMode,
+    queueType,
+    setQueueType,
     role,
     setRole,
     topLink,
@@ -26,6 +26,14 @@ export default function PlayerMatchups(props) {
     setTab,
     patch,
     setPatch,
+    patches,
+    mode,
+    setMode,
+    queueTypes,
+    modes,
+    inputType,
+    setInputType,
+    inputTypes,
   ] = useContext(PlayerContext);
 
   const [playerMatchups, setPlayerMatchups] = useState([]);
@@ -37,8 +45,12 @@ export default function PlayerMatchups(props) {
         god,
         "/",
         role,
-        "/9.1/",
-        queue_type
+        "/",
+        patch,
+        "/",
+        queueType,
+        "/",
+        mode
       )
     ).then((res) =>
       res.json().then((data) => {
@@ -57,7 +69,7 @@ export default function PlayerMatchups(props) {
         });
       })
     );
-  }, [player, role, queue_type, patch]);
+  }, [player, role, queueType, patch, mode]);
   return (
     <div className="content-section content-section_no-padding played-gods">
       <div className="content-section_header played-gods_header">
@@ -75,7 +87,13 @@ export default function PlayerMatchups(props) {
           <div className="player-matchups-row">
             <div className="enemy-matchup">
               <div className="god-image-player">
-                <img src={matchup.url} alt={matchup.enemy} />
+                <img
+                  src={`https://webcdn.hirezstudios.com/smite/god-icons/${matchup.enemy
+                    .toLowerCase()
+                    .replaceAll("'", "")
+                    .replaceAll(" ", "-")}.jpg`}
+                  alt={matchup.enemy}
+                />
               </div>
               <div className="god-name">{matchup.enemy}</div>
             </div>

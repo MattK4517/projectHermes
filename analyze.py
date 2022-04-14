@@ -16,6 +16,8 @@ import pyrez
 from pyrez.api import SmiteAPI
 from pyrez.models import Smite
 from pyrez.models.MatchHistory import MatchHistory
+
+from flaskControl import get_all_items
 # info pull
 # [godWR, godPR, godBR] - check, matchesPlayed - check
 # relics used
@@ -39,6 +41,10 @@ def get_query(rank, role, patch, queue_type, mode):
     if "All" not in role:
         myquery["role"] = role
     myquery["mode"] = mode
+
+    if patch == "All Patches":
+        print(myquery)
+        del myquery["patch"]
 
     if (mode == "Joust" or mode == "Duel") and "role" in myquery.keys():
         del myquery["role"]
@@ -312,30 +318,31 @@ def get_all_builds(client, god, role, patch, queue_type="Ranked", rank="All Rank
 
     games = 0
     wins = 0
-    for x in mycol.find(myquery, {"_id": 0}):
+    for x in mycol.find(myquery, {"_id": 0, "build": 1, "win_status": 1}):
         games += 1
         flag = False
         if x["win_status"] == "Winner":
             wins += 1
             flag = True
-        for slot in x[god].keys():
-            item = x[god][slot]
-            if item:
-                if item not in top_dict[slot].keys():
-                    if flag:
-                        top_dict[slot][item] = {
-                            "item": item, "games": 1, "wins": 1}
-                    else:
-                        top_dict[slot][item] = {
-                            "item": item, "games": 1, "wins": 0}
-                elif item in top_dict[slot].keys():
-                    top_dict[slot][item]["games"] += 1
-                    if flag:
-                        top_dict[slot][item]["wins"] += 1
+        if "build" in x.keys():
+            for slot in x["build"].keys():
+                item = x["build"][slot]
+                if item:
+                    if item not in top_dict[slot].keys():
+                        if flag:
+                            top_dict[slot][item] = {
+                                "item": item, "games": 1, "wins": 1}
+                        else:
+                            top_dict[slot][item] = {
+                                "item": item, "games": 1, "wins": 0}
+                    elif item in top_dict[slot].keys():
+                        top_dict[slot][item]["games"] += 1
+                        if flag:
+                            top_dict[slot][item]["wins"] += 1
 
-            test_sort = OrderedDict(sorted(top_dict[slot].items(),
-                                           key=lambda x: getitem(x[1], "games")))
-            top_dict[slot] = dict(test_sort)
+                test_sort = OrderedDict(sorted(top_dict[slot].items(),
+                                               key=lambda x: getitem(x[1], "games")))
+                top_dict[slot] = dict(test_sort)
     if games == 0:
         games = 1
     return {**dict(top_dict), **{"games": games, "wins": wins, "winRate": round(wins/games*100, 2)}}
@@ -352,7 +359,7 @@ def get_worst_matchups(client, god, role, patch, queue_type="Ranked", rank="All 
                    {"player":  {"$regex": f"{player}", "$options": "i"}}}
 
     # print(myquery)
-    if "All" in role:
+    if "All" in role and "role" in myquery.keys():
         del myquery["role"]
 
     games = 0
@@ -915,7 +922,7 @@ def get_build_path(client, god, role, patch, queue_type, rank="All Ranks", mode=
     games = 0
     builds = {}
     myquery = get_query(rank, role, patch, queue_type, mode)
-
+    myquery["build"] = {"$exists": True}
     for x in mycol.aggregate(
         [
             {
@@ -924,9 +931,9 @@ def get_build_path(client, god, role, patch, queue_type, rank="All Ranks", mode=
             {
                 "$group": {
                     "_id": {
-                        "slot1": f"${god}.slot1",
-                        "slot2": f"${god}.slot2",
-                        "slot3": f"${god}.slot3",
+                        "slot1": f"$build.slot1",
+                        "slot2": f"$build.slot2",
+                        "slot3": f"$build.slot3",
                         "win_status": "$win_status",
                     },
                     "count": {"$sum": 1},
@@ -1088,14 +1095,4 @@ def insert_games(rank, games, patch, queue_type, mode):
 
 
 if __name__ == "__main__":
-    starttime = datetime.now()
-    print(get_total_matches(client, "All Ranks", "9.3"))
-    # print(get_worst_matchups(client, "Cliodhna", "Solo", "9.3"))
-    # #print(get_top_builds(client, "Shiva", "Solo", "9.2", "Casual"))
-    # #print(get_winrate(client, "Ah Puch", "All", "9.3", mode="Joust"))
-    # #print(create_tier_list.get_tier_stats(client, "All Ranks", "Solo"))
-    # # #print(get_total_matches(client, "Diamond", "9.1"))
-    # for god in godsDict2:
-    #     winrate = get_winrate(client, god, godsDict2[god], "9.1")["win_rate"]
-    #     data = get_pb_rate(client, god, "Bronze", godsDict2[god], "9.1")
-    #     #print(god, create_tier_list.get_tier(client, winrate, data["pickRate"], data["banRate"], godsDict2[god], "Diamond"))
+  pass

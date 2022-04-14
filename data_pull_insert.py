@@ -5,6 +5,7 @@ from pyrez.models import Smite
 from pyrez.models.MatchHistory import MatchHistory
 from data_pull_formatting_rewrite import format_no_query
 from __init__ import client
+import flaskHelper
 
 
 def normalize_godId(id):
@@ -336,5 +337,5 @@ with open("cred.txt", "r") as f:
     data = f.readlines()
     smite_api = SmiteAPI(devId=data[0].strip(
     ), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
-    print(smite_api.getPlayerId("fenrir45-maxmcca", 9))
+    # print(flaskHelper.get_player_id(smite_api, "fenrir45-maxmcca"))
     print(smite_api.getPlayer(505627156))

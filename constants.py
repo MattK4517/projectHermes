@@ -1,5 +1,6 @@
 
 patch = "9.3"
+patches = ["9.3", "9.2", "9.1"]
 godsDict = {
     "Achilles": 0,
     "Agni": 0,
