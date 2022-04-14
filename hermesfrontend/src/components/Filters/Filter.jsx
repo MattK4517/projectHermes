@@ -9,6 +9,14 @@ export default function Filter(props) {
           <div className="filter-manager_label hide">
             <span style={{ color: "white" }}>Stat Filters</span>
           </div>
+          <FilterForm
+            filter={props.mode}
+            god={props.pagegod}
+            filters={props.modeFilters}
+            setFilter={props.setMode}
+            rankSet={props.setRank}
+            mode={props.mode}
+          />
           <div
             className={
               ["Joust", "Duel"].indexOf(props.mode) != -1 ? "show" : ""
@@ -38,14 +46,6 @@ export default function Filter(props) {
             god={props.pagegod}
             filters={props.patchFilters}
             setFilter={props.setPatch}
-            rankSet={props.setRank}
-            mode={props.mode}
-          />
-          <FilterForm
-            filter={props.mode}
-            god={props.pagegod}
-            filters={props.modeFilters}
-            setFilter={props.setMode}
             rankSet={props.setRank}
             mode={props.mode}
           />
