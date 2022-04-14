@@ -483,6 +483,7 @@ def get_total_matches(client, rank, patch, queue_type="Ranked", mode="Conquest")
     myquery = get_query(rank, "", patch, queue_type, mode)
     if "role" in myquery.keys():
         del myquery["role"]
+    myquery["rank"] = rank
     for x in mycol.find(myquery, {"Total_Matches": 1, "_id": 0}):
         total_games += x["Total_Matches"]
     return total_games
@@ -1094,17 +1095,4 @@ def insert_games(rank, games, patch, queue_type, mode):
 
 
 if __name__ == "__main__":
-    starttime = datetime.now()
-    # print(get_worst_matchups(client, "Merlin",
-    #       "All Roles", "9.3", player="Taerithroen"))
-    print(get_all_builds(client, "Achilles", "Solo",
-          "9.3", queue_type="Casual", mode="Joust"))
-    # print(get_worst_matchups(client, "Cliodhna", "Solo", "9.3"))
-    # #print(get_top_builds(client, "Shiva", "Solo", "9.2", "Casual"))
-    # #print(get_winrate(client, "Ah Puch", "All", "9.3", mode="Joust"))
-    # #print(create_tier_list.get_tier_stats(client, "All Ranks", "Solo"))
-    # # #print(get_total_matches(client, "Diamond", "9.1"))
-    # for god in godsDict2:
-    #     winrate = get_winrate(client, god, godsDict2[god], "9.1")["win_rate"]
-    #     data = get_pb_rate(client, god, "Bronze", godsDict2[god], "9.1")
-    #     #print(god, create_tier_list.get_tier(client, winrate, data["pickRate"], data["banRate"], godsDict2[god], "Diamond"))
+  pass
