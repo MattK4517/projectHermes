@@ -271,7 +271,7 @@ function Items(props) {
         });
       })
     );
-  }, [god, role, rank, patch, queueType]);
+  }, [god, role, rank, patch, queueType, mode]);
 
   const itemColumns = React.useMemo(
     () => [
