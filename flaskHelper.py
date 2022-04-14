@@ -71,11 +71,15 @@ def get_filter(table_type):
 
 
 def get_player_id(smite_api: SmiteAPI, playername):
+    data = smite_api.getPlayerId(playername)
+    if data:
+        return data[0]["player_id"]
+
+    data = []
     portals = [1, 5, 9, 10, 22, 25, 28]
     for portal in portals:
-        print(playername, portal)
+        print(portal)
         data = smite_api.getPlayerId(playername, portal)
-        print(data)
         if data:
             return data[0]["player_id"]
 
