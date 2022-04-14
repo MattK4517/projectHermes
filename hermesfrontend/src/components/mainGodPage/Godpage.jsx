@@ -321,11 +321,9 @@ function Godpage(props) {
     setRole(props.role.replaceAll("_", " "));
     setGod(props.god.replaceAll("_", " "));
   }, []);
-
   const pagegod = props.god.replaceAll("_", " ");
 
   const [dispRole, setDispRole] = useState(props.role.replaceAll("_", " "));
-  const [dispRank, setDispRank] = useState(rank.replaceAll("_", " "));
   var [url, seturl] = useState(0);
   const [displaygod, setgod] = useState(0);
   const [abilities, setabilities] = useState([]);
@@ -342,7 +340,7 @@ function Godpage(props) {
         "/",
         dispRole,
         "/",
-        dispRank,
+        rank,
         "/",
         patch,
         "/",
@@ -363,8 +361,8 @@ function Godpage(props) {
         // setTier(data.tier)
       })
     );
-  }, [god, dispRole, dispRank, patch, queueType, matchup, mode]);
-
+  }, [god, dispRole, rank, patch, queueType, matchup, mode]);
+  console.log(rank);
   useEffect(() => {
     fetch("/api/".concat(pagegod, "/abilities")).then((res) =>
       res.json().then((data) => {
@@ -404,7 +402,7 @@ function Godpage(props) {
                   url={url}
                   tier={tier}
                   role={dispRole}
-                  rank={dispRank}
+                  rank={rank}
                   abilities={abilities}
                   patch={patch}
                   tab={tab}
@@ -416,7 +414,7 @@ function Godpage(props) {
                   role={dispRole}
                   god={pagegod}
                   queueType={queueType}
-                  rank={dispRank}
+                  rank={rank}
                   patch={patch}
                   matchup={matchup}
                   modeFilters={modes}

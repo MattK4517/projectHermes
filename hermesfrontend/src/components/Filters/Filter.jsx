@@ -14,7 +14,6 @@ export default function Filter(props) {
             god={props.pagegod}
             filters={props.modeFilters}
             setFilter={props.setMode}
-            rankSet={props.setRank}
             mode={props.mode}
           />
           <div
@@ -27,7 +26,6 @@ export default function Filter(props) {
               god={props.pagegod}
               filters={props.roleFilters}
               setFilter={props.setRole}
-              rankSet={props.setRank}
               mode={props.mode}
             />
           </div>
@@ -37,7 +35,6 @@ export default function Filter(props) {
               god={props.pagegod}
               filters={props.rankFilters}
               setFilter={props.setRank}
-              rankSet={props.setRank}
               mode={props.mode}
             />
           </div>
@@ -46,7 +43,6 @@ export default function Filter(props) {
             god={props.pagegod}
             filters={props.patchFilters}
             setFilter={props.setPatch}
-            rankSet={props.setRank}
             mode={props.mode}
           />
           <div className={props.mode === "Duel" ? "show" : ""}>
@@ -55,7 +51,6 @@ export default function Filter(props) {
               god={props.pagegod}
               filters={props.queueFilters}
               setFilter={props.setQueueType}
-              rankSet={props.setRank}
               mode={props.mode}
             />
           </div>
