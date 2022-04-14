@@ -167,7 +167,6 @@ def get_top_builds(client, god, role, patch, queue_type="Ranked", rank="All Rank
     mydb = client["single_match_stats"]
     mycol = mydb[god]
     myquery = get_query(rank, role, patch, queue_type, mode)
-    # print(mycol.count_documents(myquery))
     games = 0
     wins = 0
     if type(data) is list:
@@ -193,30 +192,42 @@ def get_top_builds(client, god, role, patch, queue_type="Ranked", rank="All Rank
                             top_dict[slot][item]["wins"] += 1
 
     else:
-        myquery = {
-            **{god: {"$exists": True}},
-            **myquery
-        }
         for x in mycol.find(myquery, {"_id": 0, god: 1, "win_status": 1}):
             games += 1
             flag = False
             if x["win_status"] == "Winner":
                 wins += 1
                 flag = True
-            for slot in x[god].keys():
-                item = x[god][slot]
-                if item:
-                    if item not in top_dict[slot].keys():
-                        if flag:
-                            top_dict[slot][item] = {
-                                "item": item, "games": 1, "wins": 1}
-                        else:
-                            top_dict[slot][item] = {
-                                "item": item, "games": 1, "wins": 0}
-                    elif item in top_dict[slot].keys():
-                        top_dict[slot][item]["games"] += 1
-                        if flag:
-                            top_dict[slot][item]["wins"] += 1
+            if god in x.keys():
+                for slot in x[god].keys():
+                    item = x[god][slot]
+                    if item:
+                        if item not in top_dict[slot].keys():
+                            if flag:
+                                top_dict[slot][item] = {
+                                    "item": item, "games": 1, "wins": 1}
+                            else:
+                                top_dict[slot][item] = {
+                                    "item": item, "games": 1, "wins": 0}
+                        elif item in top_dict[slot].keys():
+                            top_dict[slot][item]["games"] += 1
+                            if flag:
+                                top_dict[slot][item]["wins"] += 1
+            elif "build" in x.keys():
+                for slot in x["build"].keys():
+                    item = x[god][slot]
+                    if item:
+                        if item not in top_dict[slot].keys():
+                            if flag:
+                                top_dict[slot][item] = {
+                                    "item": item, "games": 1, "wins": 1}
+                            else:
+                                top_dict[slot][item] = {
+                                    "item": item, "games": 1, "wins": 0}
+                        elif item in top_dict[slot].keys():
+                            top_dict[slot][item]["games"] += 1
+                            if flag:
+                                top_dict[slot][item]["wins"] += 1
 
     if games == 0:
         return {**{}, **{"games": games, "wins": wins, "winRate": 0}}
@@ -1095,4 +1106,4 @@ def insert_games(rank, games, patch, queue_type, mode):
 
 
 if __name__ == "__main__":
-  pass
+    pass
