@@ -217,6 +217,7 @@ def get_player_general(playername):
 
     # TODO find a way to only pull from database weekly
     if fh.validate_player(client, playername):
+        print("jfae")
         for x in mycol.find({"NameTag": {"$regex": f"{playername}", "$options": "i"}}, {"_id": 0}):
             data = x
     else:

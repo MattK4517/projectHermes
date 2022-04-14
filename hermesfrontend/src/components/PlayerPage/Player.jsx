@@ -167,9 +167,11 @@ class NameForm extends React.Component {
 }
 
 const parsePlayer = (data, mode, inputType) => {
+  console.log(data);
   let rank = 0;
   let seasonGames = 0;
   let seasonWinRate = 0;
+  console.log(`Ranked${mode}`);
   if (inputType === "KBM") {
     seasonGames =
       data[`Ranked${mode}`]["Wins"] + data[`Ranked${mode}`]["Losses"];
@@ -178,7 +180,6 @@ const parsePlayer = (data, mode, inputType) => {
       data[`Ranked${mode}`]["Wins"] /
       (data[`Ranked${mode}`]["Wins"] + data[`Ranked${mode}`]["Losses"]);
   } else if (inputType === "Controller") {
-    console.log("DKOWJAFDPOJWOIFJWOIAJ", data[`Ranked${mode}${inputType}`]);
     seasonGames =
       data[`Ranked${mode}${inputType}`]["Wins"] +
       data[`Ranked${mode}${inputType}`]["Losses"];
@@ -277,7 +278,7 @@ export default function Player(props) {
         });
       })
     );
-  }, [player]);
+  }, [player, mode, queueType, inputType]);
   const [matchList, setMatchList] = useState([]);
 
   useEffect(() => {
@@ -353,7 +354,7 @@ export default function Player(props) {
           </div>
           <div className="player-content-container">
             <div className="player-content-main">
-              <div className="player-side">
+              <div className="player-side" style={{ minWidth: "315px" }}>
                 <RankDisplay
                   rank={rank}
                   tier={tier}

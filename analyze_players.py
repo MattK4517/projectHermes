@@ -1,3 +1,4 @@
+from pandas import test
 from data_pull_formatting_rewrite import normalize_rank
 from constants import godsDict, roles, patches
 import analyze as anlz
@@ -76,7 +77,7 @@ def create_player_return_dict(player):
 
 def get_player_basic(player):
     # my player id 704292327
-    return {
+    data = {
         "Avatar_URL": player["Avatar_URL"],
         "Created_Datetime": player["Created_Datetime"],
         "HoursPlayed": player["HoursPlayed"],
@@ -88,6 +89,8 @@ def get_player_basic(player):
         "NameTag": player["hz_player_name"],
         "Rank_Stat_Conquest": player["Rank_Stat_Conquest"],
         "Rank_Stat_Conquest_Controller": player["Rank_Stat_Conquest_Controller"],
+        "Rank_Stat_Joust": player["Rank_Stat_Joust"],
+        "Rank_Stat_Joust_Controller": player["Rank_Stat_Joust_Controller"],
         "RankedConquest": {
             "Leaves": player["RankedConquest"]["Leaves"],
             "Losses": player["RankedConquest"]["Losses"],
@@ -142,10 +145,13 @@ def get_player_basic(player):
         "Total_Worshippers": player["Total_Worshippers"],
         "Wins": player["Wins"],
     }
+    print(data)
+    return data
 
 
 def create_player_god_dict(data, playername, queue_type, mode, input_type):
-    ret_data = {"NameTag": playername, "queue_type": queue_type, "mode": mode, "input_type": input_type}
+    ret_data = {"NameTag": playername, "queue_type": queue_type,
+                "mode": mode, "input_type": input_type}
     for god in data:
         losses = god["Losses"]
         if losses == 0:
@@ -476,9 +482,16 @@ def grab_stats(player_data):
 
 
 if __name__ == "__main__":
-    # find_match_history(client, "AleksEnglish", "Ranked")
-    starttime = datetime.now()
-    print(get_player_god_stats(client, "Taerithroen",
-          "Merlin", "All Roles", "Ranked", "All Patches"))
-    # print(find_match_history(client, "Rawjik", "Casual", "9.3", "Joust"))
-    # print(datetime.now() - starttime)
+    import flaskHelper as fh
+    from pyrez import SmiteAPI
+    import pyrez
+    with open("cred.txt", "r") as creds:
+        lines = creds.readlines()
+        smite_api = SmiteAPI(devId=lines[0].strip(
+
+        ), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
+        player_id = fh.get_player_id(smite_api, "MayheM4517")
+        print(player_id)
+        test_data = smite_api.getPlayer(player_id)
+        print(test_data)
+        data = get_player_basic(test_data)
