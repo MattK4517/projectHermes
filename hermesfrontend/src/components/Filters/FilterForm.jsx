@@ -80,16 +80,9 @@ export default class FilterForm extends React.Component {
 
   handleChange(event) {
     this.props.setFilter(event.target.value);
-    if (this.props.rankSet) {
-      this.props.rankSet("All Ranks");
-    }
   }
 
   handleSubmit(event) {
-    this.props.setFilter(this.props.patch);
-    if (this.props.rankSet) {
-      this.props.rankSet("All Ranks");
-    }
     event.preventDefault();
   }
 
