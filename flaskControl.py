@@ -217,7 +217,6 @@ def get_player_general(playername):
 
     # TODO find a way to only pull from database weekly
     if fh.validate_player(client, playername):
-        print("jfae")
         for x in mycol.find({"NameTag": {"$regex": f"{playername}", "$options": "i"}}, {"_id": 0}):
             data = x
     else:
@@ -236,17 +235,13 @@ def get_player_general(playername):
 @app.route("/api/getplayergods/<playername>/<queue_type>/<mode>/<input_type>")
 @app.route("/api/getplayergods/<playername>/<queue_type>/<mode>/")
 def get_player_god_info(playername, queue_type, mode, input_type="KBM"):
-    print(queue_type, mode)
     mydb = client["Players"]
     mycol = mydb["Player Gods"]
     data = {}
     if playername == "undefined":
         return {}
 
-    print(mycol.count_documents({"queue_type": queue_type, "mode": mode, "input_type": input_type, "NameTag": {
-          "$regex": f"{playername}", "$options": "i"}}))
     if fh.validate_gods(client, playername, queue_type, mode, input_type):
-        print("getting here")
         for x in mycol.find({"queue_type": queue_type, "mode": mode, "input_type": input_type, "NameTag": {"$regex": f"{playername}", "$options": "i"}}, {"_id": 0}):
             data = x
     else:
@@ -264,7 +259,6 @@ def get_player_god_info(playername, queue_type, mode, input_type="KBM"):
     if data == {}:
         return {}
     else:
-        print("getting here")
         return {**data, **anlzpy.get_player_winrate(data)}
 
 
