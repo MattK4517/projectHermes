@@ -323,8 +323,7 @@ function Godpage(props) {
   }, []);
   const pagegod = props.god.replaceAll("_", " ");
 
-  const [dispRole, setDispRole] = useState(props.role.replaceAll("_", " "));
-  var [url, seturl] = useState(0);
+  const [url, seturl] = useState(0);
   const [displaygod, setgod] = useState(0);
   const [abilities, setabilities] = useState([]);
   const [tab, setTab] = useState("Build");
@@ -338,7 +337,7 @@ function Godpage(props) {
       "/api/main/".concat(
         pagegod,
         "/",
-        dispRole,
+        role,
         "/",
         rank,
         "/",
@@ -361,7 +360,7 @@ function Godpage(props) {
         // setTier(data.tier)
       })
     );
-  }, [god, dispRole, rank, patch, queueType, matchup, mode]);
+  }, [god, role, rank, patch, queueType, matchup, mode]);
   console.log(rank);
   useEffect(() => {
     fetch("/api/".concat(pagegod, "/abilities")).then((res) =>
@@ -401,7 +400,7 @@ function Godpage(props) {
                   god={pagegod}
                   url={url}
                   tier={tier}
-                  role={dispRole}
+                  role={role}
                   rank={rank}
                   abilities={abilities}
                   patch={patch}
@@ -411,7 +410,7 @@ function Godpage(props) {
                 />
                 <Filter
                   mode={mode}
-                  role={dispRole}
+                  role={role}
                   god={pagegod}
                   queueType={queueType}
                   rank={rank}
