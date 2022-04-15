@@ -26,7 +26,7 @@ def find_match_history(client, playername, queue_type, patch, mode):
 
     mydb = client[database]
     mycol = mydb[f"{patch} Matches"]
-    if mode == "Joust":
+    if mode == "Joust" or mode == "Duel":
         mycol = mydb[f"{patch} {mode} Matches"]
 
     myquery = {
@@ -91,6 +91,8 @@ def get_player_basic(player):
         "Rank_Stat_Conquest_Controller": player["Rank_Stat_Conquest_Controller"],
         "Rank_Stat_Joust": player["Rank_Stat_Joust"],
         "Rank_Stat_Joust_Controller": player["Rank_Stat_Joust_Controller"],
+        "Rank_Stat_Duel": player["Rank_Stat_Duel"],
+        "Rank_Stat_Duel_Controller": player["Rank_Stat_Duel_Controller"],
         "RankedConquest": {
             "Leaves": player["RankedConquest"]["Leaves"],
             "Losses": player["RankedConquest"]["Losses"],
@@ -139,13 +141,35 @@ def get_player_basic(player):
             "Tier": player["RankedJoustController"]["Tier"],
             "Wins": player["RankedJoustController"]["Wins"],
         },
+        "RankedDuel": {
+            "Leaves": player["RankedDuel"]["Leaves"],
+            "Losses": player["RankedDuel"]["Losses"],
+            "Points": player["RankedDuel"]["Points"],
+            "Rank": player["RankedDuel"]["Rank"],
+            "Rank_Stat": player["RankedDuel"]["Rank_Stat"],
+            "Rank_Variance": player["RankedDuel"]["Rank_Variance"],
+            "Season": player["RankedDuel"]["Season"],
+            "Tier": player["RankedDuel"]["Tier"],
+            "Wins": player["RankedDuel"]["Wins"],
+        },
+        "RankedDuelController": {
+            "Leaves": player["RankedDuelController"]["Leaves"],
+            "Losses": player["RankedDuelController"]["Losses"],
+            "Points": player["RankedDuelController"]["Points"],
+            "Rank": player["RankedDuelController"]["Rank"],
+            "Rank_Stat": player["RankedDuelController"]["Rank_Stat"],
+            "Rank_Variance": player["RankedDuelController"]["Rank_Variance"],
+            "Season": player["RankedDuelController"]["Season"],
+            "Tier": player["RankedDuelController"]["Tier"],
+            "Wins": player["RankedDuelController"]["Wins"],
+        },
         "Tier_Conquest": player["Tier_Conquest"],
         "Tier_Joust": player["Tier_Joust"],
+        "Tier_Duel": player["Tier_Duel"],
         "Total_Achievements": player["Total_Achievements"],
         "Total_Worshippers": player["Total_Worshippers"],
         "Wins": player["Wins"],
     }
-    print(data)
     return data
 
 
@@ -490,7 +514,7 @@ if __name__ == "__main__":
         smite_api = SmiteAPI(devId=lines[0].strip(
 
         ), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
-        player_id = fh.get_player_id(smite_api, "MayheM4517")
+        player_id = fh.get_player_id(smite_api, "samdadude")
         print(player_id)
         test_data = smite_api.getPlayer(player_id)
         print(test_data)

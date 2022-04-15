@@ -18,7 +18,7 @@ export const PlayerProvider = props => {
     const [inputType, setInputType] = useState("KBM");
     const patches = ["9.3", "9.2", "9.1"]
     const queueTypes = ["Casual", "Ranked"];
-    const modes = ["Joust", "Conquest"];
+    const modes = ["Joust", "Conquest", "Duel"];
     const inputTypes = ["KBM", "Controller"];
     return (
         <PlayerContext.Provider value={[

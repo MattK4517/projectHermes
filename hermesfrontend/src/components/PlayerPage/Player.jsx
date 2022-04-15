@@ -306,7 +306,7 @@ export default function Player(props) {
         });
       })
     );
-  }, [player, queueType, patch, mode]);
+  }, [player, queueType, patch, mode, inputType]);
 
   useEffect(() => {
     fetch("/api/getplayergeneral/".concat(player)).then((res) =>
