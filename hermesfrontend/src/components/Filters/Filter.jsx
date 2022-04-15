@@ -71,20 +71,22 @@ export function PlayerFilter(props) {
       <div className="filter-width-wrapper">
         <div className="filter-manager_container">
           <FilterForm
-            filter={props.patch}
-            filters={props.patches}
-            setFilter={props.setPatch}
-          />
-          <FilterForm
             filter={props.mode}
             filters={props.modes}
             setFilter={props.setMode}
           />
           <FilterForm
-            filter={props.queueType}
-            filters={props.queueTypes}
-            setFilter={props.setQueueType}
+            filter={props.patch}
+            filters={props.patches}
+            setFilter={props.setPatch}
           />
+          <div className={props.mode === "Duel" ? "show" : ""}>
+            <FilterForm
+              filter={props.queueType}
+              filters={props.queueTypes}
+              setFilter={props.setQueueType}
+            />
+          </div>
           <FilterForm
             filter={props.inputType}
             filters={props.inputTypes}
