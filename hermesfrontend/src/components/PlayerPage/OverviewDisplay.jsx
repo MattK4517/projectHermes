@@ -151,58 +151,31 @@ export default function OverviewDisplay() {
         {/* <NameForm setPlayer={setPlayer} /> */}
         <div className={player ?? "undefined"}>
           <PlayerHeader />
-          <div className="filter-manager">
-            <div className="filter-width-wrapper">
-              <div className="filter-manager_container">
-                <div className="filter-manager_label">
-                  <span style={{ color: "white" }}>Filters</span>
-                </div>
-                <Filter
-                  mode={mode}
-                  role={role}
-                  god={""}
-                  queueType={queueType}
-                  rank={""}
-                  patch={patch}
-                  matchup={""}
-                  modeFilters={modes}
-                  patchFilters={patches}
-                  roleFilters={roles}
-                  rankFilters={[""]}
-                  queueFilters={queueTypes}
-                  routes={""}
-                  setRank={() => {
-                    return;
-                  }}
-                  setRole={setRole}
-                  setPatch={setPatch}
-                  setMode={setMode}
-                  setMatchup={() => {
-                    return;
-                  }}
-                  setQueueType={setQueueType}
-                />
-                {/* <FilterForm
-                  filter={role}
-                  god={god}
-                  filters={roles}
-                  setFilter={setRole}
-                />
-                <FilterForm
-                  filter={queueType}
-                  god={queueType}
-                  filters={["Ranked", "Casual"]}
-                  setFilter={setMode}
-                />
-                <FilterForm
-                  filter={patch}
-                  god={patch}
-                  filters={["All Patches", ...patches]}
-                  setFilter={setPatch}
-                /> */}
-              </div>
-            </div>
-          </div>
+          <Filter
+            mode={mode}
+            role={role}
+            god={""}
+            queueType={queueType}
+            rank={""}
+            patch={patch}
+            matchup={""}
+            modeFilters={modes}
+            patchFilters={patches}
+            roleFilters={roles}
+            rankFilters={[""]}
+            queueFilters={queueTypes}
+            routes={""}
+            setRank={() => {
+              return;
+            }}
+            setRole={setRole}
+            setPatch={setPatch}
+            setMode={setMode}
+            setMatchup={() => {
+              return;
+            }}
+            setQueueType={setQueueType}
+          />
         </div>
         <div className="player-content-container">
           <div className="player-overview-stats">

@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { PlayerContext } from "./PlayerContext";
-
+import { getImageUrl } from "../Match";
 export default function CarryScoreSection(props) {
   const [
     god,
@@ -33,7 +33,7 @@ export default function CarryScoreSection(props) {
               />
             </div>
             <div className="role-icon-container">
-              <img src="https://static.u.gg/assets/lol/roles/all.svg" />
+              <img src={getImageUrl(role)} />
             </div>
           </div>
         </div>

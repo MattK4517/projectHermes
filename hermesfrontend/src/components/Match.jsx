@@ -647,7 +647,7 @@ const normalize_rank = (tier) => {
   return rank;
 };
 
-const getImageUrl = (rank) => {
+export const getImageUrl = (rank) => {
   let url = "https://i.imgur.com/LVbUJes.png";
   if (rank == "Bronze") {
     url = "https://i.imgur.com/pNAGUeR.png";
