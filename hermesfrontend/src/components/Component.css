@@ -462,12 +462,19 @@ hr {
   color: white;
 }
 
-.god-home .image-wrap {
+.god-home .image-wrap .skins .image-wrap {
   position: relative;
   border: 1px solid #2c2c40;
   overflow: hidden;
 }
-.god-home .gods-container .god-link .image-wrap {
+.god-home
+  .gods-container
+  .god-link
+  .image-wrap
+  .skins
+  .gods-container
+  .god-link
+  .image-wrap {
   width: 100px;
   height: 100px;
 }
@@ -509,14 +516,16 @@ hr {
   color: white;
 }
 
-.god-home {
+.god-home,
+.skins {
   padding-top: 100px;
   max-width: 1014px;
   width: 200vh;
   box-sizing: content-box;
 }
 
-.god-home-page {
+.god-home-page,
+.skin-page {
   display: flex;
   margin: auto;
   color: white;
@@ -558,7 +567,15 @@ a:visited {
   color: white;
 }
 
-.god-home .gods-container .god-link .god-name {
+.god-home
+  .gods-container
+  .god-link
+  .god-name
+  .skins
+  .god-home
+  .gods-container
+  .god-link
+  .god-name {
   margin-top: 8px;
   font-size: 0.8rem;
   color: white;
@@ -2478,3 +2495,24 @@ figure.snip0015:hover figcaption::before {
 .Casual {
   display: none;
 } */
+
+.skins .gods-container .god-link figure.snip0015 {
+  width: 150px;
+  height: 200px;
+  margin: 0 2rem;
+  overflow: hidden;
+}
+
+.skins .gods-container {
+  align-self: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-gap: 25px 25px;
+  padding: 20px;
+  border: 5px solid #2c2c40;
+  background-color: #17172e;
+}
+
+.skins .gods-container .god-link .god-name {
+  text-align: center;
+}

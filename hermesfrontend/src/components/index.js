@@ -1,15 +1,17 @@
+import { GodsDisplay } from "./Gods";
+
 export { default as Godpage } from "./mainGodPage/Godpage";
 // export { default as Navigation } from "./Navigation";
-export { default as Home} from "./Home";
+export { default as Home } from "./Home";
 export { SinglePostPage as GetPage } from "./GetPage";
-// export { default as Gods } from "./Gods";
+// export { default as G } from "./Gods";
 export { default as GodsScreen } from "./Gods";
 export { default as TierList } from "./Tierlists/TierList";
 export { default as CombatTierList } from "./Tierlists/CombatTierList";
 export { default as ObjectiveTierList } from "./Tierlists/ObjectiveTierList";
 export { default as DuoLaneTierList } from "./Tierlists/DuoLaneTierList";
 // export { default as NavigationBar } from "./Navbar";
-export { default as ContactForm } from "./ContactForm"; 
+export { default as ContactForm } from "./ContactForm";
 export { default as TierListPage } from "./TierListPage";
 export { default as Items } from "./mainGodPage/Items";
 export { default as Match } from "./Match";
@@ -23,6 +25,7 @@ export { default as WinRateColor } from "./mainGodPage/WinRateColor";
 export { default as BasicTabs } from "./mainGodPage/PageTabs";
 export { default as BuildPath } from "./mainGodPage/BuildPath";
 export { default as Matchups } from "./mainGodPage/Matchups";
+export { default as SkinPage } from "./mainGodPage/Skins/SkinPage";
 export { default as SearchBar } from "./SearchBarStuff/SearchBar";
 export { default as SearchBarGodPage } from "./SearchBarStuff/SearchBarGodPage";
 export { default as SearchBarGodsDisplay } from "./SearchBarStuff/SearchBarGodsDisplay";
@@ -38,22 +41,17 @@ export { default as CarryScoreSection } from "./PlayerPage/CarryScoreSection";
 export { default as PlayerMatchups } from "./PlayerPage/PlayerMatchups";
 export { default as PlayerGodSection } from "./PlayerPage/PlayerGodSection";
 export { default as PlayerTabs } from "./PlayerPage/PlayerTabs";
-export { default as MultiKillDisplay } from "./PlayerPage/MultiKillDisplay"
-export { default as DamageCalculator} from "./DmgCalcPage/DamageCalculator"
-export { default as ItemBuffs} from "./DmgCalcPage/ItemBuffs"
-export { default as DragDrop } from "./DmgCalcPage/DragDropGodList"
-export { default as MainCalcSection } from "./DmgCalcPage/MainCalcSection"
-export { default as GodSelectionBox } from "./DmgCalcPage/GodSelectionBox"
-export { default as BuildSection } from "./DmgCalcPage/BuildSection"
-export { default as CombatStatSection } from "./DmgCalcPage/CombatStatSection"
-export { default as PlayerCarryScore } from "./MatchPage/PlayerCarryScore"
-export { default as BaseMatchSummary } from "./MatchPage/BaseMatchSummary"
-export { default as TeamDisplay } from "./MatchPage/TeamDisplay"
-export { default as HeaderMatchInfoSummary } from "./MatchPage/HeaderMatchInfoSummary"
-export { default as CarryPlayerDisplay } from "./MatchPage/CarryPlayerDisplay"
-export { default as FindAMatch } from "./MatchPage/FindAMatch"
-
-
-
-
-
+export { default as MultiKillDisplay } from "./PlayerPage/MultiKillDisplay";
+export { default as DamageCalculator } from "./DmgCalcPage/DamageCalculator";
+export { default as ItemBuffs } from "./DmgCalcPage/ItemBuffs";
+export { default as DragDrop } from "./DmgCalcPage/DragDropGodList";
+export { default as MainCalcSection } from "./DmgCalcPage/MainCalcSection";
+export { default as GodSelectionBox } from "./DmgCalcPage/GodSelectionBox";
+export { default as BuildSection } from "./DmgCalcPage/BuildSection";
+export { default as CombatStatSection } from "./DmgCalcPage/CombatStatSection";
+export { default as PlayerCarryScore } from "./MatchPage/PlayerCarryScore";
+export { default as BaseMatchSummary } from "./MatchPage/BaseMatchSummary";
+export { default as TeamDisplay } from "./MatchPage/TeamDisplay";
+export { default as HeaderMatchInfoSummary } from "./MatchPage/HeaderMatchInfoSummary";
+export { default as CarryPlayerDisplay } from "./MatchPage/CarryPlayerDisplay";
+export { default as FindAMatch } from "./MatchPage/FindAMatch";

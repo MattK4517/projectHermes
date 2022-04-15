@@ -4,29 +4,36 @@ import "./Component.css";
 import Graph from "./Graphs";
 import SearchBarGodsDisplay from "./SearchBarStuff/SearchBarGodsDisplay";
 
-
-function GodsDisplay(props) {
+export function AllGodsDisplay(props) {
   return (
     <div className="gods-container">
       {props.gods.map((god, index) => {
+        console.log(god);
         return (
           <Link
             key={index}
-            to={"/".concat(god.name.replaceAll(" ", "_"))}
+            to={"/"}
+            // to={"/".concat(god.name.replaceAll(" ", "_"))}
             className="god-link"
           >
+            <div
+              className={god.wins ? "hide god-name" : "god-name"}
+              style={{ fontSize: "14px" }}
+            >
+              {god.wins} | {god.games} | {god.winRate}%
+            </div>
             <figure className="snip0015">
               <img
                 className="god-face"
-                src={god.url}
-                alt={god.name}
+                src={god.url || god.godSkin_URL}
+                alt={god.name || god.skin_name}
                 style={{ width: "100%" }}
               />
               <figcaption>
-                <p>Stats for {god.name}</p>
+                <p>Stats for {god.name || god.skin_name}</p>
               </figcaption>
             </figure>
-            <div className="god-name">{god.name}</div>
+            <div className="god-name">{god.name || god.skin_name}</div>
           </Link>
         );
       })}
@@ -34,7 +41,7 @@ function GodsDisplay(props) {
   );
 }
 
-export default function GodsScreen() {
+export default function GodsScreen(props) {
   const [allgods, setallgods] = useState([]);
 
   useEffect(() => {
@@ -61,10 +68,10 @@ export default function GodsScreen() {
             <h1 className="tier-list">Smite Gods Search</h1>
             <h2 className="subtitle">Find the best builds for every god!</h2>
             <div className="show">
-                <SearchBarGodsDisplay />
+              <SearchBarGodsDisplay />
             </div>
           </div>
-          <GodsDisplay gods={allgods} />
+          <AllGodsDisplay gods={allgods} />
         </div>
       </div>
     </div>

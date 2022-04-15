@@ -644,13 +644,13 @@ def get_carry_score(match):
             "Loser": {
                 "totalDamage": 1,
             }
-                },
+            },
         "levelDiff": {
             "Winner": {
             },
             "Loser": {
             }
-                },
+            },
         "killPart": {
                 "Winner": {
                     "totalKills": 0,
@@ -658,7 +658,7 @@ def get_carry_score(match):
                 "Loser": {
                     "totalKills": 0,
                 }
-                }
+            }
     }
     match_roles = []
 
@@ -1094,5 +1094,21 @@ def insert_games(rank, games, patch, queue_type, mode):
     print(f"{rank} done")
 
 
+def get_skin_stats(god, skin):
+    mydb = client["single_match_stats"]
+    mycol = mydb[god]
+    games = 0
+    wins = 0
+    for x in mycol.find({"skin": skin, "patch": "9.3"}, {"_id": 0, "win_status": 1}):
+        games += 1
+        if x["win_status"] == "Winner":
+            wins += 1
+
+    if games == 0:
+        return {"games": 0, "wins": wins, "win_rate": 100}
+    else:
+        return {"games": games, "wins": wins, "win_rate": round(wins/games*100, 2)}
+
+
 if __name__ == "__main__":
-  pass
+    pass

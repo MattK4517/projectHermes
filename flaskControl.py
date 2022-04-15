@@ -1,12 +1,12 @@
 from datetime import datetime
 from queue import Empty
-from re import M
+from re import L, M
 
 # from sklearn.linear_model import GammaRegressor
 import analyze as anlz
 import analyze_players as anlzpy
 import pandas as pd
-from constants import godsDict, roles
+from constants import godsDict, roles, id_dict
 from flask import Flask, render_template, request
 # from flask_limiter import Limiter
 # from flask_limiter.util import get_remote_address
@@ -322,4 +322,32 @@ def get_build_calc():
                 ret_data["base"] = anlz.get_god_stats(client, data[key], 20)
         build_stats = anlz.get_build_stats(client, build)
         ret_data["build"] = build_stats
+    return ret_data
+
+
+@app.route('/api/skins/<god>')
+def get_god_skins(god):
+    ret_data = {"skins": []}
+    with open("cred.txt", "r") as creds:
+        lines = creds.readlines()
+        smite_api = SmiteAPI(devId=lines[0].strip(
+        ), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
+
+        god_id = id_dict[god]
+        data = smite_api.getGodSkins(god_id)
+
+        for skin in data:
+            win_stats = anlz.get_skin_stats(god, skin["skin_name"])
+            temp_dict = {
+                "godSkin_URL": skin["godSkin_URL"],
+                "obtainability": skin["obtainability"],
+                "price_favor": skin["price_favor"],
+                "price_gems": skin["price_gems"],
+                "skin_name": skin["skin_name"],
+                "games": win_stats["games"],
+                "wins": win_stats["wins"],
+                "winRate": win_stats["win_rate"],
+            }
+            print(skin["skin_name"], "done")
+            ret_data["skins"].append(temp_dict)
     return ret_data
