@@ -357,7 +357,7 @@ export default function MatchDisplay(props) {
           <div className="filter-manager">
             <div className="filter-width-wrapper">
               <div className="filter-manager_container">
-                <Filter
+                <PlayerFilter
                   patch={patch}
                   mode={mode}
                   queueType={queueType}

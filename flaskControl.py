@@ -2,7 +2,7 @@ from datetime import datetime
 from queue import Empty
 from re import M
 
-from sklearn.linear_model import GammaRegressor
+# from sklearn.linear_model import GammaRegressor
 import analyze as anlz
 import analyze_players as anlzpy
 import pandas as pd
