@@ -86,7 +86,7 @@ export default function RankDisplay(props) {
               <span className="total-games">{props.seasonGames} games</span>
             </div>
             <div className="rank-wins">
-              <strong>{props.winrate}%</strong>
+              <strong>Lifetime: {props.winrate}%</strong>
               <span className="total-games">{props.games} games</span>
             </div>
           </div>
