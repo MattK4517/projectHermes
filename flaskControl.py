@@ -233,7 +233,7 @@ def get_player_general(playername):
 
 
 @app.route("/api/getplayergods/<playername>/<queue_type>/<mode>/<input_type>")
-@app.route("/api/getplayergods/<playername>/<queue_type>/<mode>/")
+# @app.route("/api/getplayergods/<playername>/<queue_type>/<mode>/")
 def get_player_god_info(playername, queue_type, mode, input_type="KBM"):
     mydb = client["Players"]
     mycol = mydb["Player Gods"]
@@ -251,8 +251,9 @@ def get_player_god_info(playername, queue_type, mode, input_type="KBM"):
             smite_api = SmiteAPI(devId=lines[0].strip(
             ), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
             player_id = fh.get_player_id(smite_api, playername)
+            queue_id = fh.get_queue_id(queue_type, mode, input_type)
             data = anlzpy.create_player_god_dict(smite_api.getQueueStats(
-                player_id, fh.get_queue_id(queue_type, mode, input_type)), playername, queue_type, mode, input_type)
+                player_id, queue_id), playername, queue_type, mode, input_type)
             mycol.insert_one(data)
             return json.loads(json_util.dumps({**data, **anlzpy.get_player_winrate(data)}))
 
