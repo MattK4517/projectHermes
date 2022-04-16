@@ -4,10 +4,7 @@ import { Link } from "react-router-dom";
 import { PlayerContext } from "./PlayerContext";
 import { linkDict, setTopGod } from "./Player";
 import OverviewDisplay from "./OverviewDisplay";
-
-const calcKDA = (kills, deaths, assists) => {
-  return ((kills + assists / 2) / deaths).toFixed(2);
-};
+import { getKDA } from "./GodStatsDisplay";
 
 export default function GodDisplay(props) {
   const [
@@ -97,7 +94,7 @@ export default function GodDisplay(props) {
                   </div>
                   <div className="god-stats_col god-stats_col-2">
                     <div className="kda-ratio">
-                      {calcKDA(god.kills, god.deaths, god.assists)}
+                      {getKDA(god.kills, god.deaths, god.assists).toFixed(2)}
                     </div>
                     <div className="kda-split">
                       <span>{god.kills}</span>&nbsp;
