@@ -4,36 +4,28 @@ import "./Component.css";
 import Graph from "./Graphs";
 import SearchBarGodsDisplay from "./SearchBarStuff/SearchBarGodsDisplay";
 
-export function AllGodsDisplay(props) {
+function AllGodsDisplay(props) {
   return (
     <div className="gods-container">
       {props.gods.map((god, index) => {
-        console.log(god);
         return (
           <Link
             key={index}
-            to={"/"}
-            // to={"/".concat(god.name.replaceAll(" ", "_"))}
+            to={"/".concat(god.name.replaceAll(" ", "_"))}
             className="god-link"
           >
-            <div
-              className={god.wins ? "hide god-name" : "god-name"}
-              style={{ fontSize: "14px" }}
-            >
-              {god.wins} | {god.games} | {god.winRate}%
-            </div>
             <figure className="snip0015">
               <img
                 className="god-face"
-                src={god.url || god.godSkin_URL}
-                alt={god.name || god.skin_name}
-                style={{ width: "100%" }}
+                src={god.url}
+                alt={god.name}
+                style={{ width: "100%", height: "100%" }}
               />
               <figcaption>
-                <p>Stats for {god.name || god.skin_name}</p>
+                <p>Stats for {god.name}</p>
               </figcaption>
             </figure>
-            <div className="god-name">{god.name || god.skin_name}</div>
+            <div className="god-name">{god.name}</div>
           </Link>
         );
       })}
@@ -74,6 +66,52 @@ export default function GodsScreen(props) {
           <AllGodsDisplay gods={allgods} />
         </div>
       </div>
+    </div>
+  );
+}
+
+export function AllGodsSkinsDisplay(props) {
+  return (
+    <div className="gods-container">
+      {props.gods.map((god, index) => {
+        return (
+          <Link
+            key={index}
+            to={"/"}
+            // to={"/".concat(god.name.replaceAll(" ", "_"))}
+            className="god-link"
+          >
+            <div className={"god-name"} style={{ fontSize: "14px" }}>
+              {god.wins} | {god.games} | {god.winRate}%
+            </div>
+            <figure className="snip0015">
+              <img
+                className="god-face"
+                src={
+                  god.url ||
+                  god.godSkin_URL ||
+                  "https://i.imgur.com/kigNdxX.png"
+                }
+                alt={god.name || god.skin_name}
+                style={{ width: "100%", height: "100%" }}
+              />
+              <figcaption>
+                <p>
+                  <div className="KDA">
+                    <span className="player-info-style">KDA: </span> {god.kills}
+                    <span style={{ color: "#5f5f7b" }}> / </span>
+                    <span style={{ color: "#ff4e50" }}>{god.deaths}</span>
+                    <span style={{ color: "#5f5f7b" }}> / </span>
+                    {god.assists}
+                    <br></br>
+                  </div>
+                </p>
+              </figcaption>
+            </figure>
+            <div className="god-name">{god.name || god.skin_name}</div>
+          </Link>
+        );
+      })}
     </div>
   );
 }

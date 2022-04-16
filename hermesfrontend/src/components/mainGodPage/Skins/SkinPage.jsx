@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { MainContext } from "../MainContext";
-import { AllGodsDisplay } from "../../Gods";
+import { AllGodsSkinsDisplay } from "../../Gods";
 
 export default function SkinPage(props) {
   const [
@@ -27,19 +27,34 @@ export default function SkinPage(props) {
   const [allSkins, setAllSkins] = useState([]);
 
   useEffect(() => {
-    fetch("/api/skins/".concat(god)).then((res) =>
+    fetch(
+      "/api/skins/".concat(
+        god,
+        "/",
+        role,
+        "/",
+        rank,
+        "/",
+        patch,
+        "/",
+        queueType,
+        "/",
+        mode,
+        "/",
+        matchup
+      )
+    ).then((res) =>
       res.json().then((data) => {
         console.log(data);
         setAllSkins([...data["skins"]]);
       })
     );
-  }, []);
-  console.log(allSkins);
+  }, [mode, role, rank, patch, queueType, matchup]);
   return (
     <div className="content">
       <div className="skin-page">
-        <div className="skins content-side-pad">
-          <AllGodsDisplay gods={allSkins} />
+        <div className="skins content-side-pad" style={{ paddingTop: "25px" }}>
+          <AllGodsSkinsDisplay gods={allSkins} />
         </div>
       </div>
     </div>

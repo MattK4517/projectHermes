@@ -219,6 +219,7 @@ id_dict = {
     "Scylla": 1988,
     "Serqet": 2005,
     "Set": 3612,
+    "Shiva": 4039,
     "Skadi": 2107,
     "Sobek": 1747,
     "Sol": 2074,

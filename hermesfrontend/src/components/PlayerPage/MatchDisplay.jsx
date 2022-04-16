@@ -138,6 +138,7 @@ export default function MatchDisplay(props) {
               .toLowerCase()
               .includes(props.player.toLowerCase())
           ) {
+            console.log(player.godName);
             return (
               <div className="match-history">
                 <div className={`match-history-large ${player.Win_Status}`}>

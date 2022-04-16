@@ -1094,21 +1094,36 @@ def insert_games(rank, games, patch, queue_type, mode):
     print(f"{rank} done")
 
 
-def get_skin_stats(god, skin):
+def get_skin_stats(god, skin, role, patch, rank="All Ranks", queue_type="Ranked", mode="Conquest", matchup=None):
+    if skin == f"Standard {god}":
+        skin = god
     mydb = client["single_match_stats"]
     mycol = mydb[god]
     games = 0
     wins = 0
-    for x in mycol.find({"skin": skin, "patch": "9.3"}, {"_id": 0, "win_status": 1}):
+    myquery = get_query(rank, role, patch, queue_type, mode)
+    myquery = {**myquery, **{"skin": skin}}
+    if matchup != "None":
+        myquery = {**myquery, **{"enemy": matchup}}
+    print(myquery, mycol.count_documents(myquery))
+
+    kills = 0
+    deaths = 0
+    assists = 0
+    for x in mycol.find(myquery, {"_id": 0}):
+        kills += x["kills"]
+        deaths += x["deaths"]
+        assists += x["assists"]
         games += 1
         if x["win_status"] == "Winner":
             wins += 1
 
     if games == 0:
-        return {"games": 0, "wins": wins, "win_rate": 100}
+        return {"games": 0, "wins": wins, "win_rate": 100, "kills": kills, "deaths": deaths, "assists": assists}
     else:
-        return {"games": games, "wins": wins, "win_rate": round(wins/games*100, 2)}
+        return {"games": games, "wins": wins, "win_rate": round(wins/games*100, 2), "kills": kills, "deaths": deaths, "assists": assists}
 
 
 if __name__ == "__main__":
+
     pass

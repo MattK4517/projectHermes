@@ -325,29 +325,45 @@ def get_build_calc():
     return ret_data
 
 
-@app.route('/api/skins/<god>')
-def get_god_skins(god):
+@app.route('/api/skins/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>/<matchup>', methods=["GET", "POST"])
+@app.route('/api/skins/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>', methods=["GET", "POST"])
+def get_god_skins(god, role, rank, patch, queue_type, mode, matchup=None):
     ret_data = {"skins": []}
-    with open("cred.txt", "r") as creds:
-        lines = creds.readlines()
-        smite_api = SmiteAPI(devId=lines[0].strip(
-        ), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
+    mydb = client["Skins"]
+    mycol = mydb[god]
+    if mycol.count_documents({}) == 0:
+        with open("cred.txt", "r") as creds:
+            lines = creds.readlines()
+            smite_api = SmiteAPI(devId=lines[0].strip(
+            ), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
 
-        god_id = id_dict[god]
-        data = smite_api.getGodSkins(god_id)
+            god_id = id_dict[god]
+            data = smite_api.getGodSkins(god_id)
 
-        for skin in data:
-            win_stats = anlz.get_skin_stats(god, skin["skin_name"])
-            temp_dict = {
-                "godSkin_URL": skin["godSkin_URL"],
-                "obtainability": skin["obtainability"],
-                "price_favor": skin["price_favor"],
-                "price_gems": skin["price_gems"],
-                "skin_name": skin["skin_name"],
-                "games": win_stats["games"],
-                "wins": win_stats["wins"],
-                "winRate": win_stats["win_rate"],
-            }
-            print(skin["skin_name"], "done")
-            ret_data["skins"].append(temp_dict)
+            for skin in data:
+                win_stats = anlz.get_skin_stats(
+                    god, skin["skin_name"], role, patch, rank=rank, queue_type=queue_type, mode=mode, matchup=matchup)
+                temp_dict = {
+                    "godSkin_URL": skin["godSkin_URL"],
+                    "obtainability": skin["obtainability"],
+                    "price_favor": skin["price_favor"],
+                    "price_gems": skin["price_gems"],
+                    "skin_name": skin["skin_name"],
+                    "games": win_stats["games"],
+                    "wins": win_stats["wins"],
+                    "winRate": win_stats["win_rate"],
+                    "kills": win_stats["kills"],
+                    "deaths": win_stats["deaths"],
+                    "assists": win_stats["assists"],
+                }
+                ret_data["skins"].append(temp_dict)
+                mycol.insert_one({
+                    "godSkin_URL": skin["godSkin_URL"],
+                    "obtainability": skin["obtainability"],
+                    "price_favor": skin["price_favor"],
+                    "price_gems": skin["price_gems"],
+                    "skin_name": skin["skin_name"]})
+    else:
+        for x in mycol.find({}, {"_id": 0}):
+            ret_data["skins"].append(x)
     return ret_data
