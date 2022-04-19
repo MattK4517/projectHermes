@@ -1,0 +1,6 @@
+add god to godsdict in constants
+get god id from api
+add god to ids dict in data pull insert
+generate urls for abililtes
+get giant cardart for godpage add to linkdict in godpage
+add god / role in dict in drawer js
