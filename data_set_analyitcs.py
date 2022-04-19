@@ -16,13 +16,13 @@ import pandas as pd
 #                dict3[key] = [value , dict1[key]]
 #    return dict3
 
+
 def get_items_by_class(client, class_name, role):
     items = {f"slot{i+1}": {} for i in range(6)}
-    build = [""]
     for char in class_name:
         print(char)
         char_items = anlz.get_all_builds(
-            client, char, role, "9.3", queue_type="Casual")
+            client, char, role, "9.4", queue_type="Casual", mode="Assault")
         for slot in char_items:
             if "slot" in slot:
                 for item in char_items[slot]:
@@ -35,7 +35,7 @@ def get_items_by_class(client, class_name, role):
     with open("items.txt", "w") as f:
         for slot in items:
             for item in items[slot]:
-                if item in build:  # and items[slot][item]["games"] > 25:
+                if items[slot][item]["games"] > 25:
                     games = items[slot][item]["games"]
                     wins = items[slot][item]["wins"]
                     wr = round(wins/games * 100, 2)
@@ -43,7 +43,7 @@ def get_items_by_class(client, class_name, role):
                         f"{slot}, {item} , {wins} , {games} , {wr}% \n")
 
 
-get_items_by_class(client, ["Bellona"], "Solo")
+get_items_by_class(client, godsDict.keys(), "Solo")
 if __name__ == "__main__":
     pass
     # items = {item: {"games": 0, "wins": 0} for item in Tier_Three_items}

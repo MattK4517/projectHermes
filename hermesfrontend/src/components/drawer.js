@@ -147,6 +147,7 @@ export const godsDict = {
   "Xing Tian": "Support",
   "Yemoja": "Support",
   "Ymir": "Support",
+  "Yu Huang": "Mid",
   "Zeus": "Mid",
   "Zhong Kui": "Solo"
 }
