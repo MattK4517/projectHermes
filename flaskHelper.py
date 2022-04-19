@@ -78,7 +78,6 @@ def get_player_id(smite_api: SmiteAPI, playername):
     data = []
     portals = [1, 5, 9, 10, 22, 25, 28]
     for portal in portals:
-        print(portal)
         data = smite_api.getPlayerId(playername, portal)
         if data:
             return data[0]["player_id"]

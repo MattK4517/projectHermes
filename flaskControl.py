@@ -283,6 +283,11 @@ def get_god_matchups_by_player(playername, god, role, patch, queue_type, mode):
     return matchups
 
 
+@app.route('/api/playeraccounts/<playername>')
+def get_player_accounts(playername):
+    return anlzpy.query_player_accounts(playername)
+
+
 @app.route('/api/getdmgcalc/', methods=["GET", "POST"])
 def get_dmg_calc():
     ret_data = {}

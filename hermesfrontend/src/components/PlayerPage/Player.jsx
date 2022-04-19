@@ -129,43 +129,6 @@ export const linkDict = {
   "Zhong Kui": "https://i.imgur.com/aJBjZJE.jpg",
 };
 
-class NameForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { value: "" };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleChange(event) {
-    this.setState({ value: event.target.value });
-  }
-  handleSubmit(event) {
-    this.props.setPlayer(event.target[0].value);
-    event.preventDefault();
-  }
-
-  render() {
-    return (
-      <div className="content-section">
-        <div className="content-section_header">Search for a Player</div>
-        <form onSubmit={this.handleSubmit}>
-          {" "}
-          <label style={{ color: "white" }}>
-            Player Name:
-            <input
-              type="text"
-              value={this.state.value}
-              onChange={this.handleChange}
-            />{" "}
-          </label>
-          <input type="submit" value="Submit" />
-        </form>
-      </div>
-    );
-  }
-}
-
 const parsePlayer = (data, mode, inputType) => {
   console.log(data);
   let rank = 0;
