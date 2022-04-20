@@ -38,7 +38,6 @@ export { default as CarryScoreSection } from "./PlayerPage/CarryScoreSection";
 export { default as PlayerMatchups } from "./PlayerPage/PlayerMatchups";
 export { default as PlayerGodSection } from "./PlayerPage/PlayerGodSection";
 export { default as PlayerTabs } from "./PlayerPage/PlayerTabs";
-export { default as PlayerLookup } from "./PlayerPage/PlayerLookup";
 export { default as MultiKillDisplay } from "./PlayerPage/MultiKillDisplay";
 export { default as DamageCalculator } from "./DmgCalcPage/DamageCalculator";
 export { default as ItemBuffs } from "./DmgCalcPage/ItemBuffs";

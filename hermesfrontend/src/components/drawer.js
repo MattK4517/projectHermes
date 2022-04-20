@@ -32,7 +32,6 @@ import { DamageProvider } from "./DmgCalcPage/DamageContext";
 import { TierListProvider } from "./Tierlists/TierListContext";
 import FindAMatch from "./MatchPage/FindAMatch";
 import { MainProvider } from "./mainGodPage/MainContext";
-import PlayerLookup from "./PlayerPage/PlayerLookup";
 
 export const godsDict = {
   Achilles: "Solo",
@@ -184,12 +183,8 @@ let routes = [
   },
   {
     path: ["/player/:handle", "/player"],
-    component: <PlayerLookup />,
-    god: "",
-  },
-  {
-    path: ["/player/:handle/general"],
     component: <Player />,
+    god: "",
   },
   {
     path: ["/player/:handle/god-stats"],
