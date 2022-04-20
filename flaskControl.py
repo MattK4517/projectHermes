@@ -241,21 +241,22 @@ def get_player_god_info(playername, queue_type, mode, input_type="KBM"):
     if playername == "undefined":
         return {}
 
-    if fh.validate_gods(client, playername, queue_type, mode, input_type):
-        for x in mycol.find({"queue_type": queue_type, "mode": mode, "input_type": input_type, "NameTag": {"$regex": f"{playername}", "$options": "i"}}, {"_id": 0}):
-            data = x
-    else:
-        with open("cred.txt", "r") as creds:
-            lines = creds.readlines()
+    # if fh.validate_gods(client, playername, queue_type, mode, input_type):
+    #     for x in mycol.find({"queue_type": queue_type, "mode": mode, "input_type": input_type, "NameTag": {"$regex": f"{playername}", "$options": "i"}}, {"_id": 0}):
+    #         data = x
+    # else:
+    with open("cred.txt", "r") as creds:
+        lines = creds.readlines()
 
-            smite_api = SmiteAPI(devId=lines[0].strip(
-            ), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
-            player_id = fh.get_player_id(smite_api, playername)
-            queue_id = fh.get_queue_id(queue_type, mode, input_type)
-            data = anlzpy.create_player_god_dict(smite_api.getQueueStats(
-                player_id, queue_id), playername, queue_type, mode, input_type)
-            mycol.insert_one(data)
-            return json.loads(json_util.dumps({**data, **anlzpy.get_player_winrate(data)}))
+        smite_api = SmiteAPI(devId=lines[0].strip(
+        ), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
+        player_id = fh.get_player_id(smite_api, playername)
+        queue_id = fh.get_queue_id(queue_type, mode, input_type)
+        print(queue_id)
+        data = anlzpy.create_player_god_dict(smite_api.getQueueStats(
+            player_id, queue_id), playername, queue_type, mode, input_type)
+        mycol.insert_one(data)
+        return json.loads(json_util.dumps({**data, **anlzpy.get_player_winrate(data)}))
 
     if data == {}:
         return {}
@@ -281,6 +282,11 @@ def get_god_matchups_by_player(playername, god, role, patch, queue_type, mode):
         client, god, role, patch, queue_type, mode=mode,  player=playername)
     del matchups["wins"], matchups["games"], matchups["winRate"]
     return matchups
+
+
+@app.route('/api/playeraccounts/<playername>')
+def get_player_accounts(playername):
+    return anlzpy.query_player_accounts(playername)
 
 
 @app.route('/api/getdmgcalc/', methods=["GET", "POST"])

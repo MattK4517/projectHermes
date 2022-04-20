@@ -51,6 +51,15 @@ def get_queue_id(queue_type, mode, input_type):
         elif mode == "Joust":
             queue_id = 448
 
+        elif mode == "Arena":
+            queue_id = 435
+
+        elif mode == "Assault":
+            queue_id = 445
+
+        elif mode == "Slash":
+            queue_id = 10189
+
     return queue_id
 
 
@@ -78,7 +87,6 @@ def get_player_id(smite_api: SmiteAPI, playername):
     data = []
     portals = [1, 5, 9, 10, 22, 25, 28]
     for portal in portals:
-        print(portal)
         data = smite_api.getPlayerId(playername, portal)
         if data:
             return data[0]["player_id"]
