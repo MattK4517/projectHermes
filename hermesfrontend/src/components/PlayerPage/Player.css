@@ -663,9 +663,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 24px;
-  width: 60px;
-  height: 60px;
+  margin-right: 6px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   border: 1px solid #ff9b00;
   overflow: hidden;
