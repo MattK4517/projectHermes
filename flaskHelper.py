@@ -51,6 +51,15 @@ def get_queue_id(queue_type, mode, input_type):
         elif mode == "Joust":
             queue_id = 448
 
+        elif mode == "Arena":
+            queue_id = 435
+
+        elif mode == "Assault":
+            queue_id = 445
+
+        elif mode == "Slash":
+            queue_id = 10189
+
     return queue_id
 
 

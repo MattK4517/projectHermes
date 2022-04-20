@@ -26,7 +26,7 @@ def find_match_history(client, playername, queue_type, patch, mode):
 
     mydb = client[database]
     mycol = mydb[f"{patch} Matches"]
-    if mode == "Joust" or mode == "Duel":
+    if mode != "Conquest":
         mycol = mydb[f"{patch} {mode} Matches"]
 
     myquery = {
@@ -525,3 +525,4 @@ if __name__ == "__main__":
     import flaskHelper as fh
     from pyrez import SmiteAPI
     import pyrez
+    print(find_match_history(client, "AleksEnglish", "Casual", "9.4", "Conquest"))
