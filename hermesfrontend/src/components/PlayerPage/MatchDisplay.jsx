@@ -354,26 +354,20 @@ export default function MatchDisplay(props) {
       <div className="content-section content-section_no-padding match-block">
         <div className="content-section_header played-gods_header">
           <span>Recent Matches</span>
-          <div className="filter-manager">
-            <div className="filter-width-wrapper">
-              <div className="filter-manager_container">
-                <PlayerFilter
-                  patch={patch}
-                  mode={mode}
-                  queueType={queueType}
-                  inputType={inputType}
-                  patches={patches}
-                  modes={modes}
-                  queueTypes={queueTypes}
-                  inputTypes={inputTypes}
-                  setPatch={setPatch}
-                  setMode={setMode}
-                  setQueueType={setQueueType}
-                  setInputType={setInputType}
-                />
-              </div>
-            </div>
-          </div>
+          <PlayerFilter
+            patch={patch}
+            mode={mode}
+            queueType={queueType}
+            inputType={inputType}
+            patches={patches}
+            modes={modes}
+            queueTypes={queueTypes}
+            inputTypes={inputTypes}
+            setPatch={setPatch}
+            setMode={setMode}
+            setQueueType={setQueueType}
+            setInputType={setInputType}
+          />
         </div>
         <div className="empty-set">NO DATA TO DISPLAY</div>
       </div>

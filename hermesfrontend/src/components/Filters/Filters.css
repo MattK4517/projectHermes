@@ -1,0 +1,16 @@
+
+.filter_small {
+    display: none;
+}
+
+@media (max-width: 899px) {
+    .filter > * {
+        display: none;
+        height: auto;
+    }
+
+    .filter_small {
+        display: flex;
+        margin-bottom: 2.5rem;
+    }
+}
