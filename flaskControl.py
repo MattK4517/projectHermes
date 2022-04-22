@@ -117,8 +117,10 @@ def get_tier_list(rank, role, tableType, queue_type, patch, mode):
         myquery = {**myquery, **{"queue_type": queue_type, "mode": mode}}
 
         if mode == "Joust":
-            myquery["pickRate"] = {"$gte": .5}
+            myquery["pickRate"] = {"$gte": 1.5}
 
+        elif mode == "Duel":
+            myquery["pickRate"] = {"$gte": 1}
         # print(myquery, mycol.count_documents(myquery))
 
         my_filter = fh.get_filter(tableType)

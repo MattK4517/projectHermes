@@ -45,7 +45,7 @@ export default function TierListFilter(props) {
   return (
     <>
       <Filter
-        mode={"none"}
+        mode={mode}
         role={role}
         god={god}
         queueType={queueType}
@@ -53,7 +53,7 @@ export default function TierListFilter(props) {
         patch={patch}
         matchup={"none"}
         modeFilters={modes}
-        patchFilters={["9.3", "9.2", "9.1"]}
+        patchFilters={["9.4", "9.3", "9.2", "9.1"]}
         roleFilters={roles}
         rankFilters={ranks}
         queueFilters={queueTypes}
