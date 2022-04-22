@@ -1113,5 +1113,10 @@ def insert_games(rank, games, patch, queue_type, mode):
 
 
 if __name__ == "__main__":
-    print(get_all_builds(client, "Achilles", "Solo",
-          "9.4", queue_type="Casual", mode="Assault"))
+    mydb = client["single_match_stats"]
+    with open("idek.txt", "w") as f:
+        for god in godsDict:
+            stats = get_winrate(client, god, "Solo",
+                                "9.4", queue_type="Casual", mode="Assault")
+            f.write(
+                f"{god},{stats['win_rate']},{stats['wins']},{stats['games']}\n")

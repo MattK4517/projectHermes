@@ -11,6 +11,7 @@ import winRateColor from "../mainGodPage/WinRateColor";
 import { TierListContext } from "./TierListContext";
 import { linkDict } from "../PlayerPage/Player";
 import TierListFilter from "../Filters/TierListFilter";
+import { getImageUrl } from "../Filters/FilterForm";
 
 const Table = ({ columns, data }) => {
   const {
@@ -160,9 +161,30 @@ const Table = ({ columns, data }) => {
                                       }}
                                       {...cell.getCellProps()}
                                     >
-                                      <span>{row.original.role}</span>
+                                      <div style={{ position: "relative" }}>
+                                        <div className="god-icon">
+                                          <div
+                                            style={{
+                                              height: "30px",
+                                              width: "30px",
+                                            }}
+                                          >
+                                            <img
+                                              src={getImageUrl(
+                                                row.original.role
+                                              )}
+                                              alt={row.original.role}
+                                              style={{
+                                                height: "48px",
+                                                width: "48px",
+                                                transform: "scale(0.625)",
+                                                transformOrigin: "0px 0px 0px",
+                                              }}
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
                                     </div>
-
                                     <div
                                       className="rt-td god"
                                       style={{
