@@ -149,10 +149,11 @@ export const godsDict = {
   Vulcan: "Mid",
   Xbalanque: "Carry",
   "Xing Tian": "Support",
-  Yemoja: "Support",
-  Ymir: "Support",
-  Zeus: "Mid",
-  "Zhong Kui": "Solo",
+  "Yemoja": "Support",
+  "Ymir": "Support",
+  "Yu Huang": "Mid",
+  "Zeus": "Mid",
+  "Zhong Kui": "Solo"
 };
 
 let routes = [
