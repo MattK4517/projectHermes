@@ -189,7 +189,26 @@ const Table = ({ columns, data }) => {
                                       className="god-played gtm-tierlist-god"
                                       to={"/".concat(routegod)}
                                     >
-                                      <div style={{ position: "relative" }}>
+                                      <div
+                                        className="header_champion"
+                                        style={{ marginLeft: "0px" }}
+                                      >
+                                        <div className="champion-image-container">
+                                          <img
+                                            className="champion-image"
+                                            src={`https://webcdn.hirezstudios.com/smite/god-icons/${god
+                                              .replaceAll("'", "")
+                                              .replaceAll(" ", "-")
+                                              .toLowerCase()}.jpg`}
+                                          />
+                                        </div>
+                                        <div className="role-icon-container">
+                                          <img
+                                            src={getImageUrl(row.original.role)}
+                                          />
+                                        </div>
+                                      </div>
+                                      {/* <div style={{ position: "relative" }}>
                                         <div className="god-icon">
                                           <div
                                             style={{
@@ -207,9 +226,12 @@ const Table = ({ columns, data }) => {
                                                 transformOrigin: "0px 0px 0px",
                                               }}
                                             />
+                                                                                    <div className="role-icon-container">
+                                          <img src={getImageUrl(row.original.role)} />
+                                        </div>
                                           </div>
                                         </div>
-                                      </div>
+                                      </div> */}
                                       <strong className="god-name">
                                         {row.original.god}
                                       </strong>

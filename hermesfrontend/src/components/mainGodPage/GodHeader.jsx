@@ -1,6 +1,7 @@
 import React from "react";
 import { styled } from "@mui/material/styles";
 import { tierColor } from "./WinRateColor";
+import styles from "./godpage.module.css";
 
 const CustHeader = styled("div")(({ theme }) => ({
   [theme.breakpoints.down("md")]: {
@@ -24,9 +25,13 @@ function GodAbilities(props) {
         }
         return (
           <>
-            <div className="god-ability-wlabel" key={index}>
-              <img src={ability.url} alt={ability.name} />
-              <div className="ability-label bottom-center">{text}</div>
+            <div className={styles["god-ability-wlabel"]} key={index}>
+              <img
+                className={styles["god-abilities-img"]}
+                src={ability.url}
+                alt={ability.name}
+              />
+              <div className={styles["ability-label"]}>{text}</div>
             </div>
           </>
         );
@@ -48,24 +53,24 @@ const getMessage = (role, rank, mode, queueType) => {
 
 export default function GodHeader(props) {
   return (
-    <div className="god-page-header">
-      <div className="god-header-wrap">
+    <div className={styles["god-page-header"]}>
+      <div className={styles["god-header-wrap"]}>
         <div
-          className="god-image-container"
+          className={styles["god-image-container"]}
           style={{ borderColor: tierColor(props.tier) }}
         >
           <div
-            className="tier-heading"
+            className={styles["tier-heading"]}
             style={{ borderColor: tierColor(props.tier) }}
           >
             {props.tier}
           </div>
-          <div className="god-page-image-border">
-            <div className="notch-border"></div>
+          <div className={styles["god-page-image-border"]}>
+            <div className={styles["notch-border"]}></div>
             <img className="god-image" src={props.url} alt={props.god} />
           </div>
         </div>
-        <div className="god-header-info">
+        <div className={styles["god-header-info"]}>
           <h3 className="god-label">
             <span>
               <b style={{ color: "white" }}>{props.god}</b>
@@ -75,11 +80,11 @@ export default function GodHeader(props) {
               {getMessage(props.role, props.rank, props.mode, props.queueType)}
             </span>
           </h3>
-          <div className="god-header-row2">
-            <div className="god-abilities">
+          <div className={styles["god-header-row2"]}>
+            <div className={styles["god-abilities"]}>
               <GodAbilities abilities={props.abilities} />
             </div>
-            <CustHeader className="stat-explanation">
+            <CustHeader className={styles["stat-explanation"]}>
               The best win rate {props.god} build. The best and worst matchups
               for {props.god} and anything else you need, {props.rank} Smite
               Patch {props.patch}

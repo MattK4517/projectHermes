@@ -5,6 +5,7 @@ import winRateColor from "./WinRateColor";
 import { styled } from "@mui/system";
 import { HtmlTooltip, CreateItemToolTip } from "./GodPageHelpers";
 import { MainContext } from "./MainContext";
+import styles from "./godpage.module.css";
 
 function CreateMatchupsHelpTooltip(props) {
   return (
@@ -38,7 +39,7 @@ function GodCounterMatchup(props) {
       </div>
       <div className="god-name">{props.getMatchups.enemy}</div>
       <hr></hr>
-      <div className="matchup-stats">
+      <div className=" ">
         <div
           className="win-rate"
           style={{
@@ -78,34 +79,33 @@ const ResponsiveBuild = styled("div")(({ theme }) => ({
 
 function GodRankStats(props) {
   let banrateMessage;
-  console.log(props);
   if (props.queueType === "Ranked") {
     banrateMessage = props.banrate + "%";
   } else if (props.queueType === "Casual") {
     banrateMessage = "N/A";
   }
   return (
-    <div className="content-section god-rank-stats">
+    <div className={`content-section ${styles["god-rank-stats"]}`}>
       <div className="win-rate">
-        <div className="value" style={{ color: props.colorStyle }}>
+        <div className={styles["value"]} style={{ color: props.colorStyle }}>
           {props.winrate}%
         </div>
-        <div className="label">Win Rate</div>
+        <div className={styles["label"]}>Win Rate</div>
       </div>
 
       <div className="pick-rate">
-        <div className="value">{props.pickrate}%</div>
-        <div className="label">Pick Rate</div>
+        <div className={styles["value"]}>{props.pickrate}%</div>
+        <div className={styles["label"]}>Pick Rate</div>
       </div>
 
       <div className="ban-rate">
-        <div className="value">{banrateMessage}</div>
-        <div className="label">Ban Rate</div>
+        <div className={styles["value"]}>{banrateMessage}</div>
+        <div className={styles["label"]}>Ban Rate</div>
       </div>
 
       <div className="matches">
-        <div className="value">{props.games}</div>
-        <div className="label">Matches</div>
+        <div className={styles["value"]}>{props.games}</div>
+        <div className={styles["label"]}>Matches</div>
       </div>
     </div>
   );
