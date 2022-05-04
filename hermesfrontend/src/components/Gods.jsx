@@ -77,8 +77,18 @@ export function AllGodsSkinsDisplay(props) {
         return (
           <Link
             key={index}
-            to={"/"}
-            // to={"/".concat(god.name.replaceAll(" ", "_"))}
+            to={{
+              pathname: `/${props.godName.replace(" ", "_")}/skin-stats/${
+                god.skin_name
+              }`,
+              state: {
+                skinState: god.skin_name,
+                url: god.godSkin_URL,
+                priceFavor: god.price_favor,
+                priceGems: god.price_gems,
+                obtainability: god.obtainability,
+              },
+            }}
             className="god-link"
           >
             <div className={"god-name"} style={{ fontSize: "14px" }}>
@@ -95,18 +105,6 @@ export function AllGodsSkinsDisplay(props) {
                 alt={god.name || god.skin_name}
                 style={{ width: "100%", height: "100%" }}
               />
-              <figcaption>
-                <p>
-                  <div className="KDA">
-                    <span className="player-info-style">KDA: </span> {god.kills}
-                    <span style={{ color: "#5f5f7b" }}> / </span>
-                    <span style={{ color: "#ff4e50" }}>{god.deaths}</span>
-                    <span style={{ color: "#5f5f7b" }}> / </span>
-                    {god.assists}
-                    <br></br>
-                  </div>
-                </p>
-              </figcaption>
             </figure>
             <div className="god-name">{god.name || god.skin_name}</div>
           </Link>

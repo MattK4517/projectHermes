@@ -323,8 +323,8 @@ function Godpage(props) {
   }, []);
   const pagegod = props.god.replaceAll("_", " ");
 
-  var [url, seturl] = useState(0);
-  const [displaygod, setgod] = useState(0);
+  const [url, seturl] = useState("");
+  const [displaygod, setgod] = useState("");
   const [abilities, setabilities] = useState([]);
   const [tab, setTab] = useState("Build");
   const [tier, setTier] = useState("");

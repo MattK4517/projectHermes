@@ -5,7 +5,7 @@ import { PlayerContext } from "./PlayerContext";
 import { linkDict, setTopGod } from "./Player";
 import OverviewDisplay from "./OverviewDisplay";
 
-const calcKDA = (kills, deaths, assists) => {
+export const calcKDA = (kills, deaths, assists) => {
   return ((kills + assists / 2) / deaths).toFixed(2);
 };
 

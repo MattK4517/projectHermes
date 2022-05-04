@@ -268,6 +268,12 @@ single_combat_stats = ["kills", "deaths", "assists", "damage_player",
 single_objective_stats = ["gold", "damage_bot", "kills_bot", "camps_cleared",
                           "tower_kills", "phoenix_kills", "tower_damage", "objective_assists", "wards_placed"]
 
+single_stats = ["kills", "deaths", "assists", "damage_player",
+                "damage_taken", "damage_mitigated", "healing", 
+                "healing_self", "gold", "damage_bot", "kills_bot",
+                "camps_cleared", "tower_kills", "phoenix_kills", 
+                "tower_damage", "objective_assists", "wards_placed"]
+
 Tier_Three_items = [
     "Ninja Tabi", "Shoes of Focus", "Relic Dagger", "Shield of Regrowth", "Lotus Crown", "Heartward Amulet",
     "Sovereignty", "Jade Emperor\'s Crown", "Atalanta\'s Bow", "Shogun\'s Kusari", "Ancile", "Breastplate of Valor", "Divine Ruin",

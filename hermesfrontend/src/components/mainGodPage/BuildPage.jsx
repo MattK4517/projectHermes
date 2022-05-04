@@ -46,18 +46,16 @@ function GodCounterMatchup(props) {
             fontWeight: "725px",
           }}
         >
-          {props.getMatchups.winRate}%
+          {props.getMatchups.winRate || "0"}%
         </div>
-        <div className="times-played">
-          {props.getMatchups.timesPlayed} Matches
-        </div>
+        <div className="times-played">{props.getMatchups.games} Matches</div>
       </div>
     </Link>
   );
 }
 
-function GodCounterStats(props) {
-  if (props.matchups.length > 0) {
+export function GodCounterStats(props) {
+  if (props.matchups) {
     return (
       <>
         {props.matchups.map((matchup, index) => {
@@ -78,7 +76,6 @@ const ResponsiveBuild = styled("div")(({ theme }) => ({
 
 function GodRankStats(props) {
   let banrateMessage;
-  console.log(props);
   if (props.queueType === "Ranked") {
     banrateMessage = props.banrate + "%";
   } else if (props.queueType === "Casual") {
@@ -195,8 +192,6 @@ export default function BuildPage(props) {
     ranks,
     roles,
   ] = useContext(MainContext);
-
-  console.log(props);
 
   let { games, badmatchups, goodmatchups, items, colorStyle, relics } =
     useFetch(god, role, rank, patch, matchup, queueType, mode);

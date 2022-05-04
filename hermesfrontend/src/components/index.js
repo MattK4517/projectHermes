@@ -26,6 +26,7 @@ export { default as BasicTabs } from "./mainGodPage/PageTabs";
 export { default as BuildPath } from "./mainGodPage/BuildPath";
 export { default as Matchups } from "./mainGodPage/Matchups";
 export { default as SkinPage } from "./mainGodPage/Skins/SkinPage";
+export { default as SkinStatsPage } from "./mainGodPage/Skins/SkinStatPage"
 export { default as SearchBar } from "./SearchBarStuff/SearchBar";
 export { default as SearchBarGodPage } from "./SearchBarStuff/SearchBarGodPage";
 export { default as SearchBarGodsDisplay } from "./SearchBarStuff/SearchBarGodsDisplay";

@@ -67,7 +67,7 @@ export const getImageUrl = (rank, mode) => {
   } else if (rank === "Duel") {
     url = "https://i.imgur.com/KsoBoLs.png";
   }
-  return url;
+return url;
 };
 
 export default class FilterForm extends React.Component {

@@ -1,11 +1,20 @@
 import React, { useState, useEffect, useContext } from "react";
 import { MainContext } from "../MainContext";
 import { AllGodsSkinsDisplay } from "../../Gods";
+import { SkinBasic } from "./SkinInterface";
+import { compare } from "../../drawer"
+import FilterForm from "../../Filters/FilterForm";
+import { Button } from "@mui/material";
 
-export default function SkinPage(props) {
+
+const compareGames = (a: SkinBasic, b: SkinBasic) => {
+  return a.games - b.games;
+};
+
+export default function SkinPage() {
   const [
     god,
-    setGod,
+    setGod, 
     role,
     setRole,
     rank,
@@ -23,9 +32,10 @@ export default function SkinPage(props) {
     modes,
     ranks,
     roles,
+    skin,
+    setSkin,
   ] = useContext(MainContext);
-  const [allSkins, setAllSkins] = useState([]);
-
+  const [allSkins, setAllSkins] = useState<SkinBasic[]>([]);
   useEffect(() => {
     fetch(
       "/api/skins/".concat(
@@ -44,17 +54,28 @@ export default function SkinPage(props) {
         matchup
       )
     ).then((res) =>
-      res.json().then((data) => {
-        console.log(data);
+      res.json().then((data: {"skins": SkinBasic[]}) => {
         setAllSkins([...data["skins"]]);
       })
     );
   }, [mode, role, rank, patch, queueType, matchup]);
+
+
+  console.log(allSkins)
   return (
     <div className="content">
       <div className="skin-page">
         <div className="skins content-side-pad" style={{ paddingTop: "25px" }}>
-          <AllGodsSkinsDisplay gods={allSkins} />
+
+          <Button
+          onClick={() => setAllSkins(allSkins => {
+            let sortMe = [...allSkins];
+            sortMe.sort(compare)
+            return sortMe
+          })}>
+            
+            WINRATE</Button>
+          <AllGodsSkinsDisplay gods={allSkins} godName={god} />
         </div>
       </div>
     </div>

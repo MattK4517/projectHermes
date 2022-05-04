@@ -27,6 +27,13 @@ import { DamageProvider } from './DmgCalcPage/DamageContext';
 import { TierListProvider } from './Tierlists/TierListContext';
 import FindAMatch from './MatchPage/FindAMatch';
 import { MainProvider } from './mainGodPage/MainContext';
+import SkinStatPage from './mainGodPage/Skins/SkinStatPage';
+
+
+
+export const compare = (a, b) => {
+  return a.winRate - b.winRate;
+};
 
 
 export const godsDict = {
@@ -209,6 +216,11 @@ Object.keys(godsDict).forEach((god) => {
   routes = [...routes, {
     path: "/".concat(god).replaceAll(" ", "_"),
     component: <Godpage god={god} role={godsDict[god]} />,
+    "god": god,
+  },
+  {
+    path: "/".concat(god, "/skin-stats/:handle").replaceAll(" ", "_"),
+    component: <SkinStatPage god={god} />,
     "god": god,
   },
   ]

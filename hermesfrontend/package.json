@@ -11,6 +11,10 @@
     "@mui/icons-material": "^5.4.4",
     "@mui/material": "^5.4.4",
     "@reduxjs/toolkit": "^1.8.0",
+    "@types/jest": "^27.4.1",
+    "@types/node": "^17.0.29",
+    "@types/react": "^18.0.8",
+    "@types/react-dom": "^18.0.0",
     "cdbreact": "^1.4.0",
     "ensure-array": "^1.0.0",
     "material-ui": "^0.20.2",
@@ -33,6 +37,7 @@
     "react-typekit": "^1.1.4",
     "rss-parser": "^3.12.0",
     "styled-components": "^5.3.3",
+    "typescript": "^4.6.3",
     "web-vitals": "^1.1.2"
   },
   "scripts": {
@@ -58,5 +63,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/react-router-dom": "^5.3.3"
   }
 }
