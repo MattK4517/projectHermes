@@ -87,6 +87,7 @@ export function AllGodsSkinsDisplay(props) {
                 priceFavor: god.price_favor,
                 priceGems: god.price_gems,
                 obtainability: god.obtainability,
+                games: props.games,
               },
             }}
             className="god-link"

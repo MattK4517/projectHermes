@@ -2,10 +2,9 @@ import React, { useState, useEffect, useContext } from "react";
 import { MainContext } from "../MainContext";
 import { AllGodsSkinsDisplay } from "../../Gods";
 import { SkinBasic } from "./SkinInterface";
-import { compare } from "../../drawer"
+import { compare } from "../../drawer";
 import FilterForm from "../../Filters/FilterForm";
 import { Button } from "@mui/material";
-
 
 const compareGames = (a: SkinBasic, b: SkinBasic) => {
   return a.games - b.games;
@@ -14,7 +13,7 @@ const compareGames = (a: SkinBasic, b: SkinBasic) => {
 export default function SkinPage() {
   const [
     god,
-    setGod, 
+    setGod,
     role,
     setRole,
     rank,
@@ -54,28 +53,39 @@ export default function SkinPage() {
         matchup
       )
     ).then((res) =>
-      res.json().then((data: {"skins": SkinBasic[]}) => {
+      res.json().then((data: { skins: SkinBasic[] }) => {
         setAllSkins([...data["skins"]]);
       })
     );
   }, [mode, role, rank, patch, queueType, matchup]);
 
-
-  console.log(allSkins)
+  const calcGames = (allSkins: SkinBasic[]) => {
+    let games = 0;
+    allSkins.map((skin) => {
+      games += skin.games;
+    });
+    return games;
+  };
   return (
     <div className="content">
       <div className="skin-page">
         <div className="skins content-side-pad" style={{ paddingTop: "25px" }}>
-
           <Button
-          onClick={() => setAllSkins(allSkins => {
-            let sortMe = [...allSkins];
-            sortMe.sort(compare)
-            return sortMe
-          })}>
-            
-            WINRATE</Button>
-          <AllGodsSkinsDisplay gods={allSkins} godName={god} />
+            onClick={() =>
+              setAllSkins((allSkins) => {
+                let sortMe = [...allSkins];
+                sortMe.sort(compare);
+                return sortMe;
+              })
+            }
+          >
+            WINRATE
+          </Button>
+          <AllGodsSkinsDisplay
+            gods={allSkins}
+            godName={god}
+            games={calcGames(allSkins)}
+          />
         </div>
       </div>
     </div>

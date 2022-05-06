@@ -5,6 +5,7 @@ import winRateColor from "./WinRateColor";
 import { styled } from "@mui/system";
 import { HtmlTooltip, CreateItemToolTip } from "./GodPageHelpers";
 import { MainContext } from "./MainContext";
+import { godsDict } from "../drawer";
 
 function CreateMatchupsHelpTooltip(props) {
   return (
@@ -29,10 +30,14 @@ function GodCounterMatchup(props) {
       <div className="god-icon">
         <img
           className="god-icon-style"
-          src={`https://webcdn.hirezstudios.com/smite/god-icons/${props.getMatchups.enemy
-            .replaceAll("'", "")
-            .replaceAll(" ", "-")
-            .toLowerCase()}.jpg`}
+          src={
+            godsDict[props.getMatchups.enemy] !== undefined
+              ? `https://webcdn.hirezstudios.com/smite/god-icons/${props.getMatchups.enemy
+                  .replaceAll("'", "")
+                  .replaceAll(" ", "-")
+                  .toLowerCase()}.jpg`
+              : "https://i.imgur.com/KgTaobI.png"
+          }
           alt={props.getMatchups.enemy}
         />
       </div>

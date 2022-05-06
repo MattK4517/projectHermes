@@ -1,6 +1,6 @@
 
 
-export interface CombatStats {
+export interface GameStats {
     assists: number,
     camps_cleared: number,
     damage_bot: number,
@@ -8,7 +8,6 @@ export interface CombatStats {
     damage_player: number,
     damage_taken: number,
     deaths: number,
-    games: number,
     gold: number,
     healing: number,
     healing_self: number,
@@ -19,6 +18,7 @@ export interface CombatStats {
     tower_damage: number,
     tower_kills: number,
     wards_placed: number,
-    win_rate: number,
-    wins: number
+    winRate?: number,
+    wins?: number,
+    games?: number
 }

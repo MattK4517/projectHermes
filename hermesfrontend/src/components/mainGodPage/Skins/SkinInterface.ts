@@ -1,4 +1,4 @@
-import { CombatStats } from "../../GeneralInterface";
+import { GameStats } from "../../GeneralInterface";
 
 export interface SkinBasic {
     games: number,
@@ -11,9 +11,13 @@ export interface SkinBasic {
     wins: number,
 }
 
-export interface SkinStats {
-    players: CombatStats[],
+export interface SkinStats extends GameStats{
+    players?: GameStats[],
     games: number,
-    win_rate: number,
+    winRate: number,
     wins: number,
+}
+
+export interface DataRow {
+    
 }

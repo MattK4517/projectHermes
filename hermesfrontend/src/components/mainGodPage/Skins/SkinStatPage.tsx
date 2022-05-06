@@ -1,11 +1,55 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, FC } from "react";
 import { MainContext } from "../MainContext";
 import { SkinStats } from "./SkinInterface";
 import { useLocation } from "react-router-dom";
-import { CombatStats } from "../../GeneralInterface";
+import { GameStats } from "../../GeneralInterface";
 import Filter from "../../Filters/Filter";
 import { GodCounterStats } from "../BuildPage.jsx";
 import { calcKDA } from "../../PlayerPage/GodDisplay";
+
+const formatStat = (stat: string) => {
+  stat = stat.charAt(0).toUpperCase() + stat.slice(1);
+  let underScoreIndex: number = stat.indexOf("_");
+  if (underScoreIndex > -1) {
+    stat =
+      stat.slice(0, underScoreIndex) +
+      " " +
+      stat.charAt(underScoreIndex + 1).toUpperCase() +
+      stat.slice(underScoreIndex + 2);
+  }
+  stat = stat.replace("Bot", "Minion");
+  return stat;
+};
+
+const DataRow = ({
+  props,
+}: {
+  props: Partial<SkinStats> & { games: number };
+}) => {
+  return (
+    <div className="player-damage-info">
+      {Object.entries(props).map((stat: any) => {
+        if (stat[0] !== "games") {
+          return (
+            <>
+              <span className="player-info-style">{formatStat(stat[0])}:</span>{" "}
+              {stat[1].toLocaleString(undefined, { maximumFractionDigits: 0 })}
+              <span className="helper-text">
+                (avg:{" "}
+                {(stat[1] / props.games).toLocaleString(undefined, {
+                  maximumFractionDigits: 2,
+                  // maximumSignificantDigits: 2,
+                })}
+                )
+              </span>
+              <br></br>
+            </>
+          );
+        }
+      })}
+    </div>
+  );
+};
 
 export default function SkinStatPage(props: any) {
   const [
@@ -33,11 +77,32 @@ export default function SkinStatPage(props: any) {
   ] = useContext(MainContext);
 
   const location = useLocation<any>();
-  const { skinState, url, priceFavor, priceGems, obtainability } =
+  const { skinState, url, priceFavor, priceGems, obtainability, games } =
     location.state;
   setSkin(skinState);
 
-  const [data, setData] = useState<any>({});
+  const [data, setData] = useState<SkinStats>({
+    assists: 0,
+    camps_cleared: 0,
+    damage_bot: 0,
+    damage_mitigated: 0,
+    damage_player: 0,
+    damage_taken: 0,
+    deaths: 0,
+    games: 0,
+    gold: 0,
+    healing: 0,
+    healing_self: 0,
+    kills: 0,
+    kills_bot: 0,
+    objective_assists: 0,
+    phoenix_kills: 0,
+    tower_damage: 0,
+    tower_kills: 0,
+    wards_placed: 0,
+    winRate: 0,
+    wins: 0,
+  });
   useEffect(() => {
     fetch(
       "/api/skinstats/".concat(
@@ -58,7 +123,6 @@ export default function SkinStatPage(props: any) {
     ).then((res) =>
       res.json().then((data: SkinStats) => {
         setData(data);
-        console.log(data);
       })
     );
   }, [mode, role, rank, patch, queueType, matchup, skin]);
@@ -99,15 +163,17 @@ export default function SkinStatPage(props: any) {
                     </figcaption>
                   </figure>
                   <div>
-                    {data.wins}{" "}
+                    {((data.games / games) * 100).toFixed(2)}{" "}
                     <span className="helper-text" style={{ marginLeft: "0px" }}>
-                      wins
+                      Pick Rate
                     </span>{" "}
-                    | {data.games}{" "}
                     <span className="helper-text" style={{ marginLeft: "0px" }}>
-                      games
+                      |
                     </span>{" "}
-                    | {data.winRate}%
+                    {data.winRate}%{" "}
+                    <span className="helper-text" style={{ marginLeft: "0px" }}>
+                      Win Rate
+                    </span>{" "}
                   </div>
                 </div>
               </div>
@@ -128,148 +194,53 @@ export default function SkinStatPage(props: any) {
                           {calcKDA(data.kills, data.deaths, data.assists)} KDA
                         </span>
                         <br></br>
-                      </div>
-                      <div className="player-damage-info">
-                        <span className="player-info-style">
-                          Total Healing:
-                        </span>{" "}
-                        {data.healing ? data.healing.toLocaleString() : 0}
-                        <span className="helper-text">
-                          (avg: {(data.healing / data.games).toFixed()})
-                        </span>
-                        <br></br>
-                        <span className="player-info-style">
-                          Total Self Healing:
-                        </span>{" "}
-                        {data.healing_self
-                          ? data.healing_self.toLocaleString()
-                          : 0}
-                        <span className="helper-text">
-                          (avg: {(data.healing_self / data.games).toFixed()})
-                        </span>
-                        <br></br>
+                        <DataRow
+                          props={{
+                            healing: data.healing,
+                            healing_self: data.healing_self,
+                            games: data.games,
+                          }}
+                        />
                       </div>
                     </div>
                     <div className="column">
                       <div className="player-damage-info">
-                        <span className="player-info-style">Total Damage:</span>{" "}
-                        {data.damage_player
-                          ? data.damage_player.toLocaleString()
-                          : 0}
-                        <span className="helper-text">
-                          (avg: {(data.damage_player / data.games).toFixed()})
-                        </span>
-                        <br></br>
-                        <span className="player-info-style">
-                          Total Damage Taken:
-                        </span>{" "}
-                        {data.damage_taken
-                          ? data.damage_taken.toLocaleString()
-                          : 0}
-                        <span className="helper-text">
-                          (avg: {(data.damage_taken / data.games).toFixed()})
-                        </span>
-                        <br></br>
-                        <span className="player-info-style">
-                          Total Damage Mitigated:
-                        </span>{" "}
-                        {data.damage_mitigated
-                          ? data.damage_mitigated.toLocaleString()
-                          : 0}
-                        <span className="helper-text">
-                          (avg: {(data.damage_mitigated / data.games).toFixed()}
-                          )
-                        </span>
+                        <DataRow
+                          props={{
+                            damage_player: data.damage_player,
+                            damage_taken: data.damage_taken,
+                            damage_mitigated: data.damage_mitigated,
+                            games: data.games,
+                          }}
+                        />
                       </div>
                     </div>
                   </div>
-                  {/* <span>{data.healing.toLocaleString()}</span> */}
                 </div>
-
-                {/* "tower_kills", "phoenix_kills", "tower_damage", "objective_assists", "wards_placed" */}
                 <div className="skinstats_objective">
                   <div className="content-section_header">Objective Stats</div>
                   <div className="column_wrapper">
                     <div className="column">
-                      <div className="player-damage-info">
-                        <span className="player-info-style">Total Gold:</span>{" "}
-                        {data.gold ? data.gold.toLocaleString() : 0}
-                        <span className="helper-text">
-                          (avg: {(data.gold / data.games).toFixed()})
-                        </span>
-                        <br></br>
-                        <span className="player-info-style">
-                          Total Minion Damage:
-                        </span>{" "}
-                        {data.damage_bot ? data.damage_bot.toLocaleString() : 0}
-                        <span className="helper-text">
-                          (avg: {(data.damage_bot / data.games).toFixed()})
-                        </span>
-                        <br></br>
-                        <span className="player-info-style">
-                          Total Minion Kills:
-                        </span>{" "}
-                        {data.kills_bot ? data.kills_bot.toLocaleString() : 0}
-                        <span className="helper-text">
-                          (avg: {(data.kills_bot / data.games).toFixed()})
-                        </span>
-                        <br></br>
-                        <span className="player-info-style">
-                          Total Wards Placed:
-                        </span>{" "}
-                        {data.wards_placed
-                          ? data.wards_placed.toLocaleString()
-                          : 0}
-                        <span className="helper-text">
-                          (avg: {(data.wards_placed / data.games).toFixed()})
-                        </span>
-                        <br></br>
-                      </div>
+                      <DataRow
+                        props={{
+                          gold: data.gold,
+                          damage_bot: data.damage_bot,
+                          kills_bot: data.kills_bot,
+                          wards_placed: data.wards_placed,
+                          games: data.games,
+                        }}
+                      />
                     </div>
                     <div className="column">
-                      <div className="player-damage-info">
-                        <span className="player-info-style">
-                          Total Tower Kills:
-                        </span>{" "}
-                        {data.tower_kills
-                          ? data.tower_kills.toLocaleString()
-                          : 0}
-                        <span className="helper-text">
-                          (avg: {(data.tower_kills / data.games).toFixed()})
-                        </span>
-                        <br></br>
-                        <span className="player-info-style">
-                          Total Phoenix Kills:
-                        </span>{" "}
-                        {data.phoenix_kills
-                          ? data.phoenix_kills.toLocaleString()
-                          : 0}
-                        <span className="helper-text">
-                          (avg: {(data.phoenix_kills / data.games).toFixed()})
-                        </span>
-                        <br></br>
-                        <span className="player-info-style">
-                          Total Tower Damage:
-                        </span>{" "}
-                        {data.tower_damage
-                          ? data.tower_damage.toLocaleString()
-                          : 0}
-                        <span className="helper-text">
-                          (avg: {(data.tower_damage / data.games).toFixed()})
-                        </span>
-                        <br></br>
-                        <span className="player-info-style">
-                          Total Objective Assists:
-                        </span>{" "}
-                        {data.objective_assists
-                          ? data.objective_assists.toLocaleString()
-                          : 0}
-                        <span className="helper-text">
-                          (avg:{" "}
-                          {(data.objective_assists / data.games).toFixed()})
-                        </span>
-                        <br></br>
-                      </div>
+                      <DataRow
+                        props={{
+                          tower_kills: data.tower_kills,
+                          phoenix_kills: data.phoenix_kills,
+                          tower_damage: data.tower_damage,
+                          objective_assists: data.objective_assists,
+                          games: data.games,
+                        }}
+                      />
                     </div>
                   </div>
                 </div>
