@@ -663,7 +663,6 @@ def get_carry_score(match):
                 "totalDamage": 1,
             }
         },
-            },
         "levelDiff": {
             "Winner": {
             },

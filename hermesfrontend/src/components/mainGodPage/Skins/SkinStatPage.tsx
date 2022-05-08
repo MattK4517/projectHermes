@@ -128,7 +128,6 @@ export default function SkinStatPage(props: any) {
     );
   }, [mode, role, rank, patch, queueType, matchup, skin]);
 
-  console.log(props);
   return (
     <div className="Godpage">
       <div className="container">
@@ -184,7 +183,7 @@ export default function SkinStatPage(props: any) {
                     </figcaption>
                   </figure>
                   <div>
-                    {((data.games / games) * 100).toFixed(2)}{" "}
+                    {((data.games / games) * 100).toFixed(2)}%{" "}
                     <span className="helper-text" style={{ marginLeft: "0px" }}>
                       Pick Rate
                     </span>{" "}

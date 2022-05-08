@@ -324,12 +324,12 @@ function Godpage(props) {
   ] = useContext(MainContext);
 
   const location = useLocation();
-  let { tabState } = location.state;
+  let { tabState } = location?.state ? location.state : "Build";
 
   useEffect(() => {
     setRole(props.role.replaceAll("_", " "));
     setGod(props.god.replaceAll("_", " "));
-    setTab(tabState ? tabState : "Build");
+    setTab(tabState);
   }, []);
   const pagegod = props.god.replaceAll("_", " ");
 

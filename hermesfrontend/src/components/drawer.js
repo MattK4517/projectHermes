@@ -211,11 +211,6 @@ let routes = [
     component: <FindAMatch />,
     god: "",
   },
-  {
-    path: "/".concat(god, "/skin-stats/:handle").replaceAll(" ", "_"),
-    component: <SkinStatPage god={god} />,
-    god: god,
-  },
 ];
 Object.keys(godsDict).forEach((god) => {
   routes = [
@@ -223,6 +218,11 @@ Object.keys(godsDict).forEach((god) => {
     {
       path: "/".concat(god).replaceAll(" ", "_"),
       component: <Godpage god={god} role={godsDict[god]} />,
+      god: god,
+    },
+    {
+      path: "/".concat(god, "/skin-stats/:handle").replaceAll(" ", "_"),
+      component: <SkinStatPage god={god} />,
       god: god,
     },
   ];
