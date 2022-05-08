@@ -93,7 +93,20 @@ export function AllGodsSkinsDisplay(props) {
             className="god-link"
           >
             <div className={"god-name"} style={{ fontSize: "14px" }}>
-              {god.wins} | {god.games} | {god.winRate}%
+              {god.games}{" "}
+              <span
+                className="helper-text"
+                style={{ marginLeft: "0px", fontSize: "11px" }}
+              >
+                Games
+              </span>{" "}
+              | {god.winRate}%{" "}
+              <span
+                className="helper-text"
+                style={{ marginLeft: "0px", fontSize: "11px" }}
+              >
+                Win Rate
+              </span>
             </div>
             <figure className="snip0015">
               <img

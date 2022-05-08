@@ -129,11 +129,11 @@ export default function SkinStatPage(props: any) {
   }, [mode, role, rank, patch, queueType, matchup, skin]);
 
   return (
-    <div className="Godpage">
+    <div className="Godpage" style={{ paddingTop: "0px" }}>
       <div className="container">
         <div className="god-container skinstats_page">
           <div
-            className="row align-items-center my-5"
+            className="row align-items-center"
             style={{ justifyContent: "center", flexDirection: "column" }}
           >
             <h1 className="font-weight-light">
