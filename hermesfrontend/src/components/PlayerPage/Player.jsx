@@ -102,6 +102,7 @@ export const linkDict = {
   Scylla: "https://i.imgur.com/7NPNf46.jpg",
   Serqet: "https://i.imgur.com/9odFATg.jpg",
   Set: "https://i.imgur.com/7hjbLls.jpg",
+  Shiva: "https://i.imgur.com/wH3klnZ.jpg",
   Skadi: "https://i.imgur.com/097p6i9.jpg",
   Sobek: "https://i.imgur.com/LIU5dYN.png",
   Sol: "https://i.imgur.com/H6PFyOw.jpg",
@@ -204,42 +205,44 @@ export default function Player(props) {
   const [seasonGames, setSeasonGames] = useState(0);
   const [godList, setGodList] = useState([]);
   useEffect(() => {
-    fetch(
-      "/api/getplayergods/".concat(
-        player,
-        "/",
-        queueType,
-        "/",
-        mode,
-        "/",
-        inputType
-      )
-    ).then((res) =>
-      res.json().then((data) => {
-        setGames(data.games);
-        setWinRate(data.winRate);
-        delete data.games;
-        delete data.winRate;
-        let newData = Object.values(data).sort(compare);
+    if (queueTypes.indexOf(player) === -1) {
+      fetch(
+        "/api/getplayergods/".concat(
+          player,
+          "/",
+          queueType,
+          "/",
+          mode,
+          "/",
+          inputType
+        )
+      ).then((res) =>
+        res.json().then((data) => {
+          setGames(data.games);
+          setWinRate(data.winRate);
+          delete data.games;
+          delete data.winRate;
+          let newData = Object.values(data).sort(compare);
 
-        setGodList([]);
-        Object.keys(newData).map((god, index) => {
-          if (index === 0) {
-            setTopLink(setTopGod(newData[index]["god"]));
-          }
-          if (index < 10) {
-            if (Object.keys(newData[god]).indexOf("god") !== -1) {
-              setGodList((godList) => [
-                ...godList,
-                {
-                  ...newData[god],
-                },
-              ]);
+          setGodList([]);
+          Object.keys(newData).map((god, index) => {
+            if (index === 0) {
+              setTopLink(setTopGod(newData[index]["god"]));
             }
-          }
-        });
-      })
-    );
+            if (index < 10) {
+              if (Object.keys(newData[god]).indexOf("god") !== -1) {
+                setGodList((godList) => [
+                  ...godList,
+                  {
+                    ...newData[god],
+                  },
+                ]);
+              }
+            }
+          });
+        })
+      );
+    }
   }, [player, mode, queueType, inputType]);
   const [matchList, setMatchList] = useState([]);
 

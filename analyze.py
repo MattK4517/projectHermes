@@ -9,7 +9,7 @@ import pymongo
 from collections import OrderedDict
 from operator import getitem
 from math import sqrt
-from constants import godsDict, slots, Tier_Three_items, Starter_items, roles, single_combat_stats, single_objective_stats, godsDict2, ranks
+from constants import godsDict, slots, Tier_Three_items, Starter_items, roles, single_combat_stats, single_objective_stats, godsDict2, ranks, single_stats
 import analyze_players as anlzpy
 
 import pyrez
@@ -395,16 +395,16 @@ def get_worst_matchups(client, god, role, patch, queue_type="Ranked", rank="All 
                     if matchup["enemy"] not in matchup_dict:
                         if flag:
                             matchup_dict[matchup["enemy"]] = {
-                                "enemy": matchup["enemy"], "timesPlayed": 1, "wins": 1}
+                                "enemy": matchup["enemy"], "games": 1, "wins": 1}
                         else:
                             matchup_dict[matchup["enemy"]] = {
-                                "enemy": matchup["enemy"], "timesPlayed": 1, "wins": 0}
+                                "enemy": matchup["enemy"], "games": 1, "wins": 0}
                     else:
                         if flag:
-                            matchup_dict[matchup["enemy"]]["timesPlayed"] += 1
+                            matchup_dict[matchup["enemy"]]["games"] += 1
                             matchup_dict[matchup["enemy"]]["wins"] += 1
                         else:
-                            matchup_dict[matchup["enemy"]]["timesPlayed"] += 1
+                            matchup_dict[matchup["enemy"]]["games"] += 1
         else:
             games += 1
             flag = False
@@ -416,16 +416,16 @@ def get_worst_matchups(client, god, role, patch, queue_type="Ranked", rank="All 
                     if matchup["enemy"] not in matchup_dict:
                         if flag:
                             matchup_dict[matchup["enemy"]] = {
-                                "enemy": matchup["enemy"], "timesPlayed": 1, "wins": 1}
+                                "enemy": matchup["enemy"], "games": 1, "wins": 1}
                         else:
                             matchup_dict[matchup["enemy"]] = {
-                                "enemy": matchup["enemy"], "timesPlayed": 1, "wins": 0}
+                                "enemy": matchup["enemy"], "games": 1, "wins": 0}
                     else:
                         if flag:
-                            matchup_dict[matchup["enemy"]]["timesPlayed"] += 1
+                            matchup_dict[matchup["enemy"]]["games"] += 1
                             matchup_dict[matchup["enemy"]]["wins"] += 1
                         else:
-                            matchup_dict[matchup["enemy"]]["timesPlayed"] += 1
+                            matchup_dict[matchup["enemy"]]["games"] += 1
 
             elif mode not in ["Conquest", "Duel"]:
                 for enemy in matchup["enemies"]:
@@ -436,20 +436,20 @@ def get_worst_matchups(client, god, role, patch, queue_type="Ranked", rank="All 
                         if enemy not in matchup_dict:
                             if flag:
                                 matchup_dict[enemy] = {
-                                    "enemy": enemy, "timesPlayed": 1, "wins": 1}
+                                    "enemy": enemy, "games": 1, "wins": 1}
                             else:
                                 matchup_dict[enemy] = {
-                                    "enemy": enemy, "timesPlayed": 1, "wins": 0}
+                                    "enemy": enemy, "games": 1, "wins": 0}
                         else:
                             if flag:
-                                matchup_dict[enemy]["timesPlayed"] += 1
+                                matchup_dict[enemy]["games"] += 1
                                 matchup_dict[enemy]["wins"] += 1
                             else:
-                                matchup_dict[enemy]["timesPlayed"] += 1
+                                matchup_dict[enemy]["games"] += 1
 
     for matchup in matchup_dict:
         matchup_dict[matchup]["winRate"] = round(
-            matchup_dict[matchup]["wins"]/matchup_dict[matchup]["timesPlayed"]*100, 2)
+            matchup_dict[matchup]["wins"]/matchup_dict[matchup]["games"]*100, 2)
 
     test_sort = OrderedDict(sorted(matchup_dict.items(),
                                    key=lambda x: getitem(x[1], "winRate")))
@@ -458,7 +458,7 @@ def get_worst_matchups(client, god, role, patch, queue_type="Ranked", rank="All 
 
     to_remove = []
     for key in test_sort:
-        if test_sort[key]["timesPlayed"] < min_games:
+        if test_sort[key]["games"] < min_games:
             to_remove.append(key)
 
     for god in to_remove:
@@ -662,13 +662,14 @@ def get_carry_score(match):
             "Loser": {
                 "totalDamage": 1,
             }
+        },
             },
         "levelDiff": {
             "Winner": {
             },
             "Loser": {
             }
-            },
+        },
         "killPart": {
                 "Winner": {
                     "totalKills": 0,
@@ -676,7 +677,7 @@ def get_carry_score(match):
                 "Loser": {
                     "totalKills": 0,
                 }
-            }
+        }
     }
     match_roles = []
 
@@ -885,7 +886,7 @@ def get_matchups_stats(client, god: str, role: str, patch, queue_type="Ranked", 
                 "avg_dmg_diff": {"$avg": "$damage_player"},
                 "avg_kill_diff": {"$avg": "$kills"},
                 "avg_gold_diff": {"$avg": "$gold"},
-                "timesPlayed": {"$sum": 1},
+                "games": {"$sum": 1},
             }
         }
     ]):
@@ -897,13 +898,13 @@ def get_matchups_stats(client, god: str, role: str, patch, queue_type="Ranked", 
             wins = mycol.count_documents(
                 {"enemy": x["_id"], "win_status": "Winner", "patch": patch, "rank": rank, "role": role, "queue_type": f"{queue_type}"})
 
-        if x["timesPlayed"] >= .01 * total_games:
+        if x["games"] >= .01 * total_games:
             avg_dmg_dict[x["_id"]] = {
                 "dmg": x["avg_dmg_diff"],
                 "kills": x["avg_kill_diff"],
                 "gold": x["avg_gold_diff"],
-                "wr": round(wins/x["timesPlayed"]*100, 2),
-                "games": x["timesPlayed"],
+                "wr": round(wins/x["games"]*100, 2),
+                "games": x["games"],
             }
 
     myquery = {**myquery, **{"enemy": god}}
@@ -1112,11 +1113,178 @@ def insert_games(rank, games, patch, queue_type, mode):
     print(f"{rank} done")
 
 
-if __name__ == "__main__":
+def get_skin_stats(god, role, patch, rank="All Ranks", queue_type="Ranked", mode="Conquest", matchup=None):
     mydb = client["single_match_stats"]
-    with open("idek.txt", "w") as f:
-        for god in godsDict:
-            stats = get_winrate(client, god, "Solo",
-                                "9.4", queue_type="Casual", mode="Assault")
-            f.write(
-                f"{god},{stats['win_rate']},{stats['wins']},{stats['games']}\n")
+    mycol = mydb[god]
+    games = 0
+    wins = 0
+    myquery = get_query(rank, role, patch, queue_type, mode)
+    if matchup != "None" and matchup != None:
+        myquery = {**myquery, **{"enemy": matchup}}
+
+    print(myquery, mycol.count_documents(myquery))
+
+    kills = 0
+    deaths = 0
+    assists = 0
+    data = {}
+    for x in mycol.aggregate([
+        {
+            "$match": myquery,
+        },
+        {
+            "$group": {
+                "_id": {"skin": "$skin", "win_status": "$win_status"},
+                "games": {"$sum": 1},
+            }
+        }
+    ]):
+        games += x["games"]
+        if "skin" in x["_id"] and x["_id"]["skin"] not in data:
+            data[x["_id"]["skin"]] = x
+            if x["_id"]["win_status"] == "Winner":
+                data[x["_id"]["skin"]]["wins"] = x["games"]
+
+        elif "skin" in x["_id"] and x["_id"]["skin"] in data:
+            for key in x:
+                if key != "_id":
+                    data[x["_id"]["skin"]][key] += x[key]
+
+                if x["_id"]["win_status"] == "Winner" and "wins" not in data[x["_id"]["skin"]]:
+                    data[x["_id"]["skin"]]["wins"] = x["games"]
+
+        if x["_id"]["win_status"] == "Winner":
+            wins += x["games"]
+
+        del x["_id"]
+
+    for skin in data:
+        if data[skin]["games"] > 0:
+            if "wins" not in data[skin]:
+                data[skin]["wins"] = 0
+            data[skin]["win_rate"] = round(
+                data[skin]["wins"]/data[skin]["games"] * 100, 2)
+        else:
+            data[skin]["win_rate"] = 0
+
+    if games == 0:
+        return {**{"games": 0, "wins": wins, "win_rate": 100}, **data}
+    else:
+        return {**{"games": games, "wins": wins, "win_rate": round(wins/games*100, 2), "kills": kills, "deaths": deaths, "assists": assists}, **data}
+
+
+def get_single_skin_stats(god, skin, role, patch, rank="All Ranks", queue_type="Ranked", mode="Conquest", matchup=None):
+    if "Standard" in skin:
+        skin = god
+    mydb = client["single_match_stats"]
+    mycol = mydb[god]
+    games = 0
+    wins = 0
+    data = {**{stat: 0 for stat in single_stats},
+            **{"players": []}}
+    print(rank, role, patch, queue_type, mode)
+    myquery = get_query(rank, role, patch, queue_type, mode)
+    if matchup != "None" and matchup != None:
+        myquery = {**myquery, **{"enemy": matchup}}
+
+    myquery["skin"] = skin
+    print(myquery)
+    for x in mycol.aggregate([
+        {
+            "$match": myquery,
+        },
+        {
+            "$group": {
+                "_id": {"player": "$player", "win_status": "$win_status"},
+                "kills": {"$sum": "$kills"},
+                "deaths": {"$sum": "$deaths"},
+                "assists": {"$sum": "$assists"},
+                "damage_player": {"$sum": "$damage_player"},
+                "damage_taken": {"$sum": "$damage_taken"},
+                "damage_mitigated": {"$sum": "$damage_mitigated"},
+                "healing": {"$sum": "$healing"},
+                "healing_self": {"$sum": "$healing_self"},
+                "gold": {"$sum": "$gold"},
+                "damage_bot": {"$sum": "$damage_bot"},
+                "kills_bot": {"$sum": "$kills_bot"},
+                "camps_cleared": {"$sum": "$camps_cleared"},
+                "tower_kills": {"$sum": "$tower_kills"},
+                "phoenix_kills": {"$sum": "$phoenix_kills"},
+                "tower_damage": {"$sum": "$tower_damage"},
+                "objective_assists": {"$sum": "$objective_assists"},
+                "wards_placed": {"$sum": "$wards_placed"},
+                "games": {"$sum": 1},
+            }
+        },
+        {
+            "$sort": {"games": -1}
+        }
+    ]):
+
+        data["kills"] += x["kills"]
+        data["deaths"] += x["deaths"]
+        data["assists"] += x["assists"]
+        data["damage_player"] += x["damage_player"]
+        data["damage_taken"] += x["damage_taken"]
+        data["damage_mitigated"] += x["damage_mitigated"]
+        data["healing"] += x["healing"]
+        data["healing_self"] += x["healing_self"]
+        data["gold"] += x["gold"]
+        data["damage_bot"] += x["damage_bot"]
+        data["kills_bot"] += x["kills_bot"]
+        data["camps_cleared"] += x["camps_cleared"]
+        data["tower_kills"] += x["tower_kills"]
+        data["phoenix_kills"] += x["phoenix_kills"]
+        data["tower_damage"] += x["tower_damage"]
+        data["objective_assists"] += x["objective_assists"]
+        data["wards_placed"] += x["wards_placed"]
+
+        games += x["games"]
+        if "player" in x["_id"] and x["_id"]["player"] not in data:
+            data[x["_id"]["player"]] = x
+            if x["_id"]["win_status"] == "Winner":
+                data[x["_id"]["player"]]["wins"] = x["games"]
+
+        elif "player" in x["_id"] and x["_id"]["player"] in data:
+            for key in x:
+                if key != "_id":
+                    data[x["_id"]["player"]][key] += x[key]
+
+                if x["_id"]["win_status"] == "Winner" and "wins" not in data[x["_id"]["player"]]:
+                    data[x["_id"]["player"]]["wins"] = x["games"]
+
+        if x["_id"]["win_status"] == "Winner":
+            wins += x["games"]
+
+        del x["_id"]
+
+    for skin in data:
+        if skin != "players" and skin not in single_stats:
+            if len(data["players"]) < 10:
+                if data[skin]["games"] > 0 and "wins" in data[skin]:
+                    data[skin]["winRate"] = round(
+                        data[skin]["wins"]/data[skin]["games"] * 100, 2)
+
+                data["players"].append({**data[skin], **{"enemy": skin}})
+
+            else:
+                data[skin]["winRate"] = 0
+    keys = list(data.keys()).copy()
+
+    for key in keys:
+        print(data[key] is int)
+        if key not in ["players", "games", "wi te", "wins"] and key not in single_stats:
+            del data[key]
+        # elif type(data[key]) is int:
+        #     data[key] = "{:,}".format(round(data[key]))
+
+    if games == 0:
+        return {**{"games": 0, "wins": wins, "winRate": 100}, **data}
+    else:
+        return {**{"games": games, "wins": wins, "winRate": round(wins/games*100, 2)}, **data}
+
+
+if __name__ == "__main__":
+    print(get_single_skin_stats("Achilles", "Battleworn",
+          "Solo", "9.4", queue_type="Ranked"))
+    pass

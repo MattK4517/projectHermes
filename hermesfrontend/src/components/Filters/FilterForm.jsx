@@ -73,7 +73,7 @@ export const getImageUrl = (rank, mode) => {
   } else if (rank === "Slash") {
     url = "https://i.imgur.com/pbbdkTZ.png";
   }
-  return url;
+return url;
 };
 
 export default class FilterForm extends React.Component {

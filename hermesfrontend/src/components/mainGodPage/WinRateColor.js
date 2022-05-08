@@ -1,6 +1,6 @@
 export default function winRateColor(winRate) {
   var color = "white";
-  if (winRate < 45) {
+  if (winRate < 45 || !winRate) {
     color = "#ff4e50";
   }
   else if (winRate < 48) {

@@ -58,31 +58,31 @@ hr {
   min-width: auto;
   width: 100%;
 }
-.god-build .toughest-matchups {
+.toughest-matchups {
   margin-top: 24px;
   grid-row: 2/3;
   grid-column: 4/6;
 }
 @media (max-width: 1139px) {
-  .god-build .toughest-matchups {
+  .toughest-matchups {
     grid-column: 1/2;
     grid-row: 3/4;
   }
 }
 @media (max-width: 899px) {
-  .god-build .toughest-matchups {
+  .toughest-matchups {
     grid-column: 1/2;
     grid-row: 3/4;
   }
 }
-.god-build .toughest-matchups .matchups {
+.toughest-matchups .matchups {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   grid-gap: 12px;
   -webkit-overflow-scrolling: touch;
   overflow: auto;
 }
-.god-build .toughest-matchups .matchups .god-matchup {
+.toughest-matchups .matchups .god-matchup {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -98,16 +98,16 @@ hr {
 .god-label {
   color: #cddcfe;
 }
-.god-build .toughest-matchups .matchups .god-matchup:hover {
+.toughest-matchups .matchups .god-matchup:hover {
   background-color: #25254b;
 }
-.god-build .toughest-matchups .matchups hr {
+.toughest-matchups .matchups hr {
   margin: 8px 0;
   width: 70%;
   border: none;
   border-top: 1px solid #404064;
 }
-.god-build .toughest-matchups .matchups .god-name {
+.toughest-matchups .matchups .god-name {
   margin-top: 6px;
   max-width: 70px;
   text-overflow: ellipsis;
@@ -116,14 +116,14 @@ hr {
   font-size: 12px;
   font-weight: 700;
 }
-.god-build .toughest-matchups .matchups .god-icon {
+.toughest-matchups .matchups .god-icon {
   position: relative;
   width: 32px;
   height: 32px;
   border-radius: 50%;
   overflow: hidden;
 }
-.god-build .toughest-matchups .matchups .god-icon > img {
+.toughest-matchups .matchups .god-icon > img {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -131,7 +131,7 @@ hr {
   transform: translate(-50%, -50%) scale(1.1);
 }
 
-.god-build .toughest-matchups .matchups .god-matchup .matchup-stats .win-rate {
+.toughest-matchups .matchups .god-matchup .matchup-stats .win-rate {
   font-size: 1.2rem;
 }
 .god-build
@@ -462,12 +462,19 @@ hr {
   color: white;
 }
 
-.god-home .image-wrap {
+.god-home .image-wrap .skins .image-wrap {
   position: relative;
   border: 1px solid #2c2c40;
   overflow: hidden;
 }
-.god-home .gods-container .god-link .image-wrap {
+.god-home
+  .gods-container
+  .god-link
+  .image-wrap
+  .skins
+  .gods-container
+  .god-link
+  .image-wrap {
   width: 100px;
   height: 100px;
 }
@@ -509,14 +516,16 @@ hr {
   color: white;
 }
 
-.god-home {
+.god-home,
+.skins {
   padding-top: 100px;
   max-width: 1014px;
   width: 200vh;
   box-sizing: content-box;
 }
 
-.god-home-page {
+.god-home-page,
+.skin-page {
   display: flex;
   margin: auto;
   color: white;
@@ -558,7 +567,15 @@ a:visited {
   color: white;
 }
 
-.god-home .gods-container .god-link .god-name {
+.god-home
+  .gods-container
+  .god-link
+  .god-name
+  .skins
+  .god-home
+  .gods-container
+  .god-link
+  .god-name {
   margin-top: 8px;
   font-size: 0.8rem;
   color: white;
@@ -2478,3 +2495,88 @@ figure.snip0015:hover figcaption::before {
 .Casual {
   display: none;
 } */
+
+.skinstats_page .content-section {
+  margin-top: 24px;
+}
+
+.skins .gods-container .god-link figure.snip0015,
+.skins .gods-container .content-section .god-link figure.snip0015 {
+  width: 150px;
+  height: 200px;
+  margin: 0 2rem;
+  overflow: hidden;
+}
+
+.skins .gods-container,
+.skins .gods-container .content-section {
+  align-self: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-gap: 25px 25px;
+  padding: 20px;
+  border: 5px solid #2c2c40;
+  background-color: #17172e;
+}
+
+.skins .gods-container .god-link .god-name,
+.skins .gods-container .content-section .god-link .god-name {
+  text-align: center;
+}
+
+.skinstats_god-link,
+.skinstats-header_wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.skinstats_god-link {
+  align-items: flex-start;
+  margin-right: 1.5rem;
+}
+
+.skinstats-header_wrapper {
+  align-items: center;
+}
+
+.skinstats_wrapper {
+  display: flex
+}
+
+.skinstats-number_wrapper {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.skinstats_combat,
+.skinstats_objective {
+  display: flex;
+  flex-direction: column;
+  flex: 1
+}
+
+.skinstats_combat .content-section_header,
+.skinstats_objective .content-section_header {
+  font-size: 20px
+}
+
+/* use for displaying averages, or damage mitigated on dmg calc */
+.helper-text {
+  color: #5f5f7b;
+  font-size: 14px;
+  font-weight: 400;
+  margin-left: .5rem;
+}
+
+.column_wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}

@@ -5,6 +5,7 @@ import winRateColor from "./WinRateColor";
 import { styled } from "@mui/system";
 import { HtmlTooltip, CreateItemToolTip } from "./GodPageHelpers";
 import { MainContext } from "./MainContext";
+import { godsDict } from "../drawer";
 
 function CreateMatchupsHelpTooltip(props) {
   return (
@@ -29,10 +30,14 @@ function GodCounterMatchup(props) {
       <div className="god-icon">
         <img
           className="god-icon-style"
-          src={`https://webcdn.hirezstudios.com/smite/god-icons/${props.getMatchups.enemy
-            .replaceAll("'", "")
-            .replaceAll(" ", "-")
-            .toLowerCase()}.jpg`}
+          src={
+            godsDict[props.getMatchups.enemy] !== undefined
+              ? `https://webcdn.hirezstudios.com/smite/god-icons/${props.getMatchups.enemy
+                  .replaceAll("'", "")
+                  .replaceAll(" ", "-")
+                  .toLowerCase()}.jpg`
+              : "https://i.imgur.com/KgTaobI.png"
+          }
           alt={props.getMatchups.enemy}
         />
       </div>
@@ -46,18 +51,16 @@ function GodCounterMatchup(props) {
             fontWeight: "725px",
           }}
         >
-          {props.getMatchups.winRate}%
+          {props.getMatchups.winRate || "0"}%
         </div>
-        <div className="times-played">
-          {props.getMatchups.timesPlayed} Matches
-        </div>
+        <div className="times-played">{props.getMatchups.games} Matches</div>
       </div>
     </Link>
   );
 }
 
-function GodCounterStats(props) {
-  if (props.matchups.length > 0) {
+export function GodCounterStats(props) {
+  if (props.matchups) {
     return (
       <>
         {props.matchups.map((matchup, index) => {
@@ -78,7 +81,6 @@ const ResponsiveBuild = styled("div")(({ theme }) => ({
 
 function GodRankStats(props) {
   let banrateMessage;
-  console.log(props);
   if (props.queueType === "Ranked") {
     banrateMessage = props.banrate + "%";
   } else if (props.queueType === "Casual") {
@@ -195,8 +197,6 @@ export default function BuildPage(props) {
     ranks,
     roles,
   ] = useContext(MainContext);
-
-  console.log(props);
 
   let { games, badmatchups, goodmatchups, items, colorStyle, relics } =
     useFetch(god, role, rank, patch, matchup, queueType, mode);

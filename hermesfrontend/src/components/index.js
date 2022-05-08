@@ -1,8 +1,10 @@
+import { GodsDisplay } from "./Gods";
+
 export { default as Godpage } from "./mainGodPage/Godpage";
 // export { default as Navigation } from "./Navigation";
 export { default as Home } from "./Home";
 export { SinglePostPage as GetPage } from "./GetPage";
-// export { default as Gods } from "./Gods";
+// export { default as G } from "./Gods";
 export { default as GodsScreen } from "./Gods";
 export { default as TierList } from "./Tierlists/TierList";
 export { default as CombatTierList } from "./Tierlists/CombatTierList";
@@ -23,6 +25,8 @@ export { default as WinRateColor } from "./mainGodPage/WinRateColor";
 export { default as BasicTabs } from "./mainGodPage/PageTabs";
 export { default as BuildPath } from "./mainGodPage/BuildPath";
 export { default as Matchups } from "./mainGodPage/Matchups";
+export { default as SkinPage } from "./mainGodPage/Skins/SkinPage";
+export { default as SkinStatsPage } from "./mainGodPage/Skins/SkinStatPage"
 export { default as SearchBar } from "./SearchBarStuff/SearchBar";
 export { default as SearchBarGodPage } from "./SearchBarStuff/SearchBarGodPage";
 export { default as SearchBarGodsDisplay } from "./SearchBarStuff/SearchBarGodsDisplay";

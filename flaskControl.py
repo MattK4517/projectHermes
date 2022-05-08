@@ -1,12 +1,12 @@
 from datetime import datetime
 from queue import Empty
-from re import M
+from re import L, M
 
 # from sklearn.linear_model import GammaRegressor
 import analyze as anlz
 import analyze_players as anlzpy
 import pandas as pd
-from constants import godsDict, roles
+from constants import godsDict, roles, id_dict
 from flask import Flask, render_template, request
 # from flask_limiter import Limiter
 # from flask_limiter.util import get_remote_address
@@ -332,3 +332,78 @@ def get_build_calc():
         build_stats = anlz.get_build_stats(client, build)
         ret_data["build"] = build_stats
     return ret_data
+
+
+@app.route('/api/skins/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>/<matchup>', methods=["GET", "POST"])
+@app.route('/api/skins/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>', methods=["GET", "POST"])
+def get_god_skins(god, role, rank, patch, queue_type, mode, matchup=None):
+    ret_data = {"skins": []}
+    mydb = client["Skins"]
+    mycol = mydb[god]
+    if mycol.count_documents({}) == 0:
+        with open("cred.txt", "r") as creds:
+            lines = creds.readlines()
+            smite_api = SmiteAPI(devId=lines[0].strip(
+            ), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
+
+            god_id = id_dict[god]
+            data = smite_api.getGodSkins(god_id)
+
+            skin_stats = anlz.get_skin_stats(
+                god, role, patch, rank=rank, queue_type=queue_type, mode=mode, matchup=matchup)
+
+            for skin in data:
+                try:
+                    skin_name = skin["skin_name"]
+                    if skin["skin_name"] == f"Standard {god}":
+                        skin_name = god
+                    temp_dict = {
+                        "godSkin_URL": skin["godSkin_URL"],
+                        "obtainability": skin["obtainability"],
+                        "price_favor": skin["price_favor"],
+                        "price_gems": skin["price_gems"],
+                        "skin_name": skin["skin_name"],
+                        "games": skin_stats[skin_name]["games"],
+                        "wins": skin_stats[skin_name]["wins"],
+                        "winRate": skin_stats[skin_name]["win_rate"],
+                    }
+                    ret_data["skins"].append(temp_dict)
+                except KeyError:
+                    temp_dict = {
+                        "godSkin_URL": skin["godSkin_URL"],
+                        "obtainability": skin["obtainability"],
+                        "price_favor": skin["price_favor"],
+                        "price_gems": skin["price_gems"],
+                        "skin_name": skin["skin_name"],
+                        "games": 0,
+                        "wins": 0,
+                        "winRate": 0,
+                    }
+                    ret_data["skins"].append(temp_dict)
+                mycol.insert_one({
+                    "godSkin_URL": skin["godSkin_URL"],
+                    "obtainability": skin["obtainability"],
+                    "price_favor": skin["price_favor"],
+                    "price_gems": skin["price_gems"],
+                    "skin_name": skin["skin_name"]})
+    else:
+        skin_stats = anlz.get_skin_stats(
+            god, role, "9.4", rank=rank, queue_type=queue_type, mode=mode, matchup=matchup)
+        for x in mycol.find({}, {"_id": 0}):
+            if x["skin_name"] == f"Standard {god}":
+                x["skin_name"] = god
+            ret_data["skins"].append({**x, **{"games": skin_stats[x['skin_name']]["games"],
+                                              "wins": skin_stats[x['skin_name']]["wins"],
+                                              "winRate": skin_stats[x['skin_name']]["win_rate"]}})
+    return ret_data
+
+
+@app.route('/api/skinstats/<god>/<skin>/<role>/<rank>/<patch>/<queue_type>/<mode>', methods=["GET", "POST"])
+def get_single_skin(god, skin, role, rank, patch, queue_type, mode):
+    print(god, skin, role, rank, patch, queue_type, mode)
+    # TODO add patch back in
+    skin_stats = anlz.get_single_skin_stats(
+        god, skin, role, "9.4", rank=rank, queue_type=queue_type, mode=mode)
+
+    print(skin_stats)
+    return skin_stats

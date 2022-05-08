@@ -27,11 +27,16 @@ import Player from "./PlayerPage/Player";
 import OverviewDisplay from "./PlayerPage/OverviewDisplay";
 import GodStatsDisplay from "./PlayerPage/GodStatsDisplay";
 import { PlayerProvider } from "./PlayerPage/PlayerContext";
-import DamageCalculator from "./DmgCalcPage/DamageCalculator";
-import { DamageProvider } from "./DmgCalcPage/DamageContext";
-import { TierListProvider } from "./Tierlists/TierListContext";
-import FindAMatch from "./MatchPage/FindAMatch";
-import { MainProvider } from "./mainGodPage/MainContext";
+import DamageCalculator from "./DmgCalcPage/DamageCalculator"
+import { DamageProvider } from './DmgCalcPage/DamageContext';
+import { TierListProvider } from './Tierlists/TierListContext';
+import FindAMatch from './MatchPage/FindAMatch';
+import { MainProvider } from './mainGodPage/MainContext';
+import SkinStatPage from './mainGodPage/Skins/SkinStatPage';
+
+export const compare = (a, b) => {
+  return a.winRate - b.winRate;
+};
 
 export const godsDict = {
   Achilles: "Solo",
@@ -155,7 +160,6 @@ export const godsDict = {
   "Zeus": "Mid",
   "Zhong Kui": "Solo"
 };
-
 let routes = [
   {
     path: "/",
@@ -207,6 +211,11 @@ let routes = [
     component: <FindAMatch />,
     god: "",
   },
+  {
+    path: "/".concat(god, "/skin-stats/:handle").replaceAll(" ", "_"),
+    component: <SkinStatPage god={god} />,
+    god: god,
+  },
 ];
 Object.keys(godsDict).forEach((god) => {
   routes = [
@@ -218,7 +227,6 @@ Object.keys(godsDict).forEach((god) => {
     },
   ];
 });
-
 const Root = styled(AppBar)(({ theme }) => ({
   padding: theme.spacing(1),
   [theme.breakpoints.down("sm")]: {

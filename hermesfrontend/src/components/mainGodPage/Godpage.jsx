@@ -18,6 +18,7 @@ import SearchBarGodPage from "../SearchBarStuff/SearchBarGodPage";
 import { Helmet } from "react-helmet";
 import Filter from "../Filters/Filter";
 import { MainContext } from "./MainContext";
+import { useLocation } from "react-router-dom";
 
 const godsDict = {
   "All Gods": "None",
@@ -316,18 +317,25 @@ function Godpage(props) {
     modes,
     ranks,
     roles,
+    skin,
+    setSkin,
+    tab,
+    setTab,
   ] = useContext(MainContext);
+
+  const location = useLocation();
+  let { tabState } = location.state;
 
   useEffect(() => {
     setRole(props.role.replaceAll("_", " "));
     setGod(props.god.replaceAll("_", " "));
+    setTab(tabState ? tabState : "Build");
   }, []);
   const pagegod = props.god.replaceAll("_", " ");
 
-  var [url, seturl] = useState(0);
-  const [displaygod, setgod] = useState(0);
+  const [url, seturl] = useState("");
+  const [displaygod, setgod] = useState("");
   const [abilities, setabilities] = useState([]);
-  const [tab, setTab] = useState("Build");
   const [tier, setTier] = useState("");
   const [banrate, setbanrate] = useState(0);
   const [pickrate, setpickrate] = useState(0);
