@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useContext, FC } from "react";
 import { MainContext } from "../MainContext";
 import { SkinStats } from "./SkinInterface";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { GameStats } from "../../GeneralInterface";
 import Filter from "../../Filters/Filter";
 import { GodCounterStats } from "../BuildPage.jsx";
 import { calcKDA } from "../../PlayerPage/GodDisplay";
+import GodHeader from "../GodHeader";
 
 const formatStat = (stat: string) => {
   stat = stat.charAt(0).toUpperCase() + stat.slice(1);
@@ -127,14 +128,34 @@ export default function SkinStatPage(props: any) {
     );
   }, [mode, role, rank, patch, queueType, matchup, skin]);
 
+  console.log(props);
   return (
     <div className="Godpage">
       <div className="container">
         <div className="god-container skinstats_page">
-          {/* <div className="row align-items-center my-5">
-            <div class="col-lg-5"></div>
-            <h1 className="font-weight-light"></h1>
-          </div> */}
+          <div
+            className="row align-items-center my-5"
+            style={{ justifyContent: "center", flexDirection: "column" }}
+          >
+            <h1 className="font-weight-light">
+              {god} {skinState} Stats
+            </h1>
+            <Link
+              to={{
+                pathname: `/${god}`,
+                state: {
+                  tabState: "Skins",
+                },
+              }}
+              style={{
+                fontSize: "10px",
+                backgroundColor: "#191937",
+                padding: ".25rem",
+              }}
+            >
+              Back to Skin Page Page
+            </Link>
+          </div>
           <div className="content-section" style={{ display: "column" }}>
             <div className="skinstats_wrapper">
               <div className="skinstats_god-link">

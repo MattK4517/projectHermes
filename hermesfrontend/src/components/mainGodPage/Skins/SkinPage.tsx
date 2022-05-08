@@ -70,7 +70,16 @@ export default function SkinPage() {
     <div className="content">
       <div className="skin-page">
         <div className="skins content-side-pad" style={{ paddingTop: "25px" }}>
-          <Button
+          {/* TODO IMPLEMENT HIGH/LOW filters for winrate and games played */}
+          {/* <Button
+            sx={{
+              backgroundColor: "#423f61",
+              color: "white",
+              ":hover": {
+                backgroundColor: "#423f61",
+                borderRadius: "7px",
+              },
+            }}
             onClick={() =>
               setAllSkins((allSkins) => {
                 let sortMe = [...allSkins];
@@ -80,7 +89,7 @@ export default function SkinPage() {
             }
           >
             WINRATE
-          </Button>
+          </Button> */}
           <AllGodsSkinsDisplay
             gods={allSkins}
             godName={god}

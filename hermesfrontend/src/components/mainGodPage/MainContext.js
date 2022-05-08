@@ -13,6 +13,7 @@ export const MainProvider = props => {
     const [mode, setMode] = useState("Conquest")
     const [matchup, setMatchup] = useState("None");
     const [skin, setSkin] = useState("None");
+    const [tab, setTab] = useState("Build")
     const patches = ["9.3", "9.2", "9.1"]
     const queueTypes = ["Casual", "Ranked"];
     const modes = ["Joust", "Conquest", "Duel"];
@@ -46,7 +47,8 @@ export const MainProvider = props => {
     return (
         <MainContext.Provider value={[
             god, setGod, role, setRole, rank, setRank, patch, setPatch, queueType, setQueueType,
-            mode, setMode, matchup, setMatchup, patches, queueTypes, modes, ranks, roles, skin, setSkin
+            mode, setMode, matchup, setMatchup, patches, queueTypes, modes, ranks, roles, skin, setSkin,
+            tab, setTab
         ]}>
             {props.children}
         </MainContext.Provider>

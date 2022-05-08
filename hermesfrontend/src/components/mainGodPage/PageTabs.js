@@ -51,10 +51,8 @@ export default function BasicTabs(props) {
     mode, setMode, matchup, setMatchup, patches, queueTypes, modes, ranks, roles
   ] = React.useContext(MainContext)
   const [value, setValue] = React.useState(0);
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    props.changeTab(event.target.textContent)
   };
   return (
     <TierListTabs style={{ paddingTop: "10px" }} changeTableType={props.changeTab}>
@@ -75,7 +73,7 @@ export default function BasicTabs(props) {
       <div label="Matchups" style={{ color: "white" }}>
         <Matchups />
       </div>
-      <div label="Skins" style={{ color: "white"}}>
+      <div label="Skins" style={{ color: "white" }}>
         <SkinPage />
       </div>
     </TierListTabs>
