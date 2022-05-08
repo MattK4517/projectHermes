@@ -276,6 +276,7 @@ const linkDict = {
   "Xing Tian": "https://i.imgur.com/EPD67l6.jpg",
   Yemoja: "https://i.imgur.com/N3MPZdc.jpg",
   Ymir: "https://i.imgur.com/QajyfQZ.jpg",
+  "Yu Huang": "https://i.imgur.com/jeWpJ4l.jpg",
   Zeus: "https://i.imgur.com/M6EUYxz.jpg",
   "Zhong Kui": "https://i.imgur.com/aJBjZJE.jpg",
 };

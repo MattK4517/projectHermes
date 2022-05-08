@@ -46,7 +46,7 @@ def get_query(rank, role, patch, queue_type, mode):
         print(myquery)
         del myquery["patch"]
 
-    if (mode == "Joust" or mode == "Duel") and "role" in myquery.keys():
+    if mode != "Conquest" and "role" in myquery.keys():
         del myquery["role"]
 
     return myquery
@@ -193,30 +193,48 @@ def get_top_builds(client, god, role, patch, queue_type="Ranked", rank="All Rank
                             top_dict[slot][item]["wins"] += 1
 
     else:
-        myquery = {
-            **{god: {"$exists": True}},
-            **myquery
-        }
-        for x in mycol.find(myquery, {"_id": 0, god: 1, "win_status": 1}):
+        limit = {}
+        if patch in ["9.2", "9.1"]:
+            limit = {"_id": 0, god: 1, "win_status": 1}
+        else:
+            limit = {"_id": 0, "build": 1, "win_status": 1}
+        for x in mycol.find(myquery, limit):
             games += 1
             flag = False
             if x["win_status"] == "Winner":
                 wins += 1
                 flag = True
-            for slot in x[god].keys():
-                item = x[god][slot]
-                if item:
-                    if item not in top_dict[slot].keys():
-                        if flag:
-                            top_dict[slot][item] = {
-                                "item": item, "games": 1, "wins": 1}
-                        else:
-                            top_dict[slot][item] = {
-                                "item": item, "games": 1, "wins": 0}
-                    elif item in top_dict[slot].keys():
-                        top_dict[slot][item]["games"] += 1
-                        if flag:
-                            top_dict[slot][item]["wins"] += 1
+            if god in x.keys() and x[god].keys():
+                for slot in x[god].keys():
+                    print(x[god])
+                    item = x[god][slot]
+                    if item:
+                        if item not in top_dict[slot].keys():
+                            if flag:
+                                top_dict[slot][item] = {
+                                    "item": item, "games": 1, "wins": 1}
+                            else:
+                                top_dict[slot][item] = {
+                                    "item": item, "games": 1, "wins": 0}
+                        elif item in top_dict[slot].keys():
+                            top_dict[slot][item]["games"] += 1
+                            if flag:
+                                top_dict[slot][item]["wins"] += 1
+            elif "build" in x.keys():
+                for slot in x["build"].keys():
+                    item = x["build"][slot]
+                    if item:
+                        if item not in top_dict[slot].keys():
+                            if flag:
+                                top_dict[slot][item] = {
+                                    "item": item, "games": 1, "wins": 1}
+                            else:
+                                top_dict[slot][item] = {
+                                    "item": item, "games": 1, "wins": 0}
+                        elif item in top_dict[slot].keys():
+                            top_dict[slot][item]["games"] += 1
+                            if flag:
+                                top_dict[slot][item]["wins"] += 1
 
     if games == 0:
         return {**{}, **{"games": games, "wins": wins, "winRate": 0}}
@@ -409,7 +427,7 @@ def get_worst_matchups(client, god, role, patch, queue_type="Ranked", rank="All 
                         else:
                             matchup_dict[matchup["enemy"]]["games"] += 1
 
-            elif mode == "Joust":
+            elif mode not in ["Conquest", "Duel"]:
                 for enemy in matchup["enemies"]:
                     if enemy:
                         if matchup["win_status"] == "Winner":
@@ -645,6 +663,7 @@ def get_carry_score(match):
                 "totalDamage": 1,
             }
         },
+            },
         "levelDiff": {
             "Winner": {
             },

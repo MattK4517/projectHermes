@@ -359,7 +359,7 @@ const compare = (a, b) => {
   return a.winRate - b.winRate;
 };
 
-const getKDA = (kills, deaths, assists) => {
+export const getKDA = (kills, deaths, assists) => {
   if (deaths > 0) {
     return (kills + 0.5 * assists) / deaths;
   } else {

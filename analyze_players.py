@@ -26,7 +26,7 @@ def find_match_history(client, playername, queue_type, patch, mode):
 
     mydb = client[database]
     mycol = mydb[f"{patch} Matches"]
-    if mode == "Joust" or mode == "Duel":
+    if mode != "Conquest":
         mycol = mydb[f"{patch} {mode} Matches"]
 
     myquery = {
@@ -505,17 +505,24 @@ def grab_stats(player_data):
     return ret_data
 
 
-if __name__ == "__main__":
-    import flaskHelper as fh
-    from pyrez import SmiteAPI
-    import pyrez
+def query_player_accounts(playername):
+    accounts = []
     with open("cred.txt", "r") as creds:
         lines = creds.readlines()
         smite_api = SmiteAPI(devId=lines[0].strip(
 
         ), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
-        player_id = fh.get_player_id(smite_api, "samdadude")
-        print(player_id)
+        player_id = fh.get_player_id(smite_api, playername)
         test_data = smite_api.getPlayer(player_id)
-        print(test_data)
-        data = get_player_basic(test_data)
+        accounts.append(test_data)
+        if "playerId" in test_data["MergedPlayers"]:
+            accounts.append(smite_api.getPlayer(
+                test_data["MergedPlayers"]["playerId"]))
+    return accounts
+
+
+if __name__ == "__main__":
+    import flaskHelper as fh
+    from pyrez import SmiteAPI
+    import pyrez
+    print(find_match_history(client, "AleksEnglish", "Casual", "9.4", "Conquest"))

@@ -14,11 +14,11 @@ export const PlayerProvider = props => {
     const [icon, setIcon] = useState("https://i.imgur.com/KgTaobI.png")
     const [playerLevel, setPlayerLevel] = useState(-1);
     const [tab, setTab] = useState("Build");
-    const [patch, setPatch] = useState("9.3");
+    const [patch, setPatch] = useState("9.4");
     const [inputType, setInputType] = useState("KBM");
-    const patches = ["9.3", "9.2", "9.1"]
+    const patches = ["9.4", "9.3", "9.2", "9.1"]
     const queueTypes = ["Casual", "Ranked"];
-    const modes = ["Joust", "Conquest", "Duel"];
+    const modes = ["Joust", "Conquest", "Duel", "Assault", "Slash", "Arena"];
     const inputTypes = ["KBM", "Controller"];
     return (
         <PlayerContext.Provider value={[

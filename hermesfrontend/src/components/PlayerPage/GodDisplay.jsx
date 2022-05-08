@@ -97,7 +97,7 @@ export default function GodDisplay(props) {
                   </div>
                   <div className="god-stats_col god-stats_col-2">
                     <div className="kda-ratio">
-                      {calcKDA(god.kills, god.deaths, god.assists)}
+                      {getKDA(god.kills, god.deaths, god.assists).toFixed(2)}
                     </div>
                     <div className="kda-split">
                       <span>{god.kills}</span>&nbsp;

@@ -66,6 +66,12 @@ export const getImageUrl = (rank, mode) => {
     url = "https://i.imgur.com/tydY7sr.png";
   } else if (rank === "Duel") {
     url = "https://i.imgur.com/KsoBoLs.png";
+  } else if (rank === "Assault") {
+    url = "https://i.imgur.com/edrgTB8.png";
+  } else if (rank === "Arena") {
+    url = "https://i.imgur.com/pUh04Os.png";
+  } else if (rank === "Slash") {
+    url = "https://i.imgur.com/pbbdkTZ.png";
   }
 return url;
 };

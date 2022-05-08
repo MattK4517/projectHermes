@@ -119,6 +119,7 @@ godsDict = {
     "Xing Tian": 0,
     "Yemoja": 0,
     "Ymir": 0,
+    "Yu Huang": 0,
     "Zeus": 0,
     "Zhong Kui": 0
 }

@@ -6,8 +6,6 @@ import { MatchDisplay } from "..";
 import { PlayerContext } from "./PlayerContext";
 import PlayerTabs from "./PlayerTabs";
 import "./Player.css";
-import { GiModernCity } from "react-icons/gi";
-
 export const linkDict = {
   Achilles: "https://i.imgur.com/KoU1bup.jpg",
   Agni: "https://i.imgur.com/DNzygMe.jpg",
@@ -130,65 +128,29 @@ export const linkDict = {
   "Zhong Kui": "https://i.imgur.com/aJBjZJE.jpg",
 };
 
-class NameForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { value: "" };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleChange(event) {
-    this.setState({ value: event.target.value });
-  }
-  handleSubmit(event) {
-    this.props.setPlayer(event.target[0].value);
-    event.preventDefault();
-  }
-
-  render() {
-    return (
-      <div className="content-section">
-        <div className="content-section_header">Search for a Player</div>
-        <form onSubmit={this.handleSubmit}>
-          {" "}
-          <label style={{ color: "white" }}>
-            Player Name:
-            <input
-              type="text"
-              value={this.state.value}
-              onChange={this.handleChange}
-            />{" "}
-          </label>
-          <input type="submit" value="Submit" />
-        </form>
-      </div>
-    );
-  }
-}
-
-const parsePlayer = (data, mode, inputType) => {
+const parsePlayer = (data, mode, inputType, queueType) => {
   console.log(data);
   let rank = 0;
   let seasonGames = 0;
   let seasonWinRate = 0;
-  console.log(`Ranked${mode}`);
-  if (inputType === "KBM") {
-    seasonGames =
-      data[`Ranked${mode}`]["Wins"] + data[`Ranked${mode}`]["Losses"];
-    rank = data[`Ranked${mode}`]["Tier"];
-    seasonWinRate =
-      data[`Ranked${mode}`]["Wins"] /
-      (data[`Ranked${mode}`]["Wins"] + data[`Ranked${mode}`]["Losses"]);
-  } else if (inputType === "Controller") {
-    seasonGames =
-      data[`Ranked${mode}${inputType}`]["Wins"] +
-      data[`Ranked${mode}${inputType}`]["Losses"];
-    rank = data[`Ranked${mode}${inputType}`]["Tier"];
-    seasonWinRate =
-      data[`Ranked${mode}${inputType}`]["Wins"] /
-      (data[`Ranked${mode}${inputType}`]["Wins"] +
-        data[`Ranked${mode}${inputType}`]["Losses"]);
+  if (queueType === "Ranked") {
+    if (inputType === "KBM") {
+      seasonGames =
+        data[`Ranked${mode}`]["Wins"] + data[`Ranked${mode}`]["Losses"];
+      rank = data[`Ranked${mode}`]["Tier"];
+      seasonWinRate =
+        data[`Ranked${mode}`]["Wins"] /
+        (data[`Ranked${mode}`]["Wins"] + data[`Ranked${mode}`]["Losses"]);
+    } else if (inputType === "Controller") {
+      seasonGames =
+        data[`Ranked${mode}${inputType}`]["Wins"] +
+        data[`Ranked${mode}${inputType}`]["Losses"];
+      rank = data[`Ranked${mode}${inputType}`]["Tier"];
+      seasonWinRate =
+        data[`Ranked${mode}${inputType}`]["Wins"] /
+        (data[`Ranked${mode}${inputType}`]["Wins"] +
+          data[`Ranked${mode}${inputType}`]["Losses"]);
+    }
   }
   return { rank, seasonGames, seasonWinRate };
 };
@@ -315,7 +277,7 @@ export default function Player(props) {
     fetch("/api/getplayergeneral/".concat(player)).then((res) =>
       res.json().then((data) => {
         console.log(data);
-        let newData = parsePlayer(data, mode, inputType);
+        let newData = parsePlayer(data, mode, inputType, queueType);
         setSeasonGames(newData.seasonGames);
         setSeasonWinRate((newData.seasonWinRate * 100).toFixed(2));
         setPlayerLevel(data.Level);
@@ -374,6 +336,7 @@ export default function Player(props) {
                   matchList={matchList}
                   player={player}
                   queueType={queueType}
+                  mode={mode}
                 />
               </div>
             </div>
