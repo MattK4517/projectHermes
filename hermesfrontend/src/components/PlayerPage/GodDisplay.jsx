@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { PlayerContext } from "./PlayerContext";
 import { linkDict, setTopGod } from "./Player";
 import OverviewDisplay from "./OverviewDisplay";
+import { getKDA } from "./GodStatsDisplay";
 
 export const calcKDA = (kills, deaths, assists) => {
   return ((kills + assists / 2) / deaths).toFixed(2);
