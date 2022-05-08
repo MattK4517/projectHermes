@@ -151,7 +151,7 @@ export default function DamageCalculator() {
     body: JSON.stringify({
       god: god,
       levels: levels,
-      power: power,
+      build: [...build],
     }),
   };
 

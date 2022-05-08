@@ -296,11 +296,14 @@ def get_dmg_calc():
     ret_data = {}
     if request.method == 'POST':
         data = request.get_json()
-        print(data)
+        print("BUILD", data)
         if data["god"].lower() in [god.lower() for god in godsDict]:
             ret_data = calc_combo_damage_raw(
-                client, data["god"], data["levels"], data["power"], [], "Odin", [])
+                client, data["god"], data["levels"], 0, data["build"], "Odin", [])
 
+
+# calc_combo_damage_raw(client, "Achilles",
+#           levels, 0, ["Ancile"], "Odin", [], 20, 20)
     return ret_data
 
 
@@ -309,10 +312,9 @@ def get_auto_dmg_calc():
     ret_data = {}
     if request.method == 'POST':
         data = request.get_json()
-        print(data)
         if data["god"].lower() in [god.lower() for god in godsDict]:
             ret_data = calc_dps(
-                client, data["god"], data["build"], "Odin", [], 1, 20)
+                client, data["god"], data["build"], "Odin", data["build"], 1, 20)
 
     return ret_data
 
@@ -322,7 +324,6 @@ def get_build_calc():
     ret_data = {}
     if request.method == 'POST':
         data = request.get_json()
-        print(data)
         build = []
         for key in data:
             if key != "god":

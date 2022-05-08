@@ -67,8 +67,10 @@ def calc_ability_damage_raw(base, scaling, power, god, ability, prot, miti, armo
 
 def calc_combo_damage_raw(client, god, levels, power, build, enemy, enemy_build, level=20, enemy_level=20):
     temp = anlz.get_god_stats(client, god, level)
+    print(build)
     attSpeed, power, critChance, armor_reduction_per, armor_reduction_flat, pen_per, pen_flat = calc_dps_stats(
         client, god, build, temp["AttackSpeed"])
+    print("POWER", power)
 
     defense_stats = anlz.get_god_stats(client, enemy, enemy_level)
     temp_def = calc_tank_stats(client, enemy, enemy_build)
@@ -392,10 +394,10 @@ def calc_mitigation(dmg, prot, miti, armor_reduction_per, armor_reduction_flat, 
 
 if __name__ == "__main__":
     levels = {
-        "1": 4,
+        "1": 5,
         "2": 5,
         "3": 5,
-        "4": 1,
+        "4": 5,
         "5": 5
     }
     # print(calc_dps(client, "Achilles", [
@@ -418,7 +420,7 @@ if __name__ == "__main__":
     # "Agni", [], 20, 20)
     # print(avg/10)
     # for guardian in Guardians:
-    print(calc_combo_damage_raw(client, "Chaac",
-          levels, 0, ["Bluestone Pendant"], "Baron Samedi", [], 5, 6))
+    print(calc_combo_damage_raw(client, "Achilles",
+          levels, 0, ["Ancile"], "Odin", [], 20, 20))
 
     # 470 + 83
