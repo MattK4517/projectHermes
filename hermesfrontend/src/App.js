@@ -5,7 +5,7 @@ import {
   MiniDrawer,
 } from "./components";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { QueryClient, QueryClientProvider } from 'react-query';
+
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
@@ -25,8 +25,8 @@ const theme = createTheme({
         root: {
           color: "white",
           "&.Mui-selected": {
-            backgroundColor: "#191937",
-            color: "white",
+          backgroundColor: "#191937",
+          color: "white",
           }
         },
       }
@@ -54,13 +54,10 @@ const theme = createTheme({
   // },
 });
 
-
-const queryClient = new QueryClient()
 export default function App() {
-  // const routeComponents = routes.map(({path, component}, key) => <Route exact path={path} component={() => component} key={key} />);
-  return (
-    <div className="App">
-      <QueryClientProvider client={queryClient}>
+    // const routeComponents = routes.map(({path, component}, key) => <Route exact path={path} component={() => component} key={key} />);
+    return (
+      <div className="App">
         <HashRouter>
           <DndProvider backend={HTML5Backend}>
             <ThemeProvider theme={theme}>
@@ -68,7 +65,6 @@ export default function App() {
             </ThemeProvider>
           </DndProvider>
         </HashRouter>
-      </QueryClientProvider>
-    </div>
-  );
+      </div>
+    );
 }
