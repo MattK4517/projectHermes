@@ -400,6 +400,29 @@ hr {
   color: #bbbedb;
 }
 
+
+.items-match .build {
+  height: fit-content !important;
+  display: flex !important;
+  min-width: 225px;
+  max-width: 225px;
+  justify-content: flex-start;
+}
+
+.items-match .build .item-wrapper {
+  flex: 1
+}
+
+.items-match .build .build-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  border: none;
+} 
+
+
+
 .build {
   display: grid;
   grid-template-columns: repeat(6, 169px);
@@ -2292,6 +2315,18 @@ figure.snip0015:hover figcaption::before {
 
 /* MATCH PAGE */
 
+
+.items-match {
+  margin-left: auto !important;
+}
+
+.player-header-carry-score_container .accolades-container,
+.player-header-carry-score_container  .carry-score_container {
+  display: flex;
+  flex-direction: row;
+}
+
+
 @media (max-width: 899px) {
   .show {
     display: flex !important;
@@ -2356,6 +2391,8 @@ figure.snip0015:hover figcaption::before {
   .accolades-container {
     display: flex;
   }
+
+
   .basic-match-info > *,
   .match-info-header > * {
     font-size: 14px;
@@ -2384,7 +2421,8 @@ figure.snip0015:hover figcaption::before {
   }
 }
 
-.show {
+.show,
+.hide-element {
   display: none;
 }
 
@@ -2406,6 +2444,7 @@ figure.snip0015:hover figcaption::before {
 
 .player-header-carry-score_container {
   display: flex;
+  flex-direction: column;
   background-color: #11112a;
   padding: 0.5rem;
   border-radius: 6px;
@@ -2422,6 +2461,7 @@ figure.snip0015:hover figcaption::before {
   display: flex;
   flex-direction: column;
   text-align: center;
+  margin: 0 3rem
 }
 
 .bans-container,
@@ -2439,7 +2479,7 @@ figure.snip0015:hover figcaption::before {
 }
 
 .match-summary-wrapper_header {
-  margin: 0 auto;
+  flex: 1
 }
 
 .team-gods-container .bans-container {
@@ -2579,4 +2619,5 @@ figure.snip0015:hover figcaption::before {
   display: flex;
   flex-direction: column;
   flex: 1;
+  width: 225px;
 }

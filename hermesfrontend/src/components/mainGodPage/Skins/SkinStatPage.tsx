@@ -7,6 +7,7 @@ import Filter from "../../Filters/Filter";
 import { GodCounterStats } from "../BuildPage.jsx";
 import { calcKDA } from "../../PlayerPage/GodDisplay";
 import GodHeader from "../GodHeader";
+import { IPlayer } from "../../MatchPage/MatchInterface";
 
 const formatStat = (stat: string) => {
   stat = stat.charAt(0).toUpperCase() + stat.slice(1);
@@ -22,20 +23,21 @@ const formatStat = (stat: string) => {
   return stat;
 };
 
-const DataRow = ({
+export const DataRow = ({
   props,
 }: {
-  props: Partial<SkinStats> & { games: number };
+  props: Partial<SkinStats> &
+    Partial<IPlayer> & { games: number; show: boolean };
 }) => {
   return (
     <div className="player-damage-info">
       {Object.entries(props).map((stat: any) => {
-        if (stat[0] !== "games") {
+        if (stat[0] !== "games" && stat[0] !== "show") {
           return (
             <>
               <span className="player-info-style">{formatStat(stat[0])}:</span>{" "}
               {stat[1].toLocaleString(undefined, { maximumFractionDigits: 0 })}
-              <span className="helper-text">
+              <span className={`helper-text ${props.show ? "" : "show"}`}>
                 (avg:{" "}
                 {(stat[1] / props.games).toLocaleString(undefined, {
                   maximumFractionDigits: 2,
@@ -219,6 +221,7 @@ export default function SkinStatPage(props: any) {
                             healing: data.healing,
                             healing_self: data.healing_self,
                             games: data.games,
+                            show: true,
                           }}
                         />
                       </div>
@@ -231,6 +234,7 @@ export default function SkinStatPage(props: any) {
                             damage_taken: data.damage_taken,
                             damage_mitigated: data.damage_mitigated,
                             games: data.games,
+                            show: true,
                           }}
                         />
                       </div>
@@ -248,6 +252,7 @@ export default function SkinStatPage(props: any) {
                           kills_bot: data.kills_bot,
                           wards_placed: data.wards_placed,
                           games: data.games,
+                          show: true,
                         }}
                       />
                     </div>
@@ -259,6 +264,7 @@ export default function SkinStatPage(props: any) {
                           tower_damage: data.tower_damage,
                           objective_assists: data.objective_assists,
                           games: data.games,
+                          show: true,
                         }}
                       />
                     </div>

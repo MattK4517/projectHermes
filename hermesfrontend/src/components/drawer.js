@@ -20,7 +20,7 @@ import GodsScreen from "./Gods";
 import Godpage from "./mainGodPage/Godpage";
 import TierListPage from "./TierListPage";
 import ContactForm from "./ContactForm";
-import Match from "./Match";
+import Match from "./MatchPage/Match";
 // import { Godpage, GodsScreen, TierListPage, Match, Home, ContactForm } from "./"
 import SearchBar from "./SearchBarStuff/SearchBar";
 import Player from "./PlayerPage/Player";

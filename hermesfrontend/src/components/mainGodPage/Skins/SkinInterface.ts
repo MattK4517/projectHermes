@@ -17,7 +17,3 @@ export interface SkinStats extends GameStats{
     winRate: number,
     wins: number,
 }
-
-export interface DataRow {
-    
-}

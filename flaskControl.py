@@ -163,19 +163,22 @@ def get_all_matchups(god, role, rank, patch, queue_type, mode):
 def get_match(matchID):
     queue_type = "Ranked"
     mydb = client["Matches"]
-    mycol = mydb["9.2 Matches"]
+    mode = "Conquest"
+    mycol = mydb["9.4 Matches"]
     match = {}
     matchID = int(matchID)
-    for x in mycol.find({"MatchId": matchID}):
-        match = x
+    modes = ["Joust", "Duel"]
+    index = 0
+    count = mycol.find({"MatchId": matchID}, {"MatchId": 1}).count()
+    print(count)
+    while count == 0:
+        mycol = mydb[f"9.4 {modes[index]} Matches"]
+        count = mycol.find({"MatchId": matchID}, {"MatchId": 1}).count()
+        mode = modes[index]
+        index += 1
 
-    if len(match.keys()) == 0:
-        mydb = client["CasualMatches"]
-        mycol = mydb["9.2 Matches"]
-        queue_type = "Casual"
-        for x in mycol.find({"MatchId": matchID}):
-            print(x)
-            match = x
+    for x in mycol.find({"MatchId": matchID}, {"_id": 0}):
+        match = x
 
     for key in match:
         if "player" in key:
@@ -188,18 +191,20 @@ def get_match(matchID):
                 match[key]["Item_Purch_6"],
             ]
 
+            build_data = anlz.get_build_stats(client, build)
             match[key] = {**match[key],
-                          **{"godBuild": anlz.get_build_stats(client, build)},
+                          **{"godBuild": [build_data[slot] for slot in build_data]},
                           **{"godStats": anlz.get_god_stats(client, match[key]["godName"], match[key]["Final_Match_Level"])},
                           }
 
     retData = {
         **match,
         **anlz.get_carry_score(match),
-        **{"queue_type": queue_type},
+        **{"Queue_Type": queue_type},
+        **{"Mode": mode},
         **{"carryScores": get_carry_score_averages()}
     }
-
+    print(retData)
     return json.loads(json_util.dumps(retData))
 
 

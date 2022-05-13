@@ -370,7 +370,6 @@ function Godpage(props) {
       })
     );
   }, [god, role, rank, patch, queueType, matchup, mode]);
-  console.log(rank);
   useEffect(() => {
     fetch("/api/".concat(pagegod, "/abilities")).then((res) =>
       res.json().then((data) => {
