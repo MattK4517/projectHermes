@@ -68,8 +68,7 @@ const AccordionDetails = withStyles((theme) => ({
   },
 }))(MuiAccordionDetails);
 
-export function PlayerBuildDisplay(props: any) {
-  console.log(props.player.godBuild);
+export function PlayerBuildDisplay({ player }: { player: IPlayer }) {
   return (
     <div className="items-match">
       <div
@@ -82,7 +81,7 @@ export function PlayerBuildDisplay(props: any) {
         }}
       >
         <div className="build-container">
-          {props.player.godBuild.map((slot: any, index: number) => {
+          {player.godBuild.map((slot: any, index: number) => {
             if (slot.DeviceName) {
               return (
                 <HtmlTooltip
@@ -137,15 +136,15 @@ export function PlayerBuildDisplay(props: any) {
           width: "100%",
         }}
       >
-        <span className="player-info-style">KDA: </span> {props.player.kills}
+        <span className="player-info-style">KDA: </span> {player.Kills_Player}
         <span style={{ color: "#5f5f7b" }}> / </span>
-        <span style={{ color: "#ff4e50" }}>{props.player.deaths}</span>
+        <span style={{ color: "#ff4e50" }}>{player.Deaths}</span>
         <span style={{ color: "#5f5f7b" }}> / </span>
-        {props.player.assists}
+        {player.Assists}
         <br></br>
       </div>
       <div className="show">
-        <MultiKillDisplay player={props.player} />
+        <MultiKillDisplay player={player} />
       </div>
     </div>
   );

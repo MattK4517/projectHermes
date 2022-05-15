@@ -202,7 +202,7 @@ def get_match(matchID):
         **anlz.get_carry_score(match),
         **{"Queue_Type": queue_type},
         **{"Mode": mode},
-        **{"carryScores": get_carry_score_averages()}
+        **{"carryScores": get_carry_score_averages(match["Patch"])}
     }
     print(retData)
     return json.loads(json_util.dumps(retData))

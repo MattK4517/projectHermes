@@ -2,9 +2,12 @@ import { Fab } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import CarryPlayerDisplay from "./CarryPlayerDisplay";
 import { GetCarryPlayer } from "./MatchHelpers";
-const reducer = (accumulator, currentValue) => accumulator + currentValue;
+import { Team } from "./MatchInterface";
 
-export default function TeamDisplay(props) {
+const reducer = (accumulator: number, currentValue: number) =>
+  accumulator + currentValue;
+
+export default function TeamDisplay(props: any) {
   return (
     <div className="basic-match-info">
       <div
@@ -13,7 +16,7 @@ export default function TeamDisplay(props) {
       >
         <div>{props.team} Side Bans</div>
         <div className="bans-container">
-          {props.bans.map((ban) => {
+          {props.bans.map((ban: string) => {
             if (ban) {
               return (
                 <Link to={"/".concat(ban.replaceAll(" ", "_"))}>
@@ -22,6 +25,7 @@ export default function TeamDisplay(props) {
                       <div style={{ height: "30px", width: "30px" }}>
                         <img
                           src={`https://webcdn.hirezstudios.com/smite/god-icons/${ban
+                            .replace("'", "")
                             .replaceAll(" ", "-")
                             .toLowerCase()}.jpg`}
                           alt={ban}
@@ -44,7 +48,7 @@ export default function TeamDisplay(props) {
       <div className="team-gods-container">
         <div>{props.team} Side Gods</div>
         <div className="bans-container">
-          {props.gods.map((ban) => {
+          {props.gods.map((ban: string) => {
             if (ban) {
               return (
                 <Link to={"/".concat(ban.replaceAll(" ", "_"))}>
@@ -53,6 +57,7 @@ export default function TeamDisplay(props) {
                       <div style={{ height: "30px", width: "30px" }}>
                         <img
                           src={`https://webcdn.hirezstudios.com/smite/god-icons/${ban
+                            .replace("'", "")
                             .replaceAll(" ", "-")
                             .toLowerCase()}.jpg`}
                           alt={ban}
@@ -74,7 +79,7 @@ export default function TeamDisplay(props) {
       </div>
       <div className="basic-info-mmrs">
         <div>{props.team} Side MMR</div>
-        <div>{props.mmr.toFixed(2)}</div>
+        <div>{(props.mmr.reduce(reducer) / 5).toFixed(2)}</div>
       </div>
       <CarryPlayerDisplay
         team={props.team}

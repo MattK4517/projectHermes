@@ -29,7 +29,7 @@ export function parseMatchData(match: IMatch): Team[] {
     let winningTeam: Team = {
         bans: [match.Ban0, match.Ban2, match.Ban4, match.Ban6, match.Ban8],
         gods: [],
-        mmr: [],
+        mmr: [0],
         team: "Winning",
         carryPlayer: "None",
         carryScore: 0,
@@ -38,7 +38,7 @@ export function parseMatchData(match: IMatch): Team[] {
     let losingTeam: Team = {
         bans: [match.Ban1, match.Ban3, match.Ban5, match.Ban7, match.Ban9],
         gods: [],
-        mmr: [],
+        mmr: [0],
         team: "Winning",
         carryPlayer: "None",
         carryScore: 0,
@@ -48,8 +48,10 @@ export function parseMatchData(match: IMatch): Team[] {
       if (key.includes("player")) {
         if (value.Win_Status === "Winner") {
           winningTeam.gods.push(value.godName)
+          winningTeam.mmr.push(value.Ranked_Stat_Conq)
         } else {
           losingTeam.gods.push(value.godName)
+          losingTeam.mmr.push(value.Ranked_Stat_Conq)
         }
       }
     }

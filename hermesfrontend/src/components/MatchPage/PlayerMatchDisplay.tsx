@@ -27,6 +27,7 @@ function PlayerIcon(props: any) {
               <img
                 src={`https://webcdn.hirezstudios.com/smite/god-icons/${props.god
                   .replaceAll(" ", "-")
+                  .replaceAll("'", "")
                   .toLowerCase()}.jpg`}
                 alt={props.god}
                 style={{
@@ -49,7 +50,6 @@ function PlayerIcon(props: any) {
 }
 
 export default function PlayerMatchDisplay({ player }: { player: IPlayer }) {
-  console.log();
   return (
     <>
       <div className="player-display-container ">
@@ -79,13 +79,14 @@ export default function PlayerMatchDisplay({ player }: { player: IPlayer }) {
                       src={`https://webcdn.hirezstudios.com/smite/god-icons/${player.godName
                         .replaceAll("'", "")
                         .replaceAll("_", "-")
+                        .replaceAll(" ", "-")
                         .toLowerCase()}.jpg`}
                     />
                   </div>
                   <div
                     className={
                       player.Mode === "Conquest"
-                        ? "role-icon-container"
+                        ? "role-icon-container_small"
                         : "hide-element "
                     }
                   >
@@ -157,7 +158,7 @@ export default function PlayerMatchDisplay({ player }: { player: IPlayer }) {
           </div>
         </div>
       </div>
-      <PlayerBuildDisplay buildType={"items"} player={player} />
+      <PlayerBuildDisplay player={player} />
       <div className="player-padding_header hide">
         <PlayerCarryScore player={player} />
       </div>
