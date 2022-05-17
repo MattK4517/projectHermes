@@ -388,7 +388,7 @@ def get_god_skins(god, role, rank, patch, queue_type, mode, matchup=None):
                     "skin_name": skin["skin_name"]})
     else:
         skin_stats = anlz.get_skin_stats(
-            god, role, "9.4", rank=rank, queue_type=queue_type, mode=mode, matchup=matchup)
+            god, role, patch, rank=rank, queue_type=queue_type, mode=mode, matchup=matchup)
         for x in mycol.find({}, {"_id": 0}):
             if x["skin_name"] == f"Standard {god}":
                 x["skin_name"] = god
@@ -403,7 +403,7 @@ def get_single_skin(god, skin, role, rank, patch, queue_type, mode):
     print(god, skin, role, rank, patch, queue_type, mode)
     # TODO add patch back in
     skin_stats = anlz.get_single_skin_stats(
-        god, skin, role, "9.4", rank=rank, queue_type=queue_type, mode=mode)
+        god, skin, role, patch, rank=rank, queue_type=queue_type, mode=mode)
 
     print(skin_stats)
     return skin_stats
