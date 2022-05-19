@@ -36,6 +36,17 @@ export const MainProvider = (props) => {
     setMode("Conquest");
     setMatchup("None");
   }, [god]);
+
+  useEffect(() => {
+    if (["Assault", "Arena", "Slash"].indexOf(mode) !== -1) {
+      console.log("GETTING HERE");
+      setQueueType("Casual");
+    }
+    if (mode === "Duel") {
+      setQueueType("Ranked")
+    }
+  }, [mode]);
+
   return (
     <MainContext.Provider
       value={[
