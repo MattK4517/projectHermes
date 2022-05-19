@@ -5,7 +5,6 @@ from pyrez.models import Smite
 from pyrez.models.MatchHistory import MatchHistory
 from data_pull_formatting_rewrite import format_no_query
 from __init__ import client
-import flaskHelper
 
 
 def normalize_godId(id):
@@ -106,6 +105,7 @@ def normalize_godId(id):
         1988: "Scylla",
         2005: "Serqet",
         3612: "Set",
+        4039: "Shiva",
         2107: "Skadi",
         1747: "Sobek",
         2074: "Sol",
@@ -127,6 +127,7 @@ def normalize_godId(id):
         2072: "Xing Tian",
         3811: "Yemoja",
         1670: "Ymir",
+        4060: "Yu Huang",
         1672: "Zeus",
         1926: "Zhong Kui"
     }
@@ -185,6 +186,8 @@ def create_player_dict(player):
     playerDict["Multi_kill_Max"] = player.multiKillMax
     playerDict["Objective_Assists"] = player["Objective_Assists"]
     playerDict["Ranked_Stat_Conq"] = player["Rank_Stat_Conquest"]
+    playerDict["Rank_Stat_Joust"] = player["Rank_Stat_Joust"]
+    playerDict["Ranked_Stat_Duel"] = player["Rank_Stat_Duel"]
     playerDict["Region"] = player["Region"]
     playerDict["Role"] = player["Role"]
     playerDict["Skin"] = player["Skin"]
@@ -229,22 +232,40 @@ def create_match_dict(match, patch, input_type):
     return match_dict
 
 
-def create_sets(data):
-    mydb = client["CasualMatches"]
-    mycol = mydb["9.1 Matches"]
+def create_sets(data, mode, queue_type, patch):
+    db_string = ""
+    if queue_type == "Ranked":
+        db_string = "Matches"
+    elif queue_type == "Casual":
+        db_string = "CasualMatches"
+
+    mydb = client[db_string]
+    col_string = ""
+    if mode == "Conquest":
+        col_string = f"{patch} Matches"
+    else:
+        col_string = f"{patch} {mode} Matches"
+
+    mycol = mydb[col_string]
+    print("HERE", db_string, col_string)
+
     existing = []
-    for x in mycol.find({"Entry_Datetime": "1/26/2022"}, {"MatchId": 1, "_id": 0}):
+    for x in mycol.find({}, {"MatchId": 1, "_id": 0}):
         existing.append(x["MatchId"])
+
+    total = 0
     sets = []
     set = []
     for matchId in data:
-        if matchId not in existing:
+        if int(matchId.matchId) not in existing:
             set.append(matchId.matchId)
+            total += 1
             if len(set) == 10:
                 sets.append(set)
                 set = []
     if len(set) != 0:
         sets.append(set)
+    print("TOTAL IN SET: ", total)
     return sets
 
 
@@ -293,25 +314,39 @@ def get_queue_id(queue_type, mode, input_type):
     return queue_id
 
 
-
 def run_pull(patch, hour, queue_type, mode, input_type, date=get_date()):
     starttime = datetime.now()
-    with open("/home/matt4517k/mysite/cred.txt", "r") as f:
+    with open("cred.txt", "r") as f:
         data = f.readlines()
         smite_api = SmiteAPI(devId=data[0].strip(
         ), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
 
-    mydb = client["Matches"]
+    db_string = ""
+    if queue_type == "Ranked":
+        db_string = "Matches"
+    elif queue_type == "Casual":
+        db_string = "CasualMatches"
+
+    mydb = client[db_string]
+    col_string = ""
     if mode == "Conquest":
-        mycol = mydb[f"{patch} Matches"]
+        col_string = f"{patch} Matches"
     else:
-        mycol = mydb[f"{patch} {mode} Matches"]
+        col_string = f"{patch} {mode} Matches"
+
+    mycol = mydb[col_string]
+    print(db_string, col_string)
     date = date
-    queue_id = get_queue_id(queue_type, mode)
+    queue_id = get_queue_id(queue_type, mode, input_type)
+    if queue_id == 0:
+        print(queue_type, mode, input_type)
+        return
+
     match_ids = smite_api.getMatchIds(queue_id, date=date, hour=hour)
     inserted_count = 0
     match_ids_len = len(match_ids)
-    all_sets = create_sets(match_ids)
+    all_sets = create_sets(match_ids, mode, queue_type, patch)
+    print(f"{queue_id} {queue_type} {mode}: {len(match_ids)}")
     for set in all_sets:
 
         try:
@@ -320,7 +355,8 @@ def run_pull(patch, hour, queue_type, mode, input_type, date=get_date()):
             ids = []
             for i in range(len(match_details)):
                 if match_details[i].matchId not in ids:
-                    match_dict = create_match_dict(match_details[i], patch)
+                    match_dict = create_match_dict(
+                        match_details[i], patch, input_type)
                     player = create_player_dict(match_details[i])
                     match_dict[f"player{len(match_dict.keys())-17}"] = player
                     data.append(match_dict)
@@ -338,14 +374,15 @@ def run_pull(patch, hour, queue_type, mode, input_type, date=get_date()):
         except IndexError:
             print(set)
         except TypeError:
-            print(f"{date} Pull Completed in {str(datetime.now() - starttime)} loss: {round(100 - (inserted_count/match_ids_len*100), 2)}")
+            print(f"{date} Pull Completed in {str(datetime.now() - starttime)} loss: {100-round(inserted_count/match_ids_len*100, 2)}")
 
-    print(f"{date} Pull Completed in {str(datetime.now() - starttime)} loss: {100-round(inserted_count/match_ids_len*100, 2)}")
+    if match_ids_len > 0:
+        print(f"{date} Pull Completed in {str(datetime.now() - starttime)} loss: {100-round(inserted_count/match_ids_len*100, 2)}")
 
 
-with open("cred.txt", "r") as f:
-    data = f.readlines()
-    smite_api = SmiteAPI(devId=data[0].strip(
-    ), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
-    # print(flaskHelper.get_player_id(smite_api, "fenrir45-maxmcca"))
-    print(smite_api.getPlayer(505627156))
+if __name__ == "__main__":
+    with open("/home/matt4517k/mysite/cred.txt", "r") as f:
+        data = f.readlines()
+        smite_api = SmiteAPI(devId=data[0].strip(
+        ), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
+        print(smite_api.ping())

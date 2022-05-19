@@ -662,13 +662,13 @@ def get_carry_score(match):
             "Loser": {
                 "totalDamage": 1,
             }
-        },
+                },
         "levelDiff": {
             "Winner": {
             },
             "Loser": {
             }
-        },
+                },
         "killPart": {
                 "Winner": {
                     "totalKills": 0,
@@ -676,7 +676,7 @@ def get_carry_score(match):
                 "Loser": {
                     "totalKills": 0,
                 }
-        }
+                }
     }
     match_roles = []
 
@@ -1121,8 +1121,6 @@ def get_skin_stats(god, role, patch, rank="All Ranks", queue_type="Ranked", mode
     if matchup != "None" and matchup != None:
         myquery = {**myquery, **{"enemy": matchup}}
 
-    print(myquery, mycol.count_documents(myquery))
-
     kills = 0
     deaths = 0
     assists = 0
@@ -1181,13 +1179,11 @@ def get_single_skin_stats(god, skin, role, patch, rank="All Ranks", queue_type="
     wins = 0
     data = {**{stat: 0 for stat in single_stats},
             **{"players": []}}
-    print(rank, role, patch, queue_type, mode)
     myquery = get_query(rank, role, patch, queue_type, mode)
     if matchup != "None" and matchup != None:
         myquery = {**myquery, **{"enemy": matchup}}
 
     myquery["skin"] = skin
-    print(myquery)
     for x in mycol.aggregate([
         {
             "$match": myquery,
@@ -1271,8 +1267,7 @@ def get_single_skin_stats(god, skin, role, patch, rank="All Ranks", queue_type="
     keys = list(data.keys()).copy()
 
     for key in keys:
-        print(data[key] is int)
-        if key not in ["players", "games", "wi te", "wins"] and key not in single_stats:
+        if key not in ["players", "games", "winrate", "wins"] and key not in single_stats:
             del data[key]
         # elif type(data[key]) is int:
         #     data[key] = "{:,}".format(round(data[key]))
