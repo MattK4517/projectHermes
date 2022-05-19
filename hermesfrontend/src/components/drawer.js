@@ -366,7 +366,7 @@ export default function PermanentDrawerLeft() {
               {/* </Menu> */}
             </Hamburger>
             <div className="hide">
-              <SearchBar data={routes.slice(10)} />
+              <SearchBar data={Object.keys(godsDict)} />
             </div>
           </Typography>
         </Toolbar>

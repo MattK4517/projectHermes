@@ -8,54 +8,56 @@ import Autocomplete from "@mui/material/Autocomplete";
 export default function SearchBar(data) {
 
   let history = useHistory();
-  
-  function handleKeyPress(event){
+
+  function handleKeyPress(event) {
     let flag = false;
-    if(event.charCode==13){
+    if (event.charCode == 13) {
       if (parseInt(event.target.value)) {
         history.push(`/Match/${event.target.value.trim()}`);
       } else if (Object.keys(godsDict).findIndex(element => {
         console.log(element.toLowerCase() === event.target.value.toLowerCase())
         return element.toLowerCase() === event.target.value.toLowerCase();
       }) !== -1) {
-        history.push(`/${event.target.value.trim().toLowerCase().replaceAll(" ", "-").replaceAll("'","")}`)
+        history.push(`/${event.target.value.trim().toLowerCase().replaceAll(" ", "-").replaceAll("'", "")}`)
         flag = true
       }
       else {
-        if (!flag){
+        if (!flag) {
           history.push({
             pathname: `/Player/${event.target.value.trim()}`,
-            state: {player: event.target.value}
+            state: { player: event.target.value }
           });
         }
       }
+    }
   }
-  }
+
+  console.log(data.data.map(option => option))
   return (
-    <Stack spacing={2} 
-      sx={{ 
+    <Stack spacing={2}
+      sx={{
         width: 300,
         backgroundColor: "white",
         color: "black",
         marginLeft: "15px",
-       }}
-       className="search-bar"
-      >
+      }}
+      className="search-bar"
+    >
       <Autocomplete
         freeSolo
         id="god-seach-bar"
         // disableClearable
-        options={data.data.map((option) => option.god)}
+        options={data.data.map((option) => option)}
         defaultValue={""}
         clearOnEscape={"true"}
         renderOption={(option) => (
           <React.Fragment>
             <Link
-              style={{ cursor: "pointer", color: "black", display: "flex"}}
+              style={{ cursor: "pointer", color: "black", display: "flex" }}
               to={"/".concat(option.key.replaceAll(" ", "_"))}
             >
               <img
-                src={`https://webcdn.hirezstudios.com/smite/god-icons/${option.key.toLowerCase().replaceAll(" ", "-").replaceAll("'","")}.jpg`}
+                src={`https://webcdn.hirezstudios.com/smite/god-icons/${option.key.toLowerCase().replaceAll(" ", "-").replaceAll("'", "")}.jpg`}
                 alt={option.key}
                 style={{
                   height: "48px",
@@ -79,7 +81,7 @@ export default function SearchBar(data) {
               onKeyPress={e => handleKeyPress(e)}
               label={"Search A God, Player, or Match ID"}
             />
-            
+
           )
         )}
       />
