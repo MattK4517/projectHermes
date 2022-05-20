@@ -67,15 +67,13 @@ def get_god_matchups(god):
 def get_god_data_role(god, role, rank, patch, queue_type, mode, matchup="None"):
     newgod = god.replace("_", " ")
     if matchup != "None":
-        return anlz.get_specific_build(client, god, role, patch, matchup, rank, queue_type, mode)
-    elif "All" in rank and matchup == "None":
+        return anlz.get_specific_build(client, god, role, patch, matchup, rank, queue_type, mode)   
         build = anlz.get_top_builds(
             client, god, role, patch, queue_type, mode=mode)
     elif matchup == "None":
         build = anlz.get_top_builds(
             client, god, role, patch, queue_type, rank, mode=mode)
 
-    # pb_rate = anlz.get_pb_rate(client, newgod, rank, role, patch)
     image = {"url": anlz.get_url(newgod)}
     data_dict = {**build, **image}
     return data_dict

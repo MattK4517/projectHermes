@@ -52,6 +52,43 @@ def get_query(rank, role, patch, queue_type, mode):
     return myquery
 
 
+def return_pipeline(rank, role, patch, queue_type, mode):
+    myquery = get_query(rank, role, patch, queue_type, mode)
+    mypipeline = {
+        '$search': {
+            'compound': {
+                'filter': [
+                    {
+                        'text': {
+                            'query': myquery["patch"],
+                            'path': 'patch'
+                        }
+                    },
+                    {
+                        'text': {
+                            'query': myquery["queue_type"],
+                            'path': 'queue_type'
+                        }
+                    },
+                    {
+                        'text': {
+                            'query': myquery["role"],
+                            'path': 'role'
+                        }
+                    },
+                    {
+                        'text': {
+                            'query': myquery["mode"],
+                            'path': 'mode'
+                        }
+                    },
+                ]
+            }
+        }
+    }
+    return mypipeline
+
+
 def get_pb_rate(client, god, rank, role, patch, queue_type="Ranked", mode="Conquest"):
     """ # need to grab # of matches played by god, number of matches played, number of bans
 
@@ -75,7 +112,7 @@ def get_pb_rate(client, god, rank, role, patch, queue_type="Ranked", mode="Conqu
     if "role" in myquery.keys():
         del myquery["role"]
     del myquery["queue_type"]
-    godBans = bancol.count_documents(myquery)
+    godBans = bancol.find(myquery).count()
     games = get_games_played(client, god, rank, role,
                              patch, queue_type=queue_type, mode=mode)
     if totalMatches == 0:
@@ -87,7 +124,7 @@ def get_games_played(client, god, rank, role, patch, queue_type="Ranked", mode="
     mydb = client["single_match_stats"]
     mycol = mydb[god]
     myquery = get_query(rank, role, patch, queue_type, mode)
-    games = mycol.count_documents(myquery)
+    games = mycol.find(myquery).count()
     return games
 
 
@@ -166,10 +203,9 @@ def get_top_builds(client, god, role, patch, queue_type="Ranked", rank="All Rank
     }
     mydb = client["single_match_stats"]
     mycol = mydb[god]
-    myquery = get_query(rank, role, patch, queue_type, mode)
-    # print(mycol.count_documents(myquery))
     games = 0
     wins = 0
+    mypipeline = return_pipeline(rank, role, patch, queue_type, mode)
     if type(data) is list:
         for x in data:
             games += 1
@@ -193,12 +229,7 @@ def get_top_builds(client, god, role, patch, queue_type="Ranked", rank="All Rank
                             top_dict[slot][item]["wins"] += 1
 
     else:
-        limit = {}
-        if patch in ["9.2", "9.1"]:
-            limit = {"_id": 0, god: 1, "win_status": 1}
-        else:
-            limit = {"_id": 0, "build": 1, "win_status": 1}
-        for x in mycol.find(myquery, limit):
+        for x in mycol.aggregate([mypipeline, {"$project": {"build": 1, "win_status": 1, "_id": 0}}]):
             games += 1
             flag = False
             if x["win_status"] == "Winner":
@@ -206,7 +237,6 @@ def get_top_builds(client, god, role, patch, queue_type="Ranked", rank="All Rank
                 flag = True
             if god in x.keys() and x[god].keys():
                 for slot in x[god].keys():
-                    print(x[god])
                     item = x[god][slot]
                     if item:
                         if item not in top_dict[slot].keys():
@@ -332,11 +362,11 @@ def get_all_builds(client, god, role, patch, queue_type="Ranked", rank="All Rank
     }
     mydb = client["single_match_stats"]
     mycol = mydb[god]
-    myquery = get_query(rank, role, patch, queue_type, mode)
 
     games = 0
     wins = 0
-    for x in mycol.find(myquery, {"_id": 0, "build": 1, "win_status": 1}):
+    mypipeline = return_pipeline(rank, role, patch, queue_type, mode)
+    for x in mycol.aggregate([mypipeline, {"$project": {"_id": 0, "build": 1, "win_status": 1}}]):
         games += 1
         flag = False
         if x["win_status"] == "Winner":
@@ -370,19 +400,18 @@ def get_worst_matchups(client, god, role, patch, queue_type="Ranked", rank="All 
     mydb = client["single_match_stats"]
     mycol = mydb[god]
     matchup_dict = {}
-    myquery = get_query(rank, role, patch, queue_type, mode)
 
     if player:
         myquery = {**myquery, **
                    {"player":  {"$regex": f"{player}", "$options": "i"}}}
 
-    # print(myquery)
     if "All" in role and "role" in myquery.keys():
         del myquery["role"]
 
     games = 0
     wins = 0
-    for matchup in mycol.find(myquery, {"_id": 0}):
+    mypipeline = return_pipeline(rank, role, patch, queue_type, mode)
+    for matchup in mycol.aggregate([mypipeline, {"$project": {"_id": 0, "enemy": 1, "enemies": 1, "win_status": 1}}]):
         if player:
             # #print(matchup)
             if anlzpy.verify_player(player, matchup["player"], "none", "none"):
@@ -1267,6 +1296,10 @@ def get_single_skin_stats(god, skin, role, patch, rank="All Ranks", queue_type="
     keys = list(data.keys()).copy()
 
     for key in keys:
+<<<<<<< Updated upstream
+=======
+        print(data[key] is int)
+>>>>>>> Stashed changes
         if key not in ["players", "games", "winrate", "wins"] and key not in single_stats:
             del data[key]
         # elif type(data[key]) is int:
@@ -1279,6 +1312,8 @@ def get_single_skin_stats(god, skin, role, patch, rank="All Ranks", queue_type="
 
 
 if __name__ == "__main__":
-    print(get_single_skin_stats("Achilles", "Battleworn",
-          "Solo", "9.4", queue_type="Ranked"))
-    pass
+    start_time = datetime.now()
+    for x in range(10):
+        get_top_builds(client, "Achilles", "Solo", "9.5")
+        print(datetime.now() - start_time)
+    print(start_time - datetime.now())

@@ -3,7 +3,7 @@ from datetime import datetime
 from constants import Tier_Three_items, godsDict, roles, ranks, slots, Assassins, Guardians, Hunters, Mages, Warriors, Starter_items
 from __init__ import client
 import numpy as np
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import os
 import analyze as anlz
 import pandas as pd
@@ -43,8 +43,32 @@ def get_items_by_class(client, class_name, role):
                         f"{slot}, {item} , {wins} , {games} , {wr}% \n")
 
 
-get_items_by_class(client, godsDict.keys(), "Solo")
+def get_match_time(patch):
+    import numpy
+    mydb = client["Matches"]
+    mycol = mydb[f"{patch} Matches"]
+    total_bans = []
+    for x in mycol.find({"Minutes": {"$gte": 12}}, {"Minutes": 1}):
+        total_bans.append(x["Minutes"])
+    return total_bans
+    # print("Total Time: ", sum(total_bans) ,"Max Time: ", max(total_bans), "Number of f6 10s: ", mycol.count_documents({"Minutes": {"$lte": 12}}))
+    # print("Average Time: ", numpy.average(total_bans), "Median Time: ", numpy.median(total_bans))
+    # print("Standard Dev: ", numpy.std(total_bans))
+
+
 if __name__ == "__main__":
+    total_bans = pd.DataFrame(get_match_time("9.5"))
+    total_bans2 = pd.DataFrame(get_match_time("9.4"))
+    total_bans3 = pd.DataFrame(get_match_time("9.3"))
+    total_bans4 = pd.DataFrame(get_match_time("9.2"))
+    total_bans5 = pd.DataFrame(get_match_time("9.1"))
+    plt.hist(total_bans.values, alpha=0.75, label="9.5")
+    plt.hist(total_bans2.values, alpha=0.5, label="9.4")
+    plt.hist(total_bans3.values, alpha=0.5, label="9.3")
+    plt.hist(total_bans4.values, alpha=0.5, label="9.2")
+    plt.hist(total_bans5.values, alpha=0.5, label="9.1")
+    plt.legend()
+    plt.show()
     pass
     # items = {item: {"games": 0, "wins": 0} for item in Tier_Three_items}
     # for god in Hunters:
