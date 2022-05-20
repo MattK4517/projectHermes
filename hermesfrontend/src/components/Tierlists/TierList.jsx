@@ -574,6 +574,7 @@ function CounterMatchupDisplay(props) {
                           .replaceAll("'", "")
                           .replaceAll(" ", "-")}.jpg`}
                         style={styling}
+                        loading="lazy"
                       ></img>
                     </div>
                   </div>
