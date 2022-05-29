@@ -13,7 +13,7 @@ from data_pull_insert import create_sets, threaded_pull
 import os
 from sys import getsizeof
 # from data_pull_formatting_rewrite import format_no_query
-from __init__ import client
+from main import client
 
 eastern = timezone('US/Eastern')
 
@@ -21,11 +21,13 @@ eastern = timezone('US/Eastern')
 def init_api(patch, date):
     with open("cred.txt", "r") as f:
         data = f.readlines()
-        smite_api = SmiteAPI(devId=data[0].strip(), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
+        smite_api = SmiteAPI(devId=data[0].strip(
+        ), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
     date = date
     match_ids = smite_api.getMatchIds(426, date=date, hour=-1)
     threaded_process_range(4, create_sets(match_ids), patch)
     print(len(create_sets(match_ids)))
+
 
 def threaded_process_range(nthreads, id_range, patch):
     threads = []
@@ -38,13 +40,14 @@ def threaded_process_range(nthreads, id_range, patch):
         threads.append(t)
 
     # start the threads
-    [ t.start() for t in threads ]
+    [t.start() for t in threads]
     # wait for the threads to finish
-    [ t.join() for t in threads ]
-    
+    [t.join() for t in threads]
+
+
 def get_date_insert():
     time = datetime.now(eastern)
-    yesterday = time - timedelta(days = 1)
+    yesterday = time - timedelta(days=1)
     ret_string = f"{yesterday.year}{yesterday.month}{yesterday.day}"
     if yesterday.day < 10:
         ret_string = f"{yesterday.year}{yesterday.month}0{yesterday.day}"
@@ -53,6 +56,7 @@ def get_date_insert():
     elif yesterday.month < 10:
         ret_string = f"{yesterday.year}0{yesterday.month}{yesterday.day}"
     return ret_string
+
 
 def threaded_process_format(nthreads):
     threads = []
@@ -65,7 +69,7 @@ def threaded_process_format(nthreads):
         matches.append(x)
         if len(matches) % 10000 == 0:
             print("10k done")
-    
+
     for i in range(nthreads):
         match_data = matches[i::nthreads]
         # print(ids)
@@ -74,9 +78,10 @@ def threaded_process_format(nthreads):
         threads.append(t)
 
     # start the threads
-    [ t.start() for t in threads ]
+    [t.start() for t in threads]
     # wait for the threads to finish
-    [ t.join() for t in threads ]
+    [t.join() for t in threads]
+
 
 starttime = datetime.now()
 init_api("9.1", "20220201")

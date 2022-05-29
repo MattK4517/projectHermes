@@ -289,7 +289,7 @@ const ImageDiv = styled.div`
       rgba(7, 7, 32, 0) 0%,
       #070720 100%
     ),
-    linear-gradient(to right, #070720 30%, rgba(7, 7, 32, 0.6) 100%),
+    z linear-gradient(to right, #070720 30%, rgba(7, 7, 32, 0.6) 100%),
     url(${(props) =>
       props.url
         ? props.url.replace("icons", "cards")
@@ -317,8 +317,6 @@ function Godpage(props) {
     modes,
     ranks,
     roles,
-    skin,
-    setSkin,
     tab,
     setTab,
   ] = useContext(MainContext);
