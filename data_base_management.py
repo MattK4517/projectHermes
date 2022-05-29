@@ -11,7 +11,7 @@ import analyze as anlz
 from constants import Tier_Three_items, godsDict, roles, ranks, single_combat_stats, single_objective_stats, Warriors
 # from pandas.io.json import json_normalize
 # import time
-from __init__ import client
+from main import client
 
 
 def clear_nonmatches(client):

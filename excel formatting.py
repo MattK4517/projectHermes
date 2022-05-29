@@ -1,6 +1,6 @@
 import pandas as pd
 import pymongo
-from __init__ import client
+from main import client
 
 
 godsDict = {
@@ -121,10 +121,10 @@ godsDict = {
     "Zhong Kui": 0
 }
 
-dataSheet = pd.read_excel("God Abilities & Items.xlsx", sheet_name="god_abilties_all")
+dataSheet = pd.read_excel("God Abilities & Items.xlsx",
+                          sheet_name="god_abilties_all")
 
 formattedDS = dict(dataSheet)
-
 
 
 toMongo = {}
@@ -135,11 +135,12 @@ for god in formattedDS["god_name"]:
 for god in formattedDS["god_name"]:
     if formattedDS["god_name"][index] == god:
         toMongo[god]["Abilities"].append(formattedDS["ability_name"][index])
-        toMongo[god]["Abilities_urls"].append(formattedDS["ability_url"][index])
+        toMongo[god]["Abilities_urls"].append(
+            formattedDS["ability_url"][index])
     index += 1
 
 mydb = client["URLS"]
-for god in godsDict.keys(): 
+for god in godsDict.keys():
     if god != "Morgan Le Fay":
         mycol = mydb[god]
         mycol.insert_one(toMongo[god])

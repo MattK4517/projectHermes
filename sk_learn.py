@@ -10,7 +10,7 @@ import os
 from constants import Hunters
 from bson import BSON
 from bson import json_util
-from __init__ import client
+from main import client
 # col_names = ["gold", "damage_bot", "kills_bot", "tower_kills", "phoenix_kills", "tower_damage", "objective_assists", "wards_placed"]
 # mydb = client["single_objective_stats"]
 
@@ -54,15 +54,15 @@ print(mycol.count_documents({"Entry_Datetime": "11/4/2021"}))
 # # if not os.path.exists(f"C:\\Users\\MayheM\\Desktop\\python\\projectHermes\\charts\\_Machine Learning\\{god}"):
 # #     os.mkdir(f"C:\\Users\\MayheM\\Desktop\\python\\projectHermes\\charts\\_Machine Learning\\{god}")
 
-# plt.savefig(f"C:\\Users\\MayheM\\Desktop\\python\\projectHermes\\charts\\_Machine Learning\\{god}", 
-# dpi=None, 
-# facecolor='w', 
+# plt.savefig(f"C:\\Users\\MayheM\\Desktop\\python\\projectHermes\\charts\\_Machine Learning\\{god}",
+# dpi=None,
+# facecolor='w',
 # edgecolor='w',
-# orientation='portrait', 
-# papertype=None, 
+# orientation='portrait',
+# papertype=None,
 # format=None,
-# transparent=False, 
-# bbox_inches=None, 
+# transparent=False,
+# bbox_inches=None,
 # pad_inches=0.1,
 # metadata=None)
 # plt.close()

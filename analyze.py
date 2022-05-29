@@ -1,23 +1,19 @@
 from audioop import avg
 from re import A, M, S, X
 from datetime import datetime
-import re
-from __init__ import client
-from pymongo.message import kill_cursors
+from main import client
 import errlogger as logger
 import pymongo
 from collections import OrderedDict
 from operator import getitem
 from math import sqrt
-from constants import godsDict, slots, Tier_Three_items, Starter_items, roles, single_combat_stats, single_objective_stats, godsDict2, ranks, single_stats
+from constants import Assassins, Guardians, Hunters, Mages, Warriors, godsDict, slots, Tier_Three_items, Starter_items, roles, single_combat_stats, single_objective_stats, godsDict2, ranks, single_stats
 import analyze_players as anlzpy
 
 import pyrez
 from pyrez.api import SmiteAPI
 from pyrez.models import Smite
 from pyrez.models.MatchHistory import MatchHistory
-
-from flaskControl import get_all_items
 # info pull
 # [godWR, godPR, godBR] - check, matchesPlayed - check
 # relics used
@@ -52,37 +48,19 @@ def get_query(rank, role, patch, queue_type, mode):
     return myquery
 
 
-def return_pipeline(rank, role, patch, queue_type, mode):
+def return_pipeline(god, rank, role, patch, queue_type, mode):
     myquery = get_query(rank, role, patch, queue_type, mode)
+    filter_list = [{'text': {'query': myquery[key], "path": key}}
+                   for key in myquery]
+    filter_list.append({
+        'text': {
+            'query': god,
+            'path': 'god'
+        }})
     mypipeline = {
         '$search': {
             'compound': {
-                'filter': [
-                    {
-                        'text': {
-                            'query': myquery["patch"],
-                            'path': 'patch'
-                        }
-                    },
-                    {
-                        'text': {
-                            'query': myquery["queue_type"],
-                            'path': 'queue_type'
-                        }
-                    },
-                    {
-                        'text': {
-                            'query': myquery["role"],
-                            'path': 'role'
-                        }
-                    },
-                    {
-                        'text': {
-                            'query': myquery["mode"],
-                            'path': 'mode'
-                        }
-                    },
-                ]
+                'filter': filter_list
             }
         }
     }
@@ -202,10 +180,11 @@ def get_top_builds(client, god, role, patch, queue_type="Ranked", rank="All Rank
         **top_dict
     }
     mydb = client["single_match_stats"]
-    mycol = mydb[god]
+    mycol = mydb[mode]
     games = 0
     wins = 0
-    mypipeline = return_pipeline(rank, role, patch, queue_type, mode)
+    mypipeline = return_pipeline(god, rank, role, patch, queue_type, mode)
+
     if type(data) is list:
         for x in data:
             games += 1
@@ -229,42 +208,43 @@ def get_top_builds(client, god, role, patch, queue_type="Ranked", rank="All Rank
                             top_dict[slot][item]["wins"] += 1
 
     else:
-        for x in mycol.aggregate([mypipeline, {"$project": {"build": 1, "win_status": 1, "_id": 0}}]):
-            games += 1
-            flag = False
-            if x["win_status"] == "Winner":
-                wins += 1
-                flag = True
-            if god in x.keys() and x[god].keys():
-                for slot in x[god].keys():
-                    item = x[god][slot]
-                    if item:
-                        if item not in top_dict[slot].keys():
-                            if flag:
-                                top_dict[slot][item] = {
-                                    "item": item, "games": 1, "wins": 1}
-                            else:
-                                top_dict[slot][item] = {
-                                    "item": item, "games": 1, "wins": 0}
-                        elif item in top_dict[slot].keys():
-                            top_dict[slot][item]["games"] += 1
-                            if flag:
-                                top_dict[slot][item]["wins"] += 1
-            elif "build" in x.keys():
-                for slot in x["build"].keys():
-                    item = x["build"][slot]
-                    if item:
-                        if item not in top_dict[slot].keys():
-                            if flag:
-                                top_dict[slot][item] = {
-                                    "item": item, "games": 1, "wins": 1}
-                            else:
-                                top_dict[slot][item] = {
-                                    "item": item, "games": 1, "wins": 0}
-                        elif item in top_dict[slot].keys():
-                            top_dict[slot][item]["games"] += 1
-                            if flag:
-                                top_dict[slot][item]["wins"] += 1
+        for x in mycol.aggregate([mypipeline, {"$project": {god: 1, "build": 1, "win_status": 1, "_id": 0, "god": 1}}]):
+            if x["god"] == god:
+                games += 1
+                flag = False
+                if x["win_status"] == "Winner":
+                    wins += 1
+                    flag = True
+                if god in x.keys() and x[god].keys():
+                    for slot in x[god].keys():
+                        item = x[god][slot]
+                        if item:
+                            if item not in top_dict[slot].keys():
+                                if flag:
+                                    top_dict[slot][item] = {
+                                        "item": item, "games": 1, "wins": 1}
+                                else:
+                                    top_dict[slot][item] = {
+                                        "item": item, "games": 1, "wins": 0}
+                            elif item in top_dict[slot].keys():
+                                top_dict[slot][item]["games"] += 1
+                                if flag:
+                                    top_dict[slot][item]["wins"] += 1
+                elif "build" in x.keys():
+                    for slot in x["build"].keys():
+                        item = x["build"][slot]
+                        if item:
+                            if item not in top_dict[slot].keys():
+                                if flag:
+                                    top_dict[slot][item] = {
+                                        "item": item, "games": 1, "wins": 1}
+                                else:
+                                    top_dict[slot][item] = {
+                                        "item": item, "games": 1, "wins": 0}
+                            elif item in top_dict[slot].keys():
+                                top_dict[slot][item]["games"] += 1
+                                if flag:
+                                    top_dict[slot][item]["wins"] += 1
 
     if games == 0:
         return {**{}, **{"games": games, "wins": wins, "winRate": 0}}
@@ -361,12 +341,12 @@ def get_all_builds(client, god, role, patch, queue_type="Ranked", rank="All Rank
         **top_dict
     }
     mydb = client["single_match_stats"]
-    mycol = mydb[god]
+    mycol = mydb[mode]
 
     games = 0
     wins = 0
-    mypipeline = return_pipeline(rank, role, patch, queue_type, mode)
-    for x in mycol.aggregate([mypipeline, {"$project": {"_id": 0, "build": 1, "win_status": 1}}]):
+    mypipeline = return_pipeline(god, rank, role, patch, queue_type, mode)
+    for x in mycol.aggregate([mypipeline, {"$project": {"_id": 0, god: 1, "build": 1, "win_status": 1}}]):
         games += 1
         flag = False
         if x["win_status"] == "Winner":
@@ -398,7 +378,7 @@ def get_all_builds(client, god, role, patch, queue_type="Ranked", rank="All Rank
 
 def get_worst_matchups(client, god, role, patch, queue_type="Ranked", rank="All Ranks", mode="Conquest", player=None):
     mydb = client["single_match_stats"]
-    mycol = mydb[god]
+    mycol = mydb[mode]
     matchup_dict = {}
 
     if player:
@@ -410,7 +390,7 @@ def get_worst_matchups(client, god, role, patch, queue_type="Ranked", rank="All 
 
     games = 0
     wins = 0
-    mypipeline = return_pipeline(rank, role, patch, queue_type, mode)
+    mypipeline = return_pipeline(god, rank, role, patch, queue_type, mode)
     for matchup in mycol.aggregate([mypipeline, {"$project": {"_id": 0, "enemy": 1, "enemies": 1, "win_status": 1}}]):
         if player:
             # #print(matchup)
@@ -691,13 +671,13 @@ def get_carry_score(match):
             "Loser": {
                 "totalDamage": 1,
             }
-                },
+            },
         "levelDiff": {
             "Winner": {
             },
             "Loser": {
             }
-                },
+            },
         "killPart": {
                 "Winner": {
                     "totalKills": 0,
@@ -705,7 +685,7 @@ def get_carry_score(match):
                 "Loser": {
                     "totalKills": 0,
                 }
-                }
+            }
     }
     match_roles = []
 
@@ -1296,10 +1276,6 @@ def get_single_skin_stats(god, skin, role, patch, rank="All Ranks", queue_type="
     keys = list(data.keys()).copy()
 
     for key in keys:
-<<<<<<< Updated upstream
-=======
-        print(data[key] is int)
->>>>>>> Stashed changes
         if key not in ["players", "games", "winrate", "wins"] and key not in single_stats:
             del data[key]
         # elif type(data[key]) is int:
@@ -1311,9 +1287,163 @@ def get_single_skin_stats(god, skin, role, patch, rank="All Ranks", queue_type="
         return {**{"games": games, "wins": wins, "winRate": round(wins/games*100, 2)}, **data}
 
 
+def report_query_parser(god: list, rank: list, role: list, patch: list, queue_type: list, mode: str, enemy: list, items: list) -> dict:
+    # formatted_item = ""
+    # for item in items:
+    #     formatted_item += item + " "
+    myquery = {
+        "god": {"$in": god},
+        "rank": {"$in": rank},
+        "role": {"$in": role},
+        "patch": {"$in": patch},
+        "queue_type": {"$in": queue_type},
+        "mode": mode,
+        "enemy": {"$in": enemy},
+        "$or": [
+            {"build.slot1": {"$in": items}},
+            {"build.slot2": {"$in": items}},
+            {"build.slot3": {"$in": items}},
+            {"build.slot4": {"$in": items}},
+            {"build.slot5": {"$in": items}},
+            {"build.slot6": {"$in": items}},
+        ]
+    }
+
+    if mode != "Conquest":
+        myquery.pop("role")
+    if mode not in ["Conquest", "Duel", "Joust"]:
+        myquery["queue_type"] = "Casual"
+    if mode == "Duel":
+        myquery["queue_type"] = "Ranked"
+    if len(items) <= 0:
+        myquery.pop("$or")
+    if len(enemy) <= 0:
+        myquery.pop("enemy")
+
+    for r in ranks:
+        if r == "All Ranks":
+            myquery.pop("rank")
+    # if mode != conquest: no role
+    # if queue_type != ranked: no rank
+    # if mode != ranked modes: queue_type == casual
+    # if item create the {"$or" item.slot1-6: item}
+    return myquery
+
+
+def query_attribute_parser(attributes: list) -> dict:
+    return {f"avg{attribute.replace(' ', '_')}": {"$avg": f"${attribute.strip().lower().replace(' ', '_')}"} for attribute in attributes}
+
+
+def get_match_stats(client, god, role, patch, attributes, rank="All Ranks", queue_type="Ranked", mode="Conquest"):
+    mydb = client["single_match_stats"]
+    match_stats = {m: {p: {g: {r: {} for r in role}
+                           for g in god} for p in patch} for m in mode}
+
+    for m in mode:
+        # need to make function that correctly generates queries
+        mycol = mydb[m]
+        myquery = report_query_parser(
+            god, rank, role, patch, queue_type, m, [], [])
+        if m != "Conquest":
+            group_by = {"god": "$god", "patch": "$patch"}
+        else:
+            group_by = {"god": "$god", "role": "$role", "patch": "$patch"}
+
+        myattributes = query_attribute_parser(attributes)
+        for x in mycol.aggregate([
+            {
+                "$match": myquery
+            },
+            {
+                "$group":
+                {**{
+                    "_id": group_by,
+                    "games": {"$sum": 1},
+                },
+                **myattributes}
+
+            }
+        ]):
+            x["God"] = x["_id"]["god"]
+            x["Patch"] = x["_id"]["patch"]
+            if m != "Conquest":
+                match_stats[m][x["_id"]["patch"]][x["_id"]["god"]] = x
+                del match_stats[m][x["_id"]["patch"]][x["_id"]["god"]]["_id"]
+            else:
+                match_stats[m][x["_id"]["patch"]][x["_id"]
+                                                  ["god"]][x["_id"]["role"]] = x
+                del match_stats[m][x["_id"]["patch"]][x["_id"]
+                                                      ["god"]][x["_id"]["role"]]["_id"]
+            for key, val in enumerate(match_stats[m]):
+
+                if type(match_stats[m][val]) is float or type(match_stats[m][val]) is int:
+                    match_stats[m][val] = round(match_stats[m][val], 2)
+
+    # del combat_stats["_id"]
+    return match_stats
+
+
+def insertBatch(collection, documents):
+    bulkInsert = collection.initialize_unordered_bulk_op()
+    insertedIds = []
+    for doc in documents:
+        id = doc["_id"]
+        # Insert without raising an error for duplicates
+        bulkInsert.find({"_id": id}).upsert().replace_one(doc)
+        insertedIds.append(id)
+    bulkInsert.execute()
+    return insertedIds
+
+
+def deleteBatch(collection, documents):
+    bulkRemove = collection.initialize_ordered_bulk_op()
+    for doc in documents:
+        bulkRemove.find({"_id": doc["_id"]}).remove_one()
+    bulkRemove.execute()
+
+
+def moveDocuments(sourceCollection, targetCollection, filter, batchSize):
+    # print("Moving " + str(sourceCollection.find(filter).count()) +
+    #       " documents from " + str(sourceCollection) + " to " + str(targetCollection))
+    while ((sourceCollection.find(filter).count()) > 0):
+        print(str(sourceCollection.find(filter).count()) + " documents remaining")
+        sourceDocs = sourceCollection.find(filter).limit(batchSize)
+        idsOfCopiedDocs = insertBatch(targetCollection, sourceDocs)
+
+        targetDocs = targetCollection.find({"_id": {"$in": idsOfCopiedDocs}})
+        deleteBatch(sourceCollection, targetDocs)
+    print("Done!")
+
+
 if __name__ == "__main__":
-    start_time = datetime.now()
-    for x in range(10):
-        get_top_builds(client, "Achilles", "Solo", "9.5")
-        print(datetime.now() - start_time)
-    print(start_time - datetime.now())
+    # print(get_top_builds(client, "Achilles", "Solo", "9.3"))
+    from main import client
+    import numpy
+    mydb = client["single_match_stats"]
+    games = 0
+    wins = 0
+    kills = 0
+    total_bans = []
+    god_name = ""
+    class_games = {role: 0 for role in roles}
+    class_wins = {role: 0 for role in roles}
+    insert_col = mydb["Conquest"]
+
+    # Moving Achilles 9.1 data to conquest collection, if goes wrong just move back
+    for god in ["Hades"]:
+        for patch in ["9.1", "9.2", "9.3", "9.4"]:
+            for role in roles:
+                moveDocuments(mydb[god], mydb["Conquest"], {
+                    "mode": "Conquest", "role": role, "patch": patch}, 5000)
+                print(f"{god} {patch} {role} Done!")
+
+    # for god in ["Achilles"]:
+    #     mycol=mydb[god]
+    #     insert_col.delete_many({"Entry_Datetime": {"$lt": "5/18/2022"}})
+    #     for role in roles:
+    #         for x in mycol.find({"mode": "Conquest", "patch": "9.1", "role": role}, {"_id": 0}):
+    #             total_bans.append(x)
+
+    #     insert_col.bulk_write(total_bans)
+    #     total_bans=[]
+    #     print(f"{role} done")

@@ -2621,3 +2621,11 @@ figure.snip0015:hover figcaption::before {
   flex: 1;
   width: 225px;
 }
+
+.Legendary {
+  filter: sepia(100%) hue-rotate(-10deg) saturate(350%);
+}
+
+.Diamond {
+  filter: sepia(100%) hue-rotate(190deg) saturate(350%);
+}

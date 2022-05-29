@@ -93,5 +93,5 @@ def get_player_id(smite_api: SmiteAPI, playername):
 
 
 if __name__ == "__main__":
-    from __init__ import client
+    from main import client
     print(validate_gods(client, "Mayhem4517", "Ranked", "Conquest"))
