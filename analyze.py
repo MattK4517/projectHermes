@@ -45,6 +45,9 @@ def get_query(rank, role, patch, queue_type, mode):
     if mode != "Conquest" and "role" in myquery.keys():
         del myquery["role"]
 
+    if role == "" and "role" in myquery:
+        del myquery["role"]
+
     return myquery
 
 
@@ -100,9 +103,10 @@ def get_pb_rate(client, god, rank, role, patch, queue_type="Ranked", mode="Conqu
 
 def get_games_played(client, god, rank, role, patch, queue_type="Ranked", mode="Conquest"):
     mydb = client["single_match_stats"]
-    mycol = mydb[god]
-    myquery = get_query(rank, role, patch, queue_type, mode)
-    games = mycol.find(myquery).count()
+    mycol = mydb[mode]
+    mypipeline = return_pipeline(god, rank, role, patch, queue_type, mode)
+    for x in mycol.aggregate([mypipeline, {"$group": {"_id": "$god", "count": {"$sum": 1}}}]):
+        games = x["count"]
     return games
 
 
@@ -484,36 +488,35 @@ def get_worst_matchups(client, god, role, patch, queue_type="Ranked", rank="All 
 
 def get_winrate(client, god, role, patch, queue_type="Ranked", rank="All Ranks", mode="Conquest", matchup="None"):
     mydb = client["single_match_stats"]
-    mycol = mydb[god]
+    mycol = mydb[mode]
     myquery = get_query(rank, role, patch, queue_type, mode=mode)
 
     if matchup != "None":
         myquery = {**myquery, **{"enemy": matchup}}
     games = 0
     wins = 0
-    for x in mycol.find(myquery):
-        games += 1
-        if x["win_status"] == "Winner":
-            wins += 1
-    if games > 0:
-        win_rate = round(wins/games*100, 2)
-    else:
-        win_rate = 0
+    mypipeline = return_pipeline(god, rank, role, patch, queue_type, mode)
+    for x in mycol.aggregate([mypipeline, {"$group": {"_id": "$win_status", "count": {"$sum": 1}}}]):
+        games += x["count"]
+        if x["_id"] == "Winner":
+            wins += x["count"]
 
-    return {"wins": wins, "games": games, "win_rate": win_rate}
+    if games > 0:
+        return {"wins": wins, "games": games, "win_rate": round(wins/games*100, 2)}
+    else:
+        return {"wins": wins, "games": games, "win_rate": 0}
 
 
 def get_total_matches(client, rank, patch, queue_type="Ranked", mode="Conquest"):
     mydb = client["Matches"]
     mycol = mydb["Total_Matches"]
-    total_games = 0
     myquery = get_query(rank, "", patch, queue_type, mode)
-    if "role" in myquery.keys():
-        del myquery["role"]
     myquery["rank"] = rank
-    for x in mycol.find(myquery, {"Total_Matches": 1, "_id": 0}):
-        total_games += x["Total_Matches"]
-    return total_games
+
+    games = 0
+    for x in mycol.find(myquery):
+        games += x["Total_Matches"]
+    return games
 
 
 def get_combat_stats(client, god, role, patch, rank="All Ranks", queue_type="Ranked", mode="Conquest"):
@@ -671,13 +674,13 @@ def get_carry_score(match):
             "Loser": {
                 "totalDamage": 1,
             }
-            },
+                },
         "levelDiff": {
             "Winner": {
             },
             "Loser": {
             }
-            },
+                },
         "killPart": {
                 "Winner": {
                     "totalKills": 0,
@@ -685,7 +688,7 @@ def get_carry_score(match):
                 "Loser": {
                     "totalKills": 0,
                 }
-            }
+                }
     }
     match_roles = []
 
@@ -1416,7 +1419,7 @@ def moveDocuments(sourceCollection, targetCollection, filter, batchSize):
 
 
 if __name__ == "__main__":
-    # print(get_top_builds(client, "Achilles", "Solo", "9.3"))
+    starttime = datetime.now()
     from main import client
     import numpy
     mydb = client["single_match_stats"]
@@ -1430,12 +1433,12 @@ if __name__ == "__main__":
     insert_col = mydb["Conquest"]
 
     # Moving Achilles 9.1 data to conquest collection, if goes wrong just move back
-    for god in ["Hades"]:
-        for patch in ["9.1", "9.2", "9.3", "9.4"]:
-            for role in roles:
-                moveDocuments(mydb[god], mydb["Conquest"], {
-                    "mode": "Conquest", "role": role, "patch": patch}, 5000)
-                print(f"{god} {patch} {role} Done!")
+    # for god in ["Hades"]:
+    #     for patch in ["9.1", "9.2", "9.3", "9.4"]:
+    #         for role in roles:
+    #             moveDocuments(mydb[god], mydb["Conquest"], {
+    #                 "mode": "Conquest", "role": role, "patch": patch}, 5000)
+    #             print(f"{god} {patch} {role} Done!")
 
     # for god in ["Achilles"]:
     #     mycol=mydb[god]
