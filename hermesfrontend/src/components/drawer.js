@@ -33,6 +33,7 @@ import { TierListProvider } from './Tierlists/TierListContext';
 import FindAMatch from './MatchPage/FindAMatch';
 import { MainProvider } from './mainGodPage/MainContext';
 import SkinStatPage from './mainGodPage/Skins/SkinStatPage';
+import Button from '@mui/material/Button';
 
 export const compare = (a, b) => {
   return a.winRate - b.winRate;
@@ -284,6 +285,7 @@ const Hamburger = styled("div")(({ theme }) => ({
     backgroundColor: "#0000FF",
     display: "none",
   },
+
 }));
 
 const drawerWidth = 200;
@@ -317,6 +319,7 @@ export default function PermanentDrawerLeft() {
             component="div"
             sx={{
               display: "flex",
+              width: "100%",
             }}
           >
             <Link to={"/"}>
@@ -342,31 +345,21 @@ export default function PermanentDrawerLeft() {
                 Gods
               </Link>
               <Link to={"/tierlist"}>Tierlist</Link>
-              {/* <Button
-            id="basic-button"
-            aria-controls="basic-menu"
-            aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
-            onClick={handleClick}
-          >
-            <MenuIcon />
-          </Button>
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            MenuListProps={{
-              'aria-labelledby': 'basic-button',
-            }}
-          > */}
-              {/* <MenuItem onClick={handleClose}><Link to={"/"}>Gods</Link></MenuItem>
-            <MenuItem onClick={handleClose}><Link to={"/"}>Gods</Link></MenuItem>
-            <MenuItem onClick={handleClose}><Link to={"/tierlist"}>tierlist</Link></MenuItem> */}
-              {/* </Menu> */}
+              <div style={{ flex: "1", display: "flex", justifyContent: "flex-end" }}>
+                <Button
+                  target="_blank"
+                  href="https://www.patreon.com/smitestats"
+                  variant="contained">Support SmiteStats</Button>
+              </div>
             </Hamburger>
-            <div className="hide">
-              <SearchBar data={Object.keys(godsDict)} />
+            <div className="hide search-bar_container">
+              <SearchBar data={Object.keys(godsDict)} style={{ flex: "1" }} />
+              <div style={{ flex: "1", display: "flex", justifyContent: "flex-end" }}>
+                <Button
+                  target="_blank"
+                  href="https://www.patreon.com/smitestats"
+                  variant="contained">Support SmiteStats</Button>
+              </div>
             </div>
           </Typography>
         </Toolbar>

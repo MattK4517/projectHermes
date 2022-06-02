@@ -2629,3 +2629,10 @@ figure.snip0015:hover figcaption::before {
 .Diamond {
   filter: sepia(100%) hue-rotate(190deg) saturate(350%);
 }
+
+.search-bar_container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
