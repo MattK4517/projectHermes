@@ -105,6 +105,7 @@ def get_games_played(client, god, rank, role, patch, queue_type="Ranked", mode="
     mydb = client["single_match_stats"]
     mycol = mydb[mode]
     mypipeline = return_pipeline(god, rank, role, patch, queue_type, mode)
+    games = 0
     for x in mycol.aggregate([mypipeline, {"$group": {"_id": "$god", "count": {"$sum": 1}}}]):
         games = x["count"]
     return games
@@ -589,6 +590,7 @@ def get_build_stats(client, build):
     ret_build = {slot: {} for slot in slots}
     slot_num = 1
     for item in build:
+        print(item)
         if item:
             item_data_col = item_data_db[item]
             for x in item_data_col.find({}, {

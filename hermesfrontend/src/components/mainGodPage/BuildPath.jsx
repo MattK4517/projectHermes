@@ -1,12 +1,12 @@
-import { Tab } from "@material-ui/core";
-import React from "react";
-import { useState, useEffect, useContext } from "react";
-import { useTable, useSortBy, usePagination } from "react-table";
-import Tooltip from "@material-ui/core/Tooltip";
-import { withStyles, makeStyles } from "@material-ui/core/styles";
-import winRateColor from "../mainGodPage/WinRateColor";
-import { HtmlTooltip } from "./GodPageHelpers";
-import { MainContext } from "./MainContext";
+import { Tab } from '@material-ui/core';
+import React from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { useTable, useSortBy, usePagination } from 'react-table';
+import Tooltip from '@material-ui/core/Tooltip';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
+import winRateColor from '../mainGodPage/WinRateColor';
+import { HtmlTooltip } from './GodPageHelpers';
+import { MainContext } from './MainContext';
 
 function CreateItemToolTip(props) {
   if (props.index == 0) {
@@ -18,41 +18,41 @@ function CreateItemToolTip(props) {
     <>
       <div
         style={{
-          maxHeight: "350px",
-          maxWidth: "750px",
-          color: "#E6E6FA",
-          alignItems: "left",
-          fontSize: "14px",
+          maxHeight: '350px',
+          maxWidth: '750px',
+          color: '#E6E6FA',
+          alignItems: 'left',
+          fontSize: '14px',
         }}
       >
-        <h5 style={{ width: "100%", fontSize: "1rem", color: "#1E90FF" }}>
+        <h5 style={{ width: '100%', fontSize: '1rem', color: '#1E90FF' }}>
           {props.item.DeviceName}
         </h5>
         <div>
           <p>{props.item.itemShortDesc}</p>
         </div>
-        <div className="item-stats">
+        <div className='item-stats'>
           {props.item.ItemDescription.Menuitems.map((stat) => {
             return (
-              <p style={{ left: "0" }}>
+              <p style={{ left: '0' }}>
                 {stat.Description}: {stat.Value}
               </p>
             );
           })}
-          <div className="item-passive">
+          <div className='item-passive'>
             <p>{props.item.ItemDescription.SecondaryDescription}</p>
           </div>
         </div>
-        <p style={{ color: "#D4AF37" }}>
+        <p style={{ color: '#D4AF37' }}>
           <b>Price:</b> {props.item.absolutePrice}({props.item.relativePrice})
           <img
             style={{
-              maxHeight: "20px",
-              maxWidth: "20px",
-              paddingLeft: "3px",
+              maxHeight: '20px',
+              maxWidth: '20px',
+              paddingLeft: '3px',
             }}
-            src="https://i.imgur.com/XofaIQ0.png"
-            alt="gold-img"
+            src='https://i.imgur.com/XofaIQ0.png'
+            alt='gold-img'
           />
         </p>
       </div>
@@ -69,7 +69,7 @@ function Table({ columns, data }) {
         initialState: {
           sortBy: [
             {
-              id: "games",
+              id: 'games',
               desc: true,
             },
           ],
@@ -85,22 +85,22 @@ function Table({ columns, data }) {
   return (
     <>
       <div
-        className="stats-tables__content-container"
-        style={{ width: "fit-content" }}
+        className='stats-tables__content-container'
+        style={{ width: 'fit-content' }}
       >
-        <div className="tier-list-page-container" style={{ width: "100%" }}>
-          <div className="tier-list-page">
+        <div className='tier-list-page-container' style={{ width: '100%' }}>
+          <div className='tier-list-page'>
             <div>
               <div
-                class="content-section ReactTable ugg-table-2 tier-list"
-                role="table"
+                class='content-section ReactTable smitestats-table-2 tier-list'
+                role='table'
                 {...getTableProps()}
               >
-                <div class="rt-thead -header">
+                <div class='rt-thead -header'>
                   {headerGroups.map((headerGroup) => (
                     <div
-                      class="rt-tr "
-                      role="row"
+                      class='rt-tr '
+                      role='row'
                       {...headerGroup.getHeaderGroupProps()}
                     >
                       {headerGroup.headers.map((column) => (
@@ -108,19 +108,19 @@ function Table({ columns, data }) {
                         // we can add them into the header props
 
                         <div
-                          class={"rt-th header-".concat(column.id)}
+                          class={'rt-th header-'.concat(column.id)}
                           {...column.getHeaderProps(
                             column.getSortByToggleProps()
                           )}
                         >
-                          {column.render("Header")}
+                          {column.render('Header')}
 
                           <span>
                             {column.isSorted
                               ? column.isSortedDesc
-                                ? " 🔽"
-                                : " 🔼"
-                              : ""}
+                                ? ' 🔽'
+                                : ' 🔼'
+                              : ''}
                           </span>
                         </div>
                       ))}
@@ -128,8 +128,8 @@ function Table({ columns, data }) {
                   ))}
                 </div>
                 <div
-                  className="grid-block-content build-path_border"
-                  role="rowgroup"
+                  className='grid-block-content build-path_border'
+                  role='rowgroup'
                   {...getTableBodyProps()}
                 >
                   {firstPageRows.map(
@@ -146,37 +146,37 @@ function Table({ columns, data }) {
                         return (
                           <>
                             <div
-                              className="item-row"
-                              role="row"
+                              className='item-row'
+                              role='row'
                               {...row.getRowProps()}
-                              style={{ paddingTop: "10px" }}
+                              style={{ paddingTop: '10px' }}
                             >
                               {row.cells.map((cell) => {
                                 const { key, role } = cell.getCellProps();
-                                let url = "";
+                                let url = '';
                                 //   let url = `https://webcdn.hirezstudios.com/smite/item-icons/.jpg`
-                                if (key.includes("islot")) {
+                                if (key.includes('islot')) {
                                   let item =
                                     row.original.islot1.DeviceName.replaceAll(
-                                      "_",
-                                      " "
+                                      '_',
+                                      ' '
                                     );
-                                  item = item.replaceAll("'", "");
-                                  item = item.replaceAll(" ", "-");
+                                  item = item.replaceAll("'", '');
+                                  item = item.replaceAll(' ', '-');
                                   let item2 =
                                     row.original.slot2.DeviceName.replaceAll(
-                                      "_",
-                                      " "
+                                      '_',
+                                      ' '
                                     );
-                                  item2 = item2.replaceAll("'", "");
-                                  item2 = item2.replaceAll(" ", "-");
+                                  item2 = item2.replaceAll("'", '');
+                                  item2 = item2.replaceAll(' ', '-');
                                   let item3 =
                                     row.original.slot3.DeviceName.replaceAll(
-                                      "_",
-                                      " "
+                                      '_',
+                                      ' '
                                     );
-                                  item3 = item3.replaceAll("'", "");
-                                  item3 = item3.replaceAll(" ", "-");
+                                  item3 = item3.replaceAll("'", '');
+                                  item3 = item3.replaceAll(' ', '-');
                                   return (
                                     <>
                                       <HtmlTooltip
@@ -187,18 +187,18 @@ function Table({ columns, data }) {
                                             />
                                           </React.Fragment>
                                         }
-                                        placement="top"
+                                        placement='top'
                                         arrow
                                       >
                                         <div
-                                          className="item-image"
+                                          className='item-image'
                                           style={{
-                                            marginLeft: "30px",
-                                            minWidth: "50px",
-                                            maxWidth: "90px",
+                                            marginLeft: '30px',
+                                            minWidth: '50px',
+                                            maxWidth: '90px',
                                           }}
                                         >
-                                          <div className="item-image-div">
+                                          <div className='item-image-div'>
                                             <img
                                               src={`https://webcdn.hirezstudios.com/smite/item-icons/${item.toLowerCase()}.jpg`}
                                               alt={row.original.islot1}
@@ -215,17 +215,17 @@ function Table({ columns, data }) {
                                             />
                                           </React.Fragment>
                                         }
-                                        placement="top"
+                                        placement='top'
                                         arrow
                                       >
                                         <div
-                                          className="item-image"
+                                          className='item-image'
                                           style={{
-                                            minWidth: "50px",
-                                            maxWidth: "90px",
+                                            minWidth: '50px',
+                                            maxWidth: '90px',
                                           }}
                                         >
-                                          <div className="item-image-div">
+                                          <div className='item-image-div'>
                                             <img
                                               src={`https://webcdn.hirezstudios.com/smite/item-icons/${item2.toLowerCase()}.jpg`}
                                               alt={row.original.slot2}
@@ -242,18 +242,18 @@ function Table({ columns, data }) {
                                             />
                                           </React.Fragment>
                                         }
-                                        placement="top"
+                                        placement='top'
                                         arrow
                                       >
                                         <div
-                                          className="item-image"
+                                          className='item-image'
                                           style={{
-                                            paddingRight: "30px",
-                                            minWidth: "80px",
-                                            maxWidth: "90px",
+                                            paddingRight: '30px',
+                                            minWidth: '80px',
+                                            maxWidth: '90px',
                                           }}
                                         >
-                                          <div className="item-image-div">
+                                          <div className='item-image-div'>
                                             <img
                                               src={`https://webcdn.hirezstudios.com/smite/item-icons/${item3.toLowerCase()}.jpg`}
                                               alt={row.original.slot3}
@@ -263,13 +263,13 @@ function Table({ columns, data }) {
                                       </HtmlTooltip>
                                     </>
                                   );
-                                } else if (key.includes("games")) {
+                                } else if (key.includes('games')) {
                                   return (
                                     <div
                                       style={{
-                                        minWidth: "65px",
-                                        maxWidth: "90px",
-                                        flex: "1 1 100%",
+                                        minWidth: '65px',
+                                        maxWidth: '90px',
+                                        flex: '1 1 100%',
                                       }}
                                       {...cell.getCellProps()}
                                     >
@@ -278,14 +278,14 @@ function Table({ columns, data }) {
                                       </span>
                                     </div>
                                   );
-                                } else if (key.includes("winRate")) {
+                                } else if (key.includes('winRate')) {
                                   return (
                                     <div
                                       style={{
-                                        minWidth: "20px",
-                                        maxWidth: "40px",
-                                        flex: "1 1 100%",
-                                        marginRight: "30px",
+                                        minWidth: '20px',
+                                        maxWidth: '40px',
+                                        flex: '1 1 100%',
+                                        marginRight: '30px',
                                       }}
                                       {...cell.getCellProps()}
                                     >
@@ -348,17 +348,17 @@ export default function BuildPath(props) {
   const [paths, setPaths] = useState([]);
   useEffect(() => {
     fetch(
-      "/api/".concat(
+      '/api/'.concat(
         god,
-        "/buildpath/",
+        '/buildpath/',
         role,
-        "/",
+        '/',
         rank,
-        "/",
+        '/',
         patch,
-        "/",
+        '/',
         queueType,
-        "/",
+        '/',
         mode
       )
     ).then((res) =>
@@ -368,17 +368,17 @@ export default function BuildPath(props) {
           setPaths((paths) => [
             ...paths,
             {
-              islot1: data[path]["slot1"],
-              slot2: data[path]["slot2"],
-              slot3: data[path]["slot3"],
-              wins: data[path]["wins"],
-              losses: data[path]["losses"],
+              islot1: data[path]['slot1'],
+              slot2: data[path]['slot2'],
+              slot3: data[path]['slot3'],
+              wins: data[path]['wins'],
+              losses: data[path]['losses'],
               winRate: (
-                (data[path]["wins"] /
-                  (data[path]["wins"] + data[path]["losses"])) *
+                (data[path]['wins'] /
+                  (data[path]['wins'] + data[path]['losses'])) *
                 100
               ).toFixed(2),
-              games: data[path]["wins"] + data[path]["losses"],
+              games: data[path]['wins'] + data[path]['losses'],
             },
           ]);
         });
@@ -389,8 +389,8 @@ export default function BuildPath(props) {
   const columns = React.useMemo(
     () => [
       {
-        Header: "Items",
-        accessor: "islot1",
+        Header: 'Items',
+        accessor: 'islot1',
       },
       //   {
       //     Header: "Items",
@@ -401,12 +401,12 @@ export default function BuildPath(props) {
       //     accessor: "slot3",
       //   },
       {
-        Header: "Games",
-        accessor: "games",
+        Header: 'Games',
+        accessor: 'games',
       },
       {
-        Header: "Win Rate",
-        accessor: "winRate",
+        Header: 'Win Rate',
+        accessor: 'winRate',
       },
     ],
     []
@@ -416,9 +416,9 @@ export default function BuildPath(props) {
     return <Table columns={columns} data={paths} />;
   } else {
     return (
-      <div className="content-section">
-        <div className="content-section_header">Build Paths</div>
-        <div className="empty-set">NO DATA TO DISPLAY</div>
+      <div className='content-section'>
+        <div className='content-section_header'>Build Paths</div>
+        <div className='empty-set'>NO DATA TO DISPLAY</div>
       </div>
     );
   }

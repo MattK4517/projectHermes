@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useMemo, useContext } from "react";
-import { useTable, useSortBy, usePagination } from "react-table";
-import { Link } from "react-router-dom";
-import winRateColor from "./WinRateColor";
-import { compareNumericString } from "../Tierlists/TierListHelpers";
-import { MainContext } from "./MainContext";
+import React, { useState, useEffect, useMemo, useContext } from 'react';
+import { useTable, useSortBy, usePagination } from 'react-table';
+import { Link } from 'react-router-dom';
+import winRateColor from './WinRateColor';
+import { compareNumericString } from '../Tierlists/TierListHelpers';
+import { MainContext } from './MainContext';
 
 const Table = ({ columns, data }) => {
   const {
@@ -30,9 +30,9 @@ const Table = ({ columns, data }) => {
         pageIndex: 0,
         sortBy: [
           {
-            id: "wr",
+            id: 'wr',
             desc: false,
-            sortType: "basic",
+            sortType: 'basic',
           },
         ],
       },
@@ -46,20 +46,20 @@ const Table = ({ columns, data }) => {
   const firstPageRows = rows;
   return (
     <>
-      <div className="stats-tables__content-container">
-        <div className="tier-list-page-container" style={{ width: "100%" }}>
-          <div className="tier-list-page">
+      <div className='stats-tables__content-container'>
+        <div className='tier-list-page-container' style={{ width: '100%' }}>
+          <div className='tier-list-page'>
             <div>
               <div
-                class="content-section ReactTable ugg-table-2 tier-list"
-                role="table"
+                class='content-section ReactTable smitestats-table-2 tier-list'
+                role='table'
                 {...getTableProps()}
               >
-                <div class="rt-thead -header">
+                <div class='rt-thead -header'>
                   {headerGroups.map((headerGroup) => (
                     <div
-                      class="rt-tr "
-                      role="row"
+                      class='rt-tr '
+                      role='row'
                       {...headerGroup.getHeaderGroupProps()}
                     >
                       {headerGroup.headers.map((column) => (
@@ -67,26 +67,26 @@ const Table = ({ columns, data }) => {
                         // we can add them into the header props
 
                         <div
-                          class={"rt-th inline-".concat(column.id, "_matchups")}
+                          class={'rt-th inline-'.concat(column.id, '_matchups')}
                           {...column.getHeaderProps(
                             column.getSortByToggleProps()
                           )}
                         >
-                          {column.render("Header")}
+                          {column.render('Header')}
 
                           <span>
                             {column.isSorted
                               ? column.isSortedDesc
-                                ? " 🔽"
-                                : " 🔼"
-                              : ""}
+                                ? ' 🔽'
+                                : ' 🔼'
+                              : ''}
                           </span>
                         </div>
                       ))}
                     </div>
                   ))}
                 </div>
-                <div class="rt-tbody" role="rowgroup" {...getTableBodyProps()}>
+                <div class='rt-tbody' role='rowgroup' {...getTableBodyProps()}>
                   {page.map(
                     (row, i) => {
                       prepareRow(row);
@@ -94,96 +94,96 @@ const Table = ({ columns, data }) => {
                       //   console.log(row.original.role, this.props.role)
                       //  }
                       return (
-                        <div className="rt-tr-group">
+                        <div className='rt-tr-group'>
                           <div
-                            className="rt-tr"
-                            role="row"
+                            className='rt-tr'
+                            role='row'
                             {...row.getRowProps()}
                           >
                             {row.cells.map((cell) => {
                               const { key, role } = cell.getCellProps();
                               let god = row.original.god
                                 .toLowerCase()
-                                .replaceAll(" ", "-");
+                                .replaceAll(' ', '-');
                               let routegod = row.original.god.replaceAll(
-                                " ",
-                                "_"
+                                ' ',
+                                '_'
                               );
                               if (row.original.god == "Chang'e") {
                                 routegod = "Chang'e";
-                                god = "change";
+                                god = 'change';
                               }
-                              if (key.includes("rank")) {
+                              if (key.includes('rank')) {
                                 return (
                                   <>
                                     <div
-                                      className="rt-td rank"
+                                      className='rt-td rank'
                                       style={{
-                                        minWidth: "40px",
-                                        maxWidth: "60px",
-                                        flex: "1 1 100%",
-                                        marginLeft: "2rem",
+                                        minWidth: '40px',
+                                        maxWidth: '60px',
+                                        flex: '1 1 100%',
+                                        marginLeft: '2rem',
                                       }}
                                       {...cell.getCellProps()}
                                     >
-                                      <span className="center-aligned">
+                                      <span className='center-aligned'>
                                         {(i += 1)}
                                       </span>
                                     </div>
 
                                     <div
-                                      className="rt-td god"
+                                      className='rt-td god'
                                       style={{
-                                        minWidth: "160px",
-                                        maxWidth: "180px",
-                                        flex: "1 1 100%",
-                                        display: "flex",
-                                        alignSelf: "center",
-                                        marginLeft: "10px",
+                                        minWidth: '160px',
+                                        maxWidth: '180px',
+                                        flex: '1 1 100%',
+                                        display: 'flex',
+                                        alignSelf: 'center',
+                                        marginLeft: '10px',
                                       }}
                                       {...cell.getCellProps()}
                                     >
                                       <Link
-                                        className="god-played gtm-tierlist-god"
-                                        to={"/".concat(routegod)}
+                                        className='god-played gtm-tierlist-god'
+                                        to={'/'.concat(routegod)}
                                       >
-                                        <div style={{ position: "relative" }}>
-                                          <div className="god-icon">
+                                        <div style={{ position: 'relative' }}>
+                                          <div className='god-icon'>
                                             <div
                                               style={{
-                                                height: "30px",
-                                                width: "30px",
+                                                height: '30px',
+                                                width: '30px',
                                               }}
                                             >
                                               <img
                                                 src={`https://webcdn.hirezstudios.com/smite/god-icons/${god}.jpg`}
                                                 alt={row.original.god}
                                                 style={{
-                                                  height: "48px",
-                                                  width: "48px",
-                                                  transform: "scale(0.625)",
+                                                  height: '48px',
+                                                  width: '48px',
+                                                  transform: 'scale(0.625)',
                                                   transformOrigin:
-                                                    "0px 0px 0px",
+                                                    '0px 0px 0px',
                                                 }}
                                               />
                                             </div>
                                           </div>
                                         </div>
-                                        <strong className="god-name">
+                                        <strong className='god-name'>
                                           {row.original.god}
                                         </strong>
                                       </Link>
                                     </div>
 
                                     <div
-                                      className="rt-td"
+                                      className='rt-td'
                                       style={{
-                                        minWidth: "100px",
-                                        maxWidth: "175px",
-                                        flex: "1 1 100%",
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        justifyContent: "center",
+                                        minWidth: '100px',
+                                        maxWidth: '175px',
+                                        flex: '1 1 100%',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        justifyContent: 'center',
                                       }}
                                       {...cell.getCellProps()}
                                     >
@@ -201,69 +201,69 @@ const Table = ({ columns, data }) => {
                                     </div>
 
                                     <div
-                                      className="rt-td"
+                                      className='rt-td'
                                       style={{
-                                        minWidth: "100px",
-                                        maxWidth: "175px",
-                                        flex: "1 1 100%",
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        justifyContent: "center",
+                                        minWidth: '100px',
+                                        maxWidth: '175px',
+                                        flex: '1 1 100%',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        justifyContent: 'center',
                                       }}
                                       {...cell.getCellProps()}
                                     >
-                                      <span className="center-aligned">
+                                      <span className='center-aligned'>
                                         <b>{row.original.kills}</b>
                                       </span>
                                     </div>
 
                                     <div
-                                      className="rt-td"
+                                      className='rt-td'
                                       style={{
-                                        minWidth: "100px",
-                                        maxWidth: "150px",
-                                        flex: "1 1 100%",
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        justifyContent: "center",
+                                        minWidth: '100px',
+                                        maxWidth: '150px',
+                                        flex: '1 1 100%',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        justifyContent: 'center',
                                       }}
                                       {...cell.getCellProps()}
                                     >
-                                      <span className="center-aligned">
+                                      <span className='center-aligned'>
                                         <b>{row.original.dmg}</b>
                                       </span>
                                     </div>
 
                                     <div
-                                      className="rt-td"
+                                      className='rt-td'
                                       style={{
-                                        minWidth: "100px",
-                                        maxWidth: "150px",
-                                        flex: "1 1 100%",
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        justifyContent: "center",
+                                        minWidth: '100px',
+                                        maxWidth: '150px',
+                                        flex: '1 1 100%',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        justifyContent: 'center',
                                       }}
                                       {...cell.getCellProps()}
                                     >
-                                      <span className="center-aligned">
+                                      <span className='center-aligned'>
                                         <b>{row.original.gold}</b>
                                       </span>
                                     </div>
 
                                     <div
-                                      className="rt-td"
+                                      className='rt-td'
                                       style={{
-                                        minWidth: "100px",
-                                        maxWidth: "150px",
-                                        flex: "1 1 100%",
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        justifyContent: "center",
+                                        minWidth: '100px',
+                                        maxWidth: '150px',
+                                        flex: '1 1 100%',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        justifyContent: 'center',
                                       }}
                                       {...cell.getCellProps()}
                                     >
-                                      <span className="center-aligned">
+                                      <span className='center-aligned'>
                                         <b>{row.original.games}</b>
                                       </span>
                                     </div>
@@ -279,35 +279,35 @@ const Table = ({ columns, data }) => {
                   )}
                 </div>
               </div>
-              <div className="pagination">
+              <div className='pagination'>
                 <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-                  {"<<"}
-                </button>{" "}
+                  {'<<'}
+                </button>{' '}
                 <button
                   onClick={() => previousPage()}
                   disabled={!canPreviousPage}
                 >
-                  {"<"}
-                </button>{" "}
+                  {'<'}
+                </button>{' '}
                 <button onClick={() => nextPage()} disabled={!canNextPage}>
-                  {">"}
-                </button>{" "}
+                  {'>'}
+                </button>{' '}
                 <button
                   onClick={() => gotoPage(pageCount - 1)}
                   disabled={!canNextPage}
                 >
-                  {">>"}
-                </button>{" "}
+                  {'>>'}
+                </button>{' '}
                 <span>
-                  Page{" "}
+                  Page{' '}
                   <strong>
                     {pageIndex + 1} of {pageOptions.length}
-                  </strong>{" "}
+                  </strong>{' '}
                 </span>
                 <span>
-                  | Go to page:{" "}
+                  | Go to page:{' '}
                   <input
-                    type="number"
+                    type='number'
                     defaultValue={pageIndex + 1}
                     onChange={(e) => {
                       const page = e.target.value
@@ -315,9 +315,9 @@ const Table = ({ columns, data }) => {
                         : 0;
                       gotoPage(page);
                     }}
-                    style={{ width: "100px" }}
+                    style={{ width: '100px' }}
                   />
-                </span>{" "}
+                </span>{' '}
                 <select
                   value={pageSize}
                   onChange={(e) => {
@@ -364,17 +364,17 @@ export default function Matchups(props) {
   const [totalData, setTotalData] = useState([]);
   useEffect(() => {
     fetch(
-      "/api/".concat(
+      '/api/'.concat(
         god,
-        "/m/",
+        '/m/',
         role,
-        "/",
+        '/',
         rank,
-        "/",
+        '/',
         patch,
-        "/",
+        '/',
         queueType,
-        "/",
+        '/',
         mode
       )
     ).then((res) =>
@@ -385,12 +385,12 @@ export default function Matchups(props) {
           setTotalData((totalData) => [
             ...totalData,
             {
-              dmg: data[key]["dmg"].toFixed(2),
-              kills: data[key]["kills"].toFixed(2),
-              god: data[key]["god"],
-              gold: data[key]["gold"].toFixed(),
-              wr: data[key]["wr"],
-              games: data[key]["games"],
+              dmg: data[key]['dmg'].toFixed(2),
+              kills: data[key]['kills'].toFixed(2),
+              god: data[key]['god'],
+              gold: data[key]['gold'].toFixed(),
+              wr: data[key]['wr'],
+              games: data[key]['games'],
             },
           ]);
         });
@@ -400,36 +400,36 @@ export default function Matchups(props) {
   const columns = React.useMemo(
     () => [
       {
-        Header: "Rank",
-        accessor: "rank",
+        Header: 'Rank',
+        accessor: 'rank',
       },
       {
-        Header: "God",
-        accessor: "god",
+        Header: 'God',
+        accessor: 'god',
       },
       {
-        Header: "Win Rate",
-        accessor: "wr",
+        Header: 'Win Rate',
+        accessor: 'wr',
         sortType: compareNumericString,
       },
       {
-        Header: "Avg. Kill Diff",
-        accessor: "kills",
+        Header: 'Avg. Kill Diff',
+        accessor: 'kills',
         sortType: compareNumericString,
       },
       {
-        Header: "Avg. Damage Diff",
-        accessor: "dmg",
+        Header: 'Avg. Damage Diff',
+        accessor: 'dmg',
         sortType: compareNumericString,
       },
       {
-        Header: "Avg. Gold Diff",
-        accessor: "gold",
+        Header: 'Avg. Gold Diff',
+        accessor: 'gold',
         sortType: compareNumericString,
       },
       {
-        Header: "Games",
-        accessor: "games",
+        Header: 'Games',
+        accessor: 'games',
         sortType: compareNumericString,
       },
     ],
@@ -437,11 +437,11 @@ export default function Matchups(props) {
   );
   if (Object.keys(totalData).length > 0) {
     return (
-      <div id="content">
-        <div class="stats-tables-page">
+      <div id='content'>
+        <div class='stats-tables-page'>
           <div
-            id="stats-tables-container-ID"
-            className="stats-tables-container content-side-padding"
+            id='stats-tables-container-ID'
+            className='stats-tables-container content-side-padding'
           >
             <Table columns={columns} data={totalData} />
           </div>
@@ -450,9 +450,9 @@ export default function Matchups(props) {
     );
   } else {
     return (
-      <div className="content-section">
-        <div className="content-section_header">Matchups</div>
-        <div className="empty-set">NO DATA TO DISPLAY</div>
+      <div className='content-section'>
+        <div className='content-section_header'>Matchups</div>
+        <div className='empty-set'>NO DATA TO DISPLAY</div>
       </div>
     );
   }

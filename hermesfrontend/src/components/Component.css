@@ -696,11 +696,11 @@ a:visited {
   margin-right: auto !important;
 }
 
-.ReactTable.ugg-table-2.content-section {
+.ReactTable.smitestats-table-2.content-section {
   padding-top: 14px;
 }
 
-.ReactTable.ugg-table-2 {
+.ReactTable.smitestats-table-2 {
   width: 1014px;
   font-size: 12px;
   font-weight: 500;
@@ -723,17 +723,17 @@ a:visited {
   transition: top 0.2s ease-in;
 }
 
-.ReactTable.ugg-table-2 .rt-thead.-header {
+.ReactTable.smitestats-table-2 .rt-thead.-header {
   box-shadow: none;
   overflow: hidden !important;
 }
-.ReactTable.ugg-table-2 .rt-thead {
+.ReactTable.smitestats-table-2 .rt-thead {
   display: flex;
   align-items: center;
   margin-bottom: 12px;
   background-color: #191937;
   font-size: 12px;
-  color: var(--ugg-table-header-row-font-color);
+  color: var(--smitestats-table-header-row-font-color);
 }
 
 .ReactTable .rt-thead {
@@ -787,7 +787,7 @@ a:visited {
   width: 100%;
 } */
 
-.ReactTable.ugg-table-2 .rt-thead .rt-tr {
+.ReactTable.smitestats-table-2 .rt-thead .rt-tr {
   flex: 1 1;
   display: flex;
   width: 100%;
@@ -799,11 +799,11 @@ a:visited {
   text-align: center;
 }
 
-.ReactTable.ugg-table-2 .rt-tbody .rt-tr-group:nth-child(2n + 1) {
+.ReactTable.smitestats-table-2 .rt-tbody .rt-tr-group:nth-child(2n + 1) {
   background-color: #11112a;
 }
 
-.ReactTable.ugg-table-2 .rt-tbody .rt-tr-group {
+.ReactTable.smitestats-table-2 .rt-tbody .rt-tr-group {
   display: flex;
   align-items: center;
   height: 54px;
@@ -811,7 +811,7 @@ a:visited {
   border-radius: 6px;
 }
 
-.ReactTable.ugg-table-2 {
+.ReactTable.smitestats-table-2 {
   width: 100%;
 }
 
@@ -822,7 +822,7 @@ a:visited {
   align-items: stretch;
 }
 
-.ReactTable.ugg-table-2 .rt-tbody .rt-tr-group .rt-tr {
+.ReactTable.smitestats-table-2 .rt-tbody .rt-tr-group .rt-tr {
   flex: 1 1;
   display: flex;
   width: 100%;
@@ -836,7 +836,7 @@ a:visited {
   padding-top: 120px;
 } */
 
-.ReactTable.ugg-table-2 .rt-tbody .rt-tr-group .rt-tr .rt-td {
+.ReactTable.smitestats-table-2 .rt-tbody .rt-tr-group .rt-tr .rt-td {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -844,7 +844,7 @@ a:visited {
   border: none;
 }
 
-.ReactTable.ugg-table-2 .rt-thead .rt-tr .rt-th {
+.ReactTable.smitestats-table-2 .rt-thead .rt-tr .rt-th {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -852,7 +852,7 @@ a:visited {
   color: #cddcfe;
 }
 
-.ReactTable.ugg-table-2 .rt-tbody {
+.ReactTable.smitestats-table-2 .rt-tbody {
   scrollbar-width: thin;
   scrollbar-color: hsla(0, 0%, 100%, 0.3) hsla(0, 0%, 100%, 0);
   overflow-x: hidden;
@@ -1214,6 +1214,7 @@ figure.snip0015:hover figcaption::before {
   list-style: none;
   margin-bottom: -1px;
   padding: 0.5rem 0.75rem;
+  cursor: pointer;
 }
 
 .tab-list-active {

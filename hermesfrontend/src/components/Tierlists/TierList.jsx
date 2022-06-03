@@ -1,21 +1,21 @@
-import React, { useState, useEffect, useContext } from "react";
-import { useTable, useSortBy, usePagination } from "react-table";
-import { Link } from "react-router-dom";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import Button from "@material-ui/core/Button";
-import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
-import { withStyles, makeStyles } from "@material-ui/core/styles";
-import { FilterForm } from "../Filters/FilterForm";
-import winRateColor, { tierColor } from "../mainGodPage/WinRateColor";
-import Tooltip from "@material-ui/core/Tooltip";
-import { compareNumericString } from "./TierListHelpers";
-import { HtmlTooltip } from "../mainGodPage/GodPageHelpers";
-import { getImageUrl } from "../Filters/FilterForm";
-import { TierListContext } from "./TierListContext";
-import { CreateMatchupToolTip } from "./TierListHelpers";
-import { linkDict } from "../PlayerPage/Player";
-import TierListFilter from "../Filters/TierListFilter";
+import React, { useState, useEffect, useContext } from 'react';
+import { useTable, useSortBy, usePagination } from 'react-table';
+import { Link } from 'react-router-dom';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Button from '@material-ui/core/Button';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
+import { FilterForm } from '../Filters/FilterForm';
+import winRateColor, { tierColor } from '../mainGodPage/WinRateColor';
+import Tooltip from '@material-ui/core/Tooltip';
+import { compareNumericString } from './TierListHelpers';
+import { HtmlTooltip } from '../mainGodPage/GodPageHelpers';
+import { getImageUrl } from '../Filters/FilterForm';
+import { TierListContext } from './TierListContext';
+import { CreateMatchupToolTip } from './TierListHelpers';
+import { linkDict } from '../PlayerPage/Player';
+import TierListFilter from '../Filters/TierListFilter';
 
 const Table = ({ columns, data }) => {
   const {
@@ -42,7 +42,7 @@ const Table = ({ columns, data }) => {
         pageIndex: 0,
         sortBy: [
           {
-            id: "winRate",
+            id: 'winRate',
             desc: true,
           },
         ],
@@ -57,20 +57,20 @@ const Table = ({ columns, data }) => {
   const firstPageRows = rows;
   return (
     <>
-      <div className="stats-tables__content-container">
-        <div className="tier-list-page-container" style={{ width: "100%" }}>
-          <div className="tier-list-page">
+      <div className='stats-tables__content-container'>
+        <div className='tier-list-page-container' style={{ width: '100%' }}>
+          <div className='tier-list-page'>
             <div>
               <div
-                class="content-section ReactTable ugg-table-2 tier-list"
-                role="table"
+                class='content-section ReactTable smitestats-table-2 tier-list'
+                role='table'
                 {...getTableProps()}
               >
-                <div class="rt-thead -header">
+                <div class='rt-thead -header'>
                   {headerGroups.map((headerGroup) => (
                     <div
-                      class="rt-tr "
-                      role="row"
+                      class='rt-tr '
+                      role='row'
                       {...headerGroup.getHeaderGroupProps()}
                     >
                       {headerGroup.headers.map((column) => (
@@ -78,26 +78,26 @@ const Table = ({ columns, data }) => {
                         // we can add them into the header props
 
                         <div
-                          class={"rt-th inline-".concat(column.id)}
+                          class={'rt-th inline-'.concat(column.id)}
                           {...column.getHeaderProps(
                             column.getSortByToggleProps()
                           )}
                         >
-                          {column.render("Header")}
+                          {column.render('Header')}
 
                           <span>
                             {column.isSorted
                               ? column.isSortedDesc
-                                ? " 🔽"
-                                : " 🔼"
-                              : ""}
+                                ? ' 🔽'
+                                : ' 🔼'
+                              : ''}
                           </span>
                         </div>
                       ))}
                     </div>
                   ))}
                 </div>
-                <div class="rt-tbody" role="rowgroup" {...getTableBodyProps()}>
+                <div class='rt-tbody' role='rowgroup' {...getTableBodyProps()}>
                   {page.map(
                     (row, i) => {
                       prepareRow(row);
@@ -105,22 +105,22 @@ const Table = ({ columns, data }) => {
                       //   console.log(row.original.role, this.props.role)
                       //  }
                       return (
-                        <div className="rt-tr-group">
+                        <div className='rt-tr-group'>
                           <div
-                            className="rt-tr"
-                            role="row"
+                            className='rt-tr'
+                            role='row'
                             {...row.getRowProps()}
                           >
                             {row.cells.map((cell) => {
                               const { key, role } = cell.getCellProps();
-                              if (key.includes("rank")) {
+                              if (key.includes('rank')) {
                                 return (
                                   <div
-                                    className="rt-td rank"
+                                    className='rt-td rank'
                                     style={{
-                                      minWidth: "40px",
-                                      maxWidth: "60px",
-                                      flex: "1 1 100%",
+                                      minWidth: '40px',
+                                      maxWidth: '60px',
+                                      flex: '1 1 100%',
                                     }}
                                     {...cell.getCellProps()}
                                   >
@@ -129,33 +129,33 @@ const Table = ({ columns, data }) => {
                                     </span>
                                   </div>
                                 );
-                              } else if (key.includes("role")) {
+                              } else if (key.includes('role')) {
                                 return (
                                   <div
-                                    className="rt-td role"
+                                    className='rt-td role'
                                     style={{
-                                      minWidth: "40px",
-                                      maxWidth: "60px",
-                                      flex: "1 1 100%",
+                                      minWidth: '40px',
+                                      maxWidth: '60px',
+                                      flex: '1 1 100%',
                                     }}
                                     {...cell.getCellProps()}
                                   >
-                                    <div style={{ position: "relative" }}>
-                                      <div className="god-icon">
+                                    <div style={{ position: 'relative' }}>
+                                      <div className='god-icon'>
                                         <div
                                           style={{
-                                            height: "30px",
-                                            width: "30px",
+                                            height: '30px',
+                                            width: '30px',
                                           }}
                                         >
                                           <img
                                             src={getImageUrl(row.original.role)}
                                             alt={row.original.role}
                                             style={{
-                                              height: "48px",
-                                              width: "48px",
-                                              transform: "scale(0.625)",
-                                              transformOrigin: "0px 0px 0px",
+                                              height: '48px',
+                                              width: '48px',
+                                              transform: 'scale(0.625)',
+                                              transformOrigin: '0px 0px 0px',
                                             }}
                                           />
                                         </div>
@@ -163,67 +163,68 @@ const Table = ({ columns, data }) => {
                                     </div>
                                   </div>
                                 );
-                              } else if (key.includes("god")) {
+                              } else if (key.includes('god')) {
                                 let god = row.original.god
                                   .toLowerCase()
-                                  .replaceAll(" ", "-");
+                                  .replaceAll(' ', '-');
                                 let routegod = row.original.god.replaceAll(
-                                  " ",
-                                  "_"
+                                  ' ',
+                                  '_'
                                 );
                                 if (row.original.god == "Chang'e") {
                                   routegod = "Chang'e";
-                                  god = "change";
+                                  god = 'change';
                                 }
                                 return (
                                   <div
-                                    className="rt-td god"
+                                    className='rt-td god'
                                     style={{
-                                      minWidth: "155px",
-                                      maxWidth: "180px",
-                                      flex: "1 1 100%",
+                                      minWidth: '155px',
+                                      maxWidth: '180px',
+                                      flex: '1 1 100%',
                                     }}
                                     {...cell.getCellProps()}
                                   >
                                     <Link
-                                      className="god-played gtm-tierlist-god"
-                                      to={"/".concat(routegod)}
+                                      className='god-played gtm-tierlist-god'
+                                      to={'/'.concat(routegod)}
                                     >
-                                      <div style={{ position: "relative" }}>
-                                        <div className="god-icon">
+                                      <div style={{ position: 'relative' }}>
+                                        <div className='god-icon'>
                                           <div
                                             style={{
-                                              height: "30px",
-                                              width: "30px",
+                                              height: '30px',
+                                              width: '30px',
                                             }}
                                           >
                                             <img
+                                              loading='lazy'
                                               src={`https://webcdn.hirezstudios.com/smite/god-icons/${god}.jpg`}
                                               alt={row.original.god}
                                               style={{
-                                                height: "48px",
-                                                width: "48px",
-                                                transform: "scale(0.625)",
-                                                transformOrigin: "0px 0px 0px",
+                                                height: '48px',
+                                                width: '48px',
+                                                transform: 'scale(0.625)',
+                                                transformOrigin: '0px 0px 0px',
                                               }}
                                             />
                                           </div>
                                         </div>
                                       </div>
-                                      <strong className="god-name">
+                                      <strong className='god-name'>
                                         {row.original.god}
                                       </strong>
                                     </Link>
                                   </div>
                                 );
-                              } else if (key.includes("tier")) {
+                              } else if (key.includes('tier')) {
                                 return (
                                   <div
-                                    className="rt-td tier"
+                                    className='rt-td tier'
                                     style={{
-                                      minWidth: "50px",
-                                      maxWidth: "90px",
-                                      flex: "1 1 100%",
+                                      minWidth: '50px',
+                                      maxWidth: '90px',
+                                      flex: '1 1 100%',
                                     }}
                                     {...cell.getCellProps()}
                                   >
@@ -238,14 +239,14 @@ const Table = ({ columns, data }) => {
                                     </span>
                                   </div>
                                 );
-                              } else if (key.includes("winRate")) {
+                              } else if (key.includes('winRate')) {
                                 return (
                                   <div
-                                    className="rt-td win-rate"
+                                    className='rt-td win-rate'
                                     style={{
-                                      minWidth: "70px",
-                                      maxWidth: "90px",
-                                      flex: "1 1 100%",
+                                      minWidth: '70px',
+                                      maxWidth: '90px',
+                                      flex: '1 1 100%',
                                     }}
                                     {...cell.getCellProps()}
                                   >
@@ -262,14 +263,14 @@ const Table = ({ columns, data }) => {
                                     </span>
                                   </div>
                                 );
-                              } else if (key.includes("pickRate")) {
+                              } else if (key.includes('pickRate')) {
                                 return (
                                   <div
-                                    className="rt-td pick-rate"
+                                    className='rt-td pick-rate'
                                     style={{
-                                      minWidth: "80px",
-                                      maxWidth: "90px",
-                                      flex: "1 1 100%",
+                                      minWidth: '80px',
+                                      maxWidth: '90px',
+                                      flex: '1 1 100%',
                                     }}
                                     {...cell.getCellProps()}
                                   >
@@ -278,14 +279,14 @@ const Table = ({ columns, data }) => {
                                     </span>
                                   </div>
                                 );
-                              } else if (key.includes("banRate")) {
+                              } else if (key.includes('banRate')) {
                                 return (
                                   <div
-                                    className="rt-td ban-rate"
+                                    className='rt-td ban-rate'
                                     style={{
-                                      minWidth: "70px",
-                                      maxWidth: "90px",
-                                      flex: "1 1 100%",
+                                      minWidth: '70px',
+                                      maxWidth: '90px',
+                                      flex: '1 1 100%',
                                     }}
                                     {...cell.getCellProps()}
                                   >
@@ -294,14 +295,14 @@ const Table = ({ columns, data }) => {
                                     </span>
                                   </div>
                                 );
-                              } else if (key.includes("counterMatchups")) {
+                              } else if (key.includes('counterMatchups')) {
                                 return (
                                   <div
-                                    className="rt-td against"
+                                    className='rt-td against'
                                     style={{
-                                      minWidth: "250px",
-                                      maxWidth: "270px",
-                                      flex: "1 1 100%",
+                                      minWidth: '250px',
+                                      maxWidth: '270px',
+                                      flex: '1 1 100%',
                                     }}
                                     {...cell.getCellProps()}
                                   >
@@ -311,14 +312,14 @@ const Table = ({ columns, data }) => {
                                     />
                                   </div>
                                 );
-                              } else if (key.includes("games")) {
+                              } else if (key.includes('games')) {
                                 return (
                                   <div
-                                    className="rt-td games"
+                                    className='rt-td games'
                                     style={{
-                                      minWidth: "80px",
-                                      maxWidth: "90px",
-                                      flex: "1 1 100%",
+                                      minWidth: '80px',
+                                      maxWidth: '90px',
+                                      flex: '1 1 100%',
                                     }}
                                     {...cell.getCellProps()}
                                   >
@@ -337,35 +338,35 @@ const Table = ({ columns, data }) => {
                   )}
                 </div>
               </div>
-              <div className="pagination">
+              <div className='pagination'>
                 <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-                  {"<<"}
-                </button>{" "}
+                  {'<<'}
+                </button>{' '}
                 <button
                   onClick={() => previousPage()}
                   disabled={!canPreviousPage}
                 >
-                  {"<"}
-                </button>{" "}
+                  {'<'}
+                </button>{' '}
                 <button onClick={() => nextPage()} disabled={!canNextPage}>
-                  {">"}
-                </button>{" "}
+                  {'>'}
+                </button>{' '}
                 <button
                   onClick={() => gotoPage(pageCount - 1)}
                   disabled={!canNextPage}
                 >
-                  {">>"}
-                </button>{" "}
+                  {'>>'}
+                </button>{' '}
                 <span>
-                  Page{" "}
+                  Page{' '}
                   <strong>
                     {pageIndex + 1} of {pageOptions.length}
-                  </strong>{" "}
+                  </strong>{' '}
                 </span>
                 <span>
-                  | Go to page:{" "}
+                  | Go to page:{' '}
                   <input
-                    type="number"
+                    type='number'
                     defaultValue={pageIndex + 1}
                     onChange={(e) => {
                       const page = e.target.value
@@ -373,9 +374,9 @@ const Table = ({ columns, data }) => {
                         : 0;
                       gotoPage(page);
                     }}
-                    style={{ width: "100px" }}
+                    style={{ width: '100px' }}
                   />
-                </span>{" "}
+                </span>{' '}
                 <select
                   value={pageSize}
                   onChange={(e) => {
@@ -424,17 +425,17 @@ function TierList(props) {
   useEffect(() => {
     //"/gettierlist/".concat(dispRank, "/", role, "/", props.props, "/", patch
     fetch(
-      "/api/gettierlist/".concat(
+      '/api/gettierlist/'.concat(
         rank,
-        "/",
+        '/',
         role,
-        "/",
+        '/',
         props.tableType,
-        "/",
+        '/',
         queueType,
-        "/",
+        '/',
         patch,
-        "/",
+        '/',
         mode
       )
     ).then((res) =>
@@ -475,45 +476,45 @@ function TierList(props) {
   const columns = React.useMemo(
     () => [
       {
-        Header: "Rank",
-        accessor: "rank",
+        Header: 'Rank',
+        accessor: 'rank',
         disableSortBy: true,
       },
       {
-        Header: "Role",
-        accessor: "role",
+        Header: 'Role',
+        accessor: 'role',
       },
       {
-        Header: "God",
-        accessor: "god",
+        Header: 'God',
+        accessor: 'god',
       },
       {
-        Header: "Tier",
-        accessor: "tier",
+        Header: 'Tier',
+        accessor: 'tier',
       },
       {
-        Header: "Win Rate",
-        accessor: "winRate",
+        Header: 'Win Rate',
+        accessor: 'winRate',
         sortType: compareNumericString,
       },
       {
-        Header: "Pick Rate",
-        accessor: "pickRate",
+        Header: 'Pick Rate',
+        accessor: 'pickRate',
         sortType: compareNumericString,
       },
       {
-        Header: "Ban Rate",
-        accessor: "banRate",
+        Header: 'Ban Rate',
+        accessor: 'banRate',
         sortType: compareNumericString,
       },
       {
-        Header: "Counter Matchups",
-        accessor: "counterMatchups",
+        Header: 'Counter Matchups',
+        accessor: 'counterMatchups',
         disableSortBy: true,
       },
       {
-        Header: "Games",
-        accessor: "games",
+        Header: 'Games',
+        accessor: 'games',
       },
     ],
     []
@@ -528,20 +529,20 @@ function TierList(props) {
 
 function CounterMatchupDisplay(props) {
   return (
-    <div className="against-container">
+    <div className='against-container'>
       {props.matchups.map((matchup, index) => {
         // console.log(matchup);
         if (index < 9) {
-          let routegod = matchup[1].replaceAll(" ", "_");
+          let routegod = matchup[1].replaceAll(' ', '_');
           let styling;
           if (matchup[2] < 50) {
-            styling = { height: "24px", width: "24px" };
+            styling = { height: '24px', width: '24px' };
           } else {
             styling = {
-              height: "24px",
-              width: "24px",
-              opacity: ".4",
-              filter: "grayscale(100%)",
+              height: '24px',
+              width: '24px',
+              opacity: '.4',
+              filter: 'grayscale(100%)',
             };
           }
           return (
@@ -557,24 +558,24 @@ function CounterMatchupDisplay(props) {
                   />
                 </React.Fragment>
               }
-              placement="top"
+              placement='top'
               arrow
             >
-              <div className="against" key={index}>
-                <Link to={"/".concat(routegod)}>
-                  <div className="god-face" style={{ maxWidth: "100px" }}>
+              <div className='against' key={index}>
+                <Link to={'/'.concat(routegod)}>
+                  <div className='god-face' style={{ maxWidth: '100px' }}>
                     <div>
                       <img
                         src={`https://webcdn.hirezstudios.com/smite/god-icons/${matchup[1]
                           .toLowerCase()
-                          .replaceAll("'", "")
-                          .replaceAll(" ", "-")}.jpg`}
+                          .replaceAll("'", '')
+                          .replaceAll(' ', '-')}.jpg`}
                         alt={`https://webcdn.hirezstudios.com/smite/god-icons/${matchup[1]
                           .toLowerCase()
-                          .replaceAll("'", "")
-                          .replaceAll(" ", "-")}.jpg`}
+                          .replaceAll("'", '')
+                          .replaceAll(' ', '-')}.jpg`}
                         style={styling}
-                        loading="lazy"
+                        loading='lazy'
                       ></img>
                     </div>
                   </div>

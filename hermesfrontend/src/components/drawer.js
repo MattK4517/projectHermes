@@ -238,7 +238,7 @@ const CustDrawer = styled(Drawer)(({ theme }) => ({
     height: "100%",
     backgroundColor: "#17172e",
   },
-  [theme.breakpoints.down("md")]: {
+  [theme.breakpoints.down("lg")]: {
     width: "135px",
     "& .MuiDrawer-paper": {
       width: "inherit",
@@ -262,7 +262,7 @@ const Root = styled(AppBar)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
     left: "0 !important",
   },
-  [theme.breakpoints.down("md")]: {
+  [theme.breakpoints.down("lg")]: {
     display: "flex",
     alignItems: "center",
     left: "135px",

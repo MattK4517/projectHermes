@@ -304,7 +304,7 @@ def get_dmg_calc():
         print(data)
         if data["god"].lower() in [god.lower() for god in godsDict]:
             ret_data = calc_combo_damage_raw(
-                client, data["god"], data["levels"], data["power"], [], "Odin", [])
+                client, data["god"], data["levels"], 0, data["build"], "Odin", [])
 
     return ret_data
 
@@ -314,7 +314,6 @@ def get_auto_dmg_calc():
     ret_data = {}
     if request.method == 'POST':
         data = request.get_json()
-        print(data)
         if data["god"].lower() in [god.lower() for god in godsDict]:
             ret_data = calc_dps(
                 client, data["god"], data["build"], "Odin", [], 1, 20)
@@ -327,13 +326,9 @@ def get_build_calc():
     ret_data = {}
     if request.method == 'POST':
         data = request.get_json()
-        print(data)
-        build = []
-        for key in data:
-            if key != "god":
-                build.append(data[key])
-            else:
-                ret_data["base"] = anlz.get_god_stats(client, data[key], 20)
+        build = data["build"]
+        ret_data["base"] = anlz.get_god_stats(client, data["god"], 20)
+
         build_stats = anlz.get_build_stats(client, build)
         ret_data["build"] = build_stats
     return ret_data

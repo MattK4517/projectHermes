@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useContext } from "react";
-import { useTable, useSortBy, usePagination } from "react-table";
-import { Link } from "react-router-dom";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import Button from "@material-ui/core/Button";
-import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
-import { withStyles, makeStyles } from "@material-ui/core/styles";
-import { FilterForm } from "../Filters/FilterForm";
-import winRateColor from "../mainGodPage/WinRateColor";
-import { TierListContext } from "./TierListContext";
+import React, { useState, useEffect, useContext } from 'react';
+import { useTable, useSortBy, usePagination } from 'react-table';
+import { Link } from 'react-router-dom';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Button from '@material-ui/core/Button';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
+import { FilterForm } from '../Filters/FilterForm';
+import winRateColor from '../mainGodPage/WinRateColor';
+import { TierListContext } from './TierListContext';
 
 const Table = ({ columns, data }) => {
   const {
@@ -35,7 +35,7 @@ const Table = ({ columns, data }) => {
         pageIndex: 0,
         sortBy: [
           {
-            id: "winRate",
+            id: 'winRate',
             desc: true,
           },
         ],
@@ -50,20 +50,20 @@ const Table = ({ columns, data }) => {
   const firstPageRows = rows;
   return (
     <>
-      <div className="stats-tables__content-container">
-        <div className="tier-list-page-container" style={{ width: "100%" }}>
-          <div className="tier-list-page">
+      <div className='stats-tables__content-container'>
+        <div className='tier-list-page-container' style={{ width: '100%' }}>
+          <div className='tier-list-page'>
             <div>
               <div
-                class="content-section ReactTable ugg-table-2 tier-list"
-                role="table"
+                class='content-section ReactTable smitestats-table-2 tier-list'
+                role='table'
                 {...getTableProps()}
               >
-                <div class="rt-thead -header">
+                <div class='rt-thead -header'>
                   {headerGroups.map((headerGroup) => (
                     <div
-                      class="rt-tr "
-                      role="row"
+                      class='rt-tr '
+                      role='row'
                       {...headerGroup.getHeaderGroupProps()}
                     >
                       {headerGroup.headers.map((column) => (
@@ -71,26 +71,26 @@ const Table = ({ columns, data }) => {
                         // we can add them into the header props
 
                         <div
-                          class={"rt-th inline-".concat(column.id)}
+                          class={'rt-th inline-'.concat(column.id)}
                           {...column.getHeaderProps(
                             column.getSortByToggleProps()
                           )}
                         >
-                          {column.render("Header")}
+                          {column.render('Header')}
 
                           <span>
                             {column.isSorted
                               ? column.isSortedDesc
-                                ? " 🔽"
-                                : " 🔼"
-                              : ""}
+                                ? ' 🔽'
+                                : ' 🔼'
+                              : ''}
                           </span>
                         </div>
                       ))}
                     </div>
                   ))}
                 </div>
-                <div class="rt-tbody" role="rowgroup" {...getTableBodyProps()}>
+                <div class='rt-tbody' role='rowgroup' {...getTableBodyProps()}>
                   {page.map(
                     (row, i) => {
                       prepareRow(row);
@@ -98,45 +98,45 @@ const Table = ({ columns, data }) => {
                       //   console.log(row.original.role, this.props.role)
                       //  }
                       return (
-                        <div className="rt-tr-group">
+                        <div className='rt-tr-group'>
                           <div
-                            className="rt-tr"
-                            role="row"
+                            className='rt-tr'
+                            role='row'
                             {...row.getRowProps()}
                           >
                             {row.cells.map((cell) => {
                               const { key, role } = cell.getCellProps();
-                              let roleOne = Object.keys(row.original["_id"])[0];
-                              let roleTwo = Object.keys(row.original["_id"])[1];
-                              let god = row.original["_id"][roleOne]
+                              let roleOne = Object.keys(row.original['_id'])[0];
+                              let roleTwo = Object.keys(row.original['_id'])[1];
+                              let god = row.original['_id'][roleOne]
                                 .toLowerCase()
-                                .replaceAll(" ", "-");
-                              let routegod = row.original["_id"][
+                                .replaceAll(' ', '-');
+                              let routegod = row.original['_id'][
                                 roleOne
-                              ].replaceAll(" ", "_");
-                              if (row.original["_id"][roleOne] == "Chang'e") {
+                              ].replaceAll(' ', '_');
+                              if (row.original['_id'][roleOne] == "Chang'e") {
                                 routegod = "Chang'e";
-                                god = "change";
+                                god = 'change';
                               }
-                              let god2 = row.original["_id"][roleTwo]
+                              let god2 = row.original['_id'][roleTwo]
                                 .toLowerCase()
-                                .replaceAll(" ", "-");
-                              let routegod2 = row.original["_id"][
+                                .replaceAll(' ', '-');
+                              let routegod2 = row.original['_id'][
                                 roleTwo
-                              ].replaceAll(" ", "_");
-                              if (row.original["_id"][roleTwo] == "Chang'e") {
+                              ].replaceAll(' ', '_');
+                              if (row.original['_id'][roleTwo] == "Chang'e") {
                                 routegod2 = "Chang'e";
-                                god2 = "change";
+                                god2 = 'change';
                               }
-                              if (key.includes("rank")) {
+                              if (key.includes('rank')) {
                                 return (
                                   <>
                                     <div
-                                      className="rt-td rank"
+                                      className='rt-td rank'
                                       style={{
-                                        minWidth: "40px",
-                                        maxWidth: "60px",
-                                        flex: "1 1 100%",
+                                        minWidth: '40px',
+                                        maxWidth: '60px',
+                                        flex: '1 1 100%',
                                       }}
                                       {...cell.getCellProps()}
                                     >
@@ -146,59 +146,59 @@ const Table = ({ columns, data }) => {
                                     </div>
 
                                     <div
-                                      className="rt-td god"
+                                      className='rt-td god'
                                       style={{
-                                        minWidth: "140px",
-                                        maxWidth: "180px",
-                                        flex: "1 1 100%",
+                                        minWidth: '140px',
+                                        maxWidth: '180px',
+                                        flex: '1 1 100%',
                                       }}
                                       {...cell.getCellProps()}
                                     >
                                       <Link
-                                        className="god-played gtm-tierlist-god"
-                                        to={"/".concat(routegod)}
+                                        className='god-played gtm-tierlist-god'
+                                        to={'/'.concat(routegod)}
                                       >
-                                        <div style={{ position: "relative" }}>
-                                          <div className="god-icon">
+                                        <div style={{ position: 'relative' }}>
+                                          <div className='god-icon'>
                                             <div
                                               style={{
-                                                height: "30px",
-                                                width: "30px",
+                                                height: '30px',
+                                                width: '30px',
                                               }}
                                             >
                                               <img
                                                 src={`https://webcdn.hirezstudios.com/smite/god-icons/${god}.jpg`}
                                                 alt={
-                                                  row.original["_id"][roleOne]
+                                                  row.original['_id'][roleOne]
                                                 }
                                                 style={{
-                                                  height: "48px",
-                                                  width: "48px",
-                                                  transform: "scale(0.625)",
+                                                  height: '48px',
+                                                  width: '48px',
+                                                  transform: 'scale(0.625)',
                                                   transformOrigin:
-                                                    "0px 0px 0px",
+                                                    '0px 0px 0px',
                                                 }}
                                               />
                                             </div>
                                           </div>
                                         </div>
-                                        <strong className="god-name">
-                                          {row.original["_id"][roleOne]}
+                                        <strong className='god-name'>
+                                          {row.original['_id'][roleOne]}
                                         </strong>
                                       </Link>
                                     </div>
 
                                     <div
-                                      className="rt-td win-rate"
+                                      className='rt-td win-rate'
                                       style={{
-                                        minWidth: "70px",
-                                        maxWidth: "90px",
-                                        flex: "1 1 100%",
+                                        minWidth: '70px',
+                                        maxWidth: '90px',
+                                        flex: '1 1 100%',
                                       }}
                                       {...cell.getCellProps()}
                                     >
                                       <span>
-                                        <b style={{ color: "darkgrey" }}>
+                                        <b style={{ color: 'darkgrey' }}>
                                           {row.original[
                                             `${[roleOne]}WinRate`
                                           ].toFixed(2)}
@@ -208,59 +208,59 @@ const Table = ({ columns, data }) => {
                                     </div>
 
                                     <div
-                                      className="rt-td god"
+                                      className='rt-td god'
                                       style={{
-                                        minWidth: "160px",
-                                        maxWidth: "180px",
-                                        flex: "1 1 100%",
+                                        minWidth: '160px',
+                                        maxWidth: '180px',
+                                        flex: '1 1 100%',
                                       }}
                                       {...cell.getCellProps()}
                                     >
                                       <Link
-                                        className="god-played gtm-tierlist-god"
-                                        to={"/".concat(routegod2)}
+                                        className='god-played gtm-tierlist-god'
+                                        to={'/'.concat(routegod2)}
                                       >
-                                        <div style={{ position: "relative" }}>
-                                          <div className="god-icon">
+                                        <div style={{ position: 'relative' }}>
+                                          <div className='god-icon'>
                                             <div
                                               style={{
-                                                height: "30px",
-                                                width: "30px",
+                                                height: '30px',
+                                                width: '30px',
                                               }}
                                             >
                                               <img
                                                 src={`https://webcdn.hirezstudios.com/smite/god-icons/${god2}.jpg`}
                                                 alt={
-                                                  row.original["_id"][roleTwo]
+                                                  row.original['_id'][roleTwo]
                                                 }
                                                 style={{
-                                                  height: "48px",
-                                                  width: "48px",
-                                                  transform: "scale(0.625)",
+                                                  height: '48px',
+                                                  width: '48px',
+                                                  transform: 'scale(0.625)',
                                                   transformOrigin:
-                                                    "0px 0px 0px",
+                                                    '0px 0px 0px',
                                                 }}
                                               />
                                             </div>
                                           </div>
                                         </div>
-                                        <strong className="god-name">
-                                          {row.original["_id"][roleTwo]}
+                                        <strong className='god-name'>
+                                          {row.original['_id'][roleTwo]}
                                         </strong>
                                       </Link>
                                     </div>
 
                                     <div
-                                      className="rt-td win-rate"
+                                      className='rt-td win-rate'
                                       style={{
-                                        minWidth: "70px",
-                                        maxWidth: "90px",
-                                        flex: "1 1 100%",
+                                        minWidth: '70px',
+                                        maxWidth: '90px',
+                                        flex: '1 1 100%',
                                       }}
                                       {...cell.getCellProps()}
                                     >
                                       <span>
-                                        <b style={{ color: "darkgray" }}>
+                                        <b style={{ color: 'darkgray' }}>
                                           {row.original[
                                             `${[roleTwo]}WinRate`
                                           ].toFixed(2)}
@@ -270,11 +270,11 @@ const Table = ({ columns, data }) => {
                                     </div>
 
                                     <div
-                                      className="rt-td win-rate"
+                                      className='rt-td win-rate'
                                       style={{
-                                        minWidth: "70px",
-                                        maxWidth: "90px",
-                                        flex: "1 1 100%",
+                                        minWidth: '70px',
+                                        maxWidth: '90px',
+                                        flex: '1 1 100%',
                                       }}
                                       {...cell.getCellProps()}
                                     >
@@ -293,11 +293,11 @@ const Table = ({ columns, data }) => {
                                     </div>
 
                                     <div
-                                      className="rt-td win-rate"
+                                      className='rt-td win-rate'
                                       style={{
-                                        minWidth: "70px",
-                                        maxWidth: "90px",
-                                        flex: "1 1 100%",
+                                        minWidth: '70px',
+                                        maxWidth: '90px',
+                                        flex: '1 1 100%',
                                       }}
                                       {...cell.getCellProps()}
                                     >
@@ -315,11 +315,11 @@ const Table = ({ columns, data }) => {
                                     </div>
 
                                     <div
-                                      className="rt-td games"
+                                      className='rt-td games'
                                       style={{
-                                        minWidth: "80px",
-                                        maxWidth: "90px",
-                                        flex: "1 1 100%",
+                                        minWidth: '80px',
+                                        maxWidth: '90px',
+                                        flex: '1 1 100%',
                                       }}
                                       {...cell.getCellProps()}
                                     >
@@ -339,35 +339,35 @@ const Table = ({ columns, data }) => {
                   )}
                 </div>
               </div>
-              <div className="pagination">
+              <div className='pagination'>
                 <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-                  {"<<"}
-                </button>{" "}
+                  {'<<'}
+                </button>{' '}
                 <button
                   onClick={() => previousPage()}
                   disabled={!canPreviousPage}
                 >
-                  {"<"}
-                </button>{" "}
+                  {'<'}
+                </button>{' '}
                 <button onClick={() => nextPage()} disabled={!canNextPage}>
-                  {">"}
-                </button>{" "}
+                  {'>'}
+                </button>{' '}
                 <button
                   onClick={() => gotoPage(pageCount - 1)}
                   disabled={!canNextPage}
                 >
-                  {">>"}
-                </button>{" "}
+                  {'>>'}
+                </button>{' '}
                 <span>
-                  Page{" "}
+                  Page{' '}
                   <strong>
                     {pageIndex + 1} of {pageOptions.length}
-                  </strong>{" "}
+                  </strong>{' '}
                 </span>
                 <span>
-                  | Go to page:{" "}
+                  | Go to page:{' '}
                   <input
-                    type="number"
+                    type='number'
                     defaultValue={pageIndex + 1}
                     onChange={(e) => {
                       const page = e.target.value
@@ -375,9 +375,9 @@ const Table = ({ columns, data }) => {
                         : 0;
                       gotoPage(page);
                     }}
-                    style={{ width: "100px" }}
+                    style={{ width: '100px' }}
                   />
-                </span>{" "}
+                </span>{' '}
                 <select
                   value={pageSize}
                   onChange={(e) => {
@@ -406,50 +406,50 @@ function DuoLaneTierList(props) {
   const [totalData, setTotalData] = useState([]);
   const [counterMatchups, setCounterMatchups] = useState([]);
   const [roles, setRoles] = useState([
-    "Support/Carry",
-    "Solo/Jungle",
-    "Mid/Jungle",
+    'Support/Carry',
+    'Solo/Jungle',
+    'Mid/Jungle',
   ]);
-  const [role, setRole] = useState("Support/Carry");
+  const [role, setRole] = useState('Support/Carry');
 
   const [ranks, setranks] = useState([
-    "Bronze",
-    "Silver",
-    "Gold",
-    "Platinum",
-    "Diamond",
-    "Masters",
-    "Grandmaster",
-    "All_Ranks",
+    'Bronze',
+    'Silver',
+    'Gold',
+    'Platinum',
+    'Diamond',
+    'Masters',
+    'Grandmaster',
+    'All_Ranks',
   ]);
-  const [dispRank, setRank] = useState("All_Ranks");
-  const [roleOne, setRoleOne] = useState("Support");
-  const [roleTwo, setRoleTwo] = useState("Carry");
+  const [dispRank, setRank] = useState('All_Ranks');
+  const [roleOne, setRoleOne] = useState('Support');
+  const [roleTwo, setRoleTwo] = useState('Carry');
 
   useEffect(() => {
-    setRoleOne(role.split("/")[0]);
-    setRoleTwo(role.split("/")[1]);
+    setRoleOne(role.split('/')[0]);
+    setRoleTwo(role.split('/')[1]);
   }, [role]);
 
   useEffect(() => {
     //"/gettierlist/".concat(dispRank, "/", role, "/", tableType.tableType, "/", patch
     fetch(
-      "/api/gettierlist/".concat(
+      '/api/gettierlist/'.concat(
         dispRank,
-        "/",
-        role.replaceAll("/", "_"),
-        "/",
+        '/',
+        role.replaceAll('/', '_'),
+        '/',
         props.tableType,
-        "/",
+        '/',
         queue_type,
-        "/",
+        '/',
         patch
       )
     ).then((res) =>
       res.json().then((data) => {
         setTotalData([]);
         Object.keys(data).forEach((key) => {
-          if (data[key]["count"] + data[key]["losses"] > 250) {
+          if (data[key]['count'] + data[key]['losses'] > 250) {
             setTotalData((totalData) => [
               ...totalData,
               {
@@ -465,8 +465,8 @@ function DuoLaneTierList(props) {
   const columns = React.useMemo(
     () => [
       {
-        Header: "Rank",
-        accessor: "rank",
+        Header: 'Rank',
+        accessor: 'rank',
       },
       {
         Header: roleTwo,
@@ -487,18 +487,18 @@ function DuoLaneTierList(props) {
         sortType: compareNumericString,
       },
       {
-        Header: "Synery Factor",
-        accessor: "syneryFactor",
+        Header: 'Synery Factor',
+        accessor: 'syneryFactor',
         sortType: compareNumericString,
       },
       {
-        Header: "Win Rate",
-        accessor: "winRate",
+        Header: 'Win Rate',
+        accessor: 'winRate',
         sortType: compareNumericString,
       },
       {
-        Header: "Games",
-        accessor: "count",
+        Header: 'Games',
+        accessor: 'count',
         sortType: compareNumericString,
       },
     ],
@@ -506,7 +506,7 @@ function DuoLaneTierList(props) {
   );
   return (
     <>
-      <div className="filter-form">
+      <div className='filter-form'>
         <FilterForm
           filter={role}
           filters={roles}
@@ -514,15 +514,15 @@ function DuoLaneTierList(props) {
           setFilter={setRole}
         />
         <FilterForm
-          filter={dispRank.replaceAll("_", " ")}
+          filter={dispRank.replaceAll('_', ' ')}
           filters={ranks}
-          role={dispRank.replaceAll("_", " ")}
+          role={dispRank.replaceAll('_', ' ')}
           setFilter={setRank}
         />
         <FilterForm
           filter={patch}
-          god={"None"}
-          filters={["9.3", "9.2", "9.1"]}
+          god={'None'}
+          filters={['9.3', '9.2', '9.1']}
           setFilter={setPatch}
           rankSet={setRank}
         />

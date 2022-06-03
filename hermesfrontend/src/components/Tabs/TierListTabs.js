@@ -29,8 +29,8 @@ export default function TierListTabs(props) {
     tab,
     setTab,
   ] = useContext(MainContext);
-  console.log(tab)
-  const [activeTab, setActiveTab] = useState(tab || props.children[0].props.label)
+
+  const [activeTab, setActiveTab] = useState(props.tab || tab || props.children[0].props.label)
 
   const onClickTabItem = (tab) => {
     props.changeTableType(tab)
