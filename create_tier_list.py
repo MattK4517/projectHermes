@@ -210,3 +210,6 @@ if __name__ == '__main__':
     gen_tier_list(client, roles, "9.3", [
                   "Regular"], all_ranks, ["Ranked"], ["Conquest", "Duel", "Joust"])
     print(f"done in {datetime.now() - starttime}")
+
+
+

@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import FilterForm from "./FilterForm";
 import SearchBarGodPage from "../SearchBarStuff/SearchBarGodPage";
 import "./Filters.css";
@@ -18,11 +19,7 @@ export default function Filter(props) {
               setFilter={props.setMode}
               mode={props.mode}
             />
-            <div
-              className={
-                ["Joust", "Duel"].indexOf(props.mode) != -1 ? "show" : ""
-              }
-            >
+            <div className={props.mode === "Conquest" ? "" : "hide-element"}>
               <FilterForm
                 filter={props.role}
                 god={props.pagegod}
@@ -73,11 +70,7 @@ export default function Filter(props) {
             setFilter={props.setMode}
             mode={props.mode}
           />
-          <div
-            className={
-              ["Joust", "Duel"].indexOf(props.mode) != -1 ? "show" : ""
-            }
-          >
+          <div className={props.mode === "Conquest" ? "" : "hide-element"}>
             <FilterForm
               filter={props.role}
               god={props.pagegod}

@@ -882,23 +882,6 @@ function Match() {
           </span>
         </div>
         <div className="match-container">
-          {/* <BaseMatchSummary
-            matchId={matchId}
-            length={matchLength}
-            bansWinner={bansWinner}
-            bansLoser={bansLoser}
-            mmrWinner={mmrWinner}
-            mmrLoser={mmrLoser}
-            date={date}
-            godsWinner={godsWinner}
-            godsLoser={godsLoser}
-            matchData={matchData}
-            queueType={queueType}
-            carryScoreWinner={carryScoreWinner}
-            carryPlayerWinner={carryPlayerWinner}
-            carryScoreLoser={carryScoreLoser}
-            carryPlayerLoser={carryPlayerLoser}
-          /> */}
           <PlayerMatchSummary players={players} />
         </div>
       </div>

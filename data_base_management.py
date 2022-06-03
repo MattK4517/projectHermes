@@ -137,15 +137,14 @@ def add_gold_eff(client, db, col, field_key):
         add_patch_field(client, db, col, matchId, gold_eff, field_key)
 
 
-def remove_duplicates(client, dbs):
+def remove_duplicates(client, patch):
     # for db in dbs:
-    mydb = client["CasualMatches"]
-    mycol = mydb["9.1 Matches"]
+    mydb = client["Matches"]
+    mycol = mydb[f"{patch} Matches"]
     # for god in godsDict.keys():
     #     mycol = mydb[god]
     doc_ids = []
     for x in mycol.aggregate([
-        {"$match": {"Entry_Datetime": "12/20/2021"}},
         {"$group": {"_id": "$MatchId", "count": {"$sum": 1}}}
     ]):
         if x["count"] > 1:
@@ -153,7 +152,7 @@ def remove_duplicates(client, dbs):
                 doc_ids.append(x["_id"])
                 if len(doc_ids) > 1:
                     mycol.delete_one({"_id": doc_ids[-1]})
-                    # time.sleep(100)
+        # time.sleep(100)
         # ending_number = mycol.count_documents({})
         # with open("requirements.txt", "a") as f:
         #     f.writelines(f"{db} for {god} starting at {starting_number} end at {ending_number}. loss={round(100 -ending_number/starting_number * 100, 2)}\n")
@@ -188,9 +187,4 @@ def create_match_dict(match, patch):
 
 
 if __name__ == "__main__":
-    mydb = client["single_match_stats"]
-    games = 0
-    for god in godsDict:
-        mycol = mydb[god]
-        print(god, mycol.count_documents({"mode": "Duel", "patch": "9.3",
-                                          "queue_type": "Ranked"}))
+    remove_duplicates(client, "9.5")

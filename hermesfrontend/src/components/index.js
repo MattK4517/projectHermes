@@ -14,7 +14,7 @@ export { default as DuoLaneTierList } from "./Tierlists/DuoLaneTierList";
 export { default as ContactForm } from "./ContactForm";
 export { default as TierListPage } from "./TierListPage";
 export { default as Items } from "./mainGodPage/Items";
-export { default as Match } from "./Match";
+export { default as Match } from "./MatchPage/Match";
 export { default as FilterForm } from "./Filters/FilterForm";
 export { default as DropDownFilter } from "./Filters/DropDownFilter";
 export { default as GodHeader } from "./mainGodPage/GodHeader";
@@ -56,3 +56,7 @@ export { default as TeamDisplay } from "./MatchPage/TeamDisplay";
 export { default as HeaderMatchInfoSummary } from "./MatchPage/HeaderMatchInfoSummary";
 export { default as CarryPlayerDisplay } from "./MatchPage/CarryPlayerDisplay";
 export { default as FindAMatch } from "./MatchPage/FindAMatch";
+export { default as PlayerMatchDisplay } from "./MatchPage/PlayerMatchDisplay"
+
+export { default as Loading } from "./Shared/Loading"
+export { default as Error } from "./Shared/Error"

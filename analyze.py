@@ -662,13 +662,13 @@ def get_carry_score(match):
             "Loser": {
                 "totalDamage": 1,
             }
-        },
+            },
         "levelDiff": {
             "Winner": {
             },
             "Loser": {
             }
-        },
+            },
         "killPart": {
                 "Winner": {
                     "totalKills": 0,
@@ -676,7 +676,7 @@ def get_carry_score(match):
                 "Loser": {
                     "totalKills": 0,
                 }
-        }
+            }
     }
     match_roles = []
 
@@ -1075,26 +1075,35 @@ def calc_total_matches(client, ranks, patch, queue_type, mode):
         mydb = client["CasualMatches"]
         if mode == "Conquest":
             mycol = mydb[f"{patch} Matches"]
-        elif mode == "Joust":
-            mycol = mydb[f"{patch} Joust Matches"]
+        elif mode != "Conquest":
+            mycol = mydb[f"{patch} {mode} Matches"]
 
         insert_games("All Ranks", mycol.count_documents(
             {}), patch, queue_type, mode)
         return
+    elif queue_type == "Ranked":
+        mydb = client["Matches"]
+        if mode != "Conquest":
+            mycol = mydb[f"{patch} {mode} Matches"]
+        else:
+            mycol = mydb["{patch} Matches"]
 
-    for rank in ["All Ranks"]:
+    for rank in ranks:
         myquery = get_query(rank, "", patch, queue_type, mode)
-        del myquery["role"]
+        if "role" in myquery.keys():
+            del myquery["role"]
         if rank == "All Ranks":
+            print("ALL RANKS", myquery)
             mycol.update_one(myquery, {
                              "$set": {"Total_Matches": len(matchIds)}})
             break
+
         mydb = client["single_match_stats"]
         total_games = 0
         for god in godsDict:
             mycol = mydb[god]
             games = 0
-            for x in mycol.find(myquery, {"_id": 0}):
+            for x in mycol.find(myquery, {"matchId": 1, "_id": 0}):
                 # if x["matchId"] not in matchIds:
                 matchIds.append(x["matchId"])
                 games += 1
@@ -1107,9 +1116,21 @@ def insert_games(rank, games, patch, queue_type, mode):
     mydb = client["Matches"]
     mycol = mydb[f"Total_Matches"]
     myquery = get_query(rank, "", patch, queue_type, mode)
-    mycol.insert_one({**myquery, **{"Total_Matches": games}})
-    # mycol.update_one({"rank": rank, "patch": patch, "queue_type": "RankedConq"}, {"$set": {"Total_Matches": games}})
-    print(f"{rank} done")
+    if "role" in myquery.keys():
+        del myquery["role"]
+    if "All" in rank:
+        myquery["rank"] = "All Ranks"
+    print({**myquery, **{"Total_Matches": games}})
+    if games > 0:
+        if mycol.count_documents(myquery) == 0:
+            mycol.insert_one({"rank": rank, "patch": patch,
+                             "queue_type": queue_type, "mode": mode, "Total_Matches": games})
+        else:
+            mycol.update_one({"rank": rank, "patch": patch, "queue_type": queue_type, "mode": mode}, {
+                             "$set": {"Total_Matches": games}})
+        print(f"{rank} {queue_type} {mode} done")
+    else:
+        print(f"{rank} {queue_type} {mode} no games")
 
 
 def get_skin_stats(god, role, patch, rank="All Ranks", queue_type="Ranked", mode="Conquest", matchup=None):
@@ -1120,8 +1141,6 @@ def get_skin_stats(god, role, patch, rank="All Ranks", queue_type="Ranked", mode
     myquery = get_query(rank, role, patch, queue_type, mode)
     if matchup != "None" and matchup != None:
         myquery = {**myquery, **{"enemy": matchup}}
-
-    print(myquery, mycol.count_documents(myquery))
 
     kills = 0
     deaths = 0
@@ -1181,13 +1200,11 @@ def get_single_skin_stats(god, skin, role, patch, rank="All Ranks", queue_type="
     wins = 0
     data = {**{stat: 0 for stat in single_stats},
             **{"players": []}}
-    print(rank, role, patch, queue_type, mode)
     myquery = get_query(rank, role, patch, queue_type, mode)
     if matchup != "None" and matchup != None:
         myquery = {**myquery, **{"enemy": matchup}}
 
     myquery["skin"] = skin
-    print(myquery)
     for x in mycol.aggregate([
         {
             "$match": myquery,
@@ -1271,8 +1288,7 @@ def get_single_skin_stats(god, skin, role, patch, rank="All Ranks", queue_type="
     keys = list(data.keys()).copy()
 
     for key in keys:
-        print(data[key] is int)
-        if key not in ["players", "games", "wi te", "wins"] and key not in single_stats:
+        if key not in ["players", "games", "winrate", "wins"] and key not in single_stats:
             del data[key]
         # elif type(data[key]) is int:
         #     data[key] = "{:,}".format(round(data[key]))
