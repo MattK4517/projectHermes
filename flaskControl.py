@@ -1,27 +1,29 @@
-from datetime import datetime
-from queue import Empty
-from re import L, M
 
-# from sklearn.linear_model import GammaRegressor
-import analyze as anlz
-import analyze_players as anlzpy
-import pandas as pd
-from constants import godsDict, roles, id_dict
+from generate_report import Report
+from carry_score_analytics import get_carry_score_averages
+from damage_calculator import calc_dps, calc_combo_damage_raw
+from bson import json_util
+import json
+import flaskHelper as fh
+from pyrez.api import SmiteAPI
+import pyrez
+from duo_tier_list import get_lanes
+from operator import getitem
+from collections import OrderedDict
+from main import client
 from flask import Flask, render_template, request
+from constants import godsDict, roles, id_dict
+import pandas as pd
+import analyze_players as anlzpy
+import analyze as anlz
+import re
+from re import L, M
+from queue import Empty
+from datetime import datetime
+# from sklearn.linear_model import GammaRegressor
 # from flask_limiter import Limiter
 # from flask_limiter.util import get_remote_address
-from __init__ import client
-from collections import OrderedDict
-from operator import getitem
-import analyze_players as anlzpy
-from duo_tier_list import get_lanes
-import pyrez
-from pyrez.api import SmiteAPI
-import flaskHelper as fh
-import json
-from bson import json_util
-from damage_calculator import calc_dps, calc_combo_damage_raw
-from carry_score_analytics import get_carry_score_averages
+
 
 app = Flask(__name__, static_folder="../hermesfrontend", static_url_path="/")
 # limiter = Limiter(
@@ -68,14 +70,12 @@ def get_god_data_role(god, role, rank, patch, queue_type, mode, matchup="None"):
     newgod = god.replace("_", " ")
     if matchup != "None":
         return anlz.get_specific_build(client, god, role, patch, matchup, rank, queue_type, mode)
-    elif "All" in rank and matchup == "None":
         build = anlz.get_top_builds(
             client, god, role, patch, queue_type, mode=mode)
     elif matchup == "None":
         build = anlz.get_top_builds(
             client, god, role, patch, queue_type, rank, mode=mode)
 
-    # pb_rate = anlz.get_pb_rate(client, newgod, rank, role, patch)
     image = {"url": anlz.get_url(newgod)}
     data_dict = {**build, **image}
     return data_dict
@@ -412,3 +412,14 @@ def get_single_skin(god, skin, role, rank, patch, queue_type, mode):
 
     print(skin_stats)
     return skin_stats
+
+
+@app.route('/api/generatereport', methods=["GET", "POST"])
+def create_report():
+    if request.method == "POST":
+        report = Report()
+        report.set_params(request.get_json())
+        report.create_report()
+        report.upload_report()
+        # print("REPORT", report.params)
+    return ""

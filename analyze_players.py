@@ -4,7 +4,7 @@ from constants import godsDict, roles, patches
 import analyze as anlz
 import pymongo
 from datetime import datetime
-from __init__ import client
+from main import client
 
 
 def find_match_history(client, playername, queue_type, patch, mode):

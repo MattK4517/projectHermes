@@ -1,16 +1,15 @@
-import * as React from "react";
+
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
 import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
+import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
+import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import * as AiIcons from "react-icons/ai";
 import * as GiIcons from "react-icons/gi";
 import {
-  HashRouter as HashRouter,
   Switch,
   Route,
   Link,
@@ -33,6 +32,7 @@ import { TierListProvider } from './Tierlists/TierListContext';
 import FindAMatch from './MatchPage/FindAMatch';
 import { MainProvider } from './mainGodPage/MainContext';
 import SkinStatPage from './mainGodPage/Skins/SkinStatPage';
+import Button from '@mui/material/Button';
 
 export const compare = (a, b) => {
   return a.winRate - b.winRate;
@@ -227,163 +227,73 @@ Object.keys(godsDict).forEach((god) => {
     },
   ];
 });
+
+const CustDrawer = styled(Drawer)(({ theme }) => ({
+  width: "225px",
+  height: "100vh",
+  backgroundColor: "#17172e",
+  "& .MuiDrawer-paper": {
+    width: "inherit",
+    borderRight: "none",
+    height: "100%",
+    backgroundColor: "#17172e",
+  },
+  [theme.breakpoints.down("md")]: {
+    width: "135px",
+    "& .MuiDrawer-paper": {
+      width: "inherit",
+      borderRight: "none",
+      height: "100%",
+    },
+  },
+  [theme.breakpoints.down("sm")]: {
+    display: "none"
+  },
+
+}));
+
+
 const Root = styled(AppBar)(({ theme }) => ({
   padding: theme.spacing(1),
+  left: "225px",
+  backgroundColor: "#17172e",
+  width: "auto",
+
   [theme.breakpoints.down("sm")]: {
-    backgroundColor: "#0b0b23",
-    width: "100%",
-  },
-  [theme.breakpoints.up("sm")]: {
-    backgroundColor: "#0b0b23",
-  },
-  [theme.breakpoints.up("lg")]: {
-    backgroundColor: "#0b0b23",
+    left: "0 !important",
   },
   [theme.breakpoints.down("md")]: {
     display: "flex",
     alignItems: "center",
-  },
-}));
-
-const CustDrawer = styled(Drawer)(({ theme }) => ({
-  padding: theme.spacing(1),
-  bgColor: "#17172e",
-  [theme.breakpoints.down("sm")]: {
-    display: "none",
-  },
-  [theme.breakpoints.up("sm")]: {},
-  [theme.breakpoints.up("lg")]: {},
-  [theme.breakpoints.down("md")]: {
-    width: "120px",
-  },
-  "& .MuiDrawer-paper": {
-    backgroundColor: "#17172e",
-    [theme.breakpoints.down("lg")]: {
-      width: "120px",
-      // width: "225px",
-    },
-    [theme.breakpoints.up("lg")]: {
-      width: "225px",
-      // width: "225px",
-    },
+    left: "135px",
   },
 }));
 
 const Hamburger = styled("div")(({ theme }) => ({
+  display: "none",
   [theme.breakpoints.down("md")]: {
-    backgroundColor: "#0b0b23",
-    color: "000",
-    display: "block",
-    marginRight: "25px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    margin: "0 auto",
   },
-  [theme.breakpoints.up("md")]: {
-    backgroundColor: "#00FFFF",
-    display: "none",
-  },
-  [theme.breakpoints.up("lg")]: {
-    backgroundColor: "#0000FF",
-    display: "none",
-  },
+
 }));
 
-const drawerWidth = 200;
+
+
+
 export default function PermanentDrawerLeft() {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
   const routeComponents = routes.map(({ path, component }, key) => (
     <Route exact path={path} component={() => component} key={key} />
   ));
   return (
     <Box sx={{ display: "flex" }}>
-      <Root
-        position="fixed"
-        sx={{
-          width: `calc(100% - ${drawerWidth + 20}px)`,
-          ml: `${drawerWidth}px`,
-          bgcolor: "#17172e",
-          paddingLeft: "0px",
-          paddingRight: "0px",
-        }}
-      >
-        <Toolbar>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{
-              display: "flex",
-            }}
-          >
-            <Link to={"/"}>
-              <img
-                src="https://i.imgur.com/1OGq7Nk.png"
-                alt="SmiteStats Icon"
-                className="logo-icon"
-              />
-            </Link>
-            <Hamburger>
-              <Link
-                to={"/"}
-                style={{ marginLeft: "10px", paddingRight: "10px" }}
-              >
-                <img
-                  src="https://i.imgur.com/3KNEQMP.png"
-                  alt="SmiteStats Icon"
-                  className="logo-icon-small"
-                />
-                Home
-              </Link>
-              <Link to={"/gods"} style={{ paddingRight: "10px" }}>
-                Gods
-              </Link>
-              <Link to={"/tierlist"}>Tierlist</Link>
-              {/* <Button
-            id="basic-button"
-            aria-controls="basic-menu"
-            aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
-            onClick={handleClick}
-          >
-            <MenuIcon />
-          </Button>
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            MenuListProps={{
-              'aria-labelledby': 'basic-button',
-            }}
-          > */}
-              {/* <MenuItem onClick={handleClose}><Link to={"/"}>Gods</Link></MenuItem>
-            <MenuItem onClick={handleClose}><Link to={"/"}>Gods</Link></MenuItem>
-            <MenuItem onClick={handleClose}><Link to={"/tierlist"}>tierlist</Link></MenuItem> */}
-              {/* </Menu> */}
-            </Hamburger>
-            <div className="hide">
-              <SearchBar data={Object.keys(godsDict)} />
-            </div>
-          </Typography>
-        </Toolbar>
-      </Root>
       <CustDrawer
-        sx={{
-          width: "225px",
-          flexShrink: 0,
-          bgColor: "#17172e",
-          "& .MuiDrawer-paper": {
-            bgColor: "#17172e",
-          },
-        }}
         variant="permanent"
         anchor="left"
       >
-        <Toolbar />
         <Divider
           sx={{
             color: "#bbbedb",
@@ -445,6 +355,66 @@ export default function PermanentDrawerLeft() {
           Hi-Rez Studios. © Hi-Rez Studios, Inc. All rights reserved.
         </div>
       </CustDrawer>
+
+      <Root>
+        <Typography
+          variant="h6"
+          noWrap
+          component="div"
+          sx={{
+            display: "flex",
+            width: "100%",
+          }}
+        >
+
+
+          <Link to={"/"}>
+            <img
+              src="https://i.imgur.com/1OGq7Nk.png"
+              alt="SmiteStats Icon"
+              className="logo-icon"
+            />
+          </Link>
+
+          <Hamburger>
+            <div className="nav-row">
+              <Link
+                to={"/"}
+                style={{ paddingRight: "10px" }}
+              >
+                <img
+                  src="https://i.imgur.com/3KNEQMP.png"
+                  alt="SmiteStats Icon"
+                  className="logo-icon-small"
+                />
+                Home
+              </Link>
+              <Link to={"/gods"} style={{ paddingRight: "10px" }}>
+                Gods
+              </Link>
+              <Link to={"/tierlist"}>Tierlist</Link>
+            </div>
+            <div className="nav-row">
+              <Button
+                target="_blank"
+                href="https://www.patreon.com/smitestats"
+                variant="contained">Support SmiteStats</Button>
+            </div>
+          </Hamburger>
+
+          <div className="hide search-bar_container">
+            <SearchBar data={Object.keys(godsDict)} />
+            <div style={{ flex: "1", display: "flex", justifyContent: "flex-end", marginRight: "25px" }}>
+              <Button
+                target="_blank"
+                href="https://www.patreon.com/smitestats"
+                variant="contained">Support SmiteStats</Button>
+            </div>
+          </div>
+        </Typography>
+      </Root >
+
+
       <Box component="main" sx={{ flexGrow: 1, width: "100%" }}>
         <Toolbar />
         <MainProvider>
@@ -459,6 +429,6 @@ export default function PermanentDrawerLeft() {
           </PlayerProvider>
         </MainProvider>
       </Box>
-    </Box>
+    </Box >
   );
 }

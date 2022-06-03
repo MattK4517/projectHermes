@@ -2,7 +2,7 @@ from cProfile import run
 import pymongo
 from datetime import datetime
 from constants import godsDict, roles, ranks, slots
-from __init__ import client
+from main import client
 
 
 class GodData:
@@ -48,7 +48,7 @@ class GodData:
 
     def calc_match_stats(self):
         mydb = client["single_match_stats"]
-        mycol = mydb[self.name]
+        mycol = mydb[self.mode]
         set = []
         for match in self.matches:
             player_ids = []

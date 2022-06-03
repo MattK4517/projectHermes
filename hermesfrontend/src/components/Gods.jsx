@@ -74,6 +74,7 @@ export function AllGodsSkinsDisplay(props) {
   return (
     <div className="gods-container">
       {props.gods.map((god, index) => {
+        console.log(god);
         return (
           <Link
             key={index}
@@ -110,11 +111,11 @@ export function AllGodsSkinsDisplay(props) {
             </div>
             <figure className="snip0015">
               <img
-                className="god-face"
+                className={`god-face ${god.skin_name}`}
                 src={
                   god.url ||
                   god.godSkin_URL ||
-                  "https://i.imgur.com/kigNdxX.png"
+                  `https://webcdn.hirezstudios.com/smite/god-skins/${props.godName.toLowerCase()}_golden.jpg`
                 }
                 alt={god.name || god.skin_name}
                 style={{ width: "100%", height: "100%" }}

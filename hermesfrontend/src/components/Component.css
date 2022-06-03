@@ -1305,7 +1305,7 @@ figure.snip0015:hover figcaption::before {
 .player-container {
   display: flex;
   flex-direction: row;
-  justify-content: start;
+  justify-content: flex-start;
   overflow: hidden;
   width: 100%;
 }
@@ -2216,9 +2216,12 @@ figure.snip0015:hover figcaption::before {
 }
 
 .main-nav-wrapper {
-  border-top: 1px solid gray;
   border-bottom: 1px solid gray;
   flex: 1;
+}
+
+.main-nav-link:first-child {
+  margin-top: 50px;
 }
 
 .damage-content-main {
@@ -2526,6 +2529,7 @@ figure.snip0015:hover figcaption::before {
 
 .search-bar {
   justify-content: center;
+  flex: 1;
 }
 
 .tabs {
@@ -2620,4 +2624,33 @@ figure.snip0015:hover figcaption::before {
   flex-direction: column;
   flex: 1;
   width: 225px;
+}
+
+.Legendary {
+  filter: sepia(100%) hue-rotate(-10deg) saturate(350%);
+}
+
+.Diamond {
+  filter: sepia(100%) hue-rotate(190deg) saturate(350%);
+}
+
+.search-bar_container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.top-nav {
+  height: fit-content;
+  width: 100%;
+  background-color: #17172e;
+}
+
+.nav-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: auto;
 }

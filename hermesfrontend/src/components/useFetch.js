@@ -91,7 +91,7 @@ const useFetch = (pagegod, role, rank, patch, matchup, queueType, mode) => {
               ...badmatchups,
               {
                 enemy: newData[god].enemy,
-                timesPlayed: newData[god].timesPlayed,
+                games: newData[god].games,
                 url: newData[god].url,
                 winRate: newData[god].winRate,
                 wins: newData[god].wins,
@@ -102,7 +102,7 @@ const useFetch = (pagegod, role, rank, patch, matchup, queueType, mode) => {
               ...goodmatchups,
               {
                 enemy: newData[god].enemy,
-                timesPlayed: newData[god].timesPlayed,
+                games: newData[god].games,
                 url: newData[god].url,
                 winRate: newData[god].winRate,
                 wins: newData[god].wins,
