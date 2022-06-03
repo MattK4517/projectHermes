@@ -93,7 +93,7 @@ def get_pb_rate(client, god, rank, role, patch, queue_type="Ranked", mode="Conqu
     if "role" in myquery.keys():
         del myquery["role"]
     del myquery["queue_type"]
-    godBans = bancol.find(myquery).count()
+    godBans = bancol.count_documents(myquery)
     games = get_games_played(client, god, rank, role,
                              patch, queue_type=queue_type, mode=mode)
     if totalMatches == 0:
