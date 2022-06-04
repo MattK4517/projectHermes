@@ -135,7 +135,7 @@ def get_tier_list(rank, role, tableType, queue_type, patch, mode):
 
     elif tableType == "Duos":
         role_one, role_two = role.split("_")
-        retData = get_lanes(role_one, role_two)
+        retData = get_lanes(role_one, role_two, patch)
 
     return json.loads(json_util.dumps(retData))
 
