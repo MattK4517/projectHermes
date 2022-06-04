@@ -21,13 +21,14 @@ from constants import patch
 from pymongo import MongoClient
 
 
-def get_lanes(role_one: str, role_two: str) -> list:
+def get_lanes(role_one: str, role_two: str, patch: str) -> list:
     duodb = client["Duo_Tierlist"]
-    duocol = duodb["9.1 Matches"]
+    duocol = duodb[f"{patch} Matches"]
     role_one_lowercase = role_one.lower()
     role_two_lowercase = role_two.lower()
     lanes = {}
     myquery = {"Patch": {"$exists": True}, "Type": f"{role_one}{role_two}"}
+    print
     winning_lanes = []
     for x in duocol.aggregate(
             [
@@ -71,11 +72,11 @@ def get_lanes(role_one: str, role_two: str) -> list:
             ]
     ):
         losing_lanes.append(x)
-    god_wrs = {"mid": {}, "jungle": {}}
+    god_wrs = {role_one: {}, role_two: {}}
     for winning_duo in winning_lanes:
         for losing_duo in losing_lanes:
-            if winning_duo["count"] + losing_duo["count"] > 150:
-                if winning_duo["_id"] == losing_duo["_id"]:
+            if winning_duo["count"] + losing_duo["count"] > 50:
+                if winning_duo["_id"] == losing_duo["_id"] and (winning_duo["_id"][role_one_lowercase] and winning_duo["_id"][role_two_lowercase]):
 
                     syneryFactor = round(winning_duo["count"]/(winning_duo["count"]+losing_duo["count"])*100, 2) - sqrt(
                         winning_duo[f"winning{role_one}WR"] * winning_duo[f"winning{role_two}WR"])
@@ -85,6 +86,7 @@ def get_lanes(role_one: str, role_two: str) -> list:
                         **{f"{role_one_lowercase}WinRate": winning_duo[f"winning{role_one}WR"], f"{role_two_lowercase}WinRate": winning_duo[f"winning{role_two}WR"], "syneryFactor": syneryFactor},
                     }
     return lanes
+
 
 # gen_regular_tier_entry(client, god, role, rank, patch)
 

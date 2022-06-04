@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useTable, useSortBy, usePagination } from 'react-table';
 import { Link } from 'react-router-dom';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Button from '@material-ui/core/Button';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
 import { FilterForm } from '../Filters/FilterForm';
 import winRateColor from '../mainGodPage/WinRateColor';
 import { TierListContext } from './TierListContext';
+
+import { useQuery } from 'react-query';
+import Loading from '../Shared/Loading';
+import Error from '../Shared/Error';
 
 const Table = ({ columns, data }) => {
   const {
@@ -431,36 +430,37 @@ function DuoLaneTierList(props) {
     setRoleTwo(role.split('/')[1]);
   }, [role]);
 
-  useEffect(() => {
-    //"/gettierlist/".concat(dispRank, "/", role, "/", tableType.tableType, "/", patch
-    fetch(
-      '/api/gettierlist/'.concat(
-        dispRank,
-        '/',
-        role.replaceAll('/', '_'),
-        '/',
-        props.tableType,
-        '/',
-        queue_type,
-        '/',
-        patch
-      )
-    ).then((res) =>
-      res.json().then((data) => {
-        setTotalData([]);
-        Object.keys(data).forEach((key) => {
-          if (data[key]['count'] + data[key]['losses'] > 250) {
-            setTotalData((totalData) => [
-              ...totalData,
-              {
-                ...data[key],
-              },
-            ]);
-          }
-        });
-      })
-    );
-  }, [dispRank, role, patch]);
+  const { isLoading, error, data } = useQuery(
+    ['duoTierList', role, patch],
+    () =>
+      fetch(
+        '/api/gettierlist/'.concat(
+          dispRank.replaceAll('_', ' '),
+          '/',
+          role.replaceAll('/', '_'),
+          '/',
+          props.tableType,
+          '/',
+          'Ranked',
+          '/',
+          patch,
+          '/',
+          'Conquest'
+        )
+      ).then((res) =>
+        res.json().then((data) => {
+          let tempData = [];
+          setTotalData([]);
+          Object.values(data).map((god) => {
+            tempData = [...tempData, god];
+          });
+          setTotalData(tempData);
+        })
+      ),
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
 
   const columns = React.useMemo(
     () => [
@@ -504,6 +504,12 @@ function DuoLaneTierList(props) {
     ],
     [roleOne, roleTwo]
   );
+
+  if (isLoading) return <Loading />;
+
+  if (error) return <Error />;
+
+  console.log(totalData);
   return (
     <>
       <div className='filter-form'>
@@ -522,7 +528,7 @@ function DuoLaneTierList(props) {
         <FilterForm
           filter={patch}
           god={'None'}
-          filters={['9.3', '9.2', '9.1']}
+          filters={['9.5', '9.4', '9.3', '9.2', '9.1']}
           setFilter={setPatch}
           rankSet={setRank}
         />

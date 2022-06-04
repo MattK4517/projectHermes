@@ -1,17 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useTable, useSortBy, usePagination } from 'react-table';
 import { Link } from 'react-router-dom';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Button from '@material-ui/core/Button';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
-import { FilterForm } from '../Filters/FilterForm';
 import winRateColor from '../mainGodPage/WinRateColor';
 import { TierListContext } from './TierListContext';
-import { linkDict } from '../PlayerPage/Player';
 import TierListFilter from '../Filters/TierListFilter';
 import { getImageUrl } from '../Filters/FilterForm';
+import { useQuery } from 'react-query';
+import Loading from '../Shared/Loading';
+import Error from '../Shared/Error';
 
 const Table = ({ columns, data }) => {
   const {
@@ -485,50 +481,38 @@ function CombatTierList(props) {
 
   const [totalData, setTotalData] = useState([]);
 
-  useEffect(() => {
-    //"/gettierlist/".concat(dispRank, "/", role, "/", tableType.tableType, "/", patch
-    fetch(
-      '/api/gettierlist/'.concat(
-        rank,
-        '/',
-        role,
-        '/',
-        props.tableType,
-        '/',
-        queueType,
-        '/',
-        patch,
-        '/',
-        mode
-      )
-    ).then((res) =>
-      res.json().then((data) => {
-        setTotalData([]);
-        Object.keys(data).forEach((key) => {
-          Object.keys(data[key]).forEach((godData) => {
-            console.log(data[key]);
-            setTotalData((totalData) => [
-              ...totalData,
-              {
-                god: data[key][godData].god,
-                role: data[key][godData].role,
-                winRate: data[key][godData].winRate,
-                kills: data[key][godData].kills,
-                deaths: data[key][godData].deaths,
-                assists: data[key][godData].assists,
-                damageD: data[key][godData].damage_,
-                damageTaken: data[key][godData].damageTaken,
-                damageMitigated: data[key][godData].damageMitigated,
-                healing: data[key][godData].healing,
-                selfHealing: data[key][godData].selfHealing,
-                games: data[key][godData].games,
-              },
-            ]);
+  const { isLoading, error, data } = useQuery(
+    ['combatTierList', mode, role, patch, queueType],
+    () =>
+      fetch(
+        '/api/gettierlist/'.concat(
+          rank,
+          '/',
+          role,
+          '/',
+          props.tableType,
+          '/',
+          queueType,
+          '/',
+          patch,
+          '/',
+          mode
+        )
+      ).then((res) =>
+        res.json().then((data) => {
+          let tempData = [];
+          setTotalData([]);
+          Object.entries(data).map((god) => {
+            tempData = [...tempData, ...Object.values(god[1])];
           });
-        });
-      })
-    );
-  }, [rank, role, queueType, patch]);
+          console.log('getting here');
+          setTotalData(tempData);
+        })
+      ),
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
 
   const columns = React.useMemo(
     () => [
@@ -567,7 +551,7 @@ function CombatTierList(props) {
       },
       {
         Header: 'Damage',
-        accessor: 'damageD',
+        accessor: 'damage_',
         sortType: compareNumericString,
       },
       {
@@ -598,6 +582,12 @@ function CombatTierList(props) {
     ],
     []
   );
+
+  if (isLoading) return <Loading />;
+
+  if (error) return <Error />;
+
+  console.log(totalData);
   return (
     <>
       <TierListFilter />

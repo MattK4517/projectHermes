@@ -1,21 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useTable, useSortBy, usePagination } from 'react-table';
 import { Link } from 'react-router-dom';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Button from '@material-ui/core/Button';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
-import { FilterForm } from '../Filters/FilterForm';
 import winRateColor, { tierColor } from '../mainGodPage/WinRateColor';
-import Tooltip from '@material-ui/core/Tooltip';
 import { compareNumericString } from './TierListHelpers';
 import { HtmlTooltip } from '../mainGodPage/GodPageHelpers';
 import { getImageUrl } from '../Filters/FilterForm';
 import { TierListContext } from './TierListContext';
 import { CreateMatchupToolTip } from './TierListHelpers';
-import { linkDict } from '../PlayerPage/Player';
 import TierListFilter from '../Filters/TierListFilter';
+import { useQuery } from 'react-query';
+import Loading from '../Shared/Loading';
+import Error from '../Shared/Error';
 
 const Table = ({ columns, data }) => {
   const {
@@ -100,6 +95,7 @@ const Table = ({ columns, data }) => {
                 <div class='rt-tbody' role='rowgroup' {...getTableBodyProps()}>
                   {page.map(
                     (row, i) => {
+                      console.log(page);
                       prepareRow(row);
                       // if (row.original.role != this.props.role && this.props.role != "All Roles"){
                       //   console.log(row.original.role, this.props.role)
@@ -422,56 +418,38 @@ function TierList(props) {
   // const [patch, setPatch] = useState("8.9");
   const [totalData, setTotalData] = useState([]);
 
-  useEffect(() => {
-    //"/gettierlist/".concat(dispRank, "/", role, "/", props.props, "/", patch
-    fetch(
-      '/api/gettierlist/'.concat(
-        rank,
-        '/',
-        role,
-        '/',
-        props.tableType,
-        '/',
-        queueType,
-        '/',
-        patch,
-        '/',
-        mode
-      )
-    ).then((res) =>
-      res.json().then((data) => {
-        setTotalData([]);
-        Object.keys(data).forEach((key, index) => {
-          Object.keys(data[key]).forEach((godData) => {
-            let matchups = Object.values(
-              data[key][godData].counterMatchups
-            ).sort(compare);
-            setTotalData((totalData) => [
-              ...totalData,
-              {
-                god: data[key][godData].god,
-                role: data[key][godData].role,
-                games: data[key][godData].games,
-                winRate: data[key][godData].winRate,
-                pickRate: data[key][godData].pickRate,
-                banRate: data[key][godData].banRate,
-                wins: data[key][godData].wins,
-                tier: data[key][godData].tier,
-                counterMatchups: matchups.map((matchup, index) => {
-                  return [
-                    matchup.url,
-                    matchup.enemy,
-                    matchup.winRate,
-                    matchup.timesPlayed,
-                  ];
-                }),
-              },
-            ]);
+  const { isLoading, error, data } = useQuery(
+    ['regularTierList', mode, role, patch, queueType],
+    () =>
+      fetch(
+        '/api/gettierlist/'.concat(
+          rank,
+          '/',
+          role,
+          '/',
+          props.tableType,
+          '/',
+          queueType,
+          '/',
+          patch,
+          '/',
+          mode
+        )
+      ).then((res) =>
+        res.json().then((data) => {
+          let tempData = [];
+          setTotalData([]);
+          Object.entries(data).map((god) => {
+            tempData = [...tempData, ...Object.values(god[1])];
           });
-        });
-      })
-    );
-  }, [rank, role, queueType, patch, mode]);
+          console.log('getting here');
+          setTotalData(tempData);
+        })
+      ),
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
 
   const columns = React.useMemo(
     () => [
@@ -519,72 +497,87 @@ function TierList(props) {
     ],
     []
   );
+
+  if (isLoading) return <Loading />;
+
+  if (error) return <Error />;
+
   return (
-    <>
+    <div className={totalData.length > 0 ? '' : 'hide'}>
       <TierListFilter />
       <Table columns={columns} data={totalData} sortable />
-    </>
+    </div>
   );
 }
+
+const sortMatchups = (a, b) => {
+  if (a.winRate > b.winRate) {
+    return 1;
+  } else if (a.winRate === b.winRate) {
+    return 0;
+  } else {
+    return -1;
+  }
+};
 
 function CounterMatchupDisplay(props) {
   return (
     <div className='against-container'>
-      {props.matchups.map((matchup, index) => {
-        // console.log(matchup);
-        if (index < 9) {
-          let routegod = matchup[1].replaceAll(' ', '_');
-          let styling;
-          if (matchup[2] < 50) {
-            styling = { height: '24px', width: '24px' };
-          } else {
-            styling = {
-              height: '24px',
-              width: '24px',
-              opacity: '.4',
-              filter: 'grayscale(100%)',
-            };
-          }
-          return (
-            <HtmlTooltip
-              title={
-                <React.Fragment>
-                  <CreateMatchupToolTip
-                    god={props.god}
-                    winrate={matchup[2]}
-                    enemy={matchup[1]}
-                    enemyURL={matchup[0]}
-                    games={matchup[3]}
-                  />
-                </React.Fragment>
-              }
-              placement='top'
-              arrow
-            >
-              <div className='against' key={index}>
-                <Link to={'/'.concat(routegod)}>
-                  <div className='god-face' style={{ maxWidth: '100px' }}>
-                    <div>
-                      <img
-                        src={`https://webcdn.hirezstudios.com/smite/god-icons/${matchup[1]
-                          .toLowerCase()
-                          .replaceAll("'", '')
-                          .replaceAll(' ', '-')}.jpg`}
-                        alt={`https://webcdn.hirezstudios.com/smite/god-icons/${matchup[1]
-                          .toLowerCase()
-                          .replaceAll("'", '')
-                          .replaceAll(' ', '-')}.jpg`}
-                        style={styling}
-                        loading='lazy'
-                      ></img>
+      {Object.values(props.matchups)
+        .sort(sortMatchups)
+        .map((matchup, index) => {
+          if (index < 9) {
+            let routegod = matchup.enemy.replaceAll(' ', '_');
+            let styling;
+            if (matchup.winRate > 50) {
+              styling = { height: '24px', width: '24px' };
+            } else {
+              styling = {
+                height: '24px',
+                width: '24px',
+                opacity: '.4',
+                filter: 'grayscale(100%)',
+              };
+            }
+            return (
+              <HtmlTooltip
+                title={
+                  <React.Fragment>
+                    <CreateMatchupToolTip
+                      god={props.god}
+                      winrate={matchup.winRate}
+                      enemy={matchup.enemy}
+                      games={matchup.timesPlayed}
+                    />
+                  </React.Fragment>
+                }
+                placement='top'
+                arrow
+              >
+                <div className='against' key={index}>
+                  <Link to={'/'.concat(routegod)}>
+                    <div className='god-face' style={{ maxWidth: '100px' }}>
+                      <div>
+                        <img
+                          src={`https://webcdn.hirezstudios.com/smite/god-icons/${matchup.enemy
+                            .toLowerCase()
+                            .replaceAll("'", '')
+                            .replaceAll(' ', '-')}.jpg`}
+                          alt={`https://webcdn.hirezstudios.com/smite/god-icons/${matchup.enemy
+                            .toLowerCase()
+                            .replaceAll("'", '')
+                            .replaceAll(' ', '-')}.jpg`}
+                          style={styling}
+                          loading='lazy'
+                        ></img>
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              </div>
-            </HtmlTooltip>
-          );
-        }
-      })}
+                  </Link>
+                </div>
+              </HtmlTooltip>
+            );
+          }
+        })}
     </div>
   );
 }
