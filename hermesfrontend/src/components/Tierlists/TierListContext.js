@@ -6,7 +6,7 @@ export const TierListProvider = (props) => {
   const [god, setGod] = useState("");
   const [queueType, setQueueType] = useState("Ranked");
   const [mode, setMode] = useState("Conquest");
-  const [patch, setPatch] = useState("9.5");
+  const [patch, setPatch] = useState("9.6");
   const [topLink, setTopLink] = useState("https://i.imgur.com/wH3klnZ.jpg");
   const [rank, setRank] = useState("All Ranks");
   const [role, setRole] = useState("All Roles");

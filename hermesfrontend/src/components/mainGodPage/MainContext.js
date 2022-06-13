@@ -6,13 +6,13 @@ export const MainProvider = (props) => {
   const [god, setGod] = useState("");
   const [role, setRole] = useState("");
   const [rank, setRank] = useState("All Ranks");
-  const [patch, setPatch] = useState("9.5");
+  const [patch, setPatch] = useState("9.6");
   const [queueType, setQueueType] = useState("Ranked");
   const [mode, setMode] = useState("Conquest");
   const [matchup, setMatchup] = useState("None");
   const [skin, setSkin] = useState("None");
   const [tab, setTab] = useState("Build");
-  const patches = ["9.5", "9.4", "9.3", "9.2", "9.1"];
+  const patches = ['9.6', '9.5', '9.4', '9.3', '9.2', '9.1'];
   const queueTypes = ["Casual", "Ranked"];
   const modes = ["Joust", "Conquest", "Duel", "Assault", "Slash", "Arena"];
   const ranks = [
@@ -31,7 +31,7 @@ export const MainProvider = (props) => {
 
   useEffect(() => {
     setRank("All Ranks");
-    setPatch("9.5");
+    setPatch("9.6");
     setQueueType("Ranked");
     setMode("Conquest");
     setMatchup("None");
