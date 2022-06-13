@@ -108,6 +108,7 @@ export const godsDict = {
   Kukulkan: "Mid",
   Kumbhakarna: "Support",
   Kuzenbo: "Support",
+  Lancelot: "Jungle",
   Loki: "Jungle",
   Medusa: "Carry",
   Mercury: "Jungle",

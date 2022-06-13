@@ -47,6 +47,7 @@ export const physGods = [
   "Jing Wei",
   "Kali",
   "King Arthur",
+  "Lancelot",
   "Loki",
   "Medusa",
   "Mercury",
