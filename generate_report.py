@@ -1,8 +1,8 @@
 from numpy import Infinity
-from main import client
+from __init__ import client
 import analyze as anlz
-import df2gspread
-import gspread
+# import df2gspread
+# import gspread
 import pandas as pd
 
 
@@ -14,7 +14,7 @@ class Report():
         self.report_data = {}
 
     def set_params(self, params):
-        for param in params:
+        for paradf2gspreadm in params:
             self.params[param] = params[param]
         print(self.params)
 

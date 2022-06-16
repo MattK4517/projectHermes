@@ -1,6 +1,6 @@
 import pandas as pd
 import pymongo
-from main import client
+from __init__ import client
 
 
 godsDict = {

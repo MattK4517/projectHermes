@@ -2,7 +2,7 @@ from cProfile import run
 import pymongo
 from datetime import datetime
 from constants import godsDict, roles, ranks, slots
-from main import client
+from __init__ import client
 
 
 class GodData:

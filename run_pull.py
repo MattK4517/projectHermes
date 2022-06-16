@@ -8,7 +8,7 @@ import analyze as anlz
 from pytz import timezone
 import os
 import time
-from main import client
+from __init__ import client
 
 
 def get_date_format():

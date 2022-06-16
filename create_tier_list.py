@@ -1,7 +1,7 @@
 import pymongo
 import analyze as anlz
 from constants import godsDict, roles, ranks, patch, all_ranks
-from main import client
+from __init__ import client
 from datetime import datetime
 
 
@@ -210,6 +210,3 @@ if __name__ == '__main__':
     gen_tier_list(client, roles, "9.3", [
                   "Regular"], all_ranks, ["Ranked"], ["Conquest", "Duel", "Joust"])
     print(f"done in {datetime.now() - starttime}")
-
-
-

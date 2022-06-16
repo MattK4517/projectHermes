@@ -1,7 +1,7 @@
 import pymongo
 from datetime import datetime
 from constants import Tier_Three_items, godsDict, roles, ranks, slots, Assassins, Guardians, Hunters, Mages, Warriors, Starter_items
-from main import client
+from __init__ import client
 import numpy as np
 import matplotlib.pyplot as plt
 import os

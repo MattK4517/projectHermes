@@ -1,7 +1,7 @@
 from audioop import avg
 from re import A, M, S, X
 from datetime import datetime
-from main import client
+from __init__ import client
 import errlogger as logger
 import pymongo
 from collections import OrderedDict
@@ -1443,7 +1443,7 @@ def moveDocuments(sourceCollection, targetCollection, filter, batchSize):
 
 if __name__ == "__main__":
     starttime = datetime.now()
-    from main import client
+    from __init__ import client
     import numpy
     mydb = client["single_match_stats"]
     games = 0
