@@ -1,17 +1,6 @@
-import React from 'react';
 import { useState, useEffect, useContext } from 'react';
-import { Link } from 'react-router-dom';
 import '../Component.css';
 import styled from 'styled-components';
-import useFetch from '../useFetch';
-import Tooltip from '@material-ui/core/Tooltip';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Items from './Items';
-import { FilterForm } from '../Filters/FilterForm';
-import { DropDownFilter } from '../Filters/DropDownFilter';
-import winRateColor from './WinRateColor';
 import { GodHeader } from '../mainGodPage/GodHeader';
 import { BasicTabs } from '../mainGodPage/PageTabs';
 import SearchBarGodPage from '../SearchBarStuff/SearchBarGodPage';
@@ -19,6 +8,9 @@ import { Helmet } from 'react-helmet';
 import Filter from '../Filters/Filter';
 import { MainContext } from './MainContext';
 import { useLocation } from 'react-router-dom';
+import { useQuery } from 'react-query';
+import Loading from '../Shared/Loading';
+import Error from '../Shared/Error';
 
 const godsDict = {
   'All Gods': 'None',
@@ -228,6 +220,7 @@ const linkDict = {
   Kukulkan: 'https://i.imgur.com/QWD7oco.jpg',
   Kumbhakarna: 'https://i.imgur.com/qgFK672.jpg',
   Kuzenbo: 'https://i.imgur.com/efIAMWB.jpg',
+  Lancelot: 'https://i.imgur.com/zrqRsfr.jpg',
   Loki: 'https://i.imgur.com/vmiaaRh.jpg',
   Medusa: 'https://i.imgur.com/ilPujED.jpg',
   Mercury: 'https://i.imgur.com/P7CJ5UQ.jpg',
@@ -339,50 +332,63 @@ function Godpage(props) {
   const [pickrate, setpickrate] = useState(0);
   const [winrate, setwinrate] = useState(0);
 
-  useEffect(() => {
-    fetch(
-      '/api/main/'.concat(
-        pagegod,
-        '/',
-        role,
-        '/',
-        rank,
-        '/',
-        patch,
-        '/',
-        queueType,
-        '/',
-        mode,
-        '/',
-        matchup
-      )
-    ).then((res) =>
-      res.json().then((data) => {
-        setgod(pagegod);
-        seturl(data.url);
-        setbanrate(((data.godBans / data.totalMatches) * 100).toFixed(2));
-        setpickrate(data.pickRate);
-        setwinrate(data.win_rate);
-        setTier(data.tier);
-        // setTier(data.tier)
-      })
-    );
-  }, [god, role, rank, patch, queueType, matchup, mode]);
-  useEffect(() => {
-    fetch('/api/'.concat(pagegod, '/abilities')).then((res) =>
-      res.json().then((data) => {
-        Object.keys(data).forEach((key) => {
-          setabilities((abilities) => [
-            ...abilities,
-            {
-              name: data[key].name,
-              url: data[key].url,
-            },
-          ]);
-        });
-      })
-    );
-  }, []);
+  const mainData = useQuery(
+    ['godpage-main', role, rank, patch, queueType, matchup, mode],
+    () =>
+      fetch(
+        '/api/main/'.concat(
+          pagegod,
+          '/',
+          role,
+          '/',
+          rank,
+          '/',
+          patch,
+          '/',
+          queueType,
+          '/',
+          mode,
+          '/',
+          matchup
+        )
+      ).then((res) =>
+        res.json().then((data) => {
+          setgod(pagegod);
+          seturl(data.url);
+          setbanrate(((data.godBans / data.totalMatches) * 100).toFixed(2));
+          setpickrate(data.pickRate);
+          setwinrate(data.win_rate);
+          setTier(data.tier);
+          // setTier(data.tier)
+        })
+      ),
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  const abilityData = useQuery(
+    ['godpage-ability'],
+    () => {
+      fetch('/api/'.concat(pagegod, '/abilities')).then((res) =>
+        res.json().then((data) => {
+          Object.keys(data).forEach((key) => {
+            setabilities((abilities) => [
+              ...abilities,
+              {
+                name: data[key].name,
+                url: data[key].url,
+              },
+            ]);
+          });
+        })
+      );
+    },
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
+
   return (
     <>
       <Helmet>
