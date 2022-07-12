@@ -1,13 +1,15 @@
 from audioop import avg
 from re import A, M, S, X
 from datetime import datetime
+import re
 from main import client
+from pymongo.message import kill_cursors
 import errlogger as logger
 import pymongo
 from collections import OrderedDict
 from operator import getitem
 from math import sqrt
-from constants import Assassins, Guardians, Hunters, Mages, Warriors, godsDict, slots, Tier_Three_items, Starter_items, roles, single_combat_stats, single_objective_stats, godsDict2, ranks, single_stats
+from constants import godsDict, slots, Tier_Three_items, Starter_items, roles, single_combat_stats, single_objective_stats, ranks, Assassins, Guardians, Warriors, Mages, Hunters, single_stats
 import analyze_players as anlzpy
 
 import pyrez
@@ -26,7 +28,7 @@ def get_query(rank, role, patch, queue_type, mode):
         myquery = {"rank": {"$in": ["Platinum", "Diamond", "Masters",
                                     "Grandmaster"]}, "patch": patch, "queue_type": f"{queue_type}"}
     elif rank == "Diamond+":
-        myquery = {"rank": {"$in":  ["Diamond", "Masters", "Grandmaster"]},
+        myquery = {"rank": {"$in": ["Diamond", "Masters", "Grandmaster"]},
                    "patch": patch, "queue_type": f"{queue_type}"}
     elif rank != "All Ranks":
         myquery = {"rank": rank, "patch": patch,
@@ -39,7 +41,6 @@ def get_query(rank, role, patch, queue_type, mode):
     myquery["mode"] = mode
 
     if patch == "All Patches":
-        print(myquery)
         del myquery["patch"]
 
     if mode != "Conquest" and "role" in myquery.keys():
@@ -52,27 +53,42 @@ def get_query(rank, role, patch, queue_type, mode):
 
 
 def return_pipeline(god, rank, role, patch, queue_type, mode):
-    myquery = get_query(rank, role, patch, queue_type, mode)
-    filter_list = [{'text': {'query': myquery[key], "path": key}}
-                   for key in myquery]
-    filter_list.append({
-        'text': {
-            'query': god,
-            'path': 'god'
-        }})
-    mypipeline = {
-        '$search': {
-            'compound': {
-                'filter': filter_list
+    if god:
+        myquery = get_query(rank, role, patch, queue_type, mode)
+        if "rank" in myquery:
+            if "$in" in myquery["rank"]:
+                myquery["rank"] = myquery["rank"]["$in"]
+        filter_list = [{'text': {'query': myquery[key], "path": key}}
+                       for key in myquery]
+        filter_list.append({
+            'text': {
+                'query': god,
+                'path': 'god'
+            }})
+        mypipeline = {
+            '$search': {
+                'compound': {
+                    'filter': filter_list
+                }
             }
         }
-    }
+    else:
+        mypipeline = {
+            '$search': {
+                'compound': {
+                    'filter': {
+                        'text': {
+                            'query': "none",
+                            'path': 'rank'
+                        }}
+                }
+            }
+        }
     return mypipeline
 
 
 def get_pb_rate(client, god, rank, role, patch, queue_type="Ranked", mode="Conquest"):
     """ # need to grab # of matches played by god, number of matches played, number of bans
-
     Args:
         client ([type]): [description]
         god ([type]): [description]
@@ -87,8 +103,8 @@ def get_pb_rate(client, god, rank, role, patch, queue_type="Ranked", mode="Conqu
 
     totalMatches = get_total_matches(
         client, rank, patch, queue_type=queue_type, mode=mode)
-    if "All" not in rank:
-        totalMatches = totalMatches / 10
+    # if "All" not in rank:
+    #     totalMatches = totalMatches / 10
 
     if "role" in myquery.keys():
         del myquery["role"]
@@ -102,13 +118,15 @@ def get_pb_rate(client, god, rank, role, patch, queue_type="Ranked", mode="Conqu
 
 
 def get_games_played(client, god, rank, role, patch, queue_type="Ranked", mode="Conquest"):
+    games = 0
     mydb = client["single_match_stats"]
     if patch == "9.6":
         mycol = mydb[mode + "-" + queue_type]
+    elif patch == "9.7":
+        mycol = mydb[patch + "-" + mode + "-" + queue_type]
     else:
         mycol = mydb[mode]
     mypipeline = return_pipeline(god, rank, role, patch, queue_type, mode)
-    games = 0
     for x in mycol.aggregate([mypipeline, {"$group": {"_id": "$god", "count": {"$sum": 1}}}]):
         games = x["count"]
     return games
@@ -190,12 +208,15 @@ def get_top_builds(client, god, role, patch, queue_type="Ranked", rank="All Rank
     mydb = client["single_match_stats"]
     if patch == "9.6":
         mycol = mydb[mode + "-" + queue_type]
+    elif patch == "9.7":
+        print(patch + "-" + mode + "-" + queue_type)
+        mycol = mydb[patch + "-" + mode + "-" + queue_type]
+        print(mycol.count_documents({}))
     else:
         mycol = mydb[mode]
     games = 0
     wins = 0
     mypipeline = return_pipeline(god, rank, role, patch, queue_type, mode)
-
     if type(data) is list:
         for x in data:
             games += 1
@@ -352,7 +373,12 @@ def get_all_builds(client, god, role, patch, queue_type="Ranked", rank="All Rank
         **top_dict
     }
     mydb = client["single_match_stats"]
-    mycol = mydb[mode]
+    if patch == "9.6":
+        mycol = mydb[mode + "-" + queue_type]
+    elif patch == "9.7":
+        mycol = mydb[patch + "-" + mode + "-" + queue_type]
+    else:
+        mycol = mydb[mode]
 
     games = 0
     wins = 0
@@ -391,6 +417,8 @@ def get_worst_matchups(client, god, role, patch, queue_type="Ranked", rank="All 
     mydb = client["single_match_stats"]
     if patch == "9.6":
         mycol = mydb[mode + "-" + queue_type]
+    elif patch == "9.7":
+        mycol = mydb[patch + "-" + mode + "-" + queue_type]
     else:
         mycol = mydb[mode]
     matchup_dict = {}
@@ -500,6 +528,8 @@ def get_winrate(client, god, role, patch, queue_type="Ranked", rank="All Ranks",
     mydb = client["single_match_stats"]
     if patch == "9.6":
         mycol = mydb[mode + "-" + queue_type]
+    elif patch == "9.7":
+        mycol = mydb[patch + "-" + mode + "-" + queue_type]
     else:
         mycol = mydb[mode]
     myquery = get_query(rank, role, patch, queue_type, mode=mode)
@@ -524,8 +554,6 @@ def get_total_matches(client, rank, patch, queue_type="Ranked", mode="Conquest")
     mydb = client["Matches"]
     mycol = mydb["Total_Matches"]
     myquery = get_query(rank, "", patch, queue_type, mode)
-    myquery["rank"] = rank
-
     games = 0
     for x in mycol.find(myquery):
         games += x["Total_Matches"]
@@ -534,9 +562,10 @@ def get_total_matches(client, rank, patch, queue_type="Ranked", mode="Conquest")
 
 def get_combat_stats(client, god, role, patch, rank="All Ranks", queue_type="Ranked", mode="Conquest"):
     mydb = client["single_match_stats"]
-    mycol = mydb[god]
+    mycol = mydb[mode+"-"+queue_type]
     combat_stats = {}
     myquery = get_query(rank, role, patch, queue_type, mode)
+    myquery["god"] = god
 
     for x in mycol.aggregate([
         {
@@ -566,9 +595,10 @@ def get_combat_stats(client, god, role, patch, rank="All Ranks", queue_type="Ran
 
 def get_objective_stats(client, god, role, patch, rank="All Ranks", queue_type="Ranked", mode="Conquest"):
     mydb = client["single_match_stats"]
-    mycol = mydb[god]
+    mycol = mydb[mode+"-"+queue_type]
     combat_stats = {}
     myquery = get_query(rank, role, patch, queue_type, mode)
+    myquery["god"] = god
     for x in mycol.aggregate([
         {
             "$match": myquery
@@ -602,7 +632,6 @@ def get_build_stats(client, build):
     ret_build = {slot: {} for slot in slots}
     slot_num = 1
     for item in build:
-        print(item)
         if item:
             item_data_col = item_data_db[item]
             for x in item_data_col.find({}, {
@@ -688,13 +717,13 @@ def get_carry_score(match):
             "Loser": {
                 "totalDamage": 1,
             }
-            },
+        },
         "levelDiff": {
             "Winner": {
             },
             "Loser": {
             }
-            },
+        },
         "killPart": {
                 "Winner": {
                     "totalKills": 0,
@@ -702,7 +731,7 @@ def get_carry_score(match):
                 "Loser": {
                     "totalKills": 0,
                 }
-            }
+        }
     }
     match_roles = []
 
@@ -896,10 +925,14 @@ def get_specific_build(client, god, role, patch, matchup, rank="All Ranks", queu
 
 def get_matchups_stats(client, god: str, role: str, patch, queue_type="Ranked", rank="All Ranks", mode="Conquest"):
     mydb = client["single_match_stats"]
-    mycol = mydb[god]
+    if patch == "9.6":
+        mycol = mydb[mode + "-" + queue_type]
+    elif patch == "9.7":
+        mycol = mydb[patch + "-" + mode + "-" + queue_type]
+    else:
+        mycol = mydb[mode]
     myquery = get_query(rank, role, patch, queue_type, mode)
     avg_dmg_dict = {}
-    print(myquery)
     total_games = mycol.count_documents(myquery)
     for x in mycol.aggregate([
         {
@@ -959,19 +992,23 @@ def get_matchups_stats(client, god: str, role: str, patch, queue_type="Ranked", 
     return avg_dmg_dict
 
 
-def get_build_path(client, god, role, patch, queue_type, rank="All Ranks", mode="Conquest"):
+def get_build_path(client, god, role, patch, queue_type="Ranked", rank="All Ranks", mode="Conquest"):
     mydb = client["single_match_stats"]
-    mycol = mydb[god]
+    if patch == "9.6":
+        mycol = mydb[mode + "-" + queue_type]
+    elif patch == "9.7":
+        mycol = mydb[patch + "-" + mode + "-" + queue_type]
+
+    else:
+        mycol = mydb[mode]
     index = 0
     games = 0
     builds = {}
-    myquery = get_query(rank, role, patch, queue_type, mode)
-    myquery["build"] = {"$exists": True}
+    mypipeline = return_pipeline(god, rank, role, patch, queue_type, mode)
+    # myquery["build"] = {"$exists": True}
     for x in mycol.aggregate(
         [
-            {
-                "$match": myquery,
-            },
+            mypipeline,
             {
                 "$group": {
                     "_id": {
@@ -1095,41 +1132,49 @@ def get_lanes(client):
 
 
 def calc_total_matches(client, ranks, patch, queue_type, mode):
+
+    mypipeline = {
+        '$search': {
+            'compound': {
+                'filter': {
+                    'text': {
+                        'query': "none",
+                        'path': 'rank'
+                    }}
+            }
+        }
+    }
+
     matchIds = []
     actTotalGames = 0
+    mydb = client["Matches"]
     if queue_type == "Casual":
         mydb = client["CasualMatches"]
-        if mode == "Conquest":
-            mycol = mydb[f"{patch} Matches"]
-        elif mode != "Conquest":
-            mycol = mydb[f"{patch} {mode} Matches"]
+
+    if mode == "Conquest":
+        mycol = mydb[f"{patch} Matches"]
+    elif mode == "Joust":
+        mycol = mydb[f"{patch} Joust Matches"]
 
         insert_games("All Ranks", mycol.count_documents(
             {}), patch, queue_type, mode)
         return
-    elif queue_type == "Ranked":
-        mydb = client["Matches"]
-        if mode != "Conquest":
-            mycol = mydb[f"{patch} {mode} Matches"]
-        else:
-            mycol = mydb["{patch} Matches"]
 
     for rank in ranks:
+        mypipeline["$search"]["compound"]["filter"]["text"]["query"] = rank
         myquery = get_query(rank, "", patch, queue_type, mode)
-        if "role" in myquery.keys():
+        if "role" in myquery:
             del myquery["role"]
         if rank == "All Ranks":
-            print("ALL RANKS", myquery)
             mycol.update_one(myquery, {
                              "$set": {"Total_Matches": len(matchIds)}})
             break
-
         mydb = client["single_match_stats"]
         total_games = 0
         for god in godsDict:
             mycol = mydb[god]
             games = 0
-            for x in mycol.find(myquery, {"matchId": 1, "_id": 0}):
+            for x in mycol.aggregate([mypipeline]):
                 # if x["matchId"] not in matchIds:
                 matchIds.append(x["matchId"])
                 games += 1
@@ -1142,32 +1187,27 @@ def insert_games(rank, games, patch, queue_type, mode):
     mydb = client["Matches"]
     mycol = mydb[f"Total_Matches"]
     myquery = get_query(rank, "", patch, queue_type, mode)
-    if "role" in myquery.keys():
-        del myquery["role"]
-    if "All" in rank:
-        myquery["rank"] = "All Ranks"
-    print({**myquery, **{"Total_Matches": games}})
-    if games > 0:
-        if mycol.count_documents(myquery) == 0:
-            mycol.insert_one({"rank": rank, "patch": patch,
-                             "queue_type": queue_type, "mode": mode, "Total_Matches": games})
-        else:
-            mycol.update_one({"rank": rank, "patch": patch, "queue_type": queue_type, "mode": mode}, {
-                             "$set": {"Total_Matches": games}})
-        print(f"{rank} {queue_type} {mode} done")
-    else:
-        print(f"{rank} {queue_type} {mode} no games")
+
+    mycol.insert_one({**myquery, **{"Total_Matches": games}})
+    # mycol.update_one({"rank": rank, "patch": patch, "queue_type": "RankedConq"}, {"$set": {"Total_Matches": games}})
+    print(f"{rank} done")
 
 
 def get_skin_stats(god, role, patch, rank="All Ranks", queue_type="Ranked", mode="Conquest", matchup=None):
     mydb = client["single_match_stats"]
-    mycol = mydb[god]
+    if patch == "9.6":
+        mycol = mydb[mode + "-" + queue_type]
+    elif patch == "9.7":
+        mycol = mydb[patch + "-" + mode + "-" + queue_type]
+    else:
+        mycol = mydb[mode]
     games = 0
     wins = 0
     myquery = get_query(rank, role, patch, queue_type, mode)
     if matchup != "None" and matchup != None:
         myquery = {**myquery, **{"enemy": matchup}}
 
+    myquery['god'] = god
     kills = 0
     deaths = 0
     assists = 0
@@ -1221,7 +1261,12 @@ def get_single_skin_stats(god, skin, role, patch, rank="All Ranks", queue_type="
     if "Standard" in skin:
         skin = god
     mydb = client["single_match_stats"]
-    mycol = mydb[god]
+    if patch == "9.6":
+        mycol = mydb[mode + "-" + queue_type]
+    elif patch == "9.7":
+        mycol = mydb[patch + "-" + mode + "-" + queue_type]
+    else:
+        mycol = mydb[mode]
     games = 0
     wins = 0
     data = {**{stat: 0 for stat in single_stats},
@@ -1421,67 +1466,133 @@ def get_match_stats(client, god, role, patch, attributes, rank="All Ranks", queu
     return match_stats
 
 
-def insertBatch(collection, documents):
-    bulkInsert = collection.initialize_unordered_bulk_op()
-    insertedIds = []
-    for doc in documents:
-        id = doc["_id"]
-        # Insert without raising an error for duplicates
-        bulkInsert.find({"_id": id}).upsert().replace_one(doc)
-        insertedIds.append(id)
-    bulkInsert.execute()
-    return insertedIds
-
-
-def deleteBatch(collection, documents):
-    bulkRemove = collection.initialize_ordered_bulk_op()
-    for doc in documents:
-        bulkRemove.find({"_id": doc["_id"]}).remove_one()
-    bulkRemove.execute()
-
-
-def moveDocuments(sourceCollection, targetCollection, filter, batchSize):
-    # print("Moving " + str(sourceCollection.find(filter).count()) +
-    #       " documents from " + str(sourceCollection) + " to " + str(targetCollection))
-    while ((sourceCollection.find(filter).count()) > 0):
-        print(str(sourceCollection.find(filter).count()) + " documents remaining")
-        sourceDocs = sourceCollection.find(filter).limit(batchSize)
-        idsOfCopiedDocs = insertBatch(targetCollection, sourceDocs)
-
-        targetDocs = targetCollection.find({"_id": {"$in": idsOfCopiedDocs}})
-        deleteBatch(sourceCollection, targetDocs)
-    print("Done!")
-
-
-if __name__ == "__main__":
-    starttime = datetime.now()
-    from main import client
-    import numpy
+def save_func():
     mydb = client["single_match_stats"]
     games = 0
     wins = 0
-    kills = 0
+    winrate = 0
+    total_games = 0
+    item = "Void Shield"
+    # item = "Gladiator\'s Shield"
+    for god in godsDict:
+        mycol = mydb[god]
+        for x in mycol.find({"patch": "9.3", "role": "Solo", "queue_type": "Ranked", "mode": "Conquest"}, {"win_status": 1, "build": 1}):
+            if "build" in list(x.keys()):
+                total_games += 1
+                if item in list(x["build"].values()):
+                    games += 1
+                    if x["win_status"] == "Winner":
+                        wins += 1
+        print(god)
+    print(games, total_games)
+    print(wins, games, round(wins/games*100, 2),
+          round(games/(total_games*6) * 100, 2))
+
+
+def get_match_time(patch):
+    import numpy
+    mydb = client["CasualMatches"]
+    mycol = mydb[f"{patch} Matches"]
     total_bans = []
-    god_name = ""
-    class_games = {role: 0 for role in roles}
-    class_wins = {role: 0 for role in roles}
-    insert_col = mydb["Conquest"]
+    for x in mycol.find({"Minutes": {"$gte": 12}}, {"Minutes": 1}):
+        total_bans.append(x["Minutes"])
+    print("Total Time: ", sum(total_bans), "Max Time: ", max(total_bans),
+          "Number of f6 10s: ", mycol.count_documents({"Minutes": {"$lte": 12}}))
+    print("Average Time: ", numpy.average(total_bans),
+          "Median Time: ", numpy.median(total_bans))
+    print("Standard Dev: ", numpy.std(total_bans))
 
-    # Moving Achilles 9.1 data to conquest collection, if goes wrong just move back
-    # for god in ["Hades"]:
-    #     for patch in ["9.1", "9.2", "9.3", "9.4"]:
-    #         for role in roles:
-    #             moveDocuments(mydb[god], mydb["Conquest"], {
-    #                 "mode": "Conquest", "role": role, "patch": patch}, 5000)
-    #             print(f"{god} {patch} {role} Done!")
 
-    # for god in ["Achilles"]:
-    #     mycol=mydb[god]
-    #     insert_col.delete_many({"Entry_Datetime": {"$lt": "5/18/2022"}})
-    #     for role in roles:
-    #         for x in mycol.find({"mode": "Conquest", "patch": "9.1", "role": role}, {"_id": 0}):
-    #             total_bans.append(x)
+if __name__ == "__main__":
+    #     },}):
+    # get_match_time("9.7")
+    for god in ["Achilles"]:
+        # #     #get_build_path(client, god, role, patch, queue_type, rank="All Ranks", mode="Conquest")
+        # #     print(get_build_path(client, "Achilles", "Solo", "9.6", "Ranked"))
+        print(god, get_top_builds(client, "Achilles", "Solo", "9.7", "Ranked"))
+    # # from main import client
+    # # import numpy
+    # # (client, god, rank, role, patch, queue_type="Ranked", mode="Conquest")
+    # mydb = client["single_match_stats"]
+    # games = 0
+    # wins = 0
+    # dmg = []
+    # time = []
+    # mycol = mydb["Joust-Ranked"]
+    # num = 0
+    # # for god in ["Chronos", "Sol", "Freya", "Olorun"]:
 
-    #     insert_col.bulk_write(total_bans)
-    #     total_bans=[]
-    #     print(f"{role} done")
+    # item = "Gladiator\'s Shield"
+    # # item = "Void Shield"
+    # data = {rank: {"wins": 0, "games": 0, "winrate": 0} for rank in ranks}
+    # for x in mycol.aggregate([
+    #     {
+    #         "$match": {"god": "Kuzenbo"}
+    #     },
+    #     {
+    #         "$group": {
+    #             "_id": "$player",
+    #     #         # "avgDamage": {"$avg": "$damage_player"},
+    #     #         # "avgKills": {"$avg": "$kills"},
+    #             "games": {"$sum": 1},
+    #             }
+    #     },
+    #     {
+    #         "$sort": {"games": -1}
+    #     },
+    #     {
+    #         "$limit": 25
+    #     }
+    #         ]):
+    #             print(x)
+        # if x["win_status"] == "Winner":
+        #     data[x["_id"]]["wins"] += 1
+    # print(max(dmg))
+    # if len(dmg) > 0 and len(time) > 0:
+    #     print(sum(dmg)/len(dmg))
+    #     print(sum(time)/len(time))
+    #     print("Total Damage: ", sum(total_bans) ,"Max Damage: ", max(total_bans))
+    #     print("Average Damage: ", numpy.average(total_bans), "Median Damage: ", numpy.median(total_bans))
+    #     print("Standard Dev: ", numpy.std(total_bans))
+
+# Mages 374 751 49.8
+# Hunters 158 293 53.92
+# Warriors 869 1751 49.63
+# Guardians 122 243 50.21
+# Assassins 266 539 49.35
+
+
+# Total Damage:  1780865217 Max Damage:  93917
+# Average Damage:  13637.90734557596 Median Time:  12816.0
+# Standard Dev:  6655.287265388552
+
+        # for x in mycol.aggregate([
+        #     {
+        #         "$match": {"patch": "9.5"}
+        #     },
+        #     {
+        #         "$group": {"_id": "$skin",
+        #                     "games": {"$sum": 1}
+        #                     }
+        #     },
+
+        #     {
+        #         "$sort": {"games": -1}
+        #     },
+        #     {
+        #         "$limit": 1
+        #     }
+        #     ]):
+        #         print(x)
+
+# Ranked Conq
+# assassin 98519 196377 50.17
+# hunter 107515 214288 50.17
+# warrior 87971 176428 49.86
+# mages 125614 251845 49.88
+# guardians 101317 202929 49.93
+
+# Ranked Joust
+# assassin 17324 34021 50.92
+# hunter 42578 86270 49.35
+# warrior 41180 82626 49.84

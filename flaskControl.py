@@ -392,9 +392,10 @@ def get_god_skins(god, role, rank, patch, queue_type, mode, matchup=None):
         for x in mycol.find({}, {"_id": 0}):
             if x["skin_name"] == f"Standard {god}":
                 x["skin_name"] = god
-            ret_data["skins"].append({**x, **{"games": skin_stats[x['skin_name']]["games"],
-                                              "wins": skin_stats[x['skin_name']]["wins"],
-                                              "winRate": skin_stats[x['skin_name']]["win_rate"]}})
+            if x["skin_name"] in skin_stats:
+                ret_data["skins"].append({**x, **{"games": skin_stats[x['skin_name']]["games"],
+                                                  "wins": skin_stats[x['skin_name']]["wins"],
+                                                  "winRate": skin_stats[x['skin_name']]["win_rate"]}})
     return ret_data
 
 
@@ -405,7 +406,6 @@ def get_single_skin(god, skin, role, rank, patch, queue_type, mode):
     skin_stats = anlz.get_single_skin_stats(
         god, skin, role, patch, rank=rank, queue_type=queue_type, mode=mode)
 
-    print(skin_stats)
     return skin_stats
 
 
