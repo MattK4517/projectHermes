@@ -10,7 +10,7 @@ import os
 from constants import Hunters
 from bson import BSON
 from bson import json_util
-from __init__ import client
+from main import client
 # col_names = ["gold", "damage_bot", "kills_bot", "tower_kills", "phoenix_kills", "tower_damage", "objective_assists", "wards_placed"]
 # mydb = client["single_objective_stats"]
 

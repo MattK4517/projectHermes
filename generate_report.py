@@ -1,5 +1,5 @@
 from numpy import Infinity
-from __init__ import client
+from main import client
 import analyze as anlz
 # import df2gspread
 # import gspread
