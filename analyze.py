@@ -103,10 +103,7 @@ def get_pb_rate(client, god, rank, role, patch, queue_type="Ranked", mode="Conqu
 
 def get_games_played(client, god, rank, role, patch, queue_type="Ranked", mode="Conquest"):
     mydb = client["single_match_stats"]
-    if patch == "9.6":
-        mycol = mydb[mode + "-" + queue_type]
-    else:
-        mycol = mydb[mode]
+    mycol = mydb[mode]
     mypipeline = return_pipeline(god, rank, role, patch, queue_type, mode)
     games = 0
     for x in mycol.aggregate([mypipeline, {"$group": {"_id": "$god", "count": {"$sum": 1}}}]):
@@ -188,10 +185,7 @@ def get_top_builds(client, god, role, patch, queue_type="Ranked", rank="All Rank
         **top_dict
     }
     mydb = client["single_match_stats"]
-    if patch == "9.6":
-        mycol = mydb[mode + "-" + queue_type]
-    else:
-        mycol = mydb[mode]
+    mycol = mydb[mode]
     games = 0
     wins = 0
     mypipeline = return_pipeline(god, rank, role, patch, queue_type, mode)
@@ -389,10 +383,7 @@ def get_all_builds(client, god, role, patch, queue_type="Ranked", rank="All Rank
 
 def get_worst_matchups(client, god, role, patch, queue_type="Ranked", rank="All Ranks", mode="Conquest", player=None):
     mydb = client["single_match_stats"]
-    if patch == "9.6":
-        mycol = mydb[mode + "-" + queue_type]
-    else:
-        mycol = mydb[mode]
+    mycol = mydb[mode]
     matchup_dict = {}
 
     if player:
@@ -498,10 +489,7 @@ def get_worst_matchups(client, god, role, patch, queue_type="Ranked", rank="All 
 
 def get_winrate(client, god, role, patch, queue_type="Ranked", rank="All Ranks", mode="Conquest", matchup="None"):
     mydb = client["single_match_stats"]
-    if patch == "9.6":
-        mycol = mydb[mode + "-" + queue_type]
-    else:
-        mycol = mydb[mode]
+    mycol = mydb[mode]
     myquery = get_query(rank, role, patch, queue_type, mode=mode)
 
     if matchup != "None":
@@ -688,13 +676,13 @@ def get_carry_score(match):
             "Loser": {
                 "totalDamage": 1,
             }
-            },
+                },
         "levelDiff": {
             "Winner": {
             },
             "Loser": {
             }
-            },
+                },
         "killPart": {
                 "Winner": {
                     "totalKills": 0,
@@ -702,7 +690,7 @@ def get_carry_score(match):
                 "Loser": {
                     "totalKills": 0,
                 }
-            }
+                }
     }
     match_roles = []
 
