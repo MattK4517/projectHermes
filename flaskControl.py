@@ -10,7 +10,7 @@ import pyrez
 from duo_tier_list import get_lanes
 from operator import getitem
 from collections import OrderedDict
-from __init__ import client
+from main import client
 from flask import Flask, render_template, request
 from constants import godsDict, roles, id_dict
 import pandas as pd

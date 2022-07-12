@@ -1,7 +1,7 @@
 import pymongo
 import analyze as anlz
 from constants import godsDict, roles, ranks, patch, all_ranks
-from __init__ import client
+from main import client
 from datetime import datetime
 
 

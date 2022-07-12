@@ -13,7 +13,7 @@ from data_pull_insert import create_sets, threaded_pull
 import os
 from sys import getsizeof
 # from data_pull_formatting_rewrite import format_no_query
-from __init__ import client
+from main import client
 
 eastern = timezone('US/Eastern')
 

@@ -1,4 +1,4 @@
-from __init__ import client
+from main import client
 import analyze as anlz
 from constants import patch, roles
 

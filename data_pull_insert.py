@@ -4,7 +4,7 @@ from pyrez.api import SmiteAPI
 from pyrez.models import Smite
 from pyrez.models.MatchHistory import MatchHistory
 from data_pull_formatting_rewrite import format_no_query
-from __init__ import client
+from main import client
 
 
 def normalize_godId(id):

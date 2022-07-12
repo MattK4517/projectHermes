@@ -7,7 +7,7 @@ from data_pull_insert import run_pull
 from pytz import timezone
 import os
 import time
-from __init__ import client
+from main import client
 
 eastern = timezone('US/Eastern')
 

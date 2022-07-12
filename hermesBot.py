@@ -4,7 +4,7 @@ import discord
 import sys
 import analyze as anlz
 # import pandas as pd
-from __init__ import client as dbClient
+from main import client as dbClient
 from constants import Assassins, Guardians, Hunters, Mages, Warriors, patch
 
 
