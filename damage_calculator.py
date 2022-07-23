@@ -1,6 +1,7 @@
 import pymongo
 from main import client
 import analyze as anlz
+import math
 import matplotlib as plt
 from constants import num_hits_dict, scaling_dict, percentage_dict, Warriors, Assassins, Hunters, Mages, Guardians
 from random import randint
@@ -350,11 +351,11 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, number_of_auto
             qins += 1
 
         if "Manikin Mace" in build:
-            if attSpeed<=2:
-                item_dmg=attSpeed*60
+            if attSpeed <= 2:
+                item_dmg = attSpeed * 60
             else:
-                item_dmg+=2*60
-            dmg+=item_dmg
+                item_dmg += 2 * 60
+            dmg += item_dmg
 
         if "Stone Cutting Sword" in build:
             if i < 4 and i>0:
@@ -366,7 +367,7 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, number_of_auto
 ####### Magical items
 
         if "Telkhines Ring" in build:
-            item_dmg += 10+power*0.1
+            item_dmg += 10 + power * 0.1
             dmg += item_dmg
 
         if "Void Stone" in build:
@@ -374,10 +375,10 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, number_of_auto
 
         if "Demonic Grip" in build:
             if i < 4 and i > 0:
-                armor_reduction_per +=10
+                armor_reduction_per += 10
 
         if "Nimble Bancroft's Talon" in build:
-            attSpeed += baseAttSpeed * power/40
+            attSpeed += baseAttSpeed * math.floor(power / 40)
 
         mitigated["Total Item Damage"] += round(calc_mitigation(calc_auto_dmg(god, attDamage), enemy_prot, 0,
                                                                 armor_reduction_per, armor_reduction_flat, pen_per, pen_flat)[1])
