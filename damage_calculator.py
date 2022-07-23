@@ -181,7 +181,7 @@ def calc_dps_stats(client, god, build, baseAttSpeed):
     for item in build:
         stat = get_special_item(item)
         if "Physical Armor Reduction" in stat.keys() and item == "The Executioner":
-            armor_reduction_per = 7 # dont think this is needed as 295 takes exe into account?
+            armor_reduction_per = 7 # dont think this is needed as exe is taken into account later on right?
         itemcol = itemdb[item]
         for x in itemcol.find({}, {"ItemDescription": 1}): #pls update
             for stat in x["ItemDescription"]["Menuitems"]:
