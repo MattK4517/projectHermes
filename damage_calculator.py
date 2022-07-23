@@ -1,6 +1,7 @@
 import pymongo
 from main import client
 import analyze as anlz
+import matplotlib as plt
 from constants import num_hits_dict, scaling_dict, percentage_dict, Warriors, Assassins, Hunters, Mages, Guardians
 from random import randint
 from damage_calc_helpers import *
@@ -251,7 +252,8 @@ def calc_auto_dmg(god, power):
 
     return attDamage
 
-
+x_axis = []
+y_axis = []
 def calc_dps(client, god, build, enemy, enemy_build, enemy_level, number_of_autos, level=20):
     temp = anlz.get_god_stats(client, god, level)
     baseAttSpeed = temp["AttackSpeed"]
@@ -359,7 +361,7 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, number_of_auto
                 armor_reduction_flat+=7
 
         if "Void Shield" in build:
-            armor_reduction_per = 15
+            armor_reduction_per += 15
 
 ####### Magical items
 
@@ -368,7 +370,7 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, number_of_auto
             dmg += item_dmg
 
         if "Void Stone" in build:
-            armor_reduction_per = 15
+            armor_reduction_per += 15
 
         if "Demonic Grip" in build:
             if i < 4 and i > 0:
@@ -383,6 +385,18 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, number_of_auto
                                      armor_reduction_per, armor_reduction_flat, pen_per, pen_flat)[0])
         # print(item_dmg_out)
 
+####### Graph
+
+        x_axis.append(i)
+        y_axis.append(dmg)
+    plt.plot(x_axis, y_axis)
+    plt.xlabel("Auto Attack Numer")
+    plt.ylabel("Damage Dealt")
+    plt.title("Damage Graph")
+    plt.show()
+
+# store this somewhere, allow user to compare graphs after selecting a different build? just plot 2 sets of numbers        
+
     item_dmg_out["Total Item Damage"] = item_dmg_out["Qin's Sais"] + \
         item_dmg_out["Odysseus' Bow"] + item_dmg_out["Ichaival"] + \
         item_dmg_out["Silverbranch Bow"]
@@ -394,6 +408,7 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, number_of_auto
         mitigated["Odysseus' Bow"]
 
     dps = dmg * attSpeed
+
     # print(f"Num Crits: {crit}")
     # print(f"Damage Autos: {dmg - item_dmg_out['Total']}")
     # print(f"Damage Total: {dmg}")
