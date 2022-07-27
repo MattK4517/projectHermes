@@ -7,6 +7,9 @@ from damage_calc_helpers import *
 
 
 def get_num_hits(god, ability, base):
+    """
+        returns the number of times each ability hits
+    """
     if special_case(ability, base):
         return special_case(ability, base)
 
@@ -22,6 +25,9 @@ def get_num_hits(god, ability, base):
 
 
 def get_scaling_changes(god, ability, hit):
+    """
+        returns if ability has any changes to its damage scaling, and what said scaling is 
+    """
     ability_key = ""
     for key in num_hits_dict[god]:
         if key in ability:
@@ -32,6 +38,10 @@ def get_scaling_changes(god, ability, hit):
 
 
 def get_percent_change(god, ability, hit):
+    """
+      returns if ability has any changes to its damage scaling, and what said scaling is
+      #TODO remove funciton
+    """
     ability_key = ""
     for key in num_hits_dict[god]:
         if key in ability:
@@ -42,6 +52,9 @@ def get_percent_change(god, ability, hit):
 
 
 def calc_ability_damage_raw(base, scaling, power, god, ability, prot, miti, armor_reduction_per, armor_reduction_flat, pen_per, pen_flat, **procs):
+    """
+      returns damage stats for a given ability
+    """
     proc_damage = 0
     damage = 0
     for i in range(get_num_hits(god, ability, base)):
@@ -174,6 +187,9 @@ def get_special_item(item):
 
 
 def calc_dps_stats(client, god, build, baseAttSpeed):
+    """
+      returns gods offensive stats with a given build
+    """
     myfilter = {
         **{"_id": 0},
         **{f"AttackSpeed": 1}
@@ -220,6 +236,9 @@ def calc_dps_stats(client, god, build, baseAttSpeed):
 
 
 def calc_tank_stats(client, god, build):
+    """
+      returns gods defensive stats with a given build
+    """
     god = god.title()
     print(god)
     physProt = 0
@@ -243,6 +262,9 @@ def calc_tank_stats(client, god, build):
 
 
 def calc_qins_dmg(hp):
+    """
+        returns damage of qins sais given hp scaling
+    """
     dmg = 0
     if hp <= 2000:
         dmg = round(hp * .03)
@@ -255,6 +277,10 @@ def calc_qins_dmg(hp):
 
 
 def calc_auto_dmg(god, power):
+    """
+      returns basic attack damage of gods
+      #TODO add magical characters
+    """
     if (god.lower() in [assassin.lower() for assassin in Assassins]
         or god.lower() in [warrior.lower() for warrior in Warriors]
             or god.lower() in [hunter.lower() for hunter in Hunters]):
@@ -264,6 +290,10 @@ def calc_auto_dmg(god, power):
 
 
 def calc_dps(client, god, build, enemy, enemy_build, enemy_level, level=20):
+    """
+      returns damage stats for basic attacks
+      #TODO clean up entire function
+    """
     temp = anlz.get_god_stats(client, god, level)
     attSpeed, power, critChance, armor_reduction_per, armor_reduction_flat, pen_per, pen_flat = calc_dps_stats(
         client, god, build, baseAttSpeed=temp["AttackSpeed"])
@@ -386,6 +416,9 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, level=20):
 
 
 def calc_mitigation(dmg, prot, miti, armor_reduction_per, armor_reduction_flat, pen_per, pen_flat):
+    """
+      returns how much damage was mitigated given pen/prot stats
+    """
     # print(armor_reduction_per, armor_reduction_flat, pen_per, pen_flat)
     # % armor reduction
     # Flat armor reduction
@@ -402,6 +435,9 @@ def calc_mitigation(dmg, prot, miti, armor_reduction_per, armor_reduction_flat, 
 
 
 if __name__ == "__main__":
+    # ADJUST ABILITY LEVELS HERE
+    # TO GET A RANK 1 ACHILLES 1 FOR EXAMPLE
+    # set "1" to 1
     levels = {
         "1": 4,
         "2": 5,
