@@ -1,8 +1,6 @@
-from numpy import number
 import pymongo
 from main import client
 import analyze as anlz
-import math
 from constants import num_hits_dict, scaling_dict, percentage_dict, Warriors, Assassins, Hunters, Mages, Guardians
 from random import randint
 from damage_calc_helpers import *
@@ -288,7 +286,8 @@ def calc_auto_dmg(god, power):
 
     return attDamage
 
-def calc_dps(client, god, build, enemy, enemy_build, enemy_level, number_of_autos, level=20):
+number_of_autos = 10
+def calc_dps(client, god, build, enemy, enemy_build, enemy_level, level=20):
     """
       returns damage stats for basic attacks
       #TODO clean up entire function
@@ -312,7 +311,7 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, number_of_auto
         attDamage = power
         damage_type = "Physical"
 
-    dmg = []
+    dmg = 0
     item_dmg = 0
     item_dmg_out = {"Qin's Sais": 0, "Odysseus' Bow": 0,
                     "Ichaival": 0, "Silverbranch Bow": 0, "Total Item Damage": 0}
@@ -330,19 +329,19 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, number_of_auto
                  "Ichaival": 0, "Silverbranch Bow": 0, "Total Item Damage": 0}
 
     flag = False
+    total_damage = 0
     for i in range(number_of_autos):
-        dmg.append(0)
         if "The Executioner" in build:
             if i < 5 and i > 0:
                 armor_reduction_per = (7 * (i))
 
         elif "The Heavy Executioner" in build:
             if i < 3 and i > 0:
-                armor_reduction_per = 17.5 * i
+                armor_reduction_per = 17.5*i
 
         if "The Ferocious Executioner" in build:
             if i < 11 and i > 1:
-                dmg[-1] *= 1.02
+                dmg *= 1.02
 
         if "Ichaival" in build:
             if i < 4 and i > 0:
@@ -360,13 +359,13 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, number_of_auto
             if randint(0, 100) <= critChance:
                 crit += 1
                 if "Spectral Armor" in enemy_build:
-                    dmg[-1] += attDamage * .55
+                    dmg += attDamage * .55
                 elif "Deathbringer" in build:
-                    dmg[-1] += attDamage * 1.3
+                    dmg += attDamage * 1.3
                 elif "Spectral Armor" in enemy_build and "Deathbringer" in build:
-                    dmg[-1] += attDamage * (1.3 - .55)
+                    dmg += attDamage * (1.3 - .55)
                 else:
-                    dmg[-1] = dmg + attDamage * 0.75
+                    dmg += attDamage * 0.75
                 if "Wind Demon" in build and not flag:
                     pen_per += 10
                     flag = True
@@ -374,7 +373,7 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, number_of_auto
         if (i > 0 and i % 4 == 0) and "Odysseus' Bow" in build:
             item_dmg += round(15 + (calc_auto_dmg(god, attDamage) * .6)) 
             item_dmg_out["Odysseus' Bow"] += round(15 + (calc_auto_dmg(god, attDamage) * .6))
-            dmg[-1] += item_dmg
+            dmg += item_dmg
             item_dmg = 0
             obow += 1
 
@@ -384,7 +383,7 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, number_of_auto
                 targetHP), enemy_prot, 0, armor_reduction_per, armor_reduction_flat, pen_per, pen_flat)[1])
             item_dmg_out["Qin's Sais"] += round(calc_mitigation(calc_qins_dmg(
                 targetHP), enemy_prot, 0, armor_reduction_per, armor_reduction_flat, pen_per, pen_flat)[0])
-            dmg[-1] += item_dmg
+            dmg += item_dmg
             item_dmg = 0
             qins += 1
 
@@ -393,38 +392,36 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, number_of_auto
                 item_dmg = attSpeed * 60
             else:
                 item_dmg += 2 * 60
-            dmg[-1] += item_dmg
+            dmg += item_dmg
 
         if "Stone Cutting Sword" in build:
-            if i < 4 and i>0:
-                armor_reduction_flat+=7
+            if i < 4 and i > 0:
+                armor_reduction_flat += 7
 
         if "Void Shield" in build:
-            armor_reduction_per += 15
+            armor_reduction_per = 15
 
 ####### Magical items
 
         if "Telkhines Ring" in build:
             item_dmg += 10 + power * 0.1
-            dmg[-1] += item_dmg
+            dmg += item_dmg
 
         if "Void Stone" in build:
-            armor_reduction_per += 15
+            armor_reduction_per = 15
 
         if "Demonic Grip" in build:
             if i < 4 and i > 0:
                 armor_reduction_per += 10
 
         if "Nimble Bancroft's Talon" in build:
-            attSpeed += baseAttSpeed * math.floor(power / 40)
+            attSpeed += baseAttSpeed * power/40
 
         mitigated["Total Item Damage"] += round(calc_mitigation(calc_auto_dmg(god, attDamage), enemy_prot, 0,
                                                                 armor_reduction_per, armor_reduction_flat, pen_per, pen_flat)[1])
-        dmg[-1] += round(calc_mitigation(calc_auto_dmg(god, attDamage), enemy_prot, 0,
+        dmg += round(calc_mitigation(calc_auto_dmg(god, attDamage), enemy_prot, 0,
                                      armor_reduction_per, armor_reduction_flat, pen_per, pen_flat)[0])
         # print(item_dmg_out)
-
-# store this somewhere, allow user to compare graphs after selecting a different build? just plot 2 sets of numbers        
 
     item_dmg_out["Total Item Damage"] = item_dmg_out["Qin's Sais"] + \
         item_dmg_out["Odysseus' Bow"] + item_dmg_out["Ichaival"] + \
@@ -436,8 +433,7 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, number_of_auto
     mitigated["Total Item Damage Item"] = mitigated["Qin's Sais"] + \
         mitigated["Odysseus' Bow"]
 
-    dps = attSpeed * total_damage/number_of_autos
-
+    dps = dmg * attSpeed / number_of_autos
     # print(f"Num Crits: {crit}")
     # print(f"Damage Autos: {dmg - item_dmg_out['Total']}")
     # print(f"Damage Total: {dmg}")
