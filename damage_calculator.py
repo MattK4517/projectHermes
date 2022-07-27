@@ -329,7 +329,6 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, level=20):
                  "Ichaival": 0, "Silverbranch Bow": 0, "Total Item Damage": 0}
 
     flag = False
-    total_damage = 0
     for i in range(number_of_autos):
         if "The Executioner" in build:
             if i < 5 and i > 0:
