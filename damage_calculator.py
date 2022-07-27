@@ -207,8 +207,8 @@ def calc_dps_stats(client, god, build, baseAttSpeed):
     for item in build:
         stat = get_special_item(item)
         itemcol = itemdb[item]
-        for x in itemcol.find({}, {"ItemDescription": 1}): #pls update
-            for stat in x["ItemDescription"]["Menuitems"]:
+        for item_description in itemcol.find({}, {"ItemDescription": 1}): #pls update
+            for stat in item_description["ItemDescription"]["Menuitems"]:
                 # print(item, stat)
                 if stat["Description"] == "Attack Speed":
                     attSpeedIncease += int(stat["Value"].replace("%",
@@ -246,8 +246,8 @@ def calc_tank_stats(client, god, build):
     itemdb = client["Item_Data"]
     for item in build:
         itemcol = itemdb[item]
-        for x in itemcol.find({}, {"ItemDescription": 1}): #pls update x
-            for stat in x["ItemDescription"]["Menuitems"]:
+        for item_description in itemcol.find({}, {"ItemDescription": 1}): #pls update x
+            for stat in item_description["ItemDescription"]["Menuitems"]:
                 # print(item, stat)
                 if stat["Description"] == "Physical Protection":
                     physProt += int(stat["Value"].replace("+", ""))
