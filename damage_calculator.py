@@ -3,7 +3,6 @@ import pymongo
 from main import client
 import analyze as anlz
 import math
-import matplotlib as plt
 from constants import num_hits_dict, scaling_dict, percentage_dict, Warriors, Assassins, Hunters, Mages, Guardians
 from random import randint
 from damage_calc_helpers import *
@@ -182,8 +181,6 @@ def calc_dps_stats(client, god, build, baseAttSpeed):
     itemdb = client["Item_Data"]
     for item in build:
         stat = get_special_item(item)
-        if "Physical Armor Reduction" in stat.keys() and item == "The Executioner":
-            armor_reduction_per = 7 # dont think this is needed as exe is taken into account later on right?
         itemcol = itemdb[item]
         for x in itemcol.find({}, {"ItemDescription": 1}): #pls update
             for stat in x["ItemDescription"]["Menuitems"]:
@@ -254,8 +251,6 @@ def calc_auto_dmg(god, power):
 
     return attDamage
 
-x_axis = []
-y_axis = []
 def calc_dps(client, god, build, enemy, enemy_build, enemy_level, number_of_autos, level=20):
     temp = anlz.get_god_stats(client, god, level)
     baseAttSpeed = temp["AttackSpeed"]
@@ -330,7 +325,7 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, number_of_auto
                 elif "Spectral Armor" in enemy_build and "Deathbringer" in build:
                     dmg[-1] += attDamage * (1.3 - .55)
                 else:
-                    dmg[-1] = attDamage * 1.75
+                    dmg[-1] = dmg + attDamage * 0.75
                 if "Wind Demon" in build and not flag:
                     pen_per += 10
                     flag = True
@@ -387,17 +382,6 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, number_of_auto
         dmg[-1] += round(calc_mitigation(calc_auto_dmg(god, attDamage), enemy_prot, 0,
                                      armor_reduction_per, armor_reduction_flat, pen_per, pen_flat)[0])
         # print(item_dmg_out)
-
-####### Graph
-
-        x_axis.append(i)
-        y_axis.append(dmg[-1])
-        total_damage+= dmg
-    plt.plot(x_axis, y_axis)
-    plt.xlabel("Auto Attack Numer")
-    plt.ylabel("Damage Dealt")
-    plt.title("Damage Graph")
-    plt.show()
 
 # store this somewhere, allow user to compare graphs after selecting a different build? just plot 2 sets of numbers        
 
