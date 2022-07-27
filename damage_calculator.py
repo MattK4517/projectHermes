@@ -65,7 +65,18 @@ def calc_ability_damage_raw(base, scaling, power, god, ability, prot, miti, armo
     }
 
 
-def calc_combo_damage_raw(client, god, levels, power, build, enemy, enemy_build, level=20, enemy_level=20):
+def calc_combo_damage_raw(client, god, levels, build, enemy, enemy_build, level=20, enemy_level=20):
+    """ returns json for a gods damage stats given parameters
+    Args:
+        client ([MongoClient]): database connection
+        god ([String]): name of god
+        levels ([Dict]): ability level for base damage, example in main function
+        build ([String[]]): list of items to get stats for god
+        enemy ([String]): enemy god to get base prots for
+        enemy_build ([String[]]): list of items to get stats for enemy god
+        level ([Int]): level of god (for base stats)
+        enemy_level ([Int]): level of enemy (for base stats)
+    """
     temp = anlz.get_god_stats(client, god, level)
     attSpeed, power, critChance, armor_reduction_per, armor_reduction_flat, pen_per, pen_flat = calc_dps_stats(
         client, god, build, temp["AttackSpeed"])
@@ -398,27 +409,6 @@ if __name__ == "__main__":
         "4": 1,
         "5": 5
     }
-    # print(calc_dps(client, "Achilles", [
-    #     "Odysseus' Bow",
-    #     "Toxic Blade",
-    #     "Shogun's Kusari",
-    #     "Silverbranch Bow",
-    #     "Ichaival"
-    # ], "Odin", [
-    #     "Bluestone Brooch",
-    #     "Runeforged Hammer",
-    #     "Breastplate of Determination",
-    #     "Bulwark of Hope",
-    #     "Pridwen",
-    #     "Spectral Armor"
-    # ], 20, 20))
-    # avg = 0
-    # for i in range(10):
-    # calc_dps(client, "Achilles", ["Manikin Mace", "Bloodforge", "Evolved Rage", "Serrated Edge", "Deathbringer", "Wind Demon"],
-    # "Agni", [], 20, 20)
-    # print(avg/10)
-    # for guardian in Guardians:
+    
     print(calc_combo_damage_raw(client, "Chaac",
-          levels, 0, ["Bluestone Pendant"], "Baron Samedi", [], 5, 6))
-
-    # 470 + 83
+          levels, ["Bluestone Pendant"], "Baron Samedi", [], 5, 6))
