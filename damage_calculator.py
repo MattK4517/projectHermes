@@ -206,11 +206,9 @@ def calc_dps_stats(client, god, build, baseAttSpeed):
     itemdb = client["Item_Data"]
     for item in build:
         stat = get_special_item(item)
-        if "Physical Armor Reduction" in stat.keys() and item == "The Executioner":
-            armor_reduction_per = 7
         itemcol = itemdb[item]
-        for x in itemcol.find({}, {"ItemDescription": 1}):
-            for stat in x["ItemDescription"]["Menuitems"]:
+        for item_description in itemcol.find({}, {"ItemDescription": 1}): #pls update
+            for stat in item_description["ItemDescription"]["Menuitems"]:
                 # print(item, stat)
                 if stat["Description"] == "Attack Speed":
                     attSpeedIncease += int(stat["Value"].replace("%",
@@ -248,8 +246,8 @@ def calc_tank_stats(client, god, build):
     itemdb = client["Item_Data"]
     for item in build:
         itemcol = itemdb[item]
-        for x in itemcol.find({}, {"ItemDescription": 1}):
-            for stat in x["ItemDescription"]["Menuitems"]:
+        for item_description in itemcol.find({}, {"ItemDescription": 1}): #pls update x
+            for stat in item_description["ItemDescription"]["Menuitems"]:
                 # print(item, stat)
                 if stat["Description"] == "Physical Protection":
                     physProt += int(stat["Value"].replace("+", ""))
@@ -288,15 +286,16 @@ def calc_auto_dmg(god, power):
 
     return attDamage
 
-
+number_of_autos = 10
 def calc_dps(client, god, build, enemy, enemy_build, enemy_level, level=20):
     """
       returns damage stats for basic attacks
       #TODO clean up entire function
     """
     temp = anlz.get_god_stats(client, god, level)
+    baseAttSpeed = temp["AttackSpeed"]
     attSpeed, power, critChance, armor_reduction_per, armor_reduction_flat, pen_per, pen_flat = calc_dps_stats(
-        client, god, build, baseAttSpeed=temp["AttackSpeed"])
+        client, god, build, baseAttSpeed)
 
     if "Dominance" in build:
         pen_per += 10
@@ -330,20 +329,31 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, level=20):
                  "Ichaival": 0, "Silverbranch Bow": 0, "Total Item Damage": 0}
 
     flag = False
-    for i in range(10):
+    for i in range(number_of_autos):
         if "The Executioner" in build:
-            if i <= 4:
+            if i < 5 and i > 0:
                 armor_reduction_per = (7 * (i))
+
+        elif "The Heavy Executioner" in build:
+            if i < 3 and i > 0:
+                armor_reduction_per = 17.5*i
+
+        if "The Ferocious Executioner" in build:
+            if i < 11 and i > 1:
+                dmg *= 1.02
+
         if "Ichaival" in build:
-            if i < 3:
+            if i < 4 and i > 0:
                 attDamage += 10
                 ichi_stacks += 1
             item_dmg_out["Ichaival"] += 10 * ichi_stacks
+
         if "Silverbranch Bow" in build:
             if attSpeed > 2.5:
-                sbow_stacks = (attSpeed - 2.5) / .02
-            attDamage += 2 * round(sbow_stacks)
-            item_dmg_out["Silverbranch Bow"] += 2 * round(sbow_stacks)
+                sbow_stacks = round((attSpeed - 2.5) / .02)
+            attDamage += 2 * sbow_stacks
+            item_dmg_out["Silverbranch Bow"] += 2 * sbow_stacks
+
         if critChance > 0:
             if randint(0, 100) <= critChance:
                 crit += 1
@@ -354,14 +364,14 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, level=20):
                 elif "Spectral Armor" in enemy_build and "Deathbringer" in build:
                     dmg += attDamage * (1.3 - .55)
                 else:
-                    dmg += attDamage
+                    dmg += attDamage * 0.75
                 if "Wind Demon" in build and not flag:
                     pen_per += 10
                     flag = True
 
         if (i > 0 and i % 4 == 0) and "Odysseus' Bow" in build:
-            item_dmg += round(15 + (power * .6))
-            item_dmg_out["Odysseus' Bow"] += round(15 + (power * .6))
+            item_dmg += round(15 + (calc_auto_dmg(god, attDamage) * .6)) 
+            item_dmg_out["Odysseus' Bow"] += round(15 + (calc_auto_dmg(god, attDamage) * .6))
             dmg += item_dmg
             item_dmg = 0
             obow += 1
@@ -375,6 +385,36 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, level=20):
             dmg += item_dmg
             item_dmg = 0
             qins += 1
+
+        if "Manikin Mace" in build:
+            if attSpeed <= 2:
+                item_dmg = attSpeed * 60
+            else:
+                item_dmg += 2 * 60
+            dmg += item_dmg
+
+        if "Stone Cutting Sword" in build:
+            if i < 4 and i > 0:
+                armor_reduction_flat += 7
+
+        if "Void Shield" in build:
+            armor_reduction_per = 15
+
+####### Magical items
+
+        if "Telkhines Ring" in build:
+            item_dmg += 10 + power * 0.1
+            dmg += item_dmg
+
+        if "Void Stone" in build:
+            armor_reduction_per = 15
+
+        if "Demonic Grip" in build:
+            if i < 4 and i > 0:
+                armor_reduction_per += 10
+
+        if "Nimble Bancroft's Talon" in build:
+            attSpeed += baseAttSpeed * power/40
 
         mitigated["Total Item Damage"] += round(calc_mitigation(calc_auto_dmg(god, attDamage), enemy_prot, 0,
                                                                 armor_reduction_per, armor_reduction_flat, pen_per, pen_flat)[1])
@@ -392,7 +432,7 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, level=20):
     mitigated["Total Item Damage Item"] = mitigated["Qin's Sais"] + \
         mitigated["Odysseus' Bow"]
 
-    dps = dmg / attSpeed
+    dps = dmg * attSpeed / number_of_autos
     # print(f"Num Crits: {crit}")
     # print(f"Damage Autos: {dmg - item_dmg_out['Total']}")
     # print(f"Damage Total: {dmg}")
@@ -424,11 +464,7 @@ def calc_mitigation(dmg, prot, miti, armor_reduction_per, armor_reduction_flat, 
     # Flat armor reduction
     # % pen
     # flat pen
-    if pen_per > 0:
-        prot = (prot * (1 - armor_reduction_per/100)) * \
-            (1-(pen_per/100)) - pen_flat
-    else:
-        prot = (prot * (1 - armor_reduction_per/100)) - pen_flat
+    prot = ((prot * (1 - armor_reduction_per/100))-armor_reduction_flat) * (1-(pen_per/100)) - pen_flat
 
     taken = dmg * (1-miti) * (100/(100+prot))
     return [round(taken), round(dmg-taken)]
