@@ -211,7 +211,7 @@ def get_top_builds(client, god, role, patch, queue_type="Ranked", rank="All Rank
     elif patch == "9.7":
         print(patch + "-" + mode + "-" + queue_type)
         mycol = mydb[patch + "-" + mode + "-" + queue_type]
-        print(mycol.count_documents({}))
+        print("HERE", mycol.count_documents({}))
     else:
         mycol = mydb[mode]
     games = 0

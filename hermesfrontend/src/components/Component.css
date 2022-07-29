@@ -21,6 +21,9 @@ body {
   color: white;
   font-size: 12px;
   padding: 0.25rem;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .matchups {
@@ -2213,8 +2216,10 @@ figure.snip0015:hover figcaption::before {
 }
 
 .link-icon-svg {
-  font-size: 40px;
+  font-size: 25px;
+  color: white;
 }
+
 
 .main-nav-wrapper {
   border-bottom: 1px solid gray;
