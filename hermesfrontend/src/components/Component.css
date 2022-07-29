@@ -452,7 +452,7 @@ hr {
 }
 
 .item-row .item-dupe {
-  margin-right: 20px;
+  margin: 0 10px
 }
 
 .item-stats .winrate {
@@ -1235,7 +1235,6 @@ figure.snip0015:hover figcaption::before {
   margin-top: 24px;
   width: 1200px;
   justify-content: flex-start;
-  left: 27%;
 }
 
 /* .grid-block.items-1 {
