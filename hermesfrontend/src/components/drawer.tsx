@@ -66,7 +66,7 @@ export const godsDict = {
   Atlas: 'Support',
   Awilix: 'Jungle',
   'Baba Yaga': 'Mid',
-  Bacchus: 'Supprt',
+  Bacchus: 'Support',
   Bakasura: 'Jungle',
   'Baron Samedi': 'Mid',
   Bastet: 'Jungle',
