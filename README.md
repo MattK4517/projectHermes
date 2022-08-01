@@ -22,3 +22,14 @@ Project is created with:
 - Fully functioning Discord bot along with the website
 - Fast load times thanks to MongoDB Aggregation pipelines and Search Indexes
 - Gain Access to over 500,000 matches of Smite Data
+
+
+## To Contribute
+- git clone the repo
+Running backend
+- in the folder you cloned into run py -m flask run
+- install required dependancies (dnspython, pymongo, flask)
+Running frontend
+- start a terminal in the hermesfrontend folder
+- npm install dependancies 
+- npm run start
