@@ -2170,12 +2170,33 @@ figure.snip0015:hover figcaption::before {
   background-color: #17172e;
 }
 
-.god-selection {
+.god-selection-contianer, .god-selection-modal {
   /* background-color: white; */
-  min-width: 64px;
-  min-height: 64px;
-  max-width: 128px;
-  max-height: 128px;
+  max-height: 50vh;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+}
+
+.god-selection-contianer {
+  overflow: auto;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.god-selection-contianer .specific-image-container {
+  margin-right: 0px
+}
+
+
+
+.god-icon-container {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }
 
 .main-calc {

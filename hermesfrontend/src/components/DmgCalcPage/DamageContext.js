@@ -1,13 +1,14 @@
 import { useDragDropManager, useDrop } from "react-dnd";
 import React, { useState, useEffect, createContext } from 'react';
 import { godsDict } from "../drawer";
-import { physicalItems, magicalItems, physGods, magGods, items } from "../constants"
-
-
+import { useQuery } from 'react-query'
 
 export const DamageContext = createContext();
 
 export const DamageProvider = props => {
+    const [god, setGod] = useState("");
+    const [board, setBoard] = useState([]);
+    const [build, setBuild] = useState([]);
     const [allgods, setAllGods] = useState([])
     useEffect(() => {
         Object.keys(godsDict).forEach((key) => {
@@ -16,16 +17,29 @@ export const DamageProvider = props => {
                 {
                     id: key,
                     url: `https://webcdn.hirezstudios.com/smite/god-icons/${key
-                    .replaceAll("'", "")
-                    .replaceAll(" ", "-")
-                    .toLowerCase()}.jpg`
+                        .replaceAll("'", "")
+                        .replaceAll(" ", "-")
+                        .toLowerCase()}.jpg`
                 }
             ])
         })
     }, [])
-    const [god, setGod] = useState("");
-    const [board, setBoard] = useState([]);
-    const [build, setBuild] = useState([]);
+
+    const [items, setItems] = useState([])
+    const itemQuery = useQuery(
+        ['god-items', god],
+        () => {
+            fetch('/api/goditems/'.concat(god)).then((res) =>
+                res.json().then((data) => {
+                    console.log("DATA IN CALL", data)
+                    setItems(data.data)
+                }
+                ));
+        },
+        {
+            refetchOnWindowFocus: false,
+        }
+    )
 
     const [{ isOver }, drop] = useDrop(() => ({
         accept: "image",
@@ -37,18 +51,18 @@ export const DamageProvider = props => {
 
     const [{ isOverItem }, dropItem] = useDrop(() => (
         {
-        accept: "image",
-        drop: (item) => addItemToBuild(item.id),
-        collect: (monitor) => (
-            {
-            isOverItem: !!monitor.isOver(),
-        }),
-    }));
+            accept: "image",
+            drop: (item) => addItemToBuild(item.id),
+            collect: (monitor) => (
+                {
+                    isOverItem: !!monitor.isOver(),
+                }),
+        }));
 
     const addItemToBuild = (id) => {
         const pictureList = items.filter((picture) => id === picture.id);
         setBuild((build) => {
-            if (Object.keys(build).length < 6) { 
+            if (Object.keys(build).length < 6) {
                 return [...build, pictureList[0].id]
             } else {
                 return [...build.slice(1), pictureList[0].id]
@@ -62,9 +76,9 @@ export const DamageProvider = props => {
             {
                 id: tempGod,
                 url: `https://webcdn.hirezstudios.com/smite/god-icons/${tempGod
-                .replaceAll("'", "")
-                .replaceAll(" ", "-")
-                .toLowerCase()}.jpg`
+                    .replaceAll("'", "")
+                    .replaceAll(" ", "-")
+                    .toLowerCase()}.jpg`
             }
         ];
         // console.log(pictureList)
@@ -74,7 +88,7 @@ export const DamageProvider = props => {
     const [itemType, setItemType] = useState("");
     return (
         <DamageContext.Provider value={[
-            drop, allgods, board, setBoard, god, setGod, build, setBuild, dropItem, itemType, setItemType
+            drop, allgods, board, setBoard, god, setGod, build, setBuild, dropItem, itemType, setItemType, items
         ]}>
             {props.children}
         </DamageContext.Provider>

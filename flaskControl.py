@@ -12,7 +12,7 @@ from operator import getitem
 from collections import OrderedDict
 from main import client
 from flask import Flask, render_template, request
-from constants import godsDict, roles, id_dict
+from constants import godsDict, roles, id_dict, Tier_Three_items, Starter_items
 import pandas as pd
 import analyze_players as anlzpy
 import analyze as anlz
@@ -304,7 +304,7 @@ def get_dmg_calc():
         print(data)
         if data["god"].lower() in [god.lower() for god in godsDict]:
             ret_data = calc_combo_damage_raw(
-                client, data["god"], data["levels"], 0, data["build"], "Odin", [])
+                client, data["god"], data["levels"], data["build"], "Odin", [], 20, 20)
 
     return ret_data
 
@@ -316,7 +316,7 @@ def get_auto_dmg_calc():
         data = request.get_json()
         if data["god"].lower() in [god.lower() for god in godsDict]:
             ret_data = calc_dps(
-                client, data["god"], data["build"], "Odin", [], 1, 20)
+                client, data["god"], data["build"], "Odin", [], 20, 20)
 
     return ret_data
 
@@ -418,3 +418,20 @@ def create_report():
         report.upload_report()
         # print("REPORT", report.params)
     return ""
+
+
+@app.route('/api/goditems/<god>')
+def get_god_items(god):
+    mydb = client["Item_Data"]
+    print("\n\n\n GETTING HERE \n\n\n")
+    items = Tier_Three_items + Starter_items
+    ret_data = {"data": []}
+    god_class = fh.get_class(god)
+    for item in items:
+        mycol = mydb[item]
+        for x in mycol.find({"ActiveFlag": "y"}, {"DeviceName": 1, "RestrictedRoles": 1, "_id": 0}):
+            if god_class not in x["RestrictedRoles"]:
+                ret_data["data"].append(x["DeviceName"])
+
+    ret_data["data"].sort()
+    return ret_data

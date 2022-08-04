@@ -1,3 +1,7 @@
+from pyrez.api import SmiteAPI
+from main import client
+
+
 def get_new_id(client, smite_api):
     mydb = client["God_Data"]
     gods = smite_api.getGods()
@@ -104,6 +108,7 @@ def get_new_items(client, smite_api):
     mydb = client["Item_Data"]
     prices = {}
     items = smite_api.getItems()
+    print(items[5])
     for item in range(len(items)):
         if items[item]["RootItemId"] not in prices:
             prices[items[item]["RootItemId"]] = {items[item]["DeviceName"]: {
@@ -116,3 +121,11 @@ def get_new_items(client, smite_api):
         mycol = mydb[items[item]["DeviceName"]]
         item = create_item_dict(items[item], prices)
         mycol.insert_one(item)
+
+
+if __name__ == "__main__":
+    with open("cred.txt", "r") as f:
+        data = f.readlines()
+        smite_api = SmiteAPI(devId=data[0].strip(
+        ), authKey=data[1].strip())
+        get_new_items(client, smite_api)

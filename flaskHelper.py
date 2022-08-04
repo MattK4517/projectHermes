@@ -1,6 +1,8 @@
+from tokenize import String
 import pymongo
 import analyze as anlz
 from pyrez.api import SmiteAPI
+from constants import Assassins, Guardians, Hunters, Mages, Warriors
 
 
 def validate_player(client, playername):
@@ -92,6 +94,22 @@ def get_player_id(smite_api: SmiteAPI, playername):
             return data[0]["player_id"]
 
 
+def get_class(god):
+    god_class = ""
+    if god in Assassins:
+        god_class = "assassin"
+    elif god in Guardians:
+        god_class = "guardian"
+    elif god in Hunters:
+        god_class = "hunter"
+    elif god in Mages:
+        god_class = "mage"
+    elif god in Warriors:
+        god_class = "warrior"
+    return god_class
+
+
 if __name__ == "__main__":
     from main import client
-    print(validate_gods(client, "Mayhem4517", "Ranked", "Conquest"))
+    # print(validate_gods(client, "Mayhem4517", "Ranked", "Conquest"))
+    print(get_class("Achilles"))

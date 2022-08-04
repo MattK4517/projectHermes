@@ -80,14 +80,14 @@ export default function SearchBarGodPage(props) {
           marginLeft: "15px",
         }}
         className="search-bar"
-        // endAdornment={<InputAdornment><img class="god-icon-style" src={`https://webcdn.hirezstudios.com/smite/god-icons/${props.matchup.toLowerCase().replaceAll(" ", "-").replaceAll("'", "")}.jpg`}/></InputAdornment>}
+      // endAdornment={<InputAdornment><img class="god-icon-style" src={`https://webcdn.hirezstudios.com/smite/god-icons/${props.matchup.toLowerCase().replaceAll(" ", "-").replaceAll("'", "")}.jpg`}/></InputAdornment>}
       >
         <Autocomplete
           freeSolo
           id="god-seach-bar"
           // disableClearable
-         
-          options={props.data.map((option) => option.god)}
+
+          options={props.data.map((god) => god)}
           clearOnEscape={"true"}
           renderOption={(option) => (
             <React.Fragment>
@@ -99,8 +99,8 @@ export default function SearchBarGodPage(props) {
                     props.changeMatchup(option.key)
                   }
                 }}
-                // endAdornment={<InputAdornment><img class="god-icon-style" src={`https://webcdn.hirezstudios.com/smite/god-icons/${props.matchup.toLowerCase().replaceAll(" ", "-").replaceAll("'", "")}.jpg`}/></InputAdornment>}
-                >
+              // endAdornment={<InputAdornment><img class="god-icon-style" src={`https://webcdn.hirezstudios.com/smite/god-icons/${props.matchup.toLowerCase().replaceAll(" ", "-").replaceAll("'", "")}.jpg`}/></InputAdornment>}
+              >
                 <img
                   src={`https://webcdn.hirezstudios.com/smite/god-icons/${option.key.toLowerCase().replaceAll(" ", "-").replaceAll("'", "")}.jpg`}
                   alt={option.key}
@@ -123,8 +123,8 @@ export default function SearchBarGodPage(props) {
                 InputProps={{
                   ...params.InputProps,
                 }}
-                label={"Search A Matchup"}
-                // endAdornment={<InputAdornment><img class="god-icon-style" src={`https://webcdn.hirezstudios.com/smite/god-icons/${props.matchup.toLowerCase().replaceAll(" ", "-").replaceAll("'", "")}.jpg`}/></InputAdornment>}
+                label={props.labelText}
+              // endAdornment={<InputAdornment><img class="god-icon-style" src={`https://webcdn.hirezstudios.com/smite/god-icons/${props.matchup.toLowerCase().replaceAll(" ", "-").replaceAll("'", "")}.jpg`}/></InputAdornment>}
               />
             )
           )}

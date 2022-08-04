@@ -1,13 +1,18 @@
+from constants import Assassins, Guardians, Hunters, Mages, Warriors
+
+
 def calc_set_damage(base, ability_level, scaling_changes):
     damage = 0
     for i in range(8):
         if i >= 1:
-            damage += (base * (int(scaling_changes.split("/")[ability_level-1])/100)) * .4
-        else: 
-            damage += base * int(scaling_changes.split("/")[ability_level-1]) /100
+            damage += (base * (int(scaling_changes.split("/")
+                       [ability_level-1])/100)) * .4
+        else:
+            damage += base * int(scaling_changes.split("/")
+                                 [ability_level-1]) / 100
     return damage
 
-        
+
 def special_case(ability, base):
     base = base.strip()
     if ability == "Twin Cleave (Bladestorm) Cleave Damage":
@@ -149,3 +154,25 @@ def change_special(god, ability_numbers, levels):
             "abilityName": f"Blizzard Damage per tick",
             "displayName": f"Blizzard",
         })
+
+
+def get_correct_prots(god, phys, mag):
+    if god in Assassins + Hunters + Warriors:
+        return phys
+    if god in Guardians + Mages:
+        return mag
+    return 0
+
+
+def special_description_parsing(description):
+    return ("damage:" in description
+            or "damage per" in description
+            or "initial hit:" in description
+            or "damage" in description
+            ) and ("lane minion damage" not in description
+                   and "self damage" not in description
+                   and "jealousy damage" not in description
+                   and "buff" not in description
+                   and "damage mitigation" not in description
+                   and "damage reduction" not in description
+                   )
