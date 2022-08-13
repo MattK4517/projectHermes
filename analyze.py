@@ -717,13 +717,13 @@ def get_carry_score(match):
             "Loser": {
                 "totalDamage": 1,
             }
-        },
+            },
         "levelDiff": {
             "Winner": {
             },
             "Loser": {
             }
-        },
+            },
         "killPart": {
                 "Winner": {
                     "totalKills": 0,
@@ -731,7 +731,7 @@ def get_carry_score(match):
                 "Loser": {
                     "totalKills": 0,
                 }
-        }
+            }
     }
     match_roles = []
 
@@ -1504,12 +1504,10 @@ def get_match_time(patch):
 
 
 if __name__ == "__main__":
+    # client, god, role, patch, queue_type="Ranked", rank="All Ranks", mode="Conquest", matchup="None"
     #     },}):
     # get_match_time("9.7")
-    for god in ["Achilles"]:
-        # #     #get_build_path(client, god, role, patch, queue_type, rank="All Ranks", mode="Conquest")
-        # #     print(get_build_path(client, "Achilles", "Solo", "9.6", "Ranked"))
-        print(god, get_top_builds(client, "Achilles", "Solo", "9.7", "Ranked"))
+    print(get_winrate(client, "Kali", "Jungle", "9.7", rank="Diamond+"))
     # # from main import client
     # # import numpy
     # # (client, god, rank, role, patch, queue_type="Ranked", mode="Conquest")
@@ -1545,8 +1543,8 @@ if __name__ == "__main__":
     #     }
     #         ]):
     #             print(x)
-        # if x["win_status"] == "Winner":
-        #     data[x["_id"]]["wins"] += 1
+    # if x["win_status"] == "Winner":
+    #     data[x["_id"]]["wins"] += 1
     # print(max(dmg))
     # if len(dmg) > 0 and len(time) > 0:
     #     print(sum(dmg)/len(dmg))
@@ -1566,24 +1564,24 @@ if __name__ == "__main__":
 # Average Damage:  13637.90734557596 Median Time:  12816.0
 # Standard Dev:  6655.287265388552
 
-        # for x in mycol.aggregate([
-        #     {
-        #         "$match": {"patch": "9.5"}
-        #     },
-        #     {
-        #         "$group": {"_id": "$skin",
-        #                     "games": {"$sum": 1}
-        #                     }
-        #     },
+    # for x in mycol.aggregate([
+    #     {
+    #         "$match": {"patch": "9.5"}
+    #     },
+    #     {
+    #         "$group": {"_id": "$skin",
+    #                     "games": {"$sum": 1}
+    #                     }
+    #     },
 
-        #     {
-        #         "$sort": {"games": -1}
-        #     },
-        #     {
-        #         "$limit": 1
-        #     }
-        #     ]):
-        #         print(x)
+    #     {
+    #         "$sort": {"games": -1}
+    #     },
+    #     {
+    #         "$limit": 1
+    #     }
+    #     ]):
+    #         print(x)
 
 # Ranked Conq
 # assassin 98519 196377 50.17

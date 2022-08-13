@@ -52,7 +52,12 @@ def get_percent_change(god, ability, hit):
     return 1
 
 
-def calc_ability_damage_raw(base, scaling, power, god, ability, prot, armor_reduction_per, armor_reduction_flat, pen_per, pen_flat, miti=0, **procs):
+def get_proc(item):
+    if item == "Bluestone Pendant":
+        return
+
+
+def calc_ability_damage_raw(base, scaling, power, god, ability, prot, armor_reduction_per, armor_reduction_flat, pen_per, pen_flat, miti=0, procs=[]):
     """
       returns damage stats for a given ability
     """
@@ -68,16 +73,14 @@ def calc_ability_damage_raw(base, scaling, power, god, ability, prot, armor_redu
 
         damage += temp["dealt"]
         mitigated += temp["mitigated"]
-    # if ability == "Tearing The Veil Rift Damage:":
-    #     damage = damage * 3
-    if procs:
+    if len(procs) > 0:
         for proc in procs:
-            proc_damage += proc["damage"]
+            get_proc(proc)
 
     if hits > 1:
         temp = calc_mitigation(damage + mitigated, prot, miti,
                                armor_reduction_per, armor_reduction_flat, pen_per, pen_flat)
-        print("NEW MITI", temp, damage + mitigated, damage, mitigated)
+        # print("NEW MITI", temp, damage + mitigated, damage, mitigated)
 
         damage = temp["dealt"]
         mitigated = temp["mitigated"]
@@ -104,7 +107,6 @@ def calc_combo_damage_raw(client, god, levels, build, enemy, enemy_build, level=
     temp = anlz.get_god_stats(client, god, level)
     attSpeed, power, critChance, armor_reduction_per, armor_reduction_flat, pen_per, pen_flat = calc_dps_stats(
         client, god, build, temp["AttackSpeed"])
-    print(armor_reduction_per)
 
     defense_stats = anlz.get_god_stats(client, enemy, enemy_level)
     temp_def = calc_tank_stats(client, enemy, enemy_build)
@@ -112,7 +114,7 @@ def calc_combo_damage_raw(client, god, levels, build, enemy, enemy_build, level=
     targetPhys = defense_stats["PhysicalProtection"] + temp_def[1]
     targetMag = defense_stats["MagicProtection"] + temp_def[2]
     prots = get_correct_prots(god, targetPhys, targetMag)
-
+    print(power)
     # check for item procs
     # get base damage and scaling of all abilities
     # get raw damage per ability with calc_ability_damage_raw
@@ -285,9 +287,7 @@ def calc_auto_dmg(god, power):
       returns basic attack damage of gods
       # TODO add magical characters
     """
-    if (god.lower() in [assassin.lower() for assassin in Assassins]
-        or god.lower() in [warrior.lower() for warrior in Warriors]
-            or god.lower() in [hunter.lower() for hunter in Hunters]):
+    if god in Assassins + Hunters + Warriors:
         att_damage = power
 
     return att_damage
@@ -311,9 +311,7 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, level=20, numb
     targetPhys = defense_stats["PhysicalProtection"] + temp_def[1]
     targetMag = defense_stats["MagicProtection"] + temp_def[2]
     power += temp["PhysicalPower"]
-    if (god.lower() in [assassin.lower() for assassin in Assassins]
-        or god.lower() in [warrior.lower() for warrior in Warriors]
-            or god.lower() in [hunter.lower() for hunter in Hunters]):
+    if god in Assassins + Hunters + Warriors:
         attDamage = power
         damage_type = "Physical"
 
@@ -414,10 +412,10 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, level=20, numb
         if "Nimble Bancroft's Talon" in build:
             attSpeed += baseAttSpeed * power/40
 
-        mitigated["Total Auto Damage Mitigated"] += calc_mitigation(calc_auto_dmg(god, attDamage), enemy_prot,
-                                                                    armor_reduction_per, armor_reduction_flat, pen_per, pen_flat)["mitigated"]
-        dmg_out["Total Auto Damage"] += calc_mitigation(calc_auto_dmg(god, attDamage), enemy_prot,
-                                                        armor_reduction_per, armor_reduction_flat, pen_per, pen_flat)["dealt"]
+        mitigated["Total Auto Damage Mitigated"] += round(calc_mitigation(calc_auto_dmg(god, attDamage), enemy_prot,
+                                                                          armor_reduction_per, armor_reduction_flat, pen_per, pen_flat)["mitigated"])
+        dmg_out["Total Auto Damage"] += round(calc_mitigation(calc_auto_dmg(god, attDamage), enemy_prot,
+                                                              armor_reduction_per, armor_reduction_flat, pen_per, pen_flat)["dealt"])
         # print(item_dmg_out)
 
     for key in mitigated:
@@ -427,8 +425,8 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, level=20, numb
     for key in dmg_out:
         if "Total" not in key and key not in ["Ichaival"]:
             dmg_out["Total Item Damage"] += dmg_out[key]
-    print("MITIGATED", mitigated)
-    print("DAMAGE", dmg_out)
+    # print("MITIGATED", mitigated)
+    # print("DAMAGE", dmg_out)
     # print(f"Num Crits: {crit}")
     # print(f"Damage Autos: {dmg - item_dmg_out['Total']}")
     # print(f"Damage Total: {dmg}")
@@ -460,11 +458,10 @@ def calc_mitigation(dmg, prot, armor_reduction_per, armor_reduction_flat, pen_pe
     # Flat armor reduction
     # % pen
     # flat pen
-    prot = ceil((((prot * (1 - armor_reduction_per/100))) -
-                 armor_reduction_flat) * (1-(pen_per/100)) - pen_flat)
+    prot = (((prot * (1 - armor_reduction_per/100))) -
+            armor_reduction_flat) * (1-(pen_per/100)) - pen_flat
 
-    taken = dmg * (1-miti) * (100/(100+prot))
-    print("IN MITI FUNCTION", dmg, taken, dmg-taken)
+    taken = dmg * (1-miti) * float((100/(100+prot)))
     return {
         "dealt": taken,
         "mitigated": dmg-taken
@@ -484,7 +481,7 @@ if __name__ == "__main__":
     }
     # build = [
     # "Stone Cutting Sword", "Odysseus' Bow", "Ichaival", "Qin's Sais", "Bloodforge"]
-    build = []
+    build = ["Bluestone Pendant"]
     print(calc_combo_damage_raw(client, "Achilles",
           levels, build, "Odin", [], 20, 20))
     # print(calc_dps(client, "Achilles", build, "Odin", [], 1, 1))

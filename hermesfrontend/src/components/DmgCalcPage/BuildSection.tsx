@@ -64,37 +64,25 @@ const style: any = {
   p: 4,
 };
 
-export default function BuildSection(props: any) {
+export default function BuildSection(props: {
+  build: string[];
+  setBuild: React.Dispatch<any>;
+  items: string[];
+}) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [
-    drop,
-    allgods,
-    board,
-    setBoard,
-    god,
-    setGod,
-    build,
-    setBuild,
-    dropItem,
-    itemType,
-    setItemType,
-    items,
-  ] = useContext(DamageContext);
-
-  console.log(items);
 
   return (
     <>
       <div className='build-container'>
-        {build.map((item: string) => {
+        {props.build.map((item: string) => {
           return (
             <div
               className='item-wrapper'
               style={{ width: '48px', height: '48px' }}
               onClick={() => {
-                setBuild((build: string[]) =>
+                props.setBuild((build: string[]) =>
                   build.filter((clicked: string) => {
                     return item !== clicked;
                   })
@@ -154,12 +142,12 @@ export default function BuildSection(props: any) {
           </Typography> */}
           <Typography id='modal-modal-description' sx={{ mt: 2 }}>
             <div className='god-selection-modal'>
-              {items.map((item: string) => {
+              {props.items.map((item) => {
                 return (
                   <div
                     className='god-icon-container'
                     onClick={() => {
-                      setBuild((build: string[]) => [...build, item]);
+                      props.setBuild((build: string[]) => [...build, item]);
                       setOpen(false);
                     }}
                   >

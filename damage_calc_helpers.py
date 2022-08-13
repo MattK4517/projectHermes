@@ -175,4 +175,5 @@ def special_description_parsing(description):
                    and "buff" not in description
                    and "damage mitigation" not in description
                    and "damage reduction" not in description
+                   and "damage taken" not in description
                    )

@@ -112,4 +112,4 @@ def get_class(god):
 if __name__ == "__main__":
     from main import client
     # print(validate_gods(client, "Mayhem4517", "Ranked", "Conquest"))
-    print(get_class("Achilles"))
+    print(get_class("Ah Muzen Cab"))

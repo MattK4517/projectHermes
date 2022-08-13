@@ -301,10 +301,9 @@ def get_dmg_calc():
     ret_data = {}
     if request.method == 'POST':
         data = request.get_json()
-        print(data)
         if data["god"].lower() in [god.lower() for god in godsDict]:
             ret_data = calc_combo_damage_raw(
-                client, data["god"], data["levels"], data["build"], "Odin", [], 20, 20)
+                client, data["god"], data["levels"], data["build"], data["enemy"], data["enemyBuild"], 20, 20)
 
     return ret_data
 
@@ -316,7 +315,7 @@ def get_auto_dmg_calc():
         data = request.get_json()
         if data["god"].lower() in [god.lower() for god in godsDict]:
             ret_data = calc_dps(
-                client, data["god"], data["build"], "Odin", [], 20, 20)
+                client, data["god"], data["build"], data["enemy"], data["enemyBuild"], 20, 20)
 
     return ret_data
 
@@ -423,7 +422,6 @@ def create_report():
 @app.route('/api/goditems/<god>')
 def get_god_items(god):
     mydb = client["Item_Data"]
-    print("\n\n\n GETTING HERE \n\n\n")
     items = Tier_Three_items + Starter_items
     ret_data = {"data": []}
     god_class = fh.get_class(god)

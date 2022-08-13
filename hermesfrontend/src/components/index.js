@@ -45,8 +45,6 @@ export { default as PlayerTabs } from "./PlayerPage/PlayerTabs";
 export { default as MultiKillDisplay } from "./PlayerPage/MultiKillDisplay";
 export { default as DamageCalculator } from "./DmgCalcPage/DamageCalculator";
 export { default as ItemBuffs } from "./DmgCalcPage/ItemBuffs";
-export { default as DragDrop } from "./DmgCalcPage/DragDropGodList";
-export { default as MainCalcSection } from "./DmgCalcPage/MainCalcSection";
 export { default as GodSelectionBox } from "./DmgCalcPage/GodSelectionBox";
 export { default as BuildSection } from "./DmgCalcPage/BuildSection";
 export { default as CombatStatSection } from "./DmgCalcPage/CombatStatSection";

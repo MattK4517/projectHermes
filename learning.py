@@ -80,20 +80,20 @@
 #     print("Letters Guessed Already: {}".format(lettersUsed))
 
 # print("{} is the word".format(word))
-from main import client
-from constants import Tier_Three_items, Starter_items
-import flaskHelper as fh
-mydb = client["Item_Data"]
-items = Tier_Three_items + Starter_items
-ret_data = {"data": []}
-for item in items:
-    mycol = mydb[item]
-    for x in mycol.find({"ActiveFlag": "y"}, {"ItemDescription": 1}):
-        power_type = x["ItemDescription"]["Menuitems"][0]["Description"].split(" ")[
-            0]
-        if power_type == "Physical":
-            mycol.update_many(
-                {}, {"$set": {"RestrictedRoles": "guardian,mage"}})
-        elif power_type == "Magical":
-            mycol.update_many(
-                {}, {"$set": {"RestrictedRoles": "assassin,hunter,warrior"}})
+# from main import client
+# from constants import Tier_Three_items, Starter_items
+# import flaskHelper as fh
+# mydb = client["Item_Data"]
+# items = Tier_Three_items + Starter_items
+# ret_data = {"data": []}
+# for item in items:
+#     mycol = mydb[item]
+#     for x in mycol.find({"ActiveFlag": "y"}, {"ItemDescription": 1}):
+#         power_type = x["ItemDescription"]["Menuitems"][0]["Description"].split(" ")[
+#             0]
+#         if power_type == "Physical":
+#             mycol.update_many(
+#                 {}, {"$set": {"RestrictedRoles": "guardian,mage"}})
+#         elif power_type == "Magical":
+#             mycol.update_many(
+#                 {}, {"$set": {"RestrictedRoles": "assassin,hunter,warrior"}})

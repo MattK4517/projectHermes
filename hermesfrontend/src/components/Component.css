@@ -2199,12 +2199,6 @@ figure.snip0015:hover figcaption::before {
   cursor: pointer;
 }
 
-.main-calc {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 .home-page-section > div {
   margin-top: 25px;
 }
@@ -2213,10 +2207,33 @@ figure.snip0015:hover figcaption::before {
   letter-spacing: 0.1rem;
 }
 
-/* .home-page-section .content-section_header {
-  padding-bottom: 5px;
-  border-bottom: 1px solid gray;
-} */
+.player-main {
+  display: flex;
+}
+
+.main-calc-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.god-selection-wrapper {
+  width: 300px
+}
+
+.god-selection-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.god-selection-wrapper > * {
+  margin: 16px;
+}
+
+.side-calc-wrapper {
+  width: fit-content !important;
+}
 
 .main-nav-link {
   display: flex;
@@ -2251,8 +2268,8 @@ figure.snip0015:hover figcaption::before {
 }
 
 .damage-content-main {
-  display: grid;
-  grid-template-columns: 312px 1fr 312px;
+  display: flex;
+  /* grid-template-columns: 312px 1fr 312px; */
   grid-gap: 24px;
   width: 1016px;
 }

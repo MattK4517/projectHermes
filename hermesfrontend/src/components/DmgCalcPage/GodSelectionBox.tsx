@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { godsDict } from '../drawer';
 import SearchBarGodPage from '../SearchBarStuff/SearchBarGodPage';
+import { StringMappingType } from 'typescript';
 
 const style: any = {
   position: 'absolute' as 'absolute',
@@ -20,30 +21,32 @@ const style: any = {
   p: 4,
 };
 
-export default function GodSelectionBox() {
+export default function GodSelectionBox(props: {
+  god: string;
+  setGod: Function;
+}) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [drop, allgods, board, setBoard, god, setGod] =
-    useContext(DamageContext);
 
   return (
     <div className='god-selection-contianer'>
       <div className='specific-image-container'>
         <img
-          src={`https://webcdn.hirezstudios.com/smite/god-icons/${god
+          src={`https://webcdn.hirezstudios.com/smite/god-icons/${props.god
             .replaceAll(' ', '-')
             .replaceAll("'", '')
             .toLowerCase()}.jpg`}
-          alt={god}
+          alt={props.god}
         />
       </div>
-      <strong className='god-name'>{god}</strong>
+      <strong className='god-name'>{props.god}</strong>
       <Button
         sx={{
           bgcolor: '#423f61',
           textAlign: 'Center',
           color: 'white',
+          marginTop: '10px',
           '&:hover': {
             bgcolor: '#423f61',
             borderRadius: '8px',
@@ -67,7 +70,7 @@ export default function GodSelectionBox() {
             <SearchBarGodPage
               text={'Search a God'}
               data={Object.keys(godsDict)}
-              changeMatchup={setGod}
+              changeMatchup={props.setGod}
             />
           </Typography>
           <Typography id='modal-modal-description' sx={{ mt: 2 }}>
@@ -77,7 +80,7 @@ export default function GodSelectionBox() {
                   <div
                     className='god-icon-container'
                     onClick={() => {
-                      setGod(god);
+                      props.setGod(god);
                       setOpen(false);
                     }}
                   >
