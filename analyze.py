@@ -1507,7 +1507,7 @@ if __name__ == "__main__":
     # client, god, role, patch, queue_type="Ranked", rank="All Ranks", mode="Conquest", matchup="None"
     #     },}):
     # get_match_time("9.7")
-    print(get_winrate(client, "Kali", "Jungle", "9.7", rank="Diamond+"))
+    print(get_winrate(client, "Kali", "Jungle", "9.7", rank="Diamond"))
     # # from main import client
     # # import numpy
     # # (client, god, rank, role, patch, queue_type="Ranked", mode="Conquest")
