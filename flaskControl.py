@@ -161,23 +161,27 @@ def get_all_matchups(god, role, rank, patch, queue_type, mode):
 
 @app.route("/api/getmatch/<matchID>")
 def get_match(matchID):
-    queue_type = "Ranked"
     mydb = client["Matches"]
-    mode = "Conquest"
-    mycol = mydb["9.4 Matches"]
-    match = {}
+    mycol = mydb["MatchLookup"]
     matchID = int(matchID)
-    modes = ["Joust", "Duel"]
-    index = 0
-    count = mycol.find({"MatchId": matchID}, {"MatchId": 1}).count()
-    print(count)
-    while count == 0:
-        mycol = mydb[f"9.4 {modes[index]} Matches"]
-        count = mycol.find({"MatchId": matchID}, {"MatchId": 1}).count()
-        mode = modes[index]
-        index += 1
+    queue_type = ""
+    mode = ""
+    patch = ""
+    match = {}
+    for x in mycol.find({"matchId": matchID}):
+        queue_type = x["queue_type"]
+        mode = x["mode"]
+        patch = x["patch"]
 
-    for x in mycol.find({"MatchId": matchID}, {"_id": 0}):
+    matchdb = client["Matches"]
+    if queue_type == "Casual":
+        matchdb = client["CasualMatches"]
+
+    if mode != "Conquest":
+        matchcol = matchdb[f"{patch} {mode} Matches"]
+    else:
+        matchcol = matchdb[f"{patch} Matches"]
+    for x in matchcol.find({"MatchId": matchID}):
         match = x
 
     for key in match:

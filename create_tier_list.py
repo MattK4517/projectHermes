@@ -13,7 +13,7 @@ def gen_tier_list(client, roles, patch, types, ranks, queue_types, modes):
                 if mode == "Conquest":
                     for role in roles:
                         if queue_type == "Ranked":
-                            for rank in ["All Ranks"]:
+                            for rank in ranks:
                                 for god in godsDict:
                                     if tier_type == "Regular":
                                         gen_regular_tier_entry(
@@ -26,10 +26,11 @@ def gen_tier_list(client, roles, patch, types, ranks, queue_types, modes):
                                     gen_regular_tier_entry(
                                         client, god, role, "All Ranks", patch, queue_type, mode, date)
                                 print(
-                                    f"god done {god} - {rank} - {role} - {tier_type} - {queue_type} - {mode}")
+                                    f"god done {god} - All Ranks - {role} - {tier_type} - {queue_type} - {mode}")
                 elif mode != "Conquest":
+                    role = "None"
                     if queue_type == "Ranked":
-                        for rank in ["All Ranks"]:
+                        for rank in ranks:
                             for god in godsDict:
                                 if tier_type == "Regular":
                                     gen_regular_tier_entry(
@@ -37,6 +38,7 @@ def gen_tier_list(client, roles, patch, types, ranks, queue_types, modes):
                                 print(
                                     f"god done {god} - {rank} - {role} - {tier_type} - {queue_type} - {mode}")
                     elif queue_type == "Casual":
+                        rank = "All Ranks"
                         for god in godsDict:
                             if tier_type == "Regular":
                                 gen_regular_tier_entry(
@@ -100,8 +102,8 @@ def gen_regular_tier_entry(client, god, role, rank, patch, queue_type, mode, dat
     insert_data(client, "Tier_list", "Combined List", tier_entry)
 
 
-def get_tier(client, win_rate, pick_rate, ban_rate, role, rank):
-    tier_stats = get_tier_stats(client, rank, role)
+def get_tier(client, win_rate, pick_rate, ban_rate, role, rank, mode, queue_type, patch):
+    tier_stats = get_tier_stats(client, rank, role, mode, queue_type, patch)
     if pick_rate + ban_rate > 100:
         print(f"error")
     try:
@@ -116,6 +118,7 @@ def get_tier(client, win_rate, pick_rate, ban_rate, role, rank):
 
         tier = (1.75*win_rate_score) + \
             ((pick_rate_score + (.7*ban_rate_score)) / 2)
+
         # print(tier)
         if tier < 0:
             tier_letter = "D"
@@ -141,11 +144,12 @@ def get_tier(client, win_rate, pick_rate, ban_rate, role, rank):
         return "INVALID"
 
 
-def get_tier_stats(client: pymongo.MongoClient, rank: str, role: str) -> dict:
+def get_tier_stats(client: pymongo.MongoClient, rank: str, role: str, mode: str, queue_type: str, patch: str) -> dict:
     mydb = client["Tier_list"]
-    mycol = mydb["Regular List"]
+    mycol = mydb["Combined List"]
     retData = {}
-    myquery = {"role": role, "rank": rank, "pickRate": {"$gte": 1}}
+    myquery = {"role": role, "rank": rank, "pickRate": {"$gte": 1},
+               "mode": mode, "queue_type": queue_type, "patch": patch}
     if "All" in role:
         del myquery["role"]
 
@@ -183,7 +187,19 @@ def calc_pick_ban_rate(client, god, rank, role, patch, queue_type, mode):
 def insert_data(client, db, col, data):
     mydb = client[db]
     mycol = mydb[col]
-    mycol.insert_one(data)
+
+    god = data["god"]
+    role = data["role"]
+    patch = data["patch"]
+    mode = data["mode"]
+    queue_type = data["queue_type"]
+
+    myquery = {"god": god, "role": role, "patch": patch,
+               "mode": mode, "queue_type": queue_type}
+    if mycol.count_documents(myquery) != 0:
+        mycol.replace_one(myquery, data)
+    else:
+        mycol.insert_one(data)
 
 
 def get_date():
@@ -191,22 +207,37 @@ def get_date():
     return f"{time.month}/{time.day}/{time.year}"
 
 
-def update_tier(client, roles, patch, ranks, queue_types):
+def update_tier(client, roles, patch, ranks, queue_types, modes):
     mydb = client["Tier_list"]
-    mycol = mydb["Regular List"]
-    for queue_type in queue_types:
-        for role in roles:
+    mycol = mydb["Combined List"]
+    for mode in modes:
+        for queue_type in queue_types:
             for rank in ranks:
-                for god in godsDict:
-                    for x in mycol.find({"queue_type": f"{queue_type}Conq", "role": role, "god": god, "rank": rank}):
-                        tier = get_tier(
-                            client, x["winRate"], x["pickRate"], x["banRate"], role, rank)
-                    mycol.update_one({"queue_type": f"{queue_type}Conq", "role": role, "god": god,
-                                     "rank": rank, "patch": "9.2"}, {"$set": {"tier": tier}})
+                if mode == "Conquest":
+                    for role in roles:
+                        for god in godsDict:
+                            for x in mycol.find({"queue_type": queue_type, "mode": mode, "role": role, "god": god, "rank": rank}):
+                                tier = get_tier(
+                                    client, x["winRate"], x["pickRate"], x["banRate"], role, rank, mode, queue_type, "9.7")
+                            mycol.update_one({"queue_type": queue_type, "mode": mode, "role": role, "god": god,
+                                             "rank": rank, "patch": patch}, {"$set": {"tier": tier}})
+                else:
+                    for god in godsDict:
+                        for x in mycol.find({"queue_type": queue_type, "mode": mode, "role": role, "god": god, "rank": rank}):
+                            tier = get_tier(
+                                client, x["winRate"], x["pickRate"], x["banRate"], role, rank)
+                        mycol.update_one({"queue_type": queue_type, "mode": mode, "role": role, "god": god,
+                                         "rank": rank, "patch": patch}, {"$set": {"tier": tier}})
 
 
 if __name__ == '__main__':
     starttime = datetime.now()
-    gen_tier_list(client, roles, "9.3", [
-                  "Regular"], all_ranks, ["Ranked"], ["Conquest", "Duel", "Joust"])
-    print(f"done in {datetime.now() - starttime}")
+    gen_tier_list(client, roles, "9.7", [
+        "Regular"], ["All Ranks"], ["Ranked"], ["Conquest"])
+    update_tier(client, roles, "9.7", ["All Ranks"], ["Ranked"], ["Conquest"])
+    # mydb = client["Tier_list"]
+    # mycol = mydb["Combined List"]
+    # for god in godsDict:
+    #   for x in mycol.find({"queue_type": "Ranked", "mode": "Conquest", "role": "Jungle", "god": god, "rank": "All Ranks", "patch": "9.7", "pickRate": {"$gte": 1}}):
+    #        print(god, ",",get_tier(client, x["winRate"], x["pickRate"], x["banRate"], "Jungle", "All Ranks", "Conquest", "Ranked", "9.7"))
+    # print(f"done in {datetime.now() - starttime}")
