@@ -314,13 +314,9 @@ function Godpage(props) {
     setTab,
   ] = useContext(MainContext);
 
-  const location = useLocation();
-  let { tabState } = location?.state ? location.state : 'Build';
-
   useEffect(() => {
     setRole(props.role.replaceAll('_', ' '));
     setGod(props.god.replaceAll('_', ' '));
-    setTab(tabState);
   }, []);
   const pagegod = props.god.replaceAll('_', ' ');
 
@@ -416,7 +412,7 @@ function Godpage(props) {
                   rank={rank}
                   abilities={abilities}
                   patch={patch}
-                  tab={tab}
+                  tab={tab !== 'None' ? 'Build' : props.tab}
                   mode={mode}
                   queueType={queueType}
                 />
@@ -446,6 +442,7 @@ function Godpage(props) {
                   winRate={winrate}
                   pickRate={pickrate}
                   banRate={banrate}
+                  tab={tab !== 'None' ? 'Build' : props.tab}
                 />
               </div>
             </div>

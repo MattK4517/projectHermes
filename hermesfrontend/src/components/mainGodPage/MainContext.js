@@ -72,7 +72,7 @@ export const MainProvider = (props) => {
         skin,
         setSkin,
         tab,
-        setTab,
+        setTab
       ]}
     >
       {props.children}

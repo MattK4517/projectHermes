@@ -46,16 +46,12 @@ function a11yProps(index) {
 }
 
 export default function BasicTabs(props) {
-  const [
-    god, setGod, role, setRole, rank, setRank, patch, setPatch, queueType, setQueueType,
-    mode, setMode, matchup, setMatchup, patches, queueTypes, modes, ranks, roles
-  ] = React.useContext(MainContext)
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
   return (
-    <TierListTabs style={{ paddingTop: "10px" }} changeTableType={props.changeTab}>
+    <TierListTabs style={{ paddingTop: "10px" }} changeTableType={props.changeTab} tab={props.tab}>
       <div label="Build" style={{ color: "white" }}>
         <BuildPage
           changeTab={props.setTab}

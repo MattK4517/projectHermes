@@ -88,7 +88,6 @@ const useFetch = (pagegod, role, rank, patch, matchup, queueType, mode) => {
       let matchupsFetchStatement = "/api/".concat(pagegod, "/matchups/", role, "/", rank, "/", patch, "/", queueType, "/", mode)
       fetch(matchupsFetchStatement).then((res) =>
         res.json().then((data) => {
-          console.log("DATA", data)
           Object.values(data).sort(compare)
           let newData = Object.values(data).sort(compare)
           setbadmatchups([])

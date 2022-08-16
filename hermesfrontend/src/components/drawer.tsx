@@ -42,6 +42,7 @@ import { MainProvider } from './mainGodPage/MainContext';
 import SkinStatPage from './mainGodPage/Skins/SkinStatPage';
 
 import { HtmlTooltip, CreateItemToolTip } from './mainGodPage/GodPageHelpers';
+import { AnyARecord } from 'dns';
 
 export const compare = (a: { winRate: number }, b: { winRate: number }) => {
   return a.winRate - b.winRate;
@@ -222,18 +223,42 @@ let routes = [
     god: '',
   },
 ];
-Object.keys(godsDict).forEach((god) => {
+Object.keys(godsDict).forEach((god: string) => {
   routes = [
     ...routes,
     {
       path: '/'.concat(god).replaceAll(' ', '_'),
       //@ts-ignore
-      component: <Godpage god={god} role={godsDict[god]} />,
+      component: <Godpage god={god} role={godsDict[god]} tab={'Build'} />,
       god: god,
     },
     {
       path: '/'.concat(god, '/skin-stats/:handle').replaceAll(' ', '_'),
       component: <SkinStatPage god={god} />,
+      god: god,
+    },
+    {
+      path: '/'.concat(god, '/items').replaceAll(' ', '_'),
+      //@ts-ignore
+      component: <Godpage god={god} role={godsDict[god]} tab={'Items'} />,
+      god: god,
+    },
+    {
+      path: '/'.concat(god, '/build-paths').replaceAll(' ', '_'),
+      //@ts-ignore
+      component: <Godpage god={god} role={godsDict[god]} tab={'Build Paths'} />,
+      god: god,
+    },
+    {
+      path: '/'.concat(god, '/matchups').replaceAll(' ', '_'),
+      //@ts-ignore
+      component: <Godpage god={god} role={godsDict[god]} tab={'Matchups'} />,
+      god: god,
+    },
+    {
+      path: '/'.concat(god, '/skins').replaceAll(' ', '_'),
+      //@ts-ignore
+      component: <Godpage god={god} role={godsDict[god]} tab={'Skins'} />,
       god: god,
     },
   ];

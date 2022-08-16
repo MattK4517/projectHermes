@@ -4,34 +4,7 @@ import Tab from "./Tab";
 import { MainContext } from "../mainGodPage/MainContext";
 
 export default function TierListTabs(props) {
-  const [
-    god,
-    setGod,
-    role,
-    setRole,
-    rank,
-    setRank,
-    patch,
-    setPatch,
-    queueType,
-    setQueueType,
-    mode,
-    setMode,
-    matchup,
-    setMatchup,
-    patches,
-    queueTypes,
-    modes,
-    ranks,
-    roles,
-    skin,
-    setSkin,
-    tab,
-    setTab,
-  ] = useContext(MainContext);
-
-  const [activeTab, setActiveTab] = useState(props.tab || tab || props.children[0].props.label)
-
+  const [activeTab, setActiveTab] = useState(props.tab)
   const onClickTabItem = (tab) => {
     props.changeTableType(tab)
     setActiveTab(tab);
