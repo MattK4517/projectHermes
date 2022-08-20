@@ -1,37 +1,37 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import TierListPage from "./TierListPage";
-import { withStyles } from "@material-ui/core/styles";
-import MuiAccordion from "@material-ui/core/Accordion";
-import MuiAccordionSummary from "@material-ui/core/AccordionSummary";
-import MuiAccordionDetails from "@material-ui/core/AccordionDetails";
-import Typography from "@material-ui/core/Typography";
-import TierListTabs from "./Tabs/TierListTabs";
-import Tooltip from "@material-ui/core/Tooltip";
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import TierListPage from './TierListPage';
+import { withStyles } from '@material-ui/core/styles';
+import MuiAccordion from '@material-ui/core/Accordion';
+import MuiAccordionSummary from '@material-ui/core/AccordionSummary';
+import MuiAccordionDetails from '@material-ui/core/AccordionDetails';
+import Typography from '@material-ui/core/Typography';
+import TierListTabs from './Tabs/TierListTabs';
+import Tooltip from '@material-ui/core/Tooltip';
 import {
   HtmlTooltip,
   CreateItemToolTip,
-} from "../components/mainGodPage/GodPageHelpers";
-import PlayerCarryScore from "./MatchPage/PlayerCarryScore";
-import BaseMatchSummary from "./MatchPage/BaseMatchSummary";
-import { fontWeight } from "@mui/system";
-import MultiKillDisplay from "./PlayerPage/MultiKillDisplay";
-import { GetCarryPlayer } from "./MatchPage/MatchHelpers";
-import DamageOut from "./DmgCalcPage/DamageOut";
+} from '../components/mainGodPage/GodPageHelpers';
+import PlayerCarryScore from './MatchPage/PlayerCarryScore';
+import BaseMatchSummary from './MatchPage/BaseMatchSummary';
+import { fontWeight } from '@mui/system';
+import MultiKillDisplay from './PlayerPage/MultiKillDisplay';
+import { GetCarryPlayer } from './MatchPage/MatchHelpers';
+import DamageOut from './DmgCalcPage/DamageOut';
 
 const Accordion = withStyles({
   root: {
-    backgroundColor: "#11112a",
-    padding: "2px",
-    boxShadow: "none",
-    "&:not(:last-child)": {
+    backgroundColor: '#11112a',
+    padding: '2px',
+    boxShadow: 'none',
+    '&:not(:last-child)': {
       borderBottom: 0,
     },
-    "&:before": {
-      display: "none",
+    '&:before': {
+      display: 'none',
     },
-    "&$expanded": {
-      margin: "auto",
+    '&$expanded': {
+      margin: 'auto',
     },
   },
   expanded: {},
@@ -39,16 +39,16 @@ const Accordion = withStyles({
 
 const AccordionSummary = withStyles({
   root: {
-    display: "flex",
-    color: "white",
-    backgroundColor: "#11112a",
-    "&$expanded": {
+    display: 'flex',
+    color: 'white',
+    backgroundColor: '#11112a',
+    '&$expanded': {
       minHeight: 56,
     },
   },
   content: {
-    "&$expanded": {
-      margin: "12px 0",
+    '&$expanded': {
+      margin: '12px 0',
     },
   },
   expanded: {},
@@ -80,55 +80,55 @@ export const calcBuildStats = (build, base) => {
   }
 
   Object.entries(build).forEach((item) => {
-    if (item[1]["DeviceName"] != undefined) {
+    if (item[1]['DeviceName'] != undefined) {
       price = price + item[1].absolutePrice;
-      item[1]["ItemDescription"]["Menuitems"].map((itemStat) => {
-        if (itemStat.Description.toUpperCase() == "Health".toUpperCase()) {
+      item[1]['ItemDescription']['Menuitems'].map((itemStat) => {
+        if (itemStat.Description.toUpperCase() == 'Health'.toUpperCase()) {
           health = health + parseInt(itemStat.Value);
-        } else if (itemStat.Description.toUpperCase() == "Mana".toUpperCase()) {
+        } else if (itemStat.Description.toUpperCase() == 'Mana'.toUpperCase()) {
           mana = mana + parseInt(itemStat.Value);
         } else if (
-          itemStat.Description.toUpperCase() == "Movement Speed".toUpperCase()
+          itemStat.Description.toUpperCase() == 'Movement Speed'.toUpperCase()
         ) {
           moveSpeed =
             moveSpeed +
             ((parseInt(itemStat.Value) / 100) * base.Speed +
               (18 / 100) * base.Speed);
         } else if (
-          itemStat.Description.toUpperCase() == "Attack Speed".toUpperCase()
+          itemStat.Description.toUpperCase() == 'Attack Speed'.toUpperCase()
         ) {
           attSpeed =
             attSpeed + (parseInt(itemStat.Value) / 100) * base.AttackSpeed;
         } else if (
           itemStat.Description.toUpperCase() ==
-          "Magical Protection".toUpperCase()
+          'Magical Protection'.toUpperCase()
         ) {
           magProt = magProt + parseInt(itemStat.Value);
         } else if (
           itemStat.Description.toUpperCase() ==
-          "Physical Protection".toUpperCase()
+          'Physical Protection'.toUpperCase()
         ) {
           physProt = physProt + parseInt(itemStat.Value);
         } else if (
-          itemStat.Description.toUpperCase().includes("HP5".toUpperCase())
+          itemStat.Description.toUpperCase().includes('HP5'.toUpperCase())
         ) {
           HP5 = HP5 + parseInt(itemStat.Value);
         } else if (
-          itemStat.Description.toUpperCase().includes("MP5".toUpperCase())
+          itemStat.Description.toUpperCase().includes('MP5'.toUpperCase())
         ) {
           MP5 = MP5 + parseInt(itemStat.Value);
         } else if (
-          itemStat.Description.toUpperCase() == "Physical Power".toUpperCase()
+          itemStat.Description.toUpperCase() == 'Physical Power'.toUpperCase()
         ) {
           baseAttDamage = baseAttDamage + parseInt(itemStat.Value);
           physPower = physPower + parseInt(itemStat.Value);
         } else if (
-          itemStat.Description.toUpperCase() == "Magical Power".toUpperCase()
+          itemStat.Description.toUpperCase() == 'Magical Power'.toUpperCase()
         ) {
           baseAttDamage = baseAttDamage + parseInt(itemStat.Value) * (1 / 5);
           magPower = magPower + parseInt(itemStat.Value);
         } else if (
-          itemStat.Description.toUpperCase() == "Price".toUpperCase()
+          itemStat.Description.toUpperCase() == 'Price'.toUpperCase()
         ) {
           price = price + parseInt(itemStat.Value) * (1 / 5);
         }
@@ -152,16 +152,16 @@ export const calcBuildStats = (build, base) => {
 };
 
 function CustomizedAccordions(player) {
-  if (player.playerName === "") {
-    player.playerName = "Hidden";
+  if (player.playerName === '') {
+    player.playerName = 'Hidden';
   }
   let styling;
-  if (player.winStatus === "Winner") {
+  if (player.winStatus === 'Winner') {
     styling =
-      "linear-gradient(135deg,rgba(50,115,250,.2),rgba(50,115,250,0)),#191937";
+      'linear-gradient(135deg,rgba(50,115,250,.2),rgba(50,115,250,0)),#191937';
   } else {
     styling =
-      "linear-gradient(135deg,rgba(255,78,80,.16),rgba(255,78,80,0)),#191937";
+      'linear-gradient(135deg,rgba(255,78,80,.16),rgba(255,78,80,0)),#191937';
   }
   const {
     health,
@@ -185,44 +185,44 @@ function CustomizedAccordions(player) {
   return (
     <Accordion>
       <AccordionSummary
-        aria-controls="panel1d-content"
-        id="panel1d-header"
+        aria-controls='panel1d-content'
+        id='panel1d-header'
         style={{ background: styling }}
       >
-        <div className="player-display-container ">
-          <div className="player-display_mini show">
-            <div className="player-display_row">
-              <div className="item-image-div">
+        <div className='player-display-container '>
+          <div className='player-display_mini show'>
+            <div className='player-display_row'>
+              <div className='item-image-div'>
                 <img
                   src={getImageUrl(player.rank)}
                   alt={player.rank}
-                  style={{ minWidth: "32px", minHeight: "32px" }}
+                  style={{ minWidth: '32px', minHeight: '32px' }}
                 />
               </div>
             </div>
-            <div className="player-display_row">
+            <div className='player-display_row'>
               <Link
-                className="player-god-played"
-                to={"/".concat(player.god.replaceAll(" ", "_"))}
+                className='player-god-played'
+                to={'/'.concat(player.god.replaceAll(' ', '_'))}
               >
-                <div style={{ position: "relative", minWidth: "24px" }}>
+                <div style={{ position: 'relative', minWidth: '24px' }}>
                   <div
-                    className="header_champion"
-                    style={{ marginLeft: "0px" }}
+                    className='header_champion'
+                    style={{ marginLeft: '0px' }}
                   >
-                    <div className="champion-image-container">
+                    <div className='champion-image-container'>
                       <img
-                        className="champion-image"
+                        className='champion-image'
                         src={`https://webcdn.hirezstudios.com/smite/god-icons/${player.god
-                          .replaceAll("'", "")
-                          .replaceAll("_", "-")
+                          .replaceAll("'", '')
+                          .replaceAll('_', '-')
                           .toLowerCase()}.jpg`}
                       />
                     </div>
-                    <div className="role-icon-container">
+                    <div className='role-icon-container'>
                       <img
                         src={getImageUrl(player.role)}
-                        style={{ width: "14px", height: "14px" }}
+                        style={{ width: '14px', height: '14px' }}
                       />
                     </div>
                   </div>
@@ -232,79 +232,79 @@ function CustomizedAccordions(player) {
           </div>
 
           <div
-            className="item-image hide"
-            style={{ minWidth: "100px", alignSelf: "center" }}
+            className='item-image hide'
+            style={{ minWidth: '100px', alignSelf: 'center' }}
           >
-            <div className="item-image-div">
+            <div className='item-image-div'>
               <img
                 src={getImageUrl(player.rank)}
                 alt={player.rank}
-                style={{ minWidth: "64px", minHeight: "64px" }}
+                style={{ minWidth: '64px', minHeight: '64px' }}
               />
             </div>
           </div>
-          <div className="hide player-display-winstat">
+          <div className='hide player-display-winstat'>
             <PlayerIcon god={player.god} />
           </div>
           <div
-            className="hide"
+            className='hide'
             style={{
-              minWidth: "100px",
-              alignSelf: "center",
-              backgroundColor: "#11112a",
-              borderRadius: "6px",
-              marginRight: "3rem",
+              minWidth: '100px',
+              alignSelf: 'center',
+              backgroundColor: '#11112a',
+              borderRadius: '6px',
+              marginRight: '3rem',
             }}
           >
-            <div className="drop-down_icon">
-              <div style={{ position: "relative", textAlign: "center" }}>
-                <div className="god-icon">
+            <div className='drop-down_icon'>
+              <div style={{ position: 'relative', textAlign: 'center' }}>
+                <div className='god-icon'>
                   <div
                     style={{
-                      height: "30px",
-                      width: "30px",
+                      height: '30px',
+                      width: '30px',
                     }}
                   >
                     <img
                       src={getImageUrl(player.role)}
-                      alt={player.role.replaceAll("_", " ")}
+                      alt={player.role.replaceAll('_', ' ')}
                       style={{
-                        height: "48px",
-                        width: "48px",
-                        transform: "scale(0.625)",
-                        transformOrigin: "0px 0px 0px",
+                        height: '48px',
+                        width: '48px',
+                        transform: 'scale(0.625)',
+                        transformOrigin: '0px 0px 0px',
                       }}
                     />
                   </div>
                 </div>
               </div>
-              <strong className="god-name">
-                {player.role.replaceAll("_", " ")}
+              <strong className='god-name'>
+                {player.role.replaceAll('_', ' ')}
               </strong>
             </div>
           </div>
         </div>
-        <PlayerBuildDisplay buildType={"items"} player={player} />
-        <div className="player-padding_header hide">
+        <PlayerBuildDisplay buildType={'items'} player={player} />
+        <div className='player-padding_header hide'>
           <PlayerCarryScore player={player} />
         </div>
         {/* <PlayerBuildDisplay build={player.relic} buildType={"relics"}/> */}
-        <div className="player-display-winstat hide">
+        <div className='player-display-winstat hide'>
           <p>{player.winStatus}</p>
         </div>
       </AccordionSummary>
       <AccordionDetails style={{ background: styling }}>
         <div
-          className="player-stats-breakdown"
-          style={{ minWidth: "911px", color: "white" }}
+          className='player-stats-breakdown'
+          style={{ minWidth: '911px', color: 'white' }}
         >
-          <div className="row">
-            <div className="player-account-info" style={{ minWidth: "225px" }}>
-              <span className="player-info-style">Account Level:</span>{" "}
+          <div className='row'>
+            <div className='player-account-info' style={{ minWidth: '225px' }}>
+              <span className='player-info-style'>Account Level:</span>{' '}
               {player.accountLevel} <br></br>
-              <span className="player-info-style">Ranked MMR:</span>{" "}
+              <span className='player-info-style'>Ranked MMR:</span>{' '}
               {player.mmr.toFixed(2).toLocaleString()} <br></br>
-              <span className="player-info-style">Player:</span>{" "}
+              <span className='player-info-style'>Player:</span>{' '}
               {player.playerName}&nbsp;
               {/* <Link
                   to={{
@@ -318,123 +318,123 @@ function CustomizedAccordions(player) {
                   </span>
                 </Link> */}
             </div>
-            <div className="player-kills-info" style={{ minWidth: "200px" }}>
-              <div className="KDA">
-                <span className="player-info-style">KDA: </span> {player.kills}
-                <span style={{ color: "#5f5f7b" }}> / </span>
-                <span style={{ color: "#ff4e50" }}>{player.deaths}</span>
-                <span style={{ color: "#5f5f7b" }}> / </span>
+            <div className='player-kills-info' style={{ minWidth: '200px' }}>
+              <div className='KDA'>
+                <span className='player-info-style'>KDA: </span> {player.kills}
+                <span style={{ color: '#5f5f7b' }}> / </span>
+                <span style={{ color: '#ff4e50' }}>{player.deaths}</span>
+                <span style={{ color: '#5f5f7b' }}> / </span>
                 {player.assists}
                 <br></br>
               </div>
-              <span className="player-info-style">Largest Killing Spree:</span>{" "}
+              <span className='player-info-style'>Largest Killing Spree:</span>{' '}
               {player.killingSpree}
               <br></br>
-              <span className="player-info-style">Multi-Kills:</span>{" "}
+              <span className='player-info-style'>Multi-Kills:</span>{' '}
               {player.multiKills}
             </div>
             <div
-              className="player-objective-info"
-              style={{ minWidth: "200px" }}
+              className='player-objective-info'
+              style={{ minWidth: '200px' }}
             >
-              <span className="player-info-style">Fire Giant Kills:</span>{" "}
+              <span className='player-info-style'>Fire Giant Kills:</span>{' '}
               {player.fgKills}
               <br></br>
-              <span className="player-info-style">Gold Fury Kills:</span>{" "}
+              <span className='player-info-style'>Gold Fury Kills:</span>{' '}
               {player.gfKills}
               <br></br>
-              <span className="player-info-style">Objective Assists:</span>{" "}
+              <span className='player-info-style'>Objective Assists:</span>{' '}
               {player.objectiveAssists}
             </div>
-            <div className="player-damage-info">
-              <span className="player-info-style">Player Damage:</span>{" "}
+            <div className='player-damage-info'>
+              <span className='player-info-style'>Player Damage:</span>{' '}
               {player.damagePlayer.toLocaleString()}
               <br></br>
-              <span className="player-info-style">Damage Taken:</span>{" "}
+              <span className='player-info-style'>Damage Taken:</span>{' '}
               {player.damageTaken.toLocaleString()}
               <br></br>
-              <span className="player-info-style">Damage Mitigated:</span>{" "}
+              <span className='player-info-style'>Damage Mitigated:</span>{' '}
               {player.damageMitigated.toLocaleString()}
             </div>
           </div>
-          <div className="row">
-            <div className="player-gold-info" style={{ minWidth: "225px" }}>
-              <span className="player-info-style">Gold:</span>{" "}
+          <div className='row'>
+            <div className='player-gold-info' style={{ minWidth: '225px' }}>
+              <span className='player-info-style'>Gold:</span>{' '}
               {player.gold.toLocaleString()}
               <br></br>
-              <span className="player-info-style">Gold per Minute:</span>{" "}
+              <span className='player-info-style'>Gold per Minute:</span>{' '}
               {player.gpm}
             </div>
-            <div className="player-healing-info" style={{ minWidth: "200px" }}>
-              <span className="player-info-style">Healing:</span>{" "}
+            <div className='player-healing-info' style={{ minWidth: '200px' }}>
+              <span className='player-info-style'>Healing:</span>{' '}
               {player.healing.toLocaleString()}
               <br></br>
-              <span className="player-info-style">Self Healing:</span>{" "}
+              <span className='player-info-style'>Self Healing:</span>{' '}
               {player.selfHealing.toLocaleString()}
             </div>
-            <div className="player-struct-info" style={{ minWidth: "200px" }}>
-              <span className="player-info-style">Tower Damage:</span>{" "}
+            <div className='player-struct-info' style={{ minWidth: '200px' }}>
+              <span className='player-info-style'>Tower Damage:</span>{' '}
               {player.towerDamage.toLocaleString()}
               <br></br>
-              <span className="player-info-style">Tower Kills:</span>{" "}
+              <span className='player-info-style'>Tower Kills:</span>{' '}
               {player.towerKills}
               <br></br>
-              <span className="player-info-style">Phoenix Kills:</span>{" "}
+              <span className='player-info-style'>Phoenix Kills:</span>{' '}
               {player.phoenixKills}
             </div>
-            <div className="player-misc-info" style={{ minWidth: "200px" }}>
-              <span className="player-info-style">Level:</span> {player.level}
+            <div className='player-misc-info' style={{ minWidth: '200px' }}>
+              <span className='player-info-style'>Level:</span> {player.level}
               <br></br>
-              <span className="player-info-style">Skin:</span> {player.skin}
+              <span className='player-info-style'>Skin:</span> {player.skin}
               <br></br>
-              <span className="player-info-style">Wards Placed:</span>{" "}
+              <span className='player-info-style'>Wards Placed:</span>{' '}
               {player.wardsPlaced}
               <br></br>
             </div>
           </div>
-          <div className="row">
-            <div label="Build">
-              <div className="build-info" style={{ minWidth: "200px" }}>
-                <span className="player-info-style">Health:</span>{" "}
+          <div className='row'>
+            <div label='Build'>
+              <div className='build-info' style={{ minWidth: '200px' }}>
+                <span className='player-info-style'>Health:</span>{' '}
                 {health.toFixed(0)}
                 <br></br>
-                <span className="player-info-style">Mana:</span>{" "}
+                <span className='player-info-style'>Mana:</span>{' '}
                 {mana.toFixed(0)}
                 <br></br>
-                <span className="player-info-style">Movement Speed:</span>{" "}
+                <span className='player-info-style'>Movement Speed:</span>{' '}
                 {moveSpeed}
                 <br></br>
-                <span className="player-info-style">Attack Speed:</span>{" "}
+                <span className='player-info-style'>Attack Speed:</span>{' '}
                 {attSpeed.toFixed(2)}
                 <br></br>
-                <span className="player-info-style">
+                <span className='player-info-style'>
                   Basic Attack Damage:
-                </span>{" "}
+                </span>{' '}
                 {baseAttDamage.toFixed(0)}
                 <br></br>
-                <span className="player-info-style">
+                <span className='player-info-style'>
                   Magical Protection:
-                </span>{" "}
+                </span>{' '}
                 {magProt.toFixed(0)}
                 <br></br>
-                <span className="player-info-style">
+                <span className='player-info-style'>
                   Physical Protection:
-                </span>{" "}
+                </span>{' '}
                 {physProt.toFixed(0)}
                 <br></br>
-                <span className="player-info-style">HP5:</span> {HP5.toFixed(2)}
+                <span className='player-info-style'>HP5:</span> {HP5.toFixed(2)}
                 <br></br>
-                <span className="player-info-style">MP5:</span> {MP5.toFixed(2)}
+                <span className='player-info-style'>MP5:</span> {MP5.toFixed(2)}
                 <br></br>
-                <span className="player-info-style">Physical Power:</span>{" "}
+                <span className='player-info-style'>Physical Power:</span>{' '}
                 {physPower.toFixed(0)}
                 <br></br>
-                <span className="player-info-style">Magical Power:</span>{" "}
+                <span className='player-info-style'>Magical Power:</span>{' '}
                 {magPower.toFixed(0)}
                 <br></br>
               </div>
             </div>
-            <div label="Damage Calc">
+            <div label='Damage Calc'>
               <DamageOut message={message} totalDamage={1000} />
             </div>
           </div>
@@ -446,10 +446,10 @@ function CustomizedAccordions(player) {
 
 function PlayerMatchSummary(props) {
   return (
-    <div className="match-summary-container-players">
+    <div className='match-summary-container-players'>
       {props.players.map((player) => {
         return (
-          <div className={"player-container ".concat(player.winStatus)}>
+          <div className={'player-container '.concat(player.winStatus)}>
             {CustomizedAccordions(player)}
           </div>
         );
@@ -461,39 +461,39 @@ function PlayerMatchSummary(props) {
 function PlayerIcon(props) {
   return (
     <div
-      className="rt-tr god"
+      className='rt-tr god'
       style={{
-        minWidth: "155px",
-        maxWidth: "160px",
-        flex: "1 1 100%",
-        display: "flex",
-        alignContent: "center",
+        minWidth: '155px',
+        maxWidth: '160px',
+        flex: '1 1 100%',
+        display: 'flex',
+        alignContent: 'center',
       }}
     >
       <Link
-        className="player-god-played"
-        to={"/".concat(props.god.replaceAll(" ", "_"))}
+        className='player-god-played'
+        to={'/'.concat(props.god.replaceAll(' ', '_'))}
       >
-        <div style={{ position: "relative", minWidth: "40px" }}>
-          <div className="god-icon">
-            <div style={{ height: "48px", width: "48px" }}>
+        <div style={{ position: 'relative', minWidth: '40px' }}>
+          <div className='god-icon'>
+            <div style={{ height: '48px', width: '48px' }}>
               <img
                 src={`https://webcdn.hirezstudios.com/smite/god-icons/${props.god
-                  .replaceAll(" ", "-")
+                  .replaceAll(' ', '-')
                   .toLowerCase()}.jpg`}
                 alt={props.god}
                 style={{
-                  height: "48px",
-                  width: "48px",
-                  transformOrigin: "0px 0px 0px",
-                  border: "2px solid black",
-                  borderRadius: "5px",
+                  height: '48px',
+                  width: '48px',
+                  transformOrigin: '0px 0px 0px',
+                  border: '2px solid black',
+                  borderRadius: '5px',
                 }}
               />
             </div>
           </div>
         </div>
-        <strong className="god-name" style={{ marginLeft: ".75rem" }}>
+        <strong className='god-name' style={{ marginLeft: '.75rem' }}>
           {props.god}
         </strong>
       </Link>
@@ -503,17 +503,17 @@ function PlayerIcon(props) {
 
 export function PlayerBuildDisplay(props) {
   return (
-    <div className="items-match">
+    <div className='items-match'>
       <div
-        className="build"
+        className='build'
         style={{
-          marginTop: "0px",
-          backgroundColor: "#11112a",
-          display: "flex",
-          height: "100%",
+          marginTop: '0px',
+          backgroundColor: '#11112a',
+          display: 'flex',
+          height: '100%',
         }}
       >
-        <div className="build-container">
+        <div className='build-container'>
           {props.player.godBuild.map((slot, index) => {
             if (slot.DeviceName) {
               return (
@@ -524,33 +524,33 @@ export function PlayerBuildDisplay(props) {
                       <CreateItemToolTip item={slot} />
                     </React.Fragment>
                   }
-                  placement="top"
+                  placement='top'
                   arrow
                   style={{
-                    paddingRight: "10px",
+                    paddingRight: '10px',
                   }}
                 >
                   <div
-                    className="item-wrapper"
-                    style={{ width: "36px", height: "36px" }}
+                    className='item-wrapper'
+                    style={{ width: '36px', height: '36px' }}
                   >
                     <div
-                      class="item-image_container"
-                      style={{ width: "36px", height: "36px" }}
+                      class='item-image_container'
+                      style={{ width: '36px', height: '36px' }}
                     >
                       <img
                         style={{
-                          height: "72px",
-                          width: "72px",
-                          backgroundPosition: "-96px -96px",
-                          transform: "scale(0.5)",
-                          transformOrigin: "0px 0px 0px",
+                          height: '72px',
+                          width: '72px',
+                          backgroundPosition: '-96px -96px',
+                          transform: 'scale(0.5)',
+                          transformOrigin: '0px 0px 0px',
                         }}
                         src={`https://webcdn.hirezstudios.com/smite/item-icons/${slot.DeviceName.replaceAll(
-                          " ",
-                          "-"
+                          ' ',
+                          '-'
                         )
-                          .replaceAll("'", "")
+                          .replaceAll("'", '')
                           .toLowerCase()}.jpg`}
                         alt={slot.DeviceName}
                       />
@@ -563,22 +563,22 @@ export function PlayerBuildDisplay(props) {
         </div>
       </div>
       <div
-        className="KDA show"
+        className='KDA show'
         style={{
-          flexDirection: "row",
-          fontWeight: "500",
-          fontSize: "12px !important",
-          width: "100%",
+          flexDirection: 'row',
+          fontWeight: '500',
+          fontSize: '12px !important',
+          width: '100%',
         }}
       >
-        <span className="player-info-style">KDA: </span> {props.player.kills}
-        <span style={{ color: "#5f5f7b" }}> / </span>
-        <span style={{ color: "#ff4e50" }}>{props.player.deaths}</span>
-        <span style={{ color: "#5f5f7b" }}> / </span>
+        <span className='player-info-style'>KDA: </span> {props.player.kills}
+        <span style={{ color: '#5f5f7b' }}> / </span>
+        <span style={{ color: '#ff4e50' }}>{props.player.deaths}</span>
+        <span style={{ color: '#5f5f7b' }}> / </span>
         {props.player.assists}
         <br></br>
       </div>
-      <div className="show">
+      <div className='show'>
         <MultiKillDisplay player={props.player} />
       </div>
     </div>
@@ -586,7 +586,7 @@ export function PlayerBuildDisplay(props) {
 }
 
 const setBans = (bans, firstSideWinStatus, setBansWinner, setBansLoser) => {
-  if (firstSideWinStatus === "Winner") {
+  if (firstSideWinStatus === 'Winner') {
     // if first ban is winner set evens
     bans.map((ban, index) => {
       if (index % 2 === 0) {
@@ -607,7 +607,7 @@ const setBans = (bans, firstSideWinStatus, setBansWinner, setBansLoser) => {
 };
 
 const setMMR = (mmrs, firstSideWinStatus, setMMRWinner, setMMRLoser) => {
-  if (firstSideWinStatus === "Winner") {
+  if (firstSideWinStatus === 'Winner') {
     // if first ban is winner set evens
     mmrs.map((mmr, index) => {
       if (index % 2 === 0) {
@@ -628,62 +628,62 @@ const setMMR = (mmrs, firstSideWinStatus, setMMRWinner, setMMRLoser) => {
 };
 
 const normalize_rank = (tier) => {
-  let rank = "Error";
+  let rank = 'Error';
   if (tier <= 5) {
-    rank = "Bronze";
+    rank = 'Bronze';
   } else if (tier <= 10) {
-    rank = "Silver";
+    rank = 'Silver';
   } else if (tier <= 15) {
-    rank = "Gold";
+    rank = 'Gold';
   } else if (tier <= 20) {
-    rank = "Platinum";
+    rank = 'Platinum';
   } else if (tier <= 25) {
-    rank = "Diamond";
+    rank = 'Diamond';
   } else if (tier == 26) {
-    rank = "Masters";
+    rank = 'Masters';
   } else if (tier == 27) {
-    rank = "Grandmaster";
+    rank = 'Grandmaster';
   }
   return rank;
 };
 
 export const getImageUrl = (rank) => {
-  let url = "https://i.imgur.com/LVbUJes.png";
-  if (rank == "Bronze") {
-    url = "https://i.imgur.com/pNAGUeR.png";
-  } else if (rank == "Silver") {
-    url = "https://i.imgur.com/Cm5uf15.png";
-  } else if (rank == "Gold") {
-    url = "https://i.imgur.com/L3BmF9F.png";
-  } else if (rank == "Platinum") {
-    url = "https://i.imgur.com/6M3Ezca.png";
-  } else if (rank == "Diamond") {
-    url = "https://i.imgur.com/dtXd0Kv.png";
-  } else if (rank == "Masters") {
-    url = "https://i.imgur.com/2SdBQ4o.png";
-  } else if (rank == "Grandmaster") {
-    url = "https://i.imgur.com/uh3i4hc.png";
-  } else if (rank == "Solo") {
-    url = "https://i.imgur.com/WLU0Cel.png";
-  } else if (rank == "Jungle") {
-    url = "https://i.imgur.com/CyXnzEO.png";
-  } else if (rank == "Mid") {
-    url = "https://i.imgur.com/0oQkAAZ.png";
-  } else if (rank == "Support") {
-    url = "https://i.imgur.com/l7CD2QM.png";
-  } else if (rank == "Carry") {
-    url = "https://i.imgur.com/RlRTbrA.png";
-  } else if (rank == "Casual") {
-    url = "https://i.imgur.com/bVKJ1Az.png";
+  let url = 'https://i.imgur.com/LVbUJes.png';
+  if (rank == 'Bronze') {
+    url = 'https://i.imgur.com/pNAGUeR.png';
+  } else if (rank == 'Silver') {
+    url = 'https://i.imgur.com/Cm5uf15.png';
+  } else if (rank == 'Gold') {
+    url = 'https://i.imgur.com/L3BmF9F.png';
+  } else if (rank == 'Platinum') {
+    url = 'https://i.imgur.com/6M3Ezca.png';
+  } else if (rank == 'Diamond') {
+    url = 'https://i.imgur.com/dtXd0Kv.png';
+  } else if (rank == 'Masters') {
+    url = 'https://i.imgur.com/2SdBQ4o.png';
+  } else if (rank == 'Grandmaster') {
+    url = 'https://i.imgur.com/uh3i4hc.png';
+  } else if (rank == 'Solo') {
+    url = 'https://i.imgur.com/WLU0Cel.png';
+  } else if (rank == 'Jungle') {
+    url = 'https://i.imgur.com/CyXnzEO.png';
+  } else if (rank == 'Mid') {
+    url = 'https://i.imgur.com/0oQkAAZ.png';
+  } else if (rank == 'Support') {
+    url = 'https://i.imgur.com/l7CD2QM.png';
+  } else if (rank == 'Carry') {
+    url = 'https://i.imgur.com/RlRTbrA.png';
+  } else if (rank == 'Casual') {
+    url = 'https://i.imgur.com/bVKJ1Az.png';
   }
   return url;
 };
 
 function Match() {
-  const startMatchId = window.location.href.split("/")[5];
+  const startMatchId = window.location.href.split('/')[5];
   const [match, setMatch] = useState(startMatchId);
-  const [matchId, setmatchId] = useState("");
-  const [matchLength, setMatchLength] = useState("");
+  const [matchId, setmatchId] = useState('');
+  const [matchLength, setMatchLength] = useState('');
   const [bansWinner, setBansWinner] = useState([]);
   const [bansLoser, setBansLoser] = useState([]);
 
@@ -693,18 +693,18 @@ function Match() {
   const [mmrWinner, setMMRWinner] = useState([0, 0, 0, 0, 0]);
   const [mmrLoser, setMMRLoser] = useState([0, 0, 0, 0, 0]);
   const [players, setPlayers] = useState([]);
-  const [date, setMatchDate] = useState("");
+  const [date, setMatchDate] = useState('');
   const [matchData, setMatchData] = useState({});
 
-  const [queueType, setQueueType] = useState("Ranked");
+  const [queueType, setQueueType] = useState('Ranked');
 
-  const [carryPlayerWinner, setCarryPlayerWinner] = useState("");
+  const [carryPlayerWinner, setCarryPlayerWinner] = useState('');
   const [carryScoreWinner, setCarryScoreWinner] = useState(0);
-  const [carryPlayerLoser, setCarryPlayerLoser] = useState("");
+  const [carryPlayerLoser, setCarryPlayerLoser] = useState('');
   const [carryScoreLoser, setCarryScoreLoser] = useState(0);
 
   useEffect(() => {
-    fetch("/api/getmatch/".concat(match)).then((res) =>
+    fetch('/api/getmatch/'.concat(match)).then((res) =>
       res.json().then((data) => {
         setBansWinner([]);
         setBansLoser([]);
@@ -716,65 +716,66 @@ function Match() {
         let bans = [];
         let mmrs = [];
         setMatchData({ ...data });
-        setQueueType(data["queue_type"]);
+        setQueueType(data['queue_type']);
         Object.keys(data).forEach((key) => {
-          if (key.includes("Ban") && key !== "First_Ban_Side") {
+          if (key.includes('Ban') && key !== 'First_Ban_Side') {
             bans = [...bans, data[key]];
-          } else if (key.includes("player")) {
-            mmrs = [...mmrs, data[key]["Ranked_Stat_Conq"]];
-            if (data[key]["Win_Status"] === "Winner") {
+          } else if (key.includes('player')) {
+            mmrs = [...mmrs, data[key]['Ranked_Stat_Conq']];
+            console.log('GETTING HERE');
+            if (data[key]['Win_Status'] === 'Winner') {
               setGodsWinner((godsWinner) => [
                 ...godsWinner,
-                data[key]["godName"],
+                data[key]['godName'],
               ]);
               setCarryScoreWinner((carryScoreWinner) => {
                 let tempScore = GetCarryPlayer(
-                  data["damageScore"][data[key]["Win_Status"]][
-                    data[key]["Role"]
-                  ]["damageShare"],
-                  data["goldScore"][data[key]["Win_Status"]][data[key]["Role"]][
-                    "goldShare"
+                  data['damageScore'][data[key]['Win_Status']][
+                    data[key]['Role']
+                  ]['damageShare'],
+                  data['goldScore'][data[key]['Win_Status']][data[key]['Role']][
+                    'goldShare'
                   ],
-                  data["killPart"][data[key]["Win_Status"]][data[key]["Role"]][
-                    "killShare"
+                  data['killPart'][data[key]['Win_Status']][data[key]['Role']][
+                    'killShare'
                   ],
-                  data[key]["Wards_Placed"],
-                  data[key]["Distance_Traveled"],
-                  data[key]["Assists"],
-                  data[key]["Role"],
-                  data[key]["Win_Status"],
-                  data["carryScores"]
+                  data[key]['Wards_Placed'],
+                  data[key]['Distance_Traveled'],
+                  data[key]['Assists'],
+                  data[key]['Role'],
+                  data[key]['Win_Status'],
+                  data['carryScores']
                 );
                 if (tempScore > carryScoreWinner) {
-                  setCarryPlayerWinner(data[key]["godName"]);
+                  setCarryPlayerWinner(data[key]['godName']);
                   return tempScore;
                 } else {
                   return carryScoreWinner;
                 }
               });
-            } else if (data[key]["Win_Status"] === "Loser") {
-              setGodsLoser((godsLoser) => [...godsLoser, data[key]["godName"]]);
+            } else if (data[key]['Win_Status'] === 'Loser') {
+              setGodsLoser((godsLoser) => [...godsLoser, data[key]['godName']]);
 
               setCarryScoreLoser((carryScoreLoser) => {
                 let tempScore = GetCarryPlayer(
-                  data["damageScore"][data[key]["Win_Status"]][
-                    data[key]["Role"]
-                  ]["damageShare"],
-                  data["goldScore"][data[key]["Win_Status"]][data[key]["Role"]][
-                    "goldShare"
+                  data['damageScore'][data[key]['Win_Status']][
+                    data[key]['Role']
+                  ]['damageShare'],
+                  data['goldScore'][data[key]['Win_Status']][data[key]['Role']][
+                    'goldShare'
                   ],
-                  data["killPart"][data[key]["Win_Status"]][data[key]["Role"]][
-                    "killShare"
+                  data['killPart'][data[key]['Win_Status']][data[key]['Role']][
+                    'killShare'
                   ],
-                  data[key]["Wards_Placed"],
-                  data[key]["Distance_Traveled"],
-                  data[key]["Assists"],
-                  data[key]["Role"],
-                  data[key]["Win_Status"],
-                  data["carryScores"]
+                  data[key]['Wards_Placed'],
+                  data[key]['Distance_Traveled'],
+                  data[key]['Assists'],
+                  data[key]['Role'],
+                  data[key]['Win_Status'],
+                  data['carryScores']
                 );
                 if (tempScore > carryScoreLoser) {
-                  setCarryPlayerLoser(data[key]["godName"]);
+                  setCarryPlayerLoser(data[key]['godName']);
                   return tempScore;
                 } else {
                   return carryScoreLoser;
@@ -784,104 +785,104 @@ function Match() {
             setPlayers((player) => [
               ...player,
               {
-                god: data[key]["godName"],
-                rank: normalize_rank(data[key]["Conquest_Tier"]),
-                role: data[key]["Role"],
+                god: data[key]['godName'],
+                rank: normalize_rank(data[key]['Conquest_Tier']),
+                role: data[key]['Role'],
                 build: [
-                  { item: data[key]["Item_Purch_1"] },
-                  { item: data[key]["Item_Purch_2"] },
-                  { item: data[key]["Item_Purch_3"] },
-                  { item: data[key]["Item_Purch_4"] },
-                  { item: data[key]["Item_Purch_5"] },
-                  { item: data[key]["Item_Purch_6"] },
+                  { item: data[key]['Item_Purch_1'] },
+                  { item: data[key]['Item_Purch_2'] },
+                  { item: data[key]['Item_Purch_3'] },
+                  { item: data[key]['Item_Purch_4'] },
+                  { item: data[key]['Item_Purch_5'] },
+                  { item: data[key]['Item_Purch_6'] },
                 ],
                 relic: [
-                  { item: data[key]["Item_Active_1"] },
-                  { item: data[key]["Item_Active_2"] },
+                  { item: data[key]['Item_Active_1'] },
+                  { item: data[key]['Item_Active_2'] },
                 ],
-                accountLevel: data[key]["Account_Level"],
-                mmr: data[key]["Ranked_Stat_Conq"],
-                playerName: data[key]["Player_Name"],
-                kills: data[key]["Kills_Player"],
-                Kills_Double: data[key]["Kills_Double"],
-                Kills_Triple: data[key]["Kills_Triple"],
-                Kills_Quadra: data[key]["Kills_Quadra"],
-                Kills_Penta: data[key]["Kills_Penta"],
-                deaths: data[key]["Deaths"],
-                assists: data[key]["Assists"],
-                killingSpree: data[key]["Killing_Spree"],
-                multiKills: data[key]["Multi_kill_Max"],
-                winStatus: data[key]["Win_Status"],
-                fgKills: data[key]["Kills_Fire_Giant"],
-                gfKills: data[key]["Kills_Gold_Fury"],
-                objectiveAssists: data[key]["Objective_Assists"],
-                damagePlayer: data[key]["Damage_Player"],
-                damageTaken: data[key]["Damage_Taken"],
-                damageMitigated: data[key]["Damage_Mitigated"],
-                gold: data[key]["Gold_Earned"],
-                god: data[key]["godName"],
-                gpm: data[key]["Gold_Per_Minute"],
-                godStats: { ...data[key]["godStats"] },
+                accountLevel: data[key]['Account_Level'],
+                mmr: data[key]['Ranked_Stat_Conq'],
+                playerName: data[key]['Player_Name'],
+                kills: data[key]['Kills_Player'],
+                Kills_Double: data[key]['Kills_Double'],
+                Kills_Triple: data[key]['Kills_Triple'],
+                Kills_Quadra: data[key]['Kills_Quadra'],
+                Kills_Penta: data[key]['Kills_Penta'],
+                deaths: data[key]['Deaths'],
+                assists: data[key]['Assists'],
+                killingSpree: data[key]['Killing_Spree'],
+                multiKills: data[key]['Multi_kill_Max'],
+                winStatus: data[key]['Win_Status'],
+                fgKills: data[key]['Kills_Fire_Giant'],
+                gfKills: data[key]['Kills_Gold_Fury'],
+                objectiveAssists: data[key]['Objective_Assists'],
+                damagePlayer: data[key]['Damage_Player'],
+                damageTaken: data[key]['Damage_Taken'],
+                damageMitigated: data[key]['Damage_Mitigated'],
+                gold: data[key]['Gold_Earned'],
+                god: data[key]['godName'],
+                gpm: data[key]['Gold_Per_Minute'],
+                godStats: { ...data[key]['godStats'] },
                 godBuild: [
-                  data[key]["godBuild"]["slot1"],
-                  data[key]["godBuild"]["slot2"],
-                  data[key]["godBuild"]["slot3"],
-                  data[key]["godBuild"]["slot4"],
-                  data[key]["godBuild"]["slot5"],
-                  data[key]["godBuild"]["slot6"],
+                  data[key]['godBuild']['slot1'],
+                  data[key]['godBuild']['slot2'],
+                  data[key]['godBuild']['slot3'],
+                  data[key]['godBuild']['slot4'],
+                  data[key]['godBuild']['slot5'],
+                  data[key]['godBuild']['slot6'],
                 ],
-                level: data[key]["Final_Match_Level"],
-                towerDamage: data[key]["Structure_Damage"],
-                towerKills: data[key]["Towers_Destroyed"],
-                phoenixKills: data[key]["Kills_Phoenix"],
-                healing: data[key]["Healing"],
-                selfHealing: data[key]["Healing_Player_Self"],
-                skin: data[key]["Skin"],
-                wardsPlaced: data[key]["Wards_Placed"],
+                level: data[key]['Final_Match_Level'],
+                towerDamage: data[key]['Structure_Damage'],
+                towerKills: data[key]['Towers_Destroyed'],
+                phoenixKills: data[key]['Kills_Phoenix'],
+                healing: data[key]['Healing'],
+                selfHealing: data[key]['Healing_Player_Self'],
+                skin: data[key]['Skin'],
+                wardsPlaced: data[key]['Wards_Placed'],
                 // carryScore: data["carryScore"][data[key]["Win_Status"]][data[key]["Role"]]["goldShare"],
                 damageScore:
-                  data["damageScore"][data[key]["Win_Status"]][
-                    data[key]["Role"]
-                  ]["damageShare"],
+                  data['damageScore'][data[key]['Win_Status']][
+                    data[key]['Role']
+                  ]['damageShare'],
                 killPart:
-                  data["killPart"][data[key]["Win_Status"]][data[key]["Role"]][
-                    "killShare"
+                  data['killPart'][data[key]['Win_Status']][data[key]['Role']][
+                    'killShare'
                   ],
                 goldScore:
-                  data["goldScore"][data[key]["Win_Status"]][data[key]["Role"]][
-                    "goldShare"
+                  data['goldScore'][data[key]['Win_Status']][data[key]['Role']][
+                    'goldShare'
                   ],
               },
             ]);
           }
         });
-        setBans(bans, data["First_Ban_Side"], setBansWinner, setBansLoser);
-        setMMR(mmrs, data["First_Ban_Side"], setMMRLoser, setMMRWinner);
-        setmatchId(data["MatchId"]);
-        setMatchLength(data["Minutes"]);
-        setMatchDate(data["Entry_Datetime"]);
+        setBans(bans, data['First_Ban_Side'], setBansWinner, setBansLoser);
+        setMMR(mmrs, data['First_Ban_Side'], setMMRLoser, setMMRWinner);
+        setmatchId(data['MatchId']);
+        setMatchLength(data['Minutes']);
+        setMatchDate(data['Entry_Datetime']);
       })
     );
   }, [match]);
 
   return (
     <div
-      className="container content-container"
-      style={{ maxWidth: "fit-content" }}
+      className='container content-container'
+      style={{ maxWidth: 'fit-content' }}
     >
       <div
-        className="content-section shrink-padding"
-        style={{ marginTop: "36px" }}
+        className='content-section shrink-padding'
+        style={{ marginTop: '36px' }}
       >
-        <div className="content-section_header">
+        <div className='content-section_header'>
           Match Summary&nbsp;
           <span
-            style={{ color: "#5f5f7b", fontSize: "14px", fontWeight: "400" }}
+            style={{ color: '#5f5f7b', fontSize: '14px', fontWeight: '400' }}
           >
             Click on players to see their performance
           </span>
         </div>
-        <div className="match-container">
+        <div className='match-container'>
           <PlayerMatchSummary players={players} />
         </div>
       </div>

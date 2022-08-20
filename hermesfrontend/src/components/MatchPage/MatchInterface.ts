@@ -26,6 +26,10 @@ export interface IMatch {
     player7?: IPlayer,
     player8?: IPlayer,
     player9?: IPlayer,
+    carryScores?: any,
+    damageScore?: any,
+    goldScore?: any,
+    killPart?: any,
 } 
 
 export interface Team {
@@ -34,7 +38,7 @@ export interface Team {
     mmr: number[],
     team: string,
     carryPlayer: string,
-    carryScore: number,
+    carryScore: {god: string, score: number}[],
 }
 
 export interface IPlayer extends GameStats {

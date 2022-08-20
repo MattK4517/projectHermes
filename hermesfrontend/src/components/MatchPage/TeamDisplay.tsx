@@ -81,11 +81,21 @@ export default function TeamDisplay(props: any) {
         <div>{props.team} Side MMR</div>
         <div>{(props.mmr.reduce(reducer) / 5).toFixed(2)}</div>
       </div>
-      {/* <CarryPlayerDisplay
+      <CarryPlayerDisplay
         team={props.team}
-        god={props.carryPlayer}
+        god={
+          props.carryScore.filter(
+            (val: { god: string; score: number }) =>
+              val.score ===
+              Math.max(
+                ...props.carryScore.map(
+                  (val: { god: string; score: number }) => val.score
+                )
+              )
+          )[0].god
+        }
         carryScore={props.carryScore}
-      /> */}
+      />
     </div>
   );
 }

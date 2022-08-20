@@ -1,7 +1,8 @@
 import { Team, IMatch } from "./MatchInterface"
 
 export function GetCarryPlayer(damageScore: number, goldScore: number, killPart: number, wards: number, distance: number, assists: number, role: string, winStatus: string, scoringAverages: any) {
-    let avgDamage = scoringAverages["damageScore"][winStatus][role]["damageShare"]["avg"]
+  if (distance === 0 ) distance = 1
+  let avgDamage = scoringAverages["damageScore"][winStatus][role]["damageShare"]["avg"]
     let stdDevDamage = scoringAverages["damageScore"][winStatus][role]["damageShare"]["stdDev"]
     let avgDiffDamage = damageScore - avgDamage
     let scoreDamage = avgDiffDamage % stdDevDamage
@@ -26,13 +27,14 @@ export function GetCarryPlayer(damageScore: number, goldScore: number, killPart:
 const reducer = (accumulator: number, currentValue: number) => accumulator + currentValue;
 
 export function parseMatchData(match: IMatch): Team[] {
+  console.log(match)
     let winningTeam: Team = {
         bans: [match.Ban0, match.Ban2, match.Ban4, match.Ban6, match.Ban8],
         gods: [],
         mmr: [0],
         team: "Winning",
         carryPlayer: "None",
-        carryScore: 0,
+        carryScore: [],
     }
 
     let losingTeam: Team = {
@@ -41,23 +43,53 @@ export function parseMatchData(match: IMatch): Team[] {
         mmr: [0],
         team: "Winning",
         carryPlayer: "None",
-        carryScore: 0,
+        carryScore: [],
     }
+
 
     for (const [key, value] of Object.entries(match)) {
       if (key.includes("player")) {
         if (value.Win_Status === "Winner") {
           winningTeam.gods.push(value.godName)
           winningTeam.mmr.push(value.Ranked_Stat_Conq)
+          winningTeam.carryScore.push({
+            god: value.godName,
+            score: GetCarryPlayer(
+              match.damageScore[value.Win_Status][value.Role].damageShare,
+              match.goldScore[value.Win_Status][value.Role].goldShare,
+              match.killPart[value.Win_Status][value.Role].killShare,
+              value.Wards_Placed,
+              value.Distance_Traveled,
+              value.Assists,
+              value.Role,
+              value.Win_Status,
+              match.carryScores
+              )
+          })
+          
         } else {
           losingTeam.gods.push(value.godName)
           losingTeam.mmr.push(value.Ranked_Stat_Conq)
+          losingTeam.carryScore.push({
+            god: value.godName,
+            score: GetCarryPlayer(
+              match.damageScore[value.Win_Status][value.Role].damageShare,
+              match.goldScore[value.Win_Status][value.Role].goldShare,
+              match.killPart[value.Win_Status][value.Role].killShare,
+              value.Wards_Placed,
+              value.Distance_Traveled,
+              value.Assists,
+              value.Role,
+              value.Win_Status,
+              match.carryScores
+              )
+            })
         }
       }
     }
 
 
-
+    console.log(winningTeam, losingTeam)
     return [winningTeam, losingTeam]
 }
 

@@ -717,13 +717,13 @@ def get_carry_score(match):
             "Loser": {
                 "totalDamage": 1,
             }
-            },
+        },
         "levelDiff": {
             "Winner": {
             },
             "Loser": {
             }
-            },
+        },
         "killPart": {
                 "Winner": {
                     "totalKills": 0,
@@ -731,7 +731,7 @@ def get_carry_score(match):
                 "Loser": {
                     "totalKills": 0,
                 }
-            }
+        }
     }
     match_roles = []
 
@@ -1504,6 +1504,22 @@ def get_match_time(patch):
 
 
 if __name__ == "__main__":
-    print(get_single_skin_stats("Achilles", "Battleworn",
-          "Solo", "9.4", queue_type="Ranked"))
-    pass
+    # print(get_single_skin_stats("Achilles", "Battleworn",
+    #       "Solo", "9.4", queue_type="Ranked"))
+    mydb = client["single_match_stats"]
+    mycol = mydb["Conquest-Ranked"]
+    for x in mycol.aggregate([
+        {
+            "$match": {
+                "win_status": "Winner"
+            }
+        },
+        {
+            "$group": {
+                "_id": "$god",
+                "avgWinTime": {"$avg": "$time"}
+            }
+        },
+        {"$sort": {"avgWinTime": 1}},
+    ]):
+        print(x)

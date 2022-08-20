@@ -1,0 +1,7 @@
+fix carry players
+fix white header when match selected
+fix sidenav icons
+fix padding around build to encompass it all
+add links to player page stats with playername
+make it obvious that clicking gods links to another page
+indicate that player rows can actually dropdown

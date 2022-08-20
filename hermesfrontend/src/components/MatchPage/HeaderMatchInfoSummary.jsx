@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
-import Carousel from "react-material-ui-carousel";
-import { Paper, Button } from "@mui/material";
+import React, { useEffect, useState } from 'react';
+import Carousel from 'react-material-ui-carousel';
+import { Paper, Button } from '@mui/material';
 
 function Example(props) {
   return (
     <Carousel
       autoPlay={false}
       sx={{
-        overflow: "visible",
+        overflow: 'visible',
         // width: "100%",
         // height: "100%"
       }}
     >
-      <div style={{ minWidth: "100%", minHeight: "100%" }}>
+      <div style={{ minWidth: '100%', minHeight: '100%' }}>
         <CombatDisplay
           winnerKills={props.winnerKDA[0]}
           winnerDeaths={props.winnerKDA[1]}
@@ -41,34 +41,34 @@ function Example(props) {
 
 function CombatDisplay(props) {
   return (
-    <div className="team-stat-container">
+    <div className='team-stat-container'>
       <p>Team Combat</p>
-      <div className="KDA" style={{ marginBottom: ".5rem" }}>
-        <span className="player-info-style"> Winner Side KDA: </span>{" "}
+      <div className='KDA' style={{ marginBottom: '.5rem' }}>
+        <span className='player-info-style'> Winner Side KDA: </span>{' '}
         {props.winnerKills}
-        <span style={{ color: "#5f5f7b" }}> / </span>
-        <span style={{ color: "#ff4e50" }}>{props.winnerDeaths}</span>
-        <span style={{ color: "#5f5f7b" }}> / </span>
+        <span style={{ color: '#5f5f7b' }}> / </span>
+        <span style={{ color: '#ff4e50' }}>{props.winnerDeaths}</span>
+        <span style={{ color: '#5f5f7b' }}> / </span>
         {props.winnerAssists}
         <br></br>
-        <span className="player-info-style"> Winner Side Dmg: </span>{" "}
+        <span className='player-info-style'> Winner Side Dmg: </span>{' '}
         {props.winnerDamage.toLocaleString()}
         <br></br>
-        <span className="player-info-style"> Winner Side Healing: </span>{" "}
+        <span className='player-info-style'> Winner Side Healing: </span>{' '}
         {props.winnerHealing.toLocaleString()}
         <br></br>
         <br></br>
-        <span className="player-info-style"> Loser Side KDA: </span>{" "}
+        <span className='player-info-style'> Loser Side KDA: </span>{' '}
         {props.loserKills}
-        <span style={{ color: "#5f5f7b" }}> / </span>
-        <span style={{ color: "#ff4e50" }}>{props.loserDeaths}</span>
-        <span style={{ color: "#5f5f7b" }}> / </span>
+        <span style={{ color: '#5f5f7b' }}> / </span>
+        <span style={{ color: '#ff4e50' }}>{props.loserDeaths}</span>
+        <span style={{ color: '#5f5f7b' }}> / </span>
         {props.loserAssists}
         <br></br>
-        <span className="player-info-style"> Loser Side Dmg: </span>{" "}
+        <span className='player-info-style'> Loser Side Dmg: </span>{' '}
         {props.loserDamage.toLocaleString()}
         <br></br>
-        <span className="player-info-style"> Loser Side Healing: </span>{" "}
+        <span className='player-info-style'> Loser Side Healing: </span>{' '}
         {props.loserHealing.toLocaleString()}
       </div>
     </div>
@@ -77,26 +77,26 @@ function CombatDisplay(props) {
 
 function ObjectiveDisplay(props) {
   return (
-    <div className="team-stat-container">
+    <div className='team-stat-container'>
       <p>Team Objectives</p>
-      <div className="KDA" style={{ marginBottom: ".5rem" }}>
-        <span className="player-info-style"> Winner Side Gold: </span>{" "}
+      <div className='KDA' style={{ marginBottom: '.5rem' }}>
+        <span className='player-info-style'> Winner Side Gold: </span>{' '}
         {props.winnerGold.toLocaleString()}
         <br></br>
-        <span className="player-info-style"> Winner Side Wards: </span>{" "}
+        <span className='player-info-style'> Winner Side Wards: </span>{' '}
         {props.winnerWards.toLocaleString()}
         <br></br>
-        <span className="player-info-style"> Winner Side Distance: </span>{" "}
+        <span className='player-info-style'> Winner Side Distance: </span>{' '}
         {props.winnerDistance.toLocaleString()}
         <br></br>
         <br></br>
-        <span className="player-info-style"> Loser Side Gold: </span>{" "}
+        <span className='player-info-style'> Loser Side Gold: </span>{' '}
         {props.loserGold.toLocaleString()}
         <br></br>
-        <span className="player-info-style"> Loser Side Wards: </span>{" "}
+        <span className='player-info-style'> Loser Side Wards: </span>{' '}
         {props.loserWards.toLocaleString()}
         <br></br>
-        <span className="player-info-style"> Loser Side Distance: </span>{" "}
+        <span className='player-info-style'> Loser Side Distance: </span>{' '}
         {props.loserDistance.toLocaleString()}
       </div>
     </div>
@@ -139,72 +139,72 @@ export default function HeaderMatchInfoSUmmary(props) {
     setLoserWards(0);
     setLoserDistance(0);
     Object.keys(props.matchData).forEach((key) => {
-      if (key.includes("player")) {
-        if (props.matchData[key]["Win_Status"] === "Winner") {
+      if (key.includes('player')) {
+        if (props.matchData[key]['Win_Status'] === 'Winner') {
           setWinnerKills((winnerKills) => {
-            return winnerKills + props.matchData[key]["Kills_Player"];
+            return winnerKills + props.matchData[key]['Kills_Player'];
           });
           setWinnerDeaths((winnerDeaths) => {
-            return winnerDeaths + props.matchData[key]["Deaths"];
+            return winnerDeaths + props.matchData[key]['Deaths'];
           });
           setWinnerAssists((winnerAssists) => {
-            return winnerAssists + props.matchData[key]["Assists"];
+            return winnerAssists + props.matchData[key]['Assists'];
           });
           setWinnerDamage((winnerDamage) => {
-            return winnerDamage + props.matchData[key]["Damage_Player"];
+            return winnerDamage + props.matchData[key]['Damage_Player'];
           });
           setWinnerHealing((winnerHealing) => {
             return (
               winnerHealing +
-              props.matchData[key]["Healing"] +
-              props.matchData[key]["Healing_Player_Self"]
+              props.matchData[key]['Healing'] +
+              props.matchData[key]['Healing_Player_Self']
             );
           });
           setWinnerGold((winnerGold) => {
-            return winnerGold + props.matchData[key]["Gold_Earned"];
+            return winnerGold + props.matchData[key]['Gold_Earned'];
           });
           setWinnerWards((winnerWards) => {
-            return winnerWards + props.matchData[key]["Wards_Placed"];
+            return winnerWards + props.matchData[key]['Wards_Placed'];
           });
           setWinnerDistance((winnerDistance) => {
-            return winnerDistance + props.matchData[key]["Distance_Traveled"];
+            return winnerDistance + props.matchData[key]['Distance_Traveled'];
           });
-        } else if (props.matchData[key]["Win_Status"] === "Loser") {
+        } else if (props.matchData[key]['Win_Status'] === 'Loser') {
           setLoserKills((loserKills) => {
-            return loserKills + props.matchData[key]["Kills_Player"];
+            return loserKills + props.matchData[key]['Kills_Player'];
           });
           setLoserDeaths((loserDeaths) => {
-            return loserDeaths + props.matchData[key]["Deaths"];
+            return loserDeaths + props.matchData[key]['Deaths'];
           });
           setLoserAssists((loserAssists) => {
-            return loserAssists + props.matchData[key]["Assists"];
+            return loserAssists + props.matchData[key]['Assists'];
           });
           setLoserDamage((LoserDamage) => {
-            return LoserDamage + props.matchData[key]["Damage_Player"];
+            return LoserDamage + props.matchData[key]['Damage_Player'];
           });
           setLoserHealing((loserHealing) => {
             return (
               loserHealing +
-              props.matchData[key]["Healing"] +
-              props.matchData[key]["Healing_Player_Self"]
+              props.matchData[key]['Healing'] +
+              props.matchData[key]['Healing_Player_Self']
             );
           });
           setLoserGold((loserGold) => {
-            return loserGold + props.matchData[key]["Gold_Earned"];
+            return loserGold + props.matchData[key]['Gold_Earned'];
           });
           setLoserWards((loserWards) => {
-            return loserWards + props.matchData[key]["Wards_Placed"];
+            return loserWards + props.matchData[key]['Wards_Placed'];
           });
           setLoserDistance((loserDistance) => {
-            return loserDistance + props.matchData[key]["Distance_Traveled"];
+            return loserDistance + props.matchData[key]['Distance_Traveled'];
           });
         }
       }
     });
   }, [props.matchData]);
   return (
-    <div className="match-summary-wrapper_header content-section hide">
-      <div style={{ minWidth: "250px", minHeight: "175px" }}>
+    <div className='match-summary-wrapper_header content-section hide'>
+      <div style={{ minWidth: '250px', minHeight: '175px' }}>
         <Example
           winnerKDA={[winnerKills, winnerDeaths, winnerAssists]}
           winnerDamage={winnerDamage}

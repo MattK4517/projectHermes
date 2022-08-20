@@ -1390,6 +1390,17 @@ figure.snip0015:hover figcaption::before {
 
 .content-container {
   padding-top: 80px;
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  margin-left: 3vw;
+  margin-right: 3vw;
+}
+
+@media (max-width: 1359px) {
+  .content-container {
+  flex-direction: column;
+  }
 }
 
 .home {
@@ -2341,9 +2352,11 @@ figure.snip0015:hover figcaption::before {
 
 .items-match .build {
   height: fit-content !important;
-  min-width: 225px;
-  max-width: 225px;
+  min-width: 240px;
+  max-width: 240px;
+  display: flex;
   justify-content: flex-start;
+  align-items: center;
 }
 
 .items-match .build .item-wrapper {
@@ -2354,8 +2367,6 @@ figure.snip0015:hover figcaption::before {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 5px;
-  border: none;
 } 
 
 .items-match {
@@ -2396,7 +2407,7 @@ figure.snip0015:hover figcaption::before {
     margin-left: 1.25rem !important;
   }
   .items-match .build {
-    display: none;
+    /* display: none; */
     max-width: 175px;
     min-width: 175px;
   }
