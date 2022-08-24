@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from 'react-query';
-import { IMatch, IPlayer } from './MatchInterface';
+import { IItem, IMatch, IPlayer } from './MatchInterface';
 import Loading from '../Shared/Loading';
 import Error from '../Shared/Error';
 import { parseMatchData } from './MatchHelpers';
@@ -147,6 +147,48 @@ export function PlayerBuildDisplay({ player }: { player: IPlayer }) {
 }
 
 function CustomizedAccordions(player: IPlayer) {
+  const levels = {
+    1: 5,
+    2: 5,
+    3: 5,
+    4: 5,
+    5: 5,
+  };
+
+  const buildOptions: any = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      god: player.godName,
+      levels: levels,
+      build: Object.values(player.godBuild).map((val: any) => val.DeviceName),
+      enemy: 'Odin',
+      enemyBuild: [],
+    }),
+  };
+
+  const [totalDamage, setTotalDamage] = useState(0);
+  const [message, setMessage] = useState<string[]>([]);
+  let td = 0;
+  useEffect(() => {
+    fetch('/api/getdmgcalc/', buildOptions).then((res) =>
+      res.json().then((data) => {
+        setMessage([]);
+        td = 0;
+        Object.keys(data).map((ability) => {
+          td = td + data[ability]['damage']['damageTotal'];
+          setMessage((message) => [
+            ...message,
+            {
+              ...data[ability],
+            },
+          ]);
+        });
+        setTotalDamage(td);
+      })
+    );
+  }, []);
+
   if (player.Player_Name === '') {
     player.Player_Name = 'Hidden';
   }
@@ -175,7 +217,7 @@ function CustomizedAccordions(player: IPlayer) {
 
   // let td = 0
   // const [totalDamage, setTotalDamage] = useState(0);
-  const message: any[] = [];
+  const [tab, setTab] = useState('Game Stats');
 
   return (
     <Accordion>
@@ -186,115 +228,125 @@ function CustomizedAccordions(player: IPlayer) {
       >
         <PlayerMatchDisplay player={player} />
       </AccordionSummary>
-      <AccordionDetails style={{ background: styling }}>
-        <div
-          className='player-stats-breakdown'
-          style={{ minWidth: '911px', color: 'white' }}
-        >
-          <div className='row'>
-            <div className='column'>
-              <DataRow
-                props={{
-                  Account_Level: player.Account_Level,
-                  Ranked_Stat_Conq: player.Ranked_Stat_Conq,
-                  Player_Name: player.Player_Name,
-                  games: 1,
-                  show: false,
-                }}
-              />
-            </div>
-            <div>
-              <span className='player-info-style'>KDA: </span>{' '}
-              {player.Kills_Player}
-              <span style={{ color: '#5f5f7b' }}> / </span>
-              <span style={{ color: '#ff4e50' }}>{player.Deaths}</span>
-              <span style={{ color: '#5f5f7b' }}> / </span>
-              {player.Assists}
-              <span className='helper-text'>
-                {calcKDA(player.Kills_Player, player.Deaths, player.Assists)}{' '}
-                KDA
-              </span>
-              <br></br>
+      <AccordionDetails style={{ background: styling, color: 'white' }}>
+        <TierListTabs changeTableType={setTab}>
+          <div
+            className='player-stats-breakdown'
+            style={{ minWidth: '911px' }}
+            //@ts-ignore
+            label='Game Stats'
+          >
+            <div className='row'>
               <div className='column'>
                 <DataRow
                   props={{
-                    healing: player.Healing,
-                    healing_self: player.Healing_Player_Self,
+                    Account_Level: player.Account_Level,
+                    Ranked_Stat_Conq: player.Ranked_Stat_Conq,
+                    Player_Name: player.Player_Name,
+                    games: 1,
+                    show: false,
+                  }}
+                />
+              </div>
+              <div>
+                <span className='player-info-style'>KDA: </span>{' '}
+                {player.Kills_Player}
+                <span style={{ color: '#5f5f7b' }}> / </span>
+                <span style={{ color: '#ff4e50' }}>{player.Deaths}</span>
+                <span style={{ color: '#5f5f7b' }}> / </span>
+                {player.Assists}
+                <span className='helper-text'>
+                  {calcKDA(player.Kills_Player, player.Deaths, player.Assists)}{' '}
+                  KDA
+                </span>
+                <br></br>
+                <div className='column'>
+                  <DataRow
+                    props={{
+                      healing: player.Healing,
+                      healing_self: player.Healing_Player_Self,
+                      games: 1,
+                      show: false,
+                    }}
+                  />
+                </div>
+              </div>
+              <div className='column'>
+                <DataRow
+                  props={{
+                    Kills_Fire_Giant: player.Kills_Fire_Giant,
+                    Kills_Gold_Fury: player.Kills_Gold_Fury,
+                    objective_assists: player.Objective_Assists,
+                    games: 1,
+                    show: false,
+                  }}
+                />
+              </div>
+              <div className='column'>
+                <DataRow
+                  props={{
+                    Damage_Player: player.Damage_Player,
+                    Damage_Taken: player.Damage_Taken,
+                    Damage_Mitigated: player.Damage_Mitigated,
                     games: 1,
                     show: false,
                   }}
                 />
               </div>
             </div>
-            <div className='column'>
-              <DataRow
-                props={{
-                  Kills_Fire_Giant: player.Kills_Fire_Giant,
-                  Kills_Gold_Fury: player.Kills_Gold_Fury,
-                  objective_assists: player.Objective_Assists,
-                  games: 1,
-                  show: false,
-                }}
-              />
-            </div>
-            <div className='column'>
-              <DataRow
-                props={{
-                  Damage_Player: player.Damage_Player,
-                  Damage_Taken: player.Damage_Taken,
-                  Damage_Mitigated: player.Damage_Mitigated,
-                  games: 1,
-                  show: false,
-                }}
-              />
-            </div>
-          </div>
-          <div className='row'>
-            <div className='column'>
-              <DataRow
-                props={{
-                  Gold_Earned: player.Gold_Earned,
-                  Gold_Per_Minute: player.Gold_Per_Minute,
-                  games: 1,
-                  show: false,
-                }}
-              />
-            </div>
-            <div className='column'>
-              <DataRow
-                props={{
-                  tower_damage: player.Structure_Damage,
-                  tower_kills: player.Towers_Destroyed,
-                  phoenix_kills: player.Kills_Phoenix,
-                  games: 1,
-                  show: false,
-                }}
-              />
-            </div>
-            <div className='column'>
-              <DataRow
-                props={{
-                  Final_Match_Level: player.Final_Match_Level,
-                  Skin: player.Skin,
-                  Wards_Placed: player.Wards_Placed,
-                  games: 1,
-                  show: false,
-                }}
-              />
-            </div>
-            <div className='column'>
-              <DataRow
-                props={{
-                  Final_Match_Level: player.Final_Match_Level,
-                  Skin: player.Skin,
-                  Wards_Placed: player.Wards_Placed,
-                  games: 1,
-                  show: false,
-                }}
-              />
+            <div className='row'>
+              <div className='column'>
+                <DataRow
+                  props={{
+                    Gold_Earned: player.Gold_Earned,
+                    Gold_Per_Minute: player.Gold_Per_Minute,
+                    games: 1,
+                    show: false,
+                  }}
+                />
+              </div>
+              <div className='column'>
+                <DataRow
+                  props={{
+                    tower_damage: player.Structure_Damage,
+                    tower_kills: player.Towers_Destroyed,
+                    phoenix_kills: player.Kills_Phoenix,
+                    games: 1,
+                    show: false,
+                  }}
+                />
+              </div>
+              <div className='column'>
+                <DataRow
+                  props={{
+                    Final_Match_Level: player.Final_Match_Level,
+                    Skin: player.Skin,
+                    Wards_Placed: player.Wards_Placed,
+                    games: 1,
+                    show: false,
+                  }}
+                />
+              </div>
+              <div className='column'>
+                <DataRow
+                  props={{
+                    Final_Match_Level: player.Final_Match_Level,
+                    Skin: player.Skin,
+                    Wards_Placed: player.Wards_Placed,
+                    games: 1,
+                    show: false,
+                  }}
+                />
+              </div>
             </div>
           </div>
-        </div>
+          <div
+            //@ts-ignore
+            label='Damage Stats'
+          >
+            <DamageOut message={message} totalDamage={totalDamage} />
+          </div>
+        </TierListTabs>
       </AccordionDetails>
     </Accordion>
   );

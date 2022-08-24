@@ -262,7 +262,7 @@ const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
   backgroundColor: '#17172e',
   color: 'white',
-  borderRight: '1px solid gray',
+  borderRight: '1px solid #414165',
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
@@ -273,7 +273,7 @@ const openedMixin = (theme: Theme): CSSObject => ({
 const closedMixin = (theme: Theme): CSSObject => ({
   backgroundColor: '#17172e',
   color: 'white',
-  borderRight: '1px solid gray',
+  borderRight: '1px solid #414165',
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -369,7 +369,7 @@ export default function MiniDrawer() {
       <AppBar position='fixed' open={open}>
         <Toolbar
           style={{
-            borderBottom: '1px solid gray',
+            borderBottom: '1px solid #414165',
           }}
         >
           <IconButton
@@ -454,7 +454,7 @@ export default function MiniDrawer() {
           style={{
             display: 'flex',
             justifyContent: 'start',
-            borderBottom: `${open ? '1px solid gray' : 'none'}`,
+            borderBottom: `${open ? '1px solid #414165' : 'none'}`,
           }}
         >
           <IconButton color='inherit' onClick={handleDrawerClose}>
@@ -463,7 +463,7 @@ export default function MiniDrawer() {
         </DrawerHeader>
         <List
           style={{
-            borderBottom: '1px solid gray',
+            borderBottom: '1px solid #414165',
             flex: 1,
           }}
         >
@@ -549,7 +549,7 @@ export default function MiniDrawer() {
               <PlayerProvider>
                 <DamageProvider>
                   <TierListProvider>
-                    <Typography>
+                    <Typography sx={{ width: '100%', overflowX: 'hidden' }}>
                       <Switch>{routeComponents}</Switch>
                     </Typography>
                   </TierListProvider>

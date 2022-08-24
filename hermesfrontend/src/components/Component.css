@@ -2571,6 +2571,7 @@ figure.snip0015:hover figcaption::before {
 .match-info-simple {
   display: flex;
   flex-direction: row;
+  margin-bottom: 16px;
 }
 
 .team-stat-container {

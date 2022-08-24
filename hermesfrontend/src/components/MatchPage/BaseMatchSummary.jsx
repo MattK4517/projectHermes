@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import TeamDisplay from './TeamDisplay';
-import HeaderMatchInfoSUmmary from './HeaderMatchInfoSummary';
+import HeaderMatchInfoSummary from './HeaderMatchInfoSummary';
 
 const reducer = (accumulator, currentValue) => accumulator + currentValue;
 
@@ -25,7 +25,6 @@ export default function BaseMatchSummary(props) {
           carryScore={props.carryScoreWinner}
           queueType={props.queueType}
         />
-        <HeaderMatchInfoSUmmary matchData={props.matchData} />
         <TeamDisplay
           bans={props.bansLoser}
           gods={props.godsLoser}
@@ -36,6 +35,10 @@ export default function BaseMatchSummary(props) {
           queueType={props.queueType}
         />
       </div>
+      <div
+        style={{ borderBottom: '1px solid #414165', marginBottom: '16px' }}
+      ></div>
+      <HeaderMatchInfoSummary matchData={props.matchData} />
     </div>
   );
 }

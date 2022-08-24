@@ -4,28 +4,19 @@ import { Paper, Button } from '@mui/material';
 
 function Example(props) {
   return (
-    <Carousel
-      autoPlay={false}
-      sx={{
-        overflow: 'visible',
-        // width: "100%",
-        // height: "100%"
-      }}
-    >
-      <div style={{ minWidth: '100%', minHeight: '100%' }}>
-        <CombatDisplay
-          winnerKills={props.winnerKDA[0]}
-          winnerDeaths={props.winnerKDA[1]}
-          winnerAssists={props.winnerKDA[2]}
-          winnerDamage={props.winnerDamage}
-          winnerHealing={props.winnerHealing}
-          loserKills={props.loserKDA[0]}
-          loserDeaths={props.loserKDA[1]}
-          loserAssists={props.loserKDA[2]}
-          loserDamage={props.loserDamage}
-          loserHealing={props.loserHealing}
-        />
-      </div>
+    <div style={{ display: 'flex' }}>
+      <CombatDisplay
+        winnerKills={props.winnerKDA[0]}
+        winnerDeaths={props.winnerKDA[1]}
+        winnerAssists={props.winnerKDA[2]}
+        winnerDamage={props.winnerDamage}
+        winnerHealing={props.winnerHealing}
+        loserKills={props.loserKDA[0]}
+        loserDeaths={props.loserKDA[1]}
+        loserAssists={props.loserKDA[2]}
+        loserDamage={props.loserDamage}
+        loserHealing={props.loserHealing}
+      />
 
       <ObjectiveDisplay
         winnerGold={props.winnerGold}
@@ -35,7 +26,7 @@ function Example(props) {
         loserWards={props.loserWards}
         loserDistance={props.loserDistance}
       />
-    </Carousel>
+    </div>
   );
 }
 
@@ -102,7 +93,7 @@ function ObjectiveDisplay(props) {
     </div>
   );
 }
-export default function HeaderMatchInfoSUmmary(props) {
+export default function HeaderMatchInfoSummary(props) {
   const [winnerKills, setWinnerKills] = useState(0);
   const [winnerDeaths, setWinnerDeaths] = useState(0);
   const [winnerAssists, setWinnerAssists] = useState(0);
@@ -203,7 +194,7 @@ export default function HeaderMatchInfoSUmmary(props) {
     });
   }, [props.matchData]);
   return (
-    <div className='match-summary-wrapper_header content-section hide'>
+    <div className='match-summary-wrapper_header hide'>
       <div style={{ minWidth: '250px', minHeight: '175px' }}>
         <Example
           winnerKDA={[winnerKills, winnerDeaths, winnerAssists]}

@@ -65,11 +65,12 @@ def calc_ability_damage_raw(base, scaling, power, god, ability, prot, armor_redu
     damage = 0
     mitigated = 0
     hits = get_num_hits(god, ability, base)
+    print(base, scaling, power, hits)
     for i in range(hits):
         # print(get_scaling_changes(god, ability, i+1))
         temp = calc_mitigation(((float(base) + ((float(scaling)/100) * float(power))) + (float(base) *
-                                                                                         get_scaling_changes(god, ability, i+1)/100)) * get_percent_change(god, ability, i+1), prot, miti,
-                               armor_reduction_per, armor_reduction_flat, pen_per, pen_flat)
+                                                                                         get_scaling_changes(god, ability, i+1)/100)) * get_percent_change(god, ability, i+1), prot,
+                               armor_reduction_per, armor_reduction_flat, pen_per, pen_flat, miti)
 
         damage += temp["dealt"]
         mitigated += temp["mitigated"]
@@ -78,8 +79,8 @@ def calc_ability_damage_raw(base, scaling, power, god, ability, prot, armor_redu
             get_proc(proc)
 
     if hits > 1:
-        temp = calc_mitigation(damage + mitigated, prot, miti,
-                               armor_reduction_per, armor_reduction_flat, pen_per, pen_flat)
+        temp = calc_mitigation(damage + mitigated, prot,
+                               armor_reduction_per, armor_reduction_flat, pen_per, pen_flat, miti)
         # print("NEW MITI", temp, damage + mitigated, damage, mitigated)
 
         damage = temp["dealt"]
@@ -174,6 +175,7 @@ def calc_combo_damage_raw(client, god, levels, build, enemy, enemy_build, level=
 
     for ability, index in enumerate(ability_numbers):
         if "%" not in index["damage"]:
+
             damage = calc_ability_damage_raw(
                 index["damage"], index["scaling"], power, god, ability_numbers[ability]['abilityName'], prots, armor_reduction_per, armor_reduction_flat, pen_per, pen_flat)
             ret_data[ability] = {"damage": damage,
@@ -458,6 +460,7 @@ def calc_mitigation(dmg, prot, armor_reduction_per, armor_reduction_flat, pen_pe
     # Flat armor reduction
     # % pen
     # flat pen
+    print(miti)
     prot = (((prot * (1 - armor_reduction_per/100))) -
             armor_reduction_flat) * (1-(pen_per/100)) - pen_flat
 
@@ -481,8 +484,12 @@ if __name__ == "__main__":
     }
     # build = [
     # "Stone Cutting Sword", "Odysseus' Bow", "Ichaival", "Qin's Sais", "Bloodforge"]
-    build = ["Bluestone Pendant"]
-    print(calc_combo_damage_raw(client, "Achilles",
+    # build = ["Archmage's Gem", "Chronos' Pendant", "Evolved Book of Thoth",
+    #  "Jotunn's Cunning", "Heartseeker", "Serrated Edge"]
+    build = []
+    print(calc_combo_damage_raw(client, "Skadi",
+          levels, build, "Odin", [], 20, 20))
+    print(calc_combo_damage_raw(client, "Izanami",
           levels, build, "Odin", [], 20, 20))
     # print(calc_dps(client, "Achilles", build, "Odin", [], 1, 1))
 

@@ -309,6 +309,7 @@ def get_dmg_calc():
             ret_data = calc_combo_damage_raw(
                 client, data["god"], data["levels"], data["build"], data["enemy"], data["enemyBuild"], 20, 20)
 
+    print(ret_data)
     return ret_data
 
 
