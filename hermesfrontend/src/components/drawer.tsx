@@ -107,6 +107,7 @@ export const godsDict = {
   Horus: 'Support',
   'Hou Yi': 'Carry',
   'Hun Batz': 'Jungle',
+  Ishtar: 'Carry',
   Izanami: 'Carry',
   Janus: 'Mid',
   'Jing Wei': 'Carry',

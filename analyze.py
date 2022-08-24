@@ -103,6 +103,7 @@ def get_pb_rate(client, god, rank, role, patch, queue_type="Ranked", mode="Conqu
 
     totalMatches = get_total_matches(
         client, rank, patch, queue_type=queue_type, mode=mode)
+    print(totalMatches)
     # if "All" not in rank:
     #     totalMatches = totalMatches / 10
 
@@ -122,7 +123,7 @@ def get_games_played(client, god, rank, role, patch, queue_type="Ranked", mode="
     mydb = client["single_match_stats"]
     if patch == "9.6":
         mycol = mydb[mode + "-" + queue_type]
-    elif patch == "9.7":
+    elif patch in ["9.8", "9.7"]:
         mycol = mydb[patch + "-" + mode + "-" + queue_type]
     else:
         mycol = mydb[mode]
@@ -208,7 +209,7 @@ def get_top_builds(client, god, role, patch, queue_type="Ranked", rank="All Rank
     mydb = client["single_match_stats"]
     if patch == "9.6":
         mycol = mydb[mode + "-" + queue_type]
-    elif patch == "9.7":
+    elif patch in ["9.8", "9.7"]:
         print(patch + "-" + mode + "-" + queue_type)
         mycol = mydb[patch + "-" + mode + "-" + queue_type]
         print("HERE", mycol.count_documents({}))
@@ -375,7 +376,7 @@ def get_all_builds(client, god, role, patch, queue_type="Ranked", rank="All Rank
     mydb = client["single_match_stats"]
     if patch == "9.6":
         mycol = mydb[mode + "-" + queue_type]
-    elif patch == "9.7":
+    elif patch in ["9.8", "9.7"]:
         mycol = mydb[patch + "-" + mode + "-" + queue_type]
     else:
         mycol = mydb[mode]
@@ -417,7 +418,7 @@ def get_worst_matchups(client, god, role, patch, queue_type="Ranked", rank="All 
     mydb = client["single_match_stats"]
     if patch == "9.6":
         mycol = mydb[mode + "-" + queue_type]
-    elif patch == "9.7":
+    elif patch in ["9.8", "9.7"]:
         mycol = mydb[patch + "-" + mode + "-" + queue_type]
     else:
         mycol = mydb[mode]
@@ -528,7 +529,7 @@ def get_winrate(client, god, role, patch, queue_type="Ranked", rank="All Ranks",
     mydb = client["single_match_stats"]
     if patch == "9.6":
         mycol = mydb[mode + "-" + queue_type]
-    elif patch == "9.7":
+    elif patch in ["9.8", "9.7"]:
         mycol = mydb[patch + "-" + mode + "-" + queue_type]
     else:
         mycol = mydb[mode]
@@ -555,6 +556,8 @@ def get_total_matches(client, rank, patch, queue_type="Ranked", mode="Conquest")
     mycol = mydb["Total_Matches"]
     myquery = get_query(rank, "", patch, queue_type, mode)
     games = 0
+    if rank not in ["Platinum+", "Diamond+", "All Ranks"]:
+        myquery["rank"] = rank
     for x in mycol.find(myquery):
         games += x["Total_Matches"]
     return games
@@ -717,13 +720,13 @@ def get_carry_score(match):
             "Loser": {
                 "totalDamage": 1,
             }
-            },
+                },
         "levelDiff": {
             "Winner": {
             },
             "Loser": {
             }
-            },
+                },
         "killPart": {
                 "Winner": {
                     "totalKills": 0,
@@ -731,7 +734,7 @@ def get_carry_score(match):
                 "Loser": {
                     "totalKills": 0,
                 }
-            }
+                }
     }
     match_roles = []
 
@@ -927,7 +930,7 @@ def get_matchups_stats(client, god: str, role: str, patch, queue_type="Ranked", 
     mydb = client["single_match_stats"]
     if patch == "9.6":
         mycol = mydb[mode + "-" + queue_type]
-    elif patch == "9.7":
+    elif patch in ["9.8", "9.7"]:
         mycol = mydb[patch + "-" + mode + "-" + queue_type]
     else:
         mycol = mydb[mode]
@@ -996,7 +999,7 @@ def get_build_path(client, god, role, patch, queue_type="Ranked", rank="All Rank
     mydb = client["single_match_stats"]
     if patch == "9.6":
         mycol = mydb[mode + "-" + queue_type]
-    elif patch == "9.7":
+    elif patch in ["9.8", "9.7"]:
         mycol = mydb[patch + "-" + mode + "-" + queue_type]
 
     else:
@@ -1144,9 +1147,6 @@ def calc_total_matches(client, ranks, patch, queue_type, mode):
             }
         }
     }
-
-    matchIds = []
-    actTotalGames = 0
     mydb = client["Matches"]
     if queue_type == "Casual":
         mydb = client["CasualMatches"]
@@ -1160,27 +1160,28 @@ def calc_total_matches(client, ranks, patch, queue_type, mode):
             {}), patch, queue_type, mode)
         return
 
-    for rank in ranks:
-        mypipeline["$search"]["compound"]["filter"]["text"]["query"] = rank
-        myquery = get_query(rank, "", patch, queue_type, mode)
-        if "role" in myquery:
-            del myquery["role"]
-        if rank == "All Ranks":
-            mycol.update_one(myquery, {
-                             "$set": {"Total_Matches": len(matchIds)}})
-            break
-        mydb = client["single_match_stats"]
-        total_games = 0
-        for god in godsDict:
-            mycol = mydb[god]
-            games = 0
-            for x in mycol.aggregate([mypipeline]):
-                # if x["matchId"] not in matchIds:
-                matchIds.append(x["matchId"])
-                games += 1
-            total_games += games
-        actTotalGames += total_games
-        insert_games(rank, total_games, patch, queue_type, mode)
+    mydb = client["single_match_stats"]
+    mycol = mydb[patch + "-" + mode + "-" + queue_type]
+    games = 0
+    for x in mycol.aggregate([{
+        "$group": {
+            "_id": "$rank",
+            "games": {"$sum": 1}
+        }
+    }]):
+        insert_games(x["_id"], x["games"], patch, queue_type, mode)
+        games += x["games"]
+
+    total_games = mycol.count_documents({})
+    myquery = get_query("All Ranks", "", patch, queue_type, mode)
+    mydb = client["Matches"]
+    mycol = mydb["Total_Matches"]
+    myquery["rank"] = "All Ranks"
+    if mycol.count_documents(myquery) == 0:
+        mycol.insert_one({**myquery, **{"Total_Matches": total_games}})
+    else:
+        mycol.update_one({"rank": "All Ranks", "patch": patch, "queue_type": queue_type, "mode": mode}, {
+                         "$set": {"Total_Matches": total_games}})
 
 
 def insert_games(rank, games, patch, queue_type, mode):
@@ -1188,8 +1189,11 @@ def insert_games(rank, games, patch, queue_type, mode):
     mycol = mydb[f"Total_Matches"]
     myquery = get_query(rank, "", patch, queue_type, mode)
 
-    mycol.insert_one({**myquery, **{"Total_Matches": games}})
-    # mycol.update_one({"rank": rank, "patch": patch, "queue_type": "RankedConq"}, {"$set": {"Total_Matches": games}})
+    if mycol.count_documents(myquery) == 0:
+        mycol.insert_one({**myquery, **{"Total_Matches": games}})
+    else:
+        mycol.update_one({"rank": rank, "patch": patch, "queue_type": queue_type, "mode": mode}, {
+                         "$set": {"Total_Matches": games}})
     print(f"{rank} done")
 
 
@@ -1197,7 +1201,7 @@ def get_skin_stats(god, role, patch, rank="All Ranks", queue_type="Ranked", mode
     mydb = client["single_match_stats"]
     if patch == "9.6":
         mycol = mydb[mode + "-" + queue_type]
-    elif patch == "9.7":
+    elif patch in ["9.8", "9.7"]:
         mycol = mydb[patch + "-" + mode + "-" + queue_type]
     else:
         mycol = mydb[mode]
@@ -1263,7 +1267,7 @@ def get_single_skin_stats(god, skin, role, patch, rank="All Ranks", queue_type="
     mydb = client["single_match_stats"]
     if patch == "9.6":
         mycol = mydb[mode + "-" + queue_type]
-    elif patch == "9.7":
+    elif patch in ["9.8", "9.7"]:
         mycol = mydb[patch + "-" + mode + "-" + queue_type]
     else:
         mycol = mydb[mode]
@@ -1507,7 +1511,9 @@ if __name__ == "__main__":
     # client, god, role, patch, queue_type="Ranked", rank="All Ranks", mode="Conquest", matchup="None"
     #     },}):
     # get_match_time("9.7")
-    print(get_winrate(client, "Kali", "Jungle", "9.7", rank="Diamond"))
+    # print(get_winrate(client, "Kali", "Jungle", "9.7", rank="Diamond"))
+    calc_total_matches(
+        client, ranks + ["All Ranks"], "9.8", "Ranked", "Conquest")
     # # from main import client
     # # import numpy
     # # (client, god, rank, role, patch, queue_type="Ranked", mode="Conquest")

@@ -528,7 +528,7 @@ function DuoLaneTierList(props) {
         <FilterForm
           filter={patch}
           god={'None'}
-          filters={['9.7', '9.6', '9.5', '9.4', '9.3', '9.2', '9.1']}
+          filters={['9.8', '9.7', '9.6', '9.5', '9.4', '9.3', '9.2', '9.1']}
           setFilter={setPatch}
           rankSet={setRank}
         />
