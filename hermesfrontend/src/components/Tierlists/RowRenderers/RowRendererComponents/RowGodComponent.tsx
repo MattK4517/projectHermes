@@ -21,7 +21,15 @@ export default function RowGodComponent(props: {
       }}
       {...props.cell.getCellProps()}
     >
-      <Link className='god-played gtm-tierlist-god' to={'/'.concat(routegod)}>
+      <Link
+        className='god-played gtm-tierlist-god'
+        to={{
+          pathname: '/'.concat(routegod),
+          state: {
+            role: props.row.original.role,
+          },
+        }}
+      >
         <div style={{ position: 'relative' }}>
           <div className='god-icon'>
             <div

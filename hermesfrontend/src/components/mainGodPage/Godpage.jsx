@@ -210,6 +210,7 @@ const linkDict = {
   Horus: 'https://i.imgur.com/mA0Vom6.jpg',
   'Hou Yi': 'https://i.imgur.com/AnJgIRB.jpg',
   'Hun Batz': 'https://i.imgur.com/PWS1kZ3.jpg',
+  Ishtar: 'https://i.imgur.com/FbLCxwL.jpg',
   Izanami: 'https://i.imgur.com/t5c7f2K.jpg',
   Janus: 'https://i.imgur.com/RPotbAL.jpg',
   'Jing Wei': 'https://i.imgur.com/eaJX1IP.jpg',
@@ -318,7 +319,10 @@ function Godpage(props) {
   let { tabState } = location?.state ? location.state : 'Build';
 
   useEffect(() => {
-    setRole(props.role.replaceAll('_', ' '));
+    setRole(
+      location.state?.role.replaceAll('_', ' ') ||
+        props.role.replaceAll('_', ' ')
+    );
     setGod(props.god.replaceAll('_', ' '));
     setTab(tabState);
   }, []);
