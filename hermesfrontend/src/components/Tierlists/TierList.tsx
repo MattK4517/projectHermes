@@ -13,6 +13,7 @@ import { CounterMatchupData } from './TierListInterface';
 import TierListPaginator from './TierListPaginator';
 import { TierListRowRenderer } from './RowRenderers/TierListRowRenderer';
 
+//@ts-ignore
 const Table = ({ columns, data, tableType }) => {
   const {
     getTableProps,

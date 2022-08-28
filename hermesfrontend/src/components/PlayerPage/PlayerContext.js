@@ -16,7 +16,7 @@ export const PlayerProvider = props => {
     const [tab, setTab] = useState("Build");
     const [patch, setPatch] = useState("9.9");
     const [inputType, setInputType] = useState("KBM");
-    const patches = ['9.9', '9.8', '9.7']
+    const patches = ['9.8', '9.7', '9.6']
     const queueTypes = ["Casual", "Ranked"];
     const modes = ["Joust", "Conquest", "Duel", "Assault", "Slash", "Arena"];
     const inputTypes = ["KBM", "Controller"];

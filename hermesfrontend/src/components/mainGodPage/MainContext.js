@@ -12,7 +12,7 @@ export const MainProvider = (props) => {
   const [matchup, setMatchup] = useState("None");
   const [skin, setSkin] = useState("None");
   const [tab, setTab] = useState("Build");
-  const patches = ['9.9', '9.8', '9.7'];
+  const patches = ['9.8', '9.7', '9.6'];
   const queueTypes = ["Casual", "Ranked"];
   const modes = ["Joust", "Conquest", "Duel", "Assault", "Slash", "Arena"];
   const ranks = [
