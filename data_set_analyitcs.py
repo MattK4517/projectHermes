@@ -1,6 +1,18 @@
 import pymongo
 from datetime import datetime
-from constants import Tier_Three_items, godsDict, roles, ranks, slots, Assassins, Guardians, Hunters, Mages, Warriors, Starter_items
+from constants import (
+    Tier_Three_items,
+    godsDict,
+    roles,
+    ranks,
+    slots,
+    Assassins,
+    Guardians,
+    Hunters,
+    Mages,
+    Warriors,
+    Starter_items,
+)
 from main import client
 import numpy as np
 import matplotlib.pyplot as plt
@@ -22,7 +34,8 @@ def get_items_by_class(client, class_name, role):
     for char in class_name:
         print(char)
         char_items = anlz.get_all_builds(
-            client, char, role, "9.4", queue_type="Casual", mode="Assault")
+            client, char, role, "9.4", queue_type="Casual", mode="Assault"
+        )
         for slot in char_items:
             if "slot" in slot:
                 for item in char_items[slot]:
@@ -38,13 +51,13 @@ def get_items_by_class(client, class_name, role):
                 if items[slot][item]["games"] > 25:
                     games = items[slot][item]["games"]
                     wins = items[slot][item]["wins"]
-                    wr = round(wins/games * 100, 2)
-                    f.writelines(
-                        f"{slot}, {item} , {wins} , {games} , {wr}% \n")
+                    wr = round(wins / games * 100, 2)
+                    f.writelines(f"{slot}, {item} , {wins} , {games} , {wr}% \n")
 
 
 def get_match_time(patch):
     import numpy
+
     mydb = client["Matches"]
     mycol = mydb[f"{patch} Matches"]
     total_bans = []

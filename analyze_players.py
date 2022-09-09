@@ -30,14 +30,9 @@ def find_match_history(client, playername, queue_type, patch, mode):
         mycol = mydb[f"{patch} {mode} Matches"]
 
     myquery = {
-        '$search': {
-            'index': 'default',
-            'text': {
-                'query': f'{playername}',
-                'path': {
-                    'wildcard': '*'
-                }
-            }
+        "$search": {
+            "index": "default",
+            "text": {"query": f"{playername}", "path": {"wildcard": "*"}},
         }
     }
     ret_data = {}
@@ -66,11 +61,15 @@ def create_player_return_dict(player):
     ret_data = {
         "level": player["Level"],
         "avatar": player["Avatar_URL"],
-        "winRate": round(player["RankedConquest"]["Wins"]/(player["RankedConquest"]["Wins"]+losses)*100, 2),
+        "winRate": round(
+            player["RankedConquest"]["Wins"]
+            / (player["RankedConquest"]["Wins"] + losses)
+            * 100,
+            2,
+        ),
         "rank": normalize_rank(player["RankedConquest"]["Rank"]),
         "tier": normalize_tier(player["RankedConquest"]["Tier"]),
-        "games": player["RankedConquest"]["Wins"]+losses
-
+        "games": player["RankedConquest"]["Wins"] + losses,
     }
     return ret_data
 
@@ -111,7 +110,9 @@ def get_player_basic(player):
             "Points": player["RankedConquestController"]["Points"],
             "Rank": player["RankedConquestController"]["Rank"],
             "Rank_Stat": player["RankedConquestController"]["Rank_Stat"],
-            "Rank_Stat_Conquest": player["RankedConquestController"]["Rank_Stat_Conquest"],
+            "Rank_Stat_Conquest": player["RankedConquestController"][
+                "Rank_Stat_Conquest"
+            ],
             "Rank_Variance": player["RankedConquestController"]["Rank_Variance"],
             "Season": player["RankedConquestController"]["Season"],
             "Tier": player["RankedConquestController"]["Tier"],
@@ -174,8 +175,12 @@ def get_player_basic(player):
 
 
 def create_player_god_dict(data, playername, queue_type, mode, input_type):
-    ret_data = {"NameTag": playername, "queue_type": queue_type,
-                "mode": mode, "input_type": input_type}
+    ret_data = {
+        "NameTag": playername,
+        "queue_type": queue_type,
+        "mode": mode,
+        "input_type": input_type,
+    }
     for god in data:
         losses = god["Losses"]
         if losses == 0:
@@ -191,7 +196,7 @@ def create_player_god_dict(data, playername, queue_type, mode, input_type):
             "minutes": god["Minutes"],
             "queue": god["Queue"],
             "wins": god["Wins"],
-            "winRate": round(god["Wins"]/god["Matches"]*100, 2)
+            "winRate": round(god["Wins"] / god["Matches"] * 100, 2),
         }
     return ret_data
 
@@ -206,7 +211,7 @@ def get_player_winrate(data):
 
     if games == 0:
         games += 1
-    return {"winRate": round(wins/games*100, 2), "games": games}
+    return {"winRate": round(wins / games * 100, 2), "games": games}
 
 
 def normalize_tier(tier):
@@ -280,59 +285,63 @@ def verify_player(act_name, playername, act_god, god):
 
 
 def get_player_god_stats(client, playername, god, role, queue_type, patch):
-    updatedict = {role: {
-        "maxKills": 0,
-        "maxDeaths": 0,
-        "avgDamage": 0,
-        "avgGold": 0,
-        "avgGoldShare": 0,
-        "avgDamageShare": 0,
-        "avgKillShare": 0,
-        "avgWards": 0,
-        "maxKillShare": 0,
-        "maxGoldShare": 0,
-        "maxDamageShare": 0,
-        "maxWards": 0,
-        "killsDouble": 0,
-        "killsTriple": 0,
-        "killsQuadra": 0,
-        "killsPenta": 0,
-        "kills": 0,
-        "deaths": 0,
-        "assists": 0,
-        "games": 0,
-        "wins": 0,
-        "losses": 0,
-    }
+    updatedict = {
+        role: {
+            "maxKills": 0,
+            "maxDeaths": 0,
+            "avgDamage": 0,
+            "avgGold": 0,
+            "avgGoldShare": 0,
+            "avgDamageShare": 0,
+            "avgKillShare": 0,
+            "avgWards": 0,
+            "maxKillShare": 0,
+            "maxGoldShare": 0,
+            "maxDamageShare": 0,
+            "maxWards": 0,
+            "killsDouble": 0,
+            "killsTriple": 0,
+            "killsQuadra": 0,
+            "killsPenta": 0,
+            "kills": 0,
+            "deaths": 0,
+            "assists": 0,
+            "games": 0,
+            "wins": 0,
+            "losses": 0,
+        }
     }
 
-    updatedict = {**updatedict,
-                  **{"maxKills": 0,
-                     "maxDeaths": 0,
-                     "avgDamage": 0,
-                     "avgGold": 0,
-                     "avgGoldShare": 0,
-                     "avgDamageShare": 0,
-                     "avgKillShare": 0,
-                     "avgWards": 0,
-                     "maxKillShare": 0,
-                     "maxGoldShare": 0,
-                     "maxDamageShare": 0,
-                     "maxWards": 0,
-                     "killsDouble": 0,
-                     "killsTriple": 0,
-                     "killsQuadra": 0,
-                     "killsPenta": 0,
-                     "kills": 0,
-                     "deaths": 0,
-                     "assists": 0,
-                     "games": 0,
-                     "wins": 0,
-                     "losses": 0,
-                     "nameTag": playername,
-                     "god": god,
-                     "queue_type": f"{queue_type}Conq"
-                     }}
+    updatedict = {
+        **updatedict,
+        **{
+            "maxKills": 0,
+            "maxDeaths": 0,
+            "avgDamage": 0,
+            "avgGold": 0,
+            "avgGoldShare": 0,
+            "avgDamageShare": 0,
+            "avgKillShare": 0,
+            "avgWards": 0,
+            "maxKillShare": 0,
+            "maxGoldShare": 0,
+            "maxDamageShare": 0,
+            "maxWards": 0,
+            "killsDouble": 0,
+            "killsTriple": 0,
+            "killsQuadra": 0,
+            "killsPenta": 0,
+            "kills": 0,
+            "deaths": 0,
+            "assists": 0,
+            "games": 0,
+            "wins": 0,
+            "losses": 0,
+            "nameTag": playername,
+            "god": god,
+            "queue_type": f"{queue_type}Conq",
+        },
+    }
 
     if queue_type == "Ranked":
         mydb = client["Matches"]
@@ -348,39 +357,53 @@ def get_player_god_stats(client, playername, god, role, queue_type, patch):
 
     if updatedict[role]["games"] > 0:
         updatedict[role]["avgDamage"] = round(
-            updatedict[role]["avgDamage"] / updatedict[role]["games"], 2)
+            updatedict[role]["avgDamage"] / updatedict[role]["games"], 2
+        )
         updatedict[role]["avgGold"] = round(
-            updatedict[role]["avgGold"] / updatedict[role]["games"], 2)
+            updatedict[role]["avgGold"] / updatedict[role]["games"], 2
+        )
         updatedict[role]["avgGoldShare"] = round(
-            updatedict[role]["avgGoldShare"] / updatedict[role]["games"], 2)
+            updatedict[role]["avgGoldShare"] / updatedict[role]["games"], 2
+        )
         updatedict[role]["avgDamageShare"] = round(
-            updatedict[role]["avgDamageShare"] / updatedict[role]["games"], 2)
+            updatedict[role]["avgDamageShare"] / updatedict[role]["games"], 2
+        )
         updatedict[role]["avgKillShare"] = round(
-            updatedict[role]["avgKillShare"] / updatedict[role]["games"], 2)
+            updatedict[role]["avgKillShare"] / updatedict[role]["games"], 2
+        )
         updatedict[role]["avgWards"] = round(
-            updatedict[role]["avgWards"] / updatedict[role]["games"], 2)
+            updatedict[role]["avgWards"] / updatedict[role]["games"], 2
+        )
         if updatedict[role]["deaths"] == 0:
             updatedict[role]["deaths"] = 1
         updatedict[role]["KDA"] = round(
-            (updatedict[role]["kills"] + (.5 * updatedict[role]["assists"])) / updatedict[role]["deaths"], 2)
+            (updatedict[role]["kills"] + (0.5 * updatedict[role]["assists"]))
+            / updatedict[role]["deaths"],
+            2,
+        )
 
     if updatedict["games"] > 0:
         updatedict["avgDamage"] = round(
-            updatedict["avgDamage"] / updatedict["games"], 2)
-        updatedict["avgGold"] = round(
-            updatedict["avgGold"] / updatedict["games"], 2)
+            updatedict["avgDamage"] / updatedict["games"], 2
+        )
+        updatedict["avgGold"] = round(updatedict["avgGold"] / updatedict["games"], 2)
         updatedict["avgGoldShare"] = round(
-            updatedict["avgGoldShare"] / updatedict["games"], 2)
+            updatedict["avgGoldShare"] / updatedict["games"], 2
+        )
         updatedict["avgDamageShare"] = round(
-            updatedict["avgDamageShare"] / updatedict["games"], 2)
+            updatedict["avgDamageShare"] / updatedict["games"], 2
+        )
         updatedict["avgKillShare"] = round(
-            updatedict["avgKillShare"] / updatedict["games"], 2)
-        updatedict["avgWards"] = round(
-            updatedict["avgWards"] / updatedict["games"], 2)
+            updatedict["avgKillShare"] / updatedict["games"], 2
+        )
+        updatedict["avgWards"] = round(updatedict["avgWards"] / updatedict["games"], 2)
         if updatedict["deaths"] == 0:
             updatedict["deaths"] = 1
         updatedict["KDA"] = round(
-            (updatedict["kills"] + (.5 * updatedict["assists"])) / updatedict["deaths"], 2)
+            (updatedict["kills"] + (0.5 * updatedict["assists"]))
+            / updatedict["deaths"],
+            2,
+        )
 
     return updatedict
 
@@ -389,14 +412,9 @@ def run_loop(playername, god, role, mycol, updatedict):
 
     counter = 0
     myquery = {
-        '$search': {
-            'index': 'default',
-            'text': {
-                'query': f'{playername}',
-                'path': {
-                    'wildcard': '*'
-                }
-            }
+        "$search": {
+            "index": "default",
+            "text": {"query": f"{playername}", "path": {"wildcard": "*"}},
         }
     }
     for x in mycol.aggregate([myquery]):
@@ -405,7 +423,9 @@ def run_loop(playername, god, role, mycol, updatedict):
         try:
             for key in x:
                 if "player" in key:
-                    if verify_player(playername, x[key]["Player_Name"], god, x[key]["godName"]):
+                    if verify_player(
+                        playername, x[key]["Player_Name"], god, x[key]["godName"]
+                    ):
                         if "All" in role:
                             flag = True
                         else:
@@ -425,9 +445,15 @@ def run_loop(playername, god, role, mycol, updatedict):
                             updatedict["killsTriple"] += match_data["Kills_Triple"]
                             updatedict["killsQuadra"] += match_data["Kills_Quadra"]
                             updatedict["killsPenta"] += match_data["Kills_Penta"]
-                            updatedict[role]["killsDouble"] += match_data["Kills_Double"]
-                            updatedict[role]["killsTriple"] += match_data["Kills_Triple"]
-                            updatedict[role]["killsQuadra"] += match_data["Kills_Quadra"]
+                            updatedict[role]["killsDouble"] += match_data[
+                                "Kills_Double"
+                            ]
+                            updatedict[role]["killsTriple"] += match_data[
+                                "Kills_Triple"
+                            ]
+                            updatedict[role]["killsQuadra"] += match_data[
+                                "Kills_Quadra"
+                            ]
                             updatedict[role]["killsPenta"] += match_data["Kills_Penta"]
 
                             updatedict["avgDamage"] += match_data["Damage_Player"]
@@ -438,18 +464,24 @@ def run_loop(playername, god, role, mycol, updatedict):
                             updatedict[role]["avgWards"] += match_data["Wards_Placed"]
                             updatedict[role]["avgGold"] += match_data["Gold"]
 
-                            updatedict["avgGoldShare"] += temp_data["goldScore"][x[key]
-                                                                                 ["Win_Status"]][x[key]["Role"]]["goldShare"]
-                            updatedict["avgDamageShare"] += temp_data["damageScore"][x[key]
-                                                                                     ["Win_Status"]][x[key]["Role"]]["damageShare"]
-                            updatedict["avgKillShare"] += temp_data["killPart"][x[key]
-                                                                                ["Win_Status"]][x[key]["Role"]]["killShare"]
-                            updatedict[role]["avgGoldShare"] += temp_data["goldScore"][x[key]
-                                                                                       ["Win_Status"]][x[key]["Role"]]["goldShare"]
-                            updatedict[role]["avgDamageShare"] += temp_data["damageScore"][x[key]
-                                                                                           ["Win_Status"]][x[key]["Role"]]["damageShare"]
-                            updatedict[role]["avgKillShare"] += temp_data["killPart"][x[key]
-                                                                                      ["Win_Status"]][x[key]["Role"]]["killShare"]
+                            updatedict["avgGoldShare"] += temp_data["goldScore"][
+                                x[key]["Win_Status"]
+                            ][x[key]["Role"]]["goldShare"]
+                            updatedict["avgDamageShare"] += temp_data["damageScore"][
+                                x[key]["Win_Status"]
+                            ][x[key]["Role"]]["damageShare"]
+                            updatedict["avgKillShare"] += temp_data["killPart"][
+                                x[key]["Win_Status"]
+                            ][x[key]["Role"]]["killShare"]
+                            updatedict[role]["avgGoldShare"] += temp_data["goldScore"][
+                                x[key]["Win_Status"]
+                            ][x[key]["Role"]]["goldShare"]
+                            updatedict[role]["avgDamageShare"] += temp_data[
+                                "damageScore"
+                            ][x[key]["Win_Status"]][x[key]["Role"]]["damageShare"]
+                            updatedict[role]["avgKillShare"] += temp_data["killPart"][
+                                x[key]["Win_Status"]
+                            ][x[key]["Role"]]["killShare"]
 
                             if match_data["Kills"] > updatedict["maxKills"]:
                                 updatedict["maxKills"] = match_data["Kills"]
@@ -461,17 +493,35 @@ def run_loop(playername, god, role, mycol, updatedict):
                             if match_data["Deaths"] > updatedict[role]["maxDeaths"]:
                                 updatedict[role]["maxDeaths"] = match_data["Deaths"]
 
-                            if temp_data["goldScore"][x[key]["Win_Status"]][x[key]["Role"]]["goldShare"] > updatedict["maxGoldShare"]:
-                                updatedict["maxGoldShare"] = temp_data["goldScore"][x[key]
-                                                                                    ["Win_Status"]][x[key]["Role"]]["goldShare"]
+                            if (
+                                temp_data["goldScore"][x[key]["Win_Status"]][
+                                    x[key]["Role"]
+                                ]["goldShare"]
+                                > updatedict["maxGoldShare"]
+                            ):
+                                updatedict["maxGoldShare"] = temp_data["goldScore"][
+                                    x[key]["Win_Status"]
+                                ][x[key]["Role"]]["goldShare"]
 
-                            if temp_data["damageScore"][x[key]["Win_Status"]][x[key]["Role"]]["damageShare"] > updatedict["maxDamageShare"]:
-                                updatedict["maxDamageShare"] = temp_data["damageScore"][x[key]
-                                                                                        ["Win_Status"]][x[key]["Role"]]["damageShare"]
+                            if (
+                                temp_data["damageScore"][x[key]["Win_Status"]][
+                                    x[key]["Role"]
+                                ]["damageShare"]
+                                > updatedict["maxDamageShare"]
+                            ):
+                                updatedict["maxDamageShare"] = temp_data["damageScore"][
+                                    x[key]["Win_Status"]
+                                ][x[key]["Role"]]["damageShare"]
 
-                            if temp_data["killPart"][x[key]["Win_Status"]][x[key]["Role"]]["killShare"] > updatedict["maxKillShare"]:
-                                updatedict["maxKillShare"] = temp_data["killPart"][x[key]
-                                                                                   ["Win_Status"]][x[key]["Role"]]["killShare"]
+                            if (
+                                temp_data["killPart"][x[key]["Win_Status"]][
+                                    x[key]["Role"]
+                                ]["killShare"]
+                                > updatedict["maxKillShare"]
+                            ):
+                                updatedict["maxKillShare"] = temp_data["killPart"][
+                                    x[key]["Win_Status"]
+                                ][x[key]["Role"]]["killShare"]
 
                             if match_data["Wards_Placed"] > updatedict["maxWards"]:
                                 updatedict["maxWards"] = match_data["Wards_Placed"]
@@ -509,15 +559,16 @@ def query_player_accounts(playername):
     accounts = []
     with open("cred.txt", "r") as creds:
         lines = creds.readlines()
-        smite_api = SmiteAPI(devId=lines[0].strip(
-
-        ), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
+        smite_api = SmiteAPI(
+            devId=lines[0].strip(),
+            authKey=lines[1].strip(),
+            responseFormat=pyrez.Format.JSON,
+        )
         player_id = fh.get_player_id(smite_api, playername)
         test_data = smite_api.getPlayer(player_id)
         accounts.append(test_data)
         if "playerId" in test_data["MergedPlayers"]:
-            accounts.append(smite_api.getPlayer(
-                test_data["MergedPlayers"]["playerId"]))
+            accounts.append(smite_api.getPlayer(test_data["MergedPlayers"]["playerId"]))
     return accounts
 
 
@@ -525,4 +576,5 @@ if __name__ == "__main__":
     import flaskHelper as fh
     from pyrez import SmiteAPI
     import pyrez
+
     print(find_match_history(client, "AleksEnglish", "Casual", "9.4", "Conquest"))

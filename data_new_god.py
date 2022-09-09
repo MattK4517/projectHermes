@@ -98,7 +98,8 @@ def create_item_dict(item, item_prices):
     ret_data["ItemTier"] = item["ItemTier"]
     ret_data["relativePrice"] = item["Price"]
     ret_data["absolutePrice"] = get_item_abs_price(
-        item["DeviceName"], item["RootItemId"], item["ItemTier"], item_prices)
+        item["DeviceName"], item["RootItemId"], item["ItemTier"], item_prices
+    )
     ret_data["ShortDesc"] = item["ShortDesc"]
     ret_data["itemIcon_URL"] = item["itemIcon_URL"]
     return ret_data
@@ -111,11 +112,19 @@ def get_new_items(client, smite_api):
     print(items[5])
     for item in range(len(items)):
         if items[item]["RootItemId"] not in prices:
-            prices[items[item]["RootItemId"]] = {items[item]["DeviceName"]: {
-                "Price": items[item]["Price"], "Tier": items[item]["ItemTier"], "Name": items[item]["DeviceName"]}}
+            prices[items[item]["RootItemId"]] = {
+                items[item]["DeviceName"]: {
+                    "Price": items[item]["Price"],
+                    "Tier": items[item]["ItemTier"],
+                    "Name": items[item]["DeviceName"],
+                }
+            }
         else:
             prices[items[item]["RootItemId"]][items[item]["DeviceName"]] = {
-                "Price": items[item]["Price"], "Tier": items[item]["ItemTier"], "Name": items[item]["DeviceName"]}
+                "Price": items[item]["Price"],
+                "Tier": items[item]["ItemTier"],
+                "Name": items[item]["DeviceName"],
+            }
 
     for item in range(len(items)):
         mycol = mydb[items[item]["DeviceName"]]
@@ -126,6 +135,5 @@ def get_new_items(client, smite_api):
 if __name__ == "__main__":
     with open("cred.txt", "r") as f:
         data = f.readlines()
-        smite_api = SmiteAPI(devId=data[0].strip(
-        ), authKey=data[1].strip())
+        smite_api = SmiteAPI(devId=data[0].strip(), authKey=data[1].strip())
         get_new_items(client, smite_api)

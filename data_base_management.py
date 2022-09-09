@@ -1,5 +1,3 @@
-
-
 from os import dup
 from re import A, match
 import pymongo
@@ -8,7 +6,16 @@ from operator import getitem
 import pandas as pd
 from pymongo.encryption import Algorithm
 import analyze as anlz
-from constants import Tier_Three_items, godsDict, roles, ranks, single_combat_stats, single_objective_stats, Warriors
+from constants import (
+    Tier_Three_items,
+    godsDict,
+    roles,
+    ranks,
+    single_combat_stats,
+    single_objective_stats,
+    Warriors,
+)
+
 # from pandas.io.json import json_normalize
 # import time
 from main import client
@@ -59,10 +66,12 @@ def add_new_urls(client, god):
     ]
     mydb = client["URLS"]
     mycol = mydb[god]
-    mycol.insert_one({
-        "Abilities": ability_names,
-        "Abilities_urls": ability_urls,
-    })
+    mycol.insert_one(
+        {
+            "Abilities": ability_names,
+            "Abilities_urls": ability_urls,
+        }
+    )
 
 
 def add_patch_field(client, db, col, matchId, carry_score, field_key):
@@ -131,7 +140,9 @@ def add_gold_eff(client, db, col, field_key):
     mydb = client[db]
     mycol = mydb[col]
     gold_eff = {}
-    for x in mycol.find(myquery, {"carryScore": 1, "killPart": 1, "_id": 0, "MatchId": 1}):
+    for x in mycol.find(
+        myquery, {"carryScore": 1, "killPart": 1, "_id": 0, "MatchId": 1}
+    ):
         matchId = x["MatchId"]
         gold_eff = anlz.get_gold_eff(x["killPart"], x["carryScore"])
         add_patch_field(client, db, col, matchId, gold_eff, field_key)
@@ -144,9 +155,7 @@ def remove_duplicates(client, patch):
     # for god in godsDict.keys():
     #     mycol = mydb[god]
     doc_ids = []
-    for x in mycol.aggregate([
-        {"$group": {"_id": "$MatchId", "count": {"$sum": 1}}}
-    ]):
+    for x in mycol.aggregate([{"$group": {"_id": "$MatchId", "count": {"$sum": 1}}}]):
         if x["count"] > 1:
             for x in mycol.find({"MatchId": x["_id"]}, {"_id": 1}):
                 doc_ids.append(x["_id"])

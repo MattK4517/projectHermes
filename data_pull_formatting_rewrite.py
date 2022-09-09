@@ -16,14 +16,16 @@ class GodData:
     def insert_ban(self, matchId, rank, entry_datetime, patch):
         mydb = client["single_god_bans"]
         mycol = mydb[self.name]
-        mycol.insert_one({
-            "matchId": matchId,
-            "rank": rank,
-            "patch": patch,
-            "Entry_Datetime": entry_datetime,
-            "mode": self.mode,
-            "input_type": self.input_type
-        })
+        mycol.insert_one(
+            {
+                "matchId": matchId,
+                "rank": rank,
+                "patch": patch,
+                "Entry_Datetime": entry_datetime,
+                "mode": self.mode,
+                "input_type": self.input_type,
+            }
+        )
 
     def set_matches(self, data):
         """append match Ids to self.matches when gods in data"""
@@ -31,17 +33,29 @@ class GodData:
             match_bans = 0
             match_picks = 0
             for key in match:
-                if "player" in key and match[key]["godName"] == self.name and match_picks == 0:
+                if (
+                    "player" in key
+                    and match[key]["godName"] == self.name
+                    and match_picks == 0
+                ):
                     self.matches.append(match)
                     match_picks += 1
                 if "Ban" in key and match[key] == self.name and match_bans == 0:
                     match_bans += 1
                     if self.mode == "Duel":
-                        self.insert_ban(match["MatchId"], normalize_rank(
-                            match["player1"]["Conquest_Tier"]), match["Entry_Datetime"], match["Patch"])
+                        self.insert_ban(
+                            match["MatchId"],
+                            normalize_rank(match["player1"]["Conquest_Tier"]),
+                            match["Entry_Datetime"],
+                            match["Patch"],
+                        )
                     else:
-                        self.insert_ban(match["MatchId"], normalize_rank(
-                            match["player0"]["Conquest_Tier"]), match["Entry_Datetime"], match["Patch"])
+                        self.insert_ban(
+                            match["MatchId"],
+                            normalize_rank(match["player0"]["Conquest_Tier"]),
+                            match["Entry_Datetime"],
+                            match["Patch"],
+                        )
 
     def get_matches(self):
         return len(self.matches)
@@ -53,7 +67,11 @@ class GodData:
         for match in self.matches:
             player_ids = []
             for key in match:
-                if "player" in key and match[key]["godName"] == self.name and match[key]["PlayerId"] not in player_ids:
+                if (
+                    "player" in key
+                    and match[key]["godName"] == self.name
+                    and match[key]["PlayerId"] not in player_ids
+                ):
                     player_ids.append(match[key]["PlayerId"])
                     build = {}
                     for player_key in match[key]:
@@ -95,45 +113,51 @@ class GodData:
                     win_status = match[key]["Win_Status"]
 
                     for key in match:
-                        if "player" in key and match[key]["Role"] == role and match[key]["Win_Status"] != win_status:
+                        if (
+                            "player" in key
+                            and match[key]["Role"] == role
+                            and match[key]["Win_Status"] != win_status
+                        ):
                             enemy = match[key]["godName"]
                         if "player" in key and match[key]["Win_Status"] != win_status:
                             enemies.append(match[key]["godName"])
 
-                    set.append({
-                        "player": player,
-                        "rank": rank,
-                        "role": role,
-                        "matchId": matchId,
-                        "kills": kills,
-                        "deaths": deaths,
-                        "assists": assists,
-                        "damage_player": damage_player,
-                        "damage_taken": damage_taken,
-                        "damage_mitigated": damage_mitigated,
-                        "healing": healing,
-                        "healing_self": healing_self,
-                        "gold": gold,
-                        "damage_bot": damage_bot,
-                        "kills_bot": kills_bot,
-                        "camps_cleared": camps_cleared,
-                        "tower_kills": tower_kills,
-                        "phoenix_kills": phoenix_kills,
-                        "tower_damage": tower_damage,
-                        "objective_assists": objective_assists,
-                        "wards_placed": wards_placed,
-                        "win_status": win_status,
-                        "patch": match["Patch"],
-                        "enemy": enemy,
-                        "enemies": enemies,
-                        "Entry_Datetime": match["Entry_Datetime"],
-                        "time": match["Match_Duration"],
-                        "mode": self.mode,
-                        "queue_type": self.queue_type,
-                        "build": build,
-                        "god": self.name,
-                        "input_type": self.input_type,
-                    })
+                    set.append(
+                        {
+                            "player": player,
+                            "rank": rank,
+                            "role": role,
+                            "matchId": matchId,
+                            "kills": kills,
+                            "deaths": deaths,
+                            "assists": assists,
+                            "damage_player": damage_player,
+                            "damage_taken": damage_taken,
+                            "damage_mitigated": damage_mitigated,
+                            "healing": healing,
+                            "healing_self": healing_self,
+                            "gold": gold,
+                            "damage_bot": damage_bot,
+                            "kills_bot": kills_bot,
+                            "camps_cleared": camps_cleared,
+                            "tower_kills": tower_kills,
+                            "phoenix_kills": phoenix_kills,
+                            "tower_damage": tower_damage,
+                            "objective_assists": objective_assists,
+                            "wards_placed": wards_placed,
+                            "win_status": win_status,
+                            "patch": match["Patch"],
+                            "enemy": enemy,
+                            "enemies": enemies,
+                            "Entry_Datetime": match["Entry_Datetime"],
+                            "time": match["Match_Duration"],
+                            "mode": self.mode,
+                            "queue_type": self.queue_type,
+                            "build": build,
+                            "god": self.name,
+                            "input_type": self.input_type,
+                        }
+                    )
         if len(self.matches) > 0:
             mycol.insert_many(set)
 

@@ -8,9 +8,13 @@ from constants import Assassins, Guardians, Hunters, Mages, Warriors
 def validate_player(client, playername):
     mydb = client["Players"]
     mycol = mydb["Player Basic"]
-    print(mycol.count_documents(
-        {"NameTag": {"$regex": f"{playername}", "$options": "i"}}))
-    if mycol.count_documents({"NameTag": {"$regex": f"{playername}", "$options": "i"}}) > 0:
+    print(
+        mycol.count_documents({"NameTag": {"$regex": f"{playername}", "$options": "i"}})
+    )
+    if (
+        mycol.count_documents({"NameTag": {"$regex": f"{playername}", "$options": "i"}})
+        > 0
+    ):
         return True
     return False
 
@@ -18,9 +22,26 @@ def validate_player(client, playername):
 def validate_gods(client, playername, queue_type, mode, input_type):
     mydb = client["Players"]
     mycol = mydb["Player Gods"]
-    print(mycol.count_documents({"queue_type": queue_type, "mode": mode, "NameTag": {
-          "$regex": f"{playername}", "$options": "i"}}))
-    if mycol.count_documents({"queue_type": queue_type, "mode": mode, "input_type": input_type, "NameTag": {"$regex": f"{playername}", "$options": "i"}}) > 0:
+    print(
+        mycol.count_documents(
+            {
+                "queue_type": queue_type,
+                "mode": mode,
+                "NameTag": {"$regex": f"{playername}", "$options": "i"},
+            }
+        )
+    )
+    if (
+        mycol.count_documents(
+            {
+                "queue_type": queue_type,
+                "mode": mode,
+                "input_type": input_type,
+                "NameTag": {"$regex": f"{playername}", "$options": "i"},
+            }
+        )
+        > 0
+    ):
         return True
     return False
 
@@ -66,17 +87,43 @@ def get_queue_id(queue_type, mode, input_type):
 
 
 def get_filter(table_type):
-    my_filter = {"patch": 1, "role": 1, "winRate": 1,
-                 "games": 1, "rank": 1, "god": 1, "_id": 0}
+    my_filter = {
+        "patch": 1,
+        "role": 1,
+        "winRate": 1,
+        "games": 1,
+        "rank": 1,
+        "god": 1,
+        "_id": 0,
+    }
     if table_type == "Regular":
-        my_filter = {**my_filter, **{"pickRate": 1,
-                                     "banRate": 1, "counterMatchups": 1}}
+        my_filter = {**my_filter, **{"pickRate": 1, "banRate": 1, "counterMatchups": 1}}
     elif table_type == "Combat":
-        my_filter = {**my_filter, **{"kills": 1, "deaths": 1, "damage_": 1,
-                                     "damageTaken": 1, "damageMitigated": 1, "healing": 1, "selfHealing": 1}}
+        my_filter = {
+            **my_filter,
+            **{
+                "kills": 1,
+                "deaths": 1,
+                "damage_": 1,
+                "damageTaken": 1,
+                "damageMitigated": 1,
+                "healing": 1,
+                "selfHealing": 1,
+            },
+        }
     elif table_type == "Objective":
-        my_filter = {**my_filter, **{"gold": 1, "damageBot": 1, "killsBot": 1,
-                                     "towerKills": 1, "phoenixKills": 1, "towerDamage": 1, "wardsPlaced": 1}}
+        my_filter = {
+            **my_filter,
+            **{
+                "gold": 1,
+                "damageBot": 1,
+                "killsBot": 1,
+                "towerKills": 1,
+                "phoenixKills": 1,
+                "towerDamage": 1,
+                "wardsPlaced": 1,
+            },
+        }
 
     return my_filter
 
@@ -111,5 +158,6 @@ def get_class(god):
 
 if __name__ == "__main__":
     from main import client
+
     # print(validate_gods(client, "Mayhem4517", "Ranked", "Conquest"))
     print(get_class("Ah Muzen Cab"))

@@ -31,7 +31,7 @@ godsDict = {
     "Cerberus": 0,
     "Cernunnos": 0,
     "Chaac": 0,
-    "Chang\'e": 0,
+    "Chang'e": 0,
     "Chernobog": 0,
     "Chiron": 0,
     "Chronos": 0,
@@ -118,11 +118,10 @@ godsDict = {
     "Yemoja": 0,
     "Ymir": 0,
     "Zeus": 0,
-    "Zhong Kui": 0
+    "Zhong Kui": 0,
 }
 
-dataSheet = pd.read_excel("God Abilities & Items.xlsx",
-                          sheet_name="god_abilties_all")
+dataSheet = pd.read_excel("God Abilities & Items.xlsx", sheet_name="god_abilties_all")
 
 formattedDS = dict(dataSheet)
 
@@ -135,8 +134,7 @@ for god in formattedDS["god_name"]:
 for god in formattedDS["god_name"]:
     if formattedDS["god_name"][index] == god:
         toMongo[god]["Abilities"].append(formattedDS["ability_name"][index])
-        toMongo[god]["Abilities_urls"].append(
-            formattedDS["ability_url"][index])
+        toMongo[god]["Abilities_urls"].append(formattedDS["ability_url"][index])
     index += 1
 
 mydb = client["URLS"]
