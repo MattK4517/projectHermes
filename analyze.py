@@ -136,12 +136,7 @@ def get_games_played(
 ):
     games = 0
     mydb = client["single_match_stats"]
-    if patch == "9.6":
-        mycol = mydb[mode + "-" + queue_type]
-    elif patch in ["9.8", "9.7"]:
-        mycol = mydb[patch + "-" + mode + "-" + queue_type]
-    else:
-        mycol = mydb[mode]
+    mycol = mydb[patch + "-" + mode + "-" + queue_type]
     mypipeline = return_pipeline(god, rank, role, patch, queue_type, mode)
     for x in mycol.aggregate(
         [mypipeline, {"$group": {"_id": "$god", "count": {"$sum": 1}}}]
@@ -232,14 +227,7 @@ def get_top_builds(
     top_dict = {slot: {} for slot in slots}
     top_dict = {**{f"relic{i+1}": {} for i in range(2)}, **top_dict}
     mydb = client["single_match_stats"]
-    if patch == "9.6":
-        mycol = mydb[mode + "-" + queue_type]
-    elif patch in ["9.8", "9.7"]:
-        print(patch + "-" + mode + "-" + queue_type)
-        mycol = mydb[patch + "-" + mode + "-" + queue_type]
-        print("HERE", mycol.count_documents({}))
-    else:
-        mycol = mydb[mode]
+    mycol = mydb[patch + "-" + mode + "-" + queue_type]
     games = 0
     wins = 0
     mypipeline = return_pipeline(god, rank, role, patch, queue_type, mode)
@@ -444,13 +432,7 @@ def get_all_builds(
     top_dict = {slot: {} for slot in slots}
     top_dict = {**{f"relic{i+1}": {} for i in range(4)}, **top_dict}
     mydb = client["single_match_stats"]
-    if patch == "9.6":
-        mycol = mydb[mode + "-" + queue_type]
-    elif patch in ["9.8", "9.7"]:
-        mycol = mydb[patch + "-" + mode + "-" + queue_type]
-    else:
-        mycol = mydb[mode]
-
+    mycol = mydb[patch + "-" + mode + "-" + queue_type]
     games = 0
     wins = 0
     mypipeline = return_pipeline(god, rank, role, patch, queue_type, mode)
@@ -499,12 +481,7 @@ def get_worst_matchups(
     player=None,
 ):
     mydb = client["single_match_stats"]
-    if patch == "9.6":
-        mycol = mydb[mode + "-" + queue_type]
-    elif patch in ["9.8", "9.7"]:
-        mycol = mydb[patch + "-" + mode + "-" + queue_type]
-    else:
-        mycol = mydb[mode]
+    mycol = mydb[patch + "-" + mode + "-" + queue_type]
     matchup_dict = {}
 
     if player:
@@ -646,12 +623,7 @@ def get_winrate(
     matchup="None",
 ):
     mydb = client["single_match_stats"]
-    if patch == "9.6":
-        mycol = mydb[mode + "-" + queue_type]
-    elif patch in ["9.8", "9.7"]:
-        mycol = mydb[patch + "-" + mode + "-" + queue_type]
-    else:
-        mycol = mydb[mode]
+    mycol = mydb[patch + "-" + mode + "-" + queue_type]
     myquery = get_query(rank, role, patch, queue_type, mode=mode)
 
     if matchup != "None":
@@ -1199,12 +1171,7 @@ def get_matchups_stats(
     mode="Conquest",
 ):
     mydb = client["single_match_stats"]
-    if patch == "9.6":
-        mycol = mydb[mode + "-" + queue_type]
-    elif patch in ["9.8", "9.7"]:
-        mycol = mydb[patch + "-" + mode + "-" + queue_type]
-    else:
-        mycol = mydb[mode]
+    mycol = mydb[patch + "-" + mode + "-" + queue_type]
     myquery = get_query(rank, role, patch, queue_type, mode)
     avg_dmg_dict = {}
     total_games = mycol.count_documents(myquery)
@@ -1285,13 +1252,7 @@ def get_build_path(
     client, god, role, patch, queue_type="Ranked", rank="All Ranks", mode="Conquest"
 ):
     mydb = client["single_match_stats"]
-    if patch == "9.6":
-        mycol = mydb[mode + "-" + queue_type]
-    elif patch in ["9.8", "9.7"]:
-        mycol = mydb[patch + "-" + mode + "-" + queue_type]
-
-    else:
-        mycol = mydb[mode]
+    mycol = mydb[patch + "-" + mode + "-" + queue_type]
     index = 0
     games = 0
     builds = {}
@@ -1524,12 +1485,7 @@ def get_skin_stats(
     matchup=None,
 ):
     mydb = client["single_match_stats"]
-    if patch == "9.6":
-        mycol = mydb[mode + "-" + queue_type]
-    elif patch in ["9.8", "9.7"]:
-        mycol = mydb[patch + "-" + mode + "-" + queue_type]
-    else:
-        mycol = mydb[mode]
+    mycol = mydb[patch + "-" + mode + "-" + queue_type]
     games = 0
     wins = 0
     myquery = get_query(rank, role, patch, queue_type, mode)
@@ -1615,12 +1571,7 @@ def get_single_skin_stats(
     if "Standard" in skin:
         skin = god
     mydb = client["single_match_stats"]
-    if patch == "9.6":
-        mycol = mydb[mode + "-" + queue_type]
-    elif patch in ["9.8", "9.7"]:
-        mycol = mydb[patch + "-" + mode + "-" + queue_type]
-    else:
-        mycol = mydb[mode]
+    mycol = mydb[patch + "-" + mode + "-" + queue_type]
     games = 0
     wins = 0
     data = {**{stat: 0 for stat in single_stats}, **{"players": []}}
@@ -1916,7 +1867,7 @@ def get_match_time(patch):
 
 
 if __name__ == "__main__":
-    print(get_top_builds(client, "Achilles", "Solo", "9.8"))
+    print(get_top_builds(client, "Achilles", "Solo", "9.9"))
     print(len(godsDict))
     # client, god, role, patch, queue_type="Ranked", rank="All Ranks", mode="Conquest", matchup="None"
     #     },}):
