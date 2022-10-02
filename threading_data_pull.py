@@ -12,17 +12,21 @@ from data_pull_formatting_rewrite import format_no_query, threadedd_format_no_qu
 from data_pull_insert import create_sets, threaded_pull
 import os
 from sys import getsizeof
+
 # from data_pull_formatting_rewrite import format_no_query
 from main import client
 
-eastern = timezone('US/Eastern')
+eastern = timezone("US/Eastern")
 
 
 def init_api(patch, date):
     with open("cred.txt", "r") as f:
         data = f.readlines()
-        smite_api = SmiteAPI(devId=data[0].strip(
-        ), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
+        smite_api = SmiteAPI(
+            devId=data[0].strip(),
+            authKey=data[1].strip(),
+            responseFormat=pyrez.Format.JSON,
+        )
     date = date
     match_ids = smite_api.getMatchIds(426, date=date, hour=-1)
     threaded_process_range(4, create_sets(match_ids), patch)

@@ -17,37 +17,73 @@ def gen_tier_list(client, roles, patch, types, ranks, queue_types, modes):
                                 for god in godsDict:
                                     if tier_type == "Regular":
                                         gen_regular_tier_entry(
-                                            client, god, role, rank, patch, queue_type, mode, date)
+                                            client,
+                                            god,
+                                            role,
+                                            rank,
+                                            patch,
+                                            queue_type,
+                                            mode,
+                                            date,
+                                        )
                                     print(
-                                        f"god done {god} - {rank} - {role} - {tier_type} - {queue_type} - {mode}")
+                                        f"god done {god} - {rank} - {role} - {tier_type} - {queue_type} - {mode}"
+                                    )
                         elif queue_type == "Casual":
                             for god in godsDict:
                                 if tier_type == "Regular":
                                     gen_regular_tier_entry(
-                                        client, god, role, "All Ranks", patch, queue_type, mode, date)
+                                        client,
+                                        god,
+                                        role,
+                                        "All Ranks",
+                                        patch,
+                                        queue_type,
+                                        mode,
+                                        date,
+                                    )
                                 print(
-                                    f"god done {god} - {rank} - {role} - {tier_type} - {queue_type} - {mode}")
+                                    f"god done {god} - {rank} - {role} - {tier_type} - {queue_type} - {mode}"
+                                )
                 elif mode != "Conquest":
                     if queue_type == "Ranked":
                         for rank in ["All Ranks"]:
                             for god in godsDict:
                                 if tier_type == "Regular":
                                     gen_regular_tier_entry(
-                                        client, god, role, rank, patch, queue_type, mode, date)
+                                        client,
+                                        god,
+                                        role,
+                                        rank,
+                                        patch,
+                                        queue_type,
+                                        mode,
+                                        date,
+                                    )
                                 print(
-                                    f"god done {god} - {rank} - {role} - {tier_type} - {queue_type} - {mode}")
+                                    f"god done {god} - {rank} - {role} - {tier_type} - {queue_type} - {mode}"
+                                )
                     elif queue_type == "Casual":
                         for god in godsDict:
                             if tier_type == "Regular":
                                 gen_regular_tier_entry(
-                                    client, god, role, "All Ranks", patch, queue_type, mode, date)
+                                    client,
+                                    god,
+                                    role,
+                                    "All Ranks",
+                                    patch,
+                                    queue_type,
+                                    mode,
+                                    date,
+                                )
                             print(
-                                f"god done {god} - {rank} - {role} - {tier_type} - {queue_type} - {mode}")
+                                f"god done {god} - {rank} - {role} - {tier_type} - {queue_type} - {mode}"
+                            )
 
 
 def gen_regular_tier_entry(client, god, role, rank, patch, queue_type, mode, date):
-    """ gather information to generate tier entry
-        dict fields shown below
+    """gather information to generate tier entry
+    dict fields shown below
     """
     # insert a dict
     # {
@@ -64,12 +100,10 @@ def gen_regular_tier_entry(client, god, role, rank, patch, queue_type, mode, dat
     wr_data = calc_win_rate(client, god, role, patch, rank, queue_type, mode)
     winRate = wr_data["win_rate"]
     games = wr_data["games"]
-    pb_data = calc_pick_ban_rate(
-        client, god, rank, role, patch, queue_type, mode)
+    pb_data = calc_pick_ban_rate(client, god, rank, role, patch, queue_type, mode)
     ban_rate = pb_data["banRate"]
     pick_rate = pb_data["pickRate"]
-    matchups = anlz.get_worst_matchups(
-        client, god, role, patch, queue_type, rank, mode)
+    matchups = anlz.get_worst_matchups(client, god, role, patch, queue_type, rank, mode)
     del matchups["games"], matchups["wins"], matchups["winRate"]
     tier_entry = {
         "patch": patch,
@@ -84,14 +118,18 @@ def gen_regular_tier_entry(client, god, role, rank, patch, queue_type, mode, dat
         "pickRate": pick_rate,
         "banRate": ban_rate,
         "counterMatchups": matchups,
-        "games": 0
+        "games": 0,
     }
 
-    tier_entry = {**tier_entry, **
-                  anlz.get_combat_stats(client, god, role, patch, rank, queue_type, mode)}
+    tier_entry = {
+        **tier_entry,
+        **anlz.get_combat_stats(client, god, role, patch, rank, queue_type, mode),
+    }
 
-    tier_entry = {**tier_entry, **
-                  anlz.get_objective_stats(client, god, role, patch, rank, queue_type, mode)}
+    tier_entry = {
+        **tier_entry,
+        **anlz.get_objective_stats(client, god, role, patch, rank, queue_type, mode),
+    }
 
     tier_entry["games"] = games
     if "_id" in tier_entry:
@@ -114,13 +152,14 @@ def get_tier(client, win_rate, pick_rate, ban_rate, role, rank):
         ban_rate_diff = ban_rate - tier_stats["avgBanRate"]
         ban_rate_score = ban_rate_diff / tier_stats["stdDevBanRate"]
 
-        tier = (1.75*win_rate_score) + \
-            ((pick_rate_score + (.7*ban_rate_score)) / 2)
+        tier = (1.75 * win_rate_score) + (
+            (pick_rate_score + (0.7 * ban_rate_score)) / 2
+        )
         # print(tier)
         if tier < 0:
             tier_letter = "D"
 
-        elif tier < .5:
+        elif tier < 0.5:
             tier_letter = "C"
 
         elif tier < 1:
@@ -153,18 +192,16 @@ def get_tier_stats(client: pymongo.MongoClient, rank: str, role: str) -> dict:
         [
             {"$match": myquery},
             {
-            "$group": {
-                "_id": f"tier stats",
-                "stdDevWinRate": {"$stdDevPop": f"$winRate"},
-                "avgWinRate": {"$avg": f"$winRate"},
-
-                "stdDevPickRate": {"$stdDevPop": f"$pickRate"},
-                "avgPickRate": {"$avg": f"$pickRate"},
-
-                "stdDevBanRate": {"$stdDevPop": f"$banRate"},
-                "avgBanRate": {"$avg": f"$banRate"},
-            }
-            }
+                "$group": {
+                    "_id": f"tier stats",
+                    "stdDevWinRate": {"$stdDevPop": f"$winRate"},
+                    "avgWinRate": {"$avg": f"$winRate"},
+                    "stdDevPickRate": {"$stdDevPop": f"$pickRate"},
+                    "avgPickRate": {"$avg": f"$pickRate"},
+                    "stdDevBanRate": {"$stdDevPop": f"$banRate"},
+                    "avgBanRate": {"$avg": f"$banRate"},
+                }
+            },
         ]
     ):
         retData = x
@@ -198,15 +235,43 @@ def update_tier(client, roles, patch, ranks, queue_types):
         for role in roles:
             for rank in ranks:
                 for god in godsDict:
-                    for x in mycol.find({"queue_type": f"{queue_type}Conq", "role": role, "god": god, "rank": rank}):
+                    for x in mycol.find(
+                        {
+                            "queue_type": f"{queue_type}Conq",
+                            "role": role,
+                            "god": god,
+                            "rank": rank,
+                        }
+                    ):
                         tier = get_tier(
-                            client, x["winRate"], x["pickRate"], x["banRate"], role, rank)
-                    mycol.update_one({"queue_type": f"{queue_type}Conq", "role": role, "god": god,
-                                     "rank": rank, "patch": "9.2"}, {"$set": {"tier": tier}})
+                            client,
+                            x["winRate"],
+                            x["pickRate"],
+                            x["banRate"],
+                            role,
+                            rank,
+                        )
+                    mycol.update_one(
+                        {
+                            "queue_type": f"{queue_type}Conq",
+                            "role": role,
+                            "god": god,
+                            "rank": rank,
+                            "patch": "9.2",
+                        },
+                        {"$set": {"tier": tier}},
+                    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     starttime = datetime.now()
-    gen_tier_list(client, roles, "9.3", [
-                  "Regular"], all_ranks, ["Ranked"], ["Conquest", "Duel", "Joust"])
+    gen_tier_list(
+        client,
+        roles,
+        "9.3",
+        ["Regular"],
+        all_ranks,
+        ["Ranked"],
+        ["Conquest", "Duel", "Joust"],
+    )
     print(f"done in {datetime.now() - starttime}")

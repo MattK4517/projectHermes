@@ -42,7 +42,9 @@ def get_carry_score_averages():
                         {
                             "$group": {
                                 "_id": f"{role}{team}{field}",
-                                "stdDev": {"$stdDevPop": f"${field}.{team}.{role}.{final}"},
+                                "stdDev": {
+                                    "$stdDevPop": f"${field}.{team}.{role}.{final}"
+                                },
                                 "avg": {"$avg": f"${field}.{team}.{role}.{final}"},
                                 # "max": {"$max": f"${field}.{team}.{role}.{final}"},
                                 # "min": {"$min": f"${field}.{team}.{role}.{final}"},

@@ -6,7 +6,7 @@ export const MainProvider = (props) => {
   const [god, setGod] = useState("");
   const [role, setRole] = useState("");
   const [rank, setRank] = useState("All Ranks");
-  const [patch, setPatch] = useState("9.8");
+  const [patch, setPatch] = useState("9.9");
   const [queueType, setQueueType] = useState("Ranked");
   const [mode, setMode] = useState("Conquest");
   const [matchup, setMatchup] = useState("None");
@@ -31,7 +31,7 @@ export const MainProvider = (props) => {
 
   useEffect(() => {
     setRank("All Ranks");
-    setPatch("9.8");
+    setPatch("9.9");
     setQueueType("Ranked");
     setMode("Conquest");
     setMatchup("None");

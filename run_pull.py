@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from constants import patch, all_ranks
 from data_pull_insert import run_pull
 import analyze as anlz
+
 # from data_pull_formatting_rewrite import run_format_hourly
 from pytz import timezone
 import os
@@ -45,24 +46,28 @@ if __name__ == "__main__":
     starttime = datetime.now()
     with open("cred.txt", "r") as creds:
         lines = creds.readlines()
-        smite_api = SmiteAPI(devId=lines[0].strip(
-        ), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
+        smite_api = SmiteAPI(
+            devId=lines[0].strip(),
+            authKey=lines[1].strip(),
+            responseFormat=pyrez.Format.JSON,
+        )
 
     patch = smite_api.getPatchInfo()["version_string"]
     for mode in modes:
         for queue_type in queue_types:
             if queue_type == "Ranked":
                 for input_type in input_types:
-                    run_pull(patch, curr_time, queue_type,
-                             mode, input_type, date_insert)
+                    run_pull(
+                        patch, curr_time, queue_type, mode, input_type, date_insert
+                    )
                     print(
-                        f"pull done: {patch}, {curr_time}, {queue_type},{mode}, {input_type}, {date_insert}\n")
+                        f"pull done: {patch}, {curr_time}, {queue_type},{mode}, {input_type}, {date_insert}\n"
+                    )
 
             elif queue_type == "Casual":
-                run_pull(patch, curr_time, queue_type,
-                         mode, "KBM", date_insert)
+                run_pull(patch, curr_time, queue_type, mode, "KBM", date_insert)
                 print(
-                    f"pull done: {patch}, {curr_time}, {queue_type},{mode}, {input_type}, {date_insert}\n")
+                    f"pull done: {patch}, {curr_time}, {queue_type},{mode}, {input_type}, {date_insert}\n"
+                )
             if curr_time == 12:
-                anlz.calc_total_matches(
-                    client, all_ranks, patch, queue_type, mode)
+                anlz.calc_total_matches(client, all_ranks, patch, queue_type, mode)

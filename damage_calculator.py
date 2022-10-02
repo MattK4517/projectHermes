@@ -2,14 +2,23 @@ from math import ceil, floor
 import pymongo
 from main import client
 import analyze as anlz
-from constants import num_hits_dict, scaling_dict, percentage_dict, Warriors, Assassins, Hunters, Mages, Guardians
+from constants import (
+    num_hits_dict,
+    scaling_dict,
+    percentage_dict,
+    Warriors,
+    Assassins,
+    Hunters,
+    Mages,
+    Guardians,
+)
 from random import randint
 from damage_calc_helpers import *
 
 
 def get_num_hits(god, ability, base):
     """
-        returns the number of times each ability hits
+    returns the number of times each ability hits
     """
     if special_case(ability, base):
         return special_case(ability, base)
@@ -27,7 +36,7 @@ def get_num_hits(god, ability, base):
 
 def get_scaling_changes(god, ability, hit):
     """
-        returns if ability has any changes to its damage scaling, and what said scaling is
+    returns if ability has any changes to its damage scaling, and what said scaling is
     """
     ability_key = ""
     for key in num_hits_dict[god]:
@@ -40,8 +49,8 @@ def get_scaling_changes(god, ability, hit):
 
 def get_percent_change(god, ability, hit):
     """
-      returns if ability has any changes to its damage scaling, and what said scaling is
-      # TODO remove funciton
+    returns if ability has any changes to its damage scaling, and what said scaling is
+    # TODO remove funciton
     """
     ability_key = ""
     for key in num_hits_dict[god]:
@@ -57,9 +66,22 @@ def get_proc(item):
         return
 
 
-def calc_ability_damage_raw(base, scaling, power, god, ability, prot, armor_reduction_per, armor_reduction_flat, pen_per, pen_flat, miti=0, procs=[]):
+def calc_ability_damage_raw(
+    base,
+    scaling,
+    power,
+    god,
+    ability,
+    prot,
+    armor_reduction_per,
+    armor_reduction_flat,
+    pen_per,
+    pen_flat,
+    miti=0,
+    procs=[],
+):
     """
-      returns damage stats for a given ability
+    returns damage stats for a given ability
     """
     proc_damage = 0
     damage = 0
@@ -67,9 +89,19 @@ def calc_ability_damage_raw(base, scaling, power, god, ability, prot, armor_redu
     hits = get_num_hits(god, ability, base)
     for i in range(hits):
         # print(get_scaling_changes(god, ability, i+1))
-        temp = calc_mitigation(((float(base) + ((float(scaling)/100) * float(power))) + (float(base) *
-                                                                                         get_scaling_changes(god, ability, i+1)/100)) * get_percent_change(god, ability, i+1), prot, miti,
-                               armor_reduction_per, armor_reduction_flat, pen_per, pen_flat)
+        temp = calc_mitigation(
+            (
+                (float(base) + ((float(scaling) / 100) * float(power)))
+                + (float(base) * get_scaling_changes(god, ability, i + 1) / 100)
+            )
+            * get_percent_change(god, ability, i + 1),
+            prot,
+            miti,
+            armor_reduction_per,
+            armor_reduction_flat,
+            pen_per,
+            pen_flat,
+        )
 
         damage += temp["dealt"]
         mitigated += temp["mitigated"]
@@ -78,8 +110,15 @@ def calc_ability_damage_raw(base, scaling, power, god, ability, prot, armor_redu
             get_proc(proc)
 
     if hits > 1:
-        temp = calc_mitigation(damage + mitigated, prot, miti,
-                               armor_reduction_per, armor_reduction_flat, pen_per, pen_flat)
+        temp = calc_mitigation(
+            damage + mitigated,
+            prot,
+            miti,
+            armor_reduction_per,
+            armor_reduction_flat,
+            pen_per,
+            pen_flat,
+        )
         # print("NEW MITI", temp, damage + mitigated, damage, mitigated)
 
         damage = temp["dealt"]
@@ -88,12 +127,14 @@ def calc_ability_damage_raw(base, scaling, power, god, ability, prot, armor_redu
         "procDamage": proc_damage,
         "damageRaw": damage + mitigated,
         "damageMitigated": mitigated,
-        "damageTotal": damage
+        "damageTotal": damage,
     }
 
 
-def calc_combo_damage_raw(client, god, levels, build, enemy, enemy_build, level=20, enemy_level=20):
-    """ returns json for a gods damage stats given parameters
+def calc_combo_damage_raw(
+    client, god, levels, build, enemy, enemy_build, level=20, enemy_level=20
+):
+    """returns json for a gods damage stats given parameters
     Args:
         client ([MongoClient]): database connectionmitigated
         god ([String]): name of god
@@ -105,8 +146,15 @@ def calc_combo_damage_raw(client, god, levels, build, enemy, enemy_build, level=
         enemy_level ([Int]): level of enemy (for base stats)
     """
     temp = anlz.get_god_stats(client, god, level)
-    attSpeed, power, critChance, armor_reduction_per, armor_reduction_flat, pen_per, pen_flat = calc_dps_stats(
-        client, god, build, temp["AttackSpeed"])
+    (
+        attSpeed,
+        power,
+        critChance,
+        armor_reduction_per,
+        armor_reduction_flat,
+        pen_per,
+        pen_flat,
+    ) = calc_dps_stats(client, god, build, temp["AttackSpeed"])
 
     defense_stats = anlz.get_god_stats(client, enemy, enemy_level)
     temp_def = calc_tank_stats(client, enemy, enemy_build)
@@ -137,7 +185,9 @@ def calc_combo_damage_raw(client, god, levels, build, enemy, enemy_build, level=
                 ability_names.append(x[ability]["Summary"])
             else:
                 for item in x[ability]["itemDescription"]["rankitems"]:
-                    if special_description_parsing(item["description"].lower()) or get_special_ability(ability_names[int(ability[-1])-1]):
+                    if special_description_parsing(
+                        item["description"].lower()
+                    ) or get_special_ability(ability_names[int(ability[-1]) - 1]):
                         if levels[ability[-1]] != 0:
                             split_line = len(item["value"].split("("))
                             if split_line > 1:
@@ -145,40 +195,65 @@ def calc_combo_damage_raw(client, god, levels, build, enemy, enemy_build, level=
                                 if split_line > 1:
                                     scaling = item["value"].split("(")[1]
                                 if len(damage.split("/")) > 4:
-                                    damage = damage.split(
-                                        "/")[int(levels[ability[-1]]) - 1]
+                                    damage = damage.split("/")[
+                                        int(levels[ability[-1]]) - 1
+                                    ]
                                 else:
                                     damage = damage
                                 scaling = scaling.split("%")[0]
                                 if "+" in scaling:
-                                    scaling = scaling[scaling.index("+")+1:]
+                                    scaling = scaling[scaling.index("+") + 1 :]
                             else:
-                                if ("damage:" in item["description"].lower() or "damage per" in item["description"].lower()) and "reduced damage:" not in item["description"].lower():
+                                if (
+                                    "damage:" in item["description"].lower()
+                                    or "damage per" in item["description"].lower()
+                                ) and "reduced damage:" not in item[
+                                    "description"
+                                ].lower():
                                     # print(item)
                                     if len(item["value"].split(" ")[0].split("/")) > 1:
-                                        damage = item["value"].split(" ")[0].split(
-                                            "/")[int(levels[ability[-1]]) - 1]
+                                        damage = (
+                                            item["value"]
+                                            .split(" ")[0]
+                                            .split("/")[int(levels[ability[-1]]) - 1]
+                                        )
                                         scaling = 0
 
                             ability_numbers.append(
-                                {"damage": damage,
-                                 "scaling": scaling,
-                                 "abilityName": f"{ability_names[int(ability[-1])-1]} {item['description']}",
-                                 "displayName": f"{ability_names[int(ability[-1])-1]}"
-                                 })
+                                {
+                                    "damage": damage,
+                                    "scaling": scaling,
+                                    "abilityName": f"{ability_names[int(ability[-1])-1]} {item['description']}",
+                                    "displayName": f"{ability_names[int(ability[-1])-1]}",
+                                }
+                            )
     ret_data = {}
     for ability in ability_numbers:
-        if "damage" not in ability["abilityName"].lower() and "initial hit:" not in ability["abilityName"].lower():
+        if (
+            "damage" not in ability["abilityName"].lower()
+            and "initial hit:" not in ability["abilityName"].lower()
+        ):
             ability_numbers.pop(ability_numbers.index(ability))
     change_special(god, ability_numbers, levels)
 
     for ability, index in enumerate(ability_numbers):
         if "%" not in index["damage"]:
             damage = calc_ability_damage_raw(
-                index["damage"], index["scaling"], power, god, ability_numbers[ability]['abilityName'], prots, armor_reduction_per, armor_reduction_flat, pen_per, pen_flat)
-            ret_data[ability] = {"damage": damage,
-                                 "name": ability_numbers[ability]['abilityName'],
-                                 }
+                index["damage"],
+                index["scaling"],
+                power,
+                god,
+                ability_numbers[ability]["abilityName"],
+                prots,
+                armor_reduction_per,
+                armor_reduction_flat,
+                pen_per,
+                pen_flat,
+            )
+            ret_data[ability] = {
+                "damage": damage,
+                "name": ability_numbers[ability]["abilityName"],
+            }
     #         print(
     #             f"{ability_numbers[ability]['abilityName']} damage: {damage['damageTotal']}")
     #         total_damage += damage["damageTotal"]
@@ -194,12 +269,9 @@ def get_special_item(item):
 
 def calc_dps_stats(client, god, build, baseAttSpeed):
     """
-      returns gods offensive stats with a given build
+    returns gods offensive stats with a given build
     """
-    myfilter = {
-        **{"_id": 0},
-        **{f"AttackSpeed": 1}
-    }
+    myfilter = {**{"_id": 0}, **{f"AttackSpeed": 1}}
     god = god.title()
     attSpeedIncease = 0
     attSpeedDecrease = 0
@@ -218,31 +290,36 @@ def calc_dps_stats(client, god, build, baseAttSpeed):
             for stat in item_description["ItemDescription"]["Menuitems"]:
                 # print(item, stat)
                 if stat["Description"] == "Attack Speed":
-                    attSpeedIncease += int(stat["Value"].replace("%",
-                                           "").replace("+", ""))/100
+                    attSpeedIncease += (
+                        int(stat["Value"].replace("%", "").replace("+", "")) / 100
+                    )
                 elif "Power" in stat["Description"]:
-                    power += int(stat["Value"].replace("%",
-                                 "").replace("+", ""))
+                    power += int(stat["Value"].replace("%", "").replace("+", ""))
                 elif "Critical" in stat["Description"]:
-                    critChance += int(stat["Value"].replace("%",
-                                      "").replace("+", ""))
+                    critChance += int(stat["Value"].replace("%", "").replace("+", ""))
                 elif "Penetration" in stat["Description"]:
                     if "%" in stat["Value"]:
-                        pen_per += int(stat["Value"].replace("%",
-                                                             "").replace("+", ""))
+                        pen_per += int(stat["Value"].replace("%", "").replace("+", ""))
                     else:
-                        pen_flat += int(stat["Value"].replace("%",
-                                                              "").replace("+", ""))
+                        pen_flat += int(stat["Value"].replace("%", "").replace("+", ""))
 
-    attSpeed = baseAttSpeed * (1+(attSpeedIncease - attSpeedDecrease))
+    attSpeed = baseAttSpeed * (1 + (attSpeedIncease - attSpeedDecrease))
     attSpeed = round(attSpeed, 2)
     print(attSpeed)
-    return (attSpeed, power, critChance, armor_reduction_per, armor_reduction_flat, pen_per, pen_flat)
+    return (
+        attSpeed,
+        power,
+        critChance,
+        armor_reduction_per,
+        armor_reduction_flat,
+        pen_per,
+        pen_flat,
+    )
 
 
 def calc_tank_stats(client, god, build):
     """
-      returns gods defensive stats with a given build
+    returns gods defensive stats with a given build
     """
     god = god.title()
     print(god)
@@ -269,23 +346,23 @@ def calc_tank_stats(client, god, build):
 
 def calc_qins_dmg(hp):
     """
-        returns damage of qins sais given hp scaling
+    returns damage of qins sais given hp scaling
     """
     dmg = 0
     if hp <= 2000:
-        dmg = hp * .03
+        dmg = hp * 0.03
     elif hp >= 2750:
-        dmg = hp * .05
+        dmg = hp * 0.05
     else:
-        percent = (.002667 * hp) - 2.333
-        dmg = hp * percent/100
+        percent = (0.002667 * hp) - 2.333
+        dmg = hp * percent / 100
     return dmg
 
 
 def calc_auto_dmg(god, power):
     """
-      returns basic attack damage of gods
-      # TODO add magical characters
+    returns basic attack damage of gods
+    # TODO add magical characters
     """
     if god in Assassins + Hunters + Warriors:
         att_damage = power
@@ -293,15 +370,24 @@ def calc_auto_dmg(god, power):
     return att_damage
 
 
-def calc_dps(client, god, build, enemy, enemy_build, enemy_level, level=20, number_of_autos=10):
+def calc_dps(
+    client, god, build, enemy, enemy_build, enemy_level, level=20, number_of_autos=10
+):
     """
-      returns damage stats for basic attacks
-      # TODO clean up entire function
+    returns damage stats for basic attacks
+    # TODO clean up entire function
     """
     temp = anlz.get_god_stats(client, god, level)
     baseAttSpeed = temp["AttackSpeed"]
-    attSpeed, power, critChance, armor_reduction_per, armor_reduction_flat, pen_per, pen_flat = calc_dps_stats(
-        client, god, build, baseAttSpeed)
+    (
+        attSpeed,
+        power,
+        critChance,
+        armor_reduction_per,
+        armor_reduction_flat,
+        pen_per,
+        pen_flat,
+    ) = calc_dps_stats(client, god, build, baseAttSpeed)
 
     if "Dominance" in build:
         pen_per += 10
@@ -315,8 +401,14 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, level=20, numb
         attDamage = power
         damage_type = "Physical"
 
-    dmg_out = {"Qin's Sais": 0, "Odysseus' Bow": 0,
-               "Ichaival": 0, "Silverbranch Bow": 0, "Total Item Damage": 0, "Total Auto Damage": 0}
+    dmg_out = {
+        "Qin's Sais": 0,
+        "Odysseus' Bow": 0,
+        "Ichaival": 0,
+        "Silverbranch Bow": 0,
+        "Total Item Damage": 0,
+        "Total Auto Damage": 0,
+    }
     obow = 0
     ichi_stacks = 0
     sbow_stacks = 0
@@ -326,8 +418,14 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, level=20, numb
     elif damage_type == "Magical":
         enemy_prot = targetMag
 
-    mitigated = {"Qin's Sais": 0, "Odysseus' Bow": 0,
-                 "Ichaival": 0, "Silverbranch Bow": 0, "Total Item Damage Mitigated": 0, "Total Auto Damage Mitigated": 0}
+    mitigated = {
+        "Qin's Sais": 0,
+        "Odysseus' Bow": 0,
+        "Ichaival": 0,
+        "Silverbranch Bow": 0,
+        "Total Item Damage Mitigated": 0,
+        "Total Auto Damage Mitigated": 0,
+    }
 
     flag = False
     for i in range(number_of_autos):
@@ -340,11 +438,11 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, level=20, numb
 
         if "The Executioner" in build:
             if i < 5 and i > 0:
-                armor_reduction_per = (7 * (i))
+                armor_reduction_per = 7 * (i)
 
         if "The Heavy Executioner" in build:
             if i < 3 and i > 0:
-                armor_reduction_per = 17.5*i
+                armor_reduction_per = 17.5 * i
 
         if "The Ferocious Executioner" in build:
             if i < 11 and i > 1:
@@ -358,7 +456,7 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, level=20, numb
 
         if "Silverbranch Bow" in build:
             if attSpeed > 2.5:
-                sbow_stacks = round((attSpeed - 2.5) / .02)
+                sbow_stacks = round((attSpeed - 2.5) / 0.02)
             attDamage += 2 * sbow_stacks
             dmg_out["Silverbranch Bow"] += 2 * sbow_stacks
             dmg_out["Total Item Damage"] += 2 * sbow_stacks
@@ -367,11 +465,11 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, level=20, numb
             if randint(0, 100) <= critChance:
                 crit += 1
                 if "Spectral Armor" in enemy_build:
-                    dmg_out["Total Auto Damage"] += attDamage * .55
+                    dmg_out["Total Auto Damage"] += attDamage * 0.55
                 elif "Deathbringer" in build:
                     dmg_out["Total Auto Damage"] += attDamage * 1.3
                 elif "Spectral Armor" in enemy_build and "Deathbringer" in build:
-                    dmg_out["Total Auto Damage"] += attDamage * (1.3 - .55)
+                    dmg_out["Total Auto Damage"] += attDamage * (1.3 - 0.55)
                 else:
                     dmg_out["Total Auto Damage"] += attDamage * 0.75
                 if "Wind Demon" in build and not flag:
@@ -380,15 +478,27 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, level=20, numb
 
         if (i > 0 and i % 4 == 0) and "Odysseus' Bow" in build:
             obow_damage = calc_mitigation(
-                15 + calc_auto_dmg(god, attDamage) * .6, targetPhys, armor_reduction_per, armor_reduction_flat, pen_per, pen_flat)
+                15 + calc_auto_dmg(god, attDamage) * 0.6,
+                targetPhys,
+                armor_reduction_per,
+                armor_reduction_flat,
+                pen_per,
+                pen_flat,
+            )
 
             dmg_out["Odysseus' Bow"] += obow_damage["dealt"]
             mitigated["Odysseus' Bow"] += obow_damage["mitigated"]
             obow += 1
 
         if "Qin's Sais" in build:
-            qins_damage = calc_mitigation(calc_qins_dmg(
-                targetHP), targetPhys, armor_reduction_per, armor_reduction_flat, pen_per, pen_flat)
+            qins_damage = calc_mitigation(
+                calc_qins_dmg(targetHP),
+                targetPhys,
+                armor_reduction_per,
+                armor_reduction_flat,
+                pen_per,
+                pen_flat,
+            )
             mitigated["Qin's Sais"] += qins_damage["mitigated"]
 
             dmg_out["Qin's Sais"] += qins_damage["dealt"]
@@ -399,7 +509,7 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, level=20, numb
                 item_dmg = attSpeed * 60
             else:
                 item_dmg += 2 * 60
-# Magical items
+        # Magical items
 
         if "Telkhines Ring" in build:
             item_dmg += 10 + power * 0.1
@@ -410,12 +520,28 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, level=20, numb
                 armor_reduction_per += 10
 
         if "Nimble Bancroft's Talon" in build:
-            attSpeed += baseAttSpeed * power/40
+            attSpeed += baseAttSpeed * power / 40
 
-        mitigated["Total Auto Damage Mitigated"] += round(calc_mitigation(calc_auto_dmg(god, attDamage), enemy_prot,
-                                                                          armor_reduction_per, armor_reduction_flat, pen_per, pen_flat)["mitigated"])
-        dmg_out["Total Auto Damage"] += round(calc_mitigation(calc_auto_dmg(god, attDamage), enemy_prot,
-                                                              armor_reduction_per, armor_reduction_flat, pen_per, pen_flat)["dealt"])
+        mitigated["Total Auto Damage Mitigated"] += round(
+            calc_mitigation(
+                calc_auto_dmg(god, attDamage),
+                enemy_prot,
+                armor_reduction_per,
+                armor_reduction_flat,
+                pen_per,
+                pen_flat,
+            )["mitigated"]
+        )
+        dmg_out["Total Auto Damage"] += round(
+            calc_mitigation(
+                calc_auto_dmg(god, attDamage),
+                enemy_prot,
+                armor_reduction_per,
+                armor_reduction_flat,
+                pen_per,
+                pen_flat,
+            )["dealt"]
+        )
         # print(item_dmg_out)
 
     for key in mitigated:
@@ -440,50 +566,45 @@ def calc_dps(client, god, build, enemy, enemy_build, enemy_level, level=20, numb
     # print(f"Damage per Second: {round(dps)}")
     # print(f"Percent of {enemy}s HP dealt: {round(dmg/targetHP*100,2)}")
 
-    return {**{
-        "Number of Crits": crit,
-        "Basic Attack Damge": dmg_out['Total Auto Damage'],
-        "Damage Total": dmg_out['Total Auto Damage'] + dmg_out['Total Item Damage'],
-        "Damage Mitigated": mitigated["Total Item Damage Mitigated"]
-    },
-        **{item: dmg_out[item] for item in dmg_out}}
+    return {
+        **{
+            "Number of Crits": crit,
+            "Basic Attack Damge": dmg_out["Total Auto Damage"],
+            "Damage Total": dmg_out["Total Auto Damage"] + dmg_out["Total Item Damage"],
+            "Damage Mitigated": mitigated["Total Item Damage Mitigated"],
+        },
+        **{item: dmg_out[item] for item in dmg_out},
+    }
 
 
-def calc_mitigation(dmg, prot, armor_reduction_per, armor_reduction_flat, pen_per, pen_flat, miti=0):
+def calc_mitigation(
+    dmg, prot, armor_reduction_per, armor_reduction_flat, pen_per, pen_flat, miti=0
+):
     """
-      returns how much damage was mitigated given pen/prot stats
+    returns how much damage was mitigated given pen/prot stats
     """
     # print(armor_reduction_per, armor_reduction_flat, pen_per, pen_flat)
     # % armor reduction
     # Flat armor reduction
     # % pen
     # flat pen
-    prot = (((prot * (1 - armor_reduction_per/100))) -
-            armor_reduction_flat) * (1-(pen_per/100)) - pen_flat
+    prot = (((prot * (1 - armor_reduction_per / 100))) - armor_reduction_flat) * (
+        1 - (pen_per / 100)
+    ) - pen_flat
 
-    taken = dmg * (1-miti) * float((100/(100+prot)))
-    return {
-        "dealt": taken,
-        "mitigated": dmg-taken
-    }
+    taken = dmg * (1 - miti) * float((100 / (100 + prot)))
+    return {"dealt": taken, "mitigated": dmg - taken}
 
 
 if __name__ == "__main__":
     # ADJUST ABILITY LEVELS HERE
     # TO GET A RANK 1 ACHILLES 1 FOR EXAMPLE
     # set "1" to 1
-    levels = {
-        "1": 5,
-        "2": 5,
-        "3": 5,
-        "4": 5,
-        "5": 5
-    }
+    levels = {"1": 5, "2": 5, "3": 5, "4": 5, "5": 5}
     # build = [
     # "Stone Cutting Sword", "Odysseus' Bow", "Ichaival", "Qin's Sais", "Bloodforge"]
     build = ["Bluestone Pendant"]
-    print(calc_combo_damage_raw(client, "Achilles",
-          levels, build, "Odin", [], 20, 20))
+    print(calc_combo_damage_raw(client, "Achilles", levels, build, "Odin", [], 20, 20))
     # print(calc_dps(client, "Achilles", build, "Odin", [], 1, 1))
 
     # print(calc_combo_damage_raw(client, "Chaac",

@@ -14,7 +14,7 @@ export const PlayerProvider = props => {
     const [icon, setIcon] = useState("https://i.imgur.com/KgTaobI.png")
     const [playerLevel, setPlayerLevel] = useState(-1);
     const [tab, setTab] = useState("Build");
-    const [patch, setPatch] = useState("9.8");
+    const [patch, setPatch] = useState("9.9");
     const [inputType, setInputType] = useState("KBM");
     const patches = ['9.8', '9.7', '9.6']
     const queueTypes = ["Casual", "Ranked"];

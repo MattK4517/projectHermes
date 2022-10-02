@@ -3,13 +3,14 @@ from pyrez.api import SmiteAPI
 from datetime import datetime, timedelta
 from constants import patch
 from data_pull_insert import run_pull
+
 # from data_pull_formatting_rewrite import run_format_hourly
 from pytz import timezone
 import os
 import time
 from main import client
 
-eastern = timezone('US/Eastern')
+eastern = timezone("US/Eastern")
 
 
 def get_date_format():
@@ -44,14 +45,17 @@ if __name__ == "__main__":
     starttime = datetime.now()
     with open("cred.txt", "r") as creds:
         lines = creds.readlines()
-        smite_api = SmiteAPI(devId=lines[0].strip(
-        ), authKey=lines[1].strip(), responseFormat=pyrez.Format.JSON)
+        smite_api = SmiteAPI(
+            devId=lines[0].strip(),
+            authKey=lines[1].strip(),
+            responseFormat=pyrez.Format.JSON,
+        )
 
     patch = smite_api.getPatchInfo()["version_string"]
     for mode in modes:
         for queue_type in queue_types:
             for input_type in input_types:
-                run_pull(patch, curr_time, queue_type,
-                         mode, input_type, date_insert)
+                run_pull(patch, curr_time, queue_type, mode, input_type, date_insert)
                 print(
-                    f"pull done: {patch}, {curr_time}, {queue_type},{mode}, {input_type}, {date_insert}")
+                    f"pull done: {patch}, {curr_time}, {queue_type},{mode}, {input_type}, {date_insert}"
+                )

@@ -1,15 +1,15 @@
-import React, { useContext } from "react";
-import useFetch from "../useFetch";
-import { Link } from "react-router-dom";
-import winRateColor from "./WinRateColor";
-import { styled } from "@mui/system";
-import { HtmlTooltip, CreateItemToolTip } from "./GodPageHelpers";
-import { MainContext } from "./MainContext";
-import { godsDict } from "../drawer";
+import React, { useContext } from 'react';
+import useFetch from '../useFetch';
+import { Link } from 'react-router-dom';
+import winRateColor from './WinRateColor';
+import { styled } from '@mui/system';
+import { HtmlTooltip, CreateItemToolTip } from './GodPageHelpers';
+import { MainContext } from './MainContext';
+import { godsDict } from '../drawer';
 
 function CreateMatchupsHelpTooltip(props) {
   return (
-    <div style={{ color: "white", fontSize: ".75rem" }}>
+    <div style={{ color: 'white', fontSize: '.75rem' }}>
       <h3>What do these numbers mean?</h3>
       <div>
         <p>the percentage shown is {props.god} win rate INTO the god shown</p>
@@ -22,38 +22,39 @@ function CreateMatchupsHelpTooltip(props) {
 }
 
 function GodCounterMatchup(props) {
+  console.log(props);
   return (
     <Link
-      to={"/".concat(props.getMatchups.enemy.replaceAll(" ", "_"))}
-      className="god-matchup"
+      to={'/'.concat(props.getMatchups.enemy.replaceAll(' ', '_'))}
+      className='god-matchup'
     >
-      <div className="god-icon">
+      <div className='god-icon'>
         <img
-          className="god-icon-style"
+          className='god-icon-style'
           src={
             godsDict[props.getMatchups.enemy] !== undefined
               ? `https://webcdn.hirezstudios.com/smite/god-icons/${props.getMatchups.enemy
-                  .replaceAll("'", "")
-                  .replaceAll(" ", "-")
+                  .replaceAll("'", '')
+                  .replaceAll(' ', '-')
                   .toLowerCase()}.jpg`
-              : "https://i.imgur.com/KgTaobI.png"
+              : 'https://i.imgur.com/KgTaobI.png'
           }
           alt={props.getMatchups.enemy}
         />
       </div>
-      <div className="god-name">{props.getMatchups.enemy}</div>
+      <div className='god-name'>{props.getMatchups.enemy}</div>
       <hr></hr>
-      <div className="matchup-stats">
+      <div className='matchup-stats'>
         <div
-          className="win-rate"
+          className='win-rate'
           style={{
             color: winRateColor(props.getMatchups.winRate),
-            fontWeight: "725px",
+            fontWeight: '725px',
           }}
         >
-          {props.getMatchups.winRate || "0"}%
+          {props.getMatchups.winRate || '0'}%
         </div>
-        <div className="times-played">{props.getMatchups.games} Matches</div>
+        <div className='times-played'>{props.getMatchups.games} Matches</div>
       </div>
     </Link>
   );
@@ -69,45 +70,45 @@ export function GodCounterStats(props) {
       </>
     );
   } else {
-    return <div className="empty-set">NO DATA TO DISPLAY</div>;
+    return <div className='empty-set'>NO DATA TO DISPLAY</div>;
   }
 }
 
-const ResponsiveBuild = styled("div")(({ theme }) => ({
-  [theme.breakpoints.down("md")]: {
-    display: "block",
+const ResponsiveBuild = styled('div')(({ theme }) => ({
+  [theme.breakpoints.down('md')]: {
+    display: 'block',
   },
 }));
 
 function GodRankStats(props) {
   let banrateMessage;
-  if (props.queueType === "Ranked") {
-    banrateMessage = props.banrate + "%";
-  } else if (props.queueType === "Casual") {
-    banrateMessage = "N/A";
+  if (props.queueType === 'Ranked') {
+    banrateMessage = props.banrate + '%';
+  } else if (props.queueType === 'Casual') {
+    banrateMessage = 'N/A';
   }
   return (
-    <div className="content-section god-rank-stats">
-      <div className="win-rate">
-        <div className="value" style={{ color: props.colorStyle }}>
+    <div className='content-section god-rank-stats'>
+      <div className='win-rate'>
+        <div className='value' style={{ color: props.colorStyle }}>
           {props.winrate}%
         </div>
-        <div className="label">Win Rate</div>
+        <div className='label'>Win Rate</div>
       </div>
 
-      <div className="pick-rate">
-        <div className="value">{props.pickrate}%</div>
-        <div className="label">Pick Rate</div>
+      <div className='pick-rate'>
+        <div className='value'>{props.pickrate}%</div>
+        <div className='label'>Pick Rate</div>
       </div>
 
-      <div className="ban-rate">
-        <div className="value">{banrateMessage}</div>
-        <div className="label">Ban Rate</div>
+      <div className='ban-rate'>
+        <div className='value'>{banrateMessage}</div>
+        <div className='label'>Ban Rate</div>
       </div>
 
-      <div className="matches">
-        <div className="value">{props.games}</div>
-        <div className="label">Matches</div>
+      <div className='matches'>
+        <div className='value'>{props.games}</div>
+        <div className='label'>Matches</div>
       </div>
     </div>
   );
@@ -131,42 +132,42 @@ function BuildStats(props) {
 
 function BuildStatsElement(props) {
   return (
-    <div className="item-row">
+    <div className='item-row'>
       {Object.keys(props.item).map((slot) => {
         return (
-          <div className="item-dupe">
+          <div className='item-dupe'>
             <HtmlTooltip
               title={
                 <React.Fragment>
                   <CreateItemToolTip item={props.item[slot]} />
                 </React.Fragment>
               }
-              placement="top"
+              placement='top'
               arrow
             >
-              <div className="item-image">
-                <div className="item-image-div">
+              <div className='item-image'>
+                <div className='item-image-div'>
                   <img
                     src={`https://webcdn.hirezstudios.com/smite/item-icons/${props.item[
                       slot
                     ].item
-                      .replaceAll(" ", "-")
-                      .replaceAll("'", "")
+                      .replaceAll(' ', '-')
+                      .replaceAll("'", '')
                       .toLowerCase()}.jpg`}
                     alt={props.item[slot].item}
                   />
                 </div>
               </div>
             </HtmlTooltip>
-            <div className="item-stats">
-              <div className="winrate">
+            <div className='item-stats'>
+              <div className='winrate'>
                 {(
                   (props.item[slot].wins / props.item[slot].games) *
                   100
                 ).toFixed(2)}
                 % WR
               </div>
-              <div className="matches">{props.item[slot].games} Matches</div>
+              <div className='matches'>{props.item[slot].games} Matches</div>
             </div>
           </div>
         );
@@ -201,26 +202,26 @@ export default function BuildPage(props) {
   let { games, badmatchups, goodmatchups, items, colorStyle, relics } =
     useFetch(god, role, rank, patch, matchup, queueType, mode);
   if (items.length === 0) {
-    items = ["None"];
+    items = ['None'];
   }
   let styling = {};
   let goodStyling = {};
   if (badmatchups.length < 1) {
-    styling = { display: "flex", flexDirection: "column", color: "#bbbedb" };
+    styling = { display: 'flex', flexDirection: 'column', color: '#bbbedb' };
   } else {
     styling = {};
   }
   if (goodmatchups.length < 1) {
     goodStyling = {
-      display: "flex",
-      flexDirection: "column",
-      color: "#bbbedb",
+      display: 'flex',
+      flexDirection: 'column',
+      color: '#bbbedb',
     };
   } else {
     styling = {};
   }
   return (
-    <div className="god-build">
+    <div className='god-build'>
       <GodRankStats
         winrate={props.winrate}
         games={games}
@@ -229,11 +230,11 @@ export default function BuildPage(props) {
         colorStyle={colorStyle}
         queueType={queueType}
       />
-      <div className="toughest-matchups content-section">
-        <div className="content-section_header">
+      <div className='toughest-matchups content-section'>
+        <div className='content-section_header'>
           Counter Matchups&nbsp;
           <span
-            style={{ color: "#5f5f7b", fontSize: "14px", fontWeight: "400" }}
+            style={{ color: '#5f5f7b', fontSize: '14px', fontWeight: '400' }}
           >
             these gods counter {god} {role}
           </span>
@@ -243,29 +244,29 @@ export default function BuildPage(props) {
                 <CreateMatchupsHelpTooltip god={god} />
               </React.Fragment>
             }
-            placement="top"
+            placement='top'
             arrow
           >
-            <div style={{ paddingLeft: "25px" }}>
+            <div style={{ paddingLeft: '25px' }}>
               <div>
                 <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Icon-round-Question_mark.svg/300px-Icon-round-Question_mark.svg.png"
-                  style={{ maxWidth: "24px", maxHeight: "24px" }}
+                  src='https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Icon-round-Question_mark.svg/300px-Icon-round-Question_mark.svg.png'
+                  style={{ maxWidth: '24px', maxHeight: '24px' }}
                 />
               </div>
             </div>
           </HtmlTooltip>
         </div>
-        <div className="matchups" style={styling}>
+        <div className='matchups' style={styling}>
           <GodCounterStats matchups={badmatchups} />
         </div>
       </div>
-      <div className="combined-section">
-        <div className="toughest-matchups content-section">
-          <div className="content-section_header">
+      <div className='combined-section'>
+        <div className='toughest-matchups content-section'>
+          <div className='content-section_header'>
             Good Matchups&nbsp;
             <span
-              style={{ color: "#5f5f7b", fontSize: "14px", fontWeight: "400" }}
+              style={{ color: '#5f5f7b', fontSize: '14px', fontWeight: '400' }}
             >
               these gods get countered by {god} {role}
             </span>
@@ -275,46 +276,46 @@ export default function BuildPage(props) {
                   <CreateMatchupsHelpTooltip god={god} />
                 </React.Fragment>
               }
-              placement="top"
+              placement='top'
               arrow
             >
-              <div style={{ paddingLeft: "25px" }}>
+              <div style={{ paddingLeft: '25px' }}>
                 <div>
                   <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Icon-round-Question_mark.svg/300px-Icon-round-Question_mark.svg.png"
-                    style={{ maxWidth: "24px", maxHeight: "24px" }}
+                    src='https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Icon-round-Question_mark.svg/300px-Icon-round-Question_mark.svg.png'
+                    style={{ maxWidth: '24px', maxHeight: '24px' }}
                   />
                 </div>
               </div>
             </HtmlTooltip>
           </div>
-          <div className="matchups" style={goodStyling}>
+          <div className='matchups' style={goodStyling}>
             <GodCounterStats matchups={goodmatchups} />
           </div>
         </div>
         <ResponsiveBuild
-          className="build content-section relics"
+          className='build content-section relics'
           style={styling}
         >
           {relics.map((item, index) => {
-            if (item === "None") {
+            if (item === 'None') {
               return (
                 <>
-                  <div className="content-section_header">Relics</div>
-                  <div className="empty-set">NO DATA TO DISPLAY</div>
+                  <div className='content-section_header'>Relics</div>
+                  <div className='empty-set'>NO DATA TO DISPLAY</div>
                 </>
               );
             }
             if (index === 0) {
               return (
-                <div className="starter">
-                  <div className="content-section_header">
+                <div className='starter'>
+                  <div className='content-section_header'>
                     Relics&nbsp;
                     <span
                       style={{
-                        color: "#5f5f7b",
-                        fontSize: "14px",
-                        fontWeight: "400",
+                        color: '#5f5f7b',
+                        fontSize: '14px',
+                        fontWeight: '400',
                       }}
                     >
                       for {god} {role}
@@ -330,38 +331,38 @@ export default function BuildPage(props) {
         </ResponsiveBuild>
       </div>
       <ResponsiveBuild
-        className="build content-section scrolling-section"
+        className='build content-section scrolling-section'
         style={styling}
       >
         {items.map((item, index) => {
-          let message = "";
+          let message = '';
           if (index === 1) {
-            message = "Second";
+            message = 'Second';
           }
           if (index === 2) {
-            message = "Third";
+            message = 'Third';
           }
           if (index === 3) {
-            message = "Fourth";
+            message = 'Fourth';
           }
           if (index === 4) {
-            message = "Fifth";
+            message = 'Fifth';
           }
           if (index === 5) {
-            message = "Sixth";
+            message = 'Sixth';
           }
-          if (item === "None") {
+          if (item === 'None') {
             return (
               <>
-                <div className="content-section_header">Build</div>
-                <div className="empty-set">NO DATA TO DISPLAY</div>
+                <div className='content-section_header'>Build</div>
+                <div className='empty-set'>NO DATA TO DISPLAY</div>
               </>
             );
           }
           if (index === 0) {
             return (
-              <div className="starter">
-                <div className="content-section_header">Starter</div>
+              <div className='starter'>
+                <div className='content-section_header'>Starter</div>
                 <div>
                   <BuildStats stats={items} lower={0} upper={1} />
                 </div>
@@ -370,7 +371,7 @@ export default function BuildPage(props) {
           } else {
             return (
               <div className={`slot${index}`}>
-                <div className="content-section_header">
+                <div className='content-section_header'>
                   {message} Slot Options
                 </div>
                 <div>

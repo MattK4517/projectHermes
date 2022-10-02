@@ -38,7 +38,7 @@ def normalize_godId(id):
         3419: "Cerberus",
         2268: "Cernunnos",
         1966: "Chaac",
-        1921: "Chang\'e",
+        1921: "Chang'e",
         4010: "Charybdis",
         3509: "Chernobog",
         2075: "Chiron",
@@ -129,7 +129,7 @@ def normalize_godId(id):
         1670: "Ymir",
         4060: "Yu Huang",
         1672: "Zeus",
-        1926: "Zhong Kui"
+        1926: "Zhong Kui",
     }
     if godsDict.get(id):
         godName = godsDict.get(id)
@@ -318,8 +318,11 @@ def run_pull(patch, hour, queue_type, mode, input_type, date=get_date()):
     starttime = datetime.now()
     with open("cred.txt", "r") as f:
         data = f.readlines()
-        smite_api = SmiteAPI(devId=data[0].strip(
-        ), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
+        smite_api = SmiteAPI(
+            devId=data[0].strip(),
+            authKey=data[1].strip(),
+            responseFormat=pyrez.Format.JSON,
+        )
 
     db_string = ""
     if queue_type == "Ranked":
@@ -355,8 +358,7 @@ def run_pull(patch, hour, queue_type, mode, input_type, date=get_date()):
             ids = []
             for i in range(len(match_details)):
                 if match_details[i].matchId not in ids:
-                    match_dict = create_match_dict(
-                        match_details[i], patch, input_type)
+                    match_dict = create_match_dict(match_details[i], patch, input_type)
                     player = create_player_dict(match_details[i])
                     match_dict[f"player{len(match_dict.keys())-17}"] = player
                     data.append(match_dict)
@@ -374,15 +376,22 @@ def run_pull(patch, hour, queue_type, mode, input_type, date=get_date()):
         except IndexError:
             print(set)
         except TypeError:
-            print(f"{date} Pull Completed in {str(datetime.now() - starttime)} loss: {100-round(inserted_count/match_ids_len*100, 2)}")
+            print(
+                f"{date} Pull Completed in {str(datetime.now() - starttime)} loss: {100-round(inserted_count/match_ids_len*100, 2)}"
+            )
 
     if match_ids_len > 0:
-        print(f"{date} Pull Completed in {str(datetime.now() - starttime)} loss: {100-round(inserted_count/match_ids_len*100, 2)}")
+        print(
+            f"{date} Pull Completed in {str(datetime.now() - starttime)} loss: {100-round(inserted_count/match_ids_len*100, 2)}"
+        )
 
 
 if __name__ == "__main__":
     with open("/home/matt4517k/mysite/cred.txt", "r") as f:
         data = f.readlines()
-        smite_api = SmiteAPI(devId=data[0].strip(
-        ), authKey=data[1].strip(), responseFormat=pyrez.Format.JSON)
+        smite_api = SmiteAPI(
+            devId=data[0].strip(),
+            authKey=data[1].strip(),
+            responseFormat=pyrez.Format.JSON,
+        )
         print(smite_api.ping())
