@@ -1,12 +1,682 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/*
+! tailwindcss v3.1.8 | MIT License | https://tailwindcss.com
+*/
+
+/*
+1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
+2. Allow adding a border to an element by just adding a border-width. (https://github.com/tailwindcss/tailwindcss/pull/116)
+*/
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  /* 1 */
+  border-width: 0;
+  /* 2 */
+  border-style: solid;
+  /* 2 */
+  border-color: #e5e7eb;
+  /* 2 */
+}
+
+::before,
+::after {
+  --tw-content: '';
+}
+
+/*
+1. Use a consistent sensible line-height in all browsers.
+2. Prevent adjustments of font size after orientation changes in iOS.
+3. Use a more readable tab size.
+4. Use the user's configured `sans` font-family by default.
+*/
+
+html {
+  line-height: 1.5;
+  /* 1 */
+  -webkit-text-size-adjust: 100%;
+  /* 2 */
+  /* 3 */
+  tab-size: 4;
+  /* 3 */
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  /* 4 */
+}
+
+/*
+1. Remove the margin in all browsers.
+2. Inherit line-height from `html` so users can set them as a class directly on the `html` element.
+*/
+
+body {
+  margin: 0;
+  /* 1 */
+  line-height: inherit;
+  /* 2 */
+}
+
+/*
+1. Add the correct height in Firefox.
+2. Correct the inheritance of border color in Firefox. (https://bugzilla.mozilla.org/show_bug.cgi?id=190655)
+3. Ensure horizontal rules are visible by default.
+*/
+
+hr {
+  height: 0;
+  /* 1 */
+  color: inherit;
+  /* 2 */
+  border-top-width: 1px;
+  /* 3 */
+}
+
+/*
+Add the correct text decoration in Chrome, Edge, and Safari.
+*/
+
+abbr:where([title]) {
+  -webkit-text-decoration: underline dotted;
+          text-decoration: underline dotted;
+}
+
+/*
+Remove the default font size and weight for headings.
+*/
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+/*
+Reset links to optimize for opt-in styling instead of opt-out.
+*/
+
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+/*
+Add the correct font weight in Edge and Safari.
+*/
+
+b,
+strong {
+  font-weight: bolder;
+}
+
+/*
+1. Use the user's configured `mono` font family by default.
+2. Correct the odd `em` font sizing in all browsers.
+*/
+
+code,
+kbd,
+samp,
+pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  /* 1 */
+  font-size: 1em;
+  /* 2 */
+}
+
+/*
+Add the correct font size in all browsers.
+*/
+
+small {
+  font-size: 80%;
+}
+
+/*
+Prevent `sub` and `sup` elements from affecting the line height in all browsers.
+*/
+
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+sup {
+  top: -0.5em;
+}
+
+/*
+1. Remove text indentation from table contents in Chrome and Safari. (https://bugs.chromium.org/p/chromium/issues/detail?id=999088, https://bugs.webkit.org/show_bug.cgi?id=201297)
+2. Correct table border color inheritance in all Chrome and Safari. (https://bugs.chromium.org/p/chromium/issues/detail?id=935729, https://bugs.webkit.org/show_bug.cgi?id=195016)
+3. Remove gaps between table borders by default.
+*/
+
+table {
+  text-indent: 0;
+  /* 1 */
+  border-color: inherit;
+  /* 2 */
+  border-collapse: collapse;
+  /* 3 */
+}
+
+/*
+1. Change the font styles in all browsers.
+2. Remove the margin in Firefox and Safari.
+3. Remove default padding in all browsers.
+*/
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit;
+  /* 1 */
+  font-size: 100%;
+  /* 1 */
+  font-weight: inherit;
+  /* 1 */
+  line-height: inherit;
+  /* 1 */
+  color: inherit;
+  /* 1 */
+  margin: 0;
+  /* 2 */
+  padding: 0;
+  /* 3 */
+}
+
+/*
+Remove the inheritance of text transform in Edge and Firefox.
+*/
+
+button,
+select {
+  text-transform: none;
+}
+
+/*
+1. Correct the inability to style clickable types in iOS and Safari.
+2. Remove default button styles.
+*/
+
+button,
+[type='button'],
+[type='reset'],
+[type='submit'] {
+  -webkit-appearance: button;
+  /* 1 */
+  background-color: transparent;
+  /* 2 */
+  background-image: none;
+  /* 2 */
+}
+
+/*
+Use the modern Firefox focus style for all focusable elements.
+*/
+
+:-moz-focusring {
+  outline: auto;
+}
+
+/*
+Remove the additional `:invalid` styles in Firefox. (https://github.com/mozilla/gecko-dev/blob/2f9eacd9d3d995c937b4251a5557d95d494c9be1/layout/style/res/forms.css#L728-L737)
+*/
+
+:-moz-ui-invalid {
+  box-shadow: none;
+}
+
+/*
+Add the correct vertical alignment in Chrome and Firefox.
+*/
+
+progress {
+  vertical-align: baseline;
+}
+
+/*
+Correct the cursor style of increment and decrement buttons in Safari.
+*/
+
+::-webkit-inner-spin-button,
+::-webkit-outer-spin-button {
+  height: auto;
+}
+
+/*
+1. Correct the odd appearance in Chrome and Safari.
+2. Correct the outline style in Safari.
+*/
+
+[type='search'] {
+  -webkit-appearance: textfield;
+  /* 1 */
+  outline-offset: -2px;
+  /* 2 */
+}
+
+/*
+Remove the inner padding in Chrome and Safari on macOS.
+*/
+
+::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/*
+1. Correct the inability to style clickable types in iOS and Safari.
+2. Change font properties to `inherit` in Safari.
+*/
+
+::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  /* 1 */
+  font: inherit;
+  /* 2 */
+}
+
+/*
+Add the correct display in Chrome and Safari.
+*/
+
+summary {
+  display: list-item;
+}
+
+/*
+Removes the default spacing and border for appropriate elements.
+*/
+
+blockquote,
+dl,
+dd,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+figure,
+p,
+pre {
+  margin: 0;
+}
+
+fieldset {
+  margin: 0;
+  padding: 0;
+}
+
+legend {
+  padding: 0;
+}
+
+ol,
+ul,
+menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/*
+Prevent resizing textareas horizontally by default.
+*/
+
+textarea {
+  resize: vertical;
+}
+
+/*
+1. Reset the default placeholder opacity in Firefox. (https://github.com/tailwindlabs/tailwindcss/issues/3300)
+2. Set the default placeholder color to the user's configured gray 400 color.
+*/
+
+input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+  opacity: 1;
+  /* 1 */
+  color: #9ca3af;
+  /* 2 */
+}
+
+input:-ms-input-placeholder, textarea:-ms-input-placeholder {
+  opacity: 1;
+  /* 1 */
+  color: #9ca3af;
+  /* 2 */
+}
+
+input::placeholder,
+textarea::placeholder {
+  opacity: 1;
+  /* 1 */
+  color: #9ca3af;
+  /* 2 */
+}
+
+/*
+Set the default cursor for buttons.
+*/
+
+button,
+[role="button"] {
+  cursor: pointer;
+}
+
+/*
+Make sure disabled buttons don't get the pointer cursor.
+*/
+
+:disabled {
+  cursor: default;
+}
+
+/*
+1. Make replaced elements `display: block` by default. (https://github.com/mozdevs/cssremedy/issues/14)
+2. Add `vertical-align: middle` to align replaced elements more sensibly by default. (https://github.com/jensimmons/cssremedy/issues/14#issuecomment-634934210)
+   This can trigger a poorly considered lint error in some tools but is included by design.
+*/
+
+img,
+svg,
+video,
+canvas,
+audio,
+iframe,
+embed,
+object {
+  display: block;
+  /* 1 */
+  vertical-align: middle;
+  /* 2 */
+}
+
+/*
+Constrain images and videos to the parent width and preserve their intrinsic aspect ratio. (https://github.com/mozdevs/cssremedy/issues/14)
+*/
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+*, ::before, ::after {
+  --tw-border-spacing-x: 0;
+  --tw-border-spacing-y: 0;
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-pan-x:  ;
+  --tw-pan-y:  ;
+  --tw-pinch-zoom:  ;
+  --tw-scroll-snap-strictness: proximity;
+  --tw-ordinal:  ;
+  --tw-slashed-zero:  ;
+  --tw-numeric-figure:  ;
+  --tw-numeric-spacing:  ;
+  --tw-numeric-fraction:  ;
+  --tw-ring-inset:  ;
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgb(59 130 246 / 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+  --tw-blur:  ;
+  --tw-brightness:  ;
+  --tw-contrast:  ;
+  --tw-grayscale:  ;
+  --tw-hue-rotate:  ;
+  --tw-invert:  ;
+  --tw-saturate:  ;
+  --tw-sepia:  ;
+  --tw-drop-shadow:  ;
+  --tw-backdrop-blur:  ;
+  --tw-backdrop-brightness:  ;
+  --tw-backdrop-contrast:  ;
+  --tw-backdrop-grayscale:  ;
+  --tw-backdrop-hue-rotate:  ;
+  --tw-backdrop-invert:  ;
+  --tw-backdrop-opacity:  ;
+  --tw-backdrop-saturate:  ;
+  --tw-backdrop-sepia:  ;
+}
+
+::-webkit-backdrop {
+  --tw-border-spacing-x: 0;
+  --tw-border-spacing-y: 0;
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-pan-x:  ;
+  --tw-pan-y:  ;
+  --tw-pinch-zoom:  ;
+  --tw-scroll-snap-strictness: proximity;
+  --tw-ordinal:  ;
+  --tw-slashed-zero:  ;
+  --tw-numeric-figure:  ;
+  --tw-numeric-spacing:  ;
+  --tw-numeric-fraction:  ;
+  --tw-ring-inset:  ;
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgb(59 130 246 / 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+  --tw-blur:  ;
+  --tw-brightness:  ;
+  --tw-contrast:  ;
+  --tw-grayscale:  ;
+  --tw-hue-rotate:  ;
+  --tw-invert:  ;
+  --tw-saturate:  ;
+  --tw-sepia:  ;
+  --tw-drop-shadow:  ;
+  --tw-backdrop-blur:  ;
+  --tw-backdrop-brightness:  ;
+  --tw-backdrop-contrast:  ;
+  --tw-backdrop-grayscale:  ;
+  --tw-backdrop-hue-rotate:  ;
+  --tw-backdrop-invert:  ;
+  --tw-backdrop-opacity:  ;
+  --tw-backdrop-saturate:  ;
+  --tw-backdrop-sepia:  ;
+}
+
+::backdrop {
+  --tw-border-spacing-x: 0;
+  --tw-border-spacing-y: 0;
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-pan-x:  ;
+  --tw-pan-y:  ;
+  --tw-pinch-zoom:  ;
+  --tw-scroll-snap-strictness: proximity;
+  --tw-ordinal:  ;
+  --tw-slashed-zero:  ;
+  --tw-numeric-figure:  ;
+  --tw-numeric-spacing:  ;
+  --tw-numeric-fraction:  ;
+  --tw-ring-inset:  ;
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgb(59 130 246 / 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+  --tw-blur:  ;
+  --tw-brightness:  ;
+  --tw-contrast:  ;
+  --tw-grayscale:  ;
+  --tw-hue-rotate:  ;
+  --tw-invert:  ;
+  --tw-saturate:  ;
+  --tw-sepia:  ;
+  --tw-drop-shadow:  ;
+  --tw-backdrop-blur:  ;
+  --tw-backdrop-brightness:  ;
+  --tw-backdrop-contrast:  ;
+  --tw-backdrop-grayscale:  ;
+  --tw-backdrop-hue-rotate:  ;
+  --tw-backdrop-invert:  ;
+  --tw-backdrop-opacity:  ;
+  --tw-backdrop-saturate:  ;
+  --tw-backdrop-sepia:  ;
+}
+
+.container {
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1536px;
+  }
+}
+
+.visible {
+  visibility: visible;
+}
+
+.static {
+  position: static;
+}
+
+.fixed {
+  position: fixed;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
+.my-5 {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.block {
+  display: block;
+}
+
+.flex {
+  display: flex;
+}
+
+.table {
+  display: table;
+}
+
+.contents {
+  display: contents;
+}
+
+.hidden {
+  display: none;
+}
+
+.grow {
+  flex-grow: 1;
+}
+
+.transform {
+  -webkit-transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+          transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.resize {
+  resize: both;
+}
+
+.border {
+  border-width: 1px;
+}
+
+.grayscale {
+  --tw-grayscale: grayscale(100%);
+  -webkit-filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+          filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+
+.filter {
+  -webkit-filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+          filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+
+.transition {
+  transition-property: color, background-color, border-color, fill, stroke, opacity, box-shadow, -webkit-text-decoration-color, -webkit-transform, -webkit-filter, -webkit-backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-transform, -webkit-filter, -webkit-backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
 
 body {
   background-color: #070720 !important;
   --winner-color: rgba(50, 115, 250);
   --loser-color: rgba(255, 78, 80, 0.36);
 }
+
 .god-icon-style {
   border-radius: 50%;
   width: 32px;
@@ -65,23 +735,27 @@ hr {
   min-width: auto;
   width: 100%;
 }
+
 .toughest-matchups {
   margin-top: 24px;
   grid-row: 2/3;
   grid-column: 4/6;
 }
+
 @media (max-width: 1139px) {
   .toughest-matchups {
     grid-column: 1/2;
     grid-row: 3/4;
   }
 }
+
 @media (max-width: 899px) {
   .toughest-matchups {
     grid-column: 1/2;
     grid-row: 3/4;
   }
 }
+
 .toughest-matchups .matchups {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
@@ -89,6 +763,7 @@ hr {
   -webkit-overflow-scrolling: touch;
   overflow: auto;
 }
+
 .toughest-matchups .matchups .god-matchup {
   display: flex;
   flex-direction: column;
@@ -105,15 +780,18 @@ hr {
 .god-label {
   color: #cddcfe;
 }
+
 .toughest-matchups .matchups .god-matchup:hover {
   background-color: #25254b;
 }
+
 .toughest-matchups .matchups hr {
   margin: 8px 0;
   width: 70%;
   border: none;
   border-top: 1px solid #404064;
 }
+
 .toughest-matchups .matchups .god-name {
   margin-top: 6px;
   max-width: 70px;
@@ -123,6 +801,7 @@ hr {
   font-size: 12px;
   font-weight: 700;
 }
+
 .toughest-matchups .matchups .god-icon {
   position: relative;
   width: 32px;
@@ -130,17 +809,20 @@ hr {
   border-radius: 50%;
   overflow: hidden;
 }
+
 .toughest-matchups .matchups .god-icon > img {
   position: absolute;
   top: 50%;
   left: 50%;
   width: 100%;
-  transform: translate(-50%, -50%) scale(1.1);
+  -webkit-transform: translate(-50%, -50%) scale(1.1);
+          transform: translate(-50%, -50%) scale(1.1);
 }
 
 .toughest-matchups .matchups .god-matchup .matchup-stats .win-rate {
   font-size: 1.2rem;
 }
+
 .god-build
   .toughest-matchups
   .matchups
@@ -159,11 +841,13 @@ hr {
   top: 0;
   /* padding-bottom: 80px; */
 }
+
 .navbar .container {
   margin-left: 0;
   margin-right: 0;
   justify-content: left;
 }
+
 .container .god-page-header .god-header-info {
   flex: 1 1;
   display: flex;
@@ -186,17 +870,20 @@ hr {
   align-items: center;
   margin-right: 24px;
 }
+
 .god-page-header
   .god-header-info
   .god-abilities
   .god-ability-wlabel:not(:last-child) {
   margin-right: 6px;
 }
+
 .god-page-header .god-header-info .god-abilities img {
   width: 36px;
   height: 36px;
   border-radius: 3px;
 }
+
 .ability-label {
   position: absolute;
   display: flex;
@@ -214,6 +901,7 @@ hr {
 .god-ability-wlabel {
   position: relative;
 }
+
 .god-ability-wlabel .ability-label {
   position: absolute;
   display: flex;
@@ -231,7 +919,8 @@ hr {
 .god-ability-wlabel .ability-label.bottom-center {
   bottom: 0;
   left: 50%;
-  transform: translate(-50%, 50%);
+  -webkit-transform: translate(-50%, 50%);
+          transform: translate(-50%, 50%);
   border: 2px solid #17172e;
   box-sizing: content-box;
   color: white;
@@ -259,6 +948,7 @@ hr {
   font-weight: 700;
   color: white;
 }
+
 .content-section .content-section_header::before {
   content: "";
   position: absolute;
@@ -303,7 +993,8 @@ hr {
   z-index: 2;
   top: -16px;
   left: 50%;
-  transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -335,7 +1026,8 @@ hr {
   top: -6px;
   left: 50%;
   z-index: 1;
-  transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
   width: 40px;
   height: 10px;
   border-radius: 0 0 6px 6px;
@@ -350,7 +1042,8 @@ hr {
   width: 100%;
   height: 100%;
   border-radius: 6px;
-  transform: translate(-50%, -50%) scale(1.2);
+  -webkit-transform: translate(-50%, -50%) scale(1.2);
+          transform: translate(-50%, -50%) scale(1.2);
 }
 
 .god-rank-stats {
@@ -380,12 +1073,15 @@ hr {
   .god-ranking-stats {
     padding: 18px;
   }
+
   .god-ranking-stats > div {
     border-right: none !important;
   }
+
   .god-ranking-stats .value {
     font-size: 1.4rem;
   }
+
   .god-ranking-stats:not(.matchup-view) .matches {
     margin-top: 12px;
     padding: 12px 0 0;
@@ -393,6 +1089,7 @@ hr {
     border-top: 1px solid #414165;
   }
 }
+
 .god-rank-stats .value {
   font-size: 2rem;
   font-weight: 800;
@@ -408,6 +1105,8 @@ hr {
 }
 
 .items-match .build {
+  height: -webkit-fit-content !important;
+  height: -moz-fit-content !important;
   height: fit-content !important;
   display: flex !important;
   min-width: 225px;
@@ -494,6 +1193,7 @@ hr {
   border: 1px solid #2c2c40;
   overflow: hidden;
 }
+
 .god-home
   .gods-container
   .god-link
@@ -666,6 +1366,7 @@ a:visited {
   height: 100vh;
   width: 100vw;
 }
+
 .home-image {
   z-index: 5;
   left: 0;
@@ -721,6 +1422,7 @@ a:visited {
 
 .ReactTable.tier-list .rt-thead.-header {
   padding-top: 15px;
+  position: -webkit-sticky;
   position: sticky;
   top: 60px;
   z-index: 90;
@@ -731,6 +1433,7 @@ a:visited {
   box-shadow: none;
   overflow: hidden !important;
 }
+
 .ReactTable.smitestats-table-2 .rt-thead {
   display: flex;
   align-items: center;
@@ -745,7 +1448,6 @@ a:visited {
   display: flex;
   flex-direction: column;
   -webkit-user-select: none;
-  -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
 }
@@ -897,11 +1599,7 @@ a:visited {
 }
 
 .stats-tables-container {
-  padding-top: 24px;
   width: 100%;
-}
-
-.stats-tables-container {
   display: flex;
   flex-direction: column;
   padding-top: 24px;
@@ -1022,6 +1720,7 @@ a:visited {
 }
 
 .filter-manager {
+  position: -webkit-sticky;
   position: sticky;
   z-index: 98;
   display: flex;
@@ -1098,12 +1797,13 @@ a:visited {
   -webkit-transform: perspective(1px) translateZ(0);
   transform: perspective(1px) translateZ(0);
   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-  -webkit-transition-duration: 0.3s;
   transition-duration: 0.3s;
-  -webkit-transition-property: transform;
+  transition-property: -webkit-transform;
   transition-property: transform;
+  transition-property: transform, -webkit-transform;
   z-index: 200;
 }
+
 .role-filter:hover {
   -webkit-transform: scale(1.5);
   transform: scale(1.5);
@@ -1123,15 +1823,15 @@ figure.snip0015 {
 }
 
 figure.snip0015 * {
-  -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
+
 figure.snip0015 img {
   opacity: 1;
   width: 100%;
-  -webkit-transition: opacity 0.35s;
   transition: opacity 0.35s;
 }
+
 figure.snip0015 figcaption {
   position: absolute;
   bottom: 0;
@@ -1154,9 +1854,7 @@ figure.snip0015 figcaption::before {
   content: "";
   opacity: 0;
   background-color: #ffffff;
-  -webkit-transition: all 0.4s;
   transition: all 0.4s;
-  -webkit-transition-delay: 0.6s;
   transition-delay: 0.6s;
 }
 
@@ -1164,15 +1862,14 @@ figure.snip0015 h2,
 figure.snip0015 p {
   margin: 0;
   opacity: 0;
-  -webkit-transition: opacity 0.35s, -webkit-transform 0.35s;
-  transition: opacity 0.35s, -webkit-transform 0.35s, -moz-transform 0.35s,
-    -o-transform 0.35s, transform 0.35s;
+  transition: opacity 0.35s, -webkit-transform 0.35s, transform 0.35s;
 }
+
 figure.snip0015 p {
   font-weight: 200;
-  -webkit-transition-delay: 0s;
   transition-delay: 0s;
 }
+
 figure.snip0015 a {
   left: 0;
   right: 0;
@@ -1181,6 +1878,7 @@ figure.snip0015 a {
   position: absolute;
   color: #ffffff;
 }
+
 figure.snip0015:hover img {
   opacity: 0.35;
 }
@@ -1188,15 +1886,14 @@ figure.snip0015:hover img {
 figure.snip0015:hover figcaption p {
   padding-top: 0.5rem;
   opacity: 0.9;
-  -webkit-transition-delay: 0.6s;
   transition-delay: 0.6s;
 }
+
 figure.snip0015:hover figcaption::before {
   background: rgba(255, 255, 255, 0);
   top: 1rem;
   bottom: 1rem;
   opacity: 1;
-  -webkit-transition-delay: 0s;
   transition-delay: 0s;
 }
 
@@ -1208,6 +1905,7 @@ figure.snip0015:hover figcaption::before {
 }
 
 /* TABS */
+
 .tab-list {
   border-bottom: 1px solid #ccc;
   padding-left: 0;
@@ -1297,6 +1995,7 @@ figure.snip0015:hover figcaption::before {
   font-weight: 700;
   line-height: 17px;
 }
+
 .match-container {
   display: flex;
   color: white;
@@ -1397,9 +2096,11 @@ figure.snip0015:hover figcaption::before {
   padding: 10px;
   border-radius: 6px;
 }
+
 .tab-list {
   border: none;
 }
+
 .tabs .tab-list-active {
   background-color: #3273fa;
 }
@@ -1426,7 +2127,11 @@ figure.snip0015:hover figcaption::before {
 }
 
 .new-god {
+  max-width: -webkit-fit-content;
+  max-width: -moz-fit-content;
   max-width: fit-content;
+  max-height: -webkit-fit-content;
+  max-height: -moz-fit-content;
   max-height: fit-content;
   margin-left: 300px;
   margin-bottom: auto;
@@ -1461,6 +2166,7 @@ figure.snip0015:hover figcaption::before {
 .drop-down_icon > strong {
   padding-top: 0.35rem;
 }
+
 /* .build-path_header {
   padding: 0 1.5rem;
   position: relative;
@@ -1494,11 +2200,13 @@ figure.snip0015:hover figcaption::before {
     background-image: none;
   }
 }
+
 @media (max-width: 899px) {
   .build .recommended-build_items {
     grid-template-columns: repeat(6, 1fr);
   }
 }
+
 @media (max-width: 599px) {
   .build .recommended-build_items {
     grid-template-columns: none;
@@ -1506,6 +2214,7 @@ figure.snip0015:hover figcaption::before {
     grid-template-rows: repeat(5, min-content);
     grid-auto-flow: row;
   }
+
   .build .recommended-build_items > :not(:last-child) {
     border-right: none;
     border-bottom: 1px solid #414165;
@@ -1526,9 +2235,6 @@ figure.snip0015:hover figcaption::before {
 
 .test_page {
   -ms-overflow-style: none;
-}
-
-.test_page {
   scrollbar-width: none;
 }
 
@@ -1617,6 +2323,7 @@ figure.snip0015:hover figcaption::before {
   justify-content: space-between;
   margin-bottom: 16px;
 }
+
 .rank-block {
   display: flex;
   flex-direction: column;
@@ -1665,8 +2372,8 @@ figure.snip0015:hover figcaption::before {
   text-overflow: ellipsis;
   overflow: hidden;
 }
-/* 
-.god-face {
+
+/* .god-face {
   position: relative;
   display: flex;
   justify-content: center;
@@ -1751,7 +2458,8 @@ figure.snip0015:hover figcaption::before {
   height: 24px;
   border-radius: 50%;
   background-color: #11112a;
-  transform: translateY(-60%);
+  -webkit-transform: translateY(-60%);
+          transform: translateY(-60%);
 }
 
 .multikill-header-icon img {
@@ -1905,7 +2613,8 @@ figure.snip0015:hover figcaption::before {
   position: absolute;
   width: 100%;
   height: 100%;
-  transform: scale(1.1);
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
 }
 
 .header_champion .role-icon-container {
@@ -2102,10 +2811,12 @@ figure.snip0015:hover figcaption::before {
     min-width: 35px !important;
     max-width: 65px !important;
   }
+
   .rt-tr .inline-role {
     min-width: 75px !important;
     max-width: 85px !important;
   }
+
   .rt-tr .inline-god {
     min-width: 75px !important;
     max-width: 85px !important;
@@ -2232,6 +2943,8 @@ figure.snip0015:hover figcaption::before {
 }
 
 .side-calc-wrapper {
+  width: -webkit-fit-content !important;
+  width: -moz-fit-content !important;
   width: fit-content !important;
 }
 
@@ -2279,9 +2992,6 @@ figure.snip0015:hover figcaption::before {
   min-height: 64px;
   max-width: 128px;
   max-height: 128px;
-}
-
-.build-selection {
   display: flex;
   flex-direction: row;
 }
@@ -2321,6 +3031,7 @@ figure.snip0015:hover figcaption::before {
   width: 100%;
   height: 44px;
 }
+
 .search-bar_god-page {
   display: flex;
   flex-direction: row;
@@ -2379,14 +3090,17 @@ figure.snip0015:hover figcaption::before {
     padding: 0.25rem;
     min-width: 45px;
   }
+
   .items-match {
     flex-direction: column;
   }
+
   .items-match .build .build-container .item-wrapper,
   .items-match .build .build-container .item-wrapper .item-image_container {
     width: 24px !important;
     height: 24px !important;
   }
+
   .items-match
     .build
     .build-container
@@ -2396,6 +3110,7 @@ figure.snip0015:hover figcaption::before {
     width: 48px !important;
     height: 48px !important;
   }
+
   /* .Winner .player-display-container .show,
   .Winner .items-match,
   .shadow
@@ -2408,6 +3123,7 @@ figure.snip0015:hover figcaption::before {
   {
     box-shadow: 0 0 7px var(--loser-color);
   } */
+
   .player-display_row .player-god-played {
     padding-left: 0px;
   }
@@ -2417,6 +3133,7 @@ figure.snip0015:hover figcaption::before {
     width: 36px !important;
     height: 36px !important;
   }
+
   .player-padding_header {
     margin-right: 0.6rem;
   }
@@ -2424,9 +3141,11 @@ figure.snip0015:hover figcaption::before {
   .shrink-padding {
     padding: 0 6px !important;
   }
+
   .player-stats-breakdown .row {
     flex-direction: column;
   }
+
   .basic-match-info .match-info-list > *::before {
     display: none;
   }
@@ -2439,14 +3158,17 @@ figure.snip0015:hover figcaption::before {
   .match-info-header > * {
     font-size: 14px;
   }
+
   .match-summary-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
   }
+
   .basic-match-info ul li li::marker {
     display: none;
   }
+
   .basic-match-info {
     display: flex;
     flex-direction: column;
@@ -2454,6 +3176,7 @@ figure.snip0015:hover figcaption::before {
     align-items: center;
     gap: 0.5px;
   }
+
   .match-info-header {
     display: flex;
     flex-direction: row;
@@ -2512,6 +3235,7 @@ figure.snip0015:hover figcaption::before {
   align-items: center;
   justify-content: center;
 }
+
 .bans-container {
   flex-direction: row;
 }
@@ -2574,6 +3298,7 @@ figure.snip0015:hover figcaption::before {
 .tabs {
   width: 100%;
 }
+
 /* 
 .Casual {
   display: none;
@@ -2646,6 +3371,7 @@ figure.snip0015:hover figcaption::before {
 }
 
 /* use for displaying averages, or damage mitigated on dmg calc */
+
 .helper-text {
   color: #5f5f7b;
   font-size: 14px;
@@ -2666,11 +3392,13 @@ figure.snip0015:hover figcaption::before {
 }
 
 .Legendary {
-  filter: sepia(100%) hue-rotate(-10deg) saturate(350%);
+  -webkit-filter: sepia(100%) hue-rotate(-10deg) saturate(350%);
+          filter: sepia(100%) hue-rotate(-10deg) saturate(350%);
 }
 
 .Diamond {
-  filter: sepia(100%) hue-rotate(190deg) saturate(350%);
+  -webkit-filter: sepia(100%) hue-rotate(190deg) saturate(350%);
+          filter: sepia(100%) hue-rotate(190deg) saturate(350%);
 }
 
 .search-bar_container {
@@ -2681,6 +3409,8 @@ figure.snip0015:hover figcaption::before {
 }
 
 .top-nav {
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
   height: fit-content;
   width: 100%;
   background-color: #17172e;

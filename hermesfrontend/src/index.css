@@ -1,6 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 body {
   margin: 0;
-  font-family: Helvetica Neue,Roboto,Arial,Sans-Serif !important;
+  font-family: Helvetica Neue, Roboto, Arial, Sans-Serif !important;
   font-weight: 550;
   line-height: 1.35;
   color: white;
@@ -10,6 +13,6 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
