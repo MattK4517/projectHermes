@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  --winner-color: rgba(50, 115, 250);
+  --loser-color: rgba(255, 78, 80, 0.36);
+  --card-color: #17172e;
+  --font-alt: #babddb;
+}
+
+.card {
+  justify-content: center;
+  align-items: center;
+  background-color: var(--card-color);
+  color: white;
+}
+
+.autofill-columns {
+  grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+}
+
+.nav-border {
+  border-right: 2px solid gray;
+  background-color: var(--card-color);
+}
+
+.nav-border-bottom {
+  border-bottom: 2px solid gray;
+  background-color: var(--card-color);
+}
+
+.card-bg-color {
+  background-color: var(--card-color);
+}

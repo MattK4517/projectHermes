@@ -1,31 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import './Component.css';
-import Graph from './Graphs';
-import SearchBarGodsDisplay from './SearchBarStuff/SearchBarGodsDisplay';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import "./Component.css";
+import Graph from "./Graphs";
+import SearchBarGodsDisplay from "./SearchBarStuff/SearchBarGodsDisplay";
 
 function AllGodsDisplay(props) {
   return (
-    <div className='gods-container'>
+    <div className="bg-cyan-400 text-slate-700">
       {props.gods.map((god, index) => {
         return (
           <Link
             key={index}
-            to={'/'.concat(god.name.replaceAll(' ', '_'))}
-            className='god-link'
+            to={"/".concat(god.name.replaceAll(" ", "_"))}
+            className="god-link"
           >
-            <figure className='snip0015'>
+            <figure className="snip0015">
               <img
-                className='god-face'
+                className="god-face"
                 src={god.url}
                 alt={god.name}
-                style={{ width: '100%', height: '100%' }}
+                style={{ width: "100%", height: "100%" }}
               />
               <figcaption>
                 <p>Stats for {god.name}</p>
               </figcaption>
             </figure>
-            <div className='god-name'>{god.name}</div>
+            <div className="god-name">{god.name}</div>
           </Link>
         );
       })}
@@ -37,7 +37,7 @@ export default function GodsScreen(props) {
   const [allgods, setallgods] = useState([]);
 
   useEffect(() => {
-    fetch('/api/gods').then((res) =>
+    fetch("/api/gods").then((res) =>
       res.json().then((data) => {
         Object.keys(data).forEach((key) => {
           setallgods((allgods) => [
@@ -53,13 +53,13 @@ export default function GodsScreen(props) {
   }, []);
 
   return (
-    <div className='content'>
-      <div className='god-home-page'>
-        <div className='god-home content-side-pad'>
-          <div className='title-header'>
-            <h1 className='tier-list'>Smite Gods Search</h1>
-            <h2 className='subtitle'>Find the best builds for every god!</h2>
-            <div className='show'>
+    <div className="content">
+      <div className="god-home-page">
+        <div className="god-home content-side-pad">
+          <div className="title-header">
+            <h1 className="tier-list">Smite Gods Search</h1>
+            <h2 className="subtitle">Find the best builds for every god!</h2>
+            <div className="show">
               <SearchBarGodsDisplay />
             </div>
           </div>
@@ -72,13 +72,13 @@ export default function GodsScreen(props) {
 
 export function AllGodsSkinsDisplay(props) {
   return (
-    <div className='gods-container'>
+    <div className="gods-container">
       {props.gods.map((god, index) => {
         return (
           <Link
             key={index}
             to={{
-              pathname: `/${props.godName.replace(' ', '_')}/skin-stats/${
+              pathname: `/${props.godName.replace(" ", "_")}/skin-stats/${
                 god.skin_name
               }`,
               state: {
@@ -90,25 +90,25 @@ export function AllGodsSkinsDisplay(props) {
                 games: props.games,
               },
             }}
-            className='god-link'
+            className="god-link"
           >
-            <div className={'god-name'} style={{ fontSize: '14px' }}>
-              {god.games}{' '}
+            <div className={"god-name"} style={{ fontSize: "14px" }}>
+              {god.games}{" "}
               <span
-                className='helper-text'
-                style={{ marginLeft: '0px', fontSize: '11px' }}
+                className="helper-text"
+                style={{ marginLeft: "0px", fontSize: "11px" }}
               >
                 Games
-              </span>{' '}
-              | {god.winRate}%{' '}
+              </span>{" "}
+              | {god.winRate}%{" "}
               <span
-                className='helper-text'
-                style={{ marginLeft: '0px', fontSize: '11px' }}
+                className="helper-text"
+                style={{ marginLeft: "0px", fontSize: "11px" }}
               >
                 Win Rate
               </span>
             </div>
-            <figure className='snip0015'>
+            <figure className="snip0015">
               <img
                 className={`god-face ${god.skin_name}`}
                 src={
@@ -117,10 +117,10 @@ export function AllGodsSkinsDisplay(props) {
                   `https://webcdn.hirezstudios.com/smite/god-skins/${props.godName.toLowerCase()}_golden.jpg`
                 }
                 alt={god.name || god.skin_name}
-                style={{ width: '100%', height: '100%' }}
+                style={{ width: "100%", height: "100%" }}
               />
             </figure>
-            <div className='god-name'>{god.name || god.skin_name}</div>
+            <div className="god-name">{god.name || god.skin_name}</div>
           </Link>
         );
       })}
