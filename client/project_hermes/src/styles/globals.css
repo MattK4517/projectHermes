@@ -5,15 +5,9 @@
 body {
   --winner-color: rgba(50, 115, 250);
   --loser-color: rgba(255, 78, 80, 0.36);
-  --card-color: #17172e;
-  --font-alt: #babddb;
-}
+  --card-background-color: #161633;
+  --main-background-color: #070720
 
-.card {
-  justify-content: center;
-  align-items: center;
-  background-color: var(--card-color);
-  color: white;
 }
 
 .autofill-columns {
@@ -21,15 +15,38 @@ body {
 }
 
 .nav-border {
-  border-right: 2px solid gray;
-  background-color: var(--card-color);
+  border-right: .5px solid gray;
 }
 
 .nav-border-bottom {
-  border-bottom: 2px solid gray;
-  background-color: var(--card-color);
+  border-bottom: .5px solid gray;
 }
 
-.card-bg-color {
-  background-color: var(--card-color);
+@layer components {
+  .card {
+    margin-bottom: theme('margin.8');
+    display: theme('flex.1');
+    flex-direction: column;
+    justify-content: center;
+    min-height: theme('height.min');
+    width: theme('width.full');
+    border-radius: theme('borderRadius.DEFAULT');
+    border: 1px solid var(--winner-color);
+    padding: theme('padding.6');
+    box-shadow: theme('boxShadow.xl');
+    background-color: var(--card-background-color);
+    color: white
+  }
+
+  .god-icon-hover {
+    content: "";
+    position: absolute;
+    top: -35%;
+    left: -35%;
+    width: 220%;
+    height: 220%;
+    transform: rotate(45);
+    background: linear-gradient(90deg,hsla(0,0%,100%,.13) 0,hsla(0,0%,100%,.13) 77%,hsla(0,0%,100%,.5) 92%,hsla(0,0%,100%,0));
+  }
 }
+/*  rounded border-2 border-gray-500 p-6 shadow-xl */
