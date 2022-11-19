@@ -9,7 +9,11 @@ export const exampleRouter = router({
         greeting: `Hello ${input?.text ?? "world"}`,
       };
     }),
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.example.findMany();
+  godList: publicProcedure.query(({ ctx }) => {
+    return ctx.prisma.conquest_Casual.findMany({
+      where: {id: "634e98e12a7f47140316fc72"}
+    })
+
+    
   }),
 });

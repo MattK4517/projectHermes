@@ -56,7 +56,7 @@ model Conquest_Casual {
     wards_placed      Int
     win_status        String
 
-    @@map("9.10-Conquest-Casual")
+    @@map("single_match_stats.9.10-Conquest-Casual")
 }
 
 model Conquest_Ranked {
@@ -287,6 +287,8 @@ model Assault {
     tower_kills       Int
     wards_placed      Int
     win_status        String
+
+    @@map("single_match_stats.Assault")
 }
 
 model Conquest {
