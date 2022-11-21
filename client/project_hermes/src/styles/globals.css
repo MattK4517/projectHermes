@@ -5,8 +5,13 @@
 body {
   --winner-color: rgba(50, 115, 250);
   --loser-color: rgba(255, 78, 80, 0.36);
+  --main-background-color: #070720;
   --card-background-color: #161633;
-  --main-background-color: #070720
+  --dark-red-color: #ff4e50;
+  --light-red-color: #fcb1b2;
+  --light-purple-color: #e2ccff;
+  --medium-purple-color: #bf94e4;
+  --dark-purple-color: #a966ff;
 
 }
 
@@ -38,6 +43,15 @@ body {
     color: white
   }
 
+  .card-base {
+    border-radius: theme('borderRadius.DEFAULT');
+    border: 1px solid var(--winner-color);
+    padding: theme('padding.6');
+    box-shadow: theme('boxShadow.xl');
+    background-color: var(--card-background-color);
+    color: white
+  }
+
   .god-icon-hover {
     content: "";
     position: absolute;
@@ -48,5 +62,75 @@ body {
     transform: rotate(45);
     background: linear-gradient(90deg,hsla(0,0%,100%,.13) 0,hsla(0,0%,100%,.13) 77%,hsla(0,0%,100%,.5) 92%,hsla(0,0%,100%,0));
   }
+
+  .ability-label {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #383864;
+    font-size: 9px;
+    font-weight: 700;
+    pointer-events: none;
+  }
+
+  .ability-label.bottom-center {
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    border: 2px solid var(--card-background-color);
+    box-sizing: content-box;
+    color: white
+  }
+
+  .tier-heading {
+    position: absolute;
+    z-index: 2;
+    top: -16px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 20px;
+    border-radius: 4px;
+    border: 1px solid theme('colors.borderColor');
+    background-color: var(--main-background-color);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .notch-border {
+    top: -6px;
+    z-index: 1;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 10px;
+    border-radius: 0px 0px 6px 6px;
+    border: 2px solid var(--background-main);
+    background-color: #06061f;
+
+  }
+
+  .god-image {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+
+  .background-image {
+    background-repeat: no-repeat;
+    background-size: 1014px 670px;
+    background-position: 50% -60px;
+  }
 }
-/*  rounded border-2 border-gray-500 p-6 shadow-xl */

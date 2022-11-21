@@ -10,10 +10,13 @@ export const exampleRouter = router({
       };
     }),
   godList: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.conquest_Casual.findMany({
-      where: {id: "634e98e12a7f47140316fc72"}
+    return ctx.prisma.conquest_Casual_910.findMany({
+      where: {
+        player: {contains: "LordKarnox"}
+      },
+      select: {
+        god: true,
+      },
     })
-
-    
   }),
 });

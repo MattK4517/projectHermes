@@ -10,6 +10,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.4",
     "@prisma/client": "^4.4.0",
     "@tanstack/react-query": "^4.10.0",
     "@tanstack/react-query-devtools": "^4.12.0",

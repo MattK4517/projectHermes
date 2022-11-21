@@ -1,27 +1,43 @@
-add god to godsdict in constants
-get god id from api
-add god to ids dict in data pull insert
-generate urls for abililtes
-get giant cardart for godpage add to linkdict in godpage
-add god / role in dict in drawer js
+import { useRouter } from "next/router";
+import { QueryClient, useQueries, useQuery } from "@tanstack/react-query";
+import PageHeader from "../../../components/gods/PageHeader";
+import { getApiUrl } from "../../../utils/trpc";
+import { ParsedUrlQuery } from "querystring";
+import { Ability } from "../../../models/gods/gods.model";
+import { GodContext } from "../../../components/gods/GodContext";
+import { useContext } from "react";
+import TabList from "../../../components/general/TabList";
 
+function GodIndex<NextPage>(props) {
+  return <div></div>;
+}
 
+export default GodIndex;
 
+const GodPageLayout = ({ children }) => {
+  const { god, tabs } = useContext(GodContext);
 
-const GodPageLayout = (props) => {
-  const router = useRouter();
-  const { god } = router.query;
-  const { data, isLoading, error } = useQuery<Ability[]>(
-    ["god-abilities", god],
-    async () => await getGodAbilities(god),
-    {
-      initialData: props.data.godAbilities.queries[0]?.state.data,
-    }
-  );
+  const godPageQueries = useQueries({
+    queries: [
+      {
+        queryKey: ["god-abilities", god],
+        queryFn: async () => (await fetch("/api/" + god + "/abilities")).json(),
+      },
+      {
+        queryKey: ["god-data", god],
+        queryFn: async () => (await fetch("/api/" + god + "/data")).json(),
+      },
+    ],
+  });
 
-  if (isLoading) return <h1>Loading...</h1>;
+  const isLoading = godPageQueries.some((query) => query.isLoading);
+  const isError = godPageQueries.some((query) => query.error);
+  if (isLoading) return <h1>LOADING...</h1>;
+  if (isError) return <h1>ERROR...</h1>;
+  const data = godPageQueries.map((query) => query.data);
 
-  if (error) return <h1>Error...</h1>;
+  //@ts-ignore
+  let url = linkDict[god?.toString()];
 
   return (
     <div id="god-profile-main-page" className="mx-auto flex w-full">
@@ -34,16 +50,17 @@ const GodPageLayout = (props) => {
           className="background-image w-full"
           style={{
             backgroundImage: `radial-gradient(400px 200px at 60% 34%, rgba(7, 7, 32, 0) 0%, rgb(7, 7, 32) 100%),
-            linear-gradient(90deg, rgb(7, 7, 32) 0%, rgba(7, 7, 32, 0.6) 100%), url(${props.url})`,
+            linear-gradient(90deg, rgb(7, 7, 32) 0%, rgba(7, 7, 32, 0.6) 100%), url(${url})`,
           }}
         >
           <div>
             <GodPageHeader
-              godData={props.data.godData.queries[0]?.state.data}
-              godAbilities={props.data.godAbilities.queries[0]?.state.data}
-              god={props.god}
+              godData={data[1]}
+              godAbilities={data[0]}
+              god={god}
             ></GodPageHeader>
-            {props.children}
+            <TabList {...tabs} />
+            {children}
           </div>
         </div>
       </div>
@@ -51,13 +68,19 @@ const GodPageLayout = (props) => {
   );
 };
 
-const GodPageHeader: NextPage = (props) => {
+const GodPageHeader: React.FC = (props: {
+  godAbilities: any;
+  god: any;
+  godData: any;
+}) => {
+  const { god, tabs } = useContext(GodContext);
+  let tabIndex = tabs.findIndex((tab) => (tab.selected = true));
   return (
     <PageHeader
       abilities={props.godAbilities}
       tier={"D"}
       god={props.god}
-      tab={"TAB"}
+      tab={tabs[tabIndex]?.name}
       role={"ROLE"}
       rank={"RANK"}
       mode={"MODE"}
@@ -68,40 +91,15 @@ const GodPageHeader: NextPage = (props) => {
   );
 };
 
-export { GodPageHeader, GodPageLayout };
-
-export async function getServerSideProps({ params }) {
-  const queryClient = {
-    godData: new QueryClient(),
-    godAbilities: new QueryClient(),
-  };
-  const { god } = params;
-
-  await queryClient.godAbilities.prefetchQuery(["god-abilities", god], () =>
-    getGodAbilities(god)
-  );
-  await queryClient.godData.prefetchQuery(["god-data", god], () =>
-    getGodData(god)
-  );
-  return {
-    props: {
-      dehydratedState: {
-        godAbilities: JSON.parse(
-          JSON.stringify(dehydrate(queryClient.godAbilities))
-        ),
-        godData: JSON.parse(JSON.stringify(dehydrate(queryClient.godData))),
-      },
-    },
-  };
-}
+export { GodPageLayout, GodPageHeader };
 
 async function getGodAbilities(god: string) {
-  let url = getBaseUrl();
+  let url = getApiUrl();
   return (await fetch(url + "/api/" + god + "/abilities")).json();
 }
 
 async function getGodData(god: string) {
-  let url = getBaseUrl();
+  let url = getApiUrl();
   return (await fetch(url + "/api/" + god + "/data")).json();
 }
 

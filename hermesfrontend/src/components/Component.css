@@ -214,19 +214,6 @@ hr {
 .god-ability-wlabel {
   position: relative;
 }
-.god-ability-wlabel .ability-label {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background-color: #383864;
-  font-size: 9px;
-  font-weight: 700;
-  pointer-events: none;
-}
 
 .god-ability-wlabel .ability-label.bottom-center {
   bottom: 0;

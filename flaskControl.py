@@ -143,7 +143,18 @@ def get_god_matchups_by_rank(god, role, rank, patch, queue_type, mode):
 
 @app.route("/api/<god>/abilities")
 def get_god_abilities(god):
-    return anlz.get_abilities(client, god)
+    if god != None:
+        return anlz.get_abilities(client, god)
+    else:
+        return {"Error": "God Must be defined"}
+
+
+@app.route("/api/<god>/data")
+def get_god_data_lore(god):
+    if god != None:
+        return anlz.get_god_data(client, god)
+    else:
+        return {"Error": "God Must be defined"}
 
 
 @app.route(
