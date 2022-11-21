@@ -155,18 +155,35 @@ def get_url(god):
 
 def get_abilities(client, god):
     god = god.replace("_", " ")
-    mydb = client["URLS"]
+    mydb = client["God_Data"]
     mycol = mydb[god]
-    for x in mycol.find():
+    print(god)
+    for x in mycol.find(
+        {},
+        {
+            "Ability_1": 1,
+            "Ability_2": 1,
+            "Ability_3": 1,
+            "Ability_4": 1,
+            "Ability_5": 1,
+        },
+    ):
         abDict = x
+
     del abDict["_id"]
-    abilities = {}
-    for x in range(len(abDict["Abilities"])):
-        abilities["Ability{}".format(x + 1)] = {
-            "name": abDict["Abilities"][x],
-            "url": abDict["Abilities_urls"][x],
-        }
-    return abilities
+    return abDict
+
+def get_god_data(client, god):
+    god = god.replace("_", " ")
+    mydb = client["God_Data"]
+    mycol = mydb[god]
+    for x in mycol.find(
+        {},
+    ):
+        abDict = x
+
+    del abDict["_id"]
+    return abDict
 
 
 def get_item(item):
@@ -1866,8 +1883,10 @@ def get_match_time(patch):
 
 
 if __name__ == "__main__":
-    print(get_top_builds(client, "Achilles", "Solo", "9.9"))
-    print(len(godsDict))
+    mydb = client["God_Data"]
+    mycol = mydb["Achilles"]
+    for x in mycol.find({}):
+        print(x)
     # client, god, role, patch, queue_type="Ranked", rank="All Ranks", mode="Conquest", matchup="None"
     #     },}):
     # get_match_time("9.7")

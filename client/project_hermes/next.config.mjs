@@ -21,5 +21,26 @@ export default defineNextConfig({
     locales: ["en"],
     defaultLocale: "en",
   },
-  images: { domains: ["webcdn.hirezstudios.com"] }
-});
+  images: {
+    domains: ["webcdn.hirezstudios.com"],
+    loader: 'custom',
+    loaderFile: './src/components/loader.ts',
+  },
+  async redirects() {
+    return [
+      {
+        source: '/gods/:god',
+        destination: '/gods/:god/build',
+        permanent: true,
+      },
+    ]
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'http://localhost:5000/api/:path*' // Proxy to Backend
+      }
+    ]
+  }
+})

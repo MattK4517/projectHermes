@@ -1,7 +1,7 @@
 import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import NextPage from "next/page";
-import { trpc } from "../../utils/trpc";
+import { getBaseUrl, trpc } from "../../utils/trpc";
 
 interface god {
   name: string;
@@ -9,10 +9,6 @@ interface god {
 }
 
 export default function GodsList<NextPage>(props) {
-  console.log(props.dehydratedState);
-
-  const test = trpc.example.godList.useQuery();
-
   const { data, isLoading, error } = useQuery<god[]>(["posts"], getGods, {
     initialData: props.dehydratedState,
   });
@@ -29,7 +25,11 @@ export default function GodsList<NextPage>(props) {
     >
       {Object.values(data).map((god: god, index) => {
         return (
-          <Link key={index} href={"/gods/".concat(god.name)} target="_blank">
+          <Link
+            key={index}
+            href={"/gods/".concat(god.name, "/build")}
+            target="_blank"
+          >
             <div className="box-border flex h-fit w-fit cursor-pointer flex-col items-center">
               {/* <figure className="relative overflow-hidden border-slate-600"> */}
               <img
@@ -74,5 +74,6 @@ function Gods() {
 }
 
 async function getGods() {
-  return (await fetch("http://localhost:5000/api/gods")).json();
+  let url = getBaseUrl();
+  return (await fetch(url + "/api/gods")).json();
 }

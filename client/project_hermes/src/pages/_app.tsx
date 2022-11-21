@@ -1,20 +1,32 @@
 // src/pages/_app.tsx
 import "../styles/globals.css";
-import type { AppType } from "next/app";
+import type { AppProps, AppType } from "next/app";
 import { trpc } from "../utils/trpc";
 import {
   Hydrate,
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
-import React from "react";
+import React, { ReactElement, ReactNode } from "react";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import SideNav from "../components/general/SideNav";
 import AppBar from "../components/general/AppBar";
-import Card from "../components/general/Card";
+import { GodPageLayout } from "./gods/[god]";
+import { NextPage } from "next";
+import { GodProvider } from "../components/gods/GodContext";
 
-const MyApp: AppType = ({ Component, pageProps }) => {
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
+function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+  // Use the layout defined at the page level, if available
+  const getLayout = Component.getLayout ?? ((page) => page);
   const [queryClient] = React.useState(
     () =>
       new QueryClient({
@@ -30,22 +42,27 @@ const MyApp: AppType = ({ Component, pageProps }) => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="fixed z-10 box-border flex flex-col">
-        <AppBar open={open} setOpen={setOpen}></AppBar>
-      </div>
-      <Hydrate state={pageProps.dehydratedState}>
-        <main className="fixed top-16 flex h-full w-full ">
-          <SideNav open={open} setOpen={setOpen}></SideNav>
-          <div className="text-fontAltl flex h-full w-full overflow-scroll bg-mainBackGroundColor p-4">
-            <div className="container mx-auto my-4 p-4">
-              <Component {...pageProps} />
+      <GodProvider>
+        <div className="fixed z-10 box-border flex flex-col">
+          <AppBar open={open} setOpen={setOpen}></AppBar>
+        </div>
+        <Hydrate state={pageProps.dehydratedState}>
+          <main className="fixed top-16 flex h-full w-full ">
+            <SideNav open={open} setOpen={setOpen}></SideNav>
+            <div className="text-fontAltl flex h-full w-full overflow-scroll bg-mainBackGroundColor p-4">
+              <div className="container mx-auto my-4 max-w-5xl p-4">
+                {getLayout(<Component {...pageProps} />)}
+              </div>
             </div>
-          </div>
-        </main>
-      </Hydrate>
-      <ReactQueryDevtools initialIsOpen={false} />
+          </main>
+        </Hydrate>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </GodProvider>
     </QueryClientProvider>
   );
-};
+}
 
+MyApp.getLayout = function getLayout(page) {
+  return <GodPageLayout>{page}</GodPageLayout>;
+};
 export default trpc.withTRPC(MyApp);
