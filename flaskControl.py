@@ -48,23 +48,23 @@ def get_all_gods():
 )
 def get_god_data(god, role, rank, patch, queue_type, mode, matchup="None"):
     newgod = god.replace("_", " ")
-    print(role)
     winrate = anlz.get_winrate(
         client, god, role, patch, queue_type, rank, matchup=matchup, mode=mode
     )
+    winrate["winRate"] = winrate["win_rate"]
+    del winrate["win_rate"]
     pbrate = anlz.get_pb_rate(
         client, god, rank, role, patch, queue_type=queue_type, mode=mode
     )
-    print(winrate, pbrate)
     return {
         **{
-            "url": anlz.get_url(newgod),
+            # "url": anlz.get_url(newgod),
             "tier": anlz.get_tier(
                 client,
-                winrate["win_rate"],
+                winrate["winRate"],
                 pbrate["pickRate"],
                 pbrate["banRate"],
-                role,
+                role, 
                 rank,
             ),
         },
@@ -88,7 +88,8 @@ def get_god_data_role(god, role, rank, patch, queue_type, mode, matchup="None"):
         mydb = client["CacheStats"]
         mycol = mydb[god]
         for x in mycol.find(
-            {"mode": mode, "queue_type": queue_type, "cache_type": "build"}, {"_id": 0}
+            {"mode": mode, "queue_type": queue_type,
+                "cache_type": "build"}, {"_id": 0}
         ):
             build = x
         image = {"url": anlz.get_url(newgod)}
@@ -98,7 +99,8 @@ def get_god_data_role(god, role, rank, patch, queue_type, mode, matchup="None"):
         return anlz.get_specific_build(
             client, god, role, patch, matchup, rank, queue_type, mode
         )
-        build = anlz.get_top_builds(client, god, role, patch, queue_type, mode=mode)
+        build = anlz.get_top_builds(
+            client, god, role, patch, queue_type, mode=mode)
     elif matchup == "None":
         build = anlz.get_top_builds(
             client, god, role, patch, queue_type, rank, mode=mode
@@ -212,7 +214,8 @@ def get_item_data(item):
 
 @app.route("/api/<god>/items/<role>/<rank>/<patch>/<queue_type>/<mode>")
 def get_all_items(god, role, rank, patch, queue_type, mode):
-    items = anlz.get_all_builds(client, god, role, patch, queue_type, rank, mode)
+    items = anlz.get_all_builds(
+        client, god, role, patch, queue_type, rank, mode)
     return items
 
 
@@ -280,7 +283,8 @@ def get_match(matchID):
 
 @app.route("/api/<god>/buildpath/<role>/<rank>/<patch>/<queue_type>/<mode>")
 def get_build_path(god, role, rank, patch, queue_type, mode):
-    builds = anlz.get_build_path(client, god, role, patch, queue_type, rank, mode)
+    builds = anlz.get_build_path(
+        client, god, role, patch, queue_type, rank, mode)
     return builds
 
 
@@ -359,7 +363,8 @@ def get_player_match_info(playername, queue_type, patch, mode):
         return {}
     return json.loads(
         json_util.dumps(
-            anlzpy.find_match_history(client, playername, queue_type, patch, mode)
+            anlzpy.find_match_history(
+                client, playername, queue_type, patch, mode)
         )
     )
 
