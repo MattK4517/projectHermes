@@ -27,3 +27,14 @@ export type MenuItem = {
 };
 
 export interface GodData {}
+
+export type GodWinRateType = {
+  banRate: number;
+  games: number;
+  godBans: number;
+  pickRate: number;
+  totalMatches: number;
+  winRate: number;
+  wins: number;
+  tier: string;
+}
