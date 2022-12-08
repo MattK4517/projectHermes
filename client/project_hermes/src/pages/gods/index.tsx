@@ -8,9 +8,13 @@ interface god {
 }
 
 export default function GodsList<NextPage>(props) {
-  const { data, isLoading, error } = useQuery<god[]>(["posts"], getGods, {
-    initialData: props.dehydratedState,
-  });
+  const { data, isLoading, error } = useQuery<god[]>(
+    ["gods", { pageLoaded: "false" }],
+    getGods,
+    {
+      initialData: props.dehydratedState,
+    }
+  );
 
   if (isLoading) return <h1>Loading...</h1>;
 
@@ -52,7 +56,7 @@ export default function GodsList<NextPage>(props) {
 export async function getStaticProps() {
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery(["posts"], getGods);
+  await queryClient.prefetchQuery(["gods", { pageLoaded: "false" }], getGods);
   return {
     props: {
       dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
@@ -60,19 +64,16 @@ export async function getStaticProps() {
   };
 }
 
-function Gods() {
-  // This useQuery could just as well happen in some deeper child to
-  // the "Posts"-page, data will be available immediately either way
-  const { data } = useQuery(["gods"], getGods);
-
-  // This query was not prefetched on the server and will not start
-  // fetching until on the client, both patterns are fine to mix
-  const { data: otherData } = useQuery(["gods-2"], getGods);
-
-  // ...
-}
-
-async function getGods() {
+async function getGods({ queryKey }) {
   let url = getBaseUrl();
-  return (await fetch(url + "/api/gods")).json();
+  const [_key, { pageLoaded }] = queryKey;
+  return (
+    await fetch(
+      url +
+        "/api/gods?" +
+        new URLSearchParams({
+          loaded: pageLoaded,
+        })
+    )
+  ).json();
 }

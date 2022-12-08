@@ -33,6 +33,9 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         defaultOptions: {
           queries: {
             staleTime: Infinity,
+            cacheTime: Infinity,
+            refetchOnMount: false,
+            refetchOnReconnect: false,
           },
         },
       })

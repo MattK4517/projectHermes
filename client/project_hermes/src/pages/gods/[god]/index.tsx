@@ -1,14 +1,16 @@
+<<<<<<< HEAD
 import { useRouter } from "next/router";
 import { dehydrate, QueryClient, useQueries, useQuery } from "@tanstack/react-query";
+=======
+import { useQueries } from "@tanstack/react-query";
+>>>>>>> b3eb15a ( changes)
 import PageHeader from "../../../components/gods/PageHeader";
 import { getApiUrl } from "../../../utils/trpc";
-import { ParsedUrlQuery } from "querystring";
-import { Ability } from "../../../models/gods/gods.model";
 import { GodContext } from "../../../components/gods/GodContext";
-import { useContext } from "react";
+import React, { useContext } from "react";
 import TabList from "../../../components/general/TabList";
 
-function GodIndex<NextPage>(props) {
+function GodIndex<NextPage>() {
   return <div></div>;
 }
 
@@ -22,10 +24,12 @@ const GodPageLayout = ({ children }) => {
       {
         queryKey: ["god-abilities", god],
         queryFn: async () => (await fetch("/api/" + god + "/abilities")).json(),
+        cacheTime: Infinity,
       },
       {
         queryKey: ["god-data", god],
         queryFn: async () => (await fetch("/api/" + god + "/data")).json(),
+        cacheTime: Infinity,
       },
     ],
   });
@@ -80,7 +84,7 @@ const GodPageHeader: React.FC = (props: {
       abilities={props.godAbilities}
       tier={"D"}
       god={props.god}
-      tab={tabs[tabIndex]?.name}
+      tab={tabs[tabIndex]?.nam}
       role={"ROLE"}
       rank={"RANK"}
       mode={"MODE"}
