@@ -1,4 +1,5 @@
 import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
+import { GetServerSideProps, GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import { useContext } from "react";
 import { GodPageLayout } from ".";
@@ -7,56 +8,64 @@ import { GodContext } from "../../../components/gods/GodContext";
 import { GodWinRateType } from "../../../models/gods/gods.model";
 import { getBaseUrl } from "../../../utils/trpc";
 
-function BuildPage(props) {
+function BuildPage(props: { dehydratedState: { godWinrate: any } }) {
   const router = useRouter();
   const { god, setGod } = useContext(GodContext);
-  setGod(router.query.god);
+  if (router.query?.god) setGod(router.query.god);
 
-  const { data, isLoading, error } = useQuery<GodWinRateType>(["god-build", god], async () => await getGodWinRate(god), {
-    initialData: props.dehydratedState.godWinrate,
-  });
+  console.log(props.dehydratedState);
+  const { isSuccess, data, isLoading, error } = useQuery<GodWinRateType>(
+    ["god-build", god],
+    () => getGodWinRate(god),
+    {
+      initialData: props.dehydratedState?.godWinrate,
+      refetchOnMount: false,
+    }
+  );
 
   if (isLoading) return <h1>Loading...</h1>;
 
   if (error) return <h1>Error...</h1>;
 
-  console.log("DATA WINRATE", data)
+  console.log("DATA WINRATE", data);
 
-  return (
-    <GodPageLayout>
-      <WinRateStats 
-        winRate={data?.winRate} 
-        pickRate={data?.pickRate} 
-        banRate={data?.banRate} 
-        matches={data?.games}  
-      />
-    </GodPageLayout>
-  );
+  if (isSuccess)
+    return (
+      <GodPageLayout>
+        <WinRateStats
+          winRate={data?.winRate}
+          pickRate={data?.pickRate}
+          banRate={data?.banRate}
+          matches={data?.games}
+          queueType={"Ranked"}
+        />
+      </GodPageLayout>
+    );
 }
 
-export default BuildPage; 
+export default BuildPage;
 
-export async function getServerSideProps({ params }) {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = {
     godWinRate: new QueryClient(),
   };
-  const { god } = params;
+  const god = context.params?.god as string;
 
-  await queryClient.godWinRate.prefetchQuery(["god-build", god], () =>
-  getGodWinRate(god)
+  await queryClient.godWinRate.prefetchQuery(["godBuild", god], () =>
+    getGodWinRate(god)
   );
   return {
     props: {
       dehydratedState: {
-        godWinRate: JSON.parse(
-          JSON.stringify(dehydrate(queryClient.godWinRate))
-        ),
+        godWinRate: dehydrate(queryClient.godWinRate),
       },
     },
   };
-}
+};
 
 async function getGodWinRate(god: string) {
   let url = getBaseUrl();
-  return (await fetch(url + `/api/main/${god}/Solo/All%20Ranks/9.11/Ranked/Conquest`)).json();
+  return await fetch(
+    url + `/api/main/${god}/Solo/All%20Ranks/9.11/Ranked/Conquest`
+  ).then((res) => res.json());
 }
