@@ -1,45 +1,45 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { useQuery } from "react-query";
-import { IMatch, IPlayer } from "./MatchInterface";
-import Loading from "../Shared/Loading";
-import Error from "../Shared/Error";
-import { parseMatchData } from "./MatchHelpers";
-import { DataRow } from "../mainGodPage/Skins/SkinStatPage";
-import PlayerMatchDisplay from "./PlayerMatchDisplay";
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useQuery } from 'react-query';
+import { IMatch, IPlayer } from './MatchInterface';
+import Loading from '../Shared/Loading';
+import Error from '../Shared/Error';
+import { parseMatchData } from './MatchHelpers';
+import { DataRow } from '../mainGodPage/Skins/SkinStatPage';
+import PlayerMatchDisplay from './PlayerMatchDisplay';
 
-import TierListPage from "../TierListPage";
-import { withStyles } from "@material-ui/core/styles";
-import MuiAccordion from "@material-ui/core/Accordion";
-import MuiAccordionSummary from "@material-ui/core/AccordionSummary";
-import MuiAccordionDetails from "@material-ui/core/AccordionDetails";
+import TierListPage from '../TierListPage';
+import { withStyles } from '@material-ui/core/styles';
+import MuiAccordion from '@material-ui/core/Accordion';
+import MuiAccordionSummary from '@material-ui/core/AccordionSummary';
+import MuiAccordionDetails from '@material-ui/core/AccordionDetails';
 
-import { HtmlTooltip, CreateItemToolTip } from "../mainGodPage/GodPageHelpers";
+import { HtmlTooltip, CreateItemToolTip } from '../mainGodPage/GodPageHelpers';
 
-import Typography from "@material-ui/core/Typography";
-import TierListTabs from "../Tabs/TierListTabs";
-import Tooltip from "@material-ui/core/Tooltip";
-import PlayerCarryScore from "./PlayerCarryScore";
-import BaseMatchSummary from "./BaseMatchSummary";
-import { fontWeight } from "@mui/system";
-import MultiKillDisplay from "../PlayerPage/MultiKillDisplay";
-import { GetCarryPlayer } from "./MatchHelpers";
-import DamageOut from "../DmgCalcPage/DamageOut";
-import { calcKDA } from "../PlayerPage/GodDisplay";
+import Typography from '@material-ui/core/Typography';
+import TierListTabs from '../Tabs/TierListTabs';
+import Tooltip from '@material-ui/core/Tooltip';
+import PlayerCarryScore from './PlayerCarryScore';
+import BaseMatchSummary from './BaseMatchSummary';
+import { fontWeight } from '@mui/system';
+import MultiKillDisplay from '../PlayerPage/MultiKillDisplay';
+import { GetCarryPlayer } from './MatchHelpers';
+import DamageOut from '../DmgCalcPage/DamageOut';
+import { calcKDA } from '../PlayerPage/GodDisplay';
 
 const Accordion = withStyles({
   root: {
-    backgroundColor: "#11112a",
-    padding: "2px",
-    boxShadow: "none",
-    "&:not(:last-child)": {
+    backgroundColor: '#11112a',
+    padding: '2px',
+    boxShadow: 'none',
+    '&:not(:last-child)': {
       borderBottom: 0,
     },
-    "&:before": {
-      display: "none",
+    '&:before': {
+      display: 'none',
     },
-    "&$expanded": {
-      margin: "auto",
+    '&$expanded': {
+      margin: 'auto',
     },
   },
   expanded: {},
@@ -47,16 +47,16 @@ const Accordion = withStyles({
 
 const AccordionSummary = withStyles({
   root: {
-    display: "flex",
-    color: "white",
-    backgroundColor: "#11112a",
-    "&$expanded": {
+    display: 'flex',
+    color: 'white',
+    backgroundColor: '#11112a',
+    '&$expanded': {
       minHeight: 56,
     },
   },
   content: {
-    "&$expanded": {
-      margin: "12px 0",
+    '&$expanded': {
+      margin: '12px 0',
     },
   },
   expanded: {},
@@ -69,19 +69,18 @@ const AccordionDetails = withStyles((theme) => ({
 }))(MuiAccordionDetails);
 
 export function PlayerBuildDisplay(props: any) {
-  console.log(props.player.godBuild);
   return (
-    <div className="items-match">
+    <div className='items-match'>
       <div
-        className="build"
+        className='build'
         style={{
-          marginTop: "0px",
-          backgroundColor: "#11112a",
-          display: "flex",
-          height: "100%",
+          marginTop: '0px',
+          backgroundColor: '#11112a',
+          display: 'flex',
+          height: '100%',
         }}
       >
-        <div className="build-container">
+        <div className='build-container'>
           {props.player.godBuild.map((slot: any, index: number) => {
             if (slot.DeviceName) {
               return (
@@ -92,33 +91,33 @@ export function PlayerBuildDisplay(props: any) {
                       <CreateItemToolTip item={slot} />
                     </React.Fragment>
                   }
-                  placement="top"
+                  placement='top'
                   arrow
                   style={{
-                    paddingRight: "10px",
+                    paddingRight: '10px',
                   }}
                 >
                   <div
-                    className="item-wrapper"
-                    style={{ width: "36px", height: "36px" }}
+                    className='item-wrapper'
+                    style={{ width: '36px', height: '36px' }}
                   >
                     <div
-                      className="item-image_container"
-                      style={{ width: "36px", height: "36px" }}
+                      className='item-image_container'
+                      style={{ width: '36px', height: '36px' }}
                     >
                       <img
                         style={{
-                          height: "72px",
-                          width: "72px",
-                          backgroundPosition: "-96px -96px",
-                          transform: "scale(0.5)",
-                          transformOrigin: "0px 0px 0px",
+                          height: '72px',
+                          width: '72px',
+                          backgroundPosition: '-96px -96px',
+                          transform: 'scale(0.5)',
+                          transformOrigin: '0px 0px 0px',
                         }}
                         src={`https://webcdn.hirezstudios.com/smite/item-icons/${slot.DeviceName.replaceAll(
-                          " ",
-                          "-"
+                          ' ',
+                          '-'
                         )
-                          .replaceAll("'", "")
+                          .replaceAll("'", '')
                           .toLowerCase()}.jpg`}
                         alt={slot.DeviceName}
                       />
@@ -131,20 +130,20 @@ export function PlayerBuildDisplay(props: any) {
         </div>
       </div>
       <div
-        className="KDA show"
+        className='KDA show'
         style={{
-          flexDirection: "row",
-          width: "100%",
+          flexDirection: 'row',
+          width: '100%',
         }}
       >
-        <span className="player-info-style">KDA: </span> {props.player.kills}
-        <span style={{ color: "#5f5f7b" }}> / </span>
-        <span style={{ color: "#ff4e50" }}>{props.player.deaths}</span>
-        <span style={{ color: "#5f5f7b" }}> / </span>
+        <span className='player-info-style'>KDA: </span> {props.player.kills}
+        <span style={{ color: '#5f5f7b' }}> / </span>
+        <span style={{ color: '#ff4e50' }}>{props.player.deaths}</span>
+        <span style={{ color: '#5f5f7b' }}> / </span>
         {props.player.assists}
         <br></br>
       </div>
-      <div className="show">
+      <div className='show'>
         <MultiKillDisplay player={props.player} />
       </div>
     </div>
@@ -152,16 +151,16 @@ export function PlayerBuildDisplay(props: any) {
 }
 
 function CustomizedAccordions(player: IPlayer) {
-  if (player.Player_Name === "") {
-    player.Player_Name = "Hidden";
+  if (player.Player_Name === '') {
+    player.Player_Name = 'Hidden';
   }
   let styling;
-  if (player.Win_Status === "Winner") {
+  if (player.Win_Status === 'Winner') {
     styling =
-      "linear-gradient(135deg,rgba(50,115,250,.2),rgba(50,115,250,0)),#191937";
+      'linear-gradient(135deg,rgba(50,115,250,.2),rgba(50,115,250,0)),#191937';
   } else {
     styling =
-      "linear-gradient(135deg,rgba(255,78,80,.16),rgba(255,78,80,0)),#191937";
+      'linear-gradient(135deg,rgba(255,78,80,.16),rgba(255,78,80,0)),#191937';
   }
   // const {
   //   health,
@@ -185,19 +184,19 @@ function CustomizedAccordions(player: IPlayer) {
   return (
     <Accordion>
       <AccordionSummary
-        aria-controls="panel1d-content"
-        id="panel1d-header"
-        style={{ background: styling, maxHeight: "100px" }}
+        aria-controls='panel1d-content'
+        id='panel1d-header'
+        style={{ background: styling, maxHeight: '100px' }}
       >
         <PlayerMatchDisplay player={player} />
       </AccordionSummary>
       <AccordionDetails style={{ background: styling }}>
         <div
-          className="player-stats-breakdown"
-          style={{ minWidth: "911px", color: "white" }}
+          className='player-stats-breakdown'
+          style={{ minWidth: '911px', color: 'white' }}
         >
-          <div className="row">
-            <div className="column">
+          <div className='row'>
+            <div className='column'>
               <DataRow
                 props={{
                   Account_Level: player.Account_Level,
@@ -209,18 +208,18 @@ function CustomizedAccordions(player: IPlayer) {
               />
             </div>
             <div>
-              <span className="player-info-style">KDA: </span>{" "}
+              <span className='player-info-style'>KDA: </span>{' '}
               {player.Kills_Player}
-              <span style={{ color: "#5f5f7b" }}> / </span>
-              <span style={{ color: "#ff4e50" }}>{player.Deaths}</span>
-              <span style={{ color: "#5f5f7b" }}> / </span>
+              <span style={{ color: '#5f5f7b' }}> / </span>
+              <span style={{ color: '#ff4e50' }}>{player.Deaths}</span>
+              <span style={{ color: '#5f5f7b' }}> / </span>
               {player.Assists}
-              <span className="helper-text">
-                {calcKDA(player.Kills_Player, player.Deaths, player.Assists)}{" "}
+              <span className='helper-text'>
+                {calcKDA(player.Kills_Player, player.Deaths, player.Assists)}{' '}
                 KDA
               </span>
               <br></br>
-              <div className="column">
+              <div className='column'>
                 <DataRow
                   props={{
                     healing: player.Healing,
@@ -231,7 +230,7 @@ function CustomizedAccordions(player: IPlayer) {
                 />
               </div>
             </div>
-            <div className="column">
+            <div className='column'>
               <DataRow
                 props={{
                   Kills_Fire_Giant: player.Kills_Fire_Giant,
@@ -242,7 +241,7 @@ function CustomizedAccordions(player: IPlayer) {
                 }}
               />
             </div>
-            <div className="column">
+            <div className='column'>
               <DataRow
                 props={{
                   Damage_Player: player.Damage_Player,
@@ -254,8 +253,8 @@ function CustomizedAccordions(player: IPlayer) {
               />
             </div>
           </div>
-          <div className="row">
-            <div className="column">
+          <div className='row'>
+            <div className='column'>
               <DataRow
                 props={{
                   Gold_Earned: player.Gold_Earned,
@@ -265,7 +264,7 @@ function CustomizedAccordions(player: IPlayer) {
                 }}
               />
             </div>
-            <div className="column">
+            <div className='column'>
               <DataRow
                 props={{
                   tower_damage: player.Structure_Damage,
@@ -276,7 +275,7 @@ function CustomizedAccordions(player: IPlayer) {
                 }}
               />
             </div>
-            <div className="column">
+            <div className='column'>
               <DataRow
                 props={{
                   Final_Match_Level: player.Final_Match_Level,
@@ -287,7 +286,7 @@ function CustomizedAccordions(player: IPlayer) {
                 }}
               />
             </div>
-            <div className="column">
+            <div className='column'>
               <DataRow
                 props={{
                   Final_Match_Level: player.Final_Match_Level,
@@ -307,10 +306,10 @@ function CustomizedAccordions(player: IPlayer) {
 
 function PlayerMatchSummary({ players }: { players: IPlayer[] }) {
   return (
-    <div className="match-summary-container-players">
+    <div className='match-summary-container-players'>
       {players.map((player: IPlayer) => {
         return (
-          <div className={"player-container ".concat(player.Win_Status)}>
+          <div className={'player-container '.concat(player.Win_Status)}>
             {CustomizedAccordions(player)}
           </div>
         );
@@ -320,11 +319,11 @@ function PlayerMatchSummary({ players }: { players: IPlayer[] }) {
 }
 
 export default function Match(props: any) {
-  const startMatchId: string = window.location.href.split("/")[5];
+  const startMatchId: string = window.location.href.split('/')[5];
   const { isLoading, error, data, isFetching } = useQuery(
-    "fetchMatch",
+    'fetchMatch',
     async () => {
-      const res = await fetch("/api/getmatch/".concat(startMatchId));
+      const res = await fetch('/api/getmatch/'.concat(startMatchId));
       return res.json();
     },
     { staleTime: Infinity }
@@ -333,8 +332,8 @@ export default function Match(props: any) {
   if (isLoading)
     return (
       <div
-        className="container content-container"
-        style={{ maxWidth: "fit-content" }}
+        className='container content-container'
+        style={{ maxWidth: 'fit-content' }}
       >
         <Loading />
       </div>
@@ -343,8 +342,8 @@ export default function Match(props: any) {
   if (error)
     return (
       <div
-        className="container content-container"
-        style={{ maxWidth: "fit-content" }}
+        className='container content-container'
+        style={{ maxWidth: 'fit-content' }}
       >
         <Error />
       </div>
@@ -353,10 +352,9 @@ export default function Match(props: any) {
   const matchData: IMatch = data;
   const [winningTeam, losingTeam] = parseMatchData(matchData);
 
-  console.log(matchData);
   let players: IPlayer[] = [];
   for (const [key, value] of Object.entries(matchData)) {
-    if (key.includes("player")) {
+    if (key.includes('player')) {
       players.push({
         ...value,
         Mode: matchData.Mode,
@@ -364,23 +362,22 @@ export default function Match(props: any) {
       });
     }
   }
-  console.log(players[0]);
   return (
     <div
-      className="container content-container"
-      style={{ maxWidth: "fit-content" }}
+      className='container content-container'
+      style={{ maxWidth: 'fit-content' }}
     >
       <div
-        className="content-section shrink-padding"
-        style={{ marginTop: "36px" }}
+        className='content-section shrink-padding'
+        style={{ marginTop: '36px' }}
       >
-        <div className="content-section_header">
+        <div className='content-section_header'>
           Match Summary&nbsp;
-          <span style={{ color: "#5f5f7b", fontSize: "14px" }}>
+          <span style={{ color: '#5f5f7b', fontSize: '14px' }}>
             Click on players to see their performance
           </span>
         </div>
-        <div className="match-container">
+        <div className='match-container'>
           <BaseMatchSummary
             matchId={matchData.MatchId}
             length={matchData.Minutes}

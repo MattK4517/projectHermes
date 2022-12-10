@@ -84,16 +84,6 @@ def get_god_matchups(god):
 )
 def get_god_data_role(god, role, rank, patch, queue_type, mode, matchup="None"):
     newgod = god.replace("_", " ")
-    if role == godsDict[god]:
-        mydb = client["CacheStats"]
-        mycol = mydb[god]
-        for x in mycol.find(
-            {"mode": mode, "queue_type": queue_type, "cache_type": "build"}, {"_id": 0}
-        ):
-            build = x
-        image = {"url": anlz.get_url(newgod)}
-        data_dict = {**build, **image}
-        return data_dict
     if matchup != "None":
         return anlz.get_specific_build(
             client, god, role, patch, matchup, rank, queue_type, mode
@@ -111,23 +101,6 @@ def get_god_data_role(god, role, rank, patch, queue_type, mode, matchup="None"):
 
 @app.route("/api/<god>/matchups/<role>/<rank>/<patch>/<queue_type>/<mode>")
 def get_god_matchups_by_rank(god, role, rank, patch, queue_type, mode):
-    if role == godsDict[god]:
-        mydb = client["CacheStats"]
-        mycol = mydb[god]
-        for x in mycol.find(
-            {"mode": mode, "queue_type": queue_type, "cache_type": "matchup"},
-            {"_id": 0},
-        ):
-            matchups = x
-        del (
-            matchups["wins"],
-            matchups["games"],
-            matchups["winRate"],
-            matchups["cache_type"],
-            matchups["queue_type"],
-            matchups["mode"],
-        )
-        return matchups
     if "All" in rank and patch == "current":
         matchups = anlz.get_worst_matchups(
             client, god, role, patch, queue_type=queue_type, mode=mode
@@ -562,4 +535,14 @@ def get_god_items(god):
                 ret_data["data"].append(x["DeviceName"])
 
     ret_data["data"].sort()
+    return ret_data
+
+
+@app.route("/get_patches")
+def get_patches():
+    ret_data = {"patch": ""}
+    mydb = client["CacheStats"]
+    mycol = mydb["patches"]
+    for x in mycol.find({}, {"_id": 0}):
+        ret_data["patch"] = x["patch"]
     return ret_data

@@ -11,6 +11,7 @@ import { useLocation } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import Loading from '../Shared/Loading';
 import Error from '../Shared/Error';
+import { match } from 'assert';
 
 const godsDict = {
   'All Gods': 'None',
@@ -290,37 +291,34 @@ const ImageDiv = styled.div`
 `;
 
 function Godpage(props) {
-  const [
-    god,
+  const {
     setGod,
     role,
     setRole,
     rank,
     setRank,
     patch,
-    setPatch,
     queueType,
     setQueueType,
     mode,
     setMode,
     matchup,
     setMatchup,
-    patches,
     queueTypes,
     modes,
     ranks,
     roles,
     tab,
     setTab,
-  ] = useContext(MainContext);
+  } = useContext(MainContext);
 
   const location = useLocation();
-  let { tabState } = location?.state ? location.state : 'Build';
+  let { tabState } = location.state ? location.state : 'Build';
 
   useEffect(() => {
     setRole(props.role.replaceAll('_', ' '));
     setGod(props.god.replaceAll('_', ' '));
-    setTab(tabState);
+    setTab(tabState || 'Build');
   }, []);
   const pagegod = props.god.replaceAll('_', ' ');
 
@@ -429,14 +427,13 @@ function Godpage(props) {
                   patch={patch}
                   matchup={matchup}
                   modeFilters={modes}
-                  patchFilters={patches}
                   roleFilters={roles}
                   rankFilters={ranks}
+                  patchFilters={[]}
                   queueFilters={queueTypes}
                   routes={routes}
                   setRank={setRank}
                   setRole={setRole}
-                  setPatch={setPatch}
                   setMode={setMode}
                   setMatchup={setMatchup}
                   setQueueType={setQueueType}

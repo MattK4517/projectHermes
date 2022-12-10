@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import winRateColor from "./mainGodPage/WinRateColor";
 import { useQuery } from 'react-query';
 
@@ -7,7 +7,6 @@ const compare = (a, b) => {
 }
 
 const useFetch = (pagegod, role, rank, patch, matchup, queueType, mode) => {
-  // console.log(pagegod, role, rank, patch, matchup, queueType, mode)
   const [games, setgames] = useState(0);
   // const [banrate, setbanrate] = useState(0);
   // const [pickrate, setpickrate] = useState(0);
@@ -17,7 +16,7 @@ const useFetch = (pagegod, role, rank, patch, matchup, queueType, mode) => {
   const [items, setitems] = useState([]);
   const [relics, setRelics] = useState([]);
   const [colorStyle, setColorStyle] = useState("white");
-  const buildData = useQuery(
+  useQuery(
     ['godpage-build', role, rank, patch, queueType, mode],
     () => {
       let mainFetchStatement = "/api/".concat(pagegod, "/", role, "/", rank, "/", patch, "/", queueType, "/", mode);
@@ -82,13 +81,12 @@ const useFetch = (pagegod, role, rank, patch, matchup, queueType, mode) => {
   );
   // else if (role && rank){
   //   matchupsFetchStatement = "/".concat(pagegod, "/matchups/", role, "/", rank)
-  const matchupData = useQuery(
+  useQuery(
     ['godpage-matchups', role, rank, patch, queueType, matchup, mode],
     () => {
       let matchupsFetchStatement = "/api/".concat(pagegod, "/matchups/", role, "/", rank, "/", patch, "/", queueType, "/", mode)
       fetch(matchupsFetchStatement).then((res) =>
         res.json().then((data) => {
-          console.log("DATA", data)
           Object.values(data).sort(compare)
           let newData = Object.values(data).sort(compare)
           setbadmatchups([])

@@ -1,18 +1,19 @@
-import React, { useState, createContext, useEffect } from "react";
+import React, { useState, createContext, useEffect, useContext } from "react";
+import { AppContext } from "../../AppContext";
 
 export const MainContext = createContext();
 
 export const MainProvider = (props) => {
+  const { patch } = useContext(AppContext)
+  const [patchState, setPatchState] = useState(patch)
   const [god, setGod] = useState("");
   const [role, setRole] = useState("");
   const [rank, setRank] = useState("All Ranks");
-  const [patch, setPatch] = useState("9.9");
   const [queueType, setQueueType] = useState("Ranked");
   const [mode, setMode] = useState("Conquest");
   const [matchup, setMatchup] = useState("None");
   const [skin, setSkin] = useState("None");
   const [tab, setTab] = useState("Build");
-  const patches = ['9.9', '9.8', '9.7'];
   const queueTypes = ["Casual", "Ranked"];
   const modes = ["Joust", "Conquest", "Duel", "Assault", "Slash", "Arena"];
   const ranks = [
@@ -31,7 +32,6 @@ export const MainProvider = (props) => {
 
   useEffect(() => {
     setRank("All Ranks");
-    setPatch("9.9");
     setQueueType("Ranked");
     setMode("Conquest");
     setMatchup("None");
@@ -39,41 +39,38 @@ export const MainProvider = (props) => {
 
   useEffect(() => {
     if (["Assault", "Arena", "Slash"].indexOf(mode) !== -1) {
-      console.log("GETTING HERE");
       setQueueType("Casual");
     }
     if (mode === "Duel") {
       setQueueType("Ranked")
     }
   }, [mode]);
-
   return (
     <MainContext.Provider
-      value={[
-        god,
-        setGod,
-        role,
-        setRole,
-        rank,
-        setRank,
-        patch,
-        setPatch,
-        queueType,
-        setQueueType,
-        mode,
-        setMode,
-        matchup,
-        setMatchup,
-        patches,
-        queueTypes,
-        modes,
-        ranks,
-        roles,
-        skin,
-        setSkin,
-        tab,
-        setTab,
-      ]}
+      value={{
+        god: god,
+        setGod: setGod,
+        role: role,
+        setRole: setRole,
+        rank: rank,
+        setRank: setRank,
+        patch: patchState,
+        setPatch: setPatchState,
+        queueType: queueType,
+        setQueueType: setQueueType,
+        mode: mode,
+        setMode: setMode,
+        matchup: matchup,
+        setMatchup: setMatchup,
+        queueTypes: queueTypes,
+        modes: modes,
+        ranks: ranks,
+        roles: roles,
+        skin: skin,
+        setSkin: setSkin,
+        tab: tab,
+        setTab: setTab,
+      }}
     >
       {props.children}
     </MainContext.Provider>

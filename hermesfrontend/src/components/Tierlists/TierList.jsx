@@ -95,11 +95,7 @@ const Table = ({ columns, data }) => {
                 <div class='rt-tbody' role='rowgroup' {...getTableBodyProps()}>
                   {page.map(
                     (row, i) => {
-                      console.log(page);
                       prepareRow(row);
-                      // if (row.original.role != this.props.role && this.props.role != "All Roles"){
-                      //   console.log(row.original.role, this.props.role)
-                      //  }
                       return (
                         <div className='rt-tr-group'>
                           <div
@@ -442,7 +438,6 @@ function TierList(props) {
           Object.entries(data).map((god) => {
             tempData = [...tempData, ...Object.values(god[1])];
           });
-          console.log('getting here');
           setTotalData(tempData);
         })
       ),

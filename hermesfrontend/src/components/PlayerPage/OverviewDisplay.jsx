@@ -1,25 +1,25 @@
-import React, { useState, useEffect, useContext } from "react";
-import FilterForm from "../Filters/FilterForm";
-import { PlayerContext } from "./PlayerContext";
-import CarryScoreSection from "./CarryScoreSection";
-import PlayerMatchups from "./PlayerMatchups";
-import PlayerHeader from "./PlayerHeader";
-import PlayerGodSection from "./PlayerGodSection";
-import Filter from "../Filters/Filter";
+import React, { useState, useEffect, useContext } from 'react';
+import FilterForm from '../Filters/FilterForm';
+import { PlayerContext } from './PlayerContext';
+import CarryScoreSection from './CarryScoreSection';
+import PlayerMatchups from './PlayerMatchups';
+import PlayerHeader from './PlayerHeader';
+import PlayerGodSection from './PlayerGodSection';
+import Filter from '../Filters/Filter';
 
 export const FormatGod = (god) => {
   let firstLetter = god.charAt(0).toUpperCase();
-  let firstSection = "";
-  let secondCaps = "";
-  let secondSection = "";
-  if (god.indexOf("-") !== -1) {
-    secondCaps = god.charAt(god.indexOf("-") + 1).toUpperCase();
-    firstSection = god.slice(1, god.indexOf("-"));
-    secondSection = god.slice(god.indexOf("-") + 2);
+  let firstSection = '';
+  let secondCaps = '';
+  let secondSection = '';
+  if (god.indexOf('-') !== -1) {
+    secondCaps = god.charAt(god.indexOf('-') + 1).toUpperCase();
+    firstSection = god.slice(1, god.indexOf('-'));
+    secondSection = god.slice(god.indexOf('-') + 2);
   } else {
     firstSection = god.slice(1);
   }
-  return firstLetter + firstSection + " " + secondCaps + secondSection;
+  return firstLetter + firstSection + ' ' + secondCaps + secondSection;
 };
 
 export default function OverviewDisplay() {
@@ -52,11 +52,11 @@ export default function OverviewDisplay() {
     inputTypes,
   ] = useContext(PlayerContext);
 
-  let fgod = window.location.href.split("/")[7];
+  let fgod = window.location.href.split('/')[7];
   setGod(FormatGod(fgod).trim());
-  const [goldShare, setGoldShare] = useState("");
-  const [damageShare, setDamageShare] = useState("");
-  const [killShare, setkillShare] = useState("");
+  const [goldShare, setGoldShare] = useState('');
+  const [damageShare, setDamageShare] = useState('');
+  const [killShare, setkillShare] = useState('');
   const [KDA, setKDA] = useState(0);
   const [kills, setKills] = useState(0);
   const [deaths, setDeaths] = useState(0);
@@ -82,20 +82,19 @@ export default function OverviewDisplay() {
 
   useEffect(() => {
     fetch(
-      "/api/getplayerspecificgod/".concat(
+      '/api/getplayerspecificgod/'.concat(
         player,
-        "/",
+        '/',
         god,
-        "/",
+        '/',
         role,
-        "/",
+        '/',
         queueType,
-        "/",
+        '/',
         patch
       )
     ).then((res) =>
       res.json().then((data) => {
-        console.log("getplayerspecificgod", data);
         setKills(data.kills);
         setDeaths(data.deaths);
         setAssists(data.assists);
@@ -125,46 +124,46 @@ export default function OverviewDisplay() {
   }, [player, role, queueType, patch]);
 
   const [roles, setroles] = useState([
-    "Solo",
-    "Jungle",
-    "Mid",
-    "Support",
-    "Carry",
-    "All Roles",
+    'Solo',
+    'Jungle',
+    'Mid',
+    'Support',
+    'Carry',
+    'All Roles',
   ]);
   return (
-    <div className="player-profile-page">
+    <div className='player-profile-page'>
       <div
-        className="player-profile-container content-side-padding"
-        style={{ marginLeft: "auto", marginRight: "auto" }}
+        className='player-profile-container content-side-padding'
+        style={{ marginLeft: 'auto', marginRight: 'auto' }}
       >
-        <div className="content-side-padding background-image-container">
-          <div style={{ position: "relative", width: "100%", height: "100%" }}>
-            <div class="bg-container">
-              <img class="background-image" src={topLink} />
+        <div className='content-side-padding background-image-container'>
+          <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+            <div class='bg-container'>
+              <img class='background-image' src={topLink} />
             </div>
-            <div class="gradient-container">
-              <div class="gradient"></div>
+            <div class='gradient-container'>
+              <div class='gradient'></div>
             </div>
           </div>
         </div>
         {/* <NameForm setPlayer={setPlayer} /> */}
-        <div className={player ?? "undefined"}>
+        <div className={player ?? 'undefined'}>
           <PlayerHeader />
           <Filter
             mode={mode}
             role={role}
-            god={""}
+            god={''}
             queueType={queueType}
-            rank={""}
+            rank={''}
             patch={patch}
-            matchup={""}
+            matchup={''}
             modeFilters={modes}
             patchFilters={patches}
             roleFilters={roles}
-            rankFilters={[""]}
+            rankFilters={['']}
             queueFilters={queueTypes}
-            routes={""}
+            routes={''}
             setRank={() => {
               return;
             }}
@@ -177,10 +176,10 @@ export default function OverviewDisplay() {
             setQueueType={setQueueType}
           />
         </div>
-        <div className="player-content-container">
-          <div className="player-overview-stats">
-            <div className="player-content-main">
-              <div className="player-side">
+        <div className='player-content-container'>
+          <div className='player-overview-stats'>
+            <div className='player-content-main'>
+              <div className='player-side'>
                 <PlayerGodSection
                   KDA={KDA}
                   games={games}
@@ -201,7 +200,7 @@ export default function OverviewDisplay() {
                 />
                 <PlayerMatchups />
               </div>
-              <div className="player-main">
+              <div className='player-main'>
                 <CarryScoreSection
                   goldShare={goldShare}
                   goldShareBest={maxGoldShare}

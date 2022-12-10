@@ -3,7 +3,6 @@ from re import A, M, S, X
 from datetime import datetime
 import re
 from main import client
-from pymongo.message import kill_cursors
 import errlogger as logger
 import pymongo
 from collections import OrderedDict

@@ -53,7 +53,16 @@ export default function TierListFilter(props) {
         patch={patch}
         matchup={'none'}
         modeFilters={modes}
-        patchFilters={['9.9', '9.8', '9.7']}
+        patchFilters={[
+          '9.11',
+          '9.10',
+          '9.9',
+          '9.8',
+          '9.7',
+          '9.6',
+          '9.5',
+          '9.4',
+        ]}
         roleFilters={roles}
         rankFilters={ranks}
         queueFilters={queueTypes}

@@ -90,9 +90,6 @@ const Table = ({ columns, data }) => {
                   {page.map(
                     (row, i) => {
                       prepareRow(row);
-                      // if (row.original.role != this.props.role && this.props.role != "All Roles"){
-                      //   console.log(row.original.role, this.props.role)
-                      //  }
                       return (
                         <div className='rt-tr-group'>
                           <div
@@ -340,27 +337,7 @@ const Table = ({ columns, data }) => {
 };
 
 export default function Matchups(props) {
-  const [
-    god,
-    setGod,
-    role,
-    setRole,
-    rank,
-    setRank,
-    patch,
-    setPatch,
-    queueType,
-    setQueueType,
-    mode,
-    setMode,
-    matchup,
-    setMatchup,
-    patches,
-    queueTypes,
-    modes,
-    ranks,
-    roles,
-  ] = useContext(MainContext);
+  const { god, role, rank, patch, queueType, mode } = useContext(MainContext);
   const [totalData, setTotalData] = useState([]);
   useEffect(() => {
     fetch(
@@ -379,7 +356,6 @@ export default function Matchups(props) {
       )
     ).then((res) =>
       res.json().then((data) => {
-        console.log(data);
         setTotalData([]);
         Object.keys(data).forEach((key) => {
           setTotalData((totalData) => [

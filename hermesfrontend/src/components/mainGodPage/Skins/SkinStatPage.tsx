@@ -1,25 +1,25 @@
-import React, { useState, useEffect, useContext, FC } from "react";
-import { MainContext } from "../MainContext";
-import { SkinStats } from "./SkinInterface";
-import { Link, useLocation } from "react-router-dom";
-import { GameStats } from "../../GeneralInterface";
-import Filter from "../../Filters/Filter";
-import { GodCounterStats } from "../BuildPage.jsx";
-import { calcKDA } from "../../PlayerPage/GodDisplay";
-import GodHeader from "../GodHeader";
-import { IPlayer } from "../../MatchPage/MatchInterface";
+import React, { useState, useEffect, useContext, FC } from 'react';
+import { MainContext } from '../MainContext';
+import { SkinStats } from './SkinInterface';
+import { Link, useLocation } from 'react-router-dom';
+import { GameStats } from '../../GeneralInterface';
+import Filter from '../../Filters/Filter';
+import { GodCounterStats } from '../BuildPage.jsx';
+import { calcKDA } from '../../PlayerPage/GodDisplay';
+import GodHeader from '../GodHeader';
+import { IPlayer } from '../../MatchPage/MatchInterface';
 
 const formatStat = (stat: string) => {
   stat = stat.charAt(0).toUpperCase() + stat.slice(1);
-  let underScoreIndex: number = stat.indexOf("_");
+  let underScoreIndex: number = stat.indexOf('_');
   if (underScoreIndex > -1) {
     stat =
       stat.slice(0, underScoreIndex) +
-      " " +
+      ' ' +
       stat.charAt(underScoreIndex + 1).toUpperCase() +
       stat.slice(underScoreIndex + 2);
   }
-  stat = stat.replace("Bot", "Minion");
+  stat = stat.replace('Bot', 'Minion');
   return stat;
 };
 
@@ -30,15 +30,15 @@ export const DataRow = ({
     Partial<IPlayer> & { games: number; show: boolean };
 }) => {
   return (
-    <div className="player-damage-info">
+    <div className='player-damage-info'>
       {Object.entries(props).map((stat: any) => {
-        if (stat[0] !== "games" && stat[0] !== "show") {
+        if (stat[0] !== 'games' && stat[0] !== 'show') {
           return (
             <>
-              <span className="player-info-style">{formatStat(stat[0])}:</span>{" "}
+              <span className='player-info-style'>{formatStat(stat[0])}:</span>{' '}
               {stat[1].toLocaleString(undefined, { maximumFractionDigits: 0 })}
-              <span className={`helper-text ${props.show ? "" : "show"}`}>
-                (avg:{" "}
+              <span className={`helper-text ${props.show ? '' : 'show'}`}>
+                (avg:{' '}
                 {(stat[1] / props.games).toLocaleString(undefined, {
                   maximumFractionDigits: 2,
                   // maximumSignificantDigits: 2,
@@ -55,15 +55,13 @@ export const DataRow = ({
 };
 
 export default function SkinStatPage(props: any) {
-  const [
+  const {
     god,
-    setGod,
     role,
     setRole,
     rank,
     setRank,
     patch,
-    setPatch,
     queueType,
     setQueueType,
     mode,
@@ -77,7 +75,7 @@ export default function SkinStatPage(props: any) {
     roles,
     skin,
     setSkin,
-  ] = useContext(MainContext);
+  } = useContext(MainContext);
 
   const location = useLocation<any>();
   const { skinState, url, priceFavor, priceGems, obtainability, games } =
@@ -108,19 +106,19 @@ export default function SkinStatPage(props: any) {
   });
   useEffect(() => {
     fetch(
-      "/api/skinstats/".concat(
-        god.replace("-", "_"),
-        "/",
+      '/api/skinstats/'.concat(
+        god.replace('-', '_'),
+        '/',
         skinState,
-        "/",
+        '/',
         role,
-        "/",
+        '/',
         rank,
-        "/",
+        '/',
         patch,
-        "/",
+        '/',
         queueType,
-        "/",
+        '/',
         mode
       )
     ).then((res) =>
@@ -131,48 +129,48 @@ export default function SkinStatPage(props: any) {
   }, [mode, role, rank, patch, queueType, matchup, skin]);
 
   return (
-    <div className="Godpage" style={{ paddingTop: "0px" }}>
-      <div className="container">
-        <div className="god-container skinstats_page">
+    <div className='Godpage' style={{ paddingTop: '0px' }}>
+      <div className='container'>
+        <div className='god-container skinstats_page'>
           <div
-            className="row align-items-center"
-            style={{ justifyContent: "center", flexDirection: "column" }}
+            className='row align-items-center'
+            style={{ justifyContent: 'center', flexDirection: 'column' }}
           >
-            <h1 className="font-weight-light">
+            <h1 className='font-weight-light'>
               {god} {skinState} Stats
             </h1>
             <Link
               to={{
                 pathname: `/${god}`,
                 state: {
-                  tabState: "Skins",
+                  tabState: 'Skins',
                 },
               }}
               style={{
-                fontSize: "10px",
-                backgroundColor: "#191937",
-                padding: ".25rem",
+                fontSize: '10px',
+                backgroundColor: '#191937',
+                padding: '.25rem',
               }}
             >
               Back to Skin Page Page
             </Link>
           </div>
-          <div className="content-section" style={{ display: "column" }}>
-            <div className="skinstats_wrapper">
-              <div className="skinstats_god-link">
-                <div className="skinstats-header_wrapper">
+          <div className='content-section' style={{ display: 'column' }}>
+            <div className='skinstats_wrapper'>
+              <div className='skinstats_god-link'>
+                <div className='skinstats-header_wrapper'>
                   <div>
                     <h3>{skinState}</h3>
                   </div>
                   <figure
-                    className="snip0015"
-                    style={{ width: "200px", height: "250px" }}
+                    className='snip0015'
+                    style={{ width: '200px', height: '250px' }}
                   >
                     <img
-                      className="god-face"
-                      src={url || "https://i.imgur.com/kigNdxX.png"}
+                      className='god-face'
+                      src={url || 'https://i.imgur.com/kigNdxX.png'}
                       alt={god.name || god.skin_name}
-                      style={{ width: "100%", height: "100%" }}
+                      style={{ width: '100%', height: '100%' }}
                     />
                     <figcaption>
                       <p>
@@ -185,34 +183,34 @@ export default function SkinStatPage(props: any) {
                     </figcaption>
                   </figure>
                   <div>
-                    {((data.games / games) * 100).toFixed(2)}%{" "}
-                    <span className="helper-text" style={{ marginLeft: "0px" }}>
+                    {((data.games / games) * 100).toFixed(2)}%{' '}
+                    <span className='helper-text' style={{ marginLeft: '0px' }}>
                       Pick Rate
-                    </span>{" "}
-                    <span className="helper-text" style={{ marginLeft: "0px" }}>
+                    </span>{' '}
+                    <span className='helper-text' style={{ marginLeft: '0px' }}>
                       |
-                    </span>{" "}
-                    {data.winRate}%{" "}
-                    <span className="helper-text" style={{ marginLeft: "0px" }}>
+                    </span>{' '}
+                    {data.winRate}%{' '}
+                    <span className='helper-text' style={{ marginLeft: '0px' }}>
                       Win Rate
-                    </span>{" "}
+                    </span>{' '}
                   </div>
                 </div>
               </div>
 
-              <div className="skinstats-number_wrapper">
-                <div className="skinstats_combat">
-                  <div className="content-section_header">Combat Stats</div>
-                  <div className="column_wrapper">
-                    <div className="column">
+              <div className='skinstats-number_wrapper'>
+                <div className='skinstats_combat'>
+                  <div className='content-section_header'>Combat Stats</div>
+                  <div className='column_wrapper'>
+                    <div className='column'>
                       <div>
-                        <span className="player-info-style">KDA: </span>{" "}
+                        <span className='player-info-style'>KDA: </span>{' '}
                         {data?.kills ? data.kills.toLocaleString() : 0}
-                        <span style={{ color: "#5f5f7b" }}> / </span>
-                        <span style={{ color: "#ff4e50" }}>{data?.deaths}</span>
-                        <span style={{ color: "#5f5f7b" }}> / </span>
+                        <span style={{ color: '#5f5f7b' }}> / </span>
+                        <span style={{ color: '#ff4e50' }}>{data?.deaths}</span>
+                        <span style={{ color: '#5f5f7b' }}> / </span>
                         {data?.assists ? data.assists.toLocaleString() : 0}
-                        <span className="helper-text">
+                        <span className='helper-text'>
                           {calcKDA(data.kills, data.deaths, data.assists)} KDA
                         </span>
                         <br></br>
@@ -226,8 +224,8 @@ export default function SkinStatPage(props: any) {
                         />
                       </div>
                     </div>
-                    <div className="column">
-                      <div className="player-damage-info">
+                    <div className='column'>
+                      <div className='player-damage-info'>
                         <DataRow
                           props={{
                             damage_player: data.damage_player,
@@ -241,10 +239,10 @@ export default function SkinStatPage(props: any) {
                     </div>
                   </div>
                 </div>
-                <div className="skinstats_objective">
-                  <div className="content-section_header">Objective Stats</div>
-                  <div className="column_wrapper">
-                    <div className="column">
+                <div className='skinstats_objective'>
+                  <div className='content-section_header'>Objective Stats</div>
+                  <div className='column_wrapper'>
+                    <div className='column'>
                       <DataRow
                         props={{
                           gold: data.gold,
@@ -256,7 +254,7 @@ export default function SkinStatPage(props: any) {
                         }}
                       />
                     </div>
-                    <div className="column">
+                    <div className='column'>
                       <DataRow
                         props={{
                           tower_kills: data.tower_kills,
@@ -288,15 +286,14 @@ export default function SkinStatPage(props: any) {
               queueFilters={queueTypes}
               setRank={setRank}
               setRole={setRole}
-              setPatch={setPatch}
               setMode={setMode}
               setMatchup={setMatchup}
               setQueueType={setQueueType}
             />
           </div>
-          <div className="skinstats_players content-section toughest-matchups">
-            <div className="content-section_header">Top Player Stats</div>
-            <div className={data.players ? "matchups" : "show matchups"}>
+          <div className='skinstats_players content-section toughest-matchups'>
+            <div className='content-section_header'>Top Player Stats</div>
+            <div className={data.players ? 'matchups' : 'show matchups'}>
               <GodCounterStats matchups={data.players} />
             </div>
           </div>

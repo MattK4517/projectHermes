@@ -22,7 +22,6 @@ function CreateMatchupsHelpTooltip(props) {
 }
 
 function GodCounterMatchup(props) {
-  console.log(props);
   return (
     <Link
       to={'/'.concat(props.getMatchups.enemy.replaceAll(' ', '_'))}
@@ -177,27 +176,8 @@ function BuildStatsElement(props) {
 }
 
 export default function BuildPage(props) {
-  const [
-    god,
-    setGod,
-    role,
-    setRole,
-    rank,
-    setRank,
-    patch,
-    setPatch,
-    queueType,
-    setQueueType,
-    mode,
-    setMode,
-    matchup,
-    setMatchup,
-    patches,
-    queueTypes,
-    modes,
-    ranks,
-    roles,
-  ] = useContext(MainContext);
+  const { god, role, rank, patch, queueType, mode, matchup } =
+    useContext(MainContext);
 
   let { games, badmatchups, goodmatchups, items, colorStyle, relics } =
     useFetch(god, role, rank, patch, matchup, queueType, mode);

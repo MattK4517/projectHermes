@@ -74,7 +74,6 @@ export function AllGodsSkinsDisplay(props) {
   return (
     <div className='gods-container'>
       {props.gods.map((god, index) => {
-        console.log(god);
         return (
           <Link
             key={index}

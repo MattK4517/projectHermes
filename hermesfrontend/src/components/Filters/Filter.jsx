@@ -1,16 +1,16 @@
-import React, { useEffect } from "react";
-import FilterForm from "./FilterForm";
-import SearchBarGodPage from "../SearchBarStuff/SearchBarGodPage";
-import "./Filters.css";
+import React, { useEffect } from 'react';
+import FilterForm from './FilterForm';
+import SearchBarGodPage from '../SearchBarStuff/SearchBarGodPage';
+import './Filters.css';
 
 export default function Filter(props) {
   return (
     <>
-      <div className="filter-manager">
-        <div className="filter-width-wrapper">
-          <div className="filter-manager_container filter">
-            <div className="filter-manager_label hide">
-              <span style={{ color: "white" }}>Stat Filters</span>
+      <div className='filter-manager'>
+        <div className='filter-width-wrapper'>
+          <div className='filter-manager_container filter'>
+            <div className='filter-manager_label hide'>
+              <span style={{ color: 'white' }}>Stat Filters</span>
             </div>
             <FilterForm
               filter={props.mode}
@@ -19,7 +19,7 @@ export default function Filter(props) {
               setFilter={props.setMode}
               mode={props.mode}
             />
-            <div className={props.mode === "Conquest" ? "" : "hide-element"}>
+            <div className={props.mode === 'Conquest' ? '' : 'hide-element'}>
               <FilterForm
                 filter={props.role}
                 god={props.pagegod}
@@ -28,7 +28,7 @@ export default function Filter(props) {
                 mode={props.mode}
               />
             </div>
-            <div className={props.queueType === "Casual" ? "show" : ""}>
+            <div className={props.queueType === 'Casual' ? 'show' : ''}>
               <FilterForm
                 filter={props.rank}
                 god={props.pagegod}
@@ -37,14 +37,18 @@ export default function Filter(props) {
                 mode={props.mode}
               />
             </div>
-            <FilterForm
-              filter={props.patch}
-              god={props.pagegod}
-              filters={props.patchFilters}
-              setFilter={props.setPatch}
-              mode={props.mode}
-            />
-            <div className={props.mode === "Duel" ? "show" : ""}>
+            <div
+              className={props?.patchFilters.length > 0 ? '' : 'hide-element'}
+            >
+              <FilterForm
+                filter={props.patch}
+                god={props.pagegod}
+                filters={props.patchFilters}
+                setFilter={props.setPatch}
+                mode={props.mode}
+              />
+            </div>
+            <div className={props.mode === 'Duel' ? 'show' : ''}>
               <FilterForm
                 filter={props.queueType}
                 god={props.pagegod}
@@ -61,7 +65,7 @@ export default function Filter(props) {
           </div>
         </div>
       </div>
-      <div className="filter_small">
+      <div className='filter_small'>
         <div>
           <FilterForm
             filter={props.mode}
@@ -70,7 +74,7 @@ export default function Filter(props) {
             setFilter={props.setMode}
             mode={props.mode}
           />
-          <div className={props.mode === "Conquest" ? "" : "hide-element"}>
+          <div className={props.mode === 'Conquest' ? '' : 'hide-element'}>
             <FilterForm
               filter={props.role}
               god={props.pagegod}
@@ -79,7 +83,7 @@ export default function Filter(props) {
               mode={props.mode}
             />
           </div>
-          <div className={props.queueType === "Casual" ? "show" : ""}>
+          <div className={props.queueType === 'Casual' ? 'show' : ''}>
             <FilterForm
               filter={props.rank}
               god={props.pagegod}
@@ -90,14 +94,16 @@ export default function Filter(props) {
           </div>
         </div>
         <div>
-          <FilterForm
-            filter={props.patch}
-            god={props.pagegod}
-            filters={props.patchFilters}
-            setFilter={props.setPatch}
-            mode={props.mode}
-          />
-          <div className={props.mode === "Duel" ? "show" : ""}>
+          <div className={props?.patchFilters.length > 0 ? '' : 'hide-element'}>
+            <FilterForm
+              filter={props.patch}
+              god={props.pagegod}
+              filters={props.patchFilters}
+              setFilter={props.setPatch}
+              mode={props.mode}
+            />
+          </div>
+          <div className={props.mode === 'Duel' ? 'show' : ''}>
             <FilterForm
               filter={props.queueType}
               god={props.pagegod}
@@ -120,9 +126,9 @@ export default function Filter(props) {
 export function PlayerFilter(props) {
   return (
     <>
-      <div className="filter-manager">
-        <div className="filter-width-wrapper">
-          <div className="filter-manager_container  filter">
+      <div className='filter-manager'>
+        <div className='filter-width-wrapper'>
+          <div className='filter-manager_container  filter'>
             <FilterForm
               filter={props.mode}
               filters={props.modes}
@@ -133,7 +139,7 @@ export function PlayerFilter(props) {
               filters={props.patches}
               setFilter={props.setPatch}
             />
-            <div className={props.mode === "Duel" ? "show" : ""}>
+            <div className={props.mode === 'Duel' ? 'show' : ''}>
               <FilterForm
                 filter={props.queueType}
                 filters={props.queueTypes}
@@ -148,7 +154,7 @@ export function PlayerFilter(props) {
           </div>
         </div>
       </div>
-      <div className="filter_small">
+      <div className='filter_small'>
         <div>
           <FilterForm
             filter={props.mode}
@@ -162,7 +168,7 @@ export function PlayerFilter(props) {
           />
         </div>
         <div>
-          <div className={props.mode === "Duel" ? "show" : ""}>
+          <div className={props.mode === 'Duel' ? 'show' : ''}>
             <FilterForm
               filter={props.queueType}
               filters={props.queueTypes}

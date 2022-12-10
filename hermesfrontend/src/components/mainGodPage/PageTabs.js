@@ -46,11 +46,8 @@ function a11yProps(index) {
 }
 
 export default function BasicTabs(props) {
-  const [
-    god, setGod, role, setRole, rank, setRank, patch, setPatch, queueType, setQueueType,
-    mode, setMode, matchup, setMatchup, patches, queueTypes, modes, ranks, roles
-  ] = React.useContext(MainContext)
-  const [value, setValue] = React.useState(0);
+  const { tab } = React.useContext(MainContext)
+  const [value, setValue] = React.useState(tab);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };

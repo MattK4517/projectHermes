@@ -108,9 +108,6 @@ const Table = ({ columns, data }) => {
                   {page.map(
                     (row, i) => {
                       prepareRow(row);
-                      // if (row.original.role != this.props.role && this.props.role != "All Roles"){
-                      //   console.log(row.original.role, this.props.role)
-                      //  }
                       return (
                         <div className='rt-tr-group'>
                           <div
@@ -505,7 +502,6 @@ function CombatTierList(props) {
           Object.entries(data).map((god) => {
             tempData = [...tempData, ...Object.values(god[1])];
           });
-          console.log('getting here');
           setTotalData(tempData);
         })
       ),
@@ -587,7 +583,6 @@ function CombatTierList(props) {
 
   if (error) return <Error />;
 
-  console.log(totalData);
   return (
     <>
       <TierListFilter />

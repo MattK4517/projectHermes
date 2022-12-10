@@ -51,7 +51,6 @@ const Table = ({ columns, data, player }) => {
   // We don't want to render all 2000 rows for this example, so cap
   // it at 20 for this use case
   const firstPageRows = rows;
-  console.log('player', player);
   return (
     <>
       <div className='stats-tables__content-container'>
@@ -98,9 +97,6 @@ const Table = ({ columns, data, player }) => {
                   {page.map(
                     (row, i) => {
                       prepareRow(row);
-                      // if (row.original.role != this.props.role && this.props.role != "All Roles"){
-                      //   console.log(row.original.role, this.props.role)
-                      //  }
                       return (
                         <div className='rt-tr-group'>
                           <div

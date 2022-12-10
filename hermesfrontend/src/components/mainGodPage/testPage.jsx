@@ -294,7 +294,6 @@ function BuildStats(props) {
 }
 
 function BuildStatsElement(props) {
-  console.log(props);
   return (
     <div className='item-row'>
       {Object.keys(props.item).map((slot) => {
@@ -421,7 +420,6 @@ export default function BuildPage(pagegod) {
     'Ranked'
   );
   const [slotOneItems, setSlotOneItems] = useState([]);
-  const [patch, setPatch] = useState('9.3');
   const [queue_type, setMode] = useState('Ranked');
   useEffect(() => {
     fetch(
@@ -431,9 +429,7 @@ export default function BuildPage(pagegod) {
         role,
         '/',
         rank,
-        '/',
-        patch,
-        '/',
+        '/9.11/',
         queue_type
       )
     ).then((res) =>
@@ -460,7 +456,7 @@ export default function BuildPage(pagegod) {
         });
       })
     );
-  }, [role, rank, patch, queue_type]);
+  }, [role, rank, queue_type]);
 
   return (
     <div
@@ -594,7 +590,7 @@ export default function BuildPage(pagegod) {
                     Rank and Role Data Filters
                   </div>
                   <p>
-                    Sort by ANY God, Rank, Role, Patch Combination<br></br>
+                    Sort by ANY God, Rank, Role, Pa tch Combination<br></br>
                     Khepri Bronze Jungle Data Here You Come!<br></br>
                     P.S. These Filters are Interactive
                   </p>
@@ -613,13 +609,6 @@ export default function BuildPage(pagegod) {
                           filters={ranks}
                           setFilter={setRank}
                         />
-                        <div className='hide'>
-                          <DropDownFilter
-                            changePatch={null}
-                            patch={'9.3'}
-                            style={{ color: 'white' }}
-                          />
-                        </div>
                       </div>
                     </div>
                   </div>

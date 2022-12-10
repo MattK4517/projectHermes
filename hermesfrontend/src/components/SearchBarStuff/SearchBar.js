@@ -15,7 +15,6 @@ export default function SearchBar(data) {
       if (parseInt(event.target.value)) {
         history.push(`/Match/${event.target.value.trim()}`);
       } else if (Object.keys(godsDict).findIndex(element => {
-        console.log(element.toLowerCase() === event.target.value.toLowerCase())
         return element.toLowerCase() === event.target.value.toLowerCase();
       }) !== -1) {
         history.push(`/${event.target.value.trim().toLowerCase().replaceAll(" ", "-").replaceAll("'", "")}`)
@@ -32,7 +31,6 @@ export default function SearchBar(data) {
     }
   }
 
-  console.log(data.data.map(option => option))
   return (
     <Stack spacing={2}
       sx={{

@@ -1,12 +1,15 @@
 import React, { useState, createContext } from "react";
+import { useContext } from "react";
+import { AppContext } from "../../AppContext";
 
 export const TierListContext = createContext();
 
 export const TierListProvider = (props) => {
+  const { patch } = useContext(AppContext)
   const [god, setGod] = useState("");
   const [queueType, setQueueType] = useState("Ranked");
   const [mode, setMode] = useState("Conquest");
-  const [patch, setPatch] = useState("9.9");
+  const [patchState, setPatch] = useState(patch);
   const [topLink, setTopLink] = useState("https://i.imgur.com/wH3klnZ.jpg");
   const [rank, setRank] = useState("All Ranks");
   const [role, setRole] = useState("All Roles");
@@ -17,7 +20,7 @@ export const TierListProvider = (props) => {
         setGod,
         queueType,
         setQueueType,
-        patch,
+        patchState,
         setPatch,
         rank,
         setRank,

@@ -9,6 +9,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { AppProvider } from "./AppContext";
 
 const theme = createTheme({
   breakpoints: {
@@ -62,14 +63,16 @@ export default function App() {
   return (
     <div className="App">
       <QueryClientProvider client={queryClient}>
-        <HashRouter>
-          <DndProvider backend={HTML5Backend}>
-            <ThemeProvider theme={theme}>
-              <MiniDrawer />
-            </ThemeProvider>
-          </DndProvider>
-        </HashRouter>
-        <ReactQueryDevtools />
+        <AppProvider>
+          <HashRouter>
+            <DndProvider backend={HTML5Backend}>
+              <ThemeProvider theme={theme}>
+                <MiniDrawer />
+              </ThemeProvider>
+            </DndProvider>
+          </HashRouter>
+          <ReactQueryDevtools />
+        </AppProvider>
       </QueryClientProvider>
     </div>
   );

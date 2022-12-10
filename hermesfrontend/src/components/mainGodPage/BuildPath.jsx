@@ -135,9 +135,6 @@ function Table({ columns, data }) {
                   {firstPageRows.map(
                     (row, i) => {
                       prepareRow(row);
-                      // if (row.original.role != this.props.role && this.props.role != "All Roles"){
-                      //   console.log(row.original.role, this.props.role)
-                      //  }
                       if (
                         row.original.islot1.DeviceName &&
                         row.original.slot2.DeviceName &&
@@ -323,27 +320,7 @@ function Table({ columns, data }) {
 }
 
 export default function BuildPath(props) {
-  const [
-    god,
-    setGod,
-    role,
-    setRole,
-    rank,
-    setRank,
-    patch,
-    setPatch,
-    queueType,
-    setQueueType,
-    mode,
-    setMode,
-    matchup,
-    setMatchup,
-    patches,
-    queueTypes,
-    modes,
-    ranks,
-    roles,
-  ] = useContext(MainContext);
+  const { god, role, rank, patch, queueType, mode } = useContext(MainContext);
 
   const [paths, setPaths] = useState([]);
   useEffect(() => {
