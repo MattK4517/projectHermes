@@ -616,7 +616,6 @@ def get_worst_matchups(
     test_sort = OrderedDict(
         sorted(matchup_dict.items(), key=lambda x: getitem(x[1], "winRate"))
     )
-
     min_games = games * 0.01
 
     to_remove = []

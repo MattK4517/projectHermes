@@ -133,4 +133,22 @@ body {
     background-size: 1014px 670px;
     background-position: 50% -60px;
   }
+
+  .god-icon {
+    position: relative;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+
+  .god-name {
+    margin-top: 6px;
+    max-width: 70px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 12px;
+    font-weight: 700;
+  }
 }
