@@ -1,4 +1,5 @@
 import { dehydrate, QueryClient, useQueries, useQuery } from "@tanstack/react-query";
+import { GetServerSideProps, GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import { useContext } from "react";
 import { GodPageLayout } from ".";
@@ -9,10 +10,10 @@ import { MatchupDisplayType } from "../../../components/gods/matchups/SingleMatc
 import { GodWinRateType } from "../../../models/gods/gods.model";
 import { getBaseUrl } from "../../../utils/trpc";
 
-function BuildPage(props) {
+function BuildPage(props: { dehydratedState: { godWinrate: any } }) {
   const router = useRouter();
   const { god, setGod } = useContext(GodContext);
-  setGod(router.query.god);
+  if (router.query?.god) setGod(router.query.god);
 
   const buildPageQueries = useQueries({
     queries: [
@@ -45,9 +46,9 @@ function BuildPage(props) {
   );
 }
 
-export default BuildPage; 
+export default BuildPage;
 
-export async function getServerSideProps({ params }) {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = {
     godWinRate: new QueryClient(),
     godMatchups:  new QueryClient(),
@@ -73,7 +74,7 @@ export async function getServerSideProps({ params }) {
       },
     },
   };
-}
+};
 
 async function getGodWinRate(god: string) {
   let url = getBaseUrl();

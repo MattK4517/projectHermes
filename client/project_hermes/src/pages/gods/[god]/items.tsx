@@ -6,7 +6,7 @@ import { GodContext } from "../../../components/gods/GodContext";
 function ItemsPage(props) {
   const router = useRouter();
   const { god, setGod } = useContext(GodContext);
-  setGod(router.query.god);
+  if (router.query?.god) setGod(router.query.god);
   return (
     <GodPageLayout>
       <div className="text-white">ITEMS PAGE</div>

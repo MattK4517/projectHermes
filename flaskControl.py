@@ -8,33 +8,52 @@ from pyrez.api import SmiteAPI
 import pyrez
 from duo_tier_list import get_lanes
 from operator import getitem
-from collections import OrderedDict
 from main import client
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 from constants import godsDict, roles, id_dict, Tier_Three_items, Starter_items
 import pandas as pd
 import analyze_players as anlzpy
 import analyze as anlz
-import re
-from re import L, M
-from queue import Empty
-from datetime import datetime
+from flask_session import Session
+import pymongo
 
 # from sklearn.linear_model import GammaRegressor
 # from flask_limiter import Limiter
 # from flask_limiter.util import get_remote_address
 
 
-app = Flask(__name__, static_folder="../hermesfrontend", static_url_path="/")
+app = Flask(
+    __name__,
+    static_folder="../hermesfrontend",
+    static_url_path="/",
+)
+
 # limiter = Limiter(
 #         app,
 #         key_func=get_remote_address,
 #         default_limits=["250 per day", "50 per hour"]
 # )
+# Set the secret key to some random bytes. Keep this really secret!
+app.config["SECRET_KEY"] = b'_5#y2L"F4Q8z\n\xec]/'
+# app.config["SESSION_TYPE"] = "mongodb"
+# app.config["SESSION_PERMANENT"] = True
+# app.config["SESSION_MONGODB"] = client
+
+# sess = Session(app)
 
 
-@app.route("/api/gods")
+@app.after_request
+def print_session(response: Flask.response_class):
+    # print(response.response)
+    return response
+
+
+@app.route("/api/gods", methods=["GET", "POST"])
 def get_all_gods():
+    gdDict = {}
+    print(request.args.get("loaded"))
+    if not request.args.get("loaded"):
+        print("GEtting here")
     gdDict = anlz.get_gods()
     return gdDict
 
@@ -99,8 +118,7 @@ def get_god_data_role(god, role, rank, patch, queue_type, mode, matchup="None"):
         return anlz.get_specific_build(
             client, god, role, patch, matchup, rank, queue_type, mode
         )
-        build = anlz.get_top_builds(
-            client, god, role, patch, queue_type, mode=mode)
+        build = anlz.get_top_builds(client, god, role, patch, queue_type, mode=mode)
     elif matchup == "None":
         build = anlz.get_top_builds(
             client, god, role, patch, queue_type, rank, mode=mode
@@ -215,8 +233,7 @@ def get_item_data(item):
 
 @ app.route("/api/<god>/items/<role>/<rank>/<patch>/<queue_type>/<mode>")
 def get_all_items(god, role, rank, patch, queue_type, mode):
-    items = anlz.get_all_builds(
-        client, god, role, patch, queue_type, rank, mode)
+    items = anlz.get_all_builds(client, god, role, patch, queue_type, rank, mode)
     return items
 
 
@@ -284,8 +301,7 @@ def get_match(matchID):
 
 @ app.route("/api/<god>/buildpath/<role>/<rank>/<patch>/<queue_type>/<mode>")
 def get_build_path(god, role, rank, patch, queue_type, mode):
-    builds = anlz.get_build_path(
-        client, god, role, patch, queue_type, rank, mode)
+    builds = anlz.get_build_path(client, god, role, patch, queue_type, rank, mode)
     return builds
 
 
@@ -364,8 +380,7 @@ def get_player_match_info(playername, queue_type, patch, mode):
         return {}
     return json.loads(
         json_util.dumps(
-            anlzpy.find_match_history(
-                client, playername, queue_type, patch, mode)
+            anlzpy.find_match_history(client, playername, queue_type, patch, mode)
         )
     )
 
