@@ -73,6 +73,7 @@ godsDict = {
     "Kuzenbo": "Support",
     "Lancelot": "Jungle",
     "Loki": "Jungle",
+    "Maui": "Support",
     "Medusa": "Carry",
     "Mercury": "Jungle",
     "Merlin": "Mid",

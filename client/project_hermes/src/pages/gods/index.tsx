@@ -1,6 +1,5 @@
 import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import NextPage from "next/page";
 import { getBaseUrl, trpc } from "../../utils/trpc";
 
 interface god {

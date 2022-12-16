@@ -1,13 +1,10 @@
-import { Ability, GodData, MenuItem } from "../../models/gods/gods.model";
+import { Ability, MenuItem, tier } from "../../models/gods/gods.model";
 import GodIconLoader, {
   GodAbilityIconLoader,
-  GodPantheonIconLoader,
 } from "../loader";
 import Image from "next/image";
 import { Popover } from "@headlessui/react";
-import { useQuery } from "@tanstack/react-query";
-import { getApiUrl, getBaseUrl } from "../../utils/trpc";
-import { getPantheonIcon } from "./GodHelpers";
+import { getPantheonIcon, getTierColor } from "./GodHelpers";
 
 const getMessage = (
   role: string,
@@ -25,26 +22,8 @@ const getMessage = (
   return message;
 };
 
-export function tierColor(tier: string) {
-  let color = "#414165";
-  if (tier === "D") {
-    color = "#ff4e50";
-  } else if (tier === "C") {
-    color = "#fcb1b2";
-  } else if (tier === "B") {
-    color = "white";
-  } else if (tier === "A") {
-    color = "#e2ccff";
-  } else if (tier === "S") {
-    color = "#bf94e4";
-  } else if (tier === "S+") {
-    color = "#a966ff";
-  }
-  return color;
-}
-
 interface PageHeaderProps {
-  tier: string;
+  tier: tier;
   god: string;
   tab: string;
   role: string;
@@ -63,11 +42,11 @@ const PageHeader = (props: PageHeaderProps) => {
         <Popover className="max-w-2xl">
           <Popover.Button
             className="relative h-24 w-24 flex-initial rounded-md border-2"
-            style={{ borderColor: tierColor(props.tier) }}
+            style={{ borderColor: getTierColor(props.tier) }}
           >
             <div
               className="tier-heading"
-              style={{ borderColor: tierColor(props.tier) }}
+              style={{ borderColor: getTierColor(props.tier) }}
             >
               {props.tier}
             </div>

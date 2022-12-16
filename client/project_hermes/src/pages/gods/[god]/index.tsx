@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { QueryClient, useQueries, useQuery } from "@tanstack/react-query";
+import { dehydrate, QueryClient, useQueries, useQuery } from "@tanstack/react-query";
 import PageHeader from "../../../components/gods/PageHeader";
 import { getApiUrl } from "../../../utils/trpc";
 import { ParsedUrlQuery } from "querystring";
