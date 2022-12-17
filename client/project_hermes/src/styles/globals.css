@@ -12,6 +12,7 @@ body {
   --light-purple-color: #e2ccff;
   --medium-purple-color: #bf94e4;
   --dark-purple-color: #a966ff;
+  --border-color: #414165;
 
 }
 
@@ -19,12 +20,24 @@ body {
   grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
 }
 
-.nav-border {
-  border-right: .5px solid gray;
+
+@responsive {
+
+  .nav-border {
+  border-right: .5px solid var(--border-color);
+  }
+
+  .nav-border-bottom {
+    border-bottom: .5px solid var(--border-color);
+  }
+
+  .nav-border-top {
+    border-top: .5px solid var(--border-color);
+  }
 }
 
-.nav-border-bottom {
-  border-bottom: .5px solid gray;
+.flex-0 {
+  flex: 0 0 100%
 }
 
 @layer components {
@@ -50,6 +63,27 @@ body {
     box-shadow: theme('boxShadow.xl');
     background-color: var(--card-background-color);
     color: white
+  }
+
+  .card-header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-left: 14px;
+    width: 100%;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .card-header::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 2px;
+    height: 20px;
+    border-radius: 2px;
+    background-color: #3273fa;
   }
 
   .god-icon-hover {
@@ -136,11 +170,19 @@ body {
 
   .god-icon {
     position: relative;
-    width: 32px;
+    min-width: 32px;
     height: 32px;
     border-radius: 50%;
     overflow: hidden;
   }
+
+  .item-icon {
+    position: relative;
+    min-width: 36px;
+    height: 36px;
+    overflow: hidden;
+  }
+
 
   .god-name {
     margin-top: 6px;

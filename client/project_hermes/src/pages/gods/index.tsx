@@ -8,13 +8,9 @@ interface god {
 }
 
 export default function GodsList<NextPage>(props) {
-  const { data, isLoading, error } = useQuery<god[]>(
-    ["gods", { pageLoaded: "false" }],
-    getGods,
-    {
-      initialData: props.dehydratedState,
-    }
-  );
+  const { data, isLoading, error } = useQuery<god[]>(["gods"], getGods, {
+    initialData: props.dehydratedState,
+  });
 
   if (isLoading) return <h1>Loading...</h1>;
 
@@ -56,7 +52,7 @@ export default function GodsList<NextPage>(props) {
 export async function getStaticProps() {
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery(["gods", { pageLoaded: "false" }], getGods);
+  await queryClient.prefetchQuery(["gods"], getGods);
   return {
     props: {
       dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
@@ -64,16 +60,7 @@ export async function getStaticProps() {
   };
 }
 
-async function getGods({ queryKey }) {
+async function getGods() {
   let url = getBaseUrl();
-  const [_key, { pageLoaded }] = queryKey;
-  return (
-    await fetch(
-      url +
-        "/api/gods?" +
-        new URLSearchParams({
-          loaded: pageLoaded,
-        })
-    )
-  ).json();
+  return (await fetch(url + "/api/gods")).json();
 }

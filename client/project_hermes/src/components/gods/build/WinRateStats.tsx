@@ -1,61 +1,91 @@
-import React from "react"
-import { tier } from "../../../models/gods/gods.model";
+import React from "react";
+import { tier } from "../../../models/gods.model";
 import { getWinRateColor, getTierColor } from "../GodHelpers";
 
 export type WinRateStatsType = {
-    winRate: number;
-    pickRate: number | undefined;
-    banRate: number | undefined;
-    games: number | undefined;
-    queueType: 'Ranked' | 'Casual'
-    tier: tier
-}
+  winRate: number;
+  pickRate: number | undefined;
+  banRate: number | undefined;
+  games: number | undefined;
+  queueType: "Ranked" | "Casual";
+  tier: tier;
+};
 
 export interface IWinRateStats {
-  winRateStats: WinRateStatsType
+  winRateStats: WinRateStatsType;
 }
 
-
-
- const WinRateStats = ({winRateStats}: IWinRateStats): JSX.Element => {
-    let banrateMessage;
-    if (winRateStats.queueType === 'Ranked') {
-      banrateMessage = winRateStats.banRate + '%';
-    } else if (winRateStats.queueType === 'Casual') {
-      banrateMessage = 'N/A';
-    }
-    return (
-      
-        <div className='card flex flex-row px-0 w-full'>
-        <div id='tier' className="flex-1 flex flex-col items-center nav-border">
-          <div id='value' className="text-xl font-extrabold" style={{color: getTierColor(winRateStats.tier)}}>
-            {winRateStats.tier}
+const WinRateStats = ({ winRateStats }: IWinRateStats): JSX.Element => {
+  let banrateMessage;
+  if (winRateStats.queueType === "Ranked") {
+    banrateMessage = winRateStats.banRate + "%";
+  } else if (winRateStats.queueType === "Casual") {
+    banrateMessage = "N/A";
+  }
+  return (
+    <div className="card flex w-full flex-row flex-wrap justify-around px-0 sm:flex-row sm:flex-nowrap">
+      {["tier", "winRate", "pickRate", "banRate", "games"].map((key) => {
+        return (
+          <div
+            id={key}
+            className={`${
+              key !== "games"
+                ? "sm:nav-border flex flex-shrink flex-grow flex-col items-center px-2 sm:flex-auto"
+                : "flex-0 nav-border-top mt-3 flex flex-col items-center p-3 sm:mt-0 sm:flex-auto sm:border-t-0 sm:p-0"
+            }`}
+          >
+            <div
+              id="value"
+              className="text-xl font-extrabold"
+              style={{
+                color:
+                  key === "tier"
+                    ? getTierColor(winRateStats.tier)
+                    : "" || key === "winRate"
+                    ? getWinRateColor(winRateStats.winRate)
+                    : "",
+              }}
+            >
+              {winRateStats[key]}
+              {key.includes("Rate") ? "%" : ""}
+            </div>
+            <div id="label" className="text-base font-medium text-lighterBlue">
+              {key
+                .replace(/([A-Z]+)/g, " $1")
+                .replace(/([A-Z][a-z])/g, " $1")
+                .replace(/^./, (match) => match.toUpperCase())}
+            </div>
           </div>
-          <div id='label' className="text-base font-medium text-lighterBlue">Tier</div>
-        </div>
-        <div id='win-rate' className="flex-1 flex flex-col items-center nav-border">
-          <div id='value' className="text-xl font-extrabold" style={{color: getWinRateColor(winRateStats.winRate)}}>
-            {winRateStats.winRate}%
-          </div>
-          <div id='label' className="text-base font-medium text-lighterBlue">Win Rate</div>
-        </div>
-  
-        <div id='pick-rate' className="flex-1 flex flex-col items-center nav-border">
-        <div id='value' className="text-xl font-extrabold">{winRateStats.pickRate}%</div>
-          <div id='label' className="text-base font-medium text-lighterBlue">Pick Rate</div>
-        </div>
-  
-        <div id='ban-rate' className="flex-1 flex flex-col items-center nav-border">
-        <div id='value' className="text-xl font-extrabold">{banrateMessage}</div>
-          <div id='label' className="text-base font-medium text-lighterBlue">Ban Rate</div>
-        </div>
+        );
+      })}
 
-        <div id='matches' className="flex-1 flex flex-col items-center">
-        <div id='value' className="text-xl font-extrabold">{winRateStats.games}</div>
-          <div id='label' className="text-base font-medium text-lighterBlue">Matches</div>
+      {/* <div
+        id="matches"
+        className="flex-0 nav-border-top mt-3 flex flex-col items-center p-3 sm:mt-0 sm:flex-auto sm:border-t-0 sm:p-0"
+      >
+        <div id="value" className="text-xl font-extrabold">
+          {winRateStats.games}
         </div>
-      </div>
-    )
-}
+        <div id="label" className="text-base font-medium text-lighterBlue">
+          Matches
+        </div>
+      </div> */}
+    </div>
+  );
+};
 
-export default WinRateStats
+export default WinRateStats;
+
+// display: flex;
+// flex-direction: column;
+// justify-content: center;
+// align-items: center;
+// padding: 2px 0;
+// height: 100%;
+// flex: 1 1;
+// white-space: nowrap;
+
+// display: flex;
+//   flex: 1 1 0%;
+//   align-items: center;
+//   flex-direction: column;

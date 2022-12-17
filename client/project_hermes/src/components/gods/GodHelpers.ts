@@ -1,4 +1,4 @@
-import { tier } from "../../models/gods/gods.model";
+import { tier } from "../../models/gods.model";
 export const getPantheonIcon = (pantheon: string) => {
   let icon: string = "";
   if (pantheon === "Arthurian") {
@@ -68,27 +68,22 @@ export const getTierColor = (tier: tier): string => {
     color = "#a966ff";
   }
   return color;
-}
+};
 
 export const getWinRateColor = (winRate: number): string => {
   let color = "white";
-  if (winRate < 45 || !winRate) {
+  if (winRate < 42 || !winRate) {
     color = "#ff4e50";
-  }
-  else if (winRate < 48) {
+  } else if (winRate < 48) {
     color = "#fcb1b2";
-  }
-  else if (winRate < 51.5) {
+  } else if (winRate < 51.5) {
     color = "white";
-  }
-  else if (winRate < 53) {
+  } else if (winRate < 53) {
     color = "#e2ccff";
-  }
-  else if (winRate < 56) {
+  } else if (winRate < 56) {
     color = "#bf94e4";
-  }
-  else if (winRate >= 56) {
+  } else if (winRate >= 56) {
     color = "#a966ff";
   }
   return color;
-}
+};

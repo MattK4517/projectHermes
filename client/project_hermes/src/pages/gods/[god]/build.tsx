@@ -1,36 +1,64 @@
-<<<<<<< HEAD
-import { dehydrate, QueryClient, useQueries, useQuery } from "@tanstack/react-query";
-=======
-import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
+import {
+  dehydrate,
+  QueryClient,
+  useQuery,
+  useQueries,
+} from "@tanstack/react-query";
 import { GetServerSideProps, GetStaticPaths, GetStaticProps } from "next";
->>>>>>> b3eb15a ( changes)
 import { useRouter } from "next/router";
+import React from "react";
 import { useContext } from "react";
 import { GodPageLayout } from ".";
+import { BuildRow } from "../../../components/gods/build/BuildRow";
 import WinRateStats from "../../../components/gods/build/WinRateStats";
 import { GodContext } from "../../../components/gods/GodContext";
 import MatchupRow from "../../../components/gods/matchups/MatchupRow";
-import { MatchupDisplayType } from "../../../components/gods/matchups/SingleMatchupDisplay";
-import { GodWinRateType } from "../../../models/gods/gods.model";
+import { god, GodWinRateType } from "../../../models/gods.model";
+import { Build } from "../../../models/items.model";
 import { getBaseUrl } from "../../../utils/trpc";
 
-function BuildPage(props: { dehydratedState: { godWinrate: any } }) {
+function BuildPage(props: {
+  dehydratedState: {
+    godMatchups: any;
+    godBuild: any;
+    godWinrate: any;
+  };
+}) {
   const router = useRouter();
   const { god, setGod } = useContext(GodContext);
   if (router.query?.god) setGod(router.query.god);
 
-<<<<<<< HEAD
   const buildPageQueries = useQueries({
     queries: [
       {
         queryKey: ["god-winrate", god],
-        queryFn: async () => (await fetch(`/api/main/${god}/Solo/All%20Ranks/9.11/Ranked/Conquest`)).json(),
+        queryFn: async () =>
+          (
+            await fetch(
+              `/api/main/${god}/Solo/All%20Ranks/9.12/Ranked/Conquest`
+            )
+          ).json(),
         initialData: props.dehydratedState.godWinrate,
       },
       {
         queryKey: ["god-matchups", god],
-        queryFn: async () => (await fetch(`/api/matchups/${god}/Solo/All%20Ranks/9.11/Ranked/Conquest`)).json(),
+        queryFn: async () =>
+          (
+            await fetch(
+              `/api/matchups/${god}/Solo/All%20Ranks/9.12/Ranked/Conquest`
+            )
+          ).json(),
         initialData: props.dehydratedState.godMatchups.data,
+      },
+      {
+        queryKey: ["god-build", god],
+        queryFn: async () =>
+          (
+            await fetch(
+              `/api/build/${god}/Solo/All%20Ranks/9.12/Ranked/Conquest`
+            )
+          ).json(),
+        initialData: props.dehydratedState.godBuild.data,
       },
     ],
   });
@@ -40,45 +68,25 @@ function BuildPage(props: { dehydratedState: { godWinrate: any } }) {
   if (isLoading) return <h1>LOADING...</h1>;
   if (isError) return <h1>ERROR...</h1>;
   const data = buildPageQueries.map((query) => query.data);
-
   return (
     <GodPageLayout>
-      <WinRateStats 
-      winRateStats={{...data[0] , queueType: "Ranked"}}
+      <WinRateStats winRateStats={{ ...data[0], queueType: "Ranked" }} />
+      <MatchupRow
+        matchups={{ ...data[1] }}
+        god={god}
+        role={"Solo"}
+        displayType="countered"
       />
-      <MatchupRow matchups={{...data[1]}}/>
+
+      <MatchupRow
+        matchups={{ ...data[1] }}
+        god={god}
+        role={"Solo"}
+        displayType="counters"
+      />
+      <BuildRow items={data[2].items} relics={data[2].relics} />
     </GodPageLayout>
   );
-=======
-  console.log(props.dehydratedState);
-  const { isSuccess, data, isLoading, error } = useQuery<GodWinRateType>(
-    ["god-build", god],
-    () => getGodWinRate(god),
-    {
-      initialData: props.dehydratedState?.godWinrate,
-      refetchOnMount: false,
-    }
-  );
-
-  if (isLoading) return <h1>Loading...</h1>;
-
-  if (error) return <h1>Error...</h1>;
-
-  console.log("DATA WINRATE", data);
-
-  if (isSuccess)
-    return (
-      <GodPageLayout>
-        <WinRateStats
-          winRate={data?.winRate}
-          pickRate={data?.pickRate}
-          banRate={data?.banRate}
-          matches={data?.games}
-          queueType={"Ranked"}
-        />
-      </GodPageLayout>
-    );
->>>>>>> b3eb15a ( changes)
 }
 
 export default BuildPage;
@@ -86,55 +94,56 @@ export default BuildPage;
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = {
     godWinRate: new QueryClient(),
-    godMatchups:  new QueryClient(),
+    godMatchups: new QueryClient(),
+    godBuild: new QueryClient(),
   };
-<<<<<<< HEAD
-  const { god } = params;
-  
+  const { god } = context;
 
-  await queryClient.godWinRate.prefetchQuery<GodWinRateType>(["god-winrate", god], () =>
-  getGodWinRate(god)
-=======
-  const god = context.params?.god as string;
-
-  await queryClient.godWinRate.prefetchQuery(["godBuild", god], () =>
-    getGodWinRate(god)
->>>>>>> b3eb15a ( changes)
+  await queryClient.godWinRate.prefetchQuery<GodWinRateType>(
+    ["god-winrate", god],
+    () => getGodWinRate(god)
   );
   await queryClient.godMatchups.prefetchQuery(["god-matchups", god], () =>
-  getGodMatchups(god)
+    getGodMatchups(god)
   );
+  await queryClient.godBuild.prefetchQuery<Build>([
+    "god-build",
+    () => getGodBuild(god),
+  ]);
   return {
     props: {
       dehydratedState: {
-<<<<<<< HEAD
         godWinRate: JSON.parse(
           JSON.stringify(dehydrate(queryClient.godWinRate))
         ),
         godMatchups: JSON.parse(
           JSON.stringify(dehydrate(queryClient.godMatchups))
         ),
-=======
-        godWinRate: dehydrate(queryClient.godWinRate),
->>>>>>> b3eb15a ( changes)
+        godBuild: JSON.parse(JSON.stringify(dehydrate(queryClient.godBuild))),
       },
     },
   };
 };
 
-async function getGodWinRate(god: string) {
+async function getGodWinRate(god: god) {
   let url = getBaseUrl();
-<<<<<<< HEAD
-  return (await fetch(url + `/api/main/${god}/Solo/All%20Ranks/9.11/Ranked/Conquest`)).json();
+  return (
+    await fetch(url + `/api/main/${god}/Solo/All%20Ranks/9.11/Ranked/Conquest`)
+  ).json();
 }
 
-async function getGodMatchups(god: string) {
-  let url = getBaseUrl()
-  return (await fetch(url + `/api/matchups/${god}/Solo/All%20Ranks/9.11/Ranked/Conquest`)).json();
+async function getGodMatchups(god: god) {
+  let url = getBaseUrl();
+  return (
+    await fetch(
+      url + `/api/matchups/${god}/Solo/All%20Ranks/9.12/Ranked/Conquest`
+    )
+  ).json();
 }
-=======
-  return await fetch(
-    url + `/api/main/${god}/Solo/All%20Ranks/9.11/Ranked/Conquest`
-  ).then((res) => res.json());
+
+async function getGodBuild(god: god) {
+  let url = getBaseUrl();
+  return (
+    await fetch(url + `/api/build/${god}/Solo/All%20Ranks/9.12/Ranked/Conquest`)
+  ).json();
 }
->>>>>>> b3eb15a ( changes)

@@ -42,7 +42,6 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   );
 
   const [open, setOpen] = React.useState<boolean>(true);
-
   return (
     <QueryClientProvider client={queryClient}>
       <GodProvider>
@@ -50,10 +49,10 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
           <AppBar open={open} setOpen={setOpen}></AppBar>
         </div>
         <Hydrate state={pageProps.dehydratedState}>
-          <main className="fixed top-16 flex h-full w-full ">
-            <SideNav open={open} setOpen={setOpen}></SideNav>
-            <div className="text-fontAltl flex h-full w-full overflow-scroll bg-mainBackGroundColor p-4">
-              <div className="container mx-auto my-4 max-w-5xl p-4">
+          <main className="fixed top-16 flex h-full w-full">
+            <SideNav open={open} setOpen={setOpen} />
+            <div className="text-fontAltl flex h-full w-full overflow-scroll bg-mainBackGroundColor p-0 sm:p-4">
+              <div className="container mx-auto my-4 max-w-5xl p-0 sm:p-4">
                 {getLayout(<Component {...pageProps} />)}
               </div>
             </div>

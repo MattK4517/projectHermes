@@ -1,7 +1,7 @@
 import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { Ability } from "../../models/gods/gods.model";
+import { Ability } from "../../models/gods.model";
 import { getBaseUrl } from "../../utils/trpc";
 import PageHeader from "./PageHeader";
 

@@ -1,7 +1,5 @@
-import { Ability, MenuItem, tier } from "../../models/gods/gods.model";
-import GodIconLoader, {
-  GodAbilityIconLoader,
-} from "../loader";
+import { Ability, MenuItem, tier } from "../../models/gods.model";
+import GodIconLoader, { GodAbilityIconLoader } from "../loader";
 import Image from "next/image";
 import { Popover } from "@headlessui/react";
 import { getPantheonIcon, getTierColor } from "./GodHelpers";
@@ -144,7 +142,7 @@ export function GodAbilities(props: { abilities: Ability[] }) {
                 loader={GodAbilityIconLoader}
                 width={36}
                 height={36}
-                className="h-9 w-9 rounded-sm"
+                className="h-9 w-9 flex-shrink-0 rounded-sm"
               />
 
               <div className="ability-label bottom-center">{text}</div>
