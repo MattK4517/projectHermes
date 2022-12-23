@@ -5,21 +5,21 @@ import { Error, Loading } from './components';
 export const AppContext = createContext<{ patch: string }>({ patch: '9.11' });
 
 export const AppProvider = (props: any) => {
-  // const { data, isLoading, isError } = useQuery<{ patch: string }>(
-  //   'patch',
-  //   getPatches
-  // );
-
-  // if (isLoading) return <Loading></Loading>;
-  // if (isError) return <Error></Error>;
-  // if (data)
-  return (
-    <AppContext.Provider value={{ patch: '9.12' }}>
-      {props.children}
-    </AppContext.Provider>
+  const { data, isLoading, isError } = useQuery<{ patch: string }>(
+    'patch',
+    getPatches
   );
+
+  if (isLoading) return <Loading></Loading>;
+  if (isError) return <Error></Error>;
+  if (data)
+    return (
+      <AppContext.Provider value={{ patch: data.patch }}>
+        {props.children}
+      </AppContext.Provider>
+    );
 };
 
 const getPatches = () => {
-  return fetch('/api/get_patches').then((res) => res.json());
+  return fetch('api/get_patches').then((res) => res.json());
 };
