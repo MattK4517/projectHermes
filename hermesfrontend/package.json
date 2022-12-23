@@ -1,5 +1,6 @@
 {
   "proxy": "https://lionfish-app-huotz.ondigitalocean.app/",
+  "port": "5000",
   "name": "hermesfrontend",
   "version": "0.1.0",
   "private": true,
