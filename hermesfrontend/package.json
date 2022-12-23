@@ -1,5 +1,5 @@
 {
-  "proxy": "https://www.smitestats.gg/",
+  "proxy": "https://lionfish-app-huotz.ondigitalocean.app/api",
   "name": "hermesfrontend",
   "version": "0.1.0",
   "private": true,
