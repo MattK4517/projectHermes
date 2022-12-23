@@ -7,7 +7,7 @@ const compare = (a, b) => {
 };
 
 export default function PlayerMatchups(props) {
-  const [
+  const {
     god,
     setGod,
     player,
@@ -34,7 +34,7 @@ export default function PlayerMatchups(props) {
     inputType,
     setInputType,
     inputTypes,
-  ] = useContext(PlayerContext);
+  } = useContext(PlayerContext);
 
   const [playerMatchups, setPlayerMatchups] = useState([]);
   useEffect(() => {

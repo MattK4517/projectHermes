@@ -134,11 +134,6 @@ export function PlayerFilter(props) {
               filters={props.modes}
               setFilter={props.setMode}
             />
-            <FilterForm
-              filter={props.patch}
-              filters={props.patches}
-              setFilter={props.setPatch}
-            />
             <div className={props.mode === 'Duel' ? 'show' : ''}>
               <FilterForm
                 filter={props.queueType}
@@ -160,11 +155,6 @@ export function PlayerFilter(props) {
             filter={props.mode}
             filters={props.modes}
             setFilter={props.setMode}
-          />
-          <FilterForm
-            filter={props.patch}
-            filters={props.patches}
-            setFilter={props.setPatch}
           />
         </div>
         <div>

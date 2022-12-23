@@ -48,7 +48,7 @@ function PlayerBuildDisplay(props) {
 }
 
 export default function MatchDisplay(props) {
-  const [
+  const {
     god,
     setGod,
     player,
@@ -75,7 +75,7 @@ export default function MatchDisplay(props) {
     inputType,
     setInputType,
     inputTypes,
-  ] = useContext(PlayerContext);
+  } = useContext(PlayerContext);
   if (Object.keys(props.matchList).length > 0) {
     return (
       <div className='content-section content-section_no-padding match-block'>

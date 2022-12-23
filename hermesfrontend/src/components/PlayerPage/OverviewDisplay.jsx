@@ -23,7 +23,7 @@ export const FormatGod = (god) => {
 };
 
 export default function OverviewDisplay() {
-  const [
+  const {
     god,
     setGod,
     player,
@@ -50,7 +50,7 @@ export default function OverviewDisplay() {
     inputType,
     setInputType,
     inputTypes,
-  ] = useContext(PlayerContext);
+  } = useContext(PlayerContext);
 
   let fgod = window.location.href.split('/')[7];
   setGod(FormatGod(fgod).trim());

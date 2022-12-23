@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
-import { PlayerContext } from "./PlayerContext";
-import winRateColor from "../mainGodPage/WinRateColor";
-import { setTopGod } from "./Player";
+import React, { useContext } from 'react';
+import { PlayerContext } from './PlayerContext';
+import winRateColor from '../mainGodPage/WinRateColor';
+import { setTopGod } from './Player';
 
 export default function PlayerGodSection(props) {
-  const [
+  const {
     god,
     setGod,
     player,
@@ -21,79 +21,79 @@ export default function PlayerGodSection(props) {
     setPlayerLevel,
     tab,
     setTab,
-  ] = useContext(PlayerContext);
+  } = useContext(PlayerContext);
   setTopLink(setTopGod(god));
   return (
-    <div className="content-section content-section_no-padding player-specific-god">
-      <div className="content-section_header played-gods_header">
-        <span>{god.replaceAll("_", " ").replaceAll("-", " ")} Performance</span>
+    <div className='content-section content-section_no-padding player-specific-god'>
+      <div className='content-section_header played-gods_header'>
+        <span>{god.replaceAll('_', ' ').replaceAll('-', ' ')} Performance</span>
       </div>
-      <div className="player-specific-god_content">
+      <div className='player-specific-god_content'>
         <div>
-          <div className="specific-god-basic">
-            <div className="specific-image-container">
+          <div className='specific-god-basic'>
+            <div className='specific-image-container'>
               <img
                 src={`https://webcdn.hirezstudios.com/smite/god-icons/${god
                   .toLowerCase()
-                  .replaceAll(" ", "-")
-                  .replaceAll("'", "")}.jpg`}
+                  .replaceAll(' ', '-')
+                  .replaceAll("'", '')}.jpg`}
                 alt={god}
               />
             </div>
-            <div className="specific-base-stats">
-              <div className="specific-god-row">
-                <div className="god-name">{god}</div>
+            <div className='specific-base-stats'>
+              <div className='specific-god-row'>
+                <div className='god-name'>{god}</div>
                 <div>{props.KDA} KDA</div>
               </div>
-              <div className="specific-god-row" style={{ marginBottom: "6px" }}>
+              <div className='specific-god-row' style={{ marginBottom: '6px' }}>
                 <div>{props.games} games</div>
-                <div className="KDA">
+                <div className='KDA'>
                   {(props.kills / props.games).toFixed(1)}
-                  <span className="slash"> / </span>
+                  <span className='slash'> / </span>
                   {(props.deaths / props.games).toFixed(1)}
-                  <span className="slash"> / </span>
+                  <span className='slash'> / </span>
                   {(props.assists / props.games).toFixed(1)}
                 </div>
               </div>
             </div>
           </div>
-          <div className="specific-god-winrate">
-            <div className="specific-god-winrate-container">
-              <div className="winrate_text">
+          <div className='specific-god-winrate'>
+            <div className='specific-god-winrate-container'>
+              <div className='winrate_text'>
                 <strong style={{ color: winRateColor(props.winRate) }}>
                   {props.winRate}%
-                </strong>{" "}
+                </strong>{' '}
                 Win Rate
               </div>
-              <div className="winrate_winloss">
+              <div className='winrate_winloss'>
                 {props.wins}W {props.losses}L
               </div>
             </div>
-            <div className="winrate_bar">
+            <div className='winrate_bar'>
               <div
                 style={{
-                  height: "10px",
+                  height: '10px',
                   width: `${props.winRate}%`,
-                  backgroundColor: "rgb(205, 220, 254)",
+                  backgroundColor: 'rgb(205, 220, 254)',
                 }}
               />
             </div>
           </div>
-          <div className="specific-multikills">
-            <div className="multikill-block multikill-block_2">
-              <div className="inner-block">
-                <div className="multikill-header-icon">
+          <div className='specific-multikills'>
+            <div className='multikill-block multikill-block_2'>
+              <div className='inner-block'>
+                <div className='multikill-header-icon'>
                   <img
-                    src="https://i.imgur.com/WD0BJIw.png"
-                    alt="Double Kill"
+                    src='https://i.imgur.com/WD0BJIw.png'
+                    alt='Double Kill'
                   />
                 </div>
-                <div className="multikill-count">{props.doubles}</div>
-                <div className="multikill-label">
+                <div className='multikill-count'>{props.doubles}</div>
+                <div className='multikill-label'>
                   <div
                     style={{
-                      fontWeight: "500",
-                      textShadow: "black 0px 0px 3px",
+                      fontWeight: '500',
+                      textShadow: 'black 0px 0px 3px',
                     }}
                   >
                     <strong>Double</strong>
@@ -102,21 +102,21 @@ export default function PlayerGodSection(props) {
                 </div>
               </div>
             </div>
-            <div className="multikill-block multikill-block_3">
-              <div className="inner-block">
-                <div className="multikill-header-icon">
+            <div className='multikill-block multikill-block_3'>
+              <div className='inner-block'>
+                <div className='multikill-header-icon'>
                   <img
-                    src="https://i.imgur.com/Ir6JXme.png"
-                    alt="Triple Kill"
+                    src='https://i.imgur.com/Ir6JXme.png'
+                    alt='Triple Kill'
                   />
                 </div>
-                <div className="multikill-count">{props.triples}</div>
-                <div className="multikill-label">
+                <div className='multikill-count'>{props.triples}</div>
+                <div className='multikill-label'>
                   <div
                     style={{
-                      color: "rgb(89, 210, 217)",
-                      fontWeight: "700",
-                      textShadow: "black 0px 0px 3px",
+                      color: 'rgb(89, 210, 217)',
+                      fontWeight: '700',
+                      textShadow: 'black 0px 0px 3px',
                     }}
                   >
                     Triple
@@ -125,21 +125,21 @@ export default function PlayerGodSection(props) {
                 </div>
               </div>
             </div>
-            <div className="multikill-block multikill-block_4">
-              <div className="inner-block">
-                <div className="multikill-header-icon">
+            <div className='multikill-block multikill-block_4'>
+              <div className='inner-block'>
+                <div className='multikill-header-icon'>
                   <img
-                    src="https://i.imgur.com/x8psc5J.png"
-                    alt="Quadra Kill"
+                    src='https://i.imgur.com/x8psc5J.png'
+                    alt='Quadra Kill'
                   />
                 </div>
-                <div className="multikill-count">{props.quadras}</div>
-                <div className="multikill-label">
+                <div className='multikill-count'>{props.quadras}</div>
+                <div className='multikill-label'>
                   <div
                     style={{
-                      color: "rgb(0, 167, 255)",
-                      fontWeight: "700",
-                      textShadow: "black 0px 0px 5px",
+                      color: 'rgb(0, 167, 255)',
+                      fontWeight: '700',
+                      textShadow: 'black 0px 0px 5px',
                     }}
                   >
                     Quadra
@@ -148,14 +148,14 @@ export default function PlayerGodSection(props) {
                 </div>
               </div>
             </div>
-            <div className="multikill-block multikill-block_5">
-              <div className="inner-block">
-                <div className="multikill-header-icon">
-                  <img src="https://i.imgur.com/ofYtxOH.png" alt="Penta Kill" />
+            <div className='multikill-block multikill-block_5'>
+              <div className='inner-block'>
+                <div className='multikill-header-icon'>
+                  <img src='https://i.imgur.com/ofYtxOH.png' alt='Penta Kill' />
                 </div>
-                <div className="multikill-count">{props.pentas}</div>
-                <div className="multikill-label">
-                  <div style={{ color: "rgb(255, 155, 0)", fontWeight: "700" }}>
+                <div className='multikill-count'>{props.pentas}</div>
+                <div className='multikill-label'>
+                  <div style={{ color: 'rgb(255, 155, 0)', fontWeight: '700' }}>
                     Penta
                   </div>
                   <div>Kills</div>
@@ -164,39 +164,39 @@ export default function PlayerGodSection(props) {
             </div>
           </div>
         </div>
-        <div className="additional-stats">
-          <div className="additional-stats_row">
-            <div className="row-icon">
-              <img src="https://i.imgur.com/kqTxr3r.png" width="32" />
+        <div className='additional-stats'>
+          <div className='additional-stats_row'>
+            <div className='row-icon'>
+              <img src='https://i.imgur.com/kqTxr3r.png' width='32' />
             </div>
-            <div className="row-label">Max Kills</div>
-            <div className="row-value">{props.maxKills}</div>
+            <div className='row-label'>Max Kills</div>
+            <div className='row-value'>{props.maxKills}</div>
           </div>
-          <div className="additional-stats_row">
-            <div className="row-icon">
-              <img src="https://i.imgur.com/pHLndKw.png" width="25" />
+          <div className='additional-stats_row'>
+            <div className='row-icon'>
+              <img src='https://i.imgur.com/pHLndKw.png' width='25' />
             </div>
-            <div className="row-label">Max Deaths</div>
-            <div className="row-value">{props.maxDeaths}</div>
+            <div className='row-label'>Max Deaths</div>
+            <div className='row-value'>{props.maxDeaths}</div>
           </div>
-          <div className="additional-stats_row">
-            <div className="row-icon">
-              <img src="https://i.imgur.com/kqTxr3r.png" width="32" />
+          <div className='additional-stats_row'>
+            <div className='row-icon'>
+              <img src='https://i.imgur.com/kqTxr3r.png' width='32' />
             </div>
-            <div className="row-label">Average Damage</div>
-            <div className="row-value">
+            <div className='row-label'>Average Damage</div>
+            <div className='row-value'>
               {props?.avgDamage
                 .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             </div>
           </div>
-          <div className="additional-stats_row">
-            <div className="row-icon">
-              <img src="https://i.imgur.com/XofaIQ0.png" width="14" />
+          <div className='additional-stats_row'>
+            <div className='row-icon'>
+              <img src='https://i.imgur.com/XofaIQ0.png' width='14' />
             </div>
-            <div className="row-label">Average Gold</div>
-            <div className="row-value">
-              {props?.avgGold.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+            <div className='row-label'>Average Gold</div>
+            <div className='row-value'>
+              {props?.avgGold.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             </div>
           </div>
         </div>

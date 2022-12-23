@@ -364,7 +364,7 @@ export const getKDA = (kills, deaths, assists) => {
 };
 
 function GodStatsDisplay() {
-  const [
+  const {
     god,
     setGod,
     player,
@@ -391,7 +391,7 @@ function GodStatsDisplay() {
     inputType,
     setInputType,
     inputTypes,
-  ] = useContext(PlayerContext);
+  } = useContext(PlayerContext);
   const roles = ['Solo', 'Jungle', 'Mid', 'Support', 'Carry'];
   const [godList, setGodList] = useState([]);
   useEffect(() => {
@@ -494,7 +494,7 @@ function GodStatsDisplay() {
         {/* <NameForm setPlayer={setPlayer} /> */}
         <div className={player ?? 'undefined'}>
           <PlayerHeader player={player} level={playerLevel} icon={icon} />
-          <PlayerFilter
+          {/* <PlayerFilter
             patch={patch}
             mode={mode}
             queueType={queueType}
@@ -507,7 +507,7 @@ function GodStatsDisplay() {
             setMode={setMode}
             setQueueType={setQueueType}
             setInputType={setInputType}
-          />
+          /> */}
         </div>
         <Table columns={columns} data={godList} player={player} />
       </div>

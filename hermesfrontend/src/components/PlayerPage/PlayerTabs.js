@@ -56,7 +56,7 @@ export default function PlayerTabs(props) {
         props.changeTab(event.target.textContent)
     };
 
-    const [
+    const {
         god,
         setGod,
         player,
@@ -71,7 +71,7 @@ export default function PlayerTabs(props) {
         setIcon,
         playerLevel,
         setPlayerLevel,
-    ] = React.useContext(PlayerContext);
+    } = React.useContext(PlayerContext);
     return (
         <Box sx={{
             width: '100%',

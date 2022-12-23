@@ -167,7 +167,7 @@ export const setTopGod = (god) => {
   return linkDict[god];
 };
 export default function Player(props) {
-  const [
+  const {
     god,
     setGod,
     player,
@@ -185,7 +185,6 @@ export default function Player(props) {
     tab,
     setTab,
     patch,
-    setPatch,
     patches,
     mode,
     setMode,
@@ -194,7 +193,8 @@ export default function Player(props) {
     inputType,
     setInputType,
     inputTypes,
-  ] = useContext(PlayerContext);
+  } = useContext(PlayerContext);
+  console.log(patch);
   setPlayer(window.location.href.split('/')[5]);
 
   const [rank, setRank] = useState('');
