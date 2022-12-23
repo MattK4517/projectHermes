@@ -25,3 +25,5 @@ idek.txt
 projectAthena
 client/
 generate_report
+.env
+dev_config.py

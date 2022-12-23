@@ -1,5 +1,5 @@
 {
-  "proxy": "https://lionfish-app-huotz.ondigitalocean.app/api",
+  "proxy": "http://127.0.0.1:5000",
   "name": "hermesfrontend",
   "version": "0.1.0",
   "private": true,

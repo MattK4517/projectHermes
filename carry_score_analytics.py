@@ -3,7 +3,7 @@ import analyze as anlz
 from constants import patch, roles
 
 
-def add_carry_scores():
+def add_carry_scores(patch):
     mydb = client["Matches"]
     mycol = mydb[f"{patch} Matches"]
 
@@ -19,7 +19,7 @@ def add_carry_scores():
             print("1k done")
 
 
-def get_carry_score_averages():
+def get_carry_score_averages(patch):
     mydb = client["CarryScores"]
     mycol = mydb[f"{patch} Matches"]
     data = {}
@@ -58,5 +58,5 @@ def get_carry_score_averages():
 
 
 if __name__ == "__main__":
-    print(get_carry_score_averages())
+    add_carry_scores("9.12")
     pass
