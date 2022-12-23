@@ -19,12 +19,11 @@ import re
 from re import L, M
 from queue import Empty
 from datetime import datetime
-from app import app
-
 # from sklearn.linear_model import GammaRegressor
 # from flask_limiter import Limiter
 # from flask_limiter.util import get_remote_address
 
+app = Flask(__name__)
 
 @app.route("/api/gods")
 def get_all_gods():
