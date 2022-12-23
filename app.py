@@ -19,24 +19,26 @@ import re
 from re import L, M
 from queue import Empty
 from datetime import datetime
+
 # from sklearn.linear_model import GammaRegressor
 # from flask_limiter import Limiter
 # from flask_limiter.util import get_remote_address
 
 app = Flask(__name__)
 
-@app.route("/api/gods")
+
+@app.route("/gods")
 def get_all_gods():
     gdDict = anlz.get_gods()
     return gdDict
 
 
 @app.route(
-    "/api/main/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>/<matchup>",
+    "/main/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>/<matchup>",
     methods=["GET", "POST"],
 )
 @app.route(
-    "/api/main/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>", methods=["GET", "POST"]
+    "/main/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>", methods=["GET", "POST"]
 )
 def get_god_data(god, role, rank, patch, queue_type, mode, matchup="None"):
     newgod = god.replace("_", " ")
@@ -65,15 +67,13 @@ def get_god_data(god, role, rank, patch, queue_type, mode, matchup="None"):
     }
 
 
-@app.route("/api/<god>/matchups", methods=["GET"])
+@app.route("/<god>/matchups", methods=["GET"])
 def get_god_matchups(god):
     return anlz.get_worst_matchups(client, god, "Solo")
 
 
-@app.route("/api/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>/<matchup>")
-@app.route(
-    "/api/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>", methods=["GET", "POST"]
-)
+@app.route("/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>/<matchup>")
+@app.route("/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>", methods=["GET", "POST"])
 def get_god_data_role(god, role, rank, patch, queue_type, mode, matchup="None"):
     newgod = god.replace("_", " ")
     if matchup != "None":
@@ -91,7 +91,7 @@ def get_god_data_role(god, role, rank, patch, queue_type, mode, matchup="None"):
     return data_dict
 
 
-@app.route("/api/<god>/matchups/<role>/<rank>/<patch>/<queue_type>/<mode>")
+@app.route("/<god>/matchups/<role>/<rank>/<patch>/<queue_type>/<mode>")
 def get_god_matchups_by_rank(god, role, rank, patch, queue_type, mode):
     if "All" in rank and patch == "current":
         matchups = anlz.get_worst_matchups(
@@ -106,13 +106,13 @@ def get_god_matchups_by_rank(god, role, rank, patch, queue_type, mode):
     return matchups
 
 
-@app.route("/api/<god>/abilities")
+@app.route("/<god>/abilities")
 def get_god_abilities(god):
     return anlz.get_abilities(client, god)
 
 
 @app.route(
-    "/api/gettierlist/<rank>/<role>/<tableType>/<queue_type>/<patch>/<mode>",
+    "/gettierlist/<rank>/<role>/<tableType>/<queue_type>/<patch>/<mode>",
     methods=["GET", "POST"],
 )
 def get_tier_list(rank, role, tableType, queue_type, patch, mode):
@@ -159,18 +159,18 @@ def get_tier_list(rank, role, tableType, queue_type, patch, mode):
     return json.loads(json_util.dumps(retData))
 
 
-@app.route("/api/getitemdata/<item>")
+@app.route("/getitemdata/<item>")
 def get_item_data(item):
     return anlz.get_item_data(client, item)
 
 
-@app.route("/api/<god>/items/<role>/<rank>/<patch>/<queue_type>/<mode>")
+@app.route("/<god>/items/<role>/<rank>/<patch>/<queue_type>/<mode>")
 def get_all_items(god, role, rank, patch, queue_type, mode):
     items = anlz.get_all_builds(client, god, role, patch, queue_type, rank, mode)
     return items
 
 
-@app.route("/api/<god>/m/<role>/<rank>/<patch>/<queue_type>/<mode>")
+@app.route("/<god>/m/<role>/<rank>/<patch>/<queue_type>/<mode>")
 def get_all_matchups(god, role, rank, patch, queue_type, mode):
     avg_dmg_dict = anlz.get_matchups_stats(
         client, god, role, patch, queue_type, rank, mode
@@ -178,7 +178,7 @@ def get_all_matchups(god, role, rank, patch, queue_type, mode):
     return avg_dmg_dict
 
 
-@app.route("/api/getmatch/<matchID>")
+@app.route("/getmatch/<matchID>")
 def get_match(matchID):
     queue_type = "Ranked"
     mydb = client["Matches"]
@@ -232,13 +232,13 @@ def get_match(matchID):
     return json.loads(json_util.dumps(retData))
 
 
-@app.route("/api/<god>/buildpath/<role>/<rank>/<patch>/<queue_type>/<mode>")
+@app.route("/<god>/buildpath/<role>/<rank>/<patch>/<queue_type>/<mode>")
 def get_build_path(god, role, rank, patch, queue_type, mode):
     builds = anlz.get_build_path(client, god, role, patch, queue_type, rank, mode)
     return builds
 
 
-@app.route("/api/getplayergeneral/<playername>")
+@app.route("/getplayergeneral/<playername>")
 def get_player_general(playername):
     mydb = client["Players"]
     mycol = mydb["Player Basic"]
@@ -267,8 +267,8 @@ def get_player_general(playername):
     return json.loads(json_util.dumps(data))
 
 
-@app.route("/api/getplayergods/<playername>/<queue_type>/<mode>/<input_type>")
-# @app.route("/api/getplayergods/<playername>/<queue_type>/<mode>/")
+@app.route("/getplayergods/<playername>/<queue_type>/<mode>/<input_type>")
+# @app.route("/getplayergods/<playername>/<queue_type>/<mode>/")
 def get_player_god_info(playername, queue_type, mode, input_type="KBM"):
     mydb = client["Players"]
     mycol = mydb["Player Gods"]
@@ -307,7 +307,7 @@ def get_player_god_info(playername, queue_type, mode, input_type="KBM"):
         return {**data, **anlzpy.get_player_winrate(data)}
 
 
-@app.route("/api/getplayermatch/<playername>/<queue_type>/<patch>/<mode>")
+@app.route("/getplayermatch/<playername>/<queue_type>/<patch>/<mode>")
 def get_player_match_info(playername, queue_type, patch, mode):
     if playername == "undefined":
         return {}
@@ -318,12 +318,12 @@ def get_player_match_info(playername, queue_type, patch, mode):
     )
 
 
-@app.route("/api/getplayerspecificgod/<playername>/<god>/<role>/<queue_type>/<patch>")
+@app.route("/getplayerspecificgod/<playername>/<god>/<role>/<queue_type>/<patch>")
 def get_player_specific_god(playername, god, role, queue_type, patch):
     return anlzpy.get_player_god_stats(client, playername, god, role, queue_type, patch)
 
 
-@app.route("/api/playermatchups/<playername>/<god>/<role>/<patch>/<queue_type>/<mode>")
+@app.route("/playermatchups/<playername>/<god>/<role>/<patch>/<queue_type>/<mode>")
 def get_god_matchups_by_player(playername, god, role, patch, queue_type, mode):
     matchups = anlz.get_worst_matchups(
         client, god, role, patch, queue_type, mode=mode, player=playername
@@ -332,12 +332,12 @@ def get_god_matchups_by_player(playername, god, role, patch, queue_type, mode):
     return matchups
 
 
-@app.route("/api/playeraccounts/<playername>")
+@app.route("/playeraccounts/<playername>")
 def get_player_accounts(playername):
     return anlzpy.query_player_accounts(playername)
 
 
-@app.route("/api/getdmgcalc/", methods=["GET", "POST"])
+@app.route("/getdmgcalc/", methods=["GET", "POST"])
 def get_dmg_calc():
     ret_data = {}
     if request.method == "POST":
@@ -357,7 +357,7 @@ def get_dmg_calc():
     return ret_data
 
 
-@app.route("/api/getautodmgcalc/", methods=["GET", "POST"])
+@app.route("/getautodmgcalc/", methods=["GET", "POST"])
 def get_auto_dmg_calc():
     ret_data = {}
     if request.method == "POST":
@@ -376,7 +376,7 @@ def get_auto_dmg_calc():
     return ret_data
 
 
-@app.route("/api/getbuildstats/", methods=["GET", "POST"])
+@app.route("/getbuildstats/", methods=["GET", "POST"])
 def get_build_calc():
     ret_data = {}
     if request.method == "POST":
@@ -390,11 +390,11 @@ def get_build_calc():
 
 
 @app.route(
-    "/api/skins/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>/<matchup>",
+    "/skins/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>/<matchup>",
     methods=["GET", "POST"],
 )
 @app.route(
-    "/api/skins/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>",
+    "/skins/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>",
     methods=["GET", "POST"],
 )
 def get_god_skins(god, role, rank, patch, queue_type, mode, matchup=None):
@@ -488,7 +488,7 @@ def get_god_skins(god, role, rank, patch, queue_type, mode, matchup=None):
 
 
 @app.route(
-    "/api/skinstats/<god>/<skin>/<role>/<rank>/<patch>/<queue_type>/<mode>",
+    "/skinstats/<god>/<skin>/<role>/<rank>/<patch>/<queue_type>/<mode>",
     methods=["GET", "POST"],
 )
 def get_single_skin(god, skin, role, rank, patch, queue_type, mode):
@@ -501,7 +501,7 @@ def get_single_skin(god, skin, role, rank, patch, queue_type, mode):
     return skin_stats
 
 
-@app.route("/api/generatereport", methods=["GET", "POST"])
+@app.route("/generatereport", methods=["GET", "POST"])
 def create_report():
     if request.method == "POST":
         report = Report()
@@ -512,7 +512,7 @@ def create_report():
     return ""
 
 
-@app.route("/api/goditems/<god>")
+@app.route("/goditems/<god>")
 def get_god_items(god):
     mydb = client["Item_Data"]
     items = Tier_Three_items + Starter_items
@@ -530,7 +530,7 @@ def get_god_items(god):
     return ret_data
 
 
-@app.route("/api/get_patches")
+@app.route("/get_patches")
 def get_patches():
     ret_data = {"patch": ""}
     mydb = client["CacheStats"]
