@@ -450,7 +450,15 @@ export default function MiniDrawer() {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Drawer variant='permanent' open={open}>
+      <Drawer
+        variant='permanent'
+        open={open}
+        sx={{
+          [theme.breakpoints.down('sm')]: {
+            display: 'none',
+          },
+        }}
+      >
         <DrawerHeader
           style={{
             display: 'flex',
