@@ -19,18 +19,11 @@ import re
 from re import L, M
 from queue import Empty
 from datetime import datetime
+from app import app
 
 # from sklearn.linear_model import GammaRegressor
 # from flask_limiter import Limiter
 # from flask_limiter.util import get_remote_address
-
-
-app = Flask(__name__, static_folder="../hermesfrontend", static_url_path="/")
-# limiter = Limiter(
-#         app,
-#         key_func=get_remote_address,
-#         default_limits=["250 per day", "50 per hour"]
-# )
 
 
 @app.route("/api/gods")
