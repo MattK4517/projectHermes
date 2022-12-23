@@ -531,7 +531,7 @@ def get_god_items(god):
     return ret_data
 
 
-@app.route("/get_patches")
+@app.route("/api/get_patches")
 def get_patches():
     ret_data = {"patch": ""}
     mydb = client["CacheStats"]

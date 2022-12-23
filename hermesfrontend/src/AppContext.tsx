@@ -21,5 +21,5 @@ export const AppProvider = (props: any) => {
 };
 
 const getPatches = () => {
-  return fetch('get_patches').then((res) => res.json());
+  return fetch('/api/get_patches').then((res) => res.json());
 };
