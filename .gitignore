@@ -27,3 +27,4 @@ client/
 generate_report
 .env
 dev_config.py
+dev_config
