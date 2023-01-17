@@ -1,9 +1,4 @@
-import {
-  dehydrate,
-  QueryClient,
-  useQuery,
-  useQueries,
-} from "@tanstack/react-query";
+import { dehydrate, QueryClient, useQueries } from "@tanstack/react-query";
 import { GetServerSideProps, GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import React from "react";
@@ -68,6 +63,7 @@ function BuildPage(props: {
   if (isLoading) return <h1>LOADING...</h1>;
   if (isError) return <h1>ERROR...</h1>;
   const data = buildPageQueries.map((query) => query.data);
+  console.log(data);
   return (
     <GodPageLayout>
       <WinRateStats winRateStats={{ ...data[0], queueType: "Ranked" }} />
@@ -107,7 +103,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     getGodMatchups(god)
   );
   await queryClient.godBuild.prefetchQuery<Build>([
-    "god-build",
+    ["god-build", god],
     () => getGodBuild(god),
   ]);
   return {
@@ -128,7 +124,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 async function getGodWinRate(god: god) {
   let url = getBaseUrl();
   return (
-    await fetch(url + `/api/main/${god}/Solo/All%20Ranks/9.11/Ranked/Conquest`)
+    await fetch(url + `/api/main/${god}/Solo/All%20Ranks/9.12/Ranked/Conquest`)
   ).json();
 }
 

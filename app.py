@@ -55,13 +55,14 @@ def get_god_data(god, role, rank, patch, queue_type, mode, matchup="None"):
     pbrate = anlz.get_pb_rate(
         client, god, rank, role, patch, queue_type=queue_type, mode=mode
     )
-    print(winrate, pbrate)
+    winrate["winRate"] = winrate["win_rate"]
+    del winrate["win_rate"]
     return {
         **{
             "url": anlz.get_url(newgod),
             "tier": anlz.get_tier(
                 client,
-                winrate["win_rate"],
+                winrate["winRate"],
                 pbrate["pickRate"],
                 pbrate["banRate"],
                 role,
@@ -78,9 +79,11 @@ def get_god_matchups(god):
     return anlz.get_worst_matchups(client, god, "Solo")
 
 
-@app.route(proxy_route + "/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>/<matchup>")
 @app.route(
-    proxy_route + "/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>",
+    proxy_route + "/build/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>/<matchup>"
+)
+@app.route(
+    proxy_route + "/build/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>",
     methods=["GET", "POST"],
 )
 def get_god_data_role(god, role, rank, patch, queue_type, mode, matchup="None"):
@@ -95,12 +98,14 @@ def get_god_data_role(god, role, rank, patch, queue_type, mode, matchup="None"):
             client, god, role, patch, queue_type, rank, mode=mode
         )
 
-    image = {"url": anlz.get_url(newgod)}
-    data_dict = {**build, **image}
-    return data_dict
+    ret_data = {}
+    ret_data["items"] = [build[f"slot{i+1}"] for i in range(6)]
+    ret_data["relics"] = [build[f"relic{i+1}"] for i in range(2)]
+    ret_data["url"] = anlz.get_url(newgod)
+    return ret_data
 
 
-@app.route(proxy_route + "/<god>/matchups/<role>/<rank>/<patch>/<queue_type>/<mode>")
+@app.route(proxy_route + "/matchups/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>")
 def get_god_matchups_by_rank(god, role, rank, patch, queue_type, mode):
     if "All" in rank and patch == "current":
         matchups = anlz.get_worst_matchups(
@@ -556,3 +561,8 @@ def get_patches():
     for x in mycol.find({}, {"_id": 0}):
         ret_data["patch"] = x["patch"]
     return ret_data
+
+
+@app.route(proxy_route + "/<god>/data")
+def get_god_da(god):
+    return anlz.get_god_data(client, god)

@@ -11,19 +11,6 @@ export default function AppBar(props) {
         ></GiIcons.GiHamburgerMenu>
       </div>
       <img className="h-12 w-52" src="https://i.imgur.com/5kTPiDu.png" />
-      <Filter
-        filterList={{
-          filterValue: "role",
-          defaultValue: "Solo",
-          filterOptions: [
-            { optionName: "Solo" },
-            { optionName: "Jungle" },
-            { optionName: "Mid" },
-            { optionName: "Carry" }, 
-            { optionName: "Support" },
-          ],
-        }}
-      ></Filter>
     </div>
   );
 }

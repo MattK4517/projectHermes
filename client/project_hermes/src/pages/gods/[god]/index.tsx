@@ -59,6 +59,7 @@ const GodPageLayout = ({ children }) => {
               god={god}
             ></GodPageHeader>
             <TabList {...tabs} />
+            asdsads
             {children}
           </div>
         </div>
@@ -79,7 +80,7 @@ const GodPageHeader: React.FC = (props: {
       abilities={props.godAbilities}
       tier={"D"}
       god={props.god}
-      tab={tabs[tabIndex]?.nam}
+      tab={tabs[tabIndex]?.name}
       role={"ROLE"}
       rank={"RANK"}
       mode={"MODE"}
