@@ -27,3 +27,7 @@ client/
 generate_report
 .env
 dev_config.py
+__init__
+__init__.py
+.env
+dev_config

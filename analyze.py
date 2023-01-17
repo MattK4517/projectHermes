@@ -149,7 +149,8 @@ def get_url(god):
     god = god.replace(" ", "-")
     if god == "Chang'e":
         god = "change"
-    url = "https://webcdn.hirezstudios.com/smite/god-icons/{}.jpg".format(god.lower())
+    url = "https://webcdn.hirezstudios.com/smite/god-icons/{}.jpg".format(
+        god.lower())
     return url
 
 
@@ -192,7 +193,8 @@ def get_item(item):
     item = item.replace("_", " ")
     item = item.replace(" ", "-")
     item = item.replace("'", "")
-    url = "https://webcdn.hirezstudios.com/smite/item-icons/{}.jpg".format(item.lower())
+    url = "https://webcdn.hirezstudios.com/smite/item-icons/{}.jpg".format(
+        item.lower())
     return url
 
 
@@ -260,9 +262,11 @@ def get_top_builds(
                 if item:
                     if item not in top_dict[slot].keys():
                         if flag:
-                            top_dict[slot][item] = {"item": item, "games": 1, "wins": 1}
+                            top_dict[slot][item] = {
+                                "item": item, "games": 1, "wins": 1}
                         else:
-                            top_dict[slot][item] = {"item": item, "games": 1, "wins": 0}
+                            top_dict[slot][item] = {
+                                "item": item, "games": 1, "wins": 0}
                     elif item in top_dict[slot].keys():
                         top_dict[slot][item]["games"] += 1
                         if flag:
@@ -454,7 +458,8 @@ def get_all_builds(
     wins = 0
     mypipeline = return_pipeline(god, rank, role, patch, queue_type, mode)
     for x in mycol.aggregate(
-        [mypipeline, {"$project": {"_id": 0, god: 1, "build": 1, "win_status": 1}}]
+        [mypipeline, {"$project": {
+            "_id": 0, god: 1, "build": 1, "win_status": 1}}]
     ):
         games += 1
         flag = False
@@ -467,16 +472,19 @@ def get_all_builds(
                 if item:
                     if item not in top_dict[slot].keys():
                         if flag:
-                            top_dict[slot][item] = {"item": item, "games": 1, "wins": 1}
+                            top_dict[slot][item] = {
+                                "item": item, "games": 1, "wins": 1}
                         else:
-                            top_dict[slot][item] = {"item": item, "games": 1, "wins": 0}
+                            top_dict[slot][item] = {
+                                "item": item, "games": 1, "wins": 0}
                     elif item in top_dict[slot].keys():
                         top_dict[slot][item]["games"] += 1
                         if flag:
                             top_dict[slot][item]["wins"] += 1
 
                 test_sort = OrderedDict(
-                    sorted(top_dict[slot].items(), key=lambda x: getitem(x[1], "games"))
+                    sorted(top_dict[slot].items(),
+                           key=lambda x: getitem(x[1], "games"))
                 )
                 top_dict[slot] = dict(test_sort)
     if games == 0:
@@ -502,7 +510,8 @@ def get_worst_matchups(
     matchup_dict = {}
 
     if player:
-        myquery = {**myquery, **{"player": {"$regex": f"{player}", "$options": "i"}}}
+        myquery = {**myquery, **
+                   {"player": {"$regex": f"{player}", "$options": "i"}}}
 
     if "All" in role and "role" in myquery.keys():
         del myquery["role"]
@@ -600,7 +609,8 @@ def get_worst_matchups(
 
     for matchup in matchup_dict:
         matchup_dict[matchup]["winRate"] = round(
-            matchup_dict[matchup]["wins"] / matchup_dict[matchup]["games"] * 100, 2
+            matchup_dict[matchup]["wins"] /
+            matchup_dict[matchup]["games"] * 100, 2
         )
 
     test_sort = OrderedDict(
@@ -833,10 +843,12 @@ def get_god_stats(client, god, level):
             3,
         ),
         "Health": round(
-            base_stats["Health"] + (per_level_stats["HealthPerLevel"] * level), 2
+            base_stats["Health"] +
+            (per_level_stats["HealthPerLevel"] * level), 2
         ),
         "HP5": round(
-            base_stats["HealthPerFive"] + (per_level_stats["HP5PerLevel"] * level), 2
+            base_stats["HealthPerFive"] +
+            (per_level_stats["HP5PerLevel"] * level), 2
         ),
         "MagicProtection": round(
             base_stats["MagicProtection"]
@@ -852,7 +864,8 @@ def get_god_stats(client, god, level):
             base_stats["Mana"] + (per_level_stats["ManaPerLevel"] * level), 2
         ),
         "MP5": round(
-            base_stats["ManaPerFive"] + (per_level_stats["MP5PerLevel"] * level), 2
+            base_stats["ManaPerFive"] +
+            (per_level_stats["MP5PerLevel"] * level), 2
         ),
         "PhysicalPower": round(
             base_stats["PhysicalPower"]
@@ -959,7 +972,8 @@ def get_carry_score(match):
                                 "kills": match[key]["Kills_Player"],
                                 "assists": match[key]["Assists"],
                                 "killShare": round(
-                                    (match[key]["Kills_Player"] + match[key]["Assists"])
+                                    (match[key]["Kills_Player"] +
+                                     match[key]["Assists"])
                                     / ret_data["killPart"][match[key]["Win_Status"]][
                                         "totalKills"
                                     ]
@@ -1293,7 +1307,8 @@ def get_build_path(
     ):
         games += x["count"]
         if (
-            "{},{},{}".format(x["_id"]["slot1"], x["_id"]["slot2"], x["_id"]["slot3"])
+            "{},{},{}".format(x["_id"]["slot1"], x["_id"]
+                              ["slot2"], x["_id"]["slot3"])
             not in builds.keys()
         ):
             builds[
@@ -1408,7 +1423,8 @@ def get_lanes(client):
                         * 100,
                         2,
                     ) - sqrt(
-                        winning_duo["winningCarryWR"] * winning_duo["winningSupportWR"]
+                        winning_duo["winningCarryWR"] *
+                        winning_duo["winningSupportWR"]
                     )
                     lanes[
                         str(winning_duo["_id"]["carry"])
@@ -1447,7 +1463,8 @@ def calc_total_matches(client, ranks, patch, queue_type, mode):
     elif mode == "Joust":
         mycol = mydb[f"{patch} Joust Matches"]
 
-        insert_games("All Ranks", mycol.count_documents({}), patch, queue_type, mode)
+        insert_games("All Ranks", mycol.count_documents(
+            {}), patch, queue_type, mode)
         return
 
     mydb = client["single_match_stats"]
@@ -1779,7 +1796,8 @@ def get_match_stats(
     for m in mode:
         # need to make function that correctly generates queries
         mycol = mydb[m]
-        myquery = report_query_parser(god, rank, role, patch, queue_type, m, [], [])
+        myquery = report_query_parser(
+            god, rank, role, patch, queue_type, m, [], [])
         if m != "Conquest":
             group_by = {"god": "$god", "patch": "$patch"}
         else:
@@ -1806,7 +1824,8 @@ def get_match_stats(
                 match_stats[m][x["_id"]["patch"]][x["_id"]["god"]] = x
                 del match_stats[m][x["_id"]["patch"]][x["_id"]["god"]]["_id"]
             else:
-                match_stats[m][x["_id"]["patch"]][x["_id"]["god"]][x["_id"]["role"]] = x
+                match_stats[m][x["_id"]["patch"]][x["_id"]
+                                                  ["god"]][x["_id"]["role"]] = x
                 del match_stats[m][x["_id"]["patch"]][x["_id"]["god"]][
                     x["_id"]["role"]
                 ]["_id"]

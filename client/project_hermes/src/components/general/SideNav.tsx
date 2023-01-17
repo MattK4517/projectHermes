@@ -5,7 +5,7 @@ import * as GiIcons from "react-icons/gi";
 export default function SideNav(props) {
   const iconStyling = `w-8 h-8 ${
     props.open ? "" : "opacity-70"
-  } hover:fill-[#3273fa] opacity-100`;
+  } hover:fill-[#3273fa] opacity-100`; 
 
   return (
     <div>

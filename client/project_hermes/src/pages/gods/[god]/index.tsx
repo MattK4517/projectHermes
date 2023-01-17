@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-import { useRouter } from "next/router";
-import { dehydrate, QueryClient, useQueries, useQuery } from "@tanstack/react-query";
-=======
 import { useQueries } from "@tanstack/react-query";
->>>>>>> b3eb15a ( changes)
 import PageHeader from "../../../components/gods/PageHeader";
 import { getApiUrl } from "../../../utils/trpc";
 import { GodContext } from "../../../components/gods/GodContext";
