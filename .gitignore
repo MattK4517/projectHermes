@@ -26,3 +26,5 @@ idek.txt
 projectAthena
 __init__
 __init__.py
+.env
+dev_config

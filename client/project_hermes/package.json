@@ -3,12 +3,15 @@
   "name": "project_hermes",
   "version": "0.1.0",
   "private": true,
+  "main": "index.js",
   "scripts": {
     "build": "next build",
     "dev": "next dev",
     "postinstall": "prisma generate",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.4",
@@ -24,6 +27,7 @@
     "react-dom": "18.2.0",
     "react-icons": "^4.6.0",
     "react-query": "^3.39.2",
+    "storybook-addon-next-router": "^4.0.2",
     "superjson": "1.9.1",
     "zod": "^3.18.0"
   },
@@ -41,7 +45,17 @@
     "prettier-plugin-tailwindcss": "^0.1.13",
     "prisma": "^4.4.0",
     "tailwindcss": "^3.1.6",
-    "typescript": "^4.8.4"
+    "typescript": "^4.8.4",
+    "@babel/core": "^7.20.12",
+    "@storybook/addon-actions": "^6.5.15",
+    "@storybook/addon-essentials": "^6.5.15",
+    "@storybook/addon-interactions": "^6.5.15",
+    "@storybook/addon-links": "^6.5.15",
+    "@storybook/builder-webpack4": "^6.5.15",
+    "@storybook/manager-webpack4": "^6.5.15",
+    "@storybook/react": "^6.5.15",
+    "@storybook/testing-library": "0.0.13",
+    "babel-loader": "^8.3.0"
   },
   "ct3aMetadata": {
     "initVersion": "6.4.0"
