@@ -97,7 +97,10 @@ def get_filter(table_type):
         "_id": 0,
     }
     if table_type == "Regular":
-        my_filter = {**my_filter, **{"pickRate": 1, "banRate": 1, "counterMatchups": 1}}
+        my_filter = {
+            **my_filter,
+            **{"pickRate": 1, "banRate": 1, "counterMatchups": 1, "tier": 1},
+        }
     elif table_type == "Combat":
         my_filter = {
             **my_filter,

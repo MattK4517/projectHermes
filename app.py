@@ -133,13 +133,14 @@ def get_tier_list(rank, role, tableType, queue_type, patch, mode):
         mycol = mydb["Combined List"]
         rank = rank.replace("_", " ")
         if "All" in role:
-            myquery = {"rank": rank, "pickRate": {"$gte": 1}, "patch": patch}
+            myquery = {"rank": rank, "games": {"$gte": 500}, "patch": patch}
         else:
             myquery = {
                 "rank": rank,
                 "role": role,
-                "pickRate": {"$gte": 1},
+                # "pickRate": {"$gte": 1},
                 "patch": patch,
+                "games": {"$gte": 500},
             }
 
         myquery = {**myquery, **{"queue_type": queue_type, "mode": mode}}

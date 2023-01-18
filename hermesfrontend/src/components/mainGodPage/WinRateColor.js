@@ -23,7 +23,7 @@ export default function winRateColor(winRate) {
 
 
 export function tierColor(tier) {
-  let color = "white";
+  let color = "";
   if (tier === "D") {
     color = "#ff4e50";
   }
