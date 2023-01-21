@@ -1,39 +1,50 @@
-import { useEffect, useState } from 'react';
-import TierListGods from './TierListGods';
-import TierListSection from './TierListSection';
+import { useEffect, useState } from "react";
+import TierListGods from "./TierListGods";
+import TierListSection from "./TierListSection";
 import {
   DragDropContext,
   DraggableLocation,
   DropResult,
-} from 'react-beautiful-dnd';
-import { useQuery } from 'react-query';
+} from "react-beautiful-dnd";
+import { useQuery } from "react-query";
 
 type TierType = {
   tierLabel: string;
   tierContent: any[];
 };
 
-type ColorMap = { [key: string]: string[] };
+type ColorMap = {
+  [key: string]: { tierContent: string[]; tierDescription: string };
+};
 
 const CreateTierListPage = () => {
   const [tierMap, setTiers] = useState<ColorMap>({
-    'S+': [],
-    S: [],
-    A: [],
-    B: [],
-    C: [],
-    D: [],
-    unranked: [],
+    "S+": { tierContent: [], tierDescription: "Test Description" },
+    S: { tierContent: [], tierDescription: "Test Description" },
+    A: { tierContent: [], tierDescription: "Test Description" },
+    B: { tierContent: [], tierDescription: "Test Description" },
+    C: { tierContent: [], tierDescription: "Test Description" },
+    D: { tierContent: [], tierDescription: "Test Description" },
+    unranked: { tierContent: [], tierDescription: "Test Description" },
   });
 
   useEffect(() => {
-    fetch('/api/gods').then((res) =>
+    fetch("/api/gods").then((res) =>
       res.json().then((data) => {
         Object.keys(data).forEach((key) => {
-          setTiers((tierMap) => ({
-            ...tierMap,
-            unranked: [...tierMap.unranked, data[key].name],
-          }));
+          console.log("HERE", tierMap.unranked.tierContent);
+          //@ts-ignore
+          setTiers((prevTiers) => {
+            let index = 6;
+            return [
+              ...prevTiers.unranked.tierContent.slice(0, index),
+              {
+                ...prevTiers[index],
+                tierContent: [...prevTiers[index].tierContent, data[key].name],
+              },
+              ...prevTiers.unranked.tierContent.slice(index + 1),
+            ];
+          });
         });
       })
     );
@@ -46,31 +57,38 @@ const CreateTierListPage = () => {
         if (!destination) {
           return;
         }
-
+        //@ts-ignore
         setTiers(reorderTiers(tierMap, source, destination));
       }}
     >
-      <div className='Godpage' style={{ paddingTop: '20px' }}>
-        <div className='container' style={{ maxWidth: '90vw' }}>
+      <div className='Godpage' style={{ paddingTop: "20px" }}>
+        <div className='container' style={{ maxWidth: "90vw" }}>
           <div className='god-container build_page'>
             <div className='row align-items-center my-5'>
               <div
                 id='content-container'
                 style={{
-                  display: 'flex',
-                  flexDirection: 'row',
+                  display: "flex",
+                  flexDirection: "row",
                   // backgroundColor: 'red',
-                  width: '100%',
+                  width: "100%",
                 }}
               >
-                <div style={{ flex: '1' }}>
+                <div
+                  style={{
+                    flex: "1",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
                   {Object.entries(tierMap).map(([k, v]) => (
                     <TierListSection
                       internalScroll
                       key={k}
                       listId={k}
                       listType='CARD'
-                      tierContent={v}
+                      tierContent={v.tierContent}
+                      listDescription={v.tierDescription}
                     />
                   ))}
                 </div>
@@ -104,8 +122,8 @@ export const reorderTiers = (
   source: DraggableLocation,
   destination: DraggableLocation
 ) => {
-  const current = [...colors[source.droppableId]];
-  const next = [...colors[destination.droppableId]];
+  const current = [...colors[source.droppableId].tierContent];
+  const next = [...colors[destination.droppableId].tierContent];
   const target = current[source.index];
 
   // moving to same list
