@@ -28,6 +28,7 @@ const TierListSection: React.FC<Props> = ({
   const [tierLabel, setTierLabel] = useState(listId);
   const [tierDescription, setTierDescription] =
     useState<string>(listDescription);
+  console.log(tierContent);
   return (
     <Disclosure>
       <Disclosure.Button
