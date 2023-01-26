@@ -105,6 +105,7 @@ godsDict = {
     "Sol": "Carry",
     "Sun Wukong": "Solo",
     "Susano": "Jungle",
+    "Surtr": "Solo",
     "Sylvanus": "Support",
     "Terra": "Support",
     "Thanatos": "Jungle",
