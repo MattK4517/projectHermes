@@ -1,54 +1,87 @@
-import { useEffect, useState } from "react";
-import TierListGods from "./TierListGods";
-import TierListSection from "./TierListSection";
+import { useEffect, useState, useContext, useRef } from 'react';
+import TierListSection from './TierListSection';
 import {
   DragDropContext,
   DraggableLocation,
   DropResult,
-} from "react-beautiful-dnd";
-import { useQuery } from "react-query";
+} from 'react-beautiful-dnd';
+import { useQuery } from 'react-query';
+import { MainContext } from '../../mainGodPage/MainContext';
+import html2canvas from 'html2canvas';
+import { AiOutlineDownload } from 'react-icons/ai';
+import Modal from '@mui/material/Modal';
 
-type TierType = {
-  tierLabel: string;
-  tierContent: any[];
-};
-
-type ColorMap = {
+type TierMap = {
   [key: string]: { tierContent: string[]; tierDescription: string };
 };
 
 const CreateTierListPage = () => {
-  const [tierMap, setTiers] = useState<ColorMap>({
-    "S+": { tierContent: [], tierDescription: "Test Description" },
-    S: { tierContent: [], tierDescription: "Test Description" },
-    A: { tierContent: [], tierDescription: "Test Description" },
-    B: { tierContent: [], tierDescription: "Test Description" },
-    C: { tierContent: [], tierDescription: "Test Description" },
-    D: { tierContent: [], tierDescription: "Test Description" },
-    unranked: { tierContent: [], tierDescription: "Test Description" },
+  const imageRef = useRef();
+  const { patch } = useContext(MainContext);
+  const [tierMap, setTiers] = useState<TierMap>({
+    'S+': { tierContent: [], tierDescription: 'Best gods in the game' },
+    S: { tierContent: [], tierDescription: 'Can fit most comps' },
+    A: { tierContent: [], tierDescription: 'Balanced/Average gods' },
+    B: { tierContent: [], tierDescription: 'Below Average/Weak gods' },
+    C: { tierContent: [], tierDescription: 'Counterpick / Comp specific' },
+    D: {
+      tierContent: [],
+      tierDescription: "Don't play unless you're a master of the god",
+    },
+    unranked: { tierContent: [], tierDescription: 'Test Description' },
   });
+
+  const handleDownloadImage = async () => {
+    const element = imageRef.current;
+    //@ts-ignore
+    const canvas = await html2canvas(element, {
+      allowTaint: true,
+      useCORS: true,
+    });
+
+    //@ts-ignore
+    const data = canvas.toDataURL('image/jpg');
+    const link = document.createElement('a');
+
+    if (typeof link.download === 'string') {
+      link.href = data;
+      link.download = 'tierlist.jpg';
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      window.open(data);
+    }
+  };
 
   useEffect(() => {
     fetch("/api/gods").then((res) =>
       res.json().then((data) => {
         Object.keys(data).forEach((key) => {
-          console.log("HERE", tierMap.unranked.tierContent);
-          //@ts-ignore
           setTiers((prevTiers) => {
-            let index = 6;
-            return [
-              ...prevTiers.unranked.tierContent.slice(0, index),
-              {
-                ...prevTiers[index],
-                tierContent: [...prevTiers[index].tierContent, data[key].name],
+            return {
+              ...prevTiers,
+              unranked: {
+                ...prevTiers.unranked,
+                tierContent: [
+                  ...prevTiers.unranked.tierContent,
+                  data[key].name,
+                ],
               },
-              ...prevTiers.unranked.tierContent.slice(index + 1),
-            ];
+            };
           });
         });
       })
     );
   }, []);
+
+  const [open, setOpen] = useState(false);
+  const [tierListTitle, setTierTitle] = useState(
+    `Create tier list for SMITE patch ${patch}`
+  );
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   return (
     <DragDropContext
@@ -64,9 +97,18 @@ const CreateTierListPage = () => {
       <div className='Godpage' style={{ paddingTop: "20px" }}>
         <div className='container' style={{ maxWidth: "90vw" }}>
           <div className='god-container build_page'>
-            <div className='row align-items-center my-5'>
+            <div
+              className='row align-items-center my-5'
+              style={{ display: 'flex', justifyContent: 'flex-end' }}
+            >
+              <AiOutlineDownload
+                onClick={handleDownloadImage}
+                style={{ width: '48px', height: '48px' }}
+              />
               <div
                 id='content-container'
+                //@ts-ignore
+                ref={imageRef}
                 style={{
                   display: "flex",
                   flexDirection: "row",
@@ -81,6 +123,49 @@ const CreateTierListPage = () => {
                     flexDirection: "column",
                   }}
                 >
+                  <div
+                    style={{
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: '100%',
+                      backgroundColor: '#070720',
+                      display: 'flex',
+                    }}
+                  >
+                    <h1
+                      style={{ width: 'fit-content', cursor: 'pointer' }}
+                      onClick={handleOpen}
+                    >
+                      {tierListTitle}
+                    </h1>
+                    <Modal open={open} onClose={handleClose}>
+                      <div
+                        style={{
+                          position: 'absolute' as 'absolute',
+                          top: '50%',
+                          left: '50%',
+                          transform: 'translate(-50%, -50%)',
+                          width: 400,
+                          backgroundColor: '#070720',
+                          border: '1px solid #3273fa',
+                          borderRadius: '6px',
+                          padding: 4,
+                          display: 'flex',
+                          alignItems: 'center',
+                          flexDirection: 'column',
+                        }}
+                      >
+                        <div>
+                          <span>Tier list title: </span>
+                          <input
+                            type='text'
+                            value={tierListTitle}
+                            onChange={(e) => setTierTitle(e.target.value)}
+                          ></input>
+                        </div>
+                      </div>
+                    </Modal>
+                  </div>
                   {Object.entries(tierMap).map(([k, v]) => (
                     <TierListSection
                       internalScroll
@@ -118,20 +203,20 @@ export const reorder = (
 };
 
 export const reorderTiers = (
-  colors: ColorMap,
+  tiers: TierMap,
   source: DraggableLocation,
   destination: DraggableLocation
 ) => {
-  const current = [...colors[source.droppableId].tierContent];
-  const next = [...colors[destination.droppableId].tierContent];
+  const current = [...tiers[source.droppableId].tierContent];
+  const next = [...tiers[destination.droppableId].tierContent];
   const target = current[source.index];
 
   // moving to same list
   if (source.droppableId === destination.droppableId) {
     const reordered = reorder(current, source.index, destination.index);
     return {
-      ...colors,
-      [source.droppableId]: reordered,
+      ...tiers,
+      [source.droppableId]: { tierContent: reordered },
     };
   }
 
@@ -143,8 +228,8 @@ export const reorderTiers = (
   next.splice(destination.index, 0, target);
 
   return {
-    ...colors,
-    [source.droppableId]: current,
-    [destination.droppableId]: next,
+    ...tiers,
+    [source.droppableId]: { tierContent: current },
+    [destination.droppableId]: { tierContent: next },
   };
 };

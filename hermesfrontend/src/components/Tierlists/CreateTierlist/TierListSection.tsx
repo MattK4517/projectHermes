@@ -22,13 +22,15 @@ const TierListSection: React.FC<Props> = ({
   listDescription,
 }) => {
   const [open, setOpen] = useState(false);
+  const [openDescription, setOpenDescription] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const handleDescriptionOpen = () => setOpenDescription(true);
+  const handleDescriptionClose = () => setOpenDescription(false);
   const [color, setColor] = useState();
   const [tierLabel, setTierLabel] = useState(listId);
   const [tierDescription, setTierDescription] =
     useState<string>(listDescription);
-  console.log(tierContent);
   return (
     <Disclosure>
       <Disclosure.Button
@@ -146,9 +148,40 @@ const TierListSection: React.FC<Props> = ({
         style={{
           backgroundColor: `${color ?? tierColor(listId)}`,
           color: "black",
+          cursor: "pointer",
+          padding: "0 8px",
+          //@ts-ignore
+          fontWeight: "600",
         }}
       >
-        <span>{tierDescription}</span>
+        <span onClick={handleDescriptionOpen}>{tierDescription}</span>
+        <Modal open={openDescription} onClose={handleDescriptionClose}>
+          <div
+            style={{
+              position: "absolute" as "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 400,
+              backgroundColor: "#070720",
+              border: "1px solid #3273fa",
+              borderRadius: "6px",
+              padding: "12px",
+              display: "flex",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+          >
+            <div>
+              <span>Tier Description: </span>
+              <input
+                type='text'
+                value={tierDescription}
+                onChange={(e) => setTierDescription(e.target.value)}
+              ></input>
+            </div>
+          </div>
+        </Modal>
       </Disclosure.Panel>
     </Disclosure>
   );
