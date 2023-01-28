@@ -1,15 +1,15 @@
-import { useEffect, useState, useContext, useRef } from 'react';
-import TierListSection from './TierListSection';
+import { useEffect, useState, useContext, useRef } from "react";
+import TierListSection from "./TierListSection";
 import {
   DragDropContext,
   DraggableLocation,
   DropResult,
-} from 'react-beautiful-dnd';
-import { useQuery } from 'react-query';
-import { MainContext } from '../../mainGodPage/MainContext';
-import html2canvas from 'html2canvas';
-import { AiOutlineDownload } from 'react-icons/ai';
-import Modal from '@mui/material/Modal';
+} from "react-beautiful-dnd";
+import { useQuery } from "react-query";
+import { MainContext } from "../../mainGodPage/MainContext";
+import html2canvas from "html2canvas";
+import { AiOutlineDownload } from "react-icons/ai";
+import Modal from "@mui/material/Modal";
 
 type TierMap = {
   [key: string]: { tierContent: string[]; tierDescription: string };
@@ -19,16 +19,16 @@ const CreateTierListPage = () => {
   const imageRef = useRef();
   const { patch } = useContext(MainContext);
   const [tierMap, setTiers] = useState<TierMap>({
-    'S+': { tierContent: [], tierDescription: 'Best gods in the game' },
-    S: { tierContent: [], tierDescription: 'Can fit most comps' },
-    A: { tierContent: [], tierDescription: 'Balanced/Average gods' },
-    B: { tierContent: [], tierDescription: 'Below Average/Weak gods' },
-    C: { tierContent: [], tierDescription: 'Counterpick / Comp specific' },
+    "S+": { tierContent: [], tierDescription: "Best gods in the game" },
+    S: { tierContent: [], tierDescription: "Can fit most comps" },
+    A: { tierContent: [], tierDescription: "Balanced/Average gods" },
+    B: { tierContent: [], tierDescription: "Below Average/Weak gods" },
+    C: { tierContent: [], tierDescription: "Counterpick / Comp specific" },
     D: {
       tierContent: [],
       tierDescription: "Don't play unless you're a master of the god",
     },
-    unranked: { tierContent: [], tierDescription: 'Test Description' },
+    unranked: { tierContent: [], tierDescription: "Test Description" },
   });
 
   const handleDownloadImage = async () => {
@@ -40,12 +40,12 @@ const CreateTierListPage = () => {
     });
 
     //@ts-ignore
-    const data = canvas.toDataURL('image/jpg');
-    const link = document.createElement('a');
+    const data = canvas.toDataURL("image/jpg");
+    const link = document.createElement("a");
 
-    if (typeof link.download === 'string') {
+    if (typeof link.download === "string") {
       link.href = data;
-      link.download = 'tierlist.jpg';
+      link.download = "tierlist.jpg";
 
       document.body.appendChild(link);
       link.click();
@@ -99,11 +99,11 @@ const CreateTierListPage = () => {
           <div className='god-container build_page'>
             <div
               className='row align-items-center my-5'
-              style={{ display: 'flex', justifyContent: 'flex-end' }}
+              style={{ display: "flex", justifyContent: "flex-end" }}
             >
               <AiOutlineDownload
                 onClick={handleDownloadImage}
-                style={{ width: '48px', height: '48px' }}
+                style={{ width: "48px", height: "48px", cursor: "pointer" }}
               />
               <div
                 id='content-container'
@@ -125,15 +125,15 @@ const CreateTierListPage = () => {
                 >
                   <div
                     style={{
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: '100%',
-                      backgroundColor: '#070720',
-                      display: 'flex',
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: "100%",
+                      backgroundColor: "#070720",
+                      display: "flex",
                     }}
                   >
                     <h1
-                      style={{ width: 'fit-content', cursor: 'pointer' }}
+                      style={{ width: "fit-content", cursor: "pointer" }}
                       onClick={handleOpen}
                     >
                       {tierListTitle}
@@ -141,18 +141,18 @@ const CreateTierListPage = () => {
                     <Modal open={open} onClose={handleClose}>
                       <div
                         style={{
-                          position: 'absolute' as 'absolute',
-                          top: '50%',
-                          left: '50%',
-                          transform: 'translate(-50%, -50%)',
+                          position: "absolute" as "absolute",
+                          top: "50%",
+                          left: "50%",
+                          transform: "translate(-50%, -50%)",
                           width: 400,
-                          backgroundColor: '#070720',
-                          border: '1px solid #3273fa',
-                          borderRadius: '6px',
+                          backgroundColor: "#070720",
+                          border: "1px solid #3273fa",
+                          borderRadius: "6px",
                           padding: 4,
-                          display: 'flex',
-                          alignItems: 'center',
-                          flexDirection: 'column',
+                          display: "flex",
+                          alignItems: "center",
+                          flexDirection: "column",
                         }}
                       >
                         <div>
