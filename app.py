@@ -139,9 +139,8 @@ def get_tier_list(rank, role, tableType, queue_type, patch, mode):
             myquery = {
                 "rank": rank,
                 "role": role,
-                # "pickRate": {"$gte": 1},
+                "pickRate": {"$gte": 1},
                 "patch": patch,
-                "games": {"$gte": 500},
             }
 
         myquery = {**myquery, **{"queue_type": queue_type, "mode": mode}}
