@@ -550,9 +550,9 @@ def get_god_items(god):
 
 @app.route(proxy_route + "/get_patches")
 def get_patches():
-    ret_data = {"patch": "10.1"}
-    # mydb = client["CacheStats"]
-    # mycol = mydb["patches"]
-    # for x in mycol.find({}, {"_id": 0}):
-    #     ret_data["patch"] = x["patch"]
+    ret_data = {"patch": ""}
+    mydb = client["CacheStats"]
+    mycol = mydb["patches"]
+    for x in mycol.find({}, {"_id": 0}):
+        ret_data["patch"] = x["patch"]
     return ret_data
