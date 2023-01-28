@@ -21,6 +21,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import { Switch, Route, Link } from 'react-router-dom';
 import * as AiIcons from 'react-icons/ai';
 import * as GiIcons from 'react-icons/gi';
+import { RiPlayListAddLine } from 'react-icons/ri';
 
 import Home from './Home';
 import GodsScreen from './Gods';
@@ -42,6 +43,7 @@ import { MainProvider } from './mainGodPage/MainContext';
 import SkinStatPage from './mainGodPage/Skins/SkinStatPage';
 
 import { HtmlTooltip, CreateItemToolTip } from './mainGodPage/GodPageHelpers';
+import { CreateTierListPage } from './Tierlists/CreateTierlist';
 
 export const compare = (a: { winRate: number }, b: { winRate: number }) => {
   return a.winRate - b.winRate;
@@ -219,9 +221,13 @@ let routes = [
     god: '',
   },
   {
-    path: ['/find_a_match'],
+    path: ['/find_match'],
     component: <FindAMatch />,
     god: '',
+  },
+  {
+    path: ['/create_tierlist'],
+    component: <CreateTierListPage />,
   },
 ];
 Object.keys(godsDict).forEach((god) => {
@@ -254,6 +260,8 @@ const getIcon = (index: number) => {
   } else if (index === 4) {
     icon = <GiIcons.GiSwordClash className='link-icon-svg' />;
   } else if (index === 5) {
+    icon = <RiPlayListAddLine className='link-icon-svg' />;
+  } else if (index === 6) {
     icon = <GiIcons.GiSwordman className='link-icon-svg' />;
   }
   return icon;
@@ -477,61 +485,61 @@ export default function MiniDrawer() {
             flex: 1,
           }}
         >
-          {['Home', 'Gods', 'Tierlist', 'Contact', 'Find A Match'].map(
-            (text, index) => (
-              <HtmlTooltip
-                title={
-                  <React.Fragment>
-                    <span
-                      style={{
-                        padding: '.6rem',
-                        color: 'white',
-                        fontSize: '16px',
-                      }}
-                    >
-                      {text}
-                    </span>
-                  </React.Fragment>
-                }
-                placement='right'
-                arrow
-                disableHoverListener={open}
-              >
-                <Link
-                  key={text}
-                  //@ts-ignore
-                  sx={{ display: 'block' }}
-                  to={
-                    text === 'Home'
-                      ? '/'
-                      : '/'.concat(text.replaceAll(' ', '_'))
-                  }
-                >
-                  <ListItemButton
-                    sx={{
-                      minHeight: 48,
-                      justifyContent: open ? 'initial' : 'center',
-                      px: 2.5,
+          {[
+            'Home',
+            'Gods',
+            'Tierlist',
+            'Contact',
+            'Find Match',
+            'Create Tierlist',
+          ].map((text, index) => (
+            <HtmlTooltip
+              title={
+                <React.Fragment>
+                  <span
+                    style={{
+                      padding: '.6rem',
+                      color: 'white',
+                      fontSize: '16px',
                     }}
                   >
-                    <ListItemIcon
-                      sx={{
-                        minWidth: 0,
-                        mr: open ? 3 : 'auto',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      {getIcon(index)}
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={text}
-                      sx={{ opacity: open ? 1 : 0 }}
-                    />
-                  </ListItemButton>
-                </Link>
-              </HtmlTooltip>
-            )
-          )}
+                    {text}
+                  </span>
+                </React.Fragment>
+              }
+              placement='right'
+              arrow
+              disableHoverListener={open}
+            >
+              <Link
+                key={text}
+                //@ts-ignore
+                sx={{ display: 'block' }}
+                to={
+                  text === 'Home' ? '/' : '/'.concat(text.replaceAll(' ', '_'))
+                }
+              >
+                <ListItemButton
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: open ? 'initial' : 'center',
+                    px: 2.5,
+                  }}
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : 'auto',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    {getIcon(index)}
+                  </ListItemIcon>
+                  <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                </ListItemButton>
+              </Link>
+            </HtmlTooltip>
+          ))}
         </List>
         <Divider />
         <Box
