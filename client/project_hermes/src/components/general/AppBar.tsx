@@ -1,3 +1,4 @@
+import Link from "next/link";
 import * as GiIcons from "react-icons/gi";
 import Filter from "./Filter";
 
@@ -10,7 +11,12 @@ export default function AppBar(props) {
           onClick={() => props.setOpen(!props.open)}
         ></GiIcons.GiHamburgerMenu>
       </div>
-      <img className="h-12 w-52" src="https://i.imgur.com/5kTPiDu.png" />
+      <Link href={"/"}>
+        <img
+          className="h-12 w-52 cursor-pointer"
+          src="https://i.imgur.com/5kTPiDu.png"
+        />
+      </Link>
     </div>
   );
 }

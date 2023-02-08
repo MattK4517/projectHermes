@@ -16,35 +16,36 @@ export default function GodsList<NextPage>(props) {
 
   if (error) return <h1>Error...</h1>;
   return (
-    <div
-      className="card grid gap-2"
-      style={{
-        gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))",
-      }}
-    >
-      {Object.values(data).map((god: god, index) => {
-        return (
-          <Link
-            key={index}
-            href={"/gods/".concat(god.name, "/build")}
-            target="_blank"
-          >
-            <div className="box-border flex h-fit w-fit cursor-pointer flex-col items-center">
-              {/* <figure className="relative overflow-hidden border-slate-600"> */}
-              <img
-                className="h-32 w-32 bg-neutral-900"
-                src={god.url}
-                alt={god.name}
-              />
-              {/* <figcaption>
-        <p>Stats for {god.name}</p>
-      </figcaption>
-    </figure> */}
-              <div className="w-fit">{god.name}</div>
-            </div>
-          </Link>
-        );
-      })}
+    <div>
+      <div className="flex flex-col py-8 text-white">
+        <h1>God Search</h1>
+        <h2>Find the best Data for each God</h2>
+      </div>
+      <div
+        className="card grid gap-2"
+        style={{
+          gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))",
+        }}
+      >
+        {Object.values(data).map((god: god, index) => {
+          return (
+            <Link
+              key={index}
+              href={"/gods/".concat(god.name, "/build")}
+              target="_blank"
+            >
+              <div className="box-border flex h-fit w-fit cursor-pointer flex-col items-center">
+                <img
+                  className="h-20 w-20 bg-neutral-900"
+                  src={god.url}
+                  alt={god.name}
+                />
+                <div className="w-fit text-xs text-lightBlue">{god.name}</div>
+              </div>
+            </Link>
+          );
+        })}
+      </div>
     </div>
   );
 }

@@ -19,12 +19,14 @@ module.exports = {
       lightPurple: "#e2ccff",
       mediumPurple: "#bf94e4",
       darkPurple: "#a966ff",
-      
+      winnerColor: "#3273fa"
+
     },
     extend: {
       gridTemplateColumns: {
         auto: "repeat(auto-fill, minmax(150px, 1fr))",
       },
+      visibility: ["group-hover"],
     },
   },
   plugins: [],

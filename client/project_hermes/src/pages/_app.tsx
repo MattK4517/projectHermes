@@ -45,7 +45,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <QueryClientProvider client={queryClient}>
       <GodProvider>
-        <div className="fixed z-10 box-border flex flex-col">
+        <div className="absolute z-10 box-border flex flex-col">
           <AppBar open={open} setOpen={setOpen}></AppBar>
         </div>
         <Hydrate state={pageProps.dehydratedState}>

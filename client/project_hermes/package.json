@@ -11,7 +11,10 @@
     "start": "next start"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
     "@headlessui/react": "^1.7.7",
+    "@mui/material": "^5.11.7",
     "@prisma/client": "^4.4.0",
     "@tanstack/react-query": "^4.10.0",
     "@tanstack/react-query-devtools": "^4.12.0",
