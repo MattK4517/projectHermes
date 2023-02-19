@@ -14,10 +14,22 @@ import * as GiIcons from "react-icons/gi";
 export default function SideNav(props: any) {
   const router = useRouter();
   const { route } = router;
-  console.log(route.split("/")[1]);
+
   const [showText, setShowText] = useState(false);
-  // ${props.open ? "" : "opacity-70"}
   const iconStyling = `w-8 h-8 opacity-100`;
+
+  const iconBoxStyling = (text: string) => {
+    return `mb-10 flex cursor-pointer flex-row items-center hover:text-[#3273fa] ${
+      route.split("/")[1]?.toLowerCase() === text.toLowerCase()
+        ? "rounded shadow-2xl text-white hover:text-white"
+        : ""
+    } ${
+      route.split("/")[1]?.toLowerCase() === text.toLowerCase() && !props.open
+        ? "bg-winnerColor text-white"
+        : ""
+    }`;
+  };
+
   return (
     <div
       className="side-nav-test"
@@ -28,10 +40,9 @@ export default function SideNav(props: any) {
       <div
         onTransitionEndCapture={() => setShowText(false)}
         onTransitionEnd={() => setShowText(true)}
-        className={`nav-border duration-30 hidden h-full overflow-x-hidden bg-card px-4 py-4 text-fontAlt transition-[width] sm:block ${
+        className={` nav-border duration-30 hidden h-full overflow-x-hidden bg-card px-4 py-4 text-fontAlt transition-[width] sm:block ${
           props.open ? "w-16" : "w-52"
         }`}
-        // className={`nav-border h-full w-16 bg-card px-4 py-4 text-white sm:block`}
       >
         {[
           "Tierlist",
@@ -52,23 +63,28 @@ export default function SideNav(props: any) {
           } else if (text === "Tierlist") {
             return (
               <Disclosure>
-                <div className="mb-10 flex cursor-pointer flex-row items-center">
-                  <div>
-                    <AiOutlineBars className={iconStyling} />
+                <Link key={index} href={"/".concat(newRoute.toLowerCase())}>
+                  <div className={iconBoxStyling(text)}>
+                    <div
+                      className={` p-1 ${
+                        route.split("/")[1]?.toLowerCase() ===
+                        text.toLowerCase()
+                          ? "rounded bg-winnerColor "
+                          : ""
+                      }`}
+                    >
+                      <AiOutlineBars className={iconStyling} />
+                    </div>
+                    <div className={`flex`}>
+                      <span className={`relative ml-4 whitespace-nowrap`}>
+                        {text}{" "}
+                      </span>
+                      <Disclosure.Button className="ml-2 flex items-center justify-center">
+                        <AiOutlineDown></AiOutlineDown>
+                      </Disclosure.Button>
+                    </div>
                   </div>
-                  <div className="flex items-center justify-center">
-                    <Link key={index} href={"/tierlist/"}>
-                      <p
-                        className={`relative ml-4 cursor-pointer whitespace-nowrap`}
-                      >
-                        {text}
-                      </p>
-                    </Link>
-                    <Disclosure.Button className="ml-2 flex items-center justify-center">
-                      <AiOutlineDown></AiOutlineDown>
-                    </Disclosure.Button>
-                  </div>
-                </div>
+                </Link>
                 <Disclosure.Panel
                   className={`relative ml-4 mb-10 flex flex-col gap-5 whitespace-nowrap ${
                     props.open ? "hidden" : ""
@@ -115,18 +131,7 @@ export default function SideNav(props: any) {
           }
           return (
             <Link key={index} href={"/".concat(newRoute.toLowerCase())}>
-              <div
-                className={`mb-10 flex cursor-pointer flex-row items-center hover:text-[#3273fa] ${
-                  route.split("/")[1]?.toLowerCase() === text.toLowerCase()
-                    ? "rounded shadow-2xl hover:text-white"
-                    : ""
-                } ${
-                  route.split("/")[1]?.toLowerCase() === text.toLowerCase() &&
-                  !props.open
-                    ? "bg-winnerColor"
-                    : ""
-                }`}
-              >
+              <div className={iconBoxStyling(text)}>
                 <div
                   className={` p-1 ${
                     route.split("/")[1]?.toLowerCase() === text.toLowerCase()

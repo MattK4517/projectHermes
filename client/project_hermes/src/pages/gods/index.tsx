@@ -22,10 +22,10 @@ export default function GodsList<NextPage>(props) {
         <h2>Find the best Data for each God</h2>
       </div>
       <div
-        className="card grid gap-2"
-        style={{
-          gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))",
-        }}
+        className="card grid grid-cols-10  gap-2"
+        // style={{
+        //   gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))",
+        // }}
       >
         {Object.values(data).map((god: god, index) => {
           return (
