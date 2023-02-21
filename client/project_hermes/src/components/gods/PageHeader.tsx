@@ -101,11 +101,11 @@ const PageHeader = (props: PageHeaderProps) => {
               {getMessage(props.role, props.rank, props.mode, props.queueType)}
             </span>
           </h3>
-          <div className="mt-4 flex h-8 items-center ">
-            <div className="mr-6 flex items-center">
+          <div className="mt-4 flex h-8 flex-col items-center sm:flex-row">
+            <div className="mr-6 flex items-start sm:items-center">
               <GodAbilities abilities={props.abilities} />
             </div>
-            <div className="pr-3 text-xs font-medium text-lightBlue">
+            <div className="pr-3 pt-3 text-xs font-medium text-lightBlue sm:pt-0">
               The best win rate {props.god} build. The best and worst matchups
               for {props.god} and anything else you need, {props.rank} Smite
               Patch {props.patch}
@@ -135,14 +135,18 @@ export function GodAbilities(props: { abilities: Ability[] }) {
         }
         return (
           <Popover key={index}>
-            <Popover.Button className="relative" style={{ marginRight: "6px" }}>
+            <Popover.Button
+              className="relative flex"
+              style={{ marginRight: "6px" }}
+            >
               <Image
                 src={ability.URL}
                 alt={ability.Summary + "Icon"}
                 loader={GodAbilityIconLoader}
+                layout="fixed"
                 width={36}
                 height={36}
-                className="h-9 w-9 flex-shrink-0 rounded-sm"
+                className="fixed h-auto w-auto flex-shrink-0 rounded-sm "
               />
 
               <div className="ability-label bottom-center">{text}</div>
@@ -182,7 +186,6 @@ export function GodAbilities(props: { abilities: Ability[] }) {
                   <ItemRenderer
                     items={ability.Description.itemDescription.rankitems}
                   />
-                  <div></div>
                 </div>
               </div>
             </Popover.Panel>

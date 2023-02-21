@@ -41,7 +41,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       })
   );
 
-  const [open, setOpen] = React.useState<boolean>(true);
+  const [open, setOpen] = React.useState<boolean>(false);
   return (
     <QueryClientProvider client={queryClient}>
       <GodProvider>

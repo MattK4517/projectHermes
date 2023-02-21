@@ -18,11 +18,11 @@ export default function GodsList<NextPage>(props) {
   return (
     <div>
       <div className="flex flex-col py-8 text-white">
-        <h1>God Search</h1>
-        <h2>Find the best Data for each God</h2>
+        <span className="text-3xl">God Search</span>
+        <span className="text-lg">Find the best data for each God</span>
       </div>
       <div
-        className="card grid grid-cols-10  gap-2"
+        className="card flex flex-row flex-wrap gap-6"
         // style={{
         //   gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))",
         // }}
@@ -34,7 +34,7 @@ export default function GodsList<NextPage>(props) {
               href={"/gods/".concat(god.name, "/build")}
               target="_blank"
             >
-              <div className="box-border flex h-fit w-fit cursor-pointer flex-col items-center">
+              <div className="box-border flex h-fit w-fit cursor-pointer flex-col items-center hover:text-sm hover:text-white">
                 <img
                   className="h-20 w-20 bg-neutral-900"
                   src={god.url}
