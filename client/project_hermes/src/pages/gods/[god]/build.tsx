@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import { useContext } from "react";
 import { GodPageLayout } from ".";
+import Filter from "../../../components/general/Filter";
 import { BuildRow } from "../../../components/gods/build/BuildRow";
 import WinRateStats from "../../../components/gods/build/WinRateStats";
 import { GodContext } from "../../../components/gods/GodContext";
@@ -66,6 +67,32 @@ function BuildPage(props: {
   console.log(data);
   return (
     <GodPageLayout>
+      <Filter
+        filterList={[
+          {
+            filterValue: "role",
+            defaultValue: "Solo",
+            filterOptions: [
+              { optionName: "Solo" },
+              { optionName: "Jungle" },
+              { optionName: "Mid" },
+              { optionName: "Carry" },
+              { optionName: "Support" },
+            ],
+          },
+          {
+            filterValue: "role",
+            defaultValue: "Solo",
+            filterOptions: [
+              { optionName: "Solo" },
+              { optionName: "Jungle" },
+              { optionName: "Mid" },
+              { optionName: "Carry" },
+              { optionName: "Support" },
+            ],
+          },
+        ]}
+      />
       <WinRateStats winRateStats={{ ...data[0], queueType: "Ranked" }} />
       <MatchupRow
         matchups={{ ...data[1] }}
