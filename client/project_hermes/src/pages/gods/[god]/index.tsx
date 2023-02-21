@@ -59,7 +59,6 @@ const GodPageLayout = ({ children }) => {
               god={god}
             ></GodPageHeader>
             <TabList {...tabs} />
-            asdsads
             {children}
           </div>
         </div>

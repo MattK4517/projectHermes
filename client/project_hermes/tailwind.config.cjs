@@ -19,7 +19,8 @@ module.exports = {
       lightPurple: "#e2ccff",
       mediumPurple: "#bf94e4",
       darkPurple: "#a966ff",
-      winnerColor: "#3273fa"
+      winnerColor: "#3273fa",
+      selectedColor: "#383864",
 
     },
     extend: {

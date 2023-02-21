@@ -20,15 +20,17 @@ const Filter = ({ filterList }: IFilterProps) => {
     filterList[0].defaultValue
   );
   return (
-    <div className="flex">
+    <div className="flex items-center gap-4">
+      <span className="font-semibold text-white">Filters</span>
       {filterList.map((filter, index) => {
-        console.log(filter);
         return (
           <div key={index}>
-            <div>{filterValue}</div>
             <Listbox value={filterValue} onChange={setFilterValue}>
               <div className="relative mt-1">
-                <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+                <Listbox.Button
+                  className="
+                relative w-full cursor-pointer rounded-lg bg-[#161633] py-2 pl-3 pr-10 text-left text-white shadow-md focus:outline-none sm:text-sm"
+                >
                   <span className="block truncate">{filterValue}</span>
                   <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                     <AiOutlineDown
@@ -43,25 +45,27 @@ const Filter = ({ filterList }: IFilterProps) => {
                   leaveFrom="opacity-100"
                   leaveTo="opacity-0"
                 >
-                  <Listbox.Options className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                  <Listbox.Options className="absolute z-50 mt-1 max-h-60 w-fit overflow-y-auto rounded-md bg-[#161633] p-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                     {filter.filterOptions.map(
                       (filter, index: Key | null | undefined) => (
                         <Listbox.Option
                           key={index}
-                          className={({ active }) =>
-                            `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                          className={({ active, selected }) =>
+                            `relative cursor-pointer select-none py-2 px-4 pl-10 text-white ${
                               active
-                                ? "bg-amber-100 text-amber-900"
-                                : "text-gray-900"
-                            }`
+                                ? "bg-selectedColor font-semibold"
+                                : "font-normal"
+                            }
+                            
+                             ${selected ? "bg-selectedColor" : ""}`
                           }
                           value={filter.optionName}
                         >
                           {({ selected }) => (
                             <>
                               <span
-                                className={`block truncate ${
-                                  selected ? "font-medium" : "font-normal"
+                                className={`block ${
+                                  selected ? " font-bold" : "font-normal"
                                 }`}
                               >
                                 {filter.optionName}
