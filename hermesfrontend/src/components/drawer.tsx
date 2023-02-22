@@ -120,6 +120,7 @@ export const godsDict = {
   Kuzenbo: 'Support',
   Lancelot: 'Jungle',
   Loki: 'Jungle',
+  Martichoras: 'Carry',
   Medusa: 'Carry',
   Mercury: 'Jungle',
   Merlin: 'Mid',

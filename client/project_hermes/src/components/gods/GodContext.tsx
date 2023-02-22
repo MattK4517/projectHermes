@@ -24,8 +24,37 @@ export const GodProvider: FC = ({ children }) => {
     { name: "Skins", link: `skins` },
   ];
 
+  const filterList = [
+    {
+      filterValue: "role",
+      defaultValue: "Solo",
+      filterOptions: [
+        { optionName: "Solo" },
+        { optionName: "Jungle" },
+        { optionName: "Mid" },
+        { optionName: "Carry" },
+        { optionName: "Support" },
+      ],
+    },
+    {
+      filterValue: "rank",
+      defaultValue: "All Ranks",
+      filterOptions: [
+        { optionName: "Bronze" },
+        { optionName: "Silver" },
+        { optionName: "Gold" },
+        { optionName: "Platinum" },
+        { optionName: "Platinum+" },
+        { optionName: "Diamond" },
+        { optionName: "Diamond+" },
+        { optionName: "Masters" },
+        { optionName: "Grandmaster" },
+      ],
+    },
+  ];
+
   return (
-    <GodContext.Provider value={{ god, setGod, tabs }}>
+    <GodContext.Provider value={{ god, setGod, tabs, filterList }}>
       {children}
     </GodContext.Provider>
   );

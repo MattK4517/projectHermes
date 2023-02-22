@@ -24,7 +24,7 @@ const MediumNav = ({
   const iconStyling = `w-8 h-8 opacity-100`;
 
   const iconBoxStyling = (text: string) => {
-    return `mb-10 flex cursor-pointer flex-row items-center hover:text-[#3273fa] ${
+    return `mb-10 flex cursor-pointer flex-row items-center hover:text-white rounded-md ${
       route.split("/")[1]?.toLowerCase() === text.toLowerCase()
         ? "rounded shadow-2xl text-white hover:text-white"
         : ""
@@ -32,9 +32,13 @@ const MediumNav = ({
       route.split("/")[1]?.toLowerCase() === text.toLowerCase() && open
         ? "bg-winnerColor text-white"
         : ""
+    }
+    ${
+      route.split("/")[1]?.toLowerCase() !== text.toLowerCase() && open
+        ? "hover:bg-blue-600"
+        : ""
     }`;
   };
-
   return (
     <div
       onMouseEnter={() => setOpen(true)}

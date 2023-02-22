@@ -24,13 +24,18 @@ const LargeNav = ({
   const iconStyling = `w-8 h-8 opacity-100`;
 
   const iconBoxStyling = (text: string) => {
-    return `mb-10 flex cursor-pointer flex-row items-center hover:text-[#3273fa] ${
+    return `mb-10 flex cursor-pointer flex-row items-center hover:text-white rounded-md ${
       route.split("/")[1]?.toLowerCase() === text.toLowerCase()
         ? "rounded shadow-2xl text-white hover:text-white"
         : ""
     } ${
       route.split("/")[1]?.toLowerCase() === text.toLowerCase() && open
         ? "bg-winnerColor text-white"
+        : ""
+    }
+    ${
+      route.split("/")[1]?.toLowerCase() !== text.toLowerCase() && open
+        ? "hover:bg-blue-600"
         : ""
     }`;
   };
@@ -41,7 +46,7 @@ const LargeNav = ({
       onMouseLeave={() => setOpen(false)}
       onTransitionEndCapture={() => setShowText(false)}
       onTransitionEnd={() => setShowText(true)}
-      className={` nav-border duration-30 hidden h-full h-full overflow-x-hidden bg-card px-4 py-4 text-fontAlt transition-[width] lg:block ${
+      className={` nav-border duration-30 hidden h-full overflow-x-hidden bg-card px-4 py-4 text-fontAlt transition-[width] lg:block ${
         !open ? "w-16" : "w-52"
       }`}
     >

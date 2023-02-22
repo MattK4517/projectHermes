@@ -1,5 +1,5 @@
 import { Listbox, Transition } from "@headlessui/react";
-import { Fragment, Key, useState } from "react";
+import { Fragment, Key, useEffect, useState } from "react";
 import { AiOutlineDown } from "react-icons/ai";
 
 type FilterListType = {
@@ -16,22 +16,44 @@ interface IFilterProps {
 }
 
 const Filter = ({ filterList }: IFilterProps) => {
-  const [filterValue, setFilterValue] = useState<string>(
-    filterList[0].defaultValue
+  const [filterValue, setFilterValue] = useState<
+    {
+      filter: string;
+      value: string;
+    }[]
+  >(
+    filterList.map((filter) => {
+      return { filter: filter.filterValue, value: filter.defaultValue };
+    })
   );
+
+  useEffect(() => {
+    console.log("STATE CHANGE");
+  }, [filterValue]);
+
   return (
     <div className="flex items-center gap-4">
       <span className="font-semibold text-white">Filters</span>
-      {filterList.map((filter, index) => {
+      {filterList.map((filter, index: number) => {
         return (
           <div key={index}>
-            <Listbox value={filterValue} onChange={setFilterValue}>
+            <Listbox
+              value={filterValue[index]?.value}
+              onChange={(e) => {
+                let filters = Object.assign([], filterValue);
+                //@ts-ignore
+                filters[index].value = e;
+                setFilterValue(filters);
+              }}
+            >
               <div className="relative mt-1">
                 <Listbox.Button
                   className="
                 relative w-full cursor-pointer rounded-lg bg-[#161633] py-2 pl-3 pr-10 text-left text-white shadow-md focus:outline-none sm:text-sm"
                 >
-                  <span className="block truncate">{filterValue}</span>
+                  <span className="block truncate">
+                    {filterValue[index]?.value}
+                  </span>
                   <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                     <AiOutlineDown
                       className="h-5 w-5 text-gray-400"

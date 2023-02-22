@@ -1,7 +1,7 @@
 import { dehydrate, QueryClient, useQueries } from "@tanstack/react-query";
 import { GetServerSideProps, GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect } from "react";
 import { useContext } from "react";
 import { GodPageLayout } from ".";
 import Filter from "../../../components/general/Filter";
@@ -21,7 +21,7 @@ function BuildPage(props: {
   };
 }) {
   const router = useRouter();
-  const { god, setGod } = useContext(GodContext);
+  const { god, setGod, filterList } = useContext(GodContext);
   if (router.query?.god) setGod(router.query.god);
 
   const buildPageQueries = useQueries({
@@ -64,39 +64,12 @@ function BuildPage(props: {
   if (isLoading) return <h1>LOADING...</h1>;
   if (isError) return <h1>ERROR...</h1>;
   const data = buildPageQueries.map((query) => query.data);
-  console.log(data);
+  useEffect(() => {
+    console.log("state change");
+  }, [filterList]);
   return (
     <GodPageLayout>
-      <Filter
-        filterList={[
-          {
-            filterValue: "role",
-            defaultValue: "Solo",
-            filterOptions: [
-              { optionName: "Solo" },
-              { optionName: "Jungle" },
-              { optionName: "Mid" },
-              { optionName: "Carry" },
-              { optionName: "Support" },
-            ],
-          },
-          {
-            filterValue: "rank",
-            defaultValue: "All Ranks",
-            filterOptions: [
-              { optionName: "Bronze" },
-              { optionName: "Silver" },
-              { optionName: "Gold" },
-              { optionName: "Platinum" },
-              { optionName: "Platinum+" },
-              { optionName: "Diamond" },
-              { optionName: "Diamond+" },
-              { optionName: "Masters" },
-              { optionName: "Grandmaster" },
-            ],
-          },
-        ]}
-      />
+      <Filter filterList={filterList} />
       <WinRateStats winRateStats={{ ...data[0], queueType: "Ranked" }} />
       <MatchupRow
         matchups={{ ...data[1] }}

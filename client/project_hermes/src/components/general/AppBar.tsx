@@ -10,8 +10,12 @@ export default function AppBar({
   setOpen: any;
 }) {
   return (
-    <div className="nav-border-bottom flex h-16 w-screen items-center bg-card p-4 text-fontAlt">
-      <div className="flex items-center justify-center py-2 pr-4">
+    <div className="nav-border-bottom flex h-16 w-screen items-center bg-card px-4 text-fontAlt">
+      <div
+        className="flex items-center justify-center py-2 pr-4"
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+      >
         <GiIcons.GiHamburgerMenu
           className="h-8 w-8 cursor-pointer fill-white"
           onClick={() => setOpen(!open)}
