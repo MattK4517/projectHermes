@@ -55,7 +55,10 @@ const PageHeader = ({
                 <div className="notch-border absolute left-1/2"></div>
                 <div className="god-image">
                   <Image
-                    src={defaultParams.god.replaceAll("'", "")}
+                    src={defaultParams.god
+                      .replaceAll("'", "")
+                      .replaceAll(" ", "-")
+                      .toLowerCase()}
                     alt={defaultParams.god}
                     loader={GodIconLoader}
                     layout="fill"

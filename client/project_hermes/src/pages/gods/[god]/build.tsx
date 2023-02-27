@@ -37,21 +37,8 @@ function BuildPage(props: {
   };
 }) {
   const router = useRouter();
-  let { god, setGod, filterList, setFilterList, defaultParams } =
-    useContext(GodContext);
+  let { god, setGod, filterList, setFilterList } = useContext(GodContext);
   if (router.query?.god) setGod(router.query.god);
-  useEffect(() => {
-    defaultParams = props.dehydratedState.defaultParams;
-    let newData = Object.assign([], filterList);
-    const index = newData.findIndex((value) => value.filterValue === "role");
-    // @ts-ignore
-    newData[index] = {
-      ...filterList[index],
-      defaultValue: defaultParams.role,
-    };
-    // @ts-ignore
-    setFilterList(newData);
-  }, []);
   return (
     <GodPageLayout defaultParams={props.dehydratedState.defaultParams}>
       <Filter

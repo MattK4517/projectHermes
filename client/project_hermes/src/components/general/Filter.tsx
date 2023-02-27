@@ -1,7 +1,8 @@
 import { Listbox, Transition } from "@headlessui/react";
-import { Fragment, Key } from "react";
+import { Fragment, Key, useEffect } from "react";
 import { AiOutlineDown } from "react-icons/ai";
 import { GodPagePropsType } from "../../pages/gods/[god]/build";
+import { RankIconLoader } from "../loader";
 
 export type FilterListType = {
   filterValue: string;
@@ -50,6 +51,18 @@ const handleEnabled = (filterList: FilterListType[]) => {
 };
 
 const Filter = ({ filterList, setFilterList, defaultParams }: IFilterProps) => {
+  useEffect(() => {
+    let newData = Object.assign([], filterList);
+    const index = newData.findIndex((value) => value.filterValue === "role");
+    // @ts-ignore
+    newData[index] = {
+      ...filterList[index],
+      defaultValue: defaultParams.role,
+    };
+    // @ts-ignore
+    setFilterList(newData);
+  }, []);
+
   return (
     <div className="my-6 flex items-center gap-4 overflow-x-scroll py-2 sm:overflow-visible">
       <span className="font-semibold text-white">Filters</span>
@@ -111,12 +124,22 @@ const Filter = ({ filterList, setFilterList, defaultParams }: IFilterProps) => {
                           >
                             {({ selected }) => (
                               <div className="flex items-center justify-start">
-                                {filter.optionUrl ? (
+                                {/* {filter.optionUrl ? (
                                   <img
                                     src={filter.optionUrl}
                                     className="mr-2 h-7 w-7"
                                   />
-                                ) : undefined}
+                                ) : undefined} */}
+                                <img
+                                  src={
+                                    filter.optionUrl ||
+                                    RankIconLoader(
+                                      filter.optionName,
+                                      defaultParams.mode
+                                    )
+                                  }
+                                  className="mr-2 h-7 w-7"
+                                />
                                 <span
                                   className={`block ${
                                     selected ? " font-bold" : "font-normal"
