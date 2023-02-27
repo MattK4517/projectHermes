@@ -5,7 +5,7 @@ interface IItemRowProps {
 }
 export const ItemRow = ({ item }: IItemRowProps) => {
   return (
-    <div className="flex">
+    <div className="flex items-center">
       <img src={item.itemIcon_URL} className="item-icon mr-3" />
       <div className="flex flex-col">
         <span style={{ fontSize: "12px", fontWeight: "700" }}>

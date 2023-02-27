@@ -40,9 +40,20 @@ function BuildPage(props: {
   let { god, setGod, filterList, setFilterList, defaultParams } =
     useContext(GodContext);
   if (router.query?.god) setGod(router.query.god);
-  defaultParams = props.dehydratedState.defaultParams;
+  useEffect(() => {
+    defaultParams = props.dehydratedState.defaultParams;
+    let newData = Object.assign([], filterList);
+    const index = newData.findIndex((value) => value.filterValue === "role");
+    // @ts-ignore
+    newData[index] = {
+      ...filterList[index],
+      defaultValue: defaultParams.role,
+    };
+    // @ts-ignore
+    setFilterList(newData);
+  }, []);
   return (
-    <GodPageLayout>
+    <GodPageLayout defaultParams={props.dehydratedState.defaultParams}>
       <Filter
         filterList={filterList}
         setFilterList={setFilterList}
@@ -60,7 +71,7 @@ function BuildPage(props: {
           ...props.dehydratedState.godMatchups.queries[0].state.data,
         }}
         god={god}
-        role={"Solo"}
+        role={props.dehydratedState.defaultParams.role}
         displayType="countered"
         defaultParams={props.dehydratedState.defaultParams}
       />
@@ -70,7 +81,7 @@ function BuildPage(props: {
           ...props.dehydratedState.godMatchups.queries[0].state.data,
         }}
         god={god}
-        role={"Solo"}
+        role={props.dehydratedState.defaultParams.role}
         displayType="counters"
         defaultParams={props.dehydratedState.defaultParams}
       />
@@ -98,9 +109,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     url,
     god,
   });
-  Object.keys(defaultParams).forEach((key) => {
-    console.log(defaultParams);
-  });
+  // Object.keys(defaultParams).forEach((key) => {
+  //   console.log(defaultParams);
+  // });
 
   await queryClient.godWinRate.prefetchQuery<GodWinRateType>(
     ["god-winrate", defaultParams],
@@ -130,30 +141,3 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   };
 };
-
-// const buildPageQueries = useQueries({
-//   queries: [
-//     {
-//       queryKey: ["god-winrate", props.dehydratedState.defaultParams],
-//       queryFn: async () => getGodWinRate(props.dehydratedState.defaultParams),
-//       initialData: props.dehydratedState.godWinrate,
-//     },
-//     {
-//       queryKey: ["god-matchups", props.dehydratedState.defaultParams],
-//       queryFn: async () =>
-//         getGodMatchups(props.dehydratedState.defaultParams),
-//       initialData: props.dehydratedState.godMatchups.data,
-//     },
-//     {
-//       queryKey: ["god-build", props.dehydratedState.defaultParams],
-//       queryFn: async () => getGodBuild(props.dehydratedState.defaultParams),
-//       initialData: props.dehydratedState.godBuild.data,
-//     },
-//   ],
-// });
-
-// const isLoading = buildPageQueries.some((query) => query.isLoading);
-// const isError = buildPageQueries.some((query) => query.error);
-// if (isLoading) return <h1>LOADING...</h1>;
-// if (isError) return <h1>ERROR...</h1>;
-// const data = buildPageQueries.map((query) => query.data);

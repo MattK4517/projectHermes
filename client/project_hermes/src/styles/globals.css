@@ -14,7 +14,7 @@ body {
   --dark-purple-color: #a966ff;
   --border-color: #414165;
   --selected-color: #383864;
-
+  font: 1em Arial;
 }
 
 .autofill-columns {

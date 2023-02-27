@@ -12,7 +12,7 @@ export default function AppBar({
   return (
     <div className="nav-border-bottom flex h-16 w-screen items-center bg-card px-4 text-fontAlt">
       <div
-        className="flex items-center justify-center py-2 pr-4"
+        className="flex h-full items-center justify-center py-2 pr-4"
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
       >

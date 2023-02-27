@@ -19,7 +19,6 @@ export default function Tablist(props: TabListType[]) {
     <div id="page-nav-container">
       <div className=" flex w-full flex-row gap-12" id="nav_tab-list">
         {Object.values(props).map((tab, index) => {
-          console.log(asPath, tab);
           return (
             <div className="flex h-full" key={index}>
               <div

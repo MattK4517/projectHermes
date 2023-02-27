@@ -37,11 +37,11 @@ const GodPageLayout = (props) => {
           }}
         >
           <div>
-            <GodPageHeader
+            {/* <GodPageHeader
               godData={props.data.godData.queries[0]?.state.data}
               godAbilities={props.data.godAbilities.queries[0]?.state.data}
               god={props.god}
-            ></GodPageHeader>
+            ></GodPageHeader> */}
           </div>
         </div>
       </div>

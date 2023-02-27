@@ -4,6 +4,8 @@ import { GodContext } from "../../../components/gods/GodContext";
 import React, { useContext } from "react";
 import TabList from "../../../components/general/TabList";
 import Loading from "../../../components/general/Loading";
+import { GetServerSideProps } from "next";
+import { GodPagePropsType } from "./build";
 
 function GodIndex<NextPage>() {
   return <div></div>;
@@ -11,8 +13,15 @@ function GodIndex<NextPage>() {
 
 export default GodIndex;
 
-const GodPageLayout = ({ children }) => {
+const GodPageLayout = ({
+  children,
+  defaultParams,
+}: {
+  children: any;
+  defaultParams: GodPagePropsType;
+}) => {
   const { god, tabs } = useContext(GodContext);
+  console.log("PARAMS", defaultParams);
 
   const godPageQueries = useQueries({
     queries: [
@@ -57,6 +66,7 @@ const GodPageLayout = ({ children }) => {
               godData={data[1]}
               godAbilities={data[0]}
               god={god}
+              defaultParams={defaultParams}
             ></GodPageHeader>
             <TabList {...tabs} />
             {children}
@@ -71,8 +81,10 @@ const GodPageHeader: React.FC = (props: {
   godAbilities: any;
   god: any;
   godData: any;
+  defaultParams: GodPagePropsType;
 }) => {
-  const { god, tabs, defaultParams } = useContext(GodContext);
+  console.log("in godpage header", props.defaultParams);
+  const { god, tabs } = useContext(GodContext);
   let tabIndex = tabs.findIndex((tab) => (tab.selected = true));
   return (
     <PageHeader
@@ -80,7 +92,7 @@ const GodPageHeader: React.FC = (props: {
       tier={"D"}
       tab={tabs[tabIndex]?.name}
       godData={props.godData}
-      defaultParams={defaultParams}
+      defaultParams={props.defaultParams}
     />
   );
 };
