@@ -3,6 +3,7 @@ import GodIconLoader, { GodAbilityIconLoader } from "../loader";
 import Image from "next/image";
 import { Popover } from "@headlessui/react";
 import { getPantheonIcon, getTierColor } from "./GodHelpers";
+import { GodPagePropsType } from "../../pages/gods/[god]/build";
 
 const getMessage = (
   role: string,
@@ -22,39 +23,40 @@ const getMessage = (
 
 interface PageHeaderProps {
   tier: tier;
-  god: string;
   tab: string;
-  role: string;
-  rank: string;
-  mode: string;
-  queueType: string;
-  patch: string;
   abilities: Ability[];
   godData: any;
+  defaultParams: GodPagePropsType;
 }
 
-const PageHeader = (props: PageHeaderProps) => {
+const PageHeader = ({
+  tier,
+  tab,
+  abilities,
+  godData,
+  defaultParams,
+}: PageHeaderProps) => {
   return (
     <div className="mb-6 w-full text-white" id="god-page-header">
       <div className="flex w-full items-center" id="god-header-wrap">
         <Popover className="max-w-2xl">
           <Popover.Button
             className="relative h-24 w-24 flex-initial rounded-md border-2"
-            style={{ borderColor: getTierColor(props.tier) }}
+            style={{ borderColor: getTierColor(tier) }}
           >
             <div
               className="tier-heading"
-              style={{ borderColor: getTierColor(props.tier) }}
+              style={{ borderColor: getTierColor(tier) }}
             >
-              {props.tier}
+              {tier}
             </div>
             <div className="relative h-full w-full ">
               <div className="relative h-full w-full overflow-hidden rounded-md border-2 border-card">
                 <div className="notch-border absolute left-1/2"></div>
                 <div className="god-image">
                   <Image
-                    src={props.god}
-                    alt={props.god}
+                    src={defaultParams.god.replaceAll("'", "")}
+                    alt={defaultParams.god}
                     loader={GodIconLoader}
                     layout="fill"
                     objectFit="cover"
@@ -70,45 +72,50 @@ const PageHeader = (props: PageHeaderProps) => {
             >
               <div className="flex flex-grow flex-col">
                 <span className="text-2xl font-bold text-darkPurple">
-                  {props.god} - {props.godData.Title}
+                  {defaultParams.god} - {godData.Title}
                 </span>
-                <span>{props.godData.Roles}</span>
-                <span>{props.godData.Pros}</span>
-                <span>{props.godData.Type}</span>
+                <span>{godData.Roles}</span>
+                <span>{godData.Pros}</span>
+                <span>{godData.Type}</span>
               </div>
               <div id="panth-wrapper" className="w-fit">
                 <img
-                  src={getPantheonIcon(props.godData.Pantheon)}
-                  alt={props.god + "pantheon icon"}
+                  src={getPantheonIcon(godData.Pantheon)}
+                  alt={defaultParams.god + "pantheon icon"}
                   className="h-16 w-16"
                 />
-                <span>{props.godData.Pantheon}</span>
+                <span>{godData.Pantheon}</span>
               </div>
             </div>
             <span className="text-2xl font-bold text-darkPurple">Lore</span>
             <div className="mt-2 grid max-h-48 grid-cols-2 gap-2 overflow-auto">
-              <span>{props.godData.Lore.replaceAll("\\n", "\n")}</span>
+              <span>{godData.Lore.replaceAll("\\n", "\n")}</span>
             </div>
           </Popover.Panel>
         </Popover>
         <div className="ml-6 flex h-full min-w-0 flex-1 flex-col justify-between">
           <h3 className="mb-2 text-xl text-lightBlue">
             <span>
-              <b style={{ color: "white" }}>{props.god}</b>
+              <b style={{ color: "white" }}>{defaultParams.god}</b>
             </span>
             <span>
-              &nbsp;{props.tab} for{" "}
-              {getMessage(props.role, props.rank, props.mode, props.queueType)}
+              &nbsp;{tab} for{" "}
+              {getMessage(
+                defaultParams.role,
+                defaultParams.rank,
+                defaultParams.mode,
+                defaultParams.queueType
+              )}
             </span>
           </h3>
           <div className="mt-4 flex h-8 flex-col items-center sm:flex-row">
             <div className="mr-6 flex items-start sm:items-center">
-              <GodAbilities abilities={props.abilities} />
+              <GodAbilities abilities={abilities} />
             </div>
             <div className="pr-3 pt-3 text-xs font-medium text-lightBlue sm:pt-0">
-              The best win rate {props.god} build. The best and worst matchups
-              for {props.god} and anything else you need, {props.rank} Smite
-              Patch {props.patch}
+              The best win rate {defaultParams.god} build. The best and worst
+              matchups for {defaultParams.god} and anything else you need,{" "}
+              {defaultParams.rank} Smite Patch {defaultParams.patch}
             </div>
           </div>
         </div>
@@ -214,4 +221,3 @@ const ItemRenderer = (props: { items: MenuItem[] }) => {
     </div>
   );
 };
-

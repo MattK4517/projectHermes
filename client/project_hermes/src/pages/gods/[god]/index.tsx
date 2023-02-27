@@ -1,9 +1,9 @@
 import { useQueries } from "@tanstack/react-query";
 import PageHeader from "../../../components/gods/PageHeader";
-import { getApiUrl } from "../../../utils/trpc";
 import { GodContext } from "../../../components/gods/GodContext";
 import React, { useContext } from "react";
 import TabList from "../../../components/general/TabList";
+import Loading from "../../../components/general/Loading";
 
 function GodIndex<NextPage>() {
   return <div></div>;
@@ -31,7 +31,7 @@ const GodPageLayout = ({ children }) => {
 
   const isLoading = godPageQueries.some((query) => query.isLoading);
   const isError = godPageQueries.some((query) => query.error);
-  if (isLoading) return <h1>LOADING...</h1>;
+  if (isLoading) return <Loading height={24} width={24} />;
   if (isError) return <h1>ERROR...</h1>;
   const data = godPageQueries.map((query) => query.data);
 
@@ -72,35 +72,20 @@ const GodPageHeader: React.FC = (props: {
   god: any;
   godData: any;
 }) => {
-  const { god, tabs } = useContext(GodContext);
+  const { god, tabs, defaultParams } = useContext(GodContext);
   let tabIndex = tabs.findIndex((tab) => (tab.selected = true));
   return (
     <PageHeader
       abilities={props.godAbilities}
       tier={"D"}
-      god={props.god}
       tab={tabs[tabIndex]?.name}
-      role={"ROLE"}
-      rank={"RANK"}
-      mode={"MODE"}
-      queueType={"QUEUETYPE"}
       godData={props.godData}
-      patch={""}
+      defaultParams={defaultParams}
     />
   );
 };
 
 export { GodPageLayout, GodPageHeader };
-
-async function getGodAbilities(god: string) {
-  let url = getApiUrl();
-  return (await fetch(url + "/api/" + god + "/abilities")).json();
-}
-
-async function getGodData(god: string) {
-  let url = getApiUrl();
-  return (await fetch(url + "/api/" + god + "/data")).json();
-}
 
 const linkDict = {
   Achilles: "https://i.imgur.com/KoU1bup.jpg",

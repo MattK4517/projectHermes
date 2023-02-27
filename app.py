@@ -566,3 +566,16 @@ def get_patches():
 @app.route(proxy_route + "/<god>/data")
 def get_god_da(god):
     return anlz.get_god_data(client, god)
+
+
+@app.route(proxy_route + "/default_filter/<god>")
+def default_filter(god):
+    print("RETURNING ")
+    return {
+        "god": god,
+        "role": godsDict[god],
+        "rank": "All Ranks",
+        "patch": "10.2",
+        "queueType": "Ranked",
+        "mode": "Conquest",
+    }

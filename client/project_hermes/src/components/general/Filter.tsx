@@ -1,8 +1,9 @@
 import { Listbox, Transition } from "@headlessui/react";
 import { Fragment, Key, useEffect, useState } from "react";
 import { AiOutlineDown } from "react-icons/ai";
+import { GodPagePropsType } from "../../pages/gods/[god]/build";
 
-type FilterListType = {
+export type FilterListType = {
   filterValue: string;
   defaultValue: string;
   filterOptions: {
@@ -13,37 +14,29 @@ type FilterListType = {
 
 interface IFilterProps {
   filterList: FilterListType[];
+  setFilterList: any;
+  defaultParams: GodPagePropsType;
 }
 
-const Filter = ({ filterList }: IFilterProps) => {
-  const [filterValue, setFilterValue] = useState<
-    {
-      filter: string;
-      value: string;
-    }[]
-  >(
-    filterList.map((filter) => {
-      return { filter: filter.filterValue, value: filter.defaultValue };
-    })
-  );
-
-  useEffect(() => {
-    console.log("STATE CHANGE");
-  }, [filterValue]);
-
+const Filter = ({ filterList, setFilterList, defaultParams }: IFilterProps) => {
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-4 py-6">
       <span className="font-semibold text-white">Filters</span>
       {filterList.map((filter, index: number) => {
         return (
           <div key={index}>
             <Listbox
-              value={filterValue[index]?.value}
+              value={filterList[index]?.defaultValue}
               onChange={(e) => {
-                let filters = Object.assign([], filterValue);
-                //@ts-ignore
-                filters[index].value = e;
-                setFilterValue(filters);
+                let newData = Object.assign([], filterList);
+                // @ts-ignore
+                newData[index] = {
+                  ...filterList[index],
+                  defaultValue: e,
+                };
+                // @ts-ignore
+                defaultParams[newData[index].filterValue] = e;
+                setFilterList(newData);
               }}
             >
               <div className="relative mt-1">
@@ -52,7 +45,7 @@ const Filter = ({ filterList }: IFilterProps) => {
                 relative w-full cursor-pointer rounded-lg bg-[#161633] py-2 pl-3 pr-10 text-left text-white shadow-md focus:outline-none sm:text-sm"
                 >
                   <span className="block truncate">
-                    {filterValue[index]?.value}
+                    {filterList[index]?.defaultValue}
                   </span>
                   <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                     <AiOutlineDown
@@ -67,13 +60,13 @@ const Filter = ({ filterList }: IFilterProps) => {
                   leaveFrom="opacity-100"
                   leaveTo="opacity-0"
                 >
-                  <Listbox.Options className="absolute z-50 mt-1 max-h-60 w-fit overflow-y-auto rounded-md bg-[#161633] p-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                  <Listbox.Options className="absolute z-50 mt-1 max-h-60 min-w-max overflow-y-auto rounded-md bg-[#161633] text-base shadow-xl shadow-black ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                     {filter.filterOptions.map(
                       (filter, index: Key | null | undefined) => (
                         <Listbox.Option
                           key={index}
                           className={({ active, selected }) =>
-                            `relative cursor-pointer select-none py-2 px-4 pl-10 text-white ${
+                            `cursor-pointer select-none items-center justify-center p-3 text-white ${
                               active
                                 ? "bg-selectedColor font-semibold"
                                 : "font-normal"
@@ -84,7 +77,13 @@ const Filter = ({ filterList }: IFilterProps) => {
                           value={filter.optionName}
                         >
                           {({ selected }) => (
-                            <>
+                            <div className="flex items-center justify-start">
+                              {filter.optionUrl ? (
+                                <img
+                                  src={filter.optionUrl}
+                                  className="mr-2 h-7 w-7"
+                                />
+                              ) : undefined}
                               <span
                                 className={`block ${
                                   selected ? " font-bold" : "font-normal"
@@ -92,7 +91,7 @@ const Filter = ({ filterList }: IFilterProps) => {
                               >
                                 {filter.optionName}
                               </span>
-                            </>
+                            </div>
                           )}
                         </Listbox.Option>
                       )

@@ -1,5 +1,8 @@
-import { match } from "assert";
+import { useQuery } from "@tanstack/react-query";
 import { god } from "../../../models/gods.model";
+import { GodPagePropsType } from "../../../pages/gods/[god]/build";
+import { getGodMatchups } from "../../../service/gods/gods.service";
+import Loading from "../../general/Loading";
 import SingleMatchupDisplay from "./SingleMatchupDisplay";
 
 export type MatchupRowType = {
@@ -16,14 +19,30 @@ export interface IMatchupRowProps {
   god: god;
   role: string;
   displayType: "counters" | "countered";
+  defaultParams: GodPagePropsType;
 }
 
-const MatchupRow = ({ matchups, god, role, displayType }: IMatchupRowProps) => {
-  Object.values(matchups).sort((matchupA, matchupB) => {
-    if (matchupA.winRate > matchupB.winRate) return 1;
-    if (matchupA.winRate < matchupB.winRate) return -1;
-    return 0;
-  });
+const MatchupRow = ({
+  matchups,
+  god,
+  role,
+  displayType,
+  defaultParams,
+}: IMatchupRowProps) => {
+  const { data, isLoading, isError } = useQuery(
+    ["god-matchups", defaultParams],
+    () => getGodMatchups(defaultParams)
+  );
+
+  if (data) {
+    matchups = data;
+    Object.values(matchups).sort((matchupA, matchupB) => {
+      if (matchupA.winRate > matchupB.winRate) return 1;
+      if (matchupA.winRate < matchupB.winRate) return -1;
+      return 0;
+    });
+  }
+
   return (
     <div className="card">
       <div className="card-header">
@@ -34,29 +53,35 @@ const MatchupRow = ({ matchups, god, role, displayType }: IMatchupRowProps) => {
           {role}
         </span>
       </div>
-      <div id="matchup-list" className="flex gap-4 overflow-x-auto pb-2.5">
-        {Object.values(matchups)
-          .sort((matchupA, matchupB) => {
-            if (matchupA.winRate > matchupB.winRate) return 1;
-            if (matchupA.winRate < matchupB.winRate) return -1;
-            return 0;
-          })
-          .map((matchup, index) => {
-            if (
-              index < 10 &&
-              matchup.winRate < 50 &&
-              displayType === "countered"
-            ) {
-              return <SingleMatchupDisplay matchup={matchup} key={index} />;
-            } else if (
-              Object.values(matchups).length - index <= 10 &&
-              matchup.winRate > 50 &&
-              displayType === "counters"
-            ) {
-              return <SingleMatchupDisplay matchup={matchup} key={index} />;
-            }
-          })}
-      </div>
+      {isLoading ? (
+        <div className="flex h-32 items-center justify-center">
+          <Loading width={12} height={12} />
+        </div>
+      ) : (
+        <div id="matchup-list" className="flex gap-4 overflow-x-auto pb-2.5">
+          {Object.values(matchups)
+            .sort((matchupA, matchupB) => {
+              if (matchupA.winRate > matchupB.winRate) return 1;
+              if (matchupA.winRate < matchupB.winRate) return -1;
+              return 0;
+            })
+            .map((matchup, index) => {
+              if (
+                index < 10 &&
+                matchup.winRate < 50 &&
+                displayType === "countered"
+              ) {
+                return <SingleMatchupDisplay matchup={matchup} key={index} />;
+              } else if (
+                Object.values(matchups).length - index <= 10 &&
+                matchup.winRate > 50 &&
+                displayType === "counters"
+              ) {
+                return <SingleMatchupDisplay matchup={matchup} key={index} />;
+              }
+            })}
+        </div>
+      )}
     </div>
   );
 };

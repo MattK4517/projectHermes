@@ -11,3 +11,13 @@ export function GodAbilityIconLoader(props: { src: string }) {
 export function GodPantheonIconLoader(props: { src: string }) {
   return getPantheonIcon(props.src.toLowerCase());
 }
+
+export async function GodDefaultFilterLoader({
+  god,
+  url,
+}: {
+  god: string;
+  url: string;
+}) {
+  return (await fetch(url + `/api/default_filter/${god}`)).json();
+}
