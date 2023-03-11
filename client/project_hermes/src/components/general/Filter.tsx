@@ -1,4 +1,5 @@
 import { Listbox, Transition } from "@headlessui/react";
+import Image from "next/image";
 import { Fragment, Key, useEffect } from "react";
 import { AiOutlineDown } from "react-icons/ai";
 import { GodPagePropsType } from "../../pages/gods/[god]/build";
@@ -65,7 +66,7 @@ const Filter = ({ filterList, setFilterList, defaultParams }: IFilterProps) => {
 
   return (
     <div className="my-6 flex items-center gap-4 overflow-x-scroll py-2 sm:overflow-visible">
-      <span className="font-semibold text-white">Filters</span>
+      <span className="hidden font-semibold text-white sm:block">Filters</span>
       {filterList.map((filter, index: number) => {
         if (filter.enabled) {
           return (
@@ -106,7 +107,7 @@ const Filter = ({ filterList, setFilterList, defaultParams }: IFilterProps) => {
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                   >
-                    <Listbox.Options className="absolute z-50 mt-1 max-h-60 min-w-max overflow-y-auto rounded-md bg-[#161633] text-base shadow-xl shadow-black ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                    <Listbox.Options className="absolute z-50 mt-1 max-h-60 w-40 min-w-max overflow-y-auto rounded-md bg-[#161633] text-base shadow-xl shadow-black ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                       {filter.filterOptions.map(
                         (filter, index: Key | null | undefined) => (
                           <Listbox.Option
@@ -124,13 +125,21 @@ const Filter = ({ filterList, setFilterList, defaultParams }: IFilterProps) => {
                           >
                             {({ selected }) => (
                               <div className="flex items-center justify-start">
-                                {/* {filter.optionUrl ? (
+                                {filter.optionUrl ? (
                                   <img
                                     src={filter.optionUrl}
                                     className="mr-2 h-7 w-7"
                                   />
-                                ) : undefined} */}
-                                <img
+                                ) : (
+                                  <img
+                                    src={RankIconLoader(
+                                      filter.optionName,
+                                      defaultParams.mode
+                                    )}
+                                    className="mr-2 h-7 w-7"
+                                  />
+                                )}
+                                {/* <img
                                   src={
                                     filter.optionUrl ||
                                     RankIconLoader(
@@ -139,7 +148,7 @@ const Filter = ({ filterList, setFilterList, defaultParams }: IFilterProps) => {
                                     )
                                   }
                                   className="mr-2 h-7 w-7"
-                                />
+                                /> */}
                                 <span
                                   className={`block ${
                                     selected ? " font-bold" : "font-normal"

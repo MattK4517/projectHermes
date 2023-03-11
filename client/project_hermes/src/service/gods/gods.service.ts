@@ -50,6 +50,22 @@ export async function getGodBuild({
   ).json();
 }
 
+export async function getGodItems({
+  god,
+  role,
+  rank,
+  patch,
+  queueType,
+  mode,
+}: GodPagePropsType) {
+  let url = getBaseUrl();
+  return (
+    await fetch(
+      url + `/api/items/${god}/${role}/${rank}/${patch}/${queueType}/${mode}`
+    )
+  ).json();
+}
+
 export async function getGodAbilities(god: string) {
   let url = getBaseUrl();
   return (await fetch(url + "/api/" + god + "/abilities")).json();

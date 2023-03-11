@@ -12,9 +12,9 @@ export const SingleBuildDisplay = ({
 }) => {
   return (
     <div
-      className={`flex flex-1 flex-col items-center justify-center ${
-        slot !== 6 ? "sm:nav-border" : ""
-      } gap-0.5 p-2 sm:gap-4 sm:p-6`}
+      className={`flex flex-1 flex-col items-center justify-center gap-0.5 p-2 sm:gap-4 sm:p-6 ${
+        slot !== 6 && slot !== 3 ? "sm:nav-border" : ""
+      }  ${slot === 3 ? "lg:nav-border" : ""}`}
     >
       <div className="card-header">
         {slot === 1 ? "Starting Items" : `Slot ${slot}`}

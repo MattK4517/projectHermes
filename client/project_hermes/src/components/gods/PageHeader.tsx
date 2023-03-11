@@ -111,11 +111,11 @@ const PageHeader = ({
               )}
             </span>
           </h3>
-          <div className="mt-4 flex h-8 flex-col items-center sm:flex-row">
+          <div className="mt-4 flex h-8 flex-col items-start sm:flex-row sm:items-center">
             <div className="mr-6 flex items-start sm:items-center">
               <GodAbilities abilities={abilities} />
             </div>
-            <div className="pr-3 pt-3 text-xs font-medium text-lightBlue sm:pt-0">
+            <div className="hidden pr-3 pt-3 text-xs font-medium text-lightBlue sm:block sm:pt-0">
               The best win rate {defaultParams.god} build. The best and worst
               matchups for {defaultParams.god} and anything else you need,{" "}
               {defaultParams.rank} Smite Patch {defaultParams.patch}

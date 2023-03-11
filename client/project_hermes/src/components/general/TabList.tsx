@@ -16,7 +16,7 @@ export default function Tablist(props: TabListType[]) {
   const router = useRouter();
   const { asPath } = router;
   return (
-    <div id="page-nav-container">
+    <div id="page-nav-container" className="overflow-hidden">
       <div className=" flex w-full flex-row gap-12" id="nav_tab-list">
         {Object.values(props).map((tab, index) => {
           return (

@@ -73,6 +73,8 @@ function BuildPage(props: {
         defaultParams={props.dehydratedState.defaultParams}
       />
       <BuildRow
+        build={props.dehydratedState.godBuild.queries[0].state.data}
+        defaultParams={props.dehydratedState.defaultParams}
         items={props.dehydratedState.godBuild.queries[0].state.data.items}
         relics={props.dehydratedState.godBuild.queries[0].state.data.relics}
       />
@@ -96,9 +98,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     url,
     god,
   });
-  // Object.keys(defaultParams).forEach((key) => {
-  //   console.log(defaultParams);
-  // });
 
   await queryClient.godWinRate.prefetchQuery<GodWinRateType>(
     ["god-winrate", defaultParams],

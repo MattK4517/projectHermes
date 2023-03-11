@@ -7,14 +7,11 @@ interface god {
   url: string;
 }
 
-export default function GodsList<NextPage>(props) {
-  const { data, isLoading, error } = useQuery<god[]>(["gods"], getGods, {
+export default function GodsList<NextPage>(props: { dehydratedState: any }) {
+  const { data } = useQuery<god[]>(["gods"], getGods, {
     initialData: props.dehydratedState,
   });
 
-  if (isLoading) return <h1>Loading...</h1>;
-
-  if (error) return <h1>Error...</h1>;
   return (
     <div>
       <div className="flex flex-col py-8 text-white">

@@ -1,18 +1,38 @@
+import { useQuery } from "@tanstack/react-query";
 import { Build } from "../../../models/items.model";
+import { GodPagePropsType } from "../../../pages/gods/[god]/build";
+import { getGodBuild } from "../../../service/gods/gods.service";
+import Loading from "../../general/Loading";
 import { SingleBuildDisplay } from "./SingleBuildDisplay";
 
-export const BuildRow = ({ items, relics }: Build) => {
+interface IBuildRowProps {
+  build: Build;
+  defaultParams: GodPagePropsType;
+}
+export const BuildRow = ({ build, defaultParams }: IBuildRowProps) => {
+  const { data, isLoading, isError } = useQuery(
+    ["god-build", defaultParams],
+    () => getGodBuild(defaultParams)
+  );
+  if (data) {
+    console.log(data);
+    build = data;
+  }
   return (
-    <div className="card grid h-full w-full grid-cols-1 p-0 sm:grid-cols-3 md:grid-cols-2 lg:flex lg:flex-row">
-      {items.map((item, index) => {
-        return (
-          <SingleBuildDisplay
-            item1={item.item1}
-            item2={item.item2}
-            slot={index + 1}
-          />
-        );
-      })}
+    <div className="card mt-3 grid grid-cols-3 lg:grid-cols-6">
+      {isLoading ? (
+        <Loading height={12} width={12} />
+      ) : (
+        build.items.map((item, index) => {
+          return (
+            <SingleBuildDisplay
+              item1={item.item1}
+              item2={item.item2}
+              slot={index + 1}
+            />
+          );
+        })
+      )}
     </div>
   );
 };

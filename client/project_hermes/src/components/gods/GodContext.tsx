@@ -6,19 +6,31 @@ import { TabListType } from "../general/TabList";
 
 type GodContextType = {
   god: god;
-  setGod: Dispatch<SetStateAction<god>> | null;
+  setGod: Dispatch<SetStateAction<god>>;
   tabs: TabListType[];
   filterList: FilterListType[];
-  setFilterList: Dispatch<SetStateAction<FilterListType[]>> | null;
-  defaultParmas?: GodPagePropsType;
+  setFilterList: Dispatch<SetStateAction<FilterListType[]>>;
+  defaultParmas: GodPagePropsType;
 };
 
 export const GodContext = createContext<GodContextType>({
   god: "",
-  setGod: null,
+  setGod: function (value: SetStateAction<god>): void {
+    throw new Error("Function not implemented.");
+  },
   tabs: [],
   filterList: [],
-  setFilterList: null,
+  setFilterList: function (value: SetStateAction<FilterListType[]>): void {
+    throw new Error("Function not implemented.");
+  },
+  defaultParmas: {
+    god: "",
+    role: "",
+    rank: "",
+    patch: "",
+    queueType: "",
+    mode: "",
+  },
 });
 
 export const GodProvider: FC = ({ children }) => {

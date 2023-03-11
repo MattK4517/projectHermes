@@ -178,7 +178,7 @@ def get_item_data(item):
     return anlz.get_item_data(client, item)
 
 
-@app.route(proxy_route + "/<god>/items/<role>/<rank>/<patch>/<queue_type>/<mode>")
+@app.route(proxy_route + "/items/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>")
 def get_all_items(god, role, rank, patch, queue_type, mode):
     items = anlz.get_all_builds(client, god, role, patch, queue_type, rank, mode)
     return items

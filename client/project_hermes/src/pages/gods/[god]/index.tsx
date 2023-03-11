@@ -51,7 +51,7 @@ const GodPageLayout = ({
     <div id="god-profile-main-page" className="mx-auto flex w-full">
       <div
         id="god-profile-content-container content-side-padding"
-        className="w-full px-3"
+        className="w-full sm:px-3"
       >
         <div
           id="god-profile-container page_build"
