@@ -7,6 +7,7 @@ module.exports = {
     colors: {
       ...colors,
       card: "#17172e",
+      card50: "#191937",
       darkBlue: "#070720",
       fontAlt: "#babddb",
       mainBackGroundColor: "#070720",
@@ -21,7 +22,6 @@ module.exports = {
       darkPurple: "#a966ff",
       winnerColor: "#3273fa",
       selectedColor: "#383864",
-
     },
     extend: {
       gridTemplateColumns: {

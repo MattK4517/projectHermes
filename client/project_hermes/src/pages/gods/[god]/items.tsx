@@ -12,7 +12,14 @@ import { getGodItems } from "../../../service/gods/gods.service";
 import { getBaseUrl } from "../../../utils/trpc";
 import { GodPagePropsType } from "./build";
 
-function ItemsPage(props) {
+function ItemsPage(props: {
+  dehydratedState: {
+    godItems: {
+      queries: any[];
+    };
+    defaultParams: GodPagePropsType;
+  };
+}) {
   const router = useRouter();
   let { god, setGod, filterList, setFilterList } = useContext(GodContext);
   console.log("ITEMS PAGE", props.dehydratedState);
@@ -33,7 +40,21 @@ function ItemsPage(props) {
           props.dehydratedState.godItems.queries[0].state.data
         ).map((slot) => {
           if (!slot[0].includes("slot")) return undefined;
-          return <LargeItemRow items={Object.values(slot[1])} />;
+          return (
+            <div className="min-w-fit flex-1 px-1">
+              <LargeItemRow
+                slot={slot[0]}
+                items={Object.values(slot[1]).sort(compare)}
+                totalItemCount={Object.values(slot[1]).reduce(function (
+                  a: any,
+                  b: any
+                ) {
+                  return a + b.games;
+                },
+                0)}
+              />
+            </div>
+          );
         })}
         {/* {JSON.stringify(
           Object.entries(props.dehydratedState.godItems.queries[0].state.data)
@@ -42,6 +63,10 @@ function ItemsPage(props) {
     </GodPageLayout>
   );
 }
+
+const compare = (a, b) => {
+  return b.games - a.games;
+};
 
 export default ItemsPage;
 
