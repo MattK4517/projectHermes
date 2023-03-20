@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { god } from "../../../models/gods.model";
 import { GodPagePropsType } from "../../../pages/gods/[god]/build";
-import { getGodMatchups } from "../../../service/gods/gods.service";
+import { getGodPageData } from "../../../service/gods/gods.service";
 import Loading from "../../general/Loading";
 import SingleMatchupDisplay from "./SingleMatchupDisplay";
 
@@ -31,7 +31,7 @@ const MatchupRow = ({
 }: IMatchupRowProps) => {
   const { data, isLoading, isError } = useQuery(
     ["god-matchups", defaultParams],
-    () => getGodMatchups(defaultParams)
+    () => getGodPageData({ ...defaultParams, type: "matchups" })
   );
 
   if (data) {

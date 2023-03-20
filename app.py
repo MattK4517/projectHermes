@@ -184,7 +184,7 @@ def get_all_items(god, role, rank, patch, queue_type, mode):
     return items
 
 
-@app.route(proxy_route + "/<god>/m/<role>/<rank>/<patch>/<queue_type>/<mode>")
+@app.route(proxy_route + "/matchup-stats/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>")
 def get_all_matchups(god, role, rank, patch, queue_type, mode):
     avg_dmg_dict = anlz.get_matchups_stats(
         client, god, role, patch, queue_type, rank, mode
@@ -250,7 +250,7 @@ def get_match(matchID):
     return json.loads(json_util.dumps(retData))
 
 
-@app.route(proxy_route + "/<god>/buildpath/<role>/<rank>/<patch>/<queue_type>/<mode>")
+@app.route(proxy_route + "/build-paths/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>")
 def get_build_path(god, role, rank, patch, queue_type, mode):
     builds = anlz.get_build_path(client, god, role, patch, queue_type, rank, mode)
     return builds

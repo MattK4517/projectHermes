@@ -1,67 +1,19 @@
 import { GodPagePropsType } from "../../pages/gods/[god]/build";
 import { getBaseUrl } from "../../utils/trpc";
 
-export async function getGodWinRate({
+export async function getGodPageData({
   god,
   role,
   rank,
   patch,
   queueType,
   mode,
-}: GodPagePropsType) {
+  type,
+}: GodPagePropsType & { type: string }) {
   let url = getBaseUrl();
   return (
     await fetch(
-      url + `/api/main/${god}/${role}/${rank}/${patch}/${queueType}/${mode}`
-    )
-  ).json();
-}
-
-export async function getGodMatchups({
-  god,
-  role,
-  rank,
-  patch,
-  queueType,
-  mode,
-}: GodPagePropsType) {
-  let url = getBaseUrl();
-  return (
-    await fetch(
-      url + `/api/matchups/${god}/${role}/${rank}/${patch}/${queueType}/${mode}`
-    )
-  ).json();
-}
-
-export async function getGodBuild({
-  god,
-  role,
-  rank,
-  patch,
-  queueType,
-  mode,
-}: GodPagePropsType) {
-  let url = getBaseUrl();
-  console.log("BUILD");
-  return (
-    await fetch(
-      url + `/api/build/${god}/${role}/${rank}/${patch}/${queueType}/${mode}`
-    )
-  ).json();
-}
-
-export async function getGodItems({
-  god,
-  role,
-  rank,
-  patch,
-  queueType,
-  mode,
-}: GodPagePropsType) {
-  let url = getBaseUrl();
-  return (
-    await fetch(
-      url + `/api/items/${god}/${role}/${rank}/${patch}/${queueType}/${mode}`
+      url + `/api/${type}/${god}/${role}/${rank}/${patch}/${queueType}/${mode}`
     )
   ).json();
 }

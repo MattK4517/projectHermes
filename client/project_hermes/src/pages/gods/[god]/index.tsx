@@ -21,7 +21,6 @@ const GodPageLayout = ({
   defaultParams: GodPagePropsType;
 }) => {
   const { god, tabs } = useContext(GodContext);
-  console.log("PARAMS", defaultParams);
 
   const godPageQueries = useQueries({
     queries: [
@@ -83,7 +82,6 @@ const GodPageHeader: React.FC = (props: {
   godData: any;
   defaultParams: GodPagePropsType;
 }) => {
-  console.log("in godpage header", props.defaultParams);
   const { god, tabs } = useContext(GodContext);
   let tabIndex = tabs.findIndex((tab) => (tab.selected = true));
   return (

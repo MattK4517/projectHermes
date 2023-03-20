@@ -12,11 +12,7 @@ import MatchupRow from "../../../components/gods/matchups/MatchupRow";
 import { GodDefaultFilterLoader } from "../../../components/loader";
 import { god, GodWinRateType } from "../../../models/gods.model";
 import { Build } from "../../../models/items.model";
-import {
-  getGodWinRate,
-  getGodMatchups,
-  getGodBuild,
-} from "../../../service/gods/gods.service";
+import { getGodPageData } from "../../../service/gods/gods.service";
 import { getBaseUrl } from "../../../utils/trpc";
 
 export type GodPagePropsType = {
@@ -26,6 +22,7 @@ export type GodPagePropsType = {
   patch: string;
   queueType: string;
   mode: string;
+  type?: string;
 };
 
 function BuildPage(props: {
@@ -101,15 +98,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   await queryClient.godWinRate.prefetchQuery<GodWinRateType>(
     ["god-winrate", defaultParams],
-    () => getGodWinRate(defaultParams)
+    () => getGodPageData({ ...defaultParams, type: "main" })
   );
   await queryClient.godMatchups.prefetchQuery(
     ["god-matchups", defaultParams],
-    () => getGodMatchups(defaultParams)
+    () => getGodPageData({ ...defaultParams, type: "matchups" })
   );
   await queryClient.godBuild.prefetchQuery<Build>(
     ["god-build", defaultParams],
-    () => getGodBuild(defaultParams)
+    () => getGodPageData({ ...defaultParams, type: "build" })
   );
 
   return {

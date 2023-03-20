@@ -2,6 +2,8 @@ from audioop import avg
 from re import A, M, S, X
 from datetime import datetime
 import re
+
+from statistics import mean
 from main import client
 import errlogger as logger
 import pymongo
@@ -475,10 +477,10 @@ def get_all_builds(
                         if flag:
                             top_dict[slot][item]["wins"] += 1
 
-                test_sort = OrderedDict(
-                    sorted(top_dict[slot].items(), key=lambda x: getitem(x[1], "games"))
-                )
-                top_dict[slot] = dict(test_sort)
+    test_sort = OrderedDict(
+        sorted(top_dict[slot].items(), key=lambda x: getitem(x[1], "games"))
+    )
+    top_dict[slot] = dict(test_sort)
     if games == 0:
         games = 1
     return {
@@ -1189,79 +1191,73 @@ def get_matchups_stats(
     mydb = client["single_match_stats"]
     mycol = mydb[god]
     myquery = get_query(rank, role, patch, queue_type, mode)
-    avg_dmg_dict = {}
-    total_games = mycol.count_documents(myquery)
+    avg_dmg_dict = {
+        "avgDmgDiff": [],
+        "avgKillDiff": [],
+        "avgGoldDiff": [],
+        "games": [],
+    }
+    data = []
     for x in mycol.aggregate(
         [
             {"$match": myquery},
             {
                 "$group": {
                     "_id": "$enemy",
-                    "avg_dmg_diff": {"$avg": "$damage_player"},
-                    "avg_kill_diff": {"$avg": "$kills"},
-                    "avg_gold_diff": {"$avg": "$gold"},
+                    "avgDmgDiff": {"$avg": "$damage_player"},
+                    "avgKillDiff": {"$avg": "$kills"},
+                    "avgGoldDiff": {"$avg": "$gold"},
+                }
+            },
+        ]
+    ):
+        x["games"] = 0
+        data.append(x)
+        for key, value in enumerate(x):
+            if value != "_id":
+                avg_dmg_dict[value].append(x[value])
+
+    for x in mycol.aggregate(
+        [
+            {"$match": myquery},
+            {
+                "$group": {
+                    "_id": {"enemy": "$enemy", "win_status": "$win_status"},
                     "games": {"$sum": 1},
                 }
             },
         ]
     ):
-        # wins = matchupscol.count_documents({**myquery, **{"enemy": x["_id"], "win_status": "Winner"}})
-        if "All" in rank:
-            wins = mycol.count_documents(
-                {
-                    "enemy": x["_id"],
-                    "win_status": "Winner",
-                    "patch": patch,
-                    "role": role,
-                    "queue_type": f"{queue_type}",
-                }
-            )
+        avg_dmg_dict["games"].append(x["games"])
+        for entry in data:
+            if entry["_id"] == x["_id"]["enemy"]:
+                entry["games"] += x["games"]
+                if x["_id"]["win_status"] == "Winner":
+                    entry["wins"] = x["games"]
+
+    for key in avg_dmg_dict:
+        if key != "games":
+            avg_dmg_dict[key] = mean(avg_dmg_dict[key])
         else:
-            wins = mycol.count_documents(
-                {
-                    "enemy": x["_id"],
-                    "win_status": "Winner",
-                    "patch": patch,
-                    "rank": rank,
-                    "role": role,
-                    "queue_type": f"{queue_type}",
+            avg_dmg_dict[key] = sum(avg_dmg_dict[key])
+
+    for entry in data:
+        if "wins" not in entry:
+            entry["wins"] = 0
+        for key in entry:
+            if key == "games":
+                entry[key] = {
+                    "winRate": round(entry["wins"] / entry[key] * 100, 2),
+                    "pickRate": round(entry[key] / avg_dmg_dict[key] * 100, 2),
+                    "games": entry[key],
                 }
-            )
+            elif key not in ["_id", "games", "wins"]:
+                entry[key] = round(entry[key] - avg_dmg_dict[key])
 
-        if x["games"] >= 0.01 * total_games:
-            avg_dmg_dict[x["_id"]] = {
-                "dmg": x["avg_dmg_diff"],
-                "kills": x["avg_kill_diff"],
-                "gold": x["avg_gold_diff"],
-                "wr": round(wins / x["games"] * 100, 2),
-                "games": x["games"],
-            }
-
-    myquery = {**myquery, **{"enemy": god}}
-    if "" in avg_dmg_dict.keys():
-        del avg_dmg_dict[""]
-    for god in avg_dmg_dict:
-        if god:
-            mycol = mydb[god]
-            for x in mycol.aggregate(
-                [
-                    {"$match": myquery},
-                    {
-                        "$group": {
-                            "_id": "$enemy",
-                            "avg_dmg_diff": {"$avg": "$damage_player"},
-                            "avg_kill_diff": {"$avg": "$kills"},
-                            "avg_gold_diff": {"$avg": "$gold"},
-                        }
-                    },
-                ]
-            ):
-                avg_dmg_dict[god]["god"] = god
-                avg_dmg_dict[god]["dmg"] -= x["avg_dmg_diff"]
-                avg_dmg_dict[god]["kills"] -= x["avg_kill_diff"]
-                avg_dmg_dict[god]["gold"] -= x["avg_gold_diff"]
-
-    return avg_dmg_dict
+    # for entry in data:
+    #     if entry["_id"] not in godsDict:
+    #         data.remove(entry)
+    return data
 
 
 def get_build_path(
@@ -1322,6 +1318,9 @@ def get_build_path(
         index += 1
     top_five = {}
     for x in list(builds)[-10:]:
+        builds[x]["games"] = builds[x]["wins"] + builds[x]["losses"]
+        builds[x]["pickRate"] = round(builds[x]["games"] / games * 100, 2)
+        builds[x]["winRate"] = round(builds[x]["wins"] / builds[x]["games"] * 100, 2)
         for key in builds[x].keys():
             if "slot" in key:
                 builds[x][key] = get_item_data(client, builds[x][key])
@@ -1883,24 +1882,7 @@ def get_match_time(patch):
 
 
 if __name__ == "__main__":
-    mydb = client["single_match_stats"]
-    mycol = mydb["Apollo"]
-    for x in mycol.aggregate(
-        [
-            {
-                "$match": {
-                    # "rank": {"$in": ["Diamond", "Masters", "Grandmaster"]},
-                    # "player": {"$regex": f"buzzinyo", "$options": "i"},
-                    "mode": "Conquest",
-                    "queue_type": "Ranked",
-                    "patch": "10.1",
-                    "role": "Carry",
-                }
-            },
-            {"$group": {"_id": "$win_status", "games": {"$sum": 1}}},
-        ]
-    ):
-        print(x)
+    print(get_matchups_stats(client, "Achilles", "Solo", "10.2"))
 
     # for god in godsDict:
     #     mycol = mydb[god]

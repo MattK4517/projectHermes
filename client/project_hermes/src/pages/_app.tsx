@@ -51,8 +51,8 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         <Hydrate state={pageProps.dehydratedState}>
           <main className="fixed top-16 flex h-full w-full">
             <SideNav open={open} setOpen={setOpen} />
-            <div className="text-fontAltl flex h-full w-full overflow-scroll bg-mainBackGroundColor p-0 sm:p-4">
-              <div className="container mx-auto my-4 max-w-5xl p-0 sm:p-4">
+            <div className="text-fontAltl flex h-full w-full overflow-scroll bg-mainBackGroundColor p-0 py-4 sm:p-4">
+              <div className="container mx-auto my-6 h-fit max-w-5xl p-0 py-4 sm:p-4">
                 {getLayout(<Component {...pageProps} />)}
               </div>
             </div>

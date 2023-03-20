@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Build } from "../../../models/items.model";
 import { GodPagePropsType } from "../../../pages/gods/[god]/build";
-import { getGodBuild } from "../../../service/gods/gods.service";
+import { getGodPageData } from "../../../service/gods/gods.service";
 import Loading from "../../general/Loading";
 import { SingleBuildDisplay } from "./SingleBuildDisplay";
 
@@ -12,7 +12,7 @@ interface IBuildRowProps {
 export const BuildRow = ({ build, defaultParams }: IBuildRowProps) => {
   const { data, isLoading, isError } = useQuery(
     ["god-build", defaultParams],
-    () => getGodBuild(defaultParams)
+    () => getGodPageData({ ...defaultParams, type: "build" })
   );
   if (data) {
     console.log(data);

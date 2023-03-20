@@ -1,11 +1,14 @@
 import { getPantheonIcon } from "./gods/GodHelpers";
 
 export default function GodIconLoader(props: { src: string }) {
-  return `https://webcdn.hirezstudios.com/smite/god-icons/${props.src.toLowerCase()}.jpg`;
+  return `https://webcdn.hirezstudios.com/smite/god-icons/${props.src
+    .toLowerCase()
+    .replaceAll(" ", "-")
+    .replaceAll("'", "")}.jpg`;
 }
 
-export function ItemIconLoader(src: string) {
-  return `https://webcdn.hirezstudios.com/smite/item-icons/${src
+export function ItemIconLoader(props: { src: string }) {
+  return `https://webcdn.hirezstudios.com/smite/item-icons/${props.src
     .toLowerCase()
     .replaceAll(" ", "-")
     .replaceAll("'", "")}.jpg`;

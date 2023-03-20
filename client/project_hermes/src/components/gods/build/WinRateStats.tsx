@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { tier } from "../../../models/gods.model";
 import { GodPagePropsType } from "../../../pages/gods/[god]/build";
-import { getGodWinRate } from "../../../service/gods/gods.service";
+import { getGodPageData } from "../../../service/gods/gods.service";
 import Loading from "../../general/Loading";
 import { getWinRateColor, getTierColor } from "../GodHelpers";
 
@@ -27,7 +27,7 @@ const WinRateStats = ({
   const { data, isLoading, isError } = useQuery(
     ["god-winrate", defaultParams],
     () => {
-      return getGodWinRate(defaultParams);
+      return getGodPageData({ ...defaultParams, type: "main" });
     }
   );
 

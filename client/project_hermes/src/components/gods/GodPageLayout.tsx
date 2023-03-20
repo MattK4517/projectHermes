@@ -20,8 +20,6 @@ const GodPageLayout = (props) => {
   //@ts-ignore
   let url = linkDict[god?.toString()];
 
-  console.log(data);
-
   return (
     <div id="god-profile-main-page" className="mx-auto flex w-full">
       <div
