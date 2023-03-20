@@ -54,21 +54,21 @@ function MatchupsPage(props: {
       },
       {
         Header: "Games",
-        columns: [
-          {
-            Header: "games",
-            accessor: "games.games",
-          },
-          {
-            Header: "pick rate",
-            accessor: "games.pickRate",
-          },
-          {
-            Header: "win rate",
-            accessor: "games.winRate",
-          },
-        ],
+        accessor: "games.games",
       },
+      {
+        Header: "Pick Rate",
+        accessor: "games.pickRate",
+      },
+      {
+        Header: "Win Rate",
+        accessor: "games.winRate",
+      },
+      // {
+      //   Header: "Games",
+      //   columns: [
+      //   ],
+      // },
     ],
     []
   );

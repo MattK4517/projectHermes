@@ -21,7 +21,8 @@ function ItemsPage(props: {
   };
 }) {
   const router = useRouter();
-  let { god, setGod, filterList, setFilterList } = useContext(GodContext);
+  let { god, setGod, filterList, setFilterList, tabs } = useContext(GodContext);
+
   const { data, isLoading } = useQuery(
     ["god-items", props.dehydratedState.defaultParams],
     () =>

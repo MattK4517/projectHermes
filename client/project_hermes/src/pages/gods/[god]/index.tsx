@@ -6,6 +6,7 @@ import TabList from "../../../components/general/TabList";
 import Loading from "../../../components/general/Loading";
 import { GetServerSideProps } from "next";
 import { GodPagePropsType } from "./build";
+import { useRouter } from "next/router";
 
 function GodIndex<NextPage>() {
   return <div></div>;
@@ -82,13 +83,13 @@ const GodPageHeader: React.FC = (props: {
   godData: any;
   defaultParams: GodPagePropsType;
 }) => {
-  const { god, tabs } = useContext(GodContext);
-  let tabIndex = tabs.findIndex((tab) => (tab.selected = true));
+  const router = useRouter();
+  const path = router.asPath.split("/")[3]?.replaceAll("-", " ") || "";
   return (
     <PageHeader
       abilities={props.godAbilities}
       tier={"D"}
-      tab={tabs[tabIndex]?.name}
+      tab={path.charAt(0).toUpperCase() + path.slice(1)}
       godData={props.godData}
       defaultParams={props.defaultParams}
     />

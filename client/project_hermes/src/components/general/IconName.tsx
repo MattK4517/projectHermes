@@ -9,15 +9,20 @@ interface IIconName {
 
 const IconName = ({ displayIcon, loader, width, height }: IIconName) => {
   return (
-    <div className="m-1 flex items-center justify-start">
+    <div className="m-1 flex items-center justify-center lg:justify-start">
       <Image
         src={displayIcon}
         loader={loader}
         width={width}
         height={height}
-        className="rounded-md"
+        className="rounded-sm "
       />
-      <span className="ml-5 hidden md:block">{displayIcon}</span>
+      <span
+        className="ml-4 hidden max-w-min text-sm lg:block"
+        style={{ whiteSpace: "initial" }}
+      >
+        {displayIcon}
+      </span>
     </div>
   );
 };

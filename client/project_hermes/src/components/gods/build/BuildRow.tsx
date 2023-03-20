@@ -15,7 +15,6 @@ export const BuildRow = ({ build, defaultParams }: IBuildRowProps) => {
     () => getGodPageData({ ...defaultParams, type: "build" })
   );
   if (data) {
-    console.log(data);
     build = data;
   }
   return (

@@ -1249,14 +1249,12 @@ def get_matchups_stats(
                 entry[key] = {
                     "winRate": round(entry["wins"] / entry[key] * 100, 2),
                     "pickRate": round(entry[key] / avg_dmg_dict[key] * 100, 2),
-                    "games": entry[key],
+                    "games": "{:,}".format(entry[key]),
                 }
             elif key not in ["_id", "games", "wins"]:
-                entry[key] = round(entry[key] - avg_dmg_dict[key])
+                entry[key] = "{:,}".format(round(entry[key] - avg_dmg_dict[key]))
 
-    # for entry in data:
-    #     if entry["_id"] not in godsDict:
-    #         data.remove(entry)
+    data = [entry for entry in data if entry["_id"] in godsDict]
     return data
 
 

@@ -15,7 +15,7 @@ function GodMatchupTable({ columns, data, loading }) {
           // @ts-ignore
           sortBy: [
             {
-              id: "games.winRate",
+              id: "games.pickRates",
               desc: true,
             },
           ],
@@ -26,17 +26,23 @@ function GodMatchupTable({ columns, data, loading }) {
     );
   return (
     <>
-      <table
+      <div
         {...getTableProps()}
-        className="min-w-full rounded-md bg-card50 text-white"
+        className="min-w-full rounded-md bg-card50 p-4 text-xs text-lightBlue sm:text-sm"
       >
-        <thead>
+        <div className="pb-4 text-white">
           {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
+            <tr
+              className="flex items-center justify-center"
+              {...headerGroup.getHeaderGroupProps()}
+            >
               {headerGroup.headers.map((column) => (
                 // Add the sorting props to control sorting. For this example
                 // we can add them into the header props
-                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                <th
+                  className="flex-1"
+                  {...column.getHeaderProps(column.getSortByToggleProps())}
+                >
                   {column.render("Header")}
                   {/* Add a sort direction indicator */}
                   <span>
@@ -50,38 +56,57 @@ function GodMatchupTable({ columns, data, loading }) {
               ))}
             </tr>
           ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
+        </div>
+        <div
+          className=" border border-gray-400"
+          style={{ borderBottomWidth: "1px" }}
+        />
+        <div {...getTableBodyProps()}>
           {rows.map((row, i) => {
             prepareRow(row);
             return (
-              <tr {...row.getRowProps()}>
+              <tr
+                {...row.getRowProps()}
+                className={`flex ${i % 2 !== 0 ? "bg-darkBlue" : ""}`}
+              >
                 {row.cells.map((cell) => {
                   if (cell.column.Header?.toString() === "Enemy") {
                     return (
-                      <div>
+                      <div className="min-w-fit flex-1">
                         <IconName
                           displayIcon={row.values._id}
                           loader={GodIconLoader}
-                          width={48}
-                          height={48}
+                          width={36}
+                          height={36}
                         />
                       </div>
                     );
                   }
                   return (
-                    <td {...cell.getCellProps()} className="content-center">
+                    <td
+                      style={
+                        cell.column.Header?.toString() === "Win Rate"
+                          ? { color: getWinRateColor(cell.value) }
+                          : {}
+                      }
+                      {...cell.getCellProps()}
+                      className={`flex flex-1 content-center items-center justify-center 
+                      `}
+                    >
                       {cell.render("Cell")}
+                      {["Win Rate", "Pick Rate"].indexOf(
+                        cell.column.Header?.toString()
+                      ) !== -1
+                        ? "%"
+                        : ""}
                     </td>
                   );
                 })}
               </tr>
             );
           })}
-        </tbody>
-      </table>
-      <br />
-      <div>Showing the first 20 results of {rows.length} rows</div>
+        </div>
+      </div>
     </>
     // <table
     //   {...getTableProps()}
