@@ -106,11 +106,7 @@ const MediumNav = ({
                     <Link
                       key={index}
                       href={"/tierlist/".concat(
-                        //@ts-ignore
-                        tierListType
-                        // .toLowerCase()
-                        // .replaceAll(" ", "_")
-                        // .split("_")[0]
+                        tierListType.toLowerCase().split(" ")[0] || ""
                       )}
                     >
                       <div className="cursor-pointer hover:text-[#3273fa]">

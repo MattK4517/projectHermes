@@ -1,16 +1,5 @@
-import { Disclosure, Transition } from "@headlessui/react";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import {
-  AiFillHome,
-  AiOutlineBars,
-  AiFillMail,
-  AiFillTrophy,
-  AiFillShop,
-  AiOutlineDown,
-} from "react-icons/ai";
-import * as GiIcons from "react-icons/gi";
 import LargeNav from "./nav-styles/LargeNav";
 import MediumNav from "./nav-styles/MediumNav";
 export default function SideNav({

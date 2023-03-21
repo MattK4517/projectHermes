@@ -2652,14 +2652,6 @@ figure.snip0015:hover figcaption::before {
   width: 225px;
 }
 
-.Legendary {
-  filter: sepia(100%) hue-rotate(-10deg) saturate(350%);
-}
-
-.Diamond {
-  filter: sepia(100%) hue-rotate(190deg) saturate(350%);
-}
-
 .search-bar_container {
   display: flex;
   align-items: center;

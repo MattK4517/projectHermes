@@ -64,11 +64,6 @@ function MatchupsPage(props: {
         Header: "Win Rate",
         accessor: "games.winRate",
       },
-      // {
-      //   Header: "Games",
-      //   columns: [
-      //   ],
-      // },
     ],
     []
   );
@@ -81,7 +76,11 @@ function MatchupsPage(props: {
       />
       <GodMatchupTable
         columns={columns}
-        data={props.dehydratedState.godMatchups.queries[0].state.data}
+        data={
+          data?.entries ||
+          props.dehydratedState.godMatchups.queries[0].state.data.entries
+        }
+        loading={isLoading}
       />
     </GodPageLayout>
   );

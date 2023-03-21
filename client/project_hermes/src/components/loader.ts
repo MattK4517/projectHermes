@@ -14,6 +14,10 @@ export function ItemIconLoader(props: { src: string }) {
     .replaceAll("'", "")}.jpg`;
 }
 
+export function SkinIconLoader(props: { src: string }) {
+  return props.src
+}
+
 export function GodAbilityIconLoader(props: { src: string }) {
   return props.src.toLowerCase();
 }
