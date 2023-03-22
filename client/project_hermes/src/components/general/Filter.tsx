@@ -80,7 +80,9 @@ const Filter = ({ filterList, setFilterList, defaultParams }: IFilterProps) => {
                     ...filterList[index],
                     defaultValue: e,
                   };
-                  handleEnabled(newData);
+                  if (defaultParams.type !== "tierlist") {
+                    handleEnabled(newData);
+                  }
                   // @ts-ignore
                   defaultParams[newData[index].filterValue] = e;
                   setFilterList(newData);

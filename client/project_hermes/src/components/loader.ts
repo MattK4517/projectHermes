@@ -15,7 +15,7 @@ export function ItemIconLoader(props: { src: string }) {
 }
 
 export function SkinIconLoader(props: { src: string }) {
-  return props.src
+  return props.src;
 }
 
 export function GodAbilityIconLoader(props: { src: string }) {
@@ -31,7 +31,7 @@ export async function GodDefaultFilterLoader({
   url,
 }: {
   god: string;
-  url: string;
+  url?: string;
 }) {
   return (await fetch(url + `/api/default_filter/${god}`)).json();
 }

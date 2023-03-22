@@ -69,7 +69,10 @@ const LargeNav = ({
         } else if (text === "Tierlist") {
           return (
             <Disclosure>
-              <Link key={index} href={"/".concat(newRoute.toLowerCase())}>
+              <Link
+                key={index}
+                href={"/".concat(newRoute.toLowerCase(), "/tier-list")}
+              >
                 <div className={iconBoxStyling(text)}>
                   <div
                     className={` p-1 ${
@@ -96,7 +99,7 @@ const LargeNav = ({
                 }`}
               >
                 {[
-                  "Regular Tier List",
+                  "Tier List",
                   "Combat Tier List",
                   "Objective Tier List",
                   "Duos Tier List",
@@ -105,7 +108,7 @@ const LargeNav = ({
                     <Link
                       key={index}
                       href={"/tierlist/".concat(
-                        tierListType.toLowerCase().split(" ")[0] || ""
+                        tierListType.toLowerCase().replaceAll(" ", "-") || ""
                       )}
                     >
                       <div className="cursor-pointer hover:text-[#3273fa]">
