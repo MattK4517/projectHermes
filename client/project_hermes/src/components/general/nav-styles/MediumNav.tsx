@@ -97,7 +97,7 @@ const MediumNav = ({
                 }`}
               >
                 {[
-                  "Regular Tier List",
+                  "Tier List",
                   "Combat Tier List",
                   "Objective Tier List",
                   "Duos Tier List",
@@ -106,7 +106,7 @@ const MediumNav = ({
                     <Link
                       key={index}
                       href={"/tierlist/".concat(
-                        tierListType.toLowerCase().split(" ")[0] || ""
+                        tierListType.toLowerCase().replaceAll(" ", "-") || ""
                       )}
                     >
                       <div className="cursor-pointer hover:text-[#3273fa]">

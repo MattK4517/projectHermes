@@ -8,9 +8,9 @@ export type TabListType = {
 };
 
 const handlePath = (currentPath: string, newPath: string) => {
-  let tempPath = currentPath.split("/");
-  tempPath[3] = newPath;
-  return tempPath.join("/");
+  let tempPath = currentPath.split("/").pop();
+  tempPath = newPath;
+  return tempPath + "/";
 };
 export default function Tablist(props: TabListType[]) {
   const router = useRouter();
@@ -24,7 +24,8 @@ export default function Tablist(props: TabListType[]) {
               <div
                 id="nav_tab"
                 className={`text-lg font-semibold ${
-                  asPath.split("/")[3]?.toLowerCase() === tab.link.toLowerCase()
+                  asPath.split("/").pop()?.toLowerCase() ===
+                  tab.link.toLowerCase()
                     ? "text-blue-600 underline decoration-2 underline-offset-8"
                     : "text-white"
                 }`}

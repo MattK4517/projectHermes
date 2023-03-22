@@ -37,7 +37,9 @@ export default function GodsList<NextPage>(props: { dehydratedState: any }) {
                   src={god.url}
                   alt={god.name}
                 />
-                <div className="w-fit text-xs text-lightBlue">{god.name}</div>
+                <div className="mt-1 w-fit text-xs text-lightBlue">
+                  {god.name}
+                </div>
               </div>
             </Link>
           );

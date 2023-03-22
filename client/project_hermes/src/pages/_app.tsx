@@ -15,6 +15,8 @@ import AppBar from "../components/general/AppBar";
 import { GodPageLayout } from "./gods/[god]";
 import { NextPage } from "next";
 import { GodProvider } from "../components/gods/GodContext";
+import NextProgress from "next-progress";
+import { TierListProvider } from "../components/tierlist/TierListContext";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -45,20 +47,33 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <QueryClientProvider client={queryClient}>
       <GodProvider>
-        <div className="absolute z-10 box-border flex flex-col">
-          <AppBar open={open} setOpen={setOpen}></AppBar>
-        </div>
-        <Hydrate state={pageProps.dehydratedState}>
-          <main className="fixed top-16 flex h-full w-full">
-            <SideNav open={open} setOpen={setOpen} />
-            <div className="text-fontAltl flex h-full w-full overflow-scroll bg-mainBackGroundColor p-0 py-4 sm:p-4">
-              <div className="container mx-auto my-6 h-fit max-w-5xl p-0 py-4 sm:p-4">
-                {getLayout(<Component {...pageProps} />)}
+        <TierListProvider>
+          <div className="absolute z-10 box-border flex flex-col">
+            <AppBar open={open} setOpen={setOpen}></AppBar>
+          </div>
+          <Hydrate state={pageProps.dehydratedState}>
+            <main className="fixed top-16 flex h-full w-full">
+              <SideNav open={open} setOpen={setOpen} />
+              <div
+                className="text-fontAltl flex h-full w-full overflow-scroll bg-mainBackGroundColor p-0 py-4 sm:p-4"
+                id="main-div"
+              >
+                <NextProgress
+                  delay={200}
+                  options={{
+                    parent: "#main-div",
+                    color: "#3273fa",
+                    showSpinner: false,
+                  }}
+                />
+                <div className="container mx-auto my-6 h-fit max-w-5xl p-0 py-4 sm:p-4">
+                  {getLayout(<Component {...pageProps} />)}
+                </div>
               </div>
-            </div>
-          </main>
-        </Hydrate>
-        <ReactQueryDevtools initialIsOpen={false} />
+            </main>
+          </Hydrate>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </TierListProvider>
       </GodProvider>
     </QueryClientProvider>
   );
