@@ -18,7 +18,7 @@ import { GodProvider } from "../components/gods/GodContext";
 import NextProgress from "next-progress";
 import { TierListProvider } from "../components/tierlist/TierListContext";
 
-export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<any, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
 
