@@ -26,7 +26,68 @@ export type MenuItem = {
   value: string;
 };
 
-export interface GodData {}
+export interface GodData {
+  id: string;
+  Ability1: string;
+  Ability2: string;
+  Ability3: string;
+  Ability4: string;
+  Ability5: string;
+  AbilityId1: number;
+  AbilityId2: number;
+  AbilityId3: number;
+  AbilityId4: number;
+  AbilityId5: number;
+  Ability_1: Ability;
+  Ability_2: Ability;
+  Ability_3: Ability;
+  Ability_4: Ability;
+  Ability_5: Ability;
+  AttackSpeed: number;
+  AttackSpeedPerLevel: number;
+  AutoBanned: string;
+  Cons: string;
+  HP5PerLevel: number;
+  Health: number;
+  HealthPerFive: number;
+  HealthPerLevel: number;
+  Lore: string;
+  MP5PerLevel: number;
+  MagicProtection: number;
+  MagicProtectionPerLevel: number;
+  MagicalPower: number;
+  MagicalPowerPerLevel: number;
+  Mana: number;
+  ManaPerFive: number;
+  ManaPerLevel: number;
+  Name: string;
+  OnFreeRotation: string;
+  Pantheon: string;
+  PhysicalPower: number;
+  PhysicalPowerPerLevel: number;
+  PhysicalProtection: number;
+  PhysicalProtectionPerLevel: number;
+  Pros: string;
+  Roles: string;
+  Speed: number;
+  Title: string;
+  Type: string;
+  abilityDescription1: Ability["Description"];
+  abilityDescription2: Ability["Description"];
+  abilityDescription3: Ability["Description"];
+  abilityDescription4: Ability["Description"];
+  abilityDescription5: Ability["Description"];
+  basicAttack: Ability["Description"];
+  godAbility1_URL: string;
+  godAbility2_URL: string;
+  godAbility3_URL: string;
+  godAbility4_URL: string;
+  godAbility5_URL: string;
+  godCard_URL: string;
+  godIcon_URL: string;
+  id_: string;
+  latestGod: string;
+}
 
 export type GodWinRateType = {
   banRate: number;

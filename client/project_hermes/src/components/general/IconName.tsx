@@ -23,6 +23,7 @@ const IconName = ({
         width={width}
         height={height}
         className={`rounded-sm ${displayName}`}
+        alt={`${displayIcon} icon`}
       />
       <span
         className="ml-4 hidden max-w-min text-sm lg:block"

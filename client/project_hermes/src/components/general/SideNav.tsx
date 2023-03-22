@@ -7,12 +7,12 @@ export default function SideNav({
   setOpen,
 }: {
   open: boolean;
-  setOpen: any;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const router = useRouter();
   const { route } = router;
 
-  const [showText, setShowText] = useState(false);
+  const [_showText, setShowText] = useState(false);
 
   return (
     <div className="side-nav-test absolute lg:h-full" style={{ zIndex: "100" }}>

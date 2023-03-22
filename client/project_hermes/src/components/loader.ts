@@ -26,6 +26,10 @@ export function GodPantheonIconLoader(props: { src: string }) {
   return getPantheonIcon(props.src.toLowerCase());
 }
 
+export function ImgurLoader(props: { src: string }) {
+  return props.src;
+}
+
 export async function GodDefaultFilterLoader({
   god,
   url,

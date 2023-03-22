@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Fragment, Key, useEffect } from "react";
 import { AiOutlineDown } from "react-icons/ai";
 import { GodPagePropsType } from "../../pages/gods/[god]/build";
-import { RankIconLoader } from "../loader";
+import { ImgurLoader, RankIconLoader } from "../loader";
 
 export type FilterListType = {
   filterValue: string;
@@ -17,14 +17,11 @@ export type FilterListType = {
 
 interface IFilterProps {
   filterList: FilterListType[];
-  setFilterList: any;
+  setFilterList: React.Dispatch<React.SetStateAction<string>>;
   defaultParams: GodPagePropsType;
 }
 
 const handleEnabled = (filterList: FilterListType[]) => {
-  // dont show role if mode isnt conq
-  // dont show rank if queueType isnt ranked
-  // dont show queueType if mode is duel
   const modeIndex = filterList.findIndex(
     (value) => value.filterValue === "mode"
   );
@@ -53,17 +50,16 @@ const handleEnabled = (filterList: FilterListType[]) => {
 
 const Filter = ({ filterList, setFilterList, defaultParams }: IFilterProps) => {
   useEffect(() => {
-    let newData = Object.assign([], filterList);
-    const index = newData.findIndex((value) => value.filterValue === "role");
-    // @ts-ignore
+    const newData = Object.assign(filterList);
+    const index = newData.findIndex(
+      (value: FilterListType) => value.filterValue === "role"
+    );
     newData[index] = {
       ...filterList[index],
       defaultValue: defaultParams.role,
     };
-    // @ts-ignore
     setFilterList(newData);
   }, []);
-  console.log(filterList);
   return (
     <div className="my-6 flex items-center gap-4 overflow-x-scroll py-2 sm:overflow-visible">
       <span className="hidden font-semibold text-white sm:block">Filters</span>
@@ -74,8 +70,7 @@ const Filter = ({ filterList, setFilterList, defaultParams }: IFilterProps) => {
               <Listbox
                 value={filterList[index]?.defaultValue}
                 onChange={(e) => {
-                  let newData = Object.assign([], filterList);
-                  // @ts-ignore
+                  const newData = Object.assign(filterList);
                   newData[index] = {
                     ...filterList[index],
                     defaultValue: e,
@@ -83,8 +78,9 @@ const Filter = ({ filterList, setFilterList, defaultParams }: IFilterProps) => {
                   if (defaultParams.type !== "tierlist") {
                     handleEnabled(newData);
                   }
-                  // @ts-ignore
-                  defaultParams[newData[index].filterValue] = e;
+                  defaultParams[
+                    newData[index].filterValue as keyof GodPagePropsType
+                  ] = e;
                   setFilterList(newData);
                 }}
               >
@@ -128,29 +124,27 @@ const Filter = ({ filterList, setFilterList, defaultParams }: IFilterProps) => {
                             {({ selected }) => (
                               <div className="flex items-center justify-start">
                                 {filter.optionUrl ? (
-                                  <img
+                                  <Image
                                     src={filter.optionUrl}
+                                    loader={ImgurLoader}
+                                    width={28}
+                                    height={28}
                                     className="mr-2 h-7 w-7"
+                                    alt="Filter Icon"
                                   />
                                 ) : (
-                                  <img
+                                  <Image
                                     src={RankIconLoader(
                                       filter.optionName,
                                       defaultParams.mode
                                     )}
+                                    loader={ImgurLoader}
+                                    width={28}
+                                    height={28}
                                     className="mr-2 h-7 w-7"
+                                    alt="Filter Icon"
                                   />
                                 )}
-                                {/* <img
-                                  src={
-                                    filter.optionUrl ||
-                                    RankIconLoader(
-                                      filter.optionName,
-                                      defaultParams.mode
-                                    )
-                                  }
-                                  className="mr-2 h-7 w-7"
-                                /> */}
                                 <span
                                   className={`block ${
                                     selected ? " font-bold" : "font-normal"

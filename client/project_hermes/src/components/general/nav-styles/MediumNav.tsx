@@ -17,9 +17,9 @@ const MediumNav = ({
   setOpen,
 }: {
   open: boolean;
-  setShowText: any;
+  setShowText: React.Dispatch<React.SetStateAction<string>>;
   route: string;
-  setOpen: any;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const iconStyling = `w-8 h-8 opacity-100`;
 
@@ -69,7 +69,7 @@ const MediumNav = ({
           icon = <GiPikeman className={iconStyling} />;
         } else if (text === "Tierlist") {
           return (
-            <Disclosure>
+            <Disclosure key={index}>
               <Link key={index} href={"/".concat(newRoute.toLowerCase())}>
                 <div className={iconBoxStyling(text)}>
                   <div

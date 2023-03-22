@@ -16,7 +16,7 @@ import { getGodPageData } from "../../../service/gods/gods.service";
 import { getBaseUrl } from "../../../utils/trpc";
 
 export type GodPagePropsType = {
-  god: god;
+  god: god | string;
   role: string;
   rank: string;
   patch: string;

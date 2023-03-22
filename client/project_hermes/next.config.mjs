@@ -22,7 +22,7 @@ export default defineNextConfig({
     defaultLocale: "en",
   },
   images: {
-    domains: ["webcdn.hirezstudios.com"],
+    domains: ["webcdn.hirezstudios.com", "i.imgur.com"],
     loader: 'custom',
     loaderFile: './src/components/loader.ts',
   },

@@ -16,12 +16,12 @@ type GodContextType = {
 
 export const GodContext = createContext<GodContextType>({
   god: "",
-  setGod: function (value: SetStateAction<god>): void {
+  setGod: function (): void {
     throw new Error("Function not implemented.");
   },
   tabs: [],
   filterList: [],
-  setFilterList: function (value: SetStateAction<FilterListType[]>): void {
+  setFilterList: function (): void {
     throw new Error("Function not implemented.");
   },
   defaultParmas: {

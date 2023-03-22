@@ -1,9 +1,10 @@
-import { Ability, MenuItem, tier } from "../../models/gods.model";
+import { Ability, GodData, MenuItem, tier } from "../../models/gods.model";
 import GodIconLoader, { GodAbilityIconLoader } from "../loader";
 import Image from "next/image";
 import { Popover } from "@headlessui/react";
 import { getPantheonIcon, getTierColor } from "./GodHelpers";
 import { GodPagePropsType } from "../../pages/gods/[god]/build";
+import { god } from "../../models/gods/gods.model";
 
 const getMessage = (
   role: string,
@@ -25,7 +26,7 @@ interface PageHeaderProps {
   tier: tier;
   tab: string;
   abilities: Ability[];
-  godData: any;
+  godData: GodData;
   defaultParams: GodPagePropsType;
 }
 
@@ -36,6 +37,7 @@ const PageHeader = ({
   godData,
   defaultParams,
 }: PageHeaderProps) => {
+  console.log("GODDATA", godData);
   return (
     <div className="mb-6 w-full text-white" id="god-page-header">
       <div className="flex w-full items-center" id="god-header-wrap">

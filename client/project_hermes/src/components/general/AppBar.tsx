@@ -1,13 +1,14 @@
 import Link from "next/link";
 import * as GiIcons from "react-icons/gi";
-import Filter from "./Filter";
+import Image from "next/image";
+import { ImgurLoader } from "../loader";
 
 export default function AppBar({
   open,
   setOpen,
 }: {
   open: boolean;
-  setOpen: any;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   return (
     <div className="nav-border-bottom flex h-16 w-screen items-center bg-card px-4 text-fontAlt">
@@ -22,9 +23,13 @@ export default function AppBar({
         ></GiIcons.GiHamburgerMenu>
       </div>
       <Link href={"/"}>
-        <img
+        <Image
           className="h-12 w-52 cursor-pointer"
+          loader={ImgurLoader}
+          width={208}
+          height={48}
           src="https://i.imgur.com/5kTPiDu.png"
+          alt="SmiteStats Icon"
         />
       </Link>
     </div>

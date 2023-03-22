@@ -1,7 +1,6 @@
 import { tier } from "../../models/gods.model";
-import { TabListType } from "../general/TabList";
 export const getPantheonIcon = (pantheon: string) => {
-  let icon: string = "";
+  let icon = "";
   if (pantheon === "Arthurian") {
     icon = "https://i.imgur.com/MZ6yMuc.png";
   }

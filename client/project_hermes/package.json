@@ -17,7 +17,7 @@
     "@emotion/styled": "^11.10.5",
     "@headlessui/react": "^1.7.7",
     "@mui/material": "^5.11.7",
-    "@prisma/client": "^4.4.0",
+    "@prisma/client": "^4.11.0",
     "@tanstack/react-query": "^4.10.0",
     "@tanstack/react-query-devtools": "^4.12.0",
     "@trpc/client": "10.0.0-proxy-beta.17",
@@ -58,7 +58,7 @@
     "postcss": "^8.4.14",
     "prettier": "^2.7.1",
     "prettier-plugin-tailwindcss": "^0.1.13",
-    "prisma": "^4.4.0",
+    "prisma": "^4.11.0",
     "storybook": "^6.5.16",
     "tailwindcss": "^3.1.6",
     "typescript": "^4.8.4"
