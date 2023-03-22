@@ -37,7 +37,6 @@ const PageHeader = ({
   godData,
   defaultParams,
 }: PageHeaderProps) => {
-  console.log("GODDATA", godData);
   return (
     <div className="mb-6 w-full text-white" id="god-page-header">
       <div className="flex w-full items-center" id="god-header-wrap">
