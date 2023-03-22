@@ -6,3 +6,58 @@ datasource db {
   provider = "mongodb"
   url      = env("GODDATABASE_URL")
 }
+
+model Achilles {
+  id                         String @id @default(auto()) @map("_id") @db.ObjectId
+  Ability1                   String
+  Ability2                   String
+  Ability3                   String
+  Ability4                   String
+  Ability5                   String
+  AbilityId1                 Int
+  AbilityId2                 Int
+  AbilityId3                 Int
+  AbilityId4                 Int
+  AbilityId5                 Int
+  AttackSpeed                Float
+  AttackSpeedPerLevel        Float
+  AutoBanned                 String
+  Cons                       String
+  HP5PerLevel                Float
+  Health                     Int
+  HealthPerFive              Int
+  HealthPerLevel             Int
+  Lore                       String
+  MP5PerLevel                Float
+  /// Multiple data types found: Float: 40%, Int: 60% out of 5 sampled entries
+  MagicProtection            Json
+  MagicProtectionPerLevel    Float
+  MagicalPower               Int
+  MagicalPowerPerLevel       Int
+  Mana                       Int
+  ManaPerFive                Float
+  ManaPerLevel               Int
+  Name                       String
+  OnFreeRotation             String
+  Pantheon                   String
+  PhysicalPower              Int
+  PhysicalPowerPerLevel      Int
+  PhysicalProtection         Float
+  PhysicalProtectionPerLevel Float
+  Pros                       String
+  Roles                      String
+  Speed                      Int
+  Title                      String
+  Type                       String
+  godAbility1_URL            String
+  godAbility2_URL            String
+  godAbility3_URL            String
+  godAbility4_URL            String
+  godAbility5_URL            String
+  godCard_URL                String
+  godIcon_URL                String
+  id_                        Int    @map("id")
+  latestGod                  String
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  ret_msg                    Json?
+}
