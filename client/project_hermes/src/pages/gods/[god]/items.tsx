@@ -21,7 +21,7 @@ function ItemsPage(props: {
   };
 }) {
   const router = useRouter();
-  let { god, setGod, filterList, setFilterList, tabs } = useContext(GodContext);
+  let { setGod } = useContext(GodContext);
 
   const { data, isLoading } = useQuery(
     ["god-items", props.dehydratedState.defaultParams],
@@ -31,11 +31,6 @@ function ItemsPage(props: {
   if (router.query?.god) setGod(router.query.god);
   return (
     <GodPageLayout defaultParams={props.dehydratedState.defaultParams}>
-      <Filter
-        filterList={filterList}
-        setFilterList={setFilterList}
-        defaultParams={props.dehydratedState.defaultParams}
-      />
       <div
         className={`flex flex-row text-white ${
           isLoading ? "items-center justify-center" : ""

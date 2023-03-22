@@ -7,6 +7,7 @@ import Loading from "../../../components/general/Loading";
 import { GetServerSideProps } from "next";
 import { GodPagePropsType } from "./build";
 import { useRouter } from "next/router";
+import Filter from "../../../components/general/Filter";
 
 function GodIndex<NextPage>() {
   return <div></div>;
@@ -37,6 +38,7 @@ const GodPageLayout = ({
       },
     ],
   });
+  let { filterList, setFilterList } = useContext(GodContext);
 
   const isLoading = godPageQueries.some((query) => query.isLoading);
   const isError = godPageQueries.some((query) => query.error);
@@ -69,6 +71,11 @@ const GodPageLayout = ({
               defaultParams={defaultParams}
             ></GodPageHeader>
             <TabList {...tabs} />
+            <Filter
+              filterList={filterList}
+              setFilterList={setFilterList}
+              defaultParams={defaultParams}
+            />
             {children}
           </div>
         </div>
@@ -98,7 +105,7 @@ const GodPageHeader: React.FC = (props: {
 
 export { GodPageLayout, GodPageHeader };
 
-const linkDict = {
+export const linkDict = {
   Achilles: "https://i.imgur.com/KoU1bup.jpg",
   Agni: "https://i.imgur.com/DNzygMe.jpg",
   "Ah Muzen Cab": "https://i.imgur.com/mAPxdzA.jpg",

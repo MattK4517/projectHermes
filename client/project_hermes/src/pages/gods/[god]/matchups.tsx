@@ -69,11 +69,6 @@ function MatchupsPage(props: {
   );
   return (
     <GodPageLayout defaultParams={props.dehydratedState.defaultParams}>
-      <Filter
-        filterList={filterList}
-        setFilterList={setFilterList}
-        defaultParams={props.dehydratedState.defaultParams}
-      />
       <GodMatchupTable
         columns={columns}
         data={

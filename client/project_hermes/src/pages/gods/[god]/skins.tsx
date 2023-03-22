@@ -20,7 +20,7 @@ function SkinsPage(props: {
   };
 }) {
   const router = useRouter();
-  let { god, setGod, filterList, setFilterList } = useContext(GodContext);
+  let { setGod } = useContext(GodContext);
   const { data, isLoading } = useQuery(
     ["god-skins", props.dehydratedState.defaultParams],
     () =>
@@ -54,11 +54,6 @@ function SkinsPage(props: {
   );
   return (
     <GodPageLayout defaultParams={props.dehydratedState.defaultParams}>
-      <Filter
-        filterList={filterList}
-        setFilterList={setFilterList}
-        defaultParams={props.dehydratedState.defaultParams}
-      />
       <SkinsTable
         columns={columns}
         loading={isLoading}

@@ -20,7 +20,7 @@ function BuildPathsPage(props: {
   };
 }) {
   const router = useRouter();
-  let { god, setGod, filterList, setFilterList } = useContext(GodContext);
+  let { setGod } = useContext(GodContext);
   const { data, isLoading } = useQuery(
     ["god-build-paths", props.dehydratedState.defaultParams],
     () =>
@@ -62,11 +62,6 @@ function BuildPathsPage(props: {
   );
   return (
     <GodPageLayout defaultParams={props.dehydratedState.defaultParams}>
-      <Filter
-        filterList={filterList}
-        setFilterList={setFilterList}
-        defaultParams={props.dehydratedState.defaultParams}
-      />
       <BuildPathTable
         data={Object.values(
           data || props.dehydratedState.godBuildPaths.queries[0].state.data

@@ -63,7 +63,7 @@ const Filter = ({ filterList, setFilterList, defaultParams }: IFilterProps) => {
     // @ts-ignore
     setFilterList(newData);
   }, []);
-
+  console.log(filterList);
   return (
     <div className="my-6 flex items-center gap-4 overflow-x-scroll py-2 sm:overflow-visible">
       <span className="hidden font-semibold text-white sm:block">Filters</span>
