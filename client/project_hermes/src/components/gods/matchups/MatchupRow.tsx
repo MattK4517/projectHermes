@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { god } from "../../../models/gods.model";
+import { god } from "../../../models/gods/gods.model";
 import { GodPagePropsType } from "../../../pages/gods/[god]/build";
 import { getGodPageData } from "../../../service/gods/gods.service";
 import Loading from "../../general/Loading";

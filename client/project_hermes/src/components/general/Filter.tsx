@@ -35,15 +35,18 @@ const handleEnabled = (filterList: FilterListType[]) => {
     const roleIndex = filterList.findIndex(
       (value) => value.filterValue === "role"
     );
+    // @ts-ignore
     filterList[roleIndex].enabled = false;
   }
   if (filterList[modeIndex]?.defaultValue === "Duel") {
+    // @ts-ignore
     filterList[queueIndex].enabled = false;
   }
   if (filterList[queueIndex]?.defaultValue !== "Ranked") {
     const rankIndex = filterList.findIndex(
       (value) => value.filterValue === "rank"
     );
+    // @ts-ignore
     filterList[rankIndex].enabled = false;
   }
 };

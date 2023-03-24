@@ -1,6 +1,5 @@
-// src/pages/_app.tsx
 import "../styles/globals.css";
-import type { AppProps, AppType } from "next/app";
+import type { AppProps } from "next/app";
 import { trpc } from "../utils/trpc";
 import {
   Hydrate,
@@ -18,6 +17,7 @@ import { GodProvider } from "../components/gods/GodContext";
 import NextProgress from "next-progress";
 import { TierListProvider } from "../components/tierlist/TierListContext";
 
+// eslint-disable-next-line
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<any, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };

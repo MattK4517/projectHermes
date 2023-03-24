@@ -1,4 +1,4 @@
-import { tier } from "../../models/gods.model";
+import { tier } from "../../models/gods/gods.model";
 export const getPantheonIcon = (pantheon: string) => {
   let icon = "";
   if (pantheon === "Arthurian") {

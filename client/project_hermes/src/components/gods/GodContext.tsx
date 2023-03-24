@@ -1,5 +1,5 @@
-import { useState, createContext, FC, Dispatch, SetStateAction } from "react";
-import { god } from "../../models/gods.model";
+import { createContext, Dispatch, FC, SetStateAction, useState } from "react";
+import { god } from "../../models/gods/gods.model";
 import { GodPagePropsType } from "../../pages/gods/[god]/build";
 import { FilterListType } from "../general/Filter";
 import { GenericFilterList } from "../general/GenericObejcts";

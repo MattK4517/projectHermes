@@ -1,15 +1,14 @@
 import { useContext } from "react";
 import TabList from "../../components/general/TabList";
 import { TierListContext } from "../../components/tierlist/TierListContext";
-import { GodPagePropsType } from "../gods/[god]/build";
 
-function TierIndex<NextPage>() {
+function TierIndex() {
   return <div></div>;
 }
 
 export default TierIndex;
 
-const TierListLayout = ({ children }: { children: any }) => {
+const TierListLayout = ({ children }: { children: React.ReactNode }) => {
   const { tabs } = useContext(TierListContext);
   return (
     <div id="god-profile-main-page" className="mx-auto flex w-full">

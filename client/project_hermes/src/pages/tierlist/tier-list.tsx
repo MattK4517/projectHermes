@@ -1,14 +1,14 @@
-import { TierListLayout } from ".";
-import { TierListContext } from "../../components/tierlist/TierListContext";
-import { useContext } from "react";
-import Filter from "../../components/general/Filter";
 import { GetServerSideProps } from "next";
+import { useContext } from "react";
+import { TierListLayout } from ".";
+import Filter from "../../components/general/Filter";
 import { GodDefaultFilterLoader } from "../../components/loader";
+import { TierListContext } from "../../components/tierlist/TierListContext";
 import { getBaseUrl } from "../../utils/trpc";
 import { GodPagePropsType } from "../gods/[god]/build";
 
 const TierList = () => {
-  let { filterList, setFilterList } = useContext(TierListContext);
+  const { filterList, setFilterList } = useContext(TierListContext);
   return (
     <>
       <div>dakljdslakjd</div>
@@ -36,8 +36,8 @@ const TierList = () => {
 
 export default TierList;
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  let url = getBaseUrl();
+export const getServerSideProps: GetServerSideProps = async () => {
+  const url = getBaseUrl();
   const defaultParams: GodPagePropsType = await GodDefaultFilterLoader({
     url,
   });

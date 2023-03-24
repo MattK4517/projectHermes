@@ -17,7 +17,7 @@ const LargeNav = ({
   setOpen,
 }: {
   open: boolean;
-  setShowText: React.Dispatch<React.SetStateAction<string>>;
+  setShowText: React.Dispatch<React.SetStateAction<boolean>>;
   route: string;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {

@@ -1,27 +1,25 @@
+import { QueryClient, useQuery } from "@tanstack/react-query";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useContext, useMemo } from "react";
-import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import { GodPageLayout } from ".";
-import Filter from "../../../components/general/Filter";
 import { GodContext } from "../../../components/gods/GodContext";
+import GodMatchupTable from "../../../components/gods/matchups/MatchupsTable";
 import { GodDefaultFilterLoader } from "../../../components/loader";
+import { IDetailMatchupsReturnType } from "../../../models/gods/gods.model";
 import { getGodPageData } from "../../../service/gods/gods.service";
 import { getBaseUrl } from "../../../utils/trpc";
 import { GodPagePropsType } from "./build";
-import GodMatchupTable from "../../../components/gods/matchups/MatchupsTable";
 
 function MatchupsPage(props: {
   dehydratedState: {
-    godMatchups: {
-      queries: any[];
-    };
+    godMatchups: IDetailMatchupsReturnType;
     defaultParams: GodPagePropsType;
   };
 }) {
   const router = useRouter();
-  let { god, setGod, filterList, setFilterList } = useContext(GodContext);
-  const { data, isLoading } = useQuery(
+  const { setGod } = useContext(GodContext);
+  const { data, isLoading } = useQuery<IDetailMatchupsReturnType>(
     ["god-matchup-stats", props.dehydratedState.defaultParams],
     () =>
       getGodPageData({
@@ -36,10 +34,6 @@ function MatchupsPage(props: {
         Header: "Enemy",
         accessor: "_id",
       },
-      // {
-      //   Header: "Win Rate",
-      //   accessor: "games.winRate",
-      // },
       {
         Header: "Avg Dmg Diff",
         accessor: "avgDmgDiff",
@@ -71,10 +65,7 @@ function MatchupsPage(props: {
     <GodPageLayout defaultParams={props.dehydratedState.defaultParams}>
       <GodMatchupTable
         columns={columns}
-        data={
-          data?.entries ||
-          props.dehydratedState.godMatchups.queries[0].state.data.entries
-        }
+        data={data?.entries || props.dehydratedState.godMatchups}
         loading={isLoading}
       />
     </GodPageLayout>
@@ -90,13 +81,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const { god } = context.params;
 
-  let url = getBaseUrl();
+  const url = getBaseUrl();
   const defaultParams: GodPagePropsType = await GodDefaultFilterLoader({
     url,
     god,
   });
 
-  await queryClient.godMatchups.prefetchQuery<any>(
+  await queryClient.godMatchups.prefetchQuery<IDetailMatchupsReturnType>(
     ["god-matchup-stats", defaultParams],
     () => getGodPageData({ ...defaultParams, type: "matchup-stats" })
   );
@@ -105,7 +96,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       dehydratedState: {
         godMatchups: JSON.parse(
-          JSON.stringify(dehydrate(queryClient.godMatchups))
+          JSON.stringify(
+            queryClient.godMatchups.getQueryState([
+              "god-matchup-stats",
+              defaultParams,
+            ]).data
+          )
         ),
         defaultParams,
       },

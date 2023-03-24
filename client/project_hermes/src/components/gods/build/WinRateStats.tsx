@@ -1,10 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
-import { tier } from "../../../models/gods.model";
+import { tier } from "../../../models/gods/gods.model";
 import { GodPagePropsType } from "../../../pages/gods/[god]/build";
 import { getGodPageData } from "../../../service/gods/gods.service";
 import Loading from "../../general/Loading";
-import { getWinRateColor, getTierColor } from "../GodHelpers";
+import { getTierColor, getWinRateColor } from "../GodHelpers";
 
 export type WinRateStatsType = {
   winRate: number;

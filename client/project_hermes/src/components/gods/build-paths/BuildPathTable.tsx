@@ -1,10 +1,17 @@
-import { useSortBy, useTable } from "react-table";
-import { ItemIconLoader } from "../../loader";
 import Image from "next/image";
-import { getWinRateColor } from "../GodHelpers";
+import { Column, useSortBy, useTable } from "react-table";
 import Loading from "../../general/Loading";
+import { ItemIconLoader } from "../../loader";
+import { getWinRateColor } from "../GodHelpers";
 
-function BuildPathTable({ columns, data, loading }) {
+function BuildPathTable({
+  columns,
+  data,
+  loading,
+}: {
+  columns: Column<object>[];
+  data:
+}) {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable(
       {

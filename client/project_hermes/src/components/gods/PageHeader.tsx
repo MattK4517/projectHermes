@@ -1,10 +1,9 @@
-import { Ability, GodData, MenuItem, tier } from "../../models/gods.model";
-import GodIconLoader, { GodAbilityIconLoader } from "../loader";
-import Image from "next/image";
 import { Popover } from "@headlessui/react";
-import { getPantheonIcon, getTierColor } from "./GodHelpers";
+import Image from "next/image";
+import { Ability, GodData, MenuItem, tier } from "../../models/gods/gods.model";
 import { GodPagePropsType } from "../../pages/gods/[god]/build";
-import { god } from "../../models/gods/gods.model";
+import GodIconLoader, { GodAbilityIconLoader } from "../loader";
+import { getPantheonIcon, getTierColor } from "./GodHelpers";
 
 const getMessage = (
   role: string,
