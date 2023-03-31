@@ -1,7 +1,6 @@
-import React, { useState, useContext } from "react";
-import FilterForm from "./FilterForm";
-import Filter from "./Filter";
-import { TierListContext } from "../Tierlists/TierListContext";
+import { useContext, useState } from 'react';
+import { TierListContext } from '../Tierlists/TierListContext';
+import Filter from './Filter';
 
 export default function TierListFilter(props) {
   const [
@@ -22,25 +21,16 @@ export default function TierListFilter(props) {
   ] = useContext(TierListContext);
 
   const [roles, setRoles] = useState([
-    "Solo",
-    "Jungle",
-    "Mid",
-    "Support",
-    "Carry",
-    "All Roles",
+    'Solo',
+    'Jungle',
+    'Mid',
+    'Support',
+    'Carry',
+    'All Roles',
   ]);
-  const [ranks, setranks] = useState([
-    "Bronze",
-    "Silver",
-    "Gold",
-    "Platinum",
-    "Diamond",
-    "Masters",
-    "Grandmaster",
-    "All Ranks",
-  ]);
-  const modes = ["Conquest", "Joust", "Duel"];
-  const queueTypes = ["Ranked", "Casual"];
+  const [ranks, setranks] = useState(['All Ranks']);
+  const modes = ['Conquest', 'Joust', 'Duel'];
+  const queueTypes = ['Ranked', 'Casual'];
 
   return (
     <>
@@ -51,28 +41,30 @@ export default function TierListFilter(props) {
         queueType={queueType}
         rank={rank}
         patch={patch}
-        matchup={"none"}
+        matchup={'none'}
         modeFilters={modes}
         patchFilters={[
-          "10.1",
-          "9.11",
-          "9.10",
-          "9.9",
-          "9.8",
-          "9.7",
-          "9.6",
-          "9.5",
-          "9.4",
+          '10.3',
+          '10.2',
+          '10.1',
+          '9.11',
+          '9.10',
+          '9.9',
+          '9.8',
+          '9.7',
+          '9.6',
+          '9.5',
+          '9.4',
         ]}
         roleFilters={roles}
         rankFilters={ranks}
         queueFilters={queueTypes}
-        routes={"none"}
+        routes={'none'}
         setRank={setRank}
         setRole={setRole}
         setPatch={setPatch}
         setMode={setMode}
-        setMatchup={"none"}
+        setMatchup={'none'}
         setQueueType={setQueueType}
       />
     </>

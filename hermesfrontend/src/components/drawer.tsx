@@ -1,48 +1,43 @@
-import * as React from 'react';
-import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import MuiDrawer from '@mui/material/Drawer';
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import Divider from '@mui/material/Divider';
+import MuiDrawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import MailIcon from '@mui/icons-material/Mail';
-import { Switch, Route, Link } from 'react-router-dom';
+import { CSSObject, styled, Theme, useTheme } from '@mui/material/styles';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import * as React from 'react';
 import * as AiIcons from 'react-icons/ai';
 import * as GiIcons from 'react-icons/gi';
 import { RiPlayListAddLine } from 'react-icons/ri';
+import { Link, Route, Switch } from 'react-router-dom';
 
-import Home from './Home';
-import GodsScreen from './Gods';
-import Godpage from './mainGodPage/Godpage';
-import TierListPage from './TierListPage';
 import ContactForm from './ContactForm';
+import GodsScreen from './Gods';
+import Home from './Home';
+import Godpage from './mainGodPage/Godpage';
 import Match from './MatchPage/Match';
+import TierListPage from './TierListPage';
 // import { Godpage, GodsScreen, TierListPage, Match, Home, ContactForm } from "./"
-import SearchBar from './SearchBarStuff/SearchBar';
-import Player from './PlayerPage/Player';
-import OverviewDisplay from './PlayerPage/OverviewDisplay';
-import GodStatsDisplay from './PlayerPage/GodStatsDisplay';
-import { PlayerProvider } from './PlayerPage/PlayerContext';
 import DamageCalculator from './DmgCalcPage/DamageCalculator';
 import { DamageProvider } from './DmgCalcPage/DamageContext';
-import { TierListProvider } from './Tierlists/TierListContext';
-import FindAMatch from './MatchPage/FindAMatch';
 import { MainProvider } from './mainGodPage/MainContext';
 import SkinStatPage from './mainGodPage/Skins/SkinStatPage';
+import FindAMatch from './MatchPage/FindAMatch';
+import GodStatsDisplay from './PlayerPage/GodStatsDisplay';
+import OverviewDisplay from './PlayerPage/OverviewDisplay';
+import Player from './PlayerPage/Player';
+import { PlayerProvider } from './PlayerPage/PlayerContext';
+import SearchBar from './SearchBarStuff/SearchBar';
+import { TierListProvider } from './Tierlists/TierListContext';
 
-import { HtmlTooltip, CreateItemToolTip } from './mainGodPage/GodPageHelpers';
 import { CreateTierListPage } from './Tierlists/CreateTierlist';
 
 export const compare = (a: { winRate: number }, b: { winRate: number }) => {
@@ -389,6 +384,9 @@ export default function MiniDrawer() {
             edge='start'
             sx={{
               marginRight: 5,
+              [theme.breakpoints.down('sm')]: {
+                display: 'none',
+              },
               ...(open && { display: 'none' }),
             }}
           >
@@ -467,6 +465,8 @@ export default function MiniDrawer() {
             display: 'none',
           },
         }}
+        onMouseEnter={handleDrawerOpen}
+        onMouseLeave={handleDrawerClose}
       >
         <DrawerHeader
           style={{
@@ -493,52 +493,31 @@ export default function MiniDrawer() {
             'Find Match',
             'Create Tierlist',
           ].map((text, index) => (
-            <HtmlTooltip
-              title={
-                <React.Fragment>
-                  <span
-                    style={{
-                      padding: '.6rem',
-                      color: 'white',
-                      fontSize: '16px',
-                    }}
-                  >
-                    {text}
-                  </span>
-                </React.Fragment>
-              }
-              placement='right'
-              arrow
-              disableHoverListener={open}
+            <Link
+              key={text}
+              //@ts-ignore
+              sx={{ display: 'block' }}
+              to={text === 'Home' ? '/' : '/'.concat(text.replaceAll(' ', '_'))}
             >
-              <Link
-                key={text}
-                //@ts-ignore
-                sx={{ display: 'block' }}
-                to={
-                  text === 'Home' ? '/' : '/'.concat(text.replaceAll(' ', '_'))
-                }
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5,
+                }}
               >
-                <ListItemButton
+                <ListItemIcon
                   sx={{
-                    minHeight: 48,
-                    justifyContent: open ? 'initial' : 'center',
-                    px: 2.5,
+                    minWidth: 0,
+                    mr: open ? 3 : 'auto',
+                    justifyContent: 'center',
                   }}
                 >
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : 'auto',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    {getIcon(index)}
-                  </ListItemIcon>
-                  <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-                </ListItemButton>
-              </Link>
-            </HtmlTooltip>
+                  {getIcon(index)}
+                </ListItemIcon>
+                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+              </ListItemButton>
+            </Link>
           ))}
         </List>
         <Divider />
