@@ -1,5 +1,4 @@
 // @ts-check
-import { env } from "./src/env/server.mjs";
 
 /**
  * Don't be scared of the generics here.

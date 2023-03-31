@@ -1,7 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
 import { god } from "../../../models/gods/gods.model";
 import { GodPagePropsType } from "../../../pages/gods/[god]/build";
-import { getGodPageData } from "../../../service/gods/gods.service";
 import Loading from "../../general/Loading";
 import SingleMatchupDisplay from "./SingleMatchupDisplay";
 
@@ -22,27 +20,8 @@ export interface IMatchupRowProps {
   defaultParams: GodPagePropsType;
 }
 
-const MatchupRow = ({
-  matchups,
-  god,
-  role,
-  displayType,
-  defaultParams,
-}: IMatchupRowProps) => {
-  const { data, isLoading, isError } = useQuery(
-    ["god-matchups", defaultParams],
-    () => getGodPageData({ ...defaultParams, type: "matchups" })
-  );
-
-  if (data) {
-    matchups = data;
-    Object.values(matchups).sort((matchupA, matchupB) => {
-      if (matchupA.winRate > matchupB.winRate) return 1;
-      if (matchupA.winRate < matchupB.winRate) return -1;
-      return 0;
-    });
-  }
-
+const MatchupRow = ({ matchups, god, role, displayType }: IMatchupRowProps) => {
+  const isLoading = false;
   return (
     <div className="card">
       <div className="card-header">

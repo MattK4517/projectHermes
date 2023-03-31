@@ -46,7 +46,7 @@ const LargeNav = ({
       onMouseLeave={() => setOpen(false)}
       onTransitionEndCapture={() => setShowText(false)}
       onTransitionEnd={() => setShowText(true)}
-      className={` nav-border duration-30 hidden h-full overflow-x-hidden bg-card px-4 py-4 text-fontAlt transition-[width] lg:block ${
+      className={` nav-border duration-30 hidden h-full overflow-x-hidden bg-card px-4 py-4 text-fontAlt transition-[width] sm:block ${
         !open ? "w-16" : "w-52"
       }`}
     >

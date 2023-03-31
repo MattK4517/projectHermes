@@ -8,9 +8,9 @@ export type TabListType = {
 };
 
 const handlePath = (currentPath: string, newPath: string) => {
-  let tempPath = currentPath.split("/").pop();
-  tempPath = newPath;
-  return tempPath + "/";
+  let tempPath = currentPath.split("/");
+  tempPath[3] = newPath;
+  return tempPath.join("/") + "/";
 };
 export default function Tablist(props: TabListType[]) {
   const router = useRouter();
@@ -30,9 +30,7 @@ export default function Tablist(props: TabListType[]) {
                     : "text-white"
                 }`}
               >
-                <Link href={handlePath(router.asPath, tab.link)}>
-                  {tab.name}
-                </Link>
+                <Link href={handlePath(asPath, tab.link)}>{tab.name}</Link>
               </div>
             </div>
           );

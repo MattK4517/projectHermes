@@ -1,20 +1,20 @@
-import "../styles/globals.css";
-import type { AppProps } from "next/app";
-import { trpc } from "../utils/trpc";
 import {
   Hydrate,
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
-import React, { ReactElement, ReactNode } from "react";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import type { AppProps } from "next/app";
+import React, { ReactElement, ReactNode } from "react";
+import "../styles/globals.css";
+import { trpc } from "../utils/trpc";
 
-import SideNav from "../components/general/SideNav";
-import AppBar from "../components/general/AppBar";
-import { GodPageLayout } from "./gods/[god]";
 import { NextPage } from "next";
-import { GodProvider } from "../components/gods/GodContext";
 import NextProgress from "next-progress";
+import AppBar from "../components/general/AppBar";
+import { AppStateProvider } from "../components/general/AppStateContext";
+import SideNav from "../components/general/SideNav";
+import { GodProvider } from "../components/gods/GodContext";
 import { TierListProvider } from "../components/tierlist/TierListContext";
 
 // eslint-disable-next-line
@@ -43,43 +43,41 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       })
   );
 
-  const [open, setOpen] = React.useState<boolean>(false);
   return (
-    <QueryClientProvider client={queryClient}>
-      <GodProvider>
-        <TierListProvider>
-          <div className="absolute z-10 box-border flex flex-col">
-            <AppBar open={open} setOpen={setOpen}></AppBar>
-          </div>
-          <Hydrate state={pageProps.dehydratedState}>
-            <main className="fixed top-16 flex h-full w-full">
-              <SideNav open={open} setOpen={setOpen} />
-              <div
-                className="text-fontAltl flex h-full w-full overflow-scroll bg-mainBackGroundColor p-0 py-4 sm:p-4"
-                id="main-div"
-              >
-                <NextProgress
-                  delay={200}
-                  options={{
-                    parent: "#main-div",
-                    color: "#3273fa",
-                    showSpinner: false,
-                  }}
-                />
-                <div className="container mx-auto my-6 h-fit max-w-5xl p-0 py-4 sm:p-4">
-                  {getLayout(<Component {...pageProps} />)}
+    <AppStateProvider>
+      <QueryClientProvider client={queryClient}>
+        <GodProvider>
+          <TierListProvider>
+            <div className="absolute z-10 box-border flex flex-col">
+              <AppBar />
+            </div>
+            <Hydrate state={pageProps.dehydratedState}>
+              <main className="fixed top-16 flex h-full w-full">
+                <SideNav />
+                <div
+                  className="text-fontAltl flex h-full w-full overflow-scroll bg-mainBackGroundColor p-0 py-4 sm:p-4"
+                  id="main-div"
+                >
+                  <NextProgress
+                    delay={200}
+                    options={{
+                      parent: "#main-div",
+                      color: "#3273fa",
+                      showSpinner: false,
+                    }}
+                  />
+                  <div className="container mx-auto my-6 h-fit max-w-5xl p-0 py-4 sm:p-4">
+                    {getLayout(<Component {...pageProps} />)}
+                  </div>
                 </div>
-              </div>
-            </main>
-          </Hydrate>
-          <ReactQueryDevtools initialIsOpen={false} />
-        </TierListProvider>
-      </GodProvider>
-    </QueryClientProvider>
+              </main>
+            </Hydrate>
+            <ReactQueryDevtools initialIsOpen={false} />
+          </TierListProvider>
+        </GodProvider>
+      </QueryClientProvider>
+    </AppStateProvider>
   );
 }
 
-MyApp.getLayout = function getLayout(page) {
-  return <GodPageLayout>{page}</GodPageLayout>;
-};
 export default trpc.withTRPC(MyApp);

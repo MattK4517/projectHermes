@@ -1,5 +1,5 @@
-import { router, publicProcedure } from "../trpc";
 import { z } from "zod";
+import { publicProcedure, router } from "../trpc";
 
 export const exampleRouter = router({
   hello: publicProcedure
@@ -10,13 +10,13 @@ export const exampleRouter = router({
       };
     }),
   godList: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.conquest_Casual_910.findMany({
+    return ctx.prisma.conquest_Casual_910.f({
       where: {
-        player: {contains: "LordKarnox"}
+        player: { contains: "LordKarnox" },
       },
       select: {
         god: true,
       },
-    })
+    });
   }),
 });

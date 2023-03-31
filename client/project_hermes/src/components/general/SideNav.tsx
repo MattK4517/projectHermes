@@ -1,21 +1,17 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AppStateContext } from "./AppStateContext";
 import LargeNav from "./nav-styles/LargeNav";
 import MediumNav from "./nav-styles/MediumNav";
-export default function SideNav({
-  open,
-  setOpen,
-}: {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+export default function SideNav() {
   const router = useRouter();
   const { route } = router;
 
   const [_showText, setShowText] = useState(false);
+  const { open, setOpen } = useContext(AppStateContext);
 
   return (
-    <div className="side-nav-test absolute lg:h-full" style={{ zIndex: "100" }}>
+    <div className="side-nav-test absolute sm:h-full" style={{ zIndex: "100" }}>
       <LargeNav
         open={open}
         route={route}

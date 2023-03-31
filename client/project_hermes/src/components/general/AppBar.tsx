@@ -1,15 +1,12 @@
-import Link from "next/link";
-import * as GiIcons from "react-icons/gi";
 import Image from "next/image";
+import Link from "next/link";
+import { useContext } from "react";
+import * as GiIcons from "react-icons/gi";
 import { ImgurLoader } from "../loader";
+import { AppStateContext } from "./AppStateContext";
 
-export default function AppBar({
-  open,
-  setOpen,
-}: {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+export default function AppBar() {
+  const { open, setOpen } = useContext(AppStateContext);
   return (
     <div className="nav-border-bottom flex h-16 w-screen items-center bg-card px-4 text-fontAlt">
       <div

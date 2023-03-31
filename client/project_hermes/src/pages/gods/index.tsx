@@ -1,6 +1,6 @@
 import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import { getBaseUrl, trpc } from "../../utils/trpc";
+import { getBaseUrl } from "../../utils/trpc";
 
 interface god {
   name: string;
@@ -26,11 +26,7 @@ export default function GodsList<NextPage>(props: { dehydratedState: any }) {
       >
         {Object.values(data).map((god: god, index) => {
           return (
-            <Link
-              key={index}
-              href={"/gods/".concat(god.name, "/build")}
-              target="_blank"
-            >
+            <Link key={index} href={"/gods/".concat(god.name, "/build")}>
               <div className="box-border flex h-fit w-fit cursor-pointer flex-col items-center hover:text-sm hover:text-white">
                 <img
                   className="h-20 w-20 bg-neutral-900"

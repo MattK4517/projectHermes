@@ -1,13 +1,12 @@
 import { useQueries } from "@tanstack/react-query";
-import PageHeader from "../../../components/gods/PageHeader";
-import { GodContext } from "../../../components/gods/GodContext";
-import React, { useContext } from "react";
-import TabList from "../../../components/general/TabList";
-import Loading from "../../../components/general/Loading";
-import { GetServerSideProps } from "next";
-import { GodPagePropsType } from "./build";
 import { useRouter } from "next/router";
+import React, { useContext } from "react";
 import Filter from "../../../components/general/Filter";
+import Loading from "../../../components/general/Loading";
+import TabList from "../../../components/general/TabList";
+import { GodContext } from "../../../components/gods/GodContext";
+import PageHeader from "../../../components/gods/PageHeader";
+import { GodPagePropsType } from "./build";
 
 function GodIndex<NextPage>() {
   return <div></div>;
@@ -19,7 +18,7 @@ const GodPageLayout = ({
   children,
   defaultParams,
 }: {
-  children: any;
+  children: React.ReactNode;
   defaultParams: GodPagePropsType;
 }) => {
   const { god, tabs } = useContext(GodContext);

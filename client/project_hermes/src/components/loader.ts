@@ -40,6 +40,16 @@ export async function GodDefaultFilterLoader({
   return (await fetch(url + `/api/default_filter/${god}`)).json();
 }
 
+export async function TierListDefaultFilterLoader({
+  url,
+  type,
+}: {
+  url: string;
+  type: string;
+}) {
+  return (await fetch(url + `/api/default_filter/${type}`)).json();
+}
+
 export const RankIconLoader = (rank: string, mode: string) => {
   let url = "";
   if (rank == "Bronze" && mode === "Conquest") {
@@ -84,6 +94,22 @@ export const RankIconLoader = (rank: string, mode: string) => {
     url = "https://i.imgur.com/U8Ot31L.png";
   } else if (rank === "Grandmaster" && mode === "Duel") {
     url = "https://i.imgur.com/np7y6QP.png";
+  }
+  return url;
+};
+
+export const RoleIconLoader = (props: { src: string }) => {
+  let url: string = "";
+  if (props.src === "Solo") {
+    url = "https://i.imgur.com/WLU0Cel.png";
+  } else if (props.src === "Jungle") {
+    url = "https://i.imgur.com/CyXnzEO.png";
+  } else if (props.src === "Mid") {
+    url = "https://i.imgur.com/0oQkAAZ.png";
+  } else if (props.src === "Support") {
+    url = "https://i.imgur.com/l7CD2QM.png";
+  } else if (props.src === "Carry") {
+    url = "https://i.imgur.com/RlRTbrA.png";
   }
   return url;
 };

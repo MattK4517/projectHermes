@@ -1,25 +1,27 @@
-from generate_report import Report
-from carry_score_analytics import get_carry_score_averages
-from damage_calculator import calc_dps, calc_combo_damage_raw
-from bson import json_util
 import json
-import flaskHelper as fh
-from pyrez.api import SmiteAPI
-import pyrez
-from duo_tier_list import get_lanes
-from operator import getitem
-from collections import OrderedDict
-from main import client
-from flask import Flask, render_template, request
-from constants import godsDict, roles, id_dict, Tier_Three_items, Starter_items, patch
-import pandas as pd
-import analyze_players as anlzpy
-import analyze as anlz
-import re
-from re import L, M
-from queue import Empty
-from datetime import datetime
 import os
+import re
+from collections import OrderedDict
+from datetime import datetime
+from operator import getitem
+from queue import Empty
+from re import L, M
+
+import pandas as pd
+import pyrez
+from bson import json_util
+from flask import Flask, render_template, request
+from pyrez.api import SmiteAPI
+
+import analyze as anlz
+import analyze_players as anlzpy
+import flaskHelper as fh
+from carry_score_analytics import get_carry_score_averages
+from constants import Starter_items, Tier_Three_items, godsDict, id_dict, patch, roles
+from damage_calculator import calc_combo_damage_raw, calc_dps
+from duo_tier_list import get_lanes
+from generate_report import Report
+from main import client
 
 # from sklearn.linear_model import GammaRegressor
 # from flask_limiter import Limiter
@@ -126,7 +128,7 @@ def get_god_abilities(god):
 
 
 @app.route(
-    proxy_route + "/gettierlist/<rank>/<role>/<tableType>/<queue_type>/<patch>/<mode>",
+    proxy_route + "/gettierlist/<tableType>/<rank>/<role>/<queue_type>/<patch>/<mode>",
     methods=["GET", "POST"],
 )
 def get_tier_list(rank, role, tableType, queue_type, patch, mode):
@@ -579,16 +581,34 @@ def default_filter(god=""):
             "god": god,
             "role": godsDict[god],
             "rank": "All Ranks",
-            "patch": "10.2",
+            "patch": "10.3",
             "queueType": "Ranked",
             "mode": "Conquest",
         }
     else:
         return {
-            god: "",
             "role": "All Roles",
             "rank": "All Ranks",
-            "patch": "10.2",
+            "patch": "10.3",
             "queueType": "Ranked",
             "mode": "Conquest",
+            "type": god,
         }
+
+
+@app.route(proxy_route + "/get_last_update/<patch>")
+def last_update(patch):
+    ret_data = {"lastUpdate": "", "games": 0}
+    mydb = client["Tier_list"]
+    mycol = mydb["Combined List"]
+    for x in mycol.aggregate(
+        [
+            {"$match": {"patch": patch}},
+            {"$group": {"_id": "$Entry_Datetime", "sumGames": {"$sum": "$games"}}},
+            {"$sort": {"_id": 1}},
+        ]
+    ):
+        ret_data["lastUpdate"] = x["_id"]
+        ret_data["games"] += x["sumGames"]
+
+    return ret_data

@@ -11,6 +11,9 @@ export async function getGodPageData({
   type,
 }: GodPagePropsType & { type: string }) {
   const url = getBaseUrl();
+  console.log(
+    url + `/api/${type}/${god}/${role}/${rank}/${patch}/${queueType}/${mode}`
+  );
   return (
     await fetch(
       url + `/api/${type}/${god}/${role}/${rank}/${patch}/${queueType}/${mode}`

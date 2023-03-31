@@ -4,60 +4,6756 @@ generator client {
 
 datasource db {
   provider = "mongodb"
-  url      = env("GODDATABASE_URL")
+  url      = env("DATABASE_URL")
+}
+
+type Nine10ConquestCasualBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type Nine10ConquestRankedBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type Nine10DuelRankedBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type Nine10JoustCasualBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type Nine10JoustRankedBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type Nine11ConquestCasualBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type Nine11ConquestRankedBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type Nine11DuelRankedBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type Nine11JoustCasualBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type Nine11JoustRankedBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type Nine8ConquestCasualBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type Nine8ConquestRankedBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type Nine8DuelRankedBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type Nine8JoustCasualBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type Nine8JoustRankedBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type NineNineConquestCasualBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type NineNineConquestRankedBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type NineNineDuelRankedBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type NineNineJoustCasualBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type NineNineJoustRankedBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type AchillesBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type AgniBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type AhMuzenCabBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type AhPuchBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type AmaterasuBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type AnhurBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type AnubisBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type AoKuangBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type AphroditeBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type ApolloBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type ArachneBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type AresBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type ArtemisBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type ArtioBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type AthenaBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type AtlasBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type AwilixBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type BabaYagaBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type BacchusBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type BakasuraBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type BaronSamediBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type BastetBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type BellonaBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type CabrakanBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type CamazotzBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type CerberusBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type CernunnosBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type ChaacBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type ChangeBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type CharybdisBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type ChernobogBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type ChironBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type ChronosBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type CliodhnaBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type CthulhuBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type CuChulainnBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type CupidBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type DaJiBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type DanzaburouBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type DiscordiaBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type ErlangShenBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type EsetBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type FafnirBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type FenrirBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type FreyaBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type GaneshaBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type GebBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type GilgameshBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type GuanYuBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type HachimanBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type HadesBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type HeBoBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type HeimdallrBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type HelBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type HeraBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type HerculesBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type HorusBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type HouYiBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type HunBatzBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type IshtarBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type IzanamiBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type JanusBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type JingWeiBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type JormungandrBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type KaliBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type KhepriBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type KingArthurBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type KukulkanBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type KumbhakarnaBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type KuzenboBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type LancelotBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type LokiBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type MartichorasBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type MauiBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type MedusaBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type MercuryBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type MerlinBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type MorganLeFayBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type MulanBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type NeZhaBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type NeithBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type NemesisBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type NikeBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type NoxBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type NuWaBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type OdinBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type OlorunBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type OsirisBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type PeleBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type PersephoneBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type PoseidonBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type RaBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type RaijinBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type RamaBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type RatatoskrBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type RavanaBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type ScyllaBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type SerqetBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type SetBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type ShivaBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type SkadiBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type SobekBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type SolBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type SunWukongBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type SurtrBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type SusanoBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type SylvanusBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type TerraBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type ThanatosBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type TheMorriganBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type ThorBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type ThothBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type TiamatBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type TsukuyomiBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type TyrBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type UllrBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type VamanaBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type VulcanBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type XbalanqueBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type XingTianBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type YemojaBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type YmirBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type YuHuangBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type ZeusBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+type ZhongKuiBuild {
+  relic1 String
+  relic2 String
+  relic3 String
+  relic4 String
+  slot1  String
+  slot2  String
+  slot3  String
+  slot4  String
+  slot5  String
+  slot6  String
+}
+
+model Conquest_Casual {
+  id                String                    @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             Nine10ConquestCasualBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+
+  @@map("Nine10-Conquest-Casual")
+}
+
+model Conquest_Ranked {
+  id                String                    @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             Nine10ConquestRankedBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+
+  @@map("Nine10-Conquest-Ranked")
+}
+
+model Duel_Ranked {
+  id                String                @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             Nine10DuelRankedBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+
+  @@map("Nine10-Duel-Ranked")
+}
+
+model Joust_Casual {
+  id                String                 @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             Nine10JoustCasualBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+
+  @@map("Nine10-Joust-Casual")
+}
+
+model Joust_Ranked {
+  id                String                 @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             Nine10JoustRankedBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+
+  @@map("Nine10-Joust-Ranked")
 }
 
 model Achilles {
-  id                         String @id @default(auto()) @map("_id") @db.ObjectId
-  Ability1                   String
-  Ability2                   String
-  Ability3                   String
-  Ability4                   String
-  Ability5                   String
-  AbilityId1                 Int
-  AbilityId2                 Int
-  AbilityId3                 Int
-  AbilityId4                 Int
-  AbilityId5                 Int
-  AttackSpeed                Float
-  AttackSpeedPerLevel        Float
-  AutoBanned                 String
-  Cons                       String
-  HP5PerLevel                Float
-  Health                     Int
-  HealthPerFive              Int
-  HealthPerLevel             Int
-  Lore                       String
-  MP5PerLevel                Float
-  /// Multiple data types found: Float: 40%, Int: 60% out of 5 sampled entries
-  MagicProtection            Json
-  MagicProtectionPerLevel    Float
-  MagicalPower               Int
-  MagicalPowerPerLevel       Int
-  Mana                       Int
-  ManaPerFive                Float
-  ManaPerLevel               Int
-  Name                       String
-  OnFreeRotation             String
-  Pantheon                   String
-  PhysicalPower              Int
-  PhysicalPowerPerLevel      Int
-  PhysicalProtection         Float
-  PhysicalProtectionPerLevel Float
-  Pros                       String
-  Roles                      String
-  Speed                      Int
-  Title                      String
-  Type                       String
-  godAbility1_URL            String
-  godAbility2_URL            String
-  godAbility3_URL            String
-  godAbility4_URL            String
-  godAbility5_URL            String
-  godCard_URL                String
-  godIcon_URL                String
-  id_                        Int    @map("id")
-  latestGod                  String
-  /// Could not determine type: the field only had null or empty values in the sample set.
-  ret_msg                    Json?
+  id                String        @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             AchillesBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Agni {
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             AgniBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Ah_Muzen_Cab {
+  id                String          @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             AhMuzenCabBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+
+  @@map("Ah Muzen Cab")
+}
+
+model Ah_Puch {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             AhPuchBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+
+  @@map("Ah Puch")
+}
+
+model Amaterasu {
+  id                String         @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             AmaterasuBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Anhur {
+  id                String     @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             AnhurBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Anubis {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             AnubisBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Ao_Kuang {
+  id                String       @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             AoKuangBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+
+  @@map("Ao Kuang")
+}
+
+model Aphrodite {
+  id                String         @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             AphroditeBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Apollo {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             ApolloBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Arachne {
+  id                String       @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             ArachneBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Ares {
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             AresBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Artemis {
+  id                String       @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             ArtemisBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Artio {
+  id                String     @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             ArtioBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Athena {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             AthenaBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Atlas {
+  id                String     @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             AtlasBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Awilix {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             AwilixBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Baba_Yaga {
+  id                String        @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             BabaYagaBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+
+  @@map("Baba Yaga")
+}
+
+model Bacchus {
+  id                String       @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             BacchusBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Bakasura {
+  id                String        @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             BakasuraBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Baron_Samedi {
+  id                String           @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             BaronSamediBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+
+  @@map("Baron Samedi")
+}
+
+model Bastet {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             BastetBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Bellona {
+  id                String       @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             BellonaBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Cabrakan {
+  id                String        @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             CabrakanBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Camazotz {
+  id                String        @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             CamazotzBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Cerberus {
+  id                String        @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             CerberusBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Cernunnos {
+  id                String         @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             CernunnosBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Chaac {
+  id                String     @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             ChaacBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Change {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             ChangeBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+
+  @@map("Change")
+}
+
+model Charybdis {
+  id                String         @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             CharybdisBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Chernobog {
+  id                String         @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             ChernobogBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Chiron {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             ChironBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Chronos {
+  id                String       @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             ChronosBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Cliodhna {
+  id                String        @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             CliodhnaBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Cthulhu {
+  id                String       @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             CthulhuBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Cu_Chulainn {
+  id                String          @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             CuChulainnBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+
+  @@map("Cu Chulainn")
+}
+
+model Cupid {
+  id                String     @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             CupidBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Da_Ji {
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             DaJiBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+
+  @@map("Da Ji")
+}
+
+model Danzaburou {
+  id                String          @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             DanzaburouBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Discordia {
+  id                String         @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             DiscordiaBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Erlang_Shen {
+  id                String          @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             ErlangShenBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+
+  @@map("Erlang Shen")
+}
+
+model Eset {
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             EsetBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Fafnir {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             FafnirBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Fenrir {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             FenrirBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Freya {
+  id                String     @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             FreyaBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Ganesha {
+  id                String       @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             GaneshaBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Geb {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             GebBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Gilgamesh {
+  id                String         @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             GilgameshBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Guan_Yu {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             GuanYuBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+
+  @@map("Guan Yu")
+}
+
+model Hachiman {
+  id                String        @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             HachimanBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Hades {
+  id                String     @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             HadesBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model He_Bo {
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             HeBoBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+
+  @@map("He Bo")
+}
+
+model Heimdallr {
+  id                String         @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             HeimdallrBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Hel {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             HelBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Hera {
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             HeraBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Hercules {
+  id                String        @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             HerculesBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Horus {
+  id                String     @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             HorusBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Hou_Yi {
+  id                String     @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             HouYiBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+
+  @@map("Hou Yi")
+}
+
+model Hun_Batz {
+  id                String       @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             HunBatzBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+
+  @@map("Hun Batz")
+}
+
+model Ishtar {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             IshtarBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Izanami {
+  id                String       @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             IzanamiBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Janus {
+  id                String     @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             JanusBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Jing_Wei {
+  id                String       @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             JingWeiBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+
+  @@map("Jing Wei")
+}
+
+model Jormungandr {
+  id                String           @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             JormungandrBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Kali {
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             KaliBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Khepri {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             KhepriBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model King_Arthur {
+  id                String          @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             KingArthurBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+
+  @@map("King Arthur")
+}
+
+model Kukulkan {
+  id                String        @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             KukulkanBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Kumbhakarna {
+  id                String           @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             KumbhakarnaBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Kuzenbo {
+  id                String       @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             KuzenboBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Lancelot {
+  id                String        @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             LancelotBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Loki {
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             LokiBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Martichoras {
+  id                String           @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             MartichorasBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Maui {
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             MauiBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Medusa {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             MedusaBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Mercury {
+  id                String       @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             MercuryBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Merlin {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             MerlinBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Morgan_Le_Fay {
+  id                String           @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             MorganLeFayBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+
+  @@map("Morgan Le Fay")
+}
+
+model Mulan {
+  id                String     @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             MulanBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Ne_Zha {
+  id                String     @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             NeZhaBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+
+  @@map("Ne Zha")
+}
+
+model Neith {
+  id                String     @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             NeithBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Nemesis {
+  id                String       @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             NemesisBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Nike {
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             NikeBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Nox {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             NoxBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Nu_Wa {
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             NuWaBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+
+  @@map("Nu Wa")
+}
+
+model Odin {
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             OdinBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Olorun {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             OlorunBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Osiris {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             OsirisBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Pele {
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             PeleBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Persephone {
+  id                String          @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             PersephoneBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Poseidon {
+  id                String        @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             PoseidonBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Ra {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             RaBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Raijin {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             RaijinBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Rama {
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             RamaBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Ratatoskr {
+  id                String         @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             RatatoskrBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Ravana {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             RavanaBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Scylla {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             ScyllaBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Serqet {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             SerqetBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Set {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             SetBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Shiva {
+  id                String     @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             ShivaBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Skadi {
+  id                String     @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             SkadiBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Sobek {
+  id                String     @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             SobekBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Sol {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             SolBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Sun_Wukong {
+  id                String         @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             SunWukongBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+
+  @@map("Sun Wukong")
+}
+
+model Surtr {
+  id                String     @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             SurtrBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Susano {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             SusanoBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Sylvanus {
+  id                String        @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             SylvanusBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Terra {
+  id                String     @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             TerraBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Thanatos {
+  id                String        @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             ThanatosBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model The_Morrigan {
+  id                String           @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             TheMorriganBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+
+  @@map("The Morrigan")
+}
+
+model Thor {
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             ThorBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Thoth {
+  id                String     @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             ThothBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Tiamat {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             TiamatBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Tsukuyomi {
+  id                String         @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             TsukuyomiBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Tyr {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             TyrBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Ullr {
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             UllrBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Vamana {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             VamanaBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Vulcan {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             VulcanBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Xbalanque {
+  id                String         @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             XbalanqueBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Xing_Tian {
+  id                String        @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             XingTianBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+
+  @@map("Xing Tian")
+}
+
+model Yemoja {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             YemojaBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Ymir {
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             YmirBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Yu_Huang {
+  id                String       @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             YuHuangBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+
+  @@map("Yu Huang")
+}
+
+model Zeus {
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             ZeusBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+}
+
+model Zhong_Kui {
+  id                String        @id @default(auto()) @map("_id") @db.ObjectId
+  Entry_Datetime    String
+  assists           Int
+  build             ZhongKuiBuild
+  camps_cleared     Int
+  damage_bot        Int
+  damage_mitigated  Int
+  damage_player     Int
+  damage_taken      Int
+  deaths            Int
+  enemies           String[]
+  enemy             String
+  god               String
+  gold              Int
+  healing           Int
+  healing_self      Int
+  input_type        String
+  kills             Int
+  kills_bot         Int
+  matchId           Int
+  mode              String
+  objective_assists Int
+  patch             String
+  phoenix_kills     Int
+  player            String
+  queue_type        String
+  rank              String
+  role              String
+  skin              String
+  time              Int
+  tower_damage      Int
+  tower_kills       Int
+  wards_placed      Int
+  win_status        String
+
+  @@map("Zhong Kui")
 }

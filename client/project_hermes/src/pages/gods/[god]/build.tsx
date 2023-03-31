@@ -75,7 +75,6 @@ function BuildPage(props: {
 export default BuildPage;
 
 export const getStaticPaths = async () => {
-  console.log(linkDict);
   return {
     paths: Object.keys(linkDict).map((god) => {
       return { params: { god: god } };
@@ -128,47 +127,3 @@ export const getStaticProps: GetStaticProps = async (context) => {
     revalidate: 3600,
   };
 };
-
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//   const queryClient = {
-//     godWinRate: new QueryClient(),
-//     godMatchups: new QueryClient(),
-//     godBuild: new QueryClient(),
-//   };
-
-//   const { god } = context.params;
-
-//   let url = getBaseUrl();
-//   const defaultParams: GodPagePropsType = await GodDefaultFilterLoader({
-//     url,
-//     god,
-//   });
-
-//   await queryClient.godWinRate.prefetchQuery<GodWinRateType>(
-//     ["god-winrate", defaultParams],
-//     () => getGodPageData({ ...defaultParams, type: "main" })
-//   );
-//   await queryClient.godMatchups.prefetchQuery(
-//     ["god-matchups", defaultParams],
-//     () => getGodPageData({ ...defaultParams, type: "matchups" })
-//   );
-//   await queryClient.godBuild.prefetchQuery<Build>(
-//     ["god-build", defaultParams],
-//     () => getGodPageData({ ...defaultParams, type: "build" })
-//   );
-
-//   return {
-//     props: {
-//       dehydratedState: {
-//         godWinRate: JSON.parse(
-//           JSON.stringify(dehydrate(queryClient.godWinRate))
-//         ),
-//         godMatchups: JSON.parse(
-//           JSON.stringify(dehydrate(queryClient.godMatchups))
-//         ),
-//         godBuild: JSON.parse(JSON.stringify(dehydrate(queryClient.godBuild))),
-//         defaultParams,
-//       },
-//     },
-//   };
-// };

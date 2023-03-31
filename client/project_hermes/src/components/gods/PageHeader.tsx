@@ -53,7 +53,7 @@ const PageHeader = ({
             <div className="relative h-full w-full ">
               <div className="relative h-full w-full overflow-hidden rounded-md border-2 border-card">
                 <div className="notch-border absolute left-1/2"></div>
-                <div className="god-image">
+                <div className="god-image object-cover">
                   <Image
                     src={defaultParams.god
                       .replaceAll("'", "")
@@ -61,8 +61,7 @@ const PageHeader = ({
                       .toLowerCase()}
                     alt={defaultParams.god}
                     loader={GodIconLoader}
-                    layout="fill"
-                    objectFit="cover"
+                    fill={true}
                   />
                 </div>
               </div>
@@ -146,17 +145,15 @@ export function GodAbilities(props: { abilities: Ability[] }) {
         return (
           <Popover key={index}>
             <Popover.Button
-              className="relative flex"
+              className="relative flex h-9 w-9 object-cover"
               style={{ marginRight: "6px" }}
             >
               <Image
                 src={ability.URL}
                 alt={ability.Summary + "Icon"}
                 loader={GodAbilityIconLoader}
-                layout="fixed"
-                width={36}
-                height={36}
-                className="fixed h-auto w-auto flex-shrink-0 rounded-sm "
+                fill={true}
+                className="fixed flex-shrink-0 rounded-sm "
               />
 
               <div className="ability-label bottom-center">{text}</div>

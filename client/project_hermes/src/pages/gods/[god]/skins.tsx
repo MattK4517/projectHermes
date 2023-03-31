@@ -1,5 +1,4 @@
 import { QueryClient, useQuery } from "@tanstack/react-query";
-import { constants } from "http2";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useContext, useMemo } from "react";
@@ -76,7 +75,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const { god } = context.params;
 
-  constants url = getBaseUrl();
+  const url = getBaseUrl();
   const defaultParams: GodPagePropsType = await GodDefaultFilterLoader({
     url,
     god,

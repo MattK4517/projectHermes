@@ -1,6 +1,6 @@
+import Image from "next/image";
 import { useSortBy, useTable } from "react-table";
 import { ItemIconLoader } from "../../loader";
-import Image from "next/image";
 
 function LargeItemTable({ columns, data, totalItemCount, slot }) {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
@@ -63,7 +63,7 @@ function LargeItemTable({ columns, data, totalItemCount, slot }) {
                 loader={ItemIconLoader}
                 width={36}
                 height={36}
-                className="rounded-md border-4 border-purple-800"
+                className="rounded-md border-2 border-slate-500"
               />
               <div className="mx-1.5 flex min-w-fit flex-col lg:mx-0 lg:hidden">
                 <span style={{ fontSize: "11px", fontWeight: "700" }}>
