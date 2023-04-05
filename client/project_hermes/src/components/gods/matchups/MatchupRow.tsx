@@ -1,5 +1,4 @@
 import { god } from "../../../models/gods/gods.model";
-import { GodPagePropsType } from "../../../pages/gods/[god]/build";
 import Loading from "../../general/Loading";
 import SingleMatchupDisplay from "./SingleMatchupDisplay";
 
@@ -17,7 +16,6 @@ export interface IMatchupRowProps {
   god: god;
   role: string;
   displayType: "counters" | "countered";
-  defaultParams: GodPagePropsType;
 }
 
 const MatchupRow = ({ matchups, god, role, displayType }: IMatchupRowProps) => {

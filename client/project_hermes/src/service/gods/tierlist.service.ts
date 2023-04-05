@@ -13,12 +13,13 @@ export async function getTierListData({
   queueType,
   mode,
   type,
-}: GodPagePropsType & { type: string }) {
+  page,
+}: GodPagePropsType & { type: string; page: number }) {
   const url = getBaseUrl();
   return (
     await fetch(
       url +
-        `/api/gettierlist/${type}/${rank}/${role}/${queueType}/${patch}/${mode}`
+        `/api/gettierlist/${type}/${rank}/${role}/${queueType}/${patch}/${mode}/${page}`
     )
   ).json();
 }

@@ -1,143 +1,205 @@
 import {
+  ColumnDef,
+  flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
   getSortedRowModel,
   SortingState,
-  useReactTable
+  useReactTable,
 } from "@tanstack/react-table";
-import Image from "next/image";
-import React from "react";
-import IconName from "../general/IconName";
+import React, { useEffect, useState } from "react";
+import { GodPagePropsType } from "../../pages/gods/[god]/build";
 import Loading from "../general/Loading";
-import { getWinRateColor } from "../gods/GodHelpers";
-import GodIconLoader, { RoleIconLoader } from "../loader";
 
-function TierListTable({ columns, data, loading }) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+export default function TierListTable({
+  tableData = {},
+  columns,
+  defaultParams,
+  type,
+  rowDivStyling,
+  defaultSort,
+  loading,
+}: {
+  tableData: any;
+  columns: ColumnDef<any, any>[];
+  defaultParams: GodPagePropsType;
+  type: string;
+  rowDivStyling: string;
+  defaultSort: SortingState;
+  loading: string;
+}) {
+  console.log(tableData);
+  const [data, setData] = useState([...tableData]);
 
-  const { getTableBodyProps, headerGroups, rows, prepareRow } = useReactTable({
+  useEffect(() => {
+    setData([...tableData]);
+  }, [tableData]);
+
+  const [sorting, setSorting] = React.useState<SortingState>(defaultSort);
+
+  const table = useReactTable({
+    data: data || [],
     columns,
-    data,
-    initialState: {
-      // @ts-ignore
-      sortBy: [
-        {
-          id: "games",
-          desc: true,
-        },
-      ],
-      hiddenColumns: ["rank"],
-    },
     state: {
       sorting,
     },
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
-  console.log(data);
+
   return (
+    <div className="w-fit rounded-md bg-card50 p-4 text-xs text-lightBlue sm:text-sm">
+      <div className="pb-4 text-lightBlue">
+        <div>
+          <div className="nav-border-bottom pb-5">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <div key={headerGroup.id} className="flex justify-center">
+                {headerGroup.headers.map((header) => (
+                  <div
+                    className={`${
+                      header.id === "counterMatchups"
+                        ? "hidden md:flex"
+                        : "flex"
+                    } justify-center text-white`}
+                    {...{
+                      key: header.id,
+                      colSpan: header.colSpan,
+                      style: {
+                        width: header.getSize(),
+                      },
+                    }}
+                  >
+                    {header.isPlaceholder ? null : (
+                      <div
+                        {...{
+                          className: header.column.getCanSort()
+                            ? "cursor-pointer select-none flex justify-center"
+                            : "",
+                          onClick: header.column.getToggleSortingHandler(),
+                        }}
+                      >
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                        {{
+                          asc: " 🔼",
+                          desc: " 🔽",
+                        }[header.column.getIsSorted() as string] ?? null}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+          <div className={rowDivStyling}>
+            {loading ? (
+              <div className="flex justify-center py-2">
+                <Loading width={24} height={24} />
+              </div>
+            ) : (
+              table.getRowModel().rows.map((row, i) => (
+                <div
+                  key={row.id}
+                  className={`flex rounded-lg py-2 ${
+                    i % 2 !== 0 ? "bg-darkBlue" : ""
+                  }`}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <div
+                      className={`${
+                        cell.column.id === "counterMatchups"
+                          ? "hidden w-0 md:flex"
+                          : "flex"
+                      } items-center justify-center`}
+                      {...{
+                        key: cell.id,
+                        style: {
+                          width: cell.column.getSize(),
+                        },
+                      }}
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
+      <div className="flex items-center justify-end gap-2">
+        <button
+          className="rounded border p-1 text-white"
+          onClick={() => table.setPageIndex(0)}
+          disabled={!table.getCanPreviousPage()}
+        >
+          {"<<"}
+        </button>
+        <button
+          className="rounded border p-1 text-white"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          {"<"}
+        </button>
+        <button
+          className="rounded border p-1 text-white"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          {">"}
+        </button>
+        <button
+          className="rounded border p-1 text-white"
+          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+          disabled={!table.getCanNextPage()}
+        >
+          {">>"}
+        </button>
+        <span className="flex items-center gap-1">
+          <div>Page</div>
+          <span className="text-bold text-sm">
+            {table.getState().pagination.pageIndex + 1} of{" "}
+            {table.getPageCount()}
+          </span>
+        </span>
+        <span className="flex items-center gap-1">
+          | Go to page:
+          <input
+            type="number"
+            defaultValue={table.getState().pagination.pageIndex + 1}
+            onChange={(e) => {
+              const page = e.target.value ? Number(e.target.value) - 1 : 0;
+              table.setPageIndex(page);
+            }}
+            className="w-16 rounded border bg-darkBlue p-1 text-lightBlue"
+          />
+        </span>
+        <select
+          className="rounded-sm bg-card p-1"
+          value={table.getState().pagination.pageSize}
+          onChange={(e) => {
+            table.setPageSize(Number(e.target.value));
+          }}
+        >
+          {[10, 20, 30, 40, 50].map((pageSize) => (
+            <option
+              key={pageSize}
+              value={pageSize}
+              className="bg-darkBlue text-lightBlue"
+            >
+              Show {pageSize}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
   );
 }
-
-export default TierListTable;
-
-
-
-{/* <div>
-<div className="min-w-full rounded-md bg-card50 p-4 text-xs text-lightBlue sm:text-sm">
-  <div className="pb-4 text-white">
-    {headerGroups.map((headerGroup) => (
-      <tr
-        className="flex items-center justify-center"
-        {...headerGroup.getHeaderGroupProps()}
-      >
-        {headerGroup.headers.map((column) => (
-          // Add the sorting props to control sorting. For this example
-          // we can add them into the header props
-          <th
-            className="flex-1"
-            {...column.getHeaderProps(column.getSortByToggleProps())}
-          >
-            {column.render("Header")}
-            {/* Add a sort direction indicator */}
-            <span>
-              {column.isSorted
-                ? column.isSortedDesc
-                  ? " 🔽"
-                  : " 🔼"
-                : ""}
-            </span>
-          </th>
-        ))}
-      </tr>
-    ))}
-  </div>
-  <div
-    className="border border-gray-400"
-    style={{ borderBottomWidth: "1px" }}
-  />
-  {loading ? (
-    <div className="flex w-full items-center justify-center pt-4">
-      <Loading width={24} height={24} />
-    </div>
-  ) : (
-    <div {...getTableBodyProps()} className="pt-4">
-      {rows.map((row, i) => {
-        prepareRow(row);
-        return (
-          <tr
-            {...row.getRowProps()}
-            className={`flex  ${i % 2 !== 0 ? "bg-darkBlue" : ""}`}
-          >
-            {row.cells.map((cell) => {
-              if (cell.column.Header?.toString() === "God") {
-                return (
-                  <div className="min-w-fit flex-1">
-                    <IconName
-                      displayIcon={row.values.god}
-                      loader={GodIconLoader}
-                      width={36}
-                      height={36}
-                    />
-                  </div>
-                );
-              } else if (cell.column.Header?.toString() === "Role") {
-                return (
-                  <div className="flex min-w-fit flex-1 justify-center">
-                    <Image
-                      src={row.values.role}
-                      loader={RoleIconLoader}
-                      width={36}
-                      height={36}
-                      alt={`${row.values.role} icon`}
-                    />
-                  </div>
-                );
-              }
-              return (
-                <td
-                  style={
-                    cell.column.Header?.toString() === "Win Rate"
-                      ? { color: getWinRateColor(cell.value) }
-                      : {}
-                  }
-                  {...cell.getCellProps()}
-                  className={`flex flex-1 content-center items-center justify-center 
-                `}
-                >
-                  {cell.render("Cell")}
-                  {["Win Rate", "Pick Rate"].indexOf(
-                    cell.column.Header?.toString()
-                  ) !== -1
-                    ? "%"
-                    : ""}
-                </td>
-              );
-            })}
-          </tr>
-        );
-      })}
-    </div>
-  )}
-</div>
-</div> */}

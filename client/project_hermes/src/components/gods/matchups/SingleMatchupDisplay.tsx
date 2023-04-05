@@ -7,11 +7,8 @@ export type MatchupDisplayType = {
   winRate: number;
   wins: number;
 };
-export interface IMatchupDisplayProps {
-  matchup: MatchupDisplayType;
-}
 
-const SingleMatchupDisplay = ({ matchup }: IMatchupDisplayProps) => {
+const SingleMatchupDisplay = ({ matchup }: { matchup: MatchupDisplayType }) => {
   return (
     <Link href={`/gods/${matchup.enemy}/build`} target="_blank">
       <div

@@ -1,11 +1,13 @@
 import { useQueries } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import React, { useContext } from "react";
-import Filter from "../../../components/general/Filter";
+import React, { useContext, useEffect } from "react";
+import FilterListContainer from "../../../components/general/FilterList";
+import { GenericFilterList } from "../../../components/general/GenericObejcts";
 import Loading from "../../../components/general/Loading";
 import TabList from "../../../components/general/TabList";
 import { GodContext } from "../../../components/gods/GodContext";
 import PageHeader from "../../../components/gods/PageHeader";
+import { god } from "../../../models/gods/gods.model";
 import { GodPagePropsType } from "./build";
 
 function GodIndex<NextPage>() {
@@ -21,7 +23,33 @@ const GodPageLayout = ({
   children: React.ReactNode;
   defaultParams: GodPagePropsType;
 }) => {
-  const { god, tabs } = useContext(GodContext);
+  const { god, tabs, filterList, setFilterList } = useContext(GodContext);
+  let tempFilterList = [
+    ...GenericFilterList,
+    {
+      filterValue: "mode",
+      defaultValue: "Conquest",
+      enabled: true,
+      filterOptions: [
+        { optionName: "Duel", optionUrl: "https://i.imgur.com/KsoBoLs.png" },
+        {
+          optionName: "Conquest",
+          optionUrl: "https://i.imgur.com/tydY7sr.png",
+        },
+        { optionName: "Joust", optionUrl: "https://i.imgur.com/LVbUJes.png" },
+      ],
+    },
+  ];
+  tempFilterList = tempFilterList.map((filter) => {
+    return {
+      ...filter,
+      defaultValue: defaultParams[filter.filterValue as keyof GodPagePropsType],
+    };
+  });
+
+  useEffect(() => {
+    setFilterList(tempFilterList);
+  }, []);
 
   const godPageQueries = useQueries({
     queries: [
@@ -37,7 +65,6 @@ const GodPageLayout = ({
       },
     ],
   });
-  let { filterList, setFilterList } = useContext(GodContext);
 
   const isLoading = godPageQueries.some((query) => query.isLoading);
   const isError = godPageQueries.some((query) => query.error);
@@ -67,14 +94,9 @@ const GodPageLayout = ({
               godData={data[1]}
               godAbilities={data[0]}
               god={god}
-              defaultParams={defaultParams}
             ></GodPageHeader>
             <TabList {...tabs} />
-            <Filter
-              filterList={filterList}
-              setFilterList={setFilterList}
-              defaultParams={defaultParams}
-            />
+            <FilterListContainer />
             {children}
           </div>
         </div>
@@ -85,19 +107,18 @@ const GodPageLayout = ({
 
 const GodPageHeader: React.FC = (props: {
   godAbilities: any;
-  god: any;
+  god: god;
   godData: any;
-  defaultParams: GodPagePropsType;
 }) => {
   const router = useRouter();
   const path = router.asPath.split("/")[3]?.replaceAll("-", " ") || "";
   return (
     <PageHeader
+      god={props.god}
       abilities={props.godAbilities}
       tier={"D"}
       tab={path.charAt(0).toUpperCase() + path.slice(1)}
       godData={props.godData}
-      defaultParams={props.defaultParams}
     />
   );
 };

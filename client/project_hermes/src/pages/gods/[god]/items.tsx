@@ -3,7 +3,6 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useContext } from "react";
 import { GodPageLayout } from ".";
-import Filter from "../../../components/general/Filter";
 import Loading from "../../../components/general/Loading";
 import { GodContext } from "../../../components/gods/GodContext";
 import LargeItemRow from "../../../components/gods/items/LargeItemRow";
@@ -32,7 +31,7 @@ function ItemsPage(props: {
   return (
     <GodPageLayout defaultParams={props.dehydratedState.defaultParams}>
       <div
-        className={`flex flex-row text-white ${
+        className={`grid max-w-full grid-flow-row grid-cols-1 gap-2 text-white lg:grid-cols-2 ${
           isLoading ? "items-center justify-center" : ""
         }`}
       >

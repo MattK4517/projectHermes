@@ -1,5 +1,4 @@
 import { tier } from "../../../models/gods/gods.model";
-import { GodPagePropsType } from "../../../pages/gods/[god]/build";
 import { getTierColor, getWinRateColor } from "../GodHelpers";
 
 export type WinRateStatsType = {
@@ -13,7 +12,6 @@ export type WinRateStatsType = {
 
 export interface IWinRateStats {
   winRateStats: WinRateStatsType;
-  defaultParams: GodPagePropsType;
 }
 
 const WinRateStats = ({ winRateStats }: IWinRateStats): JSX.Element => {

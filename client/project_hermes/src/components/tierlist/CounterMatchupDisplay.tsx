@@ -1,43 +1,63 @@
+import Image from "next/image";
 import Link from "next/link";
+import { god } from "../../models/gods/gods.model";
+import GodIconLoader from "../loader";
 
-const CounterMatchupDisplay = (props: {
-  matchups: { [s: string]: unknown } | ArrayLike<unknown>;
-}) => {
+const sortMatchups = (a, b) => {
+  if (a.winRate > b.winRate) {
+    return 1;
+  } else if (a.winRate === b.winRate) {
+    return 0;
+  } else {
+    return -1;
+  }
+};
+
+type MatchupType = {
+  banRate: number;
+  games: number;
+  god: god;
+  patch: string;
+  pickRate: number;
+  rank: string;
+  role: string;
+  winRate: number;
+  counterMatchups: {
+    enemy: god;
+    games: number;
+    winRate: number;
+    wins: number;
+  }[];
+};
+
+const CounterMatchupDisplay = ({ props }: { props: MatchupType[] }) => {
   return (
-    <div className="against-container">
-      {Object.values(props.matchups)
+    <div className="flex">
+      {Object.values(props)
         .sort(sortMatchups)
         .map((matchup, index) => {
           if (index < 9) {
             let routegod = matchup.enemy.replaceAll(" ", "_");
             let styling;
-            if (matchup.winRate > 50) {
-              styling = { height: "24px", width: "24px" };
-            } else {
+            if (matchup.winRate < 50) {
               styling = {
-                height: "24px",
-                width: "24px",
                 opacity: ".4",
-                filter: "grayscale(100%)",
+                filter: `grayscale(${100 - matchup.winRate}%)`,
               };
             }
             return (
-              <div className="against" key={index}>
-                <Link to={"/".concat(routegod)}>
+              <div className="flex px-0.5" key={index}>
+                <Link href={"/gods/".concat(routegod, "/build")}>
                   <div className="god-face" style={{ maxWidth: "100px" }}>
                     <div>
-                      <img
-                        src={`https://webcdn.hirezstudios.com/smite/god-icons/${matchup.enemy
-                          .toLowerCase()
-                          .replaceAll("'", "")
-                          .replaceAll(" ", "-")}.jpg`}
-                        alt={`https://webcdn.hirezstudios.com/smite/god-icons/${matchup.enemy
-                          .toLowerCase()
-                          .replaceAll("'", "")
-                          .replaceAll(" ", "-")}.jpg`}
+                      <Image
+                        src={matchup.enemy}
+                        loader={GodIconLoader}
+                        width={36}
+                        height={36}
                         style={styling}
-                        loading="lazy"
-                      ></img>
+                        alt={matchup.enemy}
+                      />
                     </div>
                   </div>
                 </Link>

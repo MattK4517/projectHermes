@@ -1,8 +1,17 @@
 import { Popover } from "@headlessui/react";
 import Image from "next/image";
-import { Ability, GodData, MenuItem, tier } from "../../models/gods/gods.model";
+import { useContext } from "react";
+import {
+  Ability,
+  GodData,
+  MenuItem,
+  god,
+  tier,
+} from "../../models/gods/gods.model";
 import { GodPagePropsType } from "../../pages/gods/[god]/build";
+import { getDefaultParams } from "../general/getDefaultParams";
 import GodIconLoader, { GodAbilityIconLoader } from "../loader";
+import { GodContext } from "./GodContext";
 import { getPantheonIcon, getTierColor } from "./GodHelpers";
 
 const getMessage = (
@@ -26,7 +35,7 @@ interface PageHeaderProps {
   tab: string;
   abilities: Ability[];
   godData: GodData;
-  defaultParams: GodPagePropsType;
+  god: god;
 }
 
 const PageHeader = ({
@@ -34,8 +43,11 @@ const PageHeader = ({
   tab,
   abilities,
   godData,
-  defaultParams,
+  god,
 }: PageHeaderProps) => {
+  const { filterList, setFilterList } = useContext(GodContext);
+  const defaultParams: Partial<GodPagePropsType> = getDefaultParams(filterList);
+
   return (
     <div className="mb-6 w-full text-white" id="god-page-header">
       <div className="flex w-full items-center" id="god-header-wrap">
@@ -55,11 +67,11 @@ const PageHeader = ({
                 <div className="notch-border absolute left-1/2"></div>
                 <div className="god-image object-cover">
                   <Image
-                    src={defaultParams.god
+                    src={god
                       .replaceAll("'", "")
                       .replaceAll(" ", "-")
                       .toLowerCase()}
-                    alt={defaultParams.god}
+                    alt={god}
                     loader={GodIconLoader}
                     fill={true}
                   />
@@ -74,7 +86,7 @@ const PageHeader = ({
             >
               <div className="flex flex-grow flex-col">
                 <span className="text-2xl font-bold text-darkPurple">
-                  {defaultParams.god} - {godData.Title}
+                  {god} - {godData.Title}
                 </span>
                 <span>{godData.Roles}</span>
                 <span>{godData.Pros}</span>
@@ -83,7 +95,7 @@ const PageHeader = ({
               <div id="panth-wrapper" className="w-fit">
                 <img
                   src={getPantheonIcon(godData.Pantheon)}
-                  alt={defaultParams.god + "pantheon icon"}
+                  alt={god + "pantheon icon"}
                   className="h-16 w-16"
                 />
                 <span>{godData.Pantheon}</span>
@@ -98,7 +110,7 @@ const PageHeader = ({
         <div className="ml-6 flex h-full min-w-0 flex-1 flex-col justify-between">
           <h3 className="mb-2 text-xl text-lightBlue">
             <span>
-              <b style={{ color: "white" }}>{defaultParams.god}</b>
+              <b style={{ color: "white" }}>{god}</b>
             </span>
             <span>
               &nbsp;{tab} for{" "}
@@ -115,9 +127,9 @@ const PageHeader = ({
               <GodAbilities abilities={abilities} />
             </div>
             <div className="hidden pr-3 pt-3 text-xs font-medium text-lightBlue sm:block sm:pt-0">
-              The best win rate {defaultParams.god} build. The best and worst
-              matchups for {defaultParams.god} and anything else you need,{" "}
-              {defaultParams.rank} Smite Patch {defaultParams.patch}
+              The best win rate {god} build. The best and worst matchups for{" "}
+              {god} and anything else you need, {defaultParams.rank} Smite Patch{" "}
+              {defaultParams.patch}
             </div>
           </div>
         </div>

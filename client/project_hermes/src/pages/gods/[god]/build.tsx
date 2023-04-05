@@ -32,8 +32,9 @@ function BuildPage(props: {
   };
 }) {
   const router = useRouter();
-  let { god, setGod } = useContext(GodContext);
+  let { god, setGod, filterList } = useContext(GodContext);
   if (router.query?.god) setGod(router.query.god);
+
   return (
     <GodPageLayout defaultParams={props.dehydratedState.defaultParams}>
       <WinRateStats
@@ -41,16 +42,17 @@ function BuildPage(props: {
           ...props.dehydratedState.godWinRate.queries[0].state.data,
           queueType: "Ranked",
         }}
-        defaultParams={props.dehydratedState.defaultParams}
       />
       <MatchupRow
         matchups={{
           ...props.dehydratedState.godMatchups.queries[0].state.data,
         }}
         god={god}
-        role={props.dehydratedState.defaultParams.role}
+        role={
+          filterList[filterList.findIndex((val) => val.filterValue === "role")]
+            ?.defaultValue
+        }
         displayType="countered"
-        defaultParams={props.dehydratedState.defaultParams}
       />
 
       <MatchupRow
@@ -58,16 +60,13 @@ function BuildPage(props: {
           ...props.dehydratedState.godMatchups.queries[0].state.data,
         }}
         god={god}
-        role={props.dehydratedState.defaultParams.role}
+        role={
+          filterList[filterList.findIndex((val) => val.filterValue === "role")]
+            ?.defaultValue
+        }
         displayType="counters"
-        defaultParams={props.dehydratedState.defaultParams}
       />
-      <BuildRow
-        build={props.dehydratedState.godBuild.queries[0].state.data}
-        defaultParams={props.dehydratedState.defaultParams}
-        items={props.dehydratedState.godBuild.queries[0].state.data.items}
-        relics={props.dehydratedState.godBuild.queries[0].state.data.relics}
-      />
+      <BuildRow build={props.dehydratedState.godBuild.queries[0].state.data} />
     </GodPageLayout>
   );
 }

@@ -14,8 +14,7 @@ const TierListHeader = ({
     <div className="pb-10 text-white">
       <div className="flex items-center pb-5">
         <span className="mr-3 text-2xl">
-          {defaultParams?.type} Tier list for {defaultParams.role},{" "}
-          {defaultParams.rank}
+          {defaultParams?.type} for {defaultParams.role}, {defaultParams.rank}
         </span>
         <div className="hidden h-full rounded bg-card50 p-3 md:block">
           Patch {defaultParams?.patch}

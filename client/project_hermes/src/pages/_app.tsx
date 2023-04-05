@@ -48,7 +48,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       <QueryClientProvider client={queryClient}>
         <GodProvider>
           <TierListProvider>
-            <div className="absolute z-10 box-border flex flex-col">
+            <div className="absolute z-10 box-border flex flex-col text-xs sm:text-sm">
               <AppBar />
             </div>
             <Hydrate state={pageProps.dehydratedState}>

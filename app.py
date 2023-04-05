@@ -131,10 +131,16 @@ def get_god_abilities(god):
     proxy_route + "/gettierlist/<tableType>/<rank>/<role>/<queue_type>/<patch>/<mode>",
     methods=["GET", "POST"],
 )
-def get_tier_list(rank, role, tableType, queue_type, patch, mode):
-    print(rank, role, tableType, queue_type, patch, mode)
+@app.route(
+    proxy_route
+    + "/gettierlist/<tableType>/<rank>/<role>/<queue_type>/<patch>/<mode>/<page>",
+    methods=["GET", "POST"],
+)
+def get_tier_list(rank, role, tableType, queue_type, patch, mode, page=0):
+    page_size = 25
     rank = rank.replace("_", " ")
-    retData = {god: {} for god in godsDict}
+    # retData = {god: {} for god in godsDict}
+    retData = {}
     mydb = client["Tier_list"]
     if not tableType == "Duos":
         mycol = mydb["Combined List"]
@@ -160,10 +166,12 @@ def get_tier_list(rank, role, tableType, queue_type, patch, mode):
 
         my_filter = fh.get_filter(tableType)
         # print(my_filter)
-        for x in mycol.find(myquery, my_filter):
+        for x in mycol.find(
+            myquery, my_filter
+        ):  # .skip(int(page) * page_size).limit(page_size)
             dict_god = x["god"]
             dict_role = x["role"]
-            if not retData[dict_god]:
+            if dict_god not in retData:
                 retData[dict_god] = {dict_role: x}
             else:
                 retData[dict_god][dict_role] = x

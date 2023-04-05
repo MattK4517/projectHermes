@@ -1,7 +1,9 @@
 from tokenize import String
+
 import pymongo
-import analyze as anlz
 from pyrez.api import SmiteAPI
+
+import analyze as anlz
 from constants import Assassins, Guardians, Hunters, Mages, Warriors
 
 
@@ -97,13 +99,17 @@ def get_filter(table_type):
         "_id": 0,
     }
     if table_type == "Regular":
-        my_filter = {**my_filter, **{"pickRate": 1, "banRate": 1, "counterMatchups": 1}}
+        my_filter = {
+            **my_filter,
+            **{"pickRate": 1, "banRate": 1, "counterMatchups": 1, "tier": 1},
+        }
     elif table_type == "Combat":
         my_filter = {
             **my_filter,
             **{
                 "kills": 1,
                 "deaths": 1,
+                "assists": 1,
                 "damage_": 1,
                 "damageTaken": 1,
                 "damageMitigated": 1,

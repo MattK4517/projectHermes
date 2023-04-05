@@ -1,11 +1,17 @@
 import { QueryClient, useQuery } from "@tanstack/react-query";
+import { createColumnHelper } from "@tanstack/react-table";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import { useContext, useMemo } from "react";
+import React, { useContext } from "react";
 import { GodPageLayout } from ".";
+import IconName from "../../../components/general/IconName";
+import { getDefaultParams } from "../../../components/general/getDefaultParams";
 import { GodContext } from "../../../components/gods/GodContext";
-import GodMatchupTable from "../../../components/gods/matchups/MatchupsTable";
-import { GodDefaultFilterLoader } from "../../../components/loader";
+import { getWinRateColor } from "../../../components/gods/GodHelpers";
+import GodIconLoader, {
+  GodDefaultFilterLoader,
+} from "../../../components/loader";
+import TierListTable from "../../../components/tierlist/TierListTable";
 import { IDetailMatchupsReturnType } from "../../../models/gods/gods.model";
 import { getGodPageData } from "../../../service/gods/gods.service";
 import { getBaseUrl } from "../../../utils/trpc";
@@ -18,56 +24,115 @@ function MatchupsPage(props: {
   };
 }) {
   const router = useRouter();
-  const { setGod } = useContext(GodContext);
-  const { data, isLoading } = useQuery<IDetailMatchupsReturnType>(
-    ["god-matchup-stats", props.dehydratedState.defaultParams],
+  const { setGod, filterList } = useContext(GodContext);
+
+  const columnHelper = createColumnHelper();
+  const MEDIUM_COLUMN_SIZE = 80;
+
+  const { data, isFetching } = useQuery(
+    [
+      "god-matchup-stats",
+      getDefaultParams(filterList, props.dehydratedState.defaultParams.god),
+    ],
     () =>
       getGodPageData({
-        ...props.dehydratedState.defaultParams,
+        ...getDefaultParams(
+          filterList,
+          props.dehydratedState.defaultParams.god
+        ),
         type: "matchup-stats",
-      })
+      }),
+    {
+      // enable query if new filterlist is different from default Params
+      // goal is to not query on mount but after filter changes
+      enabled:
+        JSON.stringify(
+          Object.values(props.dehydratedState.defaultParams).sort()
+        ) !==
+        JSON.stringify(
+          Object.values(
+            getDefaultParams(
+              filterList,
+              props.dehydratedState.defaultParams.god
+            )
+          ).sort()
+        ),
+    }
   );
   if (router.query?.god) setGod(router.query.god);
-  const columns = useMemo(
+
+  const columns = React.useMemo(
     () => [
-      {
-        Header: "Enemy",
-        accessor: "_id",
-      },
-      {
-        Header: "Avg Dmg Diff",
-        accessor: "avgDmgDiff",
-      },
-      {
-        Header: "Avg Gold Diff",
-        accessor: "avgGoldDiff",
-      },
-      {
-        Header: "Avg Kill Diff",
-        accessor: "avgKillDiff",
-      },
-      {
-        Header: "Games",
-        accessor: "games.games",
-      },
-      {
-        Header: "Pick Rate",
-        accessor: "games.pickRate",
-      },
-      {
-        Header: "Win Rate",
-        accessor: "games.winRate",
-      },
+      columnHelper.accessor("_id", {
+        header: "Enemy",
+        size: 200,
+        cell: (info) => (
+          <IconName
+            displayIcon={info.cell.getValue() || ""}
+            loader={GodIconLoader}
+            width={36}
+            height={36}
+            displayName={"rounded-md border-2 border-yellow-800"}
+          />
+        ),
+        footer: (info) => info.column.id,
+      }),
+      columnHelper.accessor("games.winRate", {
+        header: "Win Rate",
+        size: MEDIUM_COLUMN_SIZE + 10,
+        cell: (info) => (
+          <span
+            style={{ color: getWinRateColor(info.cell.getValue("winRate")) }}
+          >{`${info.renderValue()?.toFixed(0)}%`}</span>
+        ),
+        footer: (info) => info.column.id,
+      }),
+      columnHelper.accessor("games.pickRate", {
+        header: "Pick Rate",
+        size: MEDIUM_COLUMN_SIZE + 10,
+        cell: (info) => <span>{`${info.renderValue()?.toFixed(2)}%`}</span>,
+        footer: (info) => info.column.id,
+      }),
+      columnHelper.accessor("avgDmgDiff", {
+        header: "Dmg Diff",
+        size: MEDIUM_COLUMN_SIZE,
+        cell: (info) => <span>{`${info.renderValue()}`}</span>,
+        footer: (info) => info.column.id,
+      }),
+      columnHelper.accessor("avgKillDiff", {
+        header: "Kill Diff",
+        size: MEDIUM_COLUMN_SIZE,
+        cell: (info) => <span>{`${info.renderValue()?.toFixed(2)}`}</span>,
+        footer: (info) => info.column.id,
+      }),
+      columnHelper.accessor("avgGoldDiff", {
+        header: "Gold Diff",
+        size: MEDIUM_COLUMN_SIZE,
+        cell: (info) => <span>{`${info.renderValue()}`}</span>,
+        footer: (info) => info.column.id,
+      }),
+      columnHelper.accessor("games.games", {
+        header: "Games",
+        size: MEDIUM_COLUMN_SIZE,
+        cell: (info) => info.renderValue()?.toLocaleString(),
+        footer: (info) => info.column.id,
+      }),
     ],
     []
   );
   return (
     <GodPageLayout defaultParams={props.dehydratedState.defaultParams}>
-      <GodMatchupTable
-        columns={columns}
-        data={data?.entries || props.dehydratedState.godMatchups}
-        loading={isLoading}
-      />
+      <div className="flex justify-center">
+        <TierListTable
+          tableData={
+            Object.values(data || props.dehydratedState.godMatchups)[0]
+          }
+          columns={columns}
+          // defaultParams={}
+          defaultSort={[{ desc: true, id: "games.games" }]}
+          loading={isFetching}
+        />
+      </div>
     </GodPageLayout>
   );
 }

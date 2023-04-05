@@ -1,37 +1,37 @@
-from audioop import avg
-from re import A, M, S, X
-from datetime import datetime
 import re
-
-from statistics import mean
-from main import client
-import errlogger as logger
-import pymongo
+from audioop import avg
 from collections import OrderedDict
-from operator import getitem
+from datetime import datetime
 from math import sqrt
-from constants import (
-    godsDict,
-    slots,
-    Tier_Three_items,
-    Starter_items,
-    roles,
-    single_combat_stats,
-    single_objective_stats,
-    ranks,
-    Assassins,
-    Guardians,
-    Warriors,
-    Mages,
-    Hunters,
-    single_stats,
-)
-import analyze_players as anlzpy
+from operator import getitem
+from re import A, M, S, X
+from statistics import mean
 
+import pymongo
 import pyrez
 from pyrez.api import SmiteAPI
 from pyrez.models import Smite
 from pyrez.models.MatchHistory import MatchHistory
+
+import analyze_players as anlzpy
+import errlogger as logger
+from constants import (
+    Assassins,
+    Guardians,
+    Hunters,
+    Mages,
+    Starter_items,
+    Tier_Three_items,
+    Warriors,
+    godsDict,
+    ranks,
+    roles,
+    single_combat_stats,
+    single_objective_stats,
+    single_stats,
+    slots,
+)
+from main import client
 
 # info pull
 # [godWR, godPR, godBR] - check, matchesPlayed - check
@@ -1251,7 +1251,7 @@ def get_matchups_stats(
                     "pickRate": round(entry[key] / avg_dmg_dict[key] * 100, 2),
                     "games": "{:,}".format(entry[key]),
                 }
-            elif key not in ["_id", "games", "wins"]:
+            elif key not in ["_id", "games", "wins", "avgKillDiff"]:
                 entry[key] = "{:,}".format(round(entry[key] - avg_dmg_dict[key]))
 
     data = [entry for entry in data if entry["_id"] in godsDict]
@@ -1315,7 +1315,7 @@ def get_build_path(
             ]["losses"] += x["count"]
         index += 1
     top_five = {}
-    for x in list(builds)[-10:]:
+    for x in list(builds)[-15:]:
         builds[x]["games"] = builds[x]["wins"] + builds[x]["losses"]
         builds[x]["pickRate"] = round(builds[x]["games"] / games * 100, 2)
         builds[x]["winRate"] = round(builds[x]["wins"] / builds[x]["games"] * 100, 2)

@@ -26,10 +26,10 @@ const IconName = ({
         alt={`${displayIcon} icon`}
       />
       <span
-        className="ml-4 hidden max-w-min text-sm lg:block"
+        className="ml-4 hidden max-w-min text-sm sm:max-w-fit lg:block"
         style={{ whiteSpace: "initial" }}
       >
-        {displayName || displayIcon}
+        {displayName}
       </span>
     </div>
   );

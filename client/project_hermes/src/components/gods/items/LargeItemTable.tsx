@@ -1,6 +1,4 @@
-import Image from "next/image";
 import { useSortBy, useTable } from "react-table";
-import { ItemIconLoader } from "../../loader";
 
 function LargeItemTable({ columns, data, totalItemCount, slot }) {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
@@ -56,40 +54,6 @@ function LargeItemTable({ columns, data, totalItemCount, slot }) {
         {rows.map((row) => {
           prepareRow(row);
           return (
-            <div className="row.valuess-center my-1 flex items-center rounded-md bg-card50 p-2">
-              <Image
-                src={row.values.item}
-                alt={row.values.item}
-                loader={ItemIconLoader}
-                width={36}
-                height={36}
-                className="rounded-md border-2 border-slate-500"
-              />
-              <div className="mx-1.5 flex min-w-fit flex-col lg:mx-0 lg:hidden">
-                <span style={{ fontSize: "11px", fontWeight: "700" }}>
-                  {row.values.winRate.toFixed(2)}% WR
-                </span>
-                <span className="text-lightBlue" style={{ fontSize: "12px" }}>
-                  {row.values.games} Matches
-                </span>
-              </div>
-              <div className="mx-1.5 hidden min-w-fit flex-1 flex-col lg:flex">
-                <span className=" font-bold" style={{ fontSize: "12px" }}>
-                  {row.values.winRate.toFixed(2)}% WR
-                </span>
-                <span className=" text-lightBlue" style={{ fontSize: "12px" }}>
-                  {row.values.wins} Wins
-                </span>
-              </div>
-              <div className="hidden min-w-fit flex-1 flex-col lg:flex">
-                <span className=" font-bold" style={{ fontSize: "12px" }}>
-                  {((row.values.games / totalItemCount) * 100).toFixed(2)}% PR
-                </span>
-                <span className=" text-lightBlue" style={{ fontSize: "12px" }}>
-                  {row.values.games} Games
-                </span>
-              </div>
-            </div>
           );
         })}
       </tbody>

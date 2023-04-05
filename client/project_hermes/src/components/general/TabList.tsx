@@ -9,7 +9,7 @@ export type TabListType = {
 
 const handlePath = (currentPath: string, newPath: string) => {
   let tempPath = currentPath.split("/");
-  tempPath[3] = newPath;
+  tempPath[tempPath.length - 1] = newPath;
   return tempPath.join("/") + "/";
 };
 export default function Tablist(props: TabListType[]) {

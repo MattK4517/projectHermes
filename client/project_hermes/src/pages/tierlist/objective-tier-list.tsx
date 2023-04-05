@@ -10,7 +10,6 @@ import GodIconLoader, {
   RoleIconLoader,
   TierListDefaultFilterLoader,
 } from "../../components/loader";
-import CounterMatchupDisplay from "../../components/tierlist/CounterMatchupDisplay";
 import { TierListContext } from "../../components/tierlist/TierListContext";
 import TierListTable from "../../components/tierlist/TierListTable";
 import { ILastUpdate } from "../../models/tierlist/tierlist.model";
@@ -39,7 +38,7 @@ export const getTierColor = (tier: string): string => {
   return color;
 };
 
-function TierList(props: {
+function ObjectiveTierList(props: {
   dehydratedState: {
     defaultParams: GodPagePropsType;
     lastUpdate: ILastUpdate;
@@ -48,7 +47,6 @@ function TierList(props: {
 }) {
   const columnHelper = createColumnHelper();
   const MEDIUM_COLUMN_SIZE = 90;
-
   const columns = React.useMemo(
     () => [
       columnHelper.accessor("rank", {
@@ -103,16 +101,6 @@ function TierList(props: {
         ),
         footer: (info) => info.column.id,
       }),
-      columnHelper.accessor("tier", {
-        header: "Tier",
-        size: 50,
-        cell: (info) => (
-          <span
-            style={{ color: getTierColor(info.cell.getValue("tier")) }}
-          >{`${info.renderValue()}`}</span>
-        ),
-        footer: (info) => info.column.id,
-      }),
       columnHelper.accessor("winRate", {
         header: "Win Rate",
         size: MEDIUM_COLUMN_SIZE,
@@ -123,30 +111,39 @@ function TierList(props: {
         ),
         footer: (info) => info.column.id,
       }),
-      columnHelper.accessor("pickRate", {
-        header: "Pick Rate",
+      columnHelper.accessor("gold", {
+        header: "Gold",
         size: MEDIUM_COLUMN_SIZE,
-        cell: (info) => `${info.renderValue()}%`,
+        cell: (info) => info.renderValue()?.toLocaleString(),
         footer: (info) => info.column.id,
       }),
-      columnHelper.accessor("banRate", {
-        header: "Ban Rate",
+      columnHelper.accessor("killsBot", {
+        header: "Minion Kills",
         size: MEDIUM_COLUMN_SIZE,
-        cell: (info) => `${info.renderValue()}%`,
+        cell: (info) => info.renderValue()?.toLocaleString(),
         footer: (info) => info.column.id,
       }),
-      columnHelper.accessor("counterMatchups", {
-        header: "Counter Matchups",
-        size: 250,
-        enableSorting: false,
-        cell: (props) => (
-          <CounterMatchupDisplay props={props.row.original.counterMatchups} />
-        ),
+      columnHelper.accessor("damageBot", {
+        header: "Minion Dmg",
+        size: MEDIUM_COLUMN_SIZE,
+        cell: (info) => info.renderValue()?.toLocaleString(),
+        footer: (info) => info.column.id,
+      }),
+      columnHelper.accessor("towerKills", {
+        header: "Tower Kills",
+        size: MEDIUM_COLUMN_SIZE,
+        cell: (info) => info.renderValue()?.toLocaleString(),
+        footer: (info) => info.column.id,
+      }),
+      columnHelper.accessor("towerDamage", {
+        header: "Tower Dmg",
+        size: MEDIUM_COLUMN_SIZE,
+        cell: (info) => info.renderValue()?.toLocaleString(),
         footer: (info) => info.column.id,
       }),
       columnHelper.accessor("games", {
         header: "Games",
-        size: 80,
+        size: MEDIUM_COLUMN_SIZE,
         cell: (info) => info.renderValue()?.toLocaleString(),
         footer: (info) => info.column.id,
       }),
@@ -175,15 +172,14 @@ function TierList(props: {
               return [...Object.values(god[1])];
             })
             .flat()}
-          type={"Regular"}
-          defaultSort={[{ id: "winRate", desc: true }]}
+          type={"Objective"}
         />
       </div>
     </TierListLayout>
   );
 }
 
-export default TierList;
+export default ObjectiveTierList;
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const queryClient = {
@@ -193,7 +189,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
   const url = getBaseUrl();
   const defaultParams: GodPagePropsType = await TierListDefaultFilterLoader({
     url: url,
-    type: "Regular Tier List",
+    type: "Objective Tier List",
   });
 
   await queryClient.lastUpdate.prefetchQuery<ILastUpdate>({
@@ -202,9 +198,9 @@ export const getServerSideProps: GetServerSideProps = async () => {
   });
 
   await queryClient.tierListData.prefetchQuery({
-    queryKey: ["regular-tier-list", defaultParams],
+    queryKey: ["objective-tier-list", defaultParams],
     queryFn: () =>
-      getTierListData({ ...defaultParams, type: "Regular", page: 0 }),
+      getTierListData({ ...defaultParams, type: "Objective", page: 0 }),
   });
 
   return {
@@ -216,7 +212,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
         tierListData: JSON.parse(
           JSON.stringify(
             queryClient.tierListData.getQueryState([
-              "regular-tier-list",
+              "objective-tier-list",
               defaultParams,
             ]).data
           )
