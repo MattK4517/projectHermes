@@ -151,18 +151,11 @@ function ObjectiveTierList(props: {
     []
   );
 
-  const { filterList, setFilterList } = useContext(TierListContext);
-
   return (
     <TierListLayout
       defaultParams={props.dehydratedState.defaultParams}
       lastUpdate={props.dehydratedState.lastUpdate.queries[0].state.data}
     >
-      <Filter
-        filterList={filterList}
-        setFilterList={setFilterList}
-        defaultParams={props.dehydratedState.defaultParams}
-      />
       <div className="text-white">
         <TierListTable
           defaultParams={props.dehydratedState.defaultParams}
@@ -173,6 +166,7 @@ function ObjectiveTierList(props: {
             })
             .flat()}
           type={"Objective"}
+          defaultSort={[{ desc: true, id: "winRate" }]}
         />
       </div>
     </TierListLayout>

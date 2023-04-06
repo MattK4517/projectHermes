@@ -42,8 +42,8 @@ const handleEnabled = (filterList: FilterListType[]) => {
   }
 };
 
-const FilterListContainer = () => {
-  const { filterList, setFilterList } = useContext(GodContext);
+const FilterListContainer = ({ context }: { context: React.ContextType }) => {
+  const { filterList, setFilterList } = useContext(context);
   return (
     <div className="my-6 flex items-center gap-4 overflow-x-scroll py-2 sm:overflow-visible">
       <span className="hidden font-semibold text-white sm:block">Filters</span>

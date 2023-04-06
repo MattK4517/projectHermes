@@ -7,7 +7,10 @@ import React, { useContext } from "react";
 import { GodPageLayout } from ".";
 import { getDefaultParams } from "../../../components/general/getDefaultParams";
 import { GodContext } from "../../../components/gods/GodContext";
-import { getWinRateColor } from "../../../components/gods/GodHelpers";
+import {
+  getWinRateColor,
+  handleQueryEnabled,
+} from "../../../components/gods/GodHelpers";
 import {
   GodDefaultFilterLoader,
   ItemIconLoader,
@@ -55,18 +58,10 @@ function BuildPathsPage(props: {
     {
       // enable query if new filterlist is different from default Params
       // goal is to not query on mount but after filter changes
-      enabled:
-        JSON.stringify(
-          Object.values(props.dehydratedState.defaultParams).sort()
-        ) !==
-        JSON.stringify(
-          Object.values(
-            getDefaultParams(
-              filterList,
-              props.dehydratedState.defaultParams.god
-            )
-          ).sort()
-        ),
+      enabled: handleQueryEnabled(
+        props.dehydratedState.defaultParams,
+        filterList
+      ),
     }
   );
   if (router.query?.god) setGod(router.query.god);
@@ -123,13 +118,13 @@ function BuildPathsPage(props: {
       }),
       columnHelper.accessor("pickRate", {
         header: "Pick Rate",
-        size: 80,
+        size: MEDIUM_COLUMN_SIZE + 10,
         cell: (info) => <span>{`${info.renderValue()?.toFixed(2)}%`}</span>,
         footer: (info) => info.column.id,
       }),
       columnHelper.accessor("games", {
         header: "Games",
-        size: 80,
+        size: MEDIUM_COLUMN_SIZE + 10,
         cell: (info) => info.renderValue()?.toLocaleString(),
         footer: (info) => info.column.id,
       }),

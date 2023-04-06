@@ -3,6 +3,7 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useContext } from "react";
 import { GodPageLayout } from ".";
+import { getDefaultParams } from "../../../components/general/getDefaultParams";
 import Loading from "../../../components/general/Loading";
 import { GodContext } from "../../../components/gods/GodContext";
 import LargeItemRow from "../../../components/gods/items/LargeItemRow";
@@ -10,6 +11,7 @@ import { GodDefaultFilterLoader } from "../../../components/loader";
 import { getGodPageData } from "../../../service/gods/gods.service";
 import { getBaseUrl } from "../../../utils/trpc";
 import { GodPagePropsType } from "./build";
+import { handleQueryEnabled } from "../../../components/gods/GodHelpers";
 
 function ItemsPage(props: {
   dehydratedState: {
@@ -20,22 +22,39 @@ function ItemsPage(props: {
   };
 }) {
   const router = useRouter();
-  let { setGod } = useContext(GodContext);
+  let { setGod, filterList } = useContext(GodContext);
 
-  const { data, isLoading } = useQuery(
-    ["god-items", props.dehydratedState.defaultParams],
+  const { data, isFetching } = useQuery(
+    [
+      "god-items",
+      getDefaultParams(filterList, props.dehydratedState.defaultParams.god),
+    ],
     () =>
-      getGodPageData({ ...props.dehydratedState.defaultParams, type: "items" })
+      getGodPageData({
+        ...getDefaultParams(
+          filterList,
+          props.dehydratedState.defaultParams.god
+        ),
+        type: "items",
+      }),
+    {
+      // enable query if new filterlist is different from default Params
+      // goal is to not query on mount but after filter changes
+      enabled: handleQueryEnabled(
+        props.dehydratedState.defaultParams,
+        filterList
+      ),
+    }
   );
   if (router.query?.god) setGod(router.query.god);
   return (
     <GodPageLayout defaultParams={props.dehydratedState.defaultParams}>
       <div
         className={`grid max-w-full grid-flow-row grid-cols-1 gap-2 text-white lg:grid-cols-2 ${
-          isLoading ? "items-center justify-center" : ""
+          isFetching ? "items-center justify-center" : ""
         }`}
       >
-        {isLoading ? (
+        {isFetching ? (
           <Loading width={24} height={24} />
         ) : (
           Object.entries(

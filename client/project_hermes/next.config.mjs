@@ -22,24 +22,24 @@ export default defineNextConfig({
   },
   images: {
     domains: ["webcdn.hirezstudios.com", "i.imgur.com"],
-    loader: 'custom',
-    loaderFile: './src/components/loader.ts',
+    loader: "custom",
+    loaderFile: "./src/components/loader.ts",
   },
   async redirects() {
     return [
       {
-        source: '/gods/:god',
-        destination: '/gods/:god/build',
+        source: "/gods/:god",
+        destination: "/gods/:god/build",
         permanent: true,
       },
-    ]
+    ];
   },
   async rewrites() {
     return [
       {
-        source: '/api/:path*',
-        destination: 'http://localhost:5000/api/:path*' // Proxy to Backend
-      }
-    ]
-  }
-})
+        source: "/api/:path*",
+        destination: "http://127.0.0.1:5000/api/:path*", // Proxy to Backend
+      },
+    ];
+  },
+});

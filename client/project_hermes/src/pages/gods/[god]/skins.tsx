@@ -10,7 +10,10 @@ import SplitTextHidden, {
 } from "../../../components/general/SplitTextRow";
 import { getDefaultParams } from "../../../components/general/getDefaultParams";
 import { GodContext } from "../../../components/gods/GodContext";
-import { getWinRateColor } from "../../../components/gods/GodHelpers";
+import {
+  getWinRateColor,
+  handleQueryEnabled,
+} from "../../../components/gods/GodHelpers";
 import {
   GodDefaultFilterLoader,
   SkinIconLoader,
@@ -49,18 +52,10 @@ function SkinsPage(props: {
     {
       // enable query if new filterlist is different from default Params
       // goal is to not query on mount but after filter changes
-      enabled:
-        JSON.stringify(
-          Object.values(props.dehydratedState.defaultParams).sort()
-        ) !==
-        JSON.stringify(
-          Object.values(
-            getDefaultParams(
-              filterList,
-              props.dehydratedState.defaultParams.god
-            )
-          ).sort()
-        ),
+      enabled: handleQueryEnabled(
+        props.dehydratedState.defaultParams,
+        filterList
+      ),
     }
   );
   if (router.query?.god) setGod(router.query.god);

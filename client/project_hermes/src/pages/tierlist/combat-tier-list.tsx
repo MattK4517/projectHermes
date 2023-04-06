@@ -141,18 +141,11 @@ function CombatTierList(props: {
     []
   );
 
-  const { filterList, setFilterList } = useContext(TierListContext);
-
   return (
     <TierListLayout
       defaultParams={props.dehydratedState.defaultParams}
       lastUpdate={props.dehydratedState.lastUpdate.queries[0].state.data}
     >
-      <Filter
-        filterList={filterList}
-        setFilterList={setFilterList}
-        defaultParams={props.dehydratedState.defaultParams}
-      />
       <div className="text-white">
         <TierListTable
           defaultParams={props.dehydratedState.defaultParams}
@@ -163,6 +156,7 @@ function CombatTierList(props: {
             })
             .flat()}
           type={"Combat"}
+          defaultSort={[{ desc: true, id: "winRate" }]}
         />
       </div>
     </TierListLayout>

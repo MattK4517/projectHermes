@@ -1,4 +1,9 @@
-import { dehydrate, QueryClient } from "@tanstack/react-query";
+import {
+  dehydrate,
+  QueryClient,
+  useQueries,
+  useQuery,
+} from "@tanstack/react-query";
 import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import { useContext } from "react";
@@ -12,9 +17,12 @@ import { god, GodWinRateType } from "../../../models/gods/gods.model";
 import { Build } from "../../../models/items.model";
 import { getGodPageData } from "../../../service/gods/gods.service";
 import { getBaseUrl } from "../../../utils/trpc";
+import { handleQueryEnabled } from "../../../components/gods/GodHelpers";
+import { getDefaultParams } from "../../../components/general/getDefaultParams";
+import Loading from "../../../components/general/Loading";
 
 export type GodPagePropsType = {
-  god: god | string;
+  god: god;
   role: string;
   rank: string;
   patch: string;
@@ -33,6 +41,46 @@ function BuildPage(props: {
 }) {
   const router = useRouter();
   let { god, setGod, filterList } = useContext(GodContext);
+
+  const { data, isFetching } = useQuery(
+    ["god-matchups", getDefaultParams(filterList, god)],
+    () =>
+      getGodPageData({
+        ...getDefaultParams(filterList, god),
+        type: "matchups",
+      }),
+    {
+      // enable query if new filterlist is different from default Params
+      // goal is to not query on mount but after filter changes
+      enabled: handleQueryEnabled(
+        props.dehydratedState.defaultParams,
+        filterList
+      ),
+    }
+  );
+
+  // const buildPageQueries = useQueries({
+  //   queries: [
+  //     {
+  //       queryKey: [
+  //         "god-build",
+  //         getDefaultParams(filterList, props.dehydratedState.defaultParams.god),
+  //       ],
+  //       queryFn: getGodPageData({
+  //         ...getDefaultParams(
+  //           filterList,
+  //           props.dehydratedState.defaultParams.god
+  //         ),
+  //         type: "build",
+  //       }),
+  //       enabled: handleQueryEnabled(
+  //         props.dehydratedState.defaultParams,
+  //         filterList
+  //       ),
+  //     },
+  //   ],
+  // });
+
   if (router.query?.god) setGod(router.query.god);
 
   return (
@@ -42,10 +90,11 @@ function BuildPage(props: {
           ...props.dehydratedState.godWinRate.queries[0].state.data,
           queueType: "Ranked",
         }}
+        defaultParams={props.dehydratedState.defaultParams}
       />
       <MatchupRow
         matchups={{
-          ...props.dehydratedState.godMatchups.queries[0].state.data,
+          ...(data || props.dehydratedState.godMatchups.queries[0].state.data),
         }}
         god={god}
         role={
@@ -53,11 +102,12 @@ function BuildPage(props: {
             ?.defaultValue
         }
         displayType="countered"
+        isFetching={isFetching}
       />
 
       <MatchupRow
         matchups={{
-          ...props.dehydratedState.godMatchups.queries[0].state.data,
+          ...(data || props.dehydratedState.godMatchups.queries[0].state.data),
         }}
         god={god}
         role={
@@ -65,8 +115,13 @@ function BuildPage(props: {
             ?.defaultValue
         }
         displayType="counters"
+        defaultParams={props.dehydratedState.defaultParams}
+        isFetching={isFetching}
       />
-      <BuildRow build={props.dehydratedState.godBuild.queries[0].state.data} />
+      <BuildRow
+        build={props.dehydratedState.godBuild.queries[0].state.data}
+        defaultParams={props.dehydratedState.defaultParams}
+      />
     </GodPageLayout>
   );
 }

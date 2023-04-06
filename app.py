@@ -94,7 +94,8 @@ def get_god_data_role(god, role, rank, patch, queue_type, mode, matchup="None"):
         return anlz.get_specific_build(
             client, god, role, patch, matchup, rank, queue_type, mode
         )
-        build = anlz.get_top_builds(client, god, role, patch, queue_type, mode=mode)
+        build = anlz.get_top_builds(
+            client, god, role, patch, queue_type, mode=mode)
     elif matchup == "None":
         build = anlz.get_top_builds(
             client, god, role, patch, queue_type, rank, mode=mode
@@ -190,7 +191,8 @@ def get_item_data(item):
 
 @app.route(proxy_route + "/items/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>")
 def get_all_items(god, role, rank, patch, queue_type, mode):
-    items = anlz.get_all_builds(client, god, role, patch, queue_type, rank, mode)
+    items = anlz.get_all_builds(
+        client, god, role, patch, queue_type, rank, mode)
     return items
 
 
@@ -264,7 +266,8 @@ def get_match(matchID):
 
 @app.route(proxy_route + "/build-paths/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>")
 def get_build_path(god, role, rank, patch, queue_type, mode):
-    builds = anlz.get_build_path(client, god, role, patch, queue_type, rank, mode)
+    builds = anlz.get_build_path(
+        client, god, role, patch, queue_type, rank, mode)
     return builds
 
 
@@ -343,7 +346,8 @@ def get_player_match_info(playername, queue_type, patch, mode):
         return {}
     return json.loads(
         json_util.dumps(
-            anlzpy.find_match_history(client, playername, queue_type, patch, mode)
+            anlzpy.find_match_history(
+                client, playername, queue_type, patch, mode)
         )
     )
 
@@ -620,3 +624,22 @@ def last_update(patch):
         ret_data["games"] += x["sumGames"]
 
     return ret_data
+
+
+@app.route(proxy_route + "/leaderboard/<mode>")
+def get_leaderboard(mode="Conquest"):
+    players = []
+    with open("cred.txt", "r") as creds:
+        lines = creds.readlines()
+        smite_api = SmiteAPI(
+            devId=lines[0].strip(),
+            authKey=lines[1].strip(),
+            responseFormat=pyrez.Format.JSON,
+        )
+        queueId = fh.get_queue_id("Ranked", mode, "KBM")
+        data = smite_api.getLeagueLeaderboard(
+            queueId, "27", "1")
+        for player in data:
+            players.append(fh.normalize_player(player))
+        return json.loads(json.dumps({"players": players}))
+    return {}

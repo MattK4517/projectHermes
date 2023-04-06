@@ -96,7 +96,7 @@ const GodPageLayout = ({
               god={god}
             ></GodPageHeader>
             <TabList {...tabs} />
-            <FilterListContainer />
+            <FilterListContainer context={GodContext} />
             {children}
           </div>
         </div>

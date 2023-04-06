@@ -53,10 +53,10 @@ const LargeNav = ({
       {[
         "Tierlist",
         "Gods",
-        "Contact",
         "Find A Match",
         "Leaderboard",
         "Items",
+        "Contact",
       ].map((text: string, index: number) => {
         let newRoute = text;
         let icon;
@@ -107,9 +107,10 @@ const LargeNav = ({
                   return (
                     <Link
                       key={index}
-                      href={"/tierlist/".concat(
-                        tierListType.toLowerCase().replaceAll(" ", "-") || ""
-                      )}
+                      href={"/tierlist/"
+                        .concat(String(tierListType))
+                        .toLowerCase()
+                        .replaceAll(" ", "-")}
                     >
                       <div className="cursor-pointer hover:text-[#3273fa]">
                         {tierListType}

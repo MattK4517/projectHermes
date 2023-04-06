@@ -20,7 +20,7 @@
     "@prisma/client": "^4.11.0",
     "@tanstack/react-query": "^4.28.0",
     "@tanstack/react-query-devtools": "^4.12.0",
-    "@tanstack/react-table": "^8.8.4",
+    "@tanstack/react-table": "^8.8.5",
     "@trpc/client": "10.0.0-proxy-beta.17",
     "@trpc/next": "10.0.0-proxy-beta.17",
     "@trpc/react": "10.0.0-proxy-beta.17",

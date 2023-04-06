@@ -28,7 +28,6 @@ export default function TierListTable({
   defaultSort: SortingState;
   loading: string;
 }) {
-  console.log(tableData);
   const [data, setData] = useState([...tableData]);
 
   useEffect(() => {
@@ -36,6 +35,7 @@ export default function TierListTable({
   }, [tableData]);
 
   const [sorting, setSorting] = React.useState<SortingState>(defaultSort);
+  console.log(sorting);
 
   const table = useReactTable({
     data: data || [],
@@ -50,7 +50,7 @@ export default function TierListTable({
   });
 
   return (
-    <div className="w-fit rounded-md bg-card50 p-4 text-xs text-lightBlue sm:text-sm">
+    <div className="w-full rounded-md bg-card50 p-4 text-xs text-lightBlue sm:text-sm">
       <div className="pb-4 text-lightBlue">
         <div>
           <div className="nav-border-bottom pb-5">

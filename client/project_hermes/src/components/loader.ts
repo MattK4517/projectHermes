@@ -1,10 +1,14 @@
+import { linkDict } from "../pages/gods/[god]";
 import { getPantheonIcon } from "./gods/GodHelpers";
 
 export default function GodIconLoader(props: { src: string }) {
-  return `https://webcdn.hirezstudios.com/smite/god-icons/${props.src
+  console.log(Object.keys(linkDict).indexOf(props.src))
+  if (Object.keys(linkDict).indexOf(props.src) !== -1)
+    return `https://webcdn.hirezstudios.com/smite/god-icons/${props.src
     .toLowerCase()
     .replaceAll(" ", "-")
-    .replaceAll("'", "")}.jpg`;
+    .replaceAll("'", "")}.jpg`
+  else return "https://i.imgur.com/KgTaobI.png"
 }
 
 export function ItemIconLoader(props: { src: string }) {
@@ -37,6 +41,7 @@ export async function GodDefaultFilterLoader({
   god: string;
   url?: string;
 }) {
+  console.log(url + `/api/default_filter/${god}`)
   return (await fetch(url + `/api/default_filter/${god}`)).json();
 }
 
@@ -47,6 +52,7 @@ export async function TierListDefaultFilterLoader({
   url: string;
   type: string;
 }) {
+  console.log("HERE", url + `/api/default_filter/${type}`)
   return (await fetch(url + `/api/default_filter/${type}`)).json();
 }
 

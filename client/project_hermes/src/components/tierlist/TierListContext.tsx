@@ -5,15 +5,13 @@ import { GenericFilterList } from "../general/GenericObejcts";
 
 export const TierListContext = createContext<any>({
   tabs: [
-    { name: "Tier List", link: `tier-list`, selected: true },
+    { name: "Regular Tier List", link: `tier-list`, selected: true },
     { name: "Combat Tier List", link: `combat-tier-list` },
     { name: "Objective Tier List", link: `objective-tier-list` },
     { name: "Duos Tier List", link: `duos-tier-list` },
   ],
   filterList: [],
-  setFilterList: function (value: SetStateAction<FilterListType[]>): void {
-    throw new Error("Function not implemented.");
-  },
+  setFilterList: () => {},
   defaultParmas: {
     god: "",
     role: "",
@@ -32,28 +30,10 @@ export const TierListProvider: FC = ({ children }) => {
     { name: "Duos Tier List", link: `duos-tier-list` },
   ];
 
-  const [filterList, setFilterList] = useState<FilterListType[]>([
-    ...GenericFilterList,
-    {
-      filterValue: "listType",
-      defaultValue: "Regular",
-      enabled: true,
-      filterOptions: [
-        { optionName: "Combat" },
-        {
-          optionName: "Objective",
-        },
-        { optionName: "Duos" },
-      ],
-    },
-  ]);
-
-  let defaultParams: GodPagePropsType;
+  const [filterList, setFilterList] = useState<FilterListType[]>([]);
 
   return (
-    <TierListContext.Provider
-      value={{ tabs, filterList, setFilterList, defaultParams }}
-    >
+    <TierListContext.Provider value={{ tabs, filterList, setFilterList }}>
       {children}
     </TierListContext.Provider>
   );

@@ -54,10 +54,10 @@ const MediumNav = ({
       {[
         "Tierlist",
         "Gods",
-        "Contact",
         "Find A Match",
         "Leaderboard",
         "Items",
+        "Contact", 
       ].map((text: string, index: number) => {
         let newRoute = text;
         let icon;
@@ -106,7 +106,7 @@ const MediumNav = ({
                     <Link
                       key={index}
                       href={"/tierlist/".concat(
-                        tierListType.toLowerCase().replaceAll(" ", "-") || ""
+                        tierListType.toLowerCase().replaceAll(" ", "-")
                       )}
                     >
                       <div className="cursor-pointer hover:text-[#3273fa]">

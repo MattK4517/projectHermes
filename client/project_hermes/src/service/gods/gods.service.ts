@@ -1,5 +1,5 @@
 import { GodPagePropsType } from "../../pages/gods/[god]/build";
-import { getBaseUrl } from "../../utils/trpc";
+import { getApiUrl, getBaseUrl } from "../../utils/trpc";
 
 export async function getGodPageData({
   god,
@@ -22,11 +22,11 @@ export async function getGodPageData({
 }
 
 export async function getGodAbilities(god: string) {
-  const url = getBaseUrl();
+  const url = getApiUrl();
   return (await fetch(url + "/api/" + god + "/abilities")).json();
 }
 
 export async function getGodData(god: string) {
-  const url = getBaseUrl();
+  const url = getApiUrl();
   return (await fetch(url + "/api/" + god + "/data")).json();
 }

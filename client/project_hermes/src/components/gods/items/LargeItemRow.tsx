@@ -29,11 +29,12 @@ const LargeItemRow = ({ items, slot, totalItemCount }: ILargeItemRowProps) => {
         cell: (info) => {
           return (
             <IconName
-              displayIcon={info.cell.getValue("item") || ""}
+              displayIcon={info.cell.getValue() || ""}
               loader={ItemIconLoader}
               width={36}
               height={36}
-              displayName={"rounded-md border-2 border-slate-500"}
+              styling={"rounded-md border-2 border-slate-500"}
+              displayName={info.cell.getValue()}
             />
           );
         },

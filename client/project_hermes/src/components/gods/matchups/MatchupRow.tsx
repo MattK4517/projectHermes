@@ -1,6 +1,13 @@
+import { useContext } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { god } from "../../../models/gods/gods.model";
+import { getGodPageData } from "../../../service/gods/gods.service";
 import Loading from "../../general/Loading";
+import { getDefaultParams } from "../../general/getDefaultParams";
+import { GodContext } from "../GodContext";
+import { handleQueryEnabled } from "../GodHelpers";
 import SingleMatchupDisplay from "./SingleMatchupDisplay";
+import { GodPagePropsType } from "../../../pages/gods/[god]/build";
 
 export type MatchupRowType = {
   [matchup in god]: {
@@ -16,10 +23,16 @@ export interface IMatchupRowProps {
   god: god;
   role: string;
   displayType: "counters" | "countered";
+  isFetching: boolean;
 }
 
-const MatchupRow = ({ matchups, god, role, displayType }: IMatchupRowProps) => {
-  const isLoading = false;
+const MatchupRow = ({
+  matchups,
+  god,
+  role,
+  displayType,
+  isFetching,
+}: IMatchupRowProps) => {
   return (
     <div className="card">
       <div className="card-header">
@@ -30,7 +43,7 @@ const MatchupRow = ({ matchups, god, role, displayType }: IMatchupRowProps) => {
           {role}
         </span>
       </div>
-      {isLoading ? (
+      {isFetching ? (
         <div className="flex h-32 items-center justify-center">
           <Loading width={12} height={12} />
         </div>

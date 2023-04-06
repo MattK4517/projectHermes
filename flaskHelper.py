@@ -11,10 +11,12 @@ def validate_player(client, playername):
     mydb = client["Players"]
     mycol = mydb["Player Basic"]
     print(
-        mycol.count_documents({"NameTag": {"$regex": f"{playername}", "$options": "i"}})
+        mycol.count_documents(
+            {"NameTag": {"$regex": f"{playername}", "$options": "i"}})
     )
     if (
-        mycol.count_documents({"NameTag": {"$regex": f"{playername}", "$options": "i"}})
+        mycol.count_documents(
+            {"NameTag": {"$regex": f"{playername}", "$options": "i"}})
         > 0
     ):
         return True
@@ -160,6 +162,19 @@ def get_class(god):
     elif god in Warriors:
         god_class = "warrior"
     return god_class
+
+
+def normalize_player(player):
+    ret_player = {}
+    ret_player["losses"] = player["Losses"]
+    ret_player["name"] = player["Name"]
+    ret_player["points"] = player["Points"]
+    ret_player["rankedStatConq"] = player["Rank_Stat_Conquest"]
+    ret_player["tier"] = player["Tier"]
+    ret_player['wins'] = player['Wins']
+    ret_player['id'] = player['player_id']
+    ret_player['games'] = player["Wins"] + player["Losses"]
+    return ret_player
 
 
 if __name__ == "__main__":

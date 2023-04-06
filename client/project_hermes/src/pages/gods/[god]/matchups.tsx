@@ -7,7 +7,10 @@ import { GodPageLayout } from ".";
 import IconName from "../../../components/general/IconName";
 import { getDefaultParams } from "../../../components/general/getDefaultParams";
 import { GodContext } from "../../../components/gods/GodContext";
-import { getWinRateColor } from "../../../components/gods/GodHelpers";
+import {
+  getWinRateColor,
+  handleQueryEnabled,
+} from "../../../components/gods/GodHelpers";
 import GodIconLoader, {
   GodDefaultFilterLoader,
 } from "../../../components/loader";
@@ -45,18 +48,10 @@ function MatchupsPage(props: {
     {
       // enable query if new filterlist is different from default Params
       // goal is to not query on mount but after filter changes
-      enabled:
-        JSON.stringify(
-          Object.values(props.dehydratedState.defaultParams).sort()
-        ) !==
-        JSON.stringify(
-          Object.values(
-            getDefaultParams(
-              filterList,
-              props.dehydratedState.defaultParams.god
-            )
-          ).sort()
-        ),
+      enabled: handleQueryEnabled(
+        props.dehydratedState.defaultParams,
+        filterList
+      ),
     }
   );
   if (router.query?.god) setGod(router.query.god);
@@ -72,7 +67,8 @@ function MatchupsPage(props: {
             loader={GodIconLoader}
             width={36}
             height={36}
-            displayName={"rounded-md border-2 border-yellow-800"}
+            styling={"rounded-md border-2 border-yellow-800"}
+            displayName={info.cell.getValue()}
           />
         ),
         footer: (info) => info.column.id,
@@ -116,10 +112,12 @@ function MatchupsPage(props: {
         size: MEDIUM_COLUMN_SIZE,
         cell: (info) => info.renderValue()?.toLocaleString(),
         footer: (info) => info.column.id,
+        enableSorting: true,
       }),
     ],
     []
   );
+
   return (
     <GodPageLayout defaultParams={props.dehydratedState.defaultParams}>
       <div className="flex justify-center">
@@ -129,7 +127,7 @@ function MatchupsPage(props: {
           }
           columns={columns}
           // defaultParams={}
-          defaultSort={[{ desc: true, id: "games.games" }]}
+          defaultSort={[{ desc: true, id: "games_games" }]}
           loading={isFetching}
         />
       </div>

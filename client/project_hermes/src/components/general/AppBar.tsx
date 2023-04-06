@@ -4,6 +4,7 @@ import { useContext } from "react";
 import * as GiIcons from "react-icons/gi";
 import { ImgurLoader } from "../loader";
 import { AppStateContext } from "./AppStateContext";
+import SearchBar from "./SearchBar";
 
 export default function AppBar() {
   const { open, setOpen } = useContext(AppStateContext);
@@ -19,7 +20,7 @@ export default function AppBar() {
           onClick={() => setOpen(!open)}
         ></GiIcons.GiHamburgerMenu>
       </div>
-      <Link href={"/"}>
+      <Link href={"/"} className="w-80">
         <Image
           className="h-12 w-52 cursor-pointer"
           loader={ImgurLoader}
@@ -29,6 +30,8 @@ export default function AppBar() {
           alt="SmiteStats Icon"
         />
       </Link>
+      <SearchBar />
+      <div className="w-80"></div>
     </div>
   );
 }

@@ -1,9 +1,11 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import TabList from "../../components/general/TabList";
 import { TierListContext } from "../../components/tierlist/TierListContext";
 import TierListHeader from "../../components/tierlist/TierListHeader";
 import { ILastUpdate } from "../../models/tierlist/tierlist.model";
 import { GodPagePropsType } from "../gods/[god]/build";
+import { GenericFilterList } from "../../components/general/GenericObejcts";
+import FilterListContainer from "../../components/general/FilterList";
 
 function TierIndex() {
   return <div></div>;
@@ -20,7 +22,49 @@ const TierListLayout = ({
   defaultParams: GodPagePropsType;
   lastUpdate: ILastUpdate;
 }) => {
-  const { tabs } = useContext(TierListContext);
+  const { tabs, filterList, setFilterList } = useContext(TierListContext);
+  let tempFilterList = [
+    {
+      filterValue: "role",
+      defaultValue: "All Roles",
+      enabled: true,
+      filterOptions: [
+        { optionName: "Carry", optionUrl: "https://i.imgur.com/RlRTbrA.png" },
+        { optionName: "Mid", optionUrl: "https://i.imgur.com/0oQkAAZ.png" },
+        { optionName: "Jungle", optionUrl: "https://i.imgur.com/CyXnzEO.png" },
+        { optionName: "Solo", optionUrl: "https://i.imgur.com/WLU0Cel.png" },
+        { optionName: "Support", optionUrl: "https://i.imgur.com/l7CD2QM.png" },
+        { optionName: "All Roles" },
+      ],
+    },
+    {
+      filterValue: "patch",
+      defaultValue: "10.3",
+      enabled: true,
+      filterOptions: [
+        { optionName: "10.1" },
+        { optionName: "10.2" },
+        { optionName: "10.3" },
+      ],
+    },
+    {
+      filterValue: "queueType",
+      defaultValue: "Ranked",
+      enabled: true,
+      filterOptions: [{ optionName: "Casual" }, { optionName: "Ranked" }],
+    },
+  ];
+  tempFilterList = tempFilterList.map((filter) => {
+    return {
+      ...filter,
+      defaultValue: defaultParams[filter.filterValue as keyof GodPagePropsType],
+    };
+  });
+
+  useEffect(() => {
+    setFilterList(tempFilterList);
+  }, []);
+
   return (
     <div id="god-profile-main-page" className="mx-auto flex w-full">
       <div
@@ -35,12 +79,13 @@ const TierListLayout = ({
           // linear-gradient(90deg, rgb(7, 7, 32) 0%, rgba(7, 7, 32, 0.6) 100%), url(${url})`,
           //   }}
         >
-          <div>
+          <div className="pb-5">
             <TierListHeader
               defaultParams={defaultParams}
               lastUpdate={lastUpdate}
             />
             <TabList {...tabs} />
+            <FilterListContainer context={TierListContext} />
             {children}
           </div>
         </div>

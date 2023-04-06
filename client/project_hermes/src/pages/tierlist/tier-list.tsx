@@ -7,6 +7,7 @@ import { TierListLayout } from ".";
 import Filter from "../../components/general/Filter";
 import { getWinRateColor } from "../../components/gods/GodHelpers";
 import GodIconLoader, {
+  GodDefaultFilterLoader,
   RoleIconLoader,
   TierListDefaultFilterLoader,
 } from "../../components/loader";
@@ -18,8 +19,9 @@ import {
   getLastUpdate,
   getTierListData,
 } from "../../service/gods/tierlist.service";
-import { getBaseUrl } from "../../utils/trpc";
+import { getApiUrl, getBaseUrl } from "../../utils/trpc";
 import { GodPagePropsType } from "../gods/[god]/build";
+import FilterListContainer from "../../components/general/FilterList";
 
 export const getTierColor = (tier: string): string => {
   let color = "#414165";
@@ -158,15 +160,14 @@ function TierList(props: {
 
   return (
     <TierListLayout
-      defaultParams={props.dehydratedState.defaultParams}
+      defaultParams={{
+        ...props.dehydratedState.defaultParams,
+        type: "Tier List",
+      }}
       lastUpdate={props.dehydratedState.lastUpdate.queries[0].state.data}
     >
-      <Filter
-        filterList={filterList}
-        setFilterList={setFilterList}
-        defaultParams={props.dehydratedState.defaultParams}
-      />
-      <div className="text-white">
+
+      <div className="pt-5 text-white">
         <TierListTable
           defaultParams={props.dehydratedState.defaultParams}
           columns={columns}
@@ -191,9 +192,9 @@ export const getServerSideProps: GetServerSideProps = async () => {
     tierListData: new QueryClient(),
   };
   const url = getBaseUrl();
-  const defaultParams: GodPagePropsType = await TierListDefaultFilterLoader({
+  const defaultParams: GodPagePropsType = await GodDefaultFilterLoader({
     url: url,
-    type: "Regular Tier List",
+    type: "Regular",
   });
 
   await queryClient.lastUpdate.prefetchQuery<ILastUpdate>({

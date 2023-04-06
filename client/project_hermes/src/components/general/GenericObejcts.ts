@@ -31,9 +31,9 @@ export const GenericFilterList = [
   },
   {
     filterValue: "patch",
-    defaultValue: "10.2",
+    defaultValue: "10.3",
     enabled: true,
-    filterOptions: [{ optionName: "10.1" }, { optionName: "10.2" }],
+    filterOptions: [{ optionName: "10.1" }, { optionName: "10.2" }, { optionName: "10.3" }],
   },
   {
     filterValue: "queueType",
