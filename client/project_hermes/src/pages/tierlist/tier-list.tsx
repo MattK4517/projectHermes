@@ -2,14 +2,13 @@ import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useContext } from "react";
 import { TierListLayout } from ".";
-import Filter from "../../components/general/Filter";
 import { getWinRateColor } from "../../components/gods/GodHelpers";
 import GodIconLoader, {
   GodDefaultFilterLoader,
   RoleIconLoader,
-  TierListDefaultFilterLoader,
 } from "../../components/loader";
 import CounterMatchupDisplay from "../../components/tierlist/CounterMatchupDisplay";
 import { TierListContext } from "../../components/tierlist/TierListContext";
@@ -19,9 +18,8 @@ import {
   getLastUpdate,
   getTierListData,
 } from "../../service/gods/tierlist.service";
-import { getApiUrl, getBaseUrl } from "../../utils/trpc";
-import { GodPagePropsType } from "../gods/[god]/build";
-import FilterListContainer from "../../components/general/FilterList";
+import { getBaseUrl } from "../../utils/trpc";
+import { GodPagePropsType } from "../gods/[god]/build/[role]";
 
 export const getTierColor = (tier: string): string => {
   let color = "#414165";
@@ -86,22 +84,29 @@ function TierList(props: {
         header: "God",
         size: 200,
         cell: (info) => (
-          <div className="m-1 flex w-full items-center justify-center lg:justify-start">
+          <Link
+            href={{
+              pathname: `/gods/${info.cell.getValue()}/build`,
+              query: { role: info.row.original.role },
+            }}
+            as={`/gods/${info.cell.getValue()}/build/${info.row.original.role}`}
+            className="m-1 flex w-full items-center justify-center text-white hover:font-semibold hover:text-lightBlue lg:justify-start"
+          >
             <Image
-              src={info.cell.getValue("god")}
+              src={info.cell.getValue()}
               loader={GodIconLoader}
               width={36}
               height={36}
               className={`rounded-sm`}
-              alt={`${info.cell.getValue("god")} icon`}
+              alt={`${info.cell.getValue()} icon`}
             />
             <span
-              className="ml-4 hidden w-fit text-sm text-white lg:block"
+              className="ml-4 hidden w-fit text-sm lg:block"
               style={{ whiteSpace: "initial" }}
             >
               {info.cell.getValue("god")}
             </span>
-          </div>
+          </Link>
         ),
         footer: (info) => info.column.id,
       }),
@@ -166,7 +171,6 @@ function TierList(props: {
       }}
       lastUpdate={props.dehydratedState.lastUpdate.queries[0].state.data}
     >
-
       <div className="pt-5 text-white">
         <TierListTable
           defaultParams={props.dehydratedState.defaultParams}

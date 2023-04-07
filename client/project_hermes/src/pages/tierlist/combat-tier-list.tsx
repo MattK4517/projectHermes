@@ -2,15 +2,13 @@ import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
-import React, { useContext } from "react";
+import React from "react";
 import { TierListLayout } from ".";
-import Filter from "../../components/general/Filter";
 import { getWinRateColor } from "../../components/gods/GodHelpers";
 import GodIconLoader, {
   RoleIconLoader,
   TierListDefaultFilterLoader,
 } from "../../components/loader";
-import { TierListContext } from "../../components/tierlist/TierListContext";
 import TierListTable from "../../components/tierlist/TierListTable";
 import { ILastUpdate } from "../../models/tierlist/tierlist.model";
 import {
@@ -18,7 +16,7 @@ import {
   getTierListData,
 } from "../../service/gods/tierlist.service";
 import { getBaseUrl } from "../../utils/trpc";
-import { GodPagePropsType } from "../gods/[god]/build";
+import { GodPagePropsType } from "../gods/[god]/build/[role]";
 
 function CombatTierList(props: {
   dehydratedState: {

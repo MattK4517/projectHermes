@@ -1,5 +1,7 @@
 import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 import Link from "next/link";
+import { ImgurLoader } from "../../components/loader";
 import { getBaseUrl } from "../../utils/trpc";
 
 interface god {
@@ -28,9 +30,12 @@ export default function GodsList<NextPage>(props: { dehydratedState: any }) {
           return (
             <Link key={index} href={"/gods/".concat(god.name, "/build")}>
               <div className="box-border flex h-fit w-fit cursor-pointer flex-col items-center hover:text-sm hover:text-white">
-                <img
+                <Image
                   className="h-20 w-20 bg-neutral-900"
                   src={god.url}
+                  loader={ImgurLoader}
+                  width={80}
+                  height={80}
                   alt={god.name}
                 />
                 <div className="mt-1 w-fit text-xs text-lightBlue">

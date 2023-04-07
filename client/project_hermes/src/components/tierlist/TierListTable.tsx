@@ -8,7 +8,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import React, { useEffect, useState } from "react";
-import { GodPagePropsType } from "../../pages/gods/[god]/build";
+import { GodPagePropsType } from "../../pages/gods/[god]/build/[role]";
 import Loading from "../general/Loading";
 
 export default function TierListTable({

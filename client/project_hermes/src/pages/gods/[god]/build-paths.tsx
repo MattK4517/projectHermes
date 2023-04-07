@@ -18,7 +18,7 @@ import {
 import TierListTable from "../../../components/tierlist/TierListTable";
 import { getGodPageData } from "../../../service/gods/gods.service";
 import { getBaseUrl } from "../../../utils/trpc";
-import { GodPagePropsType } from "./build";
+import { GodPagePropsType } from "./build/[role]";
 
 function BuildPathsPage(props: {
   dehydratedState: {

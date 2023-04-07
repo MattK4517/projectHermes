@@ -1,5 +1,5 @@
 import { tier } from "../../models/gods/gods.model";
-import { GodPagePropsType } from "../../pages/gods/[god]/build";
+import { GodPagePropsType } from "../../pages/gods/[god]/build/[role]";
 import { FilterListType } from "../general/Filter";
 import { getDefaultParams } from "../general/getDefaultParams";
 
@@ -107,55 +107,43 @@ export const getPlayerWinRateColor = (winRate: number): string => {
 };
 
 export const getRankTierColor = (rank: string) => {
-  let color = "white"
+  let color = "white";
   if (rank === "Bronze") {
-    color = "yellow-600"
+    color = "yellow-600";
+  } else if (rank == "Grandmaster") {
+    color = "yellow-200";
   }
-  else if (rank == "Grandmaster") {
-    color = "yellow-200"
-   }
-   return color
-}
+  return color;
+};
 
-
-
-export const handleQueryEnabled = (defaultParams: GodPagePropsType, filterList: FilterListType[]) => {
-  const enabled = JSON.stringify(
-    Object.values(defaultParams).sort()
-  ) !==
-  JSON.stringify(
-    Object.values(
-      getDefaultParams(
-        filterList,
-        defaultParams.god
-      )
-    ).sort()
-  )
-  return enabled
-}
+export const handleQueryEnabled = (
+  defaultParams: GodPagePropsType,
+  filterList: FilterListType[]
+) => {
+  const enabled =
+    JSON.stringify(Object.values(defaultParams).sort()) !==
+    JSON.stringify(
+      Object.values(getDefaultParams(filterList, defaultParams.god)).sort()
+    );
+  return enabled;
+};
 
 export const normalizeTier = (tier: string) => {
-  let rank = "Error"
+  let rank = "Error";
   if (tier <= 5) {
-    rank = "Bronze"
+    rank = "Bronze";
+  } else if (tier <= 10) {
+    rank = "Silver";
+  } else if (tier <= 15) {
+    rank = "Gold";
+  } else if (tier <= 20) {
+    rank = "Platinum";
+  } else if (tier <= 25) {
+    rank = "Diamond";
+  } else if (tier == 26) {
+    rank = "Masters";
+  } else if (tier == 27) {
+    rank = "Grandmaster";
   }
-  else if (tier <= 10) {
-    rank = "Silver"
-  }
-  else if (tier <= 15) {
-    rank = "Gold"
-  }
-  else if (tier <= 20) {
-    rank = "Platinum"
-  }
-  else if (tier <= 25) {
-    rank = "Diamond"
-  }
-  else if (tier == 26) {
-    rank = "Masters"
-  }
-  else if (tier == 27) {
-    rank = "Grandmaster"
-  }
-  return rank
-}
+  return rank;
+};

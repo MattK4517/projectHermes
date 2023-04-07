@@ -1,25 +1,19 @@
-import {
-  dehydrate,
-  QueryClient,
-  useQueries,
-  useQuery,
-} from "@tanstack/react-query";
+import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import { useContext } from "react";
-import { GodPageLayout, linkDict } from ".";
-import { BuildRow } from "../../../components/gods/build/BuildRow";
-import WinRateStats from "../../../components/gods/build/WinRateStats";
-import { GodContext } from "../../../components/gods/GodContext";
-import MatchupRow from "../../../components/gods/matchups/MatchupRow";
-import { GodDefaultFilterLoader } from "../../../components/loader";
-import { god, GodWinRateType } from "../../../models/gods/gods.model";
-import { Build } from "../../../models/items.model";
-import { getGodPageData } from "../../../service/gods/gods.service";
-import { getBaseUrl } from "../../../utils/trpc";
-import { handleQueryEnabled } from "../../../components/gods/GodHelpers";
-import { getDefaultParams } from "../../../components/general/getDefaultParams";
-import Loading from "../../../components/general/Loading";
+import { GodPageLayout, linkDict } from "..";
+import { getDefaultParams } from "../../../../components/general/getDefaultParams";
+import { BuildRow } from "../../../../components/gods/build/BuildRow";
+import WinRateStats from "../../../../components/gods/build/WinRateStats";
+import { GodContext } from "../../../../components/gods/GodContext";
+import { handleQueryEnabled } from "../../../../components/gods/GodHelpers";
+import MatchupRow from "../../../../components/gods/matchups/MatchupRow";
+import { GodDefaultFilterLoader } from "../../../../components/loader";
+import { god, GodWinRateType } from "../../../../models/gods/gods.model";
+import { Build } from "../../../../models/items.model";
+import { getGodPageData } from "../../../../service/gods/gods.service";
+import { getBaseUrl } from "../../../../utils/trpc";
 
 export type GodPagePropsType = {
   god: god;
@@ -144,6 +138,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     godBuild: new QueryClient(),
   };
 
+  console.log(context);
   const { god } = context.params;
 
   let url = getBaseUrl();

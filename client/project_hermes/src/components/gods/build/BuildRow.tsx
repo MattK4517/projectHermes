@@ -1,13 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
-import { Build } from "../../../models/items.model";
-import { SingleBuildDisplay } from "./SingleBuildDisplay";
 import { useContext } from "react";
+import { Build } from "../../../models/items.model";
+import { GodPagePropsType } from "../../../pages/gods/[god]/build/[role]";
 import { getGodPageData } from "../../../service/gods/gods.service";
+import Loading from "../../general/Loading";
 import { getDefaultParams } from "../../general/getDefaultParams";
 import { GodContext } from "../GodContext";
 import { handleQueryEnabled } from "../GodHelpers";
-import { GodPagePropsType } from "../../../pages/gods/[god]/build";
-import Loading from "../../general/Loading";
+import { SingleBuildDisplay } from "./SingleBuildDisplay";
 
 export const BuildRow = ({
   build,

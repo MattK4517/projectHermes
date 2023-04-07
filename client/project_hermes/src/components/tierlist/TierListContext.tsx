@@ -1,7 +1,5 @@
-import { createContext, FC, SetStateAction, useState } from "react";
-import { GodPagePropsType } from "../../pages/gods/[god]/build";
+import { createContext, FC, useState } from "react";
 import { FilterListType } from "../general/Filter";
-import { GenericFilterList } from "../general/GenericObejcts";
 
 export const TierListContext = createContext<any>({
   tabs: [

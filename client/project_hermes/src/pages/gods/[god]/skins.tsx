@@ -22,7 +22,7 @@ import TierListTable from "../../../components/tierlist/TierListTable";
 import { ISkinStatsReturnType } from "../../../models/gods/gods.model";
 import { getGodPageData } from "../../../service/gods/gods.service";
 import { getBaseUrl } from "../../../utils/trpc";
-import { GodPagePropsType } from "./build";
+import { GodPagePropsType } from "./build/[role]";
 
 function SkinsPage(props: {
   dehydratedState: {

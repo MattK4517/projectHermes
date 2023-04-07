@@ -1,13 +1,6 @@
-import { useContext } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { god } from "../../../models/gods/gods.model";
-import { getGodPageData } from "../../../service/gods/gods.service";
 import Loading from "../../general/Loading";
-import { getDefaultParams } from "../../general/getDefaultParams";
-import { GodContext } from "../GodContext";
-import { handleQueryEnabled } from "../GodHelpers";
 import SingleMatchupDisplay from "./SingleMatchupDisplay";
-import { GodPagePropsType } from "../../../pages/gods/[god]/build";
 
 export type MatchupRowType = {
   [matchup in god]: {

@@ -1,8 +1,11 @@
 import { god } from "../../models/gods/gods.model";
-import { GodPagePropsType } from "../../pages/gods/[god]/build";
+import { GodPagePropsType } from "../../pages/gods/[god]/build/[role]";
 import { FilterListType } from "./Filter";
 
-export const getDefaultParams = (filterList: FilterListType[], god: god): GodPagePropsType => {
+export const getDefaultParams = (
+  filterList: FilterListType[],
+  god: god
+): GodPagePropsType => {
   // @ts-ignore
   return filterList.reduce(
     (obj, item) =>

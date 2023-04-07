@@ -6,12 +6,12 @@ import { GodPageLayout } from ".";
 import { getDefaultParams } from "../../../components/general/getDefaultParams";
 import Loading from "../../../components/general/Loading";
 import { GodContext } from "../../../components/gods/GodContext";
+import { handleQueryEnabled } from "../../../components/gods/GodHelpers";
 import LargeItemRow from "../../../components/gods/items/LargeItemRow";
 import { GodDefaultFilterLoader } from "../../../components/loader";
 import { getGodPageData } from "../../../service/gods/gods.service";
 import { getBaseUrl } from "../../../utils/trpc";
-import { GodPagePropsType } from "./build";
-import { handleQueryEnabled } from "../../../components/gods/GodHelpers";
+import { GodPagePropsType } from "./build/[role]";
 
 function ItemsPage(props: {
   dehydratedState: {

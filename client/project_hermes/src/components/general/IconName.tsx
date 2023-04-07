@@ -8,6 +8,7 @@ interface IIconName {
   displayName?: string;
   iconStyling: string;
   textStyling: string;
+  divStyling: string;
 }
 
 const IconName = ({
@@ -18,9 +19,12 @@ const IconName = ({
   displayName,
   iconStyling,
   textStyling,
+  divStyling,
 }: IIconName) => {
   return (
-    <div className="m-1 flex w-full items-center justify-center lg:justify-start">
+    <div
+      className={`m-1 flex w-full items-center justify-center lg:justify-start ${divStyling}`}
+    >
       <Image
         src={displayIcon}
         loader={loader}

@@ -8,7 +8,7 @@ import TabList from "../../../components/general/TabList";
 import { GodContext } from "../../../components/gods/GodContext";
 import PageHeader from "../../../components/gods/PageHeader";
 import { god } from "../../../models/gods/gods.model";
-import { GodPagePropsType } from "./build";
+import { GodPagePropsType } from "./build/[role]";
 
 function GodIndex<NextPage>() {
   return <div></div>;
@@ -54,13 +54,15 @@ const GodPageLayout = ({
   const godPageQueries = useQueries({
     queries: [
       {
-        queryKey: ["god-abilities", god],
-        queryFn: async () => (await fetch("/api/" + god + "/abilities")).json(),
+        queryKey: ["god-abilities", defaultParams.god],
+        queryFn: async () =>
+          (await fetch("/api/" + defaultParams.god + "/abilities")).json(),
         cacheTime: Infinity,
       },
       {
-        queryKey: ["god-data", god],
-        queryFn: async () => (await fetch("/api/" + god + "/data")).json(),
+        queryKey: ["god-data", defaultParams.god],
+        queryFn: async () =>
+          (await fetch("/api/" + defaultParams.god + "/data")).json(),
         cacheTime: Infinity,
       },
     ],
@@ -72,11 +74,13 @@ const GodPageLayout = ({
   if (isError) return <h1>ERROR...</h1>;
   const data = godPageQueries.map((query) => query.data);
 
+  console.log(data);
+
   //@ts-ignore
   let url = linkDict[god?.toString()];
 
   return (
-    <div id="god-profile-main-page" className="mx-auto flex w-full">
+    <div id="god-profile-main-page" className="mx-auto flex w-full pb-5">
       <div
         id="god-profile-content-container content-side-padding"
         className="w-full sm:px-3"

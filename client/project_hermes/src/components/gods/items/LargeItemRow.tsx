@@ -1,6 +1,6 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import React, { useContext } from "react";
-import { GodPagePropsType } from "../../../pages/gods/[god]/build";
+import { GodPagePropsType } from "../../../pages/gods/[god]/build/[role]";
 import IconName from "../../general/IconName";
 import { getDefaultParams } from "../../general/getDefaultParams";
 import { ItemIconLoader } from "../../loader";

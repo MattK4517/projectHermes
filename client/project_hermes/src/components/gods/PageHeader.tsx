@@ -8,7 +8,7 @@ import {
   god,
   tier,
 } from "../../models/gods/gods.model";
-import { GodPagePropsType } from "../../pages/gods/[god]/build";
+import { GodPagePropsType } from "../../pages/gods/[god]/build/[role]";
 import { getDefaultParams } from "../general/getDefaultParams";
 import GodIconLoader, { GodAbilityIconLoader } from "../loader";
 import { GodContext } from "./GodContext";
@@ -67,10 +67,7 @@ const PageHeader = ({
                 <div className="notch-border absolute left-1/2"></div>
                 <div className="god-image object-cover">
                   <Image
-                    src={god
-                      .replaceAll("'", "")
-                      .replaceAll(" ", "-")
-                      .toLowerCase()}
+                    src={god}
                     alt={god}
                     loader={GodIconLoader}
                     fill={true}

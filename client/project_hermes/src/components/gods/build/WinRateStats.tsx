@@ -1,16 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
+import { useContext } from "react";
 import { tier } from "../../../models/gods/gods.model";
+import { GodPagePropsType } from "../../../pages/gods/[god]/build/[role]";
 import { getGodPageData } from "../../../service/gods/gods.service";
+import Loading from "../../general/Loading";
 import { getDefaultParams } from "../../general/getDefaultParams";
+import { GodContext } from "../GodContext";
 import {
   getTierColor,
   getWinRateColor,
   handleQueryEnabled,
 } from "../GodHelpers";
-import { useContext } from "react";
-import { GodContext } from "../GodContext";
-import { GodPagePropsType } from "../../../pages/gods/[god]/build";
-import Loading from "../../general/Loading";
 
 export type WinRateStatsType = {
   winRate: number;

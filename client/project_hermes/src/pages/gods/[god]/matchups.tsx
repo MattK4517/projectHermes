@@ -18,7 +18,7 @@ import TierListTable from "../../../components/tierlist/TierListTable";
 import { IDetailMatchupsReturnType } from "../../../models/gods/gods.model";
 import { getGodPageData } from "../../../service/gods/gods.service";
 import { getBaseUrl } from "../../../utils/trpc";
-import { GodPagePropsType } from "./build";
+import { GodPagePropsType } from "./build/[role]";
 
 function MatchupsPage(props: {
   dehydratedState: {
@@ -60,7 +60,7 @@ function MatchupsPage(props: {
     () => [
       columnHelper.accessor("_id", {
         header: "Enemy",
-        size: 200,
+        size: 400,
         cell: (info) => (
           <IconName
             displayIcon={info.cell.getValue() || ""}

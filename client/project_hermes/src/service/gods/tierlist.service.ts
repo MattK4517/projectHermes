@@ -1,4 +1,4 @@
-import { GodPagePropsType } from "../../pages/gods/[god]/build";
+import { GodPagePropsType } from "../../pages/gods/[god]/build/[role]";
 import { getBaseUrl } from "../../utils/trpc";
 
 export async function getLastUpdate(patch: string) {

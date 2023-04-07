@@ -1,27 +1,25 @@
-import { GetStaticProps } from "next";
 import { QueryClient, dehydrate } from "@tanstack/react-query";
-import { GodWinRateType } from "../../models/gods/gods.model";
-import { getLeaderboard } from "../../service/gods/general.service";
 import { createColumnHelper } from "@tanstack/react-table";
+import { GetStaticProps } from "next";
+import Image from "next/image";
+import Link from "next/link";
 import React from "react";
-import TierListTable from "../../components/tierlist/TierListTable";
+import IconName from "../../components/general/IconName";
+import {
+  getPlayerWinRateColor,
+  getRankTierColor,
+  normalizeTier,
+} from "../../components/gods/GodHelpers";
+import LeaderboardCard, {
+  ILeaderboardPlayer,
+} from "../../components/leaderboard/LeaderboardCard";
 import GodIconLoader, {
   ImgurLoader,
   RankIconLoader,
 } from "../../components/loader";
-import Image, { ImageLoaderProps } from "next/image";
-import {
-  getPlayerWinRateColor,
-  getRankTierColor,
-  getTierColor,
-  getWinRateColor,
-  normalizeTier,
-} from "../../components/gods/GodHelpers";
-import IconName from "../../components/general/IconName";
-import Link from "next/link";
-import LeaderboardCard, {
-  ILeaderboardPlayer,
-} from "../../components/leaderboard/LeaderboardCard";
+import TierListTable from "../../components/tierlist/TierListTable";
+import { GodWinRateType } from "../../models/gods/gods.model";
+import { getLeaderboard } from "../../service/gods/general.service";
 
 const Leaderboard = (props: {
   dehydratedState: {
@@ -71,7 +69,7 @@ const Leaderboard = (props: {
                 alt={`${info.cell.getValue()} icon`}
               />
               <span
-                className="ml-4 hidden w-fit text-sm text-white lg:block"
+                className="ml-4 block w-fit text-xs text-white lg:text-sm"
                 style={{ whiteSpace: "initial" }}
               >
                 {info.row.original.name || "Hidden Profile"}
@@ -83,12 +81,12 @@ const Leaderboard = (props: {
               {info.row.original.name ? (
                 <Link
                   href={`/players/${info.row.original.id}`}
-                  className="m-1 ml-14 flex w-full items-center justify-start"
+                  className="m-1 ml-2 flex w-full items-center justify-start text-xs lg:ml-14 lg:text-sm"
                 >
                   {children}
                 </Link>
               ) : (
-                <div className="m-1 ml-14 flex w-full items-center justify-start">
+                <div className="m-1 ml-2 flex w-full items-center justify-start text-xs lg:ml-14 lg:text-sm">
                   {children}
                 </div>
               )}
@@ -107,7 +105,7 @@ const Leaderboard = (props: {
           const rankIcon = RankIconLoader(rankName, "Conquest");
 
           return (
-            <div>
+            <div className="flex justify-center">
               <IconName
                 displayIcon={rankIcon}
                 loader={ImgurLoader}
@@ -128,10 +126,10 @@ const Leaderboard = (props: {
         size: MEDIUM_COLUMN_SIZE,
         cell: (info) => Number(info.renderValue()).toFixed(),
         footer: (info) => info.column.id,
-        enableSorting: true,
+        enableSorting: false,
       }),
       columnHelper.accessor("games", {
-        header: "Games",
+        header: "Win Rate",
         size: 200,
         cell: (info) => {
           const winRate = (
@@ -140,12 +138,15 @@ const Leaderboard = (props: {
           ).toFixed(0);
           const winRateColor = getPlayerWinRateColor(winRate);
           return (
-            <div className="w-40">
-              <span className="min-w-full text-white">
+            <div className="w-fit lg:w-40">
+              <span className="block text-white lg:hidden">
+                <span style={{ color: winRateColor }}>{winRate}%</span> WR{" "}
+              </span>
+              <span className="hidden text-white lg:block">
                 <span style={{ color: winRateColor }}>{winRate}%</span> WR{" "}
                 {info.row.original.wins}W / {info.row.original.losses}L
               </span>
-              <div className="h-1 w-full rounded-md bg-slate-700">
+              <div className="hidden h-1 w-full rounded-md bg-slate-700 lg:block">
                 <div
                   className="h-1 rounded-md"
                   style={{
@@ -166,7 +167,7 @@ const Leaderboard = (props: {
   );
   console.log(data);
   return (
-    <div className="flex flex-col text-white">
+    <div className="flex flex-col pb-5 text-white">
       <div className="mb-10">
         <span className="text-3xl font-bold">Ranked Conquest Leaderboards</span>
       </div>

@@ -1,11 +1,10 @@
 import { useContext, useEffect } from "react";
+import FilterListContainer from "../../components/general/FilterList";
 import TabList from "../../components/general/TabList";
 import { TierListContext } from "../../components/tierlist/TierListContext";
 import TierListHeader from "../../components/tierlist/TierListHeader";
 import { ILastUpdate } from "../../models/tierlist/tierlist.model";
-import { GodPagePropsType } from "../gods/[god]/build";
-import { GenericFilterList } from "../../components/general/GenericObejcts";
-import FilterListContainer from "../../components/general/FilterList";
+import { GodPagePropsType } from "../gods/[god]/build/[role]";
 
 function TierIndex() {
   return <div></div>;

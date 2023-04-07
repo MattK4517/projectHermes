@@ -1,5 +1,5 @@
 import { ILastUpdate } from "../../models/tierlist/tierlist.model";
-import { GodPagePropsType } from "../../pages/gods/[god]/build";
+import { GodPagePropsType } from "../../pages/gods/[god]/build/[role]";
 
 interface ITierListHeaderProps {
   defaultParams: GodPagePropsType;
