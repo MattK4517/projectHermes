@@ -52,22 +52,5 @@ if __name__ == "__main__":
             responseFormat=pyrez.Format.JSON,
         )
 
-    patch = smite_api.getPatchInfo()["version_string"]
-    for mode in modes:
-        for queue_type in queue_types:
-            if queue_type == "Ranked":
-                for input_type in input_types:
-                    run_pull(
-                        patch, curr_time, queue_type, mode, input_type, date_insert
-                    )
-                    print(
-                        f"pull done: {patch}, {curr_time}, {queue_type},{mode}, {input_type}, {date_insert}\n"
-                    )
-
-            elif queue_type == "Casual":
-                run_pull(patch, curr_time, queue_type, mode, "KBM", date_insert)
-                print(
-                    f"pull done: {patch}, {curr_time}, {queue_type},{mode}, {input_type}, {date_insert}\n"
-                )
-            if curr_time == 12:
-                anlz.calc_total_matches(client, all_ranks, patch, queue_type, mode)
+    patch = smite_api.getItems()
+    print(patch)

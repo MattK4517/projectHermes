@@ -196,4 +196,4 @@ def create_match_dict(match, patch):
 
 
 if __name__ == "__main__":
-    remove_duplicates(client, "9.5")
+    print("KJDALKJDSsl")

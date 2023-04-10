@@ -177,6 +177,30 @@ def normalize_player(player):
     return ret_player
 
 
+def get_new_items(smite_api: SmiteAPI):
+    prices = {}
+    items = []
+    items = smite_api.getItems()
+    for item in range(len(items)):
+        if items[item]["RootItemId"] not in prices:
+            prices[items[item]["RootItemId"]] = {
+                items[item]["DeviceName"]: {
+                    "Price": items[item]["Price"],
+                    "Tier": items[item]["ItemTier"],
+                    "Name": items[item]["DeviceName"],
+                }
+            }
+        else:
+            prices[items[item]["RootItemId"]][items[item]["DeviceName"]] = {
+                "Price": items[item]["Price"],
+                "Tier": items[item]["ItemTier"],
+                "Name": items[item]["DeviceName"],
+            }
+
+        items.append(create_item_dict(items[item], prices))
+    return items
+
+
 if __name__ == "__main__":
     from main import client
 

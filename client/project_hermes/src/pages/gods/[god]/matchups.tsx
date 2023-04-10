@@ -30,7 +30,7 @@ function MatchupsPage(props: {
   const { setGod, filterList } = useContext(GodContext);
 
   const columnHelper = createColumnHelper();
-  const MEDIUM_COLUMN_SIZE = 80;
+  const MEDIUM_COLUMN_SIZE = 100;
 
   const { data, isFetching } = useQuery(
     [
@@ -60,7 +60,7 @@ function MatchupsPage(props: {
     () => [
       columnHelper.accessor("_id", {
         header: "Enemy",
-        size: 400,
+        size: 250,
         cell: (info) => (
           <IconName
             displayIcon={info.cell.getValue() || ""}
@@ -69,6 +69,7 @@ function MatchupsPage(props: {
             height={36}
             styling={"rounded-md border-2 border-yellow-800"}
             displayName={info.cell.getValue()}
+            divStyling={"ml-10"}
           />
         ),
         footer: (info) => info.column.id,
@@ -95,6 +96,12 @@ function MatchupsPage(props: {
         cell: (info) => <span>{`${info.renderValue()}`}</span>,
         footer: (info) => info.column.id,
       }),
+      columnHelper.accessor("avgMitiDiff", {
+        header: "Miti Diff",
+        size: MEDIUM_COLUMN_SIZE,
+        cell: (info) => <span>{`${info.renderValue()}`}</span>,
+        footer: (info) => info.column.id,
+      }),
       columnHelper.accessor("avgKillDiff", {
         header: "Kill Diff",
         size: MEDIUM_COLUMN_SIZE,
@@ -103,6 +110,12 @@ function MatchupsPage(props: {
       }),
       columnHelper.accessor("avgGoldDiff", {
         header: "Gold Diff",
+        size: MEDIUM_COLUMN_SIZE,
+        cell: (info) => <span>{`${info.renderValue()}`}</span>,
+        footer: (info) => info.column.id,
+      }),
+      columnHelper.accessor("avgMatchTime", {
+        header: "Avg Time",
         size: MEDIUM_COLUMN_SIZE,
         cell: (info) => <span>{`${info.renderValue()}`}</span>,
         footer: (info) => info.column.id,
@@ -127,7 +140,7 @@ function MatchupsPage(props: {
           }
           columns={columns}
           // defaultParams={}
-          defaultSort={[{ desc: true, id: "games_games" }]}
+          defaultSort={[{ desc: false, id: "games_winRate" }]}
           loading={isFetching}
         />
       </div>

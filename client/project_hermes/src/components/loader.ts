@@ -37,7 +37,6 @@ export async function GodDefaultFilterLoader({
   god: string;
   url?: string;
 }) {
-  console.log(url + `/api/default_filter/${god}`);
   return (await fetch(url + `/api/default_filter/${god}`)).json();
 }
 
@@ -48,7 +47,6 @@ export async function TierListDefaultFilterLoader({
   url: string;
   type: string;
 }) {
-  console.log("HERE", url + `/api/default_filter/${type}`);
   return (await fetch(url + `/api/default_filter/${type}`)).json();
 }
 

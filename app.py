@@ -178,7 +178,7 @@ def get_tier_list(rank, role, tableType, queue_type, patch, mode, page=0):
                 retData[dict_god][dict_role] = x
 
     elif tableType == "Duos":
-        role_one, role_two = role.split("_")
+        role_one, role_two = role.split("-")
         retData = get_lanes(role_one, role_two, patch)
 
     return json.loads(json_util.dumps(retData))
@@ -187,6 +187,15 @@ def get_tier_list(rank, role, tableType, queue_type, patch, mode, page=0):
 @app.route(proxy_route + "/getitemdata/<item>")
 def get_item_data(item):
     return anlz.get_item_data(client, item)
+
+
+@app.route(proxy_route + "/getitems")
+def get_items():
+    with open("/cred.txt", "r") as f:
+        data = f.readlines()
+        smite_api = SmiteAPI(devId=data[0].strip(
+        ), authKey=data[1].strip())
+    return {"items": fh.get_new_items(smite_api)}
 
 
 @app.route(proxy_route + "/items/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>")
@@ -588,24 +597,22 @@ def get_god_da(god):
 @app.route(proxy_route + "/default_filter/<god>")
 @app.route(proxy_route + "/default_filter")
 def default_filter(god=""):
+    role = ""
     if god in godsDict:
-        return {
-            "god": god,
-            "role": godsDict[god],
-            "rank": "All Ranks",
-            "patch": "10.3",
-            "queueType": "Ranked",
-            "mode": "Conquest",
-        }
+        role = godsDict[god]
+    elif god == "Duo":
+        role = "Support-Carry"
     else:
-        return {
-            "role": "All Roles",
-            "rank": "All Ranks",
-            "patch": "10.3",
-            "queueType": "Ranked",
-            "mode": "Conquest",
-            "type": god,
-        }
+        role = "All Roles"
+
+    return {
+        "god": god,
+        "role": role,
+        "rank": "All Ranks",
+        "patch": "10.3",
+        "queueType": "Ranked",
+        "mode": "Conquest",
+    }
 
 
 @app.route(proxy_route + "/get_last_update/<patch>")

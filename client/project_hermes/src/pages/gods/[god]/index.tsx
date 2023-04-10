@@ -74,7 +74,6 @@ const GodPageLayout = ({
   if (isError) return <h1>ERROR...</h1>;
   const data = godPageQueries.map((query) => query.data);
 
-  console.log(data);
 
   //@ts-ignore
   let url = linkDict[god?.toString()];

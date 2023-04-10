@@ -32,16 +32,6 @@ function BuildPathsPage(props: {
   const columnHelper = createColumnHelper();
   const MEDIUM_COLUMN_SIZE = 80;
   let { setGod, filterList } = useContext(GodContext);
-  console.log(
-    JSON.stringify(
-      Object.values(props.dehydratedState.defaultParams).sort()
-    ) !==
-      JSON.stringify(
-        Object.values(
-          getDefaultParams(filterList, props.dehydratedState.defaultParams.god)
-        ).sort()
-      )
-  );
   const { data, isFetching } = useQuery(
     [
       "god-build-paths",

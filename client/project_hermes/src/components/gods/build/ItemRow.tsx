@@ -6,7 +6,7 @@ interface IItemRowProps {
 export const ItemRow = ({ item }: IItemRowProps) => {
   if (item.games > 0) {
     return (
-      <div className="flex items-center">
+      <div className="flex h-12 items-center">
         <img src={item.itemIcon_URL} className="item-icon mr-3" />
         <div className="flex flex-col">
           <span style={{ fontSize: "12px", fontWeight: "700" }}>

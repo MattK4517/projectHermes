@@ -35,7 +35,6 @@ export default function TierListTable({
   }, [tableData]);
 
   const [sorting, setSorting] = React.useState<SortingState>(defaultSort);
-  console.log(sorting);
 
   const table = useReactTable({
     data: data || [],

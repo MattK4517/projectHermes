@@ -28,7 +28,6 @@ def get_lanes(role_one: str, role_two: str, patch: str) -> list:
     role_two_lowercase = role_two.lower()
     lanes = {}
     myquery = {"Patch": {"$exists": True}, "Type": f"{role_one}{role_two}"}
-    print
     winning_lanes = []
     for x in duocol.aggregate(
         [
@@ -43,10 +42,10 @@ def get_lanes(role_one: str, role_two: str, patch: str) -> list:
                     },
                     f"winning{role_one}WR": {"$avg": f"${role_one_lowercase}WinRate"},
                     f"winning{role_two}WR": {"$avg": f"${role_two_lowercase}WinRate"},
-                    "count": {"$sum": 1},
+                    "games": {"$sum": 1},
                 }
             },
-            {"$sort": {"count": 1}},
+            {"$sort": {"games": 1}},
         ]
     ):
         winning_lanes.append(x)
@@ -65,25 +64,25 @@ def get_lanes(role_one: str, role_two: str, patch: str) -> list:
                     },
                     f"winning{role_one}WR": {"$avg": f"${role_one_lowercase}WinRate"},
                     f"winning{role_two}WR": {"$avg": f"${role_two_lowercase}WinRate"},
-                    "count": {"$sum": 1},
+                    "games": {"$sum": 1},
                 }
             },
-            {"$sort": {"count": 1}},
+            {"$sort": {"games": 1}},
         ]
     ):
         losing_lanes.append(x)
     god_wrs = {role_one: {}, role_two: {}}
     for winning_duo in winning_lanes:
         for losing_duo in losing_lanes:
-            if winning_duo["count"] + losing_duo["count"] > 50:
+            if winning_duo["games"] + losing_duo["games"] > 0:
                 if winning_duo["_id"] == losing_duo["_id"] and (
                     winning_duo["_id"][role_one_lowercase]
                     and winning_duo["_id"][role_two_lowercase]
                 ):
 
                     syneryFactor = round(
-                        winning_duo["count"]
-                        / (winning_duo["count"] + losing_duo["count"])
+                        winning_duo["games"]
+                        / (winning_duo["games"] + losing_duo["games"])
                         * 100,
                         2,
                     ) - sqrt(
@@ -96,10 +95,10 @@ def get_lanes(role_one: str, role_two: str, patch: str) -> list:
                     ] = {
                         **winning_duo,
                         **{
-                            "losses": losing_duo["count"],
+                            "losses": losing_duo["games"],
                             "winRate": round(
-                                winning_duo["count"]
-                                / (winning_duo["count"] + losing_duo["count"])
+                                winning_duo["games"]
+                                / (winning_duo["games"] + losing_duo["games"])
                                 * 100,
                                 2,
                             ),
@@ -259,4 +258,5 @@ def calc_duo_tier_list(
 
 
 if __name__ == "__main__":
+    get_lanes("Support", "Carry", "10.3")
     pass

@@ -61,8 +61,8 @@ const Leaderboard = (props: {
             <>
               {" "}
               <Image
-                src={info.cell.getValue()}
-                loader={GodIconLoader}
+                src={"https://i.imgur.com/KgTaobI.png"}
+                loader={ImgurLoader}
                 width={36}
                 height={36}
                 className={`rounded-sm`}
@@ -165,7 +165,6 @@ const Leaderboard = (props: {
     ],
     []
   );
-  console.log(data);
   return (
     <div className="flex flex-col pb-5 text-white">
       <div className="mb-10">

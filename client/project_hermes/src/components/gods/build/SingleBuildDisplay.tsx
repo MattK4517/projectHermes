@@ -16,11 +16,19 @@ export const SingleBuildDisplay = ({
         slot !== 6 && slot !== 3 ? "sm:nav-border" : ""
       }  ${slot === 3 ? "lg:nav-border" : ""}`}
     >
-      <div className="card-header">
+      <div className="card-header min-w-max">
         {slot === 1 ? "Starting Items" : `Slot ${slot}`}
       </div>
-      <ItemRow item={item1} />
-      <ItemRow item={item2} />
+      {item1.item ? (
+        <ItemRow item={item1} />
+      ) : (
+        <div className="h-12 w-full "></div>
+      )}
+      {item2.item ? (
+        <ItemRow item={item2} />
+      ) : (
+        <div className="h-12 w-full"></div>
+      )}
     </div>
   );
 };
