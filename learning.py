@@ -81,10 +81,10 @@
 
 # print("{} is the word".format(word))
 # from main import client
-# from constants import Tier_Three_items, Starter_items
+# from constants import Tier_Three_items, starter_items
 # import flaskHelper as fh
 # mydb = client["Item_Data"]
-# items = Tier_Three_items + Starter_items
+# items = Tier_Three_items + starter_items
 # ret_data = {"data": []}
 # for item in items:
 #     mycol = mydb[item]

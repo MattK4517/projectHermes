@@ -11,7 +11,7 @@
 # from collections import OrderedDict
 # from main import client
 # from flask import Flask, render_template, request
-# from constants import godsDict, roles, id_dict, Tier_Three_items, Starter_items
+# from constants import godsDict, roles, id_dict, Tier_Three_items, starter_items
 # import pandas as pd
 # import analyze_players as anlzpy
 # import analyze as anlz
@@ -515,7 +515,7 @@
 # @app.route("/api/goditems/<god>")
 # def get_god_items(god):
 #     mydb = client["Item_Data"]
-#     items = Tier_Three_items + Starter_items
+#     items = Tier_Three_items + starter_items
 #     ret_data = {"data": []}
 #     god_class = fh.get_class(god)
 #     for item in items:

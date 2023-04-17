@@ -1,4 +1,4 @@
-from constants import Assassins, Guardians, Hunters, Mages, Warriors
+from constants.constants import Assassins, Guardians, Hunters, Mages, Warriors
 
 
 def calc_set_damage(base, ability_level, scaling_changes):

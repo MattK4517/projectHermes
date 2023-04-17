@@ -48,7 +48,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       <QueryClientProvider client={queryClient}>
         <GodProvider>
           <TierListProvider>
-            <div className="absolute z-10 box-border flex flex-col text-xs sm:text-sm">
+            <div className="absolute z-10 box-border flex flex-col text-xs text-white sm:text-sm">
               <AppBar />
             </div>
             <Hydrate state={pageProps.dehydratedState}>
@@ -66,7 +66,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                       showSpinner: false,
                     }}
                   />
-                  <div className="container mx-auto my-6 h-fit max-w-5xl p-0 py-4 sm:p-4">
+                  <div className="container mx-auto my-6 h-fit max-w-5xl p-0 py-4 text-white sm:p-4">
                     {getLayout(<Component {...pageProps} />)}
                   </div>
                 </div>

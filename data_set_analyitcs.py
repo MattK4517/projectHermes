@@ -1,24 +1,26 @@
-import pymongo
+import os
 from datetime import datetime
-from constants import (
-    Tier_Three_items,
-    godsDict,
-    roles,
-    ranks,
-    slots,
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import pymongo
+
+import analyze as anlz
+from constants.constants import (
     Assassins,
     Guardians,
     Hunters,
     Mages,
+    Tier_Three_items,
     Warriors,
-    Starter_items,
+    godsDict,
+    ranks,
+    roles,
+    slots,
+    starter_items,
 )
 from main import client
-import numpy as np
-import matplotlib.pyplot as plt
-import os
-import analyze as anlz
-import pandas as pd
 
 # def mergeDict(dict1, dict2):
 #    ''' Merge dictionaries and keep values of common keys in list'''

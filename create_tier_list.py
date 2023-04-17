@@ -1,8 +1,10 @@
-import pymongo
-import analyze as anlz
-from constants import godsDict, roles, ranks, patch, all_ranks
-from main import client
 from datetime import datetime
+
+import pymongo
+
+import analyze as anlz
+from constants.constants import all_ranks, godsDict, patch, ranks, roles
+from main import client
 
 
 def gen_tier_list(client, roles, patch, types, ranks, queue_types, modes):

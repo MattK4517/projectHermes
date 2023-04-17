@@ -30,3 +30,5 @@ __init__
 __init__.py
 .env
 dev_config
+main
+main.py

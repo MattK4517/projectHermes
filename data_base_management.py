@@ -1,19 +1,21 @@
-from os import dup
-from re import A, match
-import pymongo
 from collections import OrderedDict
 from operator import getitem
+from os import dup
+from re import A, match
+
 import pandas as pd
+import pymongo
 from pymongo.encryption import Algorithm
+
 import analyze as anlz
-from constants import (
+from constants.constants import (
     Tier_Three_items,
+    Warriors,
     godsDict,
-    roles,
     ranks,
+    roles,
     single_combat_stats,
     single_objective_stats,
-    Warriors,
 )
 
 # from pandas.io.json import json_normalize

@@ -5,6 +5,7 @@ export type Item = {
   ShortDesc: string;
   absolutePrice: number;
   relativePrice: number;
+  ItemTier: string;
   games: number;
   wins: number;
   itemIcon_URL: string;
@@ -12,7 +13,7 @@ export type Item = {
     Description: string;
     Menuitems: [{ Description: string; Value: string }];
     SecondaryDescription: string;
-  }[];
+  };
 };
 
 export interface Build {

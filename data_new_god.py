@@ -1,4 +1,5 @@
 from pyrez.api import SmiteAPI
+
 from main import client
 
 
@@ -92,6 +93,7 @@ def get_item_abs_price(name, family, tier, tree):
 
 def create_item_dict(item, item_prices):
     ret_data = {}
+    ret_data["ActiveFlag"] = item["ActiveFlag"]
     ret_data["ChildItemId"] = item["ChildItemId"]
     ret_data["DeviceName"] = item["DeviceName"]
     ret_data["ItemDescription"] = item["ItemDescription"]
@@ -102,14 +104,16 @@ def create_item_dict(item, item_prices):
     )
     ret_data["ShortDesc"] = item["ShortDesc"]
     ret_data["itemIcon_URL"] = item["itemIcon_URL"]
+    ret_data["RootItemId"] = item["RootItemId"]
+    ret_data["Glyph"] = item["Glyph"]
     return ret_data
 
 
 def get_new_items(client, smite_api):
     mydb = client["Item_Data"]
     prices = {}
+    insert_items = []
     items = smite_api.getItems()
-    print(items[5])
     for item in range(len(items)):
         if items[item]["RootItemId"] not in prices:
             prices[items[item]["RootItemId"]] = {
@@ -127,9 +131,9 @@ def get_new_items(client, smite_api):
             }
 
     for item in range(len(items)):
-        mycol = mydb[items[item]["DeviceName"]]
-        item = create_item_dict(items[item], prices)
-        mycol.insert_one(item)
+        insert_items.append(create_item_dict(items[item], prices))
+    mycol = mydb["All Items"]
+    mycol.insert_many(insert_items)
 
 
 if __name__ == "__main__":

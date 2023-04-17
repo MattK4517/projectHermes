@@ -1,8 +1,9 @@
 from datetime import datetime
+
+import analyze as anlz
+from constants.constants import godsDict, patch
 from data_pull_formatting_rewrite import GodData
 from main import client
-from constants import godsDict, patch
-import analyze as anlz
 
 
 class Cache:

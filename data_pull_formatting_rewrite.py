@@ -1,7 +1,9 @@
 from cProfile import run
-import pymongo
 from datetime import datetime
-from constants import godsDict, roles, ranks, slots
+
+import pymongo
+
+from constants.constants import godsDict, ranks, roles, slots
 from main import client
 
 

@@ -1,6 +1,6 @@
-from main import client
 import analyze as anlz
-from constants import patch, roles
+from constants.constants import patch, roles
+from main import client
 
 
 def add_carry_scores(patch):

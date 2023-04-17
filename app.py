@@ -17,7 +17,15 @@ import analyze as anlz
 import analyze_players as anlzpy
 import flaskHelper as fh
 from carry_score_analytics import get_carry_score_averages
-from constants import Starter_items, Tier_Three_items, godsDict, id_dict, patch, roles
+from constants.constants import Tier_Three_items, godsDict, id_dict, patch, roles
+from constants.items import (
+    base_relics,
+    consumables,
+    greater_relics,
+    relics,
+    shards,
+    starter_items,
+)
 from damage_calculator import calc_combo_damage_raw, calc_dps
 from duo_tier_list import get_lanes
 from generate_report import Report
@@ -94,8 +102,7 @@ def get_god_data_role(god, role, rank, patch, queue_type, mode, matchup="None"):
         return anlz.get_specific_build(
             client, god, role, patch, matchup, rank, queue_type, mode
         )
-        build = anlz.get_top_builds(
-            client, god, role, patch, queue_type, mode=mode)
+        build = anlz.get_top_builds(client, god, role, patch, queue_type, mode=mode)
     elif matchup == "None":
         build = anlz.get_top_builds(
             client, god, role, patch, queue_type, rank, mode=mode
@@ -186,22 +193,60 @@ def get_tier_list(rank, role, tableType, queue_type, patch, mode, page=0):
 
 @app.route(proxy_route + "/getitemdata/<item>")
 def get_item_data(item):
-    return anlz.get_item_data(client, item)
+    words = item.split("-")
+    capitalized_words = [word.capitalize() for word in words]
+    result = " ".join(capitalized_words)
+
+    return anlz.get_item_data(client, result)
 
 
 @app.route(proxy_route + "/getitems")
 def get_items():
-    with open("/cred.txt", "r") as f:
-        data = f.readlines()
-        smite_api = SmiteAPI(devId=data[0].strip(
-        ), authKey=data[1].strip())
-    return {"items": fh.get_new_items(smite_api)}
+    items = {
+        "Consumables": [],
+        "Evolved Items": [],
+        "Starter Items": [],
+        "Upgraded Starters": [],
+        "Glyphs": [],
+        "Greater Relics": [],
+        "Shards": [],
+        "Starter Relics": [],
+        "Relics": [],
+    }
+    mydb = client["Item_Data"]
+    mycol = mydb["All Items"]
+
+    for item in mycol.find({}, {"_id": 0}):
+        if item["ActiveFlag"] == "y":
+            if item["ItemTier"] not in items and item["Glyph"] != "y":
+                items[item["ItemTier"]] = [item]
+            elif item["Glyph"] == "y":
+                items["Glyphs"].append(item)
+            elif item["DeviceName"] in starter_items:
+                if item["ItemTier"] == 1:
+                    items["Starter Items"].append(item)
+                elif item["ItemTier"] == 2:
+                    items["Upgraded Starters"].append(item)
+            elif item["DeviceName"] in consumables:
+                items["Consumables"].append(item)
+            elif item["DeviceName"] in shards:
+                items["Shards"].append(item)
+            elif item["DeviceName"] in base_relics:
+                items["Starter Relics"].append(item)
+            elif item["DeviceName"] in greater_relics:
+                items["Greater Relics"].append(item)
+            elif item["DeviceName"] in relics:
+                items["Relics"].append(item)
+            elif "Evolved" in item["DeviceName"]:
+                items["Evolved Items"].append(item)
+            else:
+                items[item["ItemTier"]].append([item])
+    return json.loads(json.dumps({"items": items}))
 
 
 @app.route(proxy_route + "/items/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>")
 def get_all_items(god, role, rank, patch, queue_type, mode):
-    items = anlz.get_all_builds(
-        client, god, role, patch, queue_type, rank, mode)
+    items = anlz.get_all_builds(client, god, role, patch, queue_type, rank, mode)
     return items
 
 
@@ -275,8 +320,7 @@ def get_match(matchID):
 
 @app.route(proxy_route + "/build-paths/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>")
 def get_build_path(god, role, rank, patch, queue_type, mode):
-    builds = anlz.get_build_path(
-        client, god, role, patch, queue_type, rank, mode)
+    builds = anlz.get_build_path(client, god, role, patch, queue_type, rank, mode)
     return builds
 
 
@@ -355,8 +399,7 @@ def get_player_match_info(playername, queue_type, patch, mode):
         return {}
     return json.loads(
         json_util.dumps(
-            anlzpy.find_match_history(
-                client, playername, queue_type, patch, mode)
+            anlzpy.find_match_history(client, playername, queue_type, patch, mode)
         )
     )
 
@@ -564,7 +607,7 @@ def create_report():
 @app.route(proxy_route + "/goditems/<god>")
 def get_god_items(god):
     mydb = client["Item_Data"]
-    items = Tier_Three_items + Starter_items
+    items = Tier_Three_items + starter_items
     ret_data = {"data": []}
     god_class = fh.get_class(god)
     for item in items:
@@ -644,8 +687,7 @@ def get_leaderboard(mode="Conquest"):
             responseFormat=pyrez.Format.JSON,
         )
         queueId = fh.get_queue_id("Ranked", mode, "KBM")
-        data = smite_api.getLeagueLeaderboard(
-            queueId, "27", "1")
+        data = smite_api.getLeagueLeaderboard(queueId, "27", "1")
         for player in data:
             players.append(fh.normalize_player(player))
         return json.loads(json.dumps({"players": players}))

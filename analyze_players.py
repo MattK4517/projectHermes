@@ -1,9 +1,11 @@
-from pandas import test
-from data_pull_formatting_rewrite import normalize_rank
-from constants import godsDict, roles, patches
-import analyze as anlz
-import pymongo
 from datetime import datetime
+
+import pymongo
+from pandas import test
+
+import analyze as anlz
+from constants.constants import godsDict, patches, roles
+from data_pull_formatting_rewrite import normalize_rank
 from main import client
 
 
@@ -573,8 +575,9 @@ def query_player_accounts(playername):
 
 
 if __name__ == "__main__":
-    import flaskHelper as fh
-    from pyrez import SmiteAPI
     import pyrez
+    from pyrez import SmiteAPI
+
+    import flaskHelper as fh
 
     print(find_match_history(client, "AleksEnglish", "Casual", "9.4", "Conquest"))

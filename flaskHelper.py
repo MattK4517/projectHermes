@@ -4,19 +4,18 @@ import pymongo
 from pyrez.api import SmiteAPI
 
 import analyze as anlz
-from constants import Assassins, Guardians, Hunters, Mages, Warriors
+from constants.constants import Assassins, Guardians, Hunters, Mages, Warriors
+from data_new_god import create_item_dict
 
 
 def validate_player(client, playername):
     mydb = client["Players"]
     mycol = mydb["Player Basic"]
     print(
-        mycol.count_documents(
-            {"NameTag": {"$regex": f"{playername}", "$options": "i"}})
+        mycol.count_documents({"NameTag": {"$regex": f"{playername}", "$options": "i"}})
     )
     if (
-        mycol.count_documents(
-            {"NameTag": {"$regex": f"{playername}", "$options": "i"}})
+        mycol.count_documents({"NameTag": {"$regex": f"{playername}", "$options": "i"}})
         > 0
     ):
         return True
@@ -171,16 +170,14 @@ def normalize_player(player):
     ret_player["points"] = player["Points"]
     ret_player["rankedStatConq"] = player["Rank_Stat_Conquest"]
     ret_player["tier"] = player["Tier"]
-    ret_player['wins'] = player['Wins']
-    ret_player['id'] = player['player_id']
-    ret_player['games'] = player["Wins"] + player["Losses"]
+    ret_player["wins"] = player["Wins"]
+    ret_player["id"] = player["player_id"]
+    ret_player["games"] = player["Wins"] + player["Losses"]
     return ret_player
 
 
-def get_new_items(smite_api: SmiteAPI):
+def get_item_prices(items):
     prices = {}
-    items = []
-    items = smite_api.getItems()
     for item in range(len(items)):
         if items[item]["RootItemId"] not in prices:
             prices[items[item]["RootItemId"]] = {
@@ -196,9 +193,7 @@ def get_new_items(smite_api: SmiteAPI):
                 "Tier": items[item]["ItemTier"],
                 "Name": items[item]["DeviceName"],
             }
-
-        items.append(create_item_dict(items[item], prices))
-    return items
+    return prices
 
 
 if __name__ == "__main__":

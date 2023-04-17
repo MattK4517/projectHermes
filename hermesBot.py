@@ -1,12 +1,14 @@
 # Discord Bot testing
 # bot.py
-import discord
 import sys
-import analyze as anlz
 
+import discord
+
+import analyze as anlz
+from constants.constants import (Assassins, Guardians, Hunters, Mages,
+                                 Warriors, patch)
 # import pandas as pd
 from main import client as dbClient
-from constants import Assassins, Guardians, Hunters, Mages, Warriors, patch
 
 
 def godAbbreviations(godName):

@@ -14,11 +14,13 @@
 # }
 
 
-from main import client
-import analyze as anlz
 from math import sqrt
-from constants import patch
+
 from pymongo import MongoClient
+
+import analyze as anlz
+from constants.constants import patch
+from main import client
 
 
 def get_lanes(role_one: str, role_two: str, patch: str) -> list:
