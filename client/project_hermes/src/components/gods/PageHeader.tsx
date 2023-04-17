@@ -10,9 +10,12 @@ import {
 } from "../../models/gods/gods.model";
 import { GodPagePropsType } from "../../pages/gods/[god]/build/[role]";
 import { getDefaultParams } from "../general/getDefaultParams";
-import GodIconLoader, { GodAbilityIconLoader } from "../loader";
+import GodIconLoader, {
+  GodAbilityIconLoader,
+  GodPantheonIconLoader,
+} from "../loader";
 import { GodContext } from "./GodContext";
-import { getPantheonIcon, getTierColor } from "./GodHelpers";
+import { getTierColor } from "./GodHelpers";
 
 const getMessage = (
   role: string,
@@ -45,8 +48,11 @@ const PageHeader = ({
   godData,
   god,
 }: PageHeaderProps) => {
-  const { filterList, setFilterList } = useContext(GodContext);
-  const defaultParams: Partial<GodPagePropsType> = getDefaultParams(filterList);
+  const { filterList } = useContext(GodContext);
+  const defaultParams: Partial<GodPagePropsType> = getDefaultParams(
+    filterList,
+    god
+  );
 
   return (
     <div className="mb-6 w-full text-white" id="god-page-header">
@@ -90,8 +96,9 @@ const PageHeader = ({
                 <span>{godData.Type}</span>
               </div>
               <div id="panth-wrapper" className="w-fit">
-                <img
-                  src={getPantheonIcon(godData.Pantheon)}
+                <Image
+                  src={godData.Pantheon}
+                  loader={GodPantheonIconLoader}
                   alt={god + "pantheon icon"}
                   className="h-16 w-16"
                 />

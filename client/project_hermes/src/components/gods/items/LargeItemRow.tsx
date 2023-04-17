@@ -11,11 +11,11 @@ import { getWinRateColor } from "../GodHelpers";
 interface ILargeItemRowProps {
   items: any[];
   slot: string;
-  totalItemCount: number;
+  totalItemCount?: number;
 }
 
-const LargeItemRow = ({ items, slot, totalItemCount }: ILargeItemRowProps) => {
-  const { filterList, setFilterList } = useContext(GodContext);
+const LargeItemRow = ({ items, slot }: ILargeItemRowProps) => {
+  const { filterList } = useContext(GodContext);
   const defaultParams: Partial<GodPagePropsType> = getDefaultParams(filterList);
 
   const columnHelper = createColumnHelper();
@@ -63,7 +63,7 @@ const LargeItemRow = ({ items, slot, totalItemCount }: ILargeItemRowProps) => {
         footer: (info) => info.column.id,
       }),
     ],
-    []
+    [columnHelper]
   );
   items = items.map((item) => {
     return { ...item, winRate: (item.wins / item.games) * 100 };
@@ -84,40 +84,3 @@ const LargeItemRow = ({ items, slot, totalItemCount }: ILargeItemRowProps) => {
 };
 
 export default LargeItemRow;
-
-{
-  /* <div className="row.valuess-center my-1 flex items-center rounded-md bg-card50 p-2">
-<Image
-  src={row.values.item}
-  alt={row.values.item}
-  loader={ItemIconLoader}
-  width={36}
-  height={36}
-  className="rounded-md border-2 border-slate-500"
-/>
-<div className="mx-1.5 flex min-w-fit flex-col lg:mx-0 lg:hidden">
-  <span style={{ fontSize: "11px", fontWeight: "700" }}>
-    {row.values.winRate.toFixed(2)}% WR
-  </span>
-  <span className="text-lightBlue" style={{ fontSize: "12px" }}>
-    {row.values.games} Matches
-  </span>
-</div>
-<div className="mx-1.5 hidden min-w-fit flex-1 flex-col lg:flex">
-  <span className=" font-bold" style={{ fontSize: "12px" }}>
-    {row.values.winRate.toFixed(2)}% WR
-  </span>
-  <span className=" text-lightBlue" style={{ fontSize: "12px" }}>
-    {row.values.wins} Wins
-  </span>
-</div>
-<div className="hidden min-w-fit flex-1 flex-col lg:flex">
-  <span className=" font-bold" style={{ fontSize: "12px" }}>
-    {((row.values.games / totalItemCount) * 100).toFixed(2)}% PR
-  </span>
-  <span className=" text-lightBlue" style={{ fontSize: "12px" }}>
-    {row.values.games} Games
-  </span>
-</div>
-</div> */
-}

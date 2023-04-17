@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { GodContext } from "../gods/GodContext";
+import { GodContextType } from "../gods/GodContext";
 import Filter from "./Filter";
 
 export type FilterListType = {
@@ -12,42 +12,16 @@ export type FilterListType = {
   }[];
 };
 
-const handleEnabled = (filterList: FilterListType[]) => {
-  const modeIndex = filterList.findIndex(
-    (value) => value.filterValue === "mode"
-  );
-  const queueIndex = filterList.findIndex(
-    (value) => value.filterValue === "queueType"
-  );
-  filterList.map((filter) => {
-    filter.enabled = true;
-  });
-  if (filterList[modeIndex]?.defaultValue !== "Conquest") {
-    const roleIndex = filterList.findIndex(
-      (value) => value.filterValue === "role"
-    );
-    // @ts-ignore
-    filterList[roleIndex].enabled = false;
-  }
-  if (filterList[modeIndex]?.defaultValue === "Duel") {
-    // @ts-ignore
-    filterList[queueIndex].enabled = false;
-  }
-  if (filterList[queueIndex]?.defaultValue !== "Ranked") {
-    const rankIndex = filterList.findIndex(
-      (value) => value.filterValue === "rank"
-    );
-    // @ts-ignore
-    filterList[rankIndex].enabled = false;
-  }
-};
-
-const FilterListContainer = ({ context }: { context: React.ContextType }) => {
+const FilterListContainer = ({
+  context,
+}: {
+  context: React.Context<GodContextType>;
+}) => {
   const { filterList, setFilterList } = useContext(context);
   return (
     <div className="my-6 flex items-center gap-4 overflow-x-scroll py-2 sm:overflow-visible">
       <span className="hidden font-semibold text-white sm:block">Filters</span>
-      {filterList.map((filter, index: number) => {
+      {filterList.map((filter: FilterListType, index: number) => {
         if (filter.enabled) {
           return (
             <Filter

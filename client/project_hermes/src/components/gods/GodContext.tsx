@@ -3,7 +3,7 @@ import { god } from "../../models/gods/gods.model";
 import { FilterListType } from "../general/Filter";
 import { TabListType } from "../general/TabList";
 
-type GodContextType = {
+export type GodContextType = {
   god: god;
   setGod: Dispatch<SetStateAction<god>>;
   tabs: TabListType[];
@@ -13,10 +13,14 @@ type GodContextType = {
 
 export const GodContext = createContext<GodContextType>({
   god: "",
-  setGod: () => {},
+  setGod: () => {
+    return "";
+  },
   tabs: [],
   filterList: [],
-  setFilterList: () => {},
+  setFilterList: () => {
+    return [];
+  },
 });
 
 export const GodProvider: FC = ({ children }) => {

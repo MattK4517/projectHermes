@@ -1,12 +1,8 @@
 import { Combobox, Transition } from "@headlessui/react";
-import { Fragment, useContext, useState } from "react";
-import { linkDict } from "../../pages/gods/[god]";
-import Image from "next/image";
-import GodIconLoader from "../loader";
-import Link from "next/link";
+import { Fragment, useState } from "react";
 import { HiMagnifyingGlass } from "react-icons/hi2";
+import { linkDict } from "../../pages/gods/[god]";
 import SearchBarResults from "./SearchBarResults";
-import { GodContext } from "../gods/GodContext";
 export default function SearchBar() {
   const people = Object.keys(linkDict);
   const [selectedPerson, setSelectedPerson] = useState();

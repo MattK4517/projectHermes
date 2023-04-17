@@ -99,7 +99,7 @@ export const RankIconLoader = (rank: string, mode: string) => {
 };
 
 export const RoleIconLoader = (props: { src: string }) => {
-  let url: string = "";
+  let url = "";
   if (props.src === "Solo") {
     url = "https://i.imgur.com/WLU0Cel.png";
   } else if (props.src === "Jungle") {

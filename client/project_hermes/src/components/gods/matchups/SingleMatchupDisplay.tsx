@@ -1,4 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
+import GodIconLoader from "../../loader";
 import { getWinRateColor } from "../GodHelpers";
 
 export type MatchupDisplayType = {
@@ -17,12 +19,12 @@ const SingleMatchupDisplay = ({ matchup }: { matchup: MatchupDisplayType }) => {
         style={{ minWidth: "75px" }}
       >
         <div id="god-icon-wrapper">
-          <img
+          <Image
             className="god-icon"
-            src={`https://webcdn.hirezstudios.com/smite/god-icons/${matchup.enemy
-              .replaceAll("'", "")
-              .replaceAll(" ", "-")
-              .toLowerCase()}.jpg`}
+            loader={GodIconLoader}
+            src={matchup.enemy}
+            width={36}
+            height={36}
             alt={`${matchup.enemy} icon`}
           />
         </div>

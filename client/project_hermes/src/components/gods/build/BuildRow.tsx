@@ -16,7 +16,7 @@ export const BuildRow = ({
   build: Build;
   defaultParams: GodPagePropsType;
 }) => {
-  let { god, filterList } = useContext(GodContext);
+  const { god, filterList } = useContext(GodContext);
 
   const { data, isFetching } = useQuery(
     ["god-build", getDefaultParams(filterList, god)],
@@ -42,6 +42,7 @@ export const BuildRow = ({
         build.items.map((item, index) => {
           return (
             <SingleBuildDisplay
+              key={index}
               item1={item.item1}
               item2={item.item2}
               slot={index + 1}

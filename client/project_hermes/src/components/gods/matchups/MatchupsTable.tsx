@@ -1,9 +1,9 @@
 import { useSortBy, useTable } from "react-table";
-import GodIconLoader, { ItemIconLoader } from "../../loader";
-import Image from "next/image";
-import { getWinRateColor } from "../GodHelpers";
-import Loading from "../../general/Loading";
+import GodIconLoader from "../../loader";
+
 import IconName from "../../general/IconName";
+import Loading from "../../general/Loading";
+import { getWinRateColor } from "../GodHelpers";
 
 function GodMatchupTable({ columns, data, loading }) {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =

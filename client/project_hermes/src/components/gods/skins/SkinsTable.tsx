@@ -1,12 +1,12 @@
-import { useSortBy, useTable } from "react-table";
-import { SkinIconLoader } from "../../loader";
-import { getWinRateColor } from "../GodHelpers";
-import Loading from "../../general/Loading";
-import IconName from "../../general/IconName";
-import { SplitTextShow } from "../../general/SplitTextRow";
-import SplitTextHidden from "../../general/SplitTextRow";
-import { GodContext } from "../GodContext";
+import Image from "next/image";
 import { useContext } from "react";
+import { useSortBy, useTable } from "react-table";
+import IconName from "../../general/IconName";
+import Loading from "../../general/Loading";
+import SplitTextHidden, { SplitTextShow } from "../../general/SplitTextRow";
+import { ImgurLoader, SkinIconLoader } from "../../loader";
+import { GodContext } from "../GodContext";
+import { getWinRateColor } from "../GodHelpers";
 
 function SkinsTable({ columns, data, loading, totalGames }) {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
@@ -15,7 +15,6 @@ function SkinsTable({ columns, data, loading, totalGames }) {
         columns,
         data,
         initialState: {
-          // @ts-ignore
           sortBy: [
             {
               id: "games",
@@ -43,6 +42,7 @@ function SkinsTable({ columns, data, loading, totalGames }) {
         <div className="pb-4 text-white">
           {headerGroups.map((headerGroup) => (
             <tr
+              key={headerGroup.id}
               className="flex items-center justify-center"
               {...headerGroup.getHeaderGroupProps()}
             >
@@ -50,6 +50,7 @@ function SkinsTable({ columns, data, loading, totalGames }) {
                 // Add the sorting props to control sorting. For this example
                 // we can add them into the header props
                 <th
+                  key={column.id}
                   className="flex-1"
                   {...column.getHeaderProps(column.getSortByToggleProps())}
                 >
@@ -81,6 +82,7 @@ function SkinsTable({ columns, data, loading, totalGames }) {
               prepareRow(row);
               return (
                 <tr
+                  key={row.id}
                   {...row.getRowProps()}
                   className={`flex  ${i % 2 !== 0 ? "bg-darkBlue" : ""}`}
                 >
@@ -128,18 +130,26 @@ function SkinsTable({ columns, data, loading, totalGames }) {
 
                       <div className="mx-1.5 flex min-w-fit flex-1 flex-col items-center justify-center sm:items-start lg:mx-0">
                         <div className="flex flex-row items-center">
-                          <img
+                          <Image
+                            loader={ImgurLoader}
+                            width={16}
+                            height={16}
                             className="mr-2 h-4 w-4"
                             src={"https://i.imgur.com/PiqXvRC.png"}
+                            alt="Gem icon"
                           />
                           <span style={{ fontSize: "11px", fontWeight: "700" }}>
                             {row.values.price_gems} Gems
                           </span>
                         </div>
                         <div className="flex flex-row items-center">
-                          <img
+                          <Image
+                            loader={ImgurLoader}
+                            width={16}
+                            height={16}
                             className="mr-2 h-4 w-4"
                             src={"https://i.imgur.com/0ArqEe0.png"}
+                            alt="Favor icon"
                           />
                           <span
                             className="text-lightBlue"

@@ -30,7 +30,7 @@ const WinRateStats = ({
   winRateStats,
   defaultParams,
 }: IWinRateStats): JSX.Element => {
-  let { god, filterList } = useContext(GodContext);
+  const { god, filterList } = useContext(GodContext);
   const { data, isFetching } = useQuery(
     ["god-winrate", getDefaultParams(filterList, god)],
     () =>
@@ -44,10 +44,10 @@ const WinRateStats = ({
       enabled: handleQueryEnabled(defaultParams, filterList),
     }
   );
+  let banrateMessage;
 
   if (data) winRateStats = data;
 
-  let banrateMessage;
   if (winRateStats.queueType === "Ranked") {
     banrateMessage = winRateStats.banRate + "%";
   } else if (winRateStats.queueType === "Casual") {
@@ -61,6 +61,7 @@ const WinRateStats = ({
         ["tier", "winRate", "pickRate", "banRate", "games"].map((key) => {
           return (
             <div
+              key={key}
               id={key}
               className={`${
                 key !== "games"
