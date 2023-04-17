@@ -11,16 +11,16 @@ function GodMatchupTable({ columns, data, loading }) {
       {
         columns,
         data,
-        initialState: {
-          // @ts-ignore
-          sortBy: [
-            {
-              id: "games.pickRates",
-              desc: true,
-            },
-          ],
-          hiddenColumns: [],
-        },
+        // initialState: {
+        //   // @ts-ignore
+        //   sortBy: [
+        //     {
+        //       id: "games.pickRates",
+        //       desc: true,
+        //     },
+        //   ],
+        //   hiddenColumns: [],
+        // },
       },
       useSortBy
     );
