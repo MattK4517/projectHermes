@@ -33,6 +33,7 @@ function GodMatchupTable({ columns, data, loading }) {
         <div className="pb-4 text-white">
           {headerGroups.map((headerGroup) => (
             <tr
+              key={headerGroup.id}
               className="flex items-center justify-center"
               {...headerGroup.getHeaderGroupProps()}
             >
@@ -40,6 +41,7 @@ function GodMatchupTable({ columns, data, loading }) {
                 // Add the sorting props to control sorting. For this example
                 // we can add them into the header props
                 <th
+                  key={column.id}
                   className="flex-1"
                   {...column.getHeaderProps(column.getSortByToggleProps())}
                 >
@@ -71,13 +73,14 @@ function GodMatchupTable({ columns, data, loading }) {
               prepareRow(row);
               return (
                 <tr
+                  key={row.id}
                   {...row.getRowProps()}
                   className={`flex  ${i % 2 !== 0 ? "bg-darkBlue" : ""}`}
                 >
                   {row.cells.map((cell) => {
                     if (cell.column.Header?.toString() === "Enemy") {
                       return (
-                        <div className="min-w-fit flex-1">
+                        <div key={cell.value} className="min-w-fit flex-1">
                           <IconName
                             displayIcon={row.values._id}
                             loader={GodIconLoader}
@@ -89,6 +92,7 @@ function GodMatchupTable({ columns, data, loading }) {
                     }
                     return (
                       <td
+                        key={cell.value}
                         style={
                           cell.column.Header?.toString() === "Win Rate"
                             ? { color: getWinRateColor(cell.value) }

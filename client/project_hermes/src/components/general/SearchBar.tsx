@@ -44,13 +44,15 @@ export default function SearchBar() {
                   Nothing found.
                 </div>
               ) : (
-                sections.map((section) => (
-                  <SearchBarResults
-                    filteredGod={
-                      section !== "Player Profile" ? filteredGod : [query]
-                    }
-                    section={section}
-                  />
+                sections.map((section, index) => (
+                  <div key={index}>
+                    <SearchBarResults
+                      filteredGod={
+                        section !== "Player Profile" ? filteredGod : [query]
+                      }
+                      section={section}
+                    />
+                  </div>
                 ))
               )}
             </Combobox.Options>

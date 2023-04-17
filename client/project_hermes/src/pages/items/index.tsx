@@ -20,9 +20,12 @@ const ItemsPage = ({
         <div className="flex flex-col">
           {Object.entries(
             dehydratedState.items.queries[0].state.data.items
-          ).map((tier) => {
+          ).map((tier, index) => {
             return (
-              <div className="card flex flex-row flex-wrap justify-start gap-2 p-3">
+              <div
+                key={index}
+                className="card flex flex-row flex-wrap justify-start gap-2 p-3"
+              >
                 <div className="card-header mb-1">
                   {parseInt(tier[0]) ? (
                     <span>Tier {tier[0]}</span>
@@ -33,21 +36,23 @@ const ItemsPage = ({
                     </span>
                   )}
                 </div>
-                {tier[1].flat().map((item: Item) => {
+                {tier[1].flat().map((item: Item, index) => {
                   return (
-                    <Link
-                      href={`/items/${item.DeviceName.replaceAll("'", "")
-                        .replaceAll(" ", "-")
-                        .toLowerCase()}`}
-                    >
-                      <Image
-                        src={item.itemIcon_URL}
-                        alt={item.DeviceName}
-                        loader={ImgurLoader}
-                        width={36}
-                        height={36}
-                      />
-                    </Link>
+                    <div key={index}>
+                      <Link
+                        href={`/items/${item.DeviceName.replaceAll("'", "")
+                          .replaceAll(" ", "-")
+                          .toLowerCase()}`}
+                      >
+                        <Image
+                          src={item.itemIcon_URL}
+                          alt={item.DeviceName}
+                          loader={ImgurLoader}
+                          width={36}
+                          height={36}
+                        />
+                      </Link>
+                    </div>
                   );
                 })}
               </div>

@@ -8,7 +8,7 @@ export type TabListType = {
 };
 
 const handlePath = (currentPath: string, newPath: string) => {
-  let tempPath = currentPath.split("/");
+  const tempPath = currentPath.split("/");
   tempPath[tempPath.length - 1] = newPath;
   return tempPath.join("/") + "/";
 };

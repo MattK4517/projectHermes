@@ -37,7 +37,7 @@ const CounterMatchupDisplay = ({ props }: { props: MatchupType[] }) => {
         .sort(sortMatchups)
         .map((matchup, index) => {
           if (index < 9) {
-            let routegod = matchup.enemy.replaceAll(" ", "_");
+            const routegod = matchup.enemy.replaceAll(" ", "_");
             let styling;
             if (matchup.winRate < 50) {
               styling = {
