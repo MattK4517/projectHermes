@@ -63,11 +63,21 @@ const SingleItemPage = ({
             {item?.ItemDescription?.SecondaryDescription?.includes(
               "PASSIVE"
             ) ? (
-              <div className="card-header pt-2">Passive</div>
+              <div
+                className="card-header pt-2
+              "
+              >
+                Passive
+              </div>
             ) : null}
             {item?.ItemDescription?.SecondaryDescription?.includes("AURA") ? (
               <>
-                <div className="card-header pt-2">Aura</div>
+                <div
+                  className="card-header pt-2
+                "
+                >
+                  Aura
+                </div>
                 <span>{item?.ItemDescription?.SecondaryDescription}</span>
               </>
             ) : null}
