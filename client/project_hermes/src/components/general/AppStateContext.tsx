@@ -5,7 +5,12 @@ export interface IAppContext {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const AppStateContext = createContext<IAppContext>({});
+export const AppStateContext = createContext<IAppContext>({
+  open: false,
+  setOpen: () => {
+    return {};
+  },
+});
 
 export const AppStateProvider: React.FC = ({ children }) => {
   const [open, setOpen] = React.useState<boolean>(false);

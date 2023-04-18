@@ -1,13 +1,16 @@
 import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { GodPageLayout, linkDict } from "..";
 import { getDefaultParams } from "../../../../components/general/getDefaultParams";
 import { BuildRow } from "../../../../components/gods/build/BuildRow";
 import WinRateStats from "../../../../components/gods/build/WinRateStats";
 import { GodContext } from "../../../../components/gods/GodContext";
-import { handleQueryEnabled } from "../../../../components/gods/GodHelpers";
+import {
+  handleQueryEnabled,
+  normalizeGodName,
+} from "../../../../components/gods/GodHelpers";
 import MatchupRow from "../../../../components/gods/matchups/MatchupRow";
 import { GodDefaultFilterLoader } from "../../../../components/loader";
 import { god, GodWinRateType } from "../../../../models/gods/gods.model";
@@ -34,7 +37,7 @@ function BuildPage(props: {
   };
 }) {
   const router = useRouter();
-  let { god, setGod, filterList } = useContext(GodContext);
+  const { god, setGod, filterList } = useContext(GodContext);
 
   const { data, isFetching } = useQuery(
     ["god-matchups", getDefaultParams(filterList, god)],
@@ -90,7 +93,7 @@ function BuildPage(props: {
         matchups={{
           ...(data || props.dehydratedState.godMatchups.queries[0].state.data),
         }}
-        god={god}
+        god={props.dehydratedState.defaultParams.god}
         role={
           filterList[filterList.findIndex((val) => val.filterValue === "role")]
             ?.defaultValue
@@ -103,7 +106,7 @@ function BuildPage(props: {
         matchups={{
           ...(data || props.dehydratedState.godMatchups.queries[0].state.data),
         }}
-        god={god}
+        god={props.dehydratedState.defaultParams.god}
         role={
           filterList[filterList.findIndex((val) => val.filterValue === "role")]
             ?.defaultValue
@@ -125,7 +128,11 @@ export default BuildPage;
 export const getStaticPaths = async () => {
   return {
     paths: Object.keys(linkDict).map((god) => {
-      return { params: { god: god } };
+      return {
+        params: {
+          god: normalizeGodName(god),
+        },
+      };
     }),
     fallback: false,
   };

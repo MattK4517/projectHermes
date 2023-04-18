@@ -102,7 +102,8 @@ def get_god_data_role(god, role, rank, patch, queue_type, mode, matchup="None"):
         return anlz.get_specific_build(
             client, god, role, patch, matchup, rank, queue_type, mode
         )
-        build = anlz.get_top_builds(client, god, role, patch, queue_type, mode=mode)
+        build = anlz.get_top_builds(
+            client, god, role, patch, queue_type, mode=mode)
     elif matchup == "None":
         build = anlz.get_top_builds(
             client, god, role, patch, queue_type, rank, mode=mode
@@ -246,7 +247,8 @@ def get_items():
 
 @app.route(proxy_route + "/items/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>")
 def get_all_items(god, role, rank, patch, queue_type, mode):
-    items = anlz.get_all_builds(client, god, role, patch, queue_type, rank, mode)
+    items = anlz.get_all_builds(
+        client, god, role, patch, queue_type, rank, mode)
     return items
 
 
@@ -320,7 +322,8 @@ def get_match(matchID):
 
 @app.route(proxy_route + "/build-paths/<god>/<role>/<rank>/<patch>/<queue_type>/<mode>")
 def get_build_path(god, role, rank, patch, queue_type, mode):
-    builds = anlz.get_build_path(client, god, role, patch, queue_type, rank, mode)
+    builds = anlz.get_build_path(
+        client, god, role, patch, queue_type, rank, mode)
     return builds
 
 
@@ -399,7 +402,8 @@ def get_player_match_info(playername, queue_type, patch, mode):
         return {}
     return json.loads(
         json_util.dumps(
-            anlzpy.find_match_history(client, playername, queue_type, patch, mode)
+            anlzpy.find_match_history(
+                client, playername, queue_type, patch, mode)
         )
     )
 
@@ -640,6 +644,8 @@ def get_god_da(god):
 @app.route(proxy_route + "/default_filter/<god>")
 @app.route(proxy_route + "/default_filter")
 def default_filter(god=""):
+    newgod = god.replace("-", " ")
+    god = newgod.title()
     role = ""
     if god in godsDict:
         role = godsDict[god]

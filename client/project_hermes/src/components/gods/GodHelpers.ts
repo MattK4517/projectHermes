@@ -1,4 +1,4 @@
-import { tier } from "../../models/gods/gods.model";
+import { god, tier } from "../../models/gods/gods.model";
 import { GodPagePropsType } from "../../pages/gods/[god]/build/[role]";
 import { FilterListType } from "../general/Filter";
 import { getDefaultParams } from "../general/getDefaultParams";
@@ -147,3 +147,7 @@ export const normalizeTier = (tier: string) => {
   }
   return rank;
 };
+
+export const normalizeGodName = (god: god | string) => {
+  return god.toLowerCase().replaceAll("'", "").replaceAll(" ", "-")
+}
