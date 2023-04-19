@@ -18,5 +18,12 @@ export type Item = {
 
 export interface Build {
   relics: { [key: string]: Item }[];
-  items: { [key: string]: Item }[];
+  items: { item1: ItemStats, item2: ItemStats }[];
+}
+
+export interface ItemStats {
+  games: number;
+  wins: number;
+  item: string;
+  items: Item[]
 }

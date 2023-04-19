@@ -9,7 +9,9 @@ export const TierListContext = createContext<any>({
     { name: "Duos Tier List", link: `duos-tier-list` },
   ],
   filterList: [],
-  setFilterList: () => {},
+  setFilterList: () => {
+    return {};
+  },
   defaultParmas: {
     god: "",
     role: "",

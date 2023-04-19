@@ -21,6 +21,7 @@ export const BuildRow = ({
   const { data, isFetching } = useQuery(
     ["god-build", getDefaultParams(filterList, god)],
     () =>
+      // @ts-expect-error get default params returns correctly, just reducing the filterlist array is weird with typing
       getGodPageData({
         ...getDefaultParams(filterList, god),
         type: "build",
@@ -40,6 +41,7 @@ export const BuildRow = ({
         <Loading width={12} height={12} />
       ) : (
         build.items.map((item, index) => {
+          console.log("ITEM", item);
           return (
             <SingleBuildDisplay
               key={index}

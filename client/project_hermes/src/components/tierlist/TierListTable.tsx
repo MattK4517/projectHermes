@@ -57,6 +57,7 @@ export default function TierListTable({
               <div key={headerGroup.id} className="flex justify-center">
                 {headerGroup.headers.map((header) => (
                   <div
+                    key={header.id}
                     className={`${
                       header.id === "counterMatchups"
                         ? "hidden md:flex"
@@ -109,6 +110,7 @@ export default function TierListTable({
                 >
                   {row.getVisibleCells().map((cell) => (
                     <div
+                      key={cell.id}
                       className={`${
                         cell.column.id === "counterMatchups"
                           ? "hidden w-0 md:flex"

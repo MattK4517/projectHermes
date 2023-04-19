@@ -10,7 +10,7 @@ interface god {
   url: string;
 }
 
-export default function GodsList<NextPage>(props: { dehydratedState: any }) {
+export default function GodsList(props: { dehydratedState: any }) {
   const { data } = useQuery<god[]>(["gods"], getGods, {
     initialData: props.dehydratedState,
   });
@@ -66,6 +66,6 @@ export async function getStaticProps() {
 }
 
 async function getGods() {
-  let url = getBaseUrl();
+  const url = getBaseUrl();
   return (await fetch(url + "/api/gods")).json();
 }

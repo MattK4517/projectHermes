@@ -1,4 +1,4 @@
-import { Item } from "../../../models/items.model";
+import { ItemStats } from "../../../models/items.model";
 import { ItemRow } from "./ItemRow";
 
 export const SingleBuildDisplay = ({
@@ -6,8 +6,8 @@ export const SingleBuildDisplay = ({
   item2,
   slot,
 }: {
-  item1: Item;
-  item2: Item;
+  item1: ItemStats;
+  item2: ItemStats;
   slot: number;
 }) => {
   return (
