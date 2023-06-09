@@ -18,7 +18,6 @@ const SingleItemPage = ({
 }) => {
   console.log(dehydratedState);
   const item = dehydratedState.items.queries[0].state.data.items[0];
-  console.log(item);
   return (
     <div className="mb-6 w-full" id="god-page-header">
       <div className="flex w-full items-center" id="god-header-wrap">
@@ -52,9 +51,9 @@ const SingleItemPage = ({
         <div className="card">
           <div className="card-header">{item.DeviceName} Stats</div>
           <div className="flex flex-col gap-2">
-            {item?.ItemDescription.Menuitems.map((statDesc) => {
+            {item?.ItemDescription.Menuitems.map((statDesc, index) => {
               return (
-                <span className="font-bold">
+                <span key={index} className="font-bold">
                   <span className="text-lightBlue">{statDesc.Description}</span>
                   : {statDesc.Value}
                 </span>

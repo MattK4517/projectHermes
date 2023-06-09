@@ -22,7 +22,7 @@ const TierListLayout = ({
   lastUpdate: ILastUpdate;
 }) => {
   const { tabs, filterList, setFilterList } = useContext(TierListContext);
-  let roleSelection =
+  const roleSelection =
       defaultParams.type !== "Duo"
         ? {
             filterValue: "role",

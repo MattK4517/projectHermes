@@ -31,7 +31,7 @@ function BuildPathsPage(props: {
   const router = useRouter();
   const columnHelper = createColumnHelper();
   const MEDIUM_COLUMN_SIZE = 80;
-  let { setGod, filterList } = useContext(GodContext);
+  const { setGod, filterList } = useContext(GodContext);
   const { data, isFetching } = useQuery(
     [
       "god-build-paths",
@@ -148,7 +148,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const { god } = context.params;
 
-  let url = getBaseUrl();
+  const url = getBaseUrl();
   const defaultParams: GodPagePropsType = await GodDefaultFilterLoader({
     url,
     god,

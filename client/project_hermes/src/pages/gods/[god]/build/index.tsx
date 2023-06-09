@@ -34,7 +34,7 @@ function BuildPage(props: {
   };
 }) {
   const router = useRouter();
-  let { god, setGod, filterList } = useContext(GodContext);
+  const { god, setGod, filterList } = useContext(GodContext);
 
   const { data, isFetching } = useQuery(
     ["god-matchups", getDefaultParams(filterList, god)],
@@ -141,7 +141,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   console.log(context);
   const { god } = context.params;
 
-  let url = getBaseUrl();
+  const url = getBaseUrl();
   const defaultParams: GodPagePropsType = await GodDefaultFilterLoader({
     url,
     god,

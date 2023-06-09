@@ -74,9 +74,8 @@ const GodPageLayout = ({
   if (isError) return <h1>ERROR...</h1>;
   const data = godPageQueries.map((query) => query.data);
 
-
-  //@ts-ignore
-  let url = linkDict[god?.toString()];
+  // @ts-expect-error link dict keys are gods
+  const url = linkDict[god?.toString()];
 
   return (
     <div id="god-profile-main-page" className="mx-auto flex w-full pb-5">

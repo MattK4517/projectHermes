@@ -34,7 +34,7 @@ function BuildPage(props: {
   };
 }) {
   const router = useRouter();
-  let { god, setGod, filterList } = useContext(GodContext);
+  const { god, setGod, filterList } = useContext(GodContext);
 
   const { data, isFetching } = useQuery(
     ["god-matchups", getDefaultParams(filterList, god)],
@@ -52,28 +52,6 @@ function BuildPage(props: {
       ),
     }
   );
-
-  // const buildPageQueries = useQueries({
-  //   queries: [
-  //     {
-  //       queryKey: [
-  //         "god-build",
-  //         getDefaultParams(filterList, props.dehydratedState.defaultParams.god),
-  //       ],
-  //       queryFn: getGodPageData({
-  //         ...getDefaultParams(
-  //           filterList,
-  //           props.dehydratedState.defaultParams.god
-  //         ),
-  //         type: "build",
-  //       }),
-  //       enabled: handleQueryEnabled(
-  //         props.dehydratedState.defaultParams,
-  //         filterList
-  //       ),
-  //     },
-  //   ],
-  // });
 
   if (router.query?.god) setGod(router.query.god);
 
@@ -144,7 +122,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   };
   const { god, role } = context.params;
 
-  let url = getBaseUrl();
+  const url = getBaseUrl();
   const defaultParams: GodPagePropsType = await GodDefaultFilterLoader({
     url,
     god,
