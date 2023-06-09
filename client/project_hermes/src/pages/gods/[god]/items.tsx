@@ -22,7 +22,7 @@ function ItemsPage(props: {
   };
 }) {
   const router = useRouter();
-  let { setGod, filterList } = useContext(GodContext);
+  const { setGod, filterList } = useContext(GodContext);
 
   const { data, isFetching } = useQuery(
     [
@@ -46,6 +46,8 @@ function ItemsPage(props: {
       ),
     }
   );
+
+  // @ts-expect-error cant type router.query
   if (router.query?.god) setGod(router.query.god);
   return (
     <GodPageLayout defaultParams={props.dehydratedState.defaultParams}>
@@ -59,10 +61,10 @@ function ItemsPage(props: {
         ) : (
           Object.entries(
             data || props.dehydratedState.godItems.queries[0].state.data
-          ).map((slot) => {
+          ).map((slot, index) => {
             if (!slot[0].includes("slot")) return undefined;
             return (
-              <div className="min-w-fit flex-1 px-1">
+              <div key={index} className="min-w-fit flex-1 px-1">
                 <LargeItemRow
                   slot={slot[0]}
                   items={Object.values(slot[1])}
@@ -90,9 +92,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     godItems: new QueryClient(),
   };
 
+  // @ts-expect-error cant type router.query
   const { god } = context.params;
 
-  let url = getBaseUrl();
+  const url = getBaseUrl();
   const defaultParams: GodPagePropsType = await GodDefaultFilterLoader({
     url,
     god,

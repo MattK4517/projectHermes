@@ -6,9 +6,9 @@ interface IIconName {
   width: number;
   height: number;
   displayName?: string;
-  iconStyling: string;
-  textStyling: string;
-  divStyling: string;
+  iconStyling?: string;
+  textStyling?: string;
+  divStyling?: string;
 }
 
 const IconName = ({

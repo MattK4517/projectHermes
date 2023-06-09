@@ -3,7 +3,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useContext } from "react";
+import React from "react";
 import { TierListLayout } from ".";
 import { getWinRateColor } from "../../components/gods/GodHelpers";
 import GodIconLoader, {
@@ -11,7 +11,6 @@ import GodIconLoader, {
   RoleIconLoader,
 } from "../../components/loader";
 import CounterMatchupDisplay from "../../components/tierlist/CounterMatchupDisplay";
-import { TierListContext } from "../../components/tierlist/TierListContext";
 import TierListTable from "../../components/tierlist/TierListTable";
 import { ILastUpdate } from "../../models/tierlist/tierlist.model";
 import {

@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 export type TabListType = {
   name: string;
   link: string;
-  selected: boolean;
+  selected?: boolean;
 };
 
 const handlePath = (currentPath: string, newPath: string) => {

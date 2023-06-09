@@ -1,4 +1,4 @@
-import { createContext, FC, useState } from "react";
+import { createContext, useState } from "react";
 import { FilterListType } from "../general/Filter";
 
 export const TierListContext = createContext<any>({
@@ -22,7 +22,11 @@ export const TierListContext = createContext<any>({
   },
 });
 
-export const TierListProvider: FC = ({ children }) => {
+export const TierListProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const tabs = [
     { name: "Tier List", link: `tier-list`, selected: true },
     { name: "Combat Tier List", link: `combat-tier-list` },

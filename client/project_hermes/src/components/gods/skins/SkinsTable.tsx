@@ -8,13 +8,24 @@ import { ImgurLoader, SkinIconLoader } from "../../loader";
 import { GodContext } from "../GodContext";
 import { getWinRateColor } from "../GodHelpers";
 
-function SkinsTable({ columns, data, loading, totalGames }) {
+function SkinsTable({
+  columns,
+  data,
+  loading,
+  totalGames,
+}: {
+  columns: any;
+  data: any;
+  loading: boolean;
+  totalGames: number;
+}) {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable(
       {
         columns,
         data,
         initialState: {
+          // @ts-expect-error weird typing with tanstack table
           sortBy: [
             {
               id: "games",
@@ -42,26 +53,31 @@ function SkinsTable({ columns, data, loading, totalGames }) {
         <div className="pb-4 text-white">
           {headerGroups.map((headerGroup) => (
             <tr
-              key={headerGroup.id}
               className="flex items-center justify-center"
               {...headerGroup.getHeaderGroupProps()}
+              key={headerGroup.id}
             >
               {headerGroup.headers.map((column) => (
                 // Add the sorting props to control sorting. For this example
                 // we can add them into the header props
                 <th
-                  key={column.id}
                   className="flex-1"
+                  // @ts-expect-error type error with tanstack table sorting
                   {...column.getHeaderProps(column.getSortByToggleProps())}
+                  key={column.id}
                 >
                   {column.render("Header")}
                   {/* Add a sort direction indicator */}
                   <span>
-                    {column.isSorted
-                      ? column.isSortedDesc
-                        ? " 🔽"
-                        : " 🔼"
-                      : ""}
+                    {
+                      // @ts-expect-error weird typing with tanstack sorting
+                      column.isSorted
+                        ? // @ts-expect-error weird typing with tanstack sorting
+                          column.isSortedDesc
+                          ? " 🔽"
+                          : " 🔼"
+                        : ""
+                    }
                   </span>
                 </th>
               ))}
@@ -82,9 +98,9 @@ function SkinsTable({ columns, data, loading, totalGames }) {
               prepareRow(row);
               return (
                 <tr
-                  key={row.id}
                   {...row.getRowProps()}
                   className={`flex  ${i % 2 !== 0 ? "bg-darkBlue" : ""}`}
+                  key={row.id}
                 >
                   <div className="flex w-full items-center p-2">
                     <div className="flex w-full flex-1">

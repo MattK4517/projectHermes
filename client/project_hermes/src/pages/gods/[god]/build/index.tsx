@@ -1,7 +1,7 @@
 import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { GodPageLayout, linkDict } from "..";
 import { getDefaultParams } from "../../../../components/general/getDefaultParams";
 import { BuildRow } from "../../../../components/gods/build/BuildRow";
@@ -17,6 +17,7 @@ import { god, GodWinRateType } from "../../../../models/gods/gods.model";
 import { Build } from "../../../../models/items.model";
 import { getGodPageData } from "../../../../service/gods/gods.service";
 import { getBaseUrl } from "../../../../utils/trpc";
+import { getGods } from "../..";
 
 export type GodPagePropsType = {
   god: god;
@@ -56,28 +57,7 @@ function BuildPage(props: {
     }
   );
 
-  // const buildPageQueries = useQueries({
-  //   queries: [
-  //     {
-  //       queryKey: [
-  //         "god-build",
-  //         getDefaultParams(filterList, props.dehydratedState.defaultParams.god),
-  //       ],
-  //       queryFn: getGodPageData({
-  //         ...getDefaultParams(
-  //           filterList,
-  //           props.dehydratedState.defaultParams.god
-  //         ),
-  //         type: "build",
-  //       }),
-  //       enabled: handleQueryEnabled(
-  //         props.dehydratedState.defaultParams,
-  //         filterList
-  //       ),
-  //     },
-  //   ],
-  // });
-
+  // @ts-expect-error cant type parsedurlquery
   if (router.query?.god) setGod(router.query.god);
 
   return (
@@ -96,7 +76,7 @@ function BuildPage(props: {
         god={props.dehydratedState.defaultParams.god}
         role={
           filterList[filterList.findIndex((val) => val.filterValue === "role")]
-            ?.defaultValue
+            ?.defaultValue || ""
         }
         displayType="countered"
         isFetching={isFetching}
@@ -109,10 +89,9 @@ function BuildPage(props: {
         god={props.dehydratedState.defaultParams.god}
         role={
           filterList[filterList.findIndex((val) => val.filterValue === "role")]
-            ?.defaultValue
+            ?.defaultValue || ""
         }
         displayType="counters"
-        defaultParams={props.dehydratedState.defaultParams}
         isFetching={isFetching}
       />
       <BuildRow
@@ -126,8 +105,9 @@ function BuildPage(props: {
 export default BuildPage;
 
 export const getStaticPaths = async () => {
+  const gods = await getGods();
   return {
-    paths: Object.keys(linkDict).map((god) => {
+    paths: Object.keys(gods).map((god) => {
       return {
         params: {
           god: normalizeGodName(god),
@@ -145,10 +125,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
     godBuild: new QueryClient(),
   };
 
-  console.log(context);
+  // @ts-expect-error cant type parsedurlquery
   const { god } = context.params;
 
-  let url = getBaseUrl();
+  const url = getBaseUrl();
   const defaultParams: GodPagePropsType = await GodDefaultFilterLoader({
     url,
     god,

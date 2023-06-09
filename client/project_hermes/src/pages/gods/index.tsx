@@ -65,7 +65,7 @@ export async function getStaticProps() {
   };
 }
 
-async function getGods() {
+export async function getGods() {
   const url = getBaseUrl();
   return (await fetch(url + "/api/gods")).json();
 }

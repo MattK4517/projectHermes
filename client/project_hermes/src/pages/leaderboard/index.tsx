@@ -13,10 +13,7 @@ import {
 import LeaderboardCard, {
   ILeaderboardPlayer,
 } from "../../components/leaderboard/LeaderboardCard";
-import GodIconLoader, {
-  ImgurLoader,
-  RankIconLoader,
-} from "../../components/loader";
+import { ImgurLoader, RankIconLoader } from "../../components/loader";
 import TierListTable from "../../components/tierlist/TierListTable";
 import { GodWinRateType } from "../../models/gods/gods.model";
 import { getLeaderboard } from "../../service/gods/general.service";
@@ -163,6 +160,7 @@ const Leaderboard = (props: {
         enableSorting: false,
       }),
     ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
   return (
@@ -181,7 +179,7 @@ const Leaderboard = (props: {
   );
 };
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getStaticProps: GetStaticProps = async () => {
   const queryClient = {
     leaderBoard: new QueryClient(),
   };

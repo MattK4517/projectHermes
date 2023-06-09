@@ -16,6 +16,7 @@ import {
 } from "../../../components/gods/GodHelpers";
 import {
   GodDefaultFilterLoader,
+  ImgurLoader,
   SkinIconLoader,
 } from "../../../components/loader";
 import TierListTable from "../../../components/tierlist/TierListTable";
@@ -23,6 +24,7 @@ import { ISkinStatsReturnType } from "../../../models/gods/gods.model";
 import { getGodPageData } from "../../../service/gods/gods.service";
 import { getBaseUrl } from "../../../utils/trpc";
 import { GodPagePropsType } from "./build/[role]";
+import Image from "next/image";
 
 function SkinsPage(props: {
   dehydratedState: {
@@ -34,7 +36,6 @@ function SkinsPage(props: {
   const { setGod, filterList } = useContext(GodContext);
 
   const columnHelper = createColumnHelper();
-  const MEDIUM_COLUMN_SIZE = 80;
 
   const { data, isFetching } = useQuery(
     [
@@ -113,18 +114,22 @@ function SkinsPage(props: {
 
               <div className="mx-1.5 flex min-w-fit flex-1 flex-col items-center justify-center sm:items-start lg:mx-0">
                 <div className="flex flex-row items-center">
-                  <img
+                  <Image
                     className="mr-2 h-4 w-4"
                     src={"https://i.imgur.com/PiqXvRC.png"}
+                    loader={ImgurLoader}
+                    alt="Gem Icon"
                   />
                   <span style={{ fontSize: "11px", fontWeight: "700" }}>
                     {info.row.original.price_gems} Gems
                   </span>
                 </div>
                 <div className="flex flex-row items-center">
-                  <img
+                  <Image
                     className="mr-2 h-4 w-4"
+                    loader={ImgurLoader}
                     src={"https://i.imgur.com/0ArqEe0.png"}
+                    alt="Favor Icon"
                   />
                   <span className="text-lightBlue" style={{ fontSize: "12px" }}>
                     {info.row.original.price_favor} Favor
@@ -141,17 +146,8 @@ function SkinsPage(props: {
         ),
         footer: (info) => info.column.id,
       }),
-
-      // {
-      //   Header: "Obtainability",
-      //   accessor: "obtainability",
-      // },
-      // { Header: "Favor", accessor: "price_favor" },
-      // { Header: "Gems", accessor: "price_gems" },
-      // { Header: "Win Rate", accessor: "winRate" },
-      // { Header: "Wins", accessor: "wins" },
-      // { Header: "Games", accessor: "games" },
     ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
   return (

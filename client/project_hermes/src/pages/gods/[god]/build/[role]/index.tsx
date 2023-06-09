@@ -34,7 +34,7 @@ function BuildPage(props: {
   };
 }) {
   const router = useRouter();
-  let { god, setGod, filterList } = useContext(GodContext);
+  const { god, setGod, filterList } = useContext(GodContext);
 
   const { data, isFetching } = useQuery(
     ["god-matchups", getDefaultParams(filterList, god)],
@@ -53,28 +53,7 @@ function BuildPage(props: {
     }
   );
 
-  // const buildPageQueries = useQueries({
-  //   queries: [
-  //     {
-  //       queryKey: [
-  //         "god-build",
-  //         getDefaultParams(filterList, props.dehydratedState.defaultParams.god),
-  //       ],
-  //       queryFn: getGodPageData({
-  //         ...getDefaultParams(
-  //           filterList,
-  //           props.dehydratedState.defaultParams.god
-  //         ),
-  //         type: "build",
-  //       }),
-  //       enabled: handleQueryEnabled(
-  //         props.dehydratedState.defaultParams,
-  //         filterList
-  //       ),
-  //     },
-  //   ],
-  // });
-
+  // @ts-expect-error cant type router.query but its always a god
   if (router.query?.god) setGod(router.query.god);
 
   return (
@@ -93,7 +72,7 @@ function BuildPage(props: {
         god={god}
         role={
           filterList[filterList.findIndex((val) => val.filterValue === "role")]
-            ?.defaultValue
+            ?.defaultValue || ""
         }
         displayType="countered"
         isFetching={isFetching}
@@ -106,10 +85,9 @@ function BuildPage(props: {
         god={god}
         role={
           filterList[filterList.findIndex((val) => val.filterValue === "role")]
-            ?.defaultValue
+            ?.defaultValue || ""
         }
         displayType="counters"
-        defaultParams={props.dehydratedState.defaultParams}
         isFetching={isFetching}
       />
       <BuildRow
@@ -142,9 +120,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
     godMatchups: new QueryClient(),
     godBuild: new QueryClient(),
   };
+
+  // @ts-expect-error cant type parsedurlquery
   const { god, role } = context.params;
 
-  let url = getBaseUrl();
+  const url = getBaseUrl();
   const defaultParams: GodPagePropsType = await GodDefaultFilterLoader({
     url,
     god,

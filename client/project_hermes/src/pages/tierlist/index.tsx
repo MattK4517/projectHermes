@@ -61,8 +61,8 @@ const TierListLayout = ({
               { optionName: "Mid-Jungle" },
               { optionName: "Solo-Jungle" },
             ],
-          },
-    tempFilterList = [
+          }
+     let tempFilterList = [
       roleSelection,
       {
         filterValue: "patch",

@@ -61,6 +61,7 @@ godsDict = {
     "Hou Yi": "Carry",
     "Hun Batz": "Jungle",
     "Ishtar": "Carry",
+    "Ix Chel": "Mid",
     "Izanami": "Carry",
     "Janus": "Mid",
     "Jing Wei": "Carry",

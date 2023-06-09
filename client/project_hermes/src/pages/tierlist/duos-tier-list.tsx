@@ -6,7 +6,6 @@ import React from "react";
 import { TierListLayout } from ".";
 import { getWinRateColor } from "../../components/gods/GodHelpers";
 import GodIconLoader, {
-  RoleIconLoader,
   TierListDefaultFilterLoader,
 } from "../../components/loader";
 import TierListTable from "../../components/tierlist/TierListTable";
@@ -135,6 +134,7 @@ function DuoTierList(props: {
         footer: (info) => info.column.id,
       }),
     ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
   return (

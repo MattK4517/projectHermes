@@ -128,7 +128,7 @@ export const handleQueryEnabled = (
   return enabled;
 };
 
-export const normalizeTier = (tier: string) => {
+export const normalizeTier = (tier: number) => {
   let rank = "Error";
   if (tier <= 5) {
     rank = "Bronze";

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { god } from "../../models/gods/gods.model";
 import GodIconLoader from "../loader";
 
-const sortMatchups = (a, b) => {
+const sortMatchups = (a: { winRate: number }, b: { winRate: number }) => {
   if (a.winRate > b.winRate) {
     return 1;
   } else if (a.winRate === b.winRate) {
@@ -30,7 +30,12 @@ type MatchupType = {
   }[];
 };
 
-const CounterMatchupDisplay = ({ props }: { props: MatchupType[] }) => {
+const CounterMatchupDisplay = ({
+  props,
+}: {
+  props: MatchupType["counterMatchups"];
+}) => {
+  console.log(props);
   return (
     <div className="flex">
       {Object.values(props)

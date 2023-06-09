@@ -34,7 +34,6 @@ const WinRateStats = ({
   const { data, isFetching } = useQuery(
     ["god-winrate", getDefaultParams(filterList, god)],
     () =>
-      // @ts-expect-error get default params returns correctly, just reducing the filterlist array is weird with typing
       getGodPageData({
         ...getDefaultParams(filterList, god),
         type: "main",
@@ -82,7 +81,7 @@ const WinRateStats = ({
                       : "",
                 }}
               >
-                {winRateStats[key]}
+                {winRateStats[key as keyof WinRateStatsType]}
                 {key.includes("Rate") ? "%" : ""}
               </div>
               <div

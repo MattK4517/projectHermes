@@ -19,7 +19,7 @@ const handlePath = (
       })
       .join("&");
     if (temp.includes(filter.filterValue)) {
-      return currentPath.split("?")[0].concat("?", temp);
+      return currentPath.split("?")[0]?.concat("?", temp) || "";
     } else {
       return currentPath.concat(`&${filter.filterValue}=${newPath}`);
     }

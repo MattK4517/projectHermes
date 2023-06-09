@@ -1,4 +1,4 @@
-import { createContext, Dispatch, FC, SetStateAction, useState } from "react";
+import { createContext, Dispatch, SetStateAction, useState } from "react";
 import { god } from "../../models/gods/gods.model";
 import { FilterListType } from "../general/Filter";
 import { TabListType } from "../general/TabList";
@@ -23,7 +23,9 @@ export const GodContext = createContext<GodContextType>({
   },
 });
 
-export const GodProvider: FC = ({ children }) => {
+export const GodProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [god, setGod] = useState<god>("");
   const tabs = [
     { name: "Build", link: `build`, selected: true },

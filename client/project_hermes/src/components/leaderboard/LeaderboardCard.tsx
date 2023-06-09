@@ -10,23 +10,25 @@ export interface ILeaderboardPlayer {
   losses: number;
   name: string;
   points: number;
-  rankedStatConq: number;
-  tier: string;
+  rankedStatConq: string;
+  tier: number;
   wins: number;
   id: string;
+  games: number;
 }
 
 const LeaderboardCard = ({ data }: { data: ILeaderboardPlayer[] }) => {
-  return (
-    <div>
-      <TopPlayerCard data={data[0]} />
-      <div className="grid-row-4 grid grid-flow-row gap-0.5 lg:grid-flow-col lg:grid-cols-4 lg:gap-2">
-        {data.slice(1).map((player, index) => (
-          <TopFiveCard data={player} key={index} ranking={index + 2} />
-        ))}
+  if (data[0])
+    return (
+      <div>
+        <TopPlayerCard data={data[0]} />
+        <div className="grid-row-4 grid grid-flow-row gap-0.5 lg:grid-flow-col lg:grid-cols-4 lg:gap-2">
+          {data.slice(1).map((player, index) => (
+            <TopFiveCard data={player} key={index} ranking={index + 2} />
+          ))}
+        </div>
       </div>
-    </div>
-  );
+    );
 };
 
 export default LeaderboardCard;
@@ -38,6 +40,7 @@ const TopFiveCard = ({
   data: ILeaderboardPlayer;
   ranking: number;
 }) => {
+  console.log(data);
   return (
     <div className="card flex flex-row gap-3 p-2 lg:flex-col">
       <div className="flex flex-row items-center">
@@ -78,7 +81,7 @@ const TopFiveCard = ({
           <span
             style={{
               color: getWinRateColor(
-                ((data.wins / data.games) * 100).toFixed(2)
+                parseFloat(((data.wins / data.games) * 100).toFixed(2))
               ),
             }}
           >
@@ -93,7 +96,7 @@ const TopFiveCard = ({
             style={{
               width: `${((data.wins / data.games) * 100).toFixed(2)}%`,
               backgroundColor: getWinRateColor(
-                ((data.wins / data.games) * 100).toFixed(2)
+                parseFloat(((data.wins / data.games) * 100).toFixed(2))
               ),
             }}
           ></div>
@@ -142,7 +145,7 @@ const TopPlayerCard = ({ data }: { data: ILeaderboardPlayer }) => {
                   <span
                     style={{
                       color: getWinRateColor(
-                        ((data.wins / data.games) * 100).toFixed(2)
+                        parseFloat(((data.wins / data.games) * 100).toFixed(2))
                       ),
                     }}
                   >
@@ -157,7 +160,7 @@ const TopPlayerCard = ({ data }: { data: ILeaderboardPlayer }) => {
                     style={{
                       width: `${((data.wins / data.games) * 100).toFixed(2)}%`,
                       backgroundColor: getWinRateColor(
-                        ((data.wins / data.games) * 100).toFixed(2)
+                        parseFloat(((data.wins / data.games) * 100).toFixed(2))
                       ),
                     }}
                   ></div>

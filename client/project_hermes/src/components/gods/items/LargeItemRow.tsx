@@ -1,11 +1,8 @@
 import { createColumnHelper } from "@tanstack/react-table";
-import React, { useContext } from "react";
-import { GodPagePropsType } from "../../../pages/gods/[god]/build/[role]";
+import React from "react";
 import IconName from "../../general/IconName";
-import { getDefaultParams } from "../../general/getDefaultParams";
 import { ItemIconLoader } from "../../loader";
 import TierListTable from "../../tierlist/TierListTable";
-import { GodContext } from "../GodContext";
 import { getWinRateColor } from "../GodHelpers";
 
 interface ILargeItemRowProps {
@@ -15,10 +12,7 @@ interface ILargeItemRowProps {
 }
 
 const LargeItemRow = ({ items, slot }: ILargeItemRowProps) => {
-  const { filterList } = useContext(GodContext);
-  const defaultParams: Partial<GodPagePropsType> = getDefaultParams(filterList);
-
-  const columnHelper = createColumnHelper();
+  const columnHelper = createColumnHelper<any>();
   const MEDIUM_COLUMN_SIZE = 80;
 
   const columns = React.useMemo(
@@ -33,7 +27,7 @@ const LargeItemRow = ({ items, slot }: ILargeItemRowProps) => {
               loader={ItemIconLoader}
               width={36}
               height={36}
-              styling={"rounded-md border-2 border-slate-500"}
+              iconStyling={"rounded-md border-2 border-slate-500"}
               displayName={info.cell.getValue()}
             />
           );
@@ -45,7 +39,7 @@ const LargeItemRow = ({ items, slot }: ILargeItemRowProps) => {
         size: MEDIUM_COLUMN_SIZE + 10,
         cell: (info) => (
           <span
-            style={{ color: getWinRateColor(info.cell.getValue("winRate")) }}
+            style={{ color: getWinRateColor(info.cell.getValue()) }}
           >{`${info.renderValue()?.toFixed(0)}%`}</span>
         ),
         footer: (info) => info.column.id,
@@ -74,8 +68,6 @@ const LargeItemRow = ({ items, slot }: ILargeItemRowProps) => {
       <TierListTable
         tableData={items}
         columns={columns}
-        defaultParams={defaultParams}
-        type={""}
         rowDivStyling={"max-h-80 overflow-y-scroll"}
         defaultSort={[{ id: "games", desc: true }]}
       />

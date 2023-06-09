@@ -8,25 +8,20 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import React, { useEffect, useState } from "react";
-import { GodPagePropsType } from "../../pages/gods/[god]/build/[role]";
 import Loading from "../general/Loading";
 
 export default function TierListTable({
   tableData = {},
   columns,
-  defaultParams,
-  type,
   rowDivStyling,
   defaultSort,
   loading,
 }: {
   tableData: any;
   columns: ColumnDef<any, any>[];
-  defaultParams: GodPagePropsType;
-  type: string;
-  rowDivStyling: string;
-  defaultSort: SortingState;
-  loading: string;
+  rowDivStyling?: string;
+  defaultSort?: SortingState;
+  loading?: boolean;
 }) {
   const [data, setData] = useState([...tableData]);
 
@@ -34,7 +29,7 @@ export default function TierListTable({
     setData([...tableData]);
   }, [tableData]);
 
-  const [sorting, setSorting] = React.useState<SortingState>(defaultSort);
+  const [sorting, setSorting] = React.useState<SortingState>(defaultSort ?? []);
 
   const table = useReactTable({
     data: data || [],
@@ -57,7 +52,6 @@ export default function TierListTable({
               <div key={headerGroup.id} className="flex justify-center">
                 {headerGroup.headers.map((header) => (
                   <div
-                    key={header.id}
                     className={`${
                       header.id === "counterMatchups"
                         ? "hidden md:flex"
@@ -70,6 +64,7 @@ export default function TierListTable({
                         width: header.getSize(),
                       },
                     }}
+                    key={header.id}
                   >
                     {header.isPlaceholder ? null : (
                       <div
@@ -110,18 +105,17 @@ export default function TierListTable({
                 >
                   {row.getVisibleCells().map((cell) => (
                     <div
-                      key={cell.id}
                       className={`${
                         cell.column.id === "counterMatchups"
                           ? "hidden w-0 md:flex"
                           : "flex"
                       } items-center justify-center`}
                       {...{
-                        key: cell.id,
                         style: {
                           width: cell.column.getSize(),
                         },
                       }}
+                      key={cell.id}
                     >
                       {flexRender(
                         cell.column.columnDef.cell,

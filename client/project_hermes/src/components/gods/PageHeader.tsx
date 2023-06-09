@@ -49,10 +49,7 @@ const PageHeader = ({
   god,
 }: PageHeaderProps) => {
   const { filterList } = useContext(GodContext);
-  const defaultParams: Partial<GodPagePropsType> = getDefaultParams(
-    filterList,
-    god
-  );
+  const defaultParams: GodPagePropsType = getDefaultParams(filterList, god);
 
   return (
     <div className="mb-6 w-full text-white" id="god-page-header">

@@ -12,7 +12,9 @@ export const AppStateContext = createContext<IAppContext>({
   },
 });
 
-export const AppStateProvider: React.FC = ({ children }: any) => {
+export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [open, setOpen] = React.useState<boolean>(false);
   return (
     <AppStateContext.Provider value={{ open, setOpen }}>

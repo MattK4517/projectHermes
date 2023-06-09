@@ -10,7 +10,7 @@ import PageHeader from "../../../components/gods/PageHeader";
 import { god } from "../../../models/gods/gods.model";
 import { GodPagePropsType } from "./build/[role]";
 
-function GodIndex<NextPage>() {
+function GodIndex() {
   return <div></div>;
 }
 
@@ -23,7 +23,7 @@ const GodPageLayout = ({
   children: React.ReactNode;
   defaultParams: GodPagePropsType;
 }) => {
-  const { god, tabs, setGod, setFilterList } = useContext(GodContext);
+  const { god, tabs, setFilterList } = useContext(GodContext);
   let tempFilterList = [
     ...GenericFilterList,
     {
@@ -40,6 +40,7 @@ const GodPageLayout = ({
       ],
     },
   ];
+  // @ts-expect-error weird filter list
   tempFilterList = tempFilterList.map((filter) => {
     return {
       ...filter,
@@ -49,6 +50,7 @@ const GodPageLayout = ({
 
   useEffect(() => {
     setFilterList(tempFilterList);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const godPageQueries = useQueries({
@@ -74,8 +76,8 @@ const GodPageLayout = ({
   if (isError) return <h1>ERROR...</h1>;
   const data = godPageQueries.map((query) => query.data);
 
-  //@ts-ignore
-  let url = linkDict[god?.toString()];
+  //@ts-expect-error linkDict keys are gods
+  const url = linkDict[god?.toString()];
 
   return (
     <div id="god-profile-main-page" className="mx-auto flex w-full pb-5">
@@ -107,7 +109,7 @@ const GodPageLayout = ({
   );
 };
 
-const GodPageHeader: React.FC = (props: {
+const GodPageHeader = (props: {
   godAbilities: any;
   god: god;
   godData: any;
@@ -199,6 +201,7 @@ export const linkDict = {
   Kuzenbo: "https://i.imgur.com/efIAMWB.jpg",
   Lancelot: "https://i.imgur.com/zrqRsfr.jpg",
   Loki: "https://i.imgur.com/vmiaaRh.jpg",
+  Martichoras: "",
   Medusa: "https://i.imgur.com/ilPujED.jpg",
   Mercury: "https://i.imgur.com/P7CJ5UQ.jpg",
   Merlin: "https://i.imgur.com/abi67RB.jpg",

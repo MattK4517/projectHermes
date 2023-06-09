@@ -29,9 +29,9 @@ function BuildPathsPage(props: {
   };
 }) {
   const router = useRouter();
-  const columnHelper = createColumnHelper();
+  const columnHelper = createColumnHelper<any>();
   const MEDIUM_COLUMN_SIZE = 80;
-  let { setGod, filterList } = useContext(GodContext);
+  const { setGod, filterList } = useContext(GodContext);
   const { data, isFetching } = useQuery(
     [
       "god-build-paths",
@@ -54,7 +54,11 @@ function BuildPathsPage(props: {
       ),
     }
   );
-  if (router.query?.god) setGod(router.query.god);
+  if (router.query?.god) {
+    const { god } = router.query;
+    // @ts-expect-error cant type router.query
+    setGod(god);
+  }
 
   const columns = React.useMemo(
     () => [
@@ -101,7 +105,7 @@ function BuildPathsPage(props: {
         size: MEDIUM_COLUMN_SIZE + 10,
         cell: (info) => (
           <span
-            style={{ color: getWinRateColor(info.cell.getValue("winRate")) }}
+            style={{ color: getWinRateColor(info.cell.getValue()) }}
           >{`${info.renderValue()?.toFixed(0)}%`}</span>
         ),
         footer: (info) => info.column.id,
@@ -119,6 +123,7 @@ function BuildPathsPage(props: {
         footer: (info) => info.column.id,
       }),
     ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
@@ -146,9 +151,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     godBuildPaths: new QueryClient(),
   };
 
+  // @ts-expect-error weird typing for context
   const { god } = context.params;
 
-  let url = getBaseUrl();
+  const url = getBaseUrl();
   const defaultParams: GodPagePropsType = await GodDefaultFilterLoader({
     url,
     god,

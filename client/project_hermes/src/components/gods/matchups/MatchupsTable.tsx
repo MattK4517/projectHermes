@@ -1,3 +1,5 @@
+// eslint-disable-file react/jsx-key: 0
+// needed because of weird typing in react table, react table defines the keys but it doesnt get linted correctly
 import { useSortBy, useTable } from "react-table";
 import GodIconLoader from "../../loader";
 
@@ -5,7 +7,7 @@ import IconName from "../../general/IconName";
 import Loading from "../../general/Loading";
 import { getWinRateColor } from "../GodHelpers";
 
-function GodMatchupTable({ columns, data, loading }) {
+function GodMatchupTable({ columns, data, loading }: any) {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable(
       {
@@ -33,26 +35,31 @@ function GodMatchupTable({ columns, data, loading }) {
         <div className="pb-4 text-white">
           {headerGroups.map((headerGroup) => (
             <tr
-              key={headerGroup.id}
               className="flex items-center justify-center"
               {...headerGroup.getHeaderGroupProps()}
+              key={headerGroup.id}
             >
               {headerGroup.headers.map((column) => (
                 // Add the sorting props to control sorting. For this example
                 // we can add them into the header props
                 <th
-                  key={column.id}
                   className="flex-1"
+                  // @ts-expect-error weird typing with tanstack table
                   {...column.getHeaderProps(column.getSortByToggleProps())}
+                  key={column.id}
                 >
                   {column.render("Header")}
                   {/* Add a sort direction indicator */}
                   <span>
-                    {column.isSorted
-                      ? column.isSortedDesc
-                        ? " 🔽"
-                        : " 🔼"
-                      : ""}
+                    {
+                      // @ts-expect-error weird typing with tanstack table
+                      column.isSorted
+                        ? // @ts-expect-error weird typing with tanstack table
+                          column.isSortedDesc
+                          ? " 🔽"
+                          : " 🔼"
+                        : ""
+                    }
                   </span>
                 </th>
               ))}
@@ -73,9 +80,9 @@ function GodMatchupTable({ columns, data, loading }) {
               prepareRow(row);
               return (
                 <tr
-                  key={row.id}
                   {...row.getRowProps()}
                   className={`flex  ${i % 2 !== 0 ? "bg-darkBlue" : ""}`}
+                  key={row.id}
                 >
                   {row.cells.map((cell) => {
                     if (cell.column.Header?.toString() === "Enemy") {
@@ -92,19 +99,19 @@ function GodMatchupTable({ columns, data, loading }) {
                     }
                     return (
                       <td
-                        key={cell.value}
                         style={
                           cell.column.Header?.toString() === "Win Rate"
                             ? { color: getWinRateColor(cell.value) }
                             : {}
                         }
                         {...cell.getCellProps()}
-                        className={`flex flex-1 content-center items-center justify-center 
+                        className={`flex flex-1 content-center items-center justify-center
                       `}
+                        key={cell.value}
                       >
                         {cell.render("Cell")}
                         {["Win Rate", "Pick Rate"].indexOf(
-                          cell.column.Header?.toString()
+                          cell.column.Header?.toString() || ""
                         ) !== -1
                           ? "%"
                           : ""}
