@@ -76,7 +76,7 @@ const GodPageLayout = ({
   if (isError) return <h1>ERROR...</h1>;
   const data = godPageQueries.map((query) => query.data);
 
-  //@ts-expect-error linkDict keys are gods
+  // @ts-expect-error link dict keys are gods
   const url = linkDict[god?.toString()];
 
   return (

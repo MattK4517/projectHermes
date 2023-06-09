@@ -10,7 +10,7 @@ export const TierListContext = createContext<any>({
   ],
   filterList: [],
   setFilterList: () => {
-    return {};
+    return [];
   },
   defaultParmas: {
     god: "",

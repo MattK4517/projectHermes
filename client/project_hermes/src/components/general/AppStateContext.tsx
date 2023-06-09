@@ -8,7 +8,7 @@ export interface IAppContext {
 export const AppStateContext = createContext<IAppContext>({
   open: false,
   setOpen: () => {
-    return {};
+    return false;
   },
 });
 
