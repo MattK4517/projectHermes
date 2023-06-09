@@ -158,10 +158,9 @@ function TierList(props: {
         footer: (info) => info.column.id,
       }),
     ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
-
-  const { filterList, setFilterList } = useContext(TierListContext);
 
   return (
     <TierListLayout

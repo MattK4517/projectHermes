@@ -23,7 +23,7 @@ const GodPageLayout = ({
   children: React.ReactNode;
   defaultParams: GodPagePropsType;
 }) => {
-  const { god, tabs, filterList, setFilterList } = useContext(GodContext);
+  const { god, tabs, setGod, setFilterList } = useContext(GodContext);
   let tempFilterList = [
     ...GenericFilterList,
     {
@@ -95,7 +95,7 @@ const GodPageLayout = ({
             <GodPageHeader
               godData={data[1]}
               godAbilities={data[0]}
-              god={god}
+              god={defaultParams.god}
             ></GodPageHeader>
             <TabList {...tabs} />
             <FilterListContainer context={GodContext} />

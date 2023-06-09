@@ -146,6 +146,7 @@ function ObjectiveTierList(props: {
         footer: (info) => info.column.id,
       }),
     ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 

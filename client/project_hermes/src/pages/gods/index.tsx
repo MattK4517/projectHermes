@@ -3,13 +3,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { ImgurLoader } from "../../components/loader";
 import { getBaseUrl } from "../../utils/trpc";
+import { normalizeGodName } from "../../components/gods/GodHelpers";
 
 interface god {
   name: string;
   url: string;
 }
 
-export default function GodsList<NextPage>(props: { dehydratedState: any }) {
+export default function GodsList(props: { dehydratedState: any }) {
   const { data } = useQuery<god[]>(["gods"], getGods, {
     initialData: props.dehydratedState,
   });
@@ -28,7 +29,10 @@ export default function GodsList<NextPage>(props: { dehydratedState: any }) {
       >
         {Object.values(data).map((god: god, index) => {
           return (
-            <Link key={index} href={"/gods/".concat(god.name, "/build")}>
+            <Link
+              key={index}
+              href={"/gods/".concat(normalizeGodName(god.name), "/build")}
+            >
               <div className="box-border flex h-fit w-fit cursor-pointer flex-col items-center hover:text-sm hover:text-white">
                 <Image
                   className="h-20 w-20 bg-neutral-900"

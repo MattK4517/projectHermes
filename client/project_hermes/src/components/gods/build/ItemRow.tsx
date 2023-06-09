@@ -3,20 +3,24 @@ import { Item } from "../../../models/items.model";
 import { ItemIconLoader } from "../../loader";
 
 interface IItemRowProps {
-  item: Item;
+  item: {
+    games: number;
+    items: Item[];
+    wins: number;
+    item: string;
+  };
 }
 export const ItemRow = ({ item }: IItemRowProps) => {
   if (item.games > 0) {
-    console.log(item);
     return (
       <div className="flex h-12 items-center">
         <Image
-          src={item.item}
+          src={item.items[0]?.DeviceName || ""}
           loader={ItemIconLoader}
           className="item-icon mr-3"
           width={36}
           height={36}
-          alt={item.item}
+          alt={item.items[0]?.DeviceName || ""}
         />
         <div className="flex flex-col">
           <span style={{ fontSize: "12px", fontWeight: "700" }}>
@@ -29,4 +33,5 @@ export const ItemRow = ({ item }: IItemRowProps) => {
       </div>
     );
   }
+  return <div></div>;
 };

@@ -34,6 +34,7 @@ const WinRateStats = ({
   const { data, isFetching } = useQuery(
     ["god-winrate", getDefaultParams(filterList, god)],
     () =>
+      // @ts-expect-error get default params returns correctly, just reducing the filterlist array is weird with typing
       getGodPageData({
         ...getDefaultParams(filterList, god),
         type: "main",
@@ -44,15 +45,15 @@ const WinRateStats = ({
       enabled: handleQueryEnabled(defaultParams, filterList),
     }
   );
-  let banrateMessage;
 
   if (data) winRateStats = data;
 
-  if (winRateStats.queueType === "Ranked") {
-    banrateMessage = winRateStats.banRate + "%";
-  } else if (winRateStats.queueType === "Casual") {
-    banrateMessage = "N/A";
-  }
+  // let banrateMessage;
+  // if (winRateStats.queueType === "Ranked") {
+  //   banrateMessage = winRateStats.banRate + "%";
+  // } else if (winRateStats.queueType === "Casual") {
+  //   banrateMessage = "N/A";
+  // }
   return (
     <div className="card flex w-full flex-row flex-wrap justify-around px-0 sm:flex-row sm:flex-nowrap">
       {isFetching ? (

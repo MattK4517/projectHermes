@@ -83,16 +83,14 @@ const Filter = ({ filter, index, filterList, setFilterList }: IFilterProps) => {
                         />
                       ) : (
                         <Image
-                          src={
-                            RankIconLoader(
-                              filter.optionName,
-                              filterList[
-                                filterList.findIndex(
-                                  (val) => val.filterValue === "mode"
-                                )
-                              ]?.defaultValue
-                            ) || ""
-                          }
+                          src={RankIconLoader(
+                            filter.optionName,
+                            filterList[
+                              filterList.findIndex(
+                                (val) => val.filterValue === "mode"
+                              )
+                            ]?.defaultValue || ""
+                          )}
                           loader={ImgurLoader}
                           width={28}
                           height={28}

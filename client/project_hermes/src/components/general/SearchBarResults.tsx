@@ -2,6 +2,7 @@ import { Combobox } from "@headlessui/react";
 import Image from "next/image";
 import Link from "next/link";
 import GodIconLoader from "../loader";
+import { normalizeGodName } from "../gods/GodHelpers";
 
 const SearchBarResults = ({
   filteredGod,
@@ -27,7 +28,9 @@ const SearchBarResults = ({
             key={index}
             href={
               section !== "Player Profile"
-                ? `/gods/${god}/${section.toLowerCase().replaceAll(" ", "-")}`
+                ? `/gods/${normalizeGodName(god)}/${section
+                    .toLowerCase()
+                    .replaceAll(" ", "-")}`
                 : `/players/${god}`
             }
             className="m-1 flex w-full items-center justify-start"

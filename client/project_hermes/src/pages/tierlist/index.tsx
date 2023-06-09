@@ -21,7 +21,7 @@ const TierListLayout = ({
   defaultParams: GodPagePropsType;
   lastUpdate: ILastUpdate;
 }) => {
-  const { tabs, filterList, setFilterList } = useContext(TierListContext);
+  const { tabs, setFilterList } = useContext(TierListContext);
   const roleSelection =
       defaultParams.type !== "Duo"
         ? {
@@ -90,6 +90,7 @@ const TierListLayout = ({
 
   useEffect(() => {
     setFilterList(tempFilterList);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
