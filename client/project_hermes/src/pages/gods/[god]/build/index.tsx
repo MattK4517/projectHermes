@@ -95,7 +95,7 @@ function BuildPage(props: {
         isFetching={isFetching}
       />
       <BuildRow
-        build={props.dehydratedState.godBuild.queries[0].state.data}
+        build={props.dehydratedState.godBuild.queries[0]?.state.data}
         defaultParams={props.dehydratedState.defaultParams}
       />
     </GodPageLayout>

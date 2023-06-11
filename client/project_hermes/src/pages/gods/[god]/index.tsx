@@ -9,6 +9,7 @@ import { GodContext } from "../../../components/gods/GodContext";
 import PageHeader from "../../../components/gods/PageHeader";
 import { god } from "../../../models/gods/gods.model";
 import { GodPagePropsType } from "./build/[role]";
+import { normalizeGodName } from "../../../components/gods/GodHelpers";
 
 function GodIndex() {
   return <div></div>;
@@ -76,8 +77,13 @@ const GodPageLayout = ({
   if (isError) return <h1>ERROR...</h1>;
   const data = godPageQueries.map((query) => query.data);
 
-  // @ts-expect-error link dict keys are gods
-  const url = linkDict[god?.toString()];
+  const url =
+    linkDict[
+      // @ts-expect-error should always return a string
+      Object.keys(linkDict).filter(
+        (linkGod) => normalizeGodName(linkGod) === normalizeGodName(god)
+      )
+    ];
 
   return (
     <div id="god-profile-main-page" className="mx-auto flex w-full pb-5">
@@ -189,6 +195,7 @@ export const linkDict = {
   Horus: "https://i.imgur.com/mA0Vom6.jpg",
   "Hou Yi": "https://i.imgur.com/AnJgIRB.jpg",
   "Hun Batz": "https://i.imgur.com/PWS1kZ3.jpg",
+  "Ix Chel": "",
   Izanami: "https://i.imgur.com/t5c7f2K.jpg",
   Janus: "https://i.imgur.com/RPotbAL.jpg",
   "Jing Wei": "https://i.imgur.com/eaJX1IP.jpg",

@@ -1921,11 +1921,11 @@ def get_match_time(patch):
 
 if __name__ == "__main__":
     # print(get_matchups_stats(client, "Achilles", "Solo", "10.2"))
-    print(calc_total_matches(
-        client, ["All Ranks"], "10.3", "Ranked", "Conquest"))
+    mydb = client["single_match_stats"]
+    for god in godsDict:
+        mycol = mydb[god]
+        mycol.delete_many({"patch": "9.12"})
 
-    # for god in godsDict:
-    #     mycol = mydb[god]
     #     for x in mycol.aggregate(
     #         [
     #             {"$match": {"role": "Solo", "win_status": "Winner"}},

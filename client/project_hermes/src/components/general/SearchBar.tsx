@@ -4,27 +4,27 @@ import { HiMagnifyingGlass } from "react-icons/hi2";
 import { linkDict } from "../../pages/gods/[god]";
 import SearchBarResults from "./SearchBarResults";
 export default function SearchBar() {
-  const people = Object.keys(linkDict);
-  const [selectedPerson, setSelectedPerson] = useState();
+  const god = Object.keys(linkDict);
+  const [selectedGod, setSelectedGod] = useState();
   const [query, setQuery] = useState("");
 
   const filteredGod =
     query === ""
-      ? people
-      : people.filter((person) => {
-          return person.toLowerCase().includes(query.toLowerCase());
+      ? god
+      : god.filter((god) => {
+          return god.toLowerCase().includes(query.toLowerCase());
         });
 
   const sections = ["Build", "Items", "Build Paths", "Player Profile"];
 
   return (
     <div className="w-full">
-      <Combobox value={selectedPerson} onChange={setSelectedPerson}>
+      <Combobox value={selectedGod} onChange={setSelectedGod}>
         <div className="relative mt-1">
           <div className="relative w-full cursor-default overflow-hidden rounded-lg bg-card text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
             <Combobox.Input
               className="w-full border-none bg-card50 py-2 pl-3 pr-10 text-sm leading-5 text-white focus:ring-0"
-              displayValue={selectedPerson}
+              displayValue={selectedGod}
               onChange={(event) => setQuery(event.target.value)}
             />
             <Combobox.Button className="absolute inset-y-0 right-0 flex items-center fill-white pr-2">

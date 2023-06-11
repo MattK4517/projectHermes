@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import GodIconLoader from "../../loader";
-import { getWinRateColor } from "../GodHelpers";
+import { getWinRateColor, normalizeGodName } from "../GodHelpers";
 
 export type MatchupDisplayType = {
   enemy: string;
@@ -12,7 +12,10 @@ export type MatchupDisplayType = {
 
 const SingleMatchupDisplay = ({ matchup }: { matchup: MatchupDisplayType }) => {
   return (
-    <Link href={`/gods/${matchup.enemy}/build`} target="_blank">
+    <Link
+      href={`/gods/${normalizeGodName(matchup.enemy)}/build`}
+      target="_blank"
+    >
       <div
         id="god-matchup"
         className="flex cursor-pointer flex-col items-center justify-center rounded bg-darkBackGroundColor p-1.5 text-center text-white hover:bg-mainBackGroundColor"

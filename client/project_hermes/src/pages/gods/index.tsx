@@ -33,9 +33,9 @@ export default function GodsList(props: { dehydratedState: any }) {
               key={index}
               href={"/gods/".concat(normalizeGodName(god.name), "/build")}
             >
-              <div className="box-border flex h-fit w-fit cursor-pointer flex-col items-center hover:text-sm hover:text-white">
+              <div className="box-border flex h-fit w-fit cursor-pointer flex-col items-center hover:scale-110">
                 <Image
-                  className="h-20 w-20 bg-neutral-900"
+                  className="h-20 w-20 rounded bg-neutral-900 hover:border-2 hover:border-winnerColor"
                   src={god.url}
                   loader={ImgurLoader}
                   width={80}

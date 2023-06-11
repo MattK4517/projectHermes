@@ -40,7 +40,6 @@ export const BuildRow = ({
         <Loading width={12} height={12} />
       ) : (
         build.items.map((item, index) => {
-          console.log("ITEM", item);
           return (
             <SingleBuildDisplay
               key={index}

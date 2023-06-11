@@ -2,7 +2,6 @@ import os
 
 import pymongo
 
-if not os.getenv("DB_URI"):
-    import dev_config
 
-client = pymongo.MongoClient(os.getenv("DB_URI"))
+client = pymongo.MongoClient(
+    "mongodb+srv://sysAdmin:LaExqqm9CaXJEnuY@dev.t8xlvge.mongodb.net/?retryWrites=true&w=majority")

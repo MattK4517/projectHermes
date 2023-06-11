@@ -110,6 +110,7 @@ def get_god_data_role(god, role, rank, patch, queue_type, mode, matchup="None"):
         )
 
     ret_data = {}
+    print(build)
     ret_data["items"] = [build[f"slot{i+1}"] for i in range(6)]
     ret_data["relics"] = [build[f"relic{i+1}"] for i in range(2)]
     ret_data["url"] = anlz.get_url(newgod)
@@ -217,31 +218,31 @@ def get_items():
     mydb = client["Item_Data"]
     mycol = mydb["All Items"]
 
-    for item in mycol.find({}, {"_id": 0}):
-        if item["ActiveFlag"] == "y":
-            if item["ItemTier"] not in items and item["Glyph"] != "y":
-                items[item["ItemTier"]] = [item]
-            elif item["Glyph"] == "y":
-                items["Glyphs"].append(item)
-            elif item["DeviceName"] in starter_items:
-                if item["ItemTier"] == 1:
-                    items["Starter Items"].append(item)
-                elif item["ItemTier"] == 2:
-                    items["Upgraded Starters"].append(item)
-            elif item["DeviceName"] in consumables:
-                items["Consumables"].append(item)
-            elif item["DeviceName"] in shards:
-                items["Shards"].append(item)
-            elif item["DeviceName"] in base_relics:
-                items["Starter Relics"].append(item)
-            elif item["DeviceName"] in greater_relics:
-                items["Greater Relics"].append(item)
-            elif item["DeviceName"] in relics:
-                items["Relics"].append(item)
-            elif "Evolved" in item["DeviceName"]:
-                items["Evolved Items"].append(item)
-            else:
-                items[item["ItemTier"]].append([item])
+    for item in mycol.find({"ActiveFlag": "y"}, {"_id": 0}):
+        if "Evolved" in item["DeviceName"]:
+            items["Evolved Items"].append(item)
+        elif item["ItemTier"] not in items and item["Glyph"] != "y":
+            items[item["ItemTier"]] = [item]
+        elif item["Glyph"] == "y":
+            items["Glyphs"].append(item)
+        elif item["DeviceName"] in starter_items:
+            if item["ItemTier"] == 1:
+                items["Starter Items"].append(item)
+            elif item["ItemTier"] == 2:
+                items["Upgraded Starters"].append(item)
+        elif item["DeviceName"] in consumables:
+            items["Consumables"].append(item)
+        elif item["DeviceName"] in shards:
+            items["Shards"].append(item)
+        elif item["DeviceName"] in base_relics:
+            items["Starter Relics"].append(item)
+        elif item["DeviceName"] in greater_relics:
+            items["Greater Relics"].append(item)
+        elif item["DeviceName"] in relics:
+            items["Relics"].append(item)
+        else:
+            items[item["ItemTier"]].append(item)
+    # print(items)
     return json.loads(json.dumps({"items": items}))
 
 
